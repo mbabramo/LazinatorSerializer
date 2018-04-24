@@ -22,8 +22,6 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Buildalyzer;
-using Buildalyzer.Workspaces;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
