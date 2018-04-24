@@ -10,21 +10,16 @@
     <PackageId>LazinatorAnalyzer</PackageId>
     <PackageVersion>0.1.0.1</PackageVersion>
     <Authors>Michael</Authors>
-    <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
-    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/mbabramo/LazinatorSerializer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mbabramo/LazinatorSerializer</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>LazinatorAnalyzer</Description>
-    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-    <Copyright>Copyright</Copyright>
-    <PackageTags>LazinatorAnalyzer, analyzers</PackageTags>
+    <PackageReleaseNotes>Introductory release</PackageReleaseNotes>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageTags>LazinatorAnalyzer, analyzers, lazinator</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <None Remove="1u5fw3nu.20e~" />
-  </ItemGroup>
    
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.7.0" PrivateAssets="all" />
