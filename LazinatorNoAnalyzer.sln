@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81F4BA7C-3E60-454B-87CF-A4032FE82939}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		Performance1.psess = Performance1.psess
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9C5C4083-6126-45D2-A2E4-7487DAEE1D34}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazinator", "Lazinator\Lazinator.csproj", "{2B97C92F-6A04-4D10-979C-DBE443732381}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorTests", "LazinatorTests\LazinatorTests.csproj", "{EA9F7315-9198-4F24-AA79-6A6D050D41CD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorCodeGen", "LazinatorCodeGen\LazinatorCodeGen.csproj", "{07FB8721-DD79-434F-B7E3-962663830B1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorBase", "LazinatorBase\LazinatorBase.csproj", "{AE67F799-49E1-45D9-8AFF-B1C51FC9AF03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B97C92F-6A04-4D10-979C-DBE443732381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B97C92F-6A04-4D10-979C-DBE443732381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B97C92F-6A04-4D10-979C-DBE443732381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B97C92F-6A04-4D10-979C-DBE443732381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07FB8721-DD79-434F-B7E3-962663830B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07FB8721-DD79-434F-B7E3-962663830B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07FB8721-DD79-434F-B7E3-962663830B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07FB8721-DD79-434F-B7E3-962663830B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE67F799-49E1-45D9-8AFF-B1C51FC9AF03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE67F799-49E1-45D9-8AFF-B1C51FC9AF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE67F799-49E1-45D9-8AFF-B1C51FC9AF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE67F799-49E1-45D9-8AFF-B1C51FC9AF03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+	EndGlobalSection
+EndGlobal

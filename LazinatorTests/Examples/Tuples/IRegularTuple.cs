@@ -1,0 +1,14 @@
+﻿using System;
+using Lazinator.Attributes;
+
+namespace LazinatorTests.Examples.Tuples
+{
+    [Lazinator((int)ExampleUniqueIDs.RegularTuple)]
+    public interface IRegularTuple
+    {
+        Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized { get; set; }
+        Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2 { get; set; }
+        Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3 { get; set; }
+        Tuple<int, ExampleStruct> MyTupleSerialized4 { get; set; }
+    }
+}

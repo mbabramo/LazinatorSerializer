@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using Lazinator.Attributes;
+
+namespace LazinatorTests.Examples
+{
+    [Lazinator((int)ExampleUniqueIDs.ExampleStruct)]
+    public interface IExampleStruct
+    {
+        bool MyBool { get; set; }
+        char MyChar { get; set; }
+        ExampleChild MyChild1 { get; set; }
+        ExampleChild MyChild2 { get; set; }
+        List<int> MyListValues { get; set; }
+        List<Example> MyLazinatorList { get; set; }
+        bool MyLazinatorList_Dirty { get; set; }
+        (NonLazinatorClass item1, int? item2) MyTuple { get; set; }
+    }
+}
