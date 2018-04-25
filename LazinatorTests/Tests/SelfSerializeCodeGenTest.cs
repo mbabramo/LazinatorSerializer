@@ -23,7 +23,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
