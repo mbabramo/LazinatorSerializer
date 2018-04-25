@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lazinator.Attributes;
+using LazinatorCodeGen.AttributeClones;
 using Lazinator.Support;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;

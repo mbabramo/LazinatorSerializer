@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using Lazinator.Attributes;
+using LazinatorCodeGen.AttributeClones;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 using LazinatorCodeGen.Roslyn;

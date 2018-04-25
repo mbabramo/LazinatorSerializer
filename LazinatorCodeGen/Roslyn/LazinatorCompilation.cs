@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Immutable;
-using Lazinator.Attributes;
+using LazinatorCodeGen.AttributeClones;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -128,7 +128,7 @@ namespace LazinatorCodeGen.Roslyn
                 {
                     foreach (var @interface in allInterfaces)
                     {
-                        Lazinator.Attributes.LazinatorAttribute attribute = GetFirstAttributeOfType<Lazinator.Attributes.LazinatorAttribute>(@interface);
+                        LazinatorCodeGen.AttributeClones.LazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.LazinatorAttribute>(@interface);
                         if (attribute != null)
                         {
                             AddLinkFromTypeToInterface(namedTypeSymbol, @interface);
@@ -141,12 +141,12 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 else if (namedTypeSymbol.TypeKind == TypeKind.Interface)
                 {
-                    if (GetFirstAttributeOfType<Lazinator.Attributes.LazinatorAttribute>(type) != null)
+                    if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.LazinatorAttribute>(type) != null)
                     {
                         ExclusiveInterfaces.Add(namedTypeSymbol);
                         RecordPropertiesForInterface(namedTypeSymbol);
                     }
-                    else if (GetFirstAttributeOfType<Lazinator.Attributes.NonexclusiveLazinatorAttribute>(type) != null)
+                    else if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.NonexclusiveLazinatorAttribute>(type) != null)
                         NonexclusiveInterfaces.Add(namedTypeSymbol);
                 }
             }

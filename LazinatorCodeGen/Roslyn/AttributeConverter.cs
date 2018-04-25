@@ -1,4 +1,4 @@
-﻿using Lazinator.Attributes;
+﻿using LazinatorCodeGen.AttributeClones;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
