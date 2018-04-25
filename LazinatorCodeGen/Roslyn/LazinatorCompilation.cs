@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Immutable;
 using Lazinator.Attributes;
-using LazinatorBase.Support;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -228,7 +227,7 @@ namespace LazinatorCodeGen.Roslyn
             var bitFieldRepresentingImplementedMethods = GetBitFieldRepresentingImplementedMethods(implementingType, typeImplementsMethodHashSet);
             var bytes = interfaceSyntaxNode.GetText().GetChecksum().ToList();
             bytes.Add(bitFieldRepresentingImplementedMethods);
-            bytes.AddRange(LazinatorVersionInfo.LazinatorVersionBytes); // thus, if we change the version, all code behind will need to be regenerated
+            bytes.AddRange(LazinatorCodeGen.Roslyn.LazinatorVersionInfo.LazinatorVersionBytes); // thus, if we change the version, all code behind will need to be regenerated
             var md5 = System.Security.Cryptography.MD5.Create();
             Guid hash = new Guid(md5.ComputeHash(bytes.ToArray()));
             return hash;

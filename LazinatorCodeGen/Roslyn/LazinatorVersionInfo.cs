@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorBase.Support
+namespace LazinatorCodeGen.Roslyn
 {
-    // also change file in CodeGen with same class name
+    // NOTE: Must also change LazinatorVersionInfo in Lazinator project
     public static class LazinatorVersionInfo
     {
         public static readonly Version LazinatorVersion = new Version(0, 1, 0, 1);

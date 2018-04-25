@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 
-namespace Lazinator.Support
+namespace LazinatorCodeGen.Support
 {
 
 	#region Class StringEnum

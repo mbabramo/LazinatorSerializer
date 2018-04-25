@@ -1,6 +1,6 @@
 using System;
 
-namespace Lazinator.Support
+namespace LazinatorCodeGen.Support
 {
     /// <summary>
     /// Simple attribute class for storing String Values
