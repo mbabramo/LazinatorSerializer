@@ -18,7 +18,7 @@ namespace LazinatorTests.Examples
         string MyNewString { get; set; }
         NonLazinatorClass MyNonLazinatorChild { get; set; }
         bool MyNonLazinatorChild_Dirty { get; set; }
-        [SetterAccessibility(Accessibility.Internal)]
+        [SetterAccessibility("internal")]
         decimal? MyNullableDecimal { get; }
         double? MyNullableDouble { get; set; }
         TimeSpan? MyNullableTimeSpan { get; set; }

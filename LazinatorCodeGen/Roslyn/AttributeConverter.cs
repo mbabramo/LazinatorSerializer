@@ -40,19 +40,17 @@ namespace LazinatorCodeGen.Roslyn
                     return new IntroducedWithVersionAttribute((int)version3);
                 case nameof(SetterAccessibilityAttribute):
                     var accessibility = attributeData.GetAttributeConstructorValueByParameterName("accessibility");
-                    if (accessibility is int)
-                        accessibility = (Lazinator.Attributes.Accessibility)accessibility;
-                    if (!(accessibility is Lazinator.Attributes.Accessibility))
+                    if (!(accessibility is string))
                         throw new Exception("SetterAccessibilityAttribute accessibility is improperly formatted");
-                    return new SetterAccessibilityAttribute((Lazinator.Attributes.Accessibility)accessibility);
+                    return new SetterAccessibilityAttribute((string)accessibility);
                 case nameof(UnofficiallyIncorporateInterfaceAttribute):
                     var otherInterfaceFullyQualifiedTypeName = attributeData.GetAttributeConstructorValueByParameterName("otherInterfaceFullyQualifiedTypeName");
                     if (!(otherInterfaceFullyQualifiedTypeName is string))
                         throw new Exception("UnofficiallyIncorporateInterfaceAttribute otherInterfaceType is improperly formatted");
                     var accessibility2 = attributeData.GetAttributeConstructorValueByParameterName("accessibility");
-                    if (!(accessibility2 is Lazinator.Attributes.Accessibility) && !(accessibility2 is int) && !(accessibility2 is byte))
+                    if (!(accessibility2 is string))
                         throw new Exception("UnofficiallyIncorporateInterfaceAttribute accessibility is improperly formatted");
-                    return new UnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (Lazinator.Attributes.Accessibility)accessibility2);
+                    return new UnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (string)accessibility2);
                 case nameof(ExcludableChildAttribute):
                     return new ExcludableChildAttribute();
                 case nameof(IgnoreRecordLikeAttribute):

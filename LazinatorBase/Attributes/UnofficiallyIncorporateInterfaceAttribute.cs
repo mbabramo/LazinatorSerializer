@@ -7,9 +7,9 @@ namespace Lazinator.Attributes
     public class UnofficiallyIncorporateInterfaceAttribute : Attribute
     {
         public string OtherInterfaceFullyQualifiedTypeName { get; private set; }
-        public Accessibility Accessibility { get; private set; }
+        public string Accessibility { get; private set; }
 
-        public UnofficiallyIncorporateInterfaceAttribute(string otherInterfaceFullyQualifiedTypeName, Accessibility accessibility)
+        public UnofficiallyIncorporateInterfaceAttribute(string otherInterfaceFullyQualifiedTypeName, string accessibility)
         {
             OtherInterfaceFullyQualifiedTypeName = otherInterfaceFullyQualifiedTypeName;
             Accessibility = accessibility;

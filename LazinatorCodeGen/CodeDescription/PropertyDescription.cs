@@ -39,10 +39,10 @@ namespace Lazinator.CodeGeneration
         public List<PropertyDescription> InnerProperties { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
         public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
-        public Attributes.Accessibility? PropertyAccessibility { get; set; }
-        public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : StringEnum.GetStringValue(PropertyAccessibility);
+        public string PropertyAccessibility { get; set; }
+        public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         public SetterAccessibilityAttribute SetterAccessibility { get; set; }
-        public string SetterAccessibilityString => SetterAccessibility == null ? "" : StringEnum.GetStringValue(SetterAccessibility.Choice);
+        public string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice;
         public int? IntroducedWithVersion { get; set; }
         public int? EliminatedWithVersion { get; set; }
         public bool TrackDirtinessNonSerialized { get; set; }
@@ -72,7 +72,7 @@ namespace Lazinator.CodeGeneration
                 throw new Exception($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a get method.");
             if (propertySymbol.SetMethod == null && SetterAccessibility == null)
                 throw new Exception($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a set method or a SetterAccessibilityAttribute.");
-            if (propertySymbol.SetMethod != null && SetterAccessibility != null && SetterAccessibility.Choice != Attributes.Accessibility.Public)
+            if (propertySymbol.SetMethod != null && SetterAccessibility != null && SetterAccessibility.Choice != "public")
                 throw new Exception($"ILazinator interface property {PropertyName} in {Container?.ObjectName} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
 
             ParseVersionAttributes();

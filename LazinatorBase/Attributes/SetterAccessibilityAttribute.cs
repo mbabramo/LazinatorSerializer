@@ -7,9 +7,9 @@ namespace Lazinator.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class SetterAccessibilityAttribute : Attribute
     {
-        public Accessibility Choice { get; set; }
+        public string Choice { get; set; }
 
-        public SetterAccessibilityAttribute(Accessibility accessibility)
+        public SetterAccessibilityAttribute(string accessibility)
         {
             Choice = accessibility;
         }

@@ -6,22 +6,22 @@ namespace LazinatorCodeGen.Roslyn
 {
     public static class AccessibilityConverter
     {
-        public static Lazinator.Attributes.Accessibility? Convert(Microsoft.CodeAnalysis.Accessibility accessibility)
+        public static string Convert(Microsoft.CodeAnalysis.Accessibility accessibility)
         {
             switch (accessibility)
             {
                 case Microsoft.CodeAnalysis.Accessibility.Internal:
-                    return Lazinator.Attributes.Accessibility.Internal;
+                    return "internal";
                 case Microsoft.CodeAnalysis.Accessibility.NotApplicable:
                     return null;
                 case Microsoft.CodeAnalysis.Accessibility.Private:
-                    return Lazinator.Attributes.Accessibility.Private;
+                    return "private";
                 case Microsoft.CodeAnalysis.Accessibility.Protected:
-                    return Lazinator.Attributes.Accessibility.Protected;
+                    return "protected";
                 case Microsoft.CodeAnalysis.Accessibility.ProtectedOrInternal:
-                    return Lazinator.Attributes.Accessibility.ProtectedInternal;
+                    return "protected internal";
                 case Microsoft.CodeAnalysis.Accessibility.Public:
-                    return Lazinator.Attributes.Accessibility.Public;
+                    return "public";
                 default:
                     throw new NotSupportedException("Accessibility type not supported.");
             }
