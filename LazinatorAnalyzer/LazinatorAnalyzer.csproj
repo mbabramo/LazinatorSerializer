@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0.1-alpha</Version>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -44,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LazinatorBase\LazinatorBase.csproj" />
+    <ProjectReference Include="..\LazinatorBase\LazinatorBase.csproj"  />
     <ProjectReference Include="..\LazinatorCodeGen\LazinatorCodeGen.csproj" />
   </ItemGroup>
 
