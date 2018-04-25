@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.0.1-alpha</Version>
+    <Version>0.1.0.2-alpha</Version>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
   
   <PropertyGroup>
     <PackageId>LazinatorAnalyzer</PackageId>
-    <PackageVersion>0.1.0.1-alpha</PackageVersion>
+    <PackageVersion>0.1.0.2-alpha</PackageVersion>
     <Authors>Michael</Authors>
     <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
     <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LazinatorBase\LazinatorBase.csproj"  />
+    <ProjectReference Include="..\LazinatorBase\LazinatorBase.csproj" />
     <ProjectReference Include="..\LazinatorCodeGen\LazinatorCodeGen.csproj" />
   </ItemGroup>
 
