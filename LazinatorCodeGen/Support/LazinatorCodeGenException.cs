@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lazinator.Exceptions
+namespace Lazinator.CodeGeneration
 {
     public class LazinatorCodeGenException : Exception
     {

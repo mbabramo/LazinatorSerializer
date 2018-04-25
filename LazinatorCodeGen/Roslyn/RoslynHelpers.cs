@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Lazinator.Exceptions;
 using System.Threading.Tasks;
+using Lazinator.CodeGeneration;
 
 namespace LazinatorCodeGen.Roslyn
 {
