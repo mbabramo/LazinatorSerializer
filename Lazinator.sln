@@ -24,8 +24,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorTests", "Lazinator
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorAnalyzer", "LazinatorAnalyzer\LazinatorAnalyzer.csproj", "{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorAnalyzer.Test", "LazinatorAnalyzer.Test\LazinatorAnalyzer.Test.csproj", "{4EC74AA9-C35A-4744-92F0-CF6B0450DA6F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazinatorAnalyzer.Vsix", "LazinatorAnalyzer.Vsix\LazinatorAnalyzer.Vsix.csproj", "{461F19AC-4F96-4132-ABDE-D10A437E4031}"
 EndProject
 Global
@@ -46,10 +44,6 @@ Global
 		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EC74AA9-C35A-4744-92F0-CF6B0450DA6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EC74AA9-C35A-4744-92F0-CF6B0450DA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EC74AA9-C35A-4744-92F0-CF6B0450DA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EC74AA9-C35A-4744-92F0-CF6B0450DA6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Release|Any CPU.ActiveCfg = Release|Any CPU
