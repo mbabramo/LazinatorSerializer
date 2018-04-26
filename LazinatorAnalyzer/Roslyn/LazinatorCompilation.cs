@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Immutable;
 using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.Analyzer;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -39,7 +40,8 @@ namespace LazinatorCodeGen.Roslyn
             Compilation = compilation;
             TypeDeclarationSyntax implementingTypeDeclaration = GetTypeDeclaration(compilation, implementingTypeName);
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
-            INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.Interfaces.First(x => x.Name.Contains(implementingTypeName)); // by convention for testing purposes only. In analyzer, we'll have to specify the exclusive interface type symbol
+            INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
+            INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
             Initialize(implementingTypeDeclaration, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
         }
 

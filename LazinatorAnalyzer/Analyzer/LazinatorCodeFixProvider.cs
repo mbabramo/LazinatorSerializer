@@ -26,7 +26,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(LazinatorAnalyzer.Lazin001); }
+            get { return ImmutableArray.Create(LazinatorCodeAnalyzer.Lazin001); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()
@@ -46,7 +46,7 @@ namespace LazinatorAnalyzer.Analyzer
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             // Find the type declaration identified by the diagnostic.
-            if (diagnostic.Id == LazinatorAnalyzer.Lazin001)
+            if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin001)
             {
                 var syntaxToken = root.FindToken(diagnosticSpan.Start);
                 var declaration = syntaxToken.Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();

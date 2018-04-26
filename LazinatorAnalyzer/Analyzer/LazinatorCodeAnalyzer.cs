@@ -14,14 +14,14 @@ using Location = Microsoft.CodeAnalysis.Location;
 namespace LazinatorAnalyzer.Analyzer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class LazinatorAnalyzer : DiagnosticAnalyzer
+    public class LazinatorCodeAnalyzer : DiagnosticAnalyzer
     {
 
         // Analyses 
 
-        private const string LazinatorAttributeName = "Lazinator.Attributes.LazinatorAttribute";
-        private const string LazinatorInterfaceName = "Lazinator.Core.ILazinator";
-        private const string Category = "Lazinator";
+        public const string LazinatorAttributeName = "Lazinator.Attributes.LazinatorAttribute";
+        public const string LazinatorInterfaceName = "Lazinator.Core.ILazinator";
+        public const string Category = "Lazinator";
 
         // 1. If the Lazinator code behind does not exist or is out of date, then it must be generated.
         public const string Lazin001 = "Lazin001";
@@ -111,8 +111,7 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     case SymbolKind.NamedType:
                         var namedType = (INamedTypeSymbol)context.Symbol;
-                        var namedInterfaceType = (namedType.AllInterfaces.FirstOrDefault(x =>
-                            RoslynHelpers.HasAttribute(x, _lazinatorAttributeType)));
+                        var namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
 
                         if (namedInterfaceType != null)
                         {

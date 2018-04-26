@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Threading.Tasks;
 using Lazinator.CodeDescription;
+using LazinatorCodeGen.AttributeClones;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -47,14 +48,22 @@ namespace LazinatorCodeGen.Roslyn
         }
 
 
-        public static bool HasAttributeOfType<T>(ISymbol symbol) where T : Attribute
+        public static bool HasAttributeOfType<T>(this ISymbol symbol) where T : Attribute
         {
             return GetKnownAttributes<T>(symbol).Any();
         }
 
-        public static bool HasAttribute(ISymbol symbol, INamedTypeSymbol attributeSymbol)
+        public static bool HasAttribute(this ISymbol symbol, INamedTypeSymbol attributeSymbol)
         {
             return symbol.GetAttributes().Any(x => x.AttributeClass.Equals(attributeSymbol));
+        }
+
+        public static INamedTypeSymbol GetTopLevelInterfaceImplementingAttribute(this INamedTypeSymbol lazinatorObject, INamedTypeSymbol attributeType)
+        {
+            return lazinatorObject.Interfaces
+                        .Where(x => x.HasAttribute(attributeType))
+                        .OrderByDescending(x => x.GetMembers().Count())
+                        .SingleOrDefault();
         }
 
         public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel(this INamedTypeSymbol namedSymbolType)
