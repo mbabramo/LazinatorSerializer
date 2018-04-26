@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Lazinator.Support;
 using LazinatorCodeGen.Support;
 
-namespace Lazinator.CodeGeneration
+namespace Lazinator.CodeDescription
 {
     public enum LazinatorObjectType
     {

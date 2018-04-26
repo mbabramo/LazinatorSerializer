@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
-using Lazinator.CodeGeneration;
+using Lazinator.CodeDescription;
 using LazinatorTests.Examples;
 using Lazinator.Support;
 using Lazinator.Buffers; 

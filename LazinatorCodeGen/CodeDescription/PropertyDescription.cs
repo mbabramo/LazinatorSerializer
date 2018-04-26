@@ -6,13 +6,11 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using LazinatorCodeGen.AttributeClones;
-using Lazinator.Exceptions;
-using Lazinator.Support;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using static LazinatorCodeGen.Roslyn.RoslynHelpers;
 
-namespace Lazinator.CodeGeneration
+namespace Lazinator.CodeDescription
 {
     public class PropertyDescription
     {

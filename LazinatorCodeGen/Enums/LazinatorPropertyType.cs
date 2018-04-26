@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.CodeGeneration
+namespace Lazinator.CodeDescription
 {
     public enum LazinatorPropertyType : byte
     {

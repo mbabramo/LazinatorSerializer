@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using LazinatorCodeGen.AttributeClones;
-using Lazinator.Support;
 using LazinatorCodeGen.Roslyn;
+using LazinatorCodeGen.Support;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Lazinator.CodeGeneration
+namespace Lazinator.CodeDescription
 {
     public class ObjectDescription
     {

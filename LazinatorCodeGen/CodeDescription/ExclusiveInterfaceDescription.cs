@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LazinatorCodeGen.AttributeClones;
-using Lazinator.Exceptions;
 using Microsoft.CodeAnalysis;
 
-namespace Lazinator.CodeGeneration
+namespace Lazinator.CodeDescription
 {
     public class ExclusiveInterfaceDescription
     {

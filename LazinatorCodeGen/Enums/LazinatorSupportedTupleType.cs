@@ -1,4 +1,4 @@
-﻿namespace Lazinator.CodeGeneration
+﻿namespace Lazinator.CodeDescription
 {
     public enum LazinatorSupportedTupleType : byte
     {

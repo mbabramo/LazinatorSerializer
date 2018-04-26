@@ -6,7 +6,7 @@ using LazinatorCodeGen.AttributeClones;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 
-namespace Lazinator.CodeGeneration
+namespace Lazinator.CodeDescription
 {
     public class NonexclusiveInterfaceDescription
     {
