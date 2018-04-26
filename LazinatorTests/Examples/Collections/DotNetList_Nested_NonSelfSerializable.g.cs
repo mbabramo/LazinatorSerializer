@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.Collections
         private List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
         public List<List<NonLazinatorClass>> MyListNestedNonLazinatorType
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNestedNonLazinatorType_Accessed)
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListNestedNonLazinatorType;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

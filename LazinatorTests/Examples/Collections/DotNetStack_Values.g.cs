@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.Collections
         private Stack<int> _MyStackInt;
         public Stack<int> MyStackInt
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyStackInt_Accessed)
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyStackInt;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -199,9 +199,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyStackInt_Dirty;
         public bool MyStackInt_Dirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _MyStackInt_Dirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_MyStackInt_Dirty != value)

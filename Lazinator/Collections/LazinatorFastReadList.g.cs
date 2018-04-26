@@ -71,9 +71,9 @@ namespace Lazinator.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -104,9 +104,9 @@ namespace Lazinator.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -152,7 +152,7 @@ namespace Lazinator.Collections
         private ReadOnlyMemory<byte> _ReadOnly;
         public ReadOnlySpan<T> ReadOnly
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_ReadOnly_Accessed)
@@ -163,7 +163,7 @@ namespace Lazinator.Collections
                 }
                 return MemoryMarshal.Cast<byte, T>(_ReadOnly.Span);
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 var span = value;

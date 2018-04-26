@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -164,12 +164,12 @@ namespace LazinatorTests.Examples
         private long _MyLong;
         public long MyLong
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyLong;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -179,12 +179,12 @@ namespace LazinatorTests.Examples
         private short _MyShort;
         public short MyShort
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyShort;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

@@ -75,9 +75,9 @@ namespace Lazinator.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -108,9 +108,9 @@ namespace Lazinator.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -153,7 +153,7 @@ namespace Lazinator.Collections
         private LazinatorOffsetList _Offsets;
         public LazinatorOffsetList Offsets
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_Offsets_Accessed)
@@ -169,7 +169,7 @@ namespace Lazinator.Collections
                 }
                 return _Offsets;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

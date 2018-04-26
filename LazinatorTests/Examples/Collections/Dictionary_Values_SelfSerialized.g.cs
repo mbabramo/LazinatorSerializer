@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.Collections
         private Dictionary<int, ExampleChild> _MyDictionary;
         public Dictionary<int, ExampleChild> MyDictionary
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyDictionary_Accessed)
@@ -189,7 +189,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyDictionary;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -201,7 +201,7 @@ namespace LazinatorTests.Examples.Collections
         private SortedDictionary<int, ExampleChild> _MySortedDictionary;
         public SortedDictionary<int, ExampleChild> MySortedDictionary
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MySortedDictionary_Accessed)
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MySortedDictionary;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -232,7 +232,7 @@ namespace LazinatorTests.Examples.Collections
         private SortedList<int, ExampleChild> _MySortedList;
         public SortedList<int, ExampleChild> MySortedList
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MySortedList_Accessed)
@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MySortedList;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

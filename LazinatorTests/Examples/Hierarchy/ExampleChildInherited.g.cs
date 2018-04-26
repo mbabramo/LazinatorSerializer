@@ -30,12 +30,12 @@ namespace LazinatorTests.Examples
         private int _MyInt;
         public int MyInt
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyInt;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

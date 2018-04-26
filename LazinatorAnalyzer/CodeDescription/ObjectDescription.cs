@@ -201,9 +201,9 @@ namespace Lazinator.CodeDescription
                         private bool _IsDirty;
                         public bool IsDirty
                         {{
-                            //[DebuggerStepThrough]
+                            [DebuggerStepThrough]
                             get => _IsDirty;
-                            //[DebuggerStepThrough]
+                            [DebuggerStepThrough]
                             set
                             {{
                                 if (_IsDirty != value)
@@ -234,9 +234,9 @@ namespace Lazinator.CodeDescription
                         private bool _DescendantIsDirty;
                         public bool DescendantIsDirty
                         {{
-                            //[DebuggerStepThrough]
+                            [DebuggerStepThrough]
                             get => _DescendantIsDirty{additionalDirtinessChecks};
-                            //[DebuggerStepThrough]
+                            [DebuggerStepThrough]
                             set
                             {{
                                 if (_DescendantIsDirty != value)

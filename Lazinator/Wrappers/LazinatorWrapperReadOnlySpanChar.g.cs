@@ -85,9 +85,9 @@ namespace Lazinator.Wrappers
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace Lazinator.Wrappers
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -166,7 +166,7 @@ namespace Lazinator.Wrappers
         private ReadOnlyMemory<byte> _Value;
         public ReadOnlySpan<char> Value
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_Value_Accessed)
@@ -177,7 +177,7 @@ namespace Lazinator.Wrappers
                 }
                 return MemoryMarshal.Cast<byte, char>(_Value.Span);
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 

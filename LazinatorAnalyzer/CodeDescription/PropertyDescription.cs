@@ -524,12 +524,12 @@ namespace Lazinator.CodeDescription
             string propertyString = $@"        private {TypeName} _{PropertyName};
         {PropertyAccessibilityString}{TypeName} {PropertyName}
         {{
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {{
                 return _{PropertyName};
             }}
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             {SetterAccessibilityString}set
             {{
                 IsDirty = true;
@@ -578,7 +578,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"private {TypeName} _{PropertyName};
         public {TypeName} {PropertyName}
         {{
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {{
                 if (!_{PropertyName}_Accessed)
@@ -598,7 +598,7 @@ namespace Lazinator.CodeDescription
                 }}
                 return _{PropertyName};
             }}
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {{
                 IsDirty = true;
@@ -618,7 +618,7 @@ namespace Lazinator.CodeDescription
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
                 sb.Append($@"public {TypeName} {PropertyName}_Copy
                             {{
-                                //[DebuggerStepThrough]
+                                [DebuggerStepThrough]
                                 get
                                 {{
                                     if (!_{PropertyName}_Accessed)
@@ -672,7 +672,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
         public {TypeName} {PropertyName}
         {{
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {{
                 if (!_{PropertyName}_Accessed)
@@ -683,7 +683,7 @@ namespace Lazinator.CodeDescription
                 }}
                 return MemoryMarshal.Cast<byte, {innerType}>(_{PropertyName}.Span);
             }}
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {{
                 
@@ -702,9 +702,9 @@ namespace Lazinator.CodeDescription
         private bool _{PropertyName}_Dirty;
         public bool {PropertyName}_Dirty
         {{
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _{PropertyName}_Dirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {{
                 if (_{PropertyName}_Dirty != value)

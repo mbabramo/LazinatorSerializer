@@ -86,9 +86,9 @@ namespace Lazinator.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -119,9 +119,9 @@ namespace Lazinator.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -169,7 +169,7 @@ namespace Lazinator.Collections
         private LazinatorFastReadList<int> _FourByteItems;
         public LazinatorFastReadList<int> FourByteItems
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_FourByteItems_Accessed)
@@ -192,7 +192,7 @@ namespace Lazinator.Collections
                 }
                 return _FourByteItems;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -208,7 +208,7 @@ namespace Lazinator.Collections
         private LazinatorFastReadList<short> _TwoByteItems;
         public LazinatorFastReadList<short> TwoByteItems
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_TwoByteItems_Accessed)
@@ -231,7 +231,7 @@ namespace Lazinator.Collections
                 }
                 return _TwoByteItems;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

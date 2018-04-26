@@ -30,12 +30,12 @@ namespace LazinatorTests.Examples
         private string _MyListName;
         public string MyListName
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyListName;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

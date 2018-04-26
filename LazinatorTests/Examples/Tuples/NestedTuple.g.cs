@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Tuples
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Tuples
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.Tuples
         private Tuple<uint?, ValueTuple<ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, NonLazinatorClass> _MyNestedTuple;
         public Tuple<uint?, ValueTuple<ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, NonLazinatorClass> MyNestedTuple
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyNestedTuple_Accessed)
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyNestedTuple;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

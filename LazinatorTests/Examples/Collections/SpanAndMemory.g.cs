@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -176,7 +176,7 @@ namespace LazinatorTests.Examples.Collections
         private Memory<int> _MyMemoryInt;
         public Memory<int> MyMemoryInt
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyMemoryInt_Accessed)
@@ -195,7 +195,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyMemoryInt;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Collections
         private Memory<int>? _MyNullableMemoryInt;
         public Memory<int>? MyNullableMemoryInt
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyNullableMemoryInt_Accessed)
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyNullableMemoryInt;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -238,7 +238,7 @@ namespace LazinatorTests.Examples.Collections
         private ReadOnlyMemory<byte> _MyReadOnlySpanByte;
         public ReadOnlySpan<byte> MyReadOnlySpanByte
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyReadOnlySpanByte_Accessed)
@@ -249,7 +249,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return MemoryMarshal.Cast<byte, byte>(_MyReadOnlySpanByte.Span);
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 
@@ -262,7 +262,7 @@ namespace LazinatorTests.Examples.Collections
         private ReadOnlyMemory<byte> _MyReadOnlySpanChar;
         public ReadOnlySpan<char> MyReadOnlySpanChar
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyReadOnlySpanChar_Accessed)
@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span);
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 
@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples.Collections
         private ReadOnlyMemory<byte> _MyReadOnlySpanDateTime;
         public ReadOnlySpan<DateTime> MyReadOnlySpanDateTime
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyReadOnlySpanDateTime_Accessed)
@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return MemoryMarshal.Cast<byte, DateTime>(_MyReadOnlySpanDateTime.Span);
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 
@@ -310,7 +310,7 @@ namespace LazinatorTests.Examples.Collections
         private ReadOnlyMemory<byte> _MyReadOnlySpanLong;
         public ReadOnlySpan<long> MyReadOnlySpanLong
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyReadOnlySpanLong_Accessed)
@@ -321,7 +321,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span);
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 

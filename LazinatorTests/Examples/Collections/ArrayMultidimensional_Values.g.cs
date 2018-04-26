@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.Collections
         private int[,] _MyArrayInt;
         public int[,] MyArrayInt
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyArrayInt_Accessed)
@@ -189,7 +189,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyArrayInt;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -203,9 +203,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyArrayInt_Dirty;
         public bool MyArrayInt_Dirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _MyArrayInt_Dirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_MyArrayInt_Dirty != value)
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Collections
         private int[][,,][,,,] _MyCrazyJaggedArray;
         public int[][,,][,,,] MyCrazyJaggedArray
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyCrazyJaggedArray_Accessed)
@@ -238,7 +238,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyCrazyJaggedArray;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Collections
         private int[,,] _MyThreeDimArrayInt;
         public int[,,] MyThreeDimArrayInt
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyThreeDimArrayInt_Accessed)
@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyThreeDimArrayInt;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

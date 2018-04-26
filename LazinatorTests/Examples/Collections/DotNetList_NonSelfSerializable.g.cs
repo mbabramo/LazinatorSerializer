@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -168,7 +168,7 @@ namespace LazinatorTests.Examples.Collections
         private List<NonLazinatorClass> _MyListNonLazinatorType;
         public List<NonLazinatorClass> MyListNonLazinatorType
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNonLazinatorType_Accessed)
@@ -187,7 +187,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListNonLazinatorType;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -201,9 +201,9 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyListNonLazinatorType_Dirty;
         public bool MyListNonLazinatorType_Dirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _MyListNonLazinatorType_Dirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_MyListNonLazinatorType_Dirty != value)
@@ -217,7 +217,7 @@ namespace LazinatorTests.Examples.Collections
         private List<NonLazinatorClass> _MyListNonLazinatorType2;
         public List<NonLazinatorClass> MyListNonLazinatorType2
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNonLazinatorType2_Accessed)
@@ -236,7 +236,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListNonLazinatorType2;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

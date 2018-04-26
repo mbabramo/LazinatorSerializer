@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty || (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty);
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples
         private ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyExampleStruct_Accessed)
@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyExampleStruct;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples
         internal bool _MyExampleStruct_Accessed;
         public ExampleStruct MyExampleStruct_Copy
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyExampleStruct_Accessed)

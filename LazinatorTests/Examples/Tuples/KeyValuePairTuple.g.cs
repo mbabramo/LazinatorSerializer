@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Tuples
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Tuples
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.Tuples
         private KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
         public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyKeyValuePairSerialized_Accessed)
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyKeyValuePairSerialized;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

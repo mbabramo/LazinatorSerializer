@@ -85,9 +85,9 @@ namespace LazinatorTests.Examples.Tuples
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -118,9 +118,9 @@ namespace LazinatorTests.Examples.Tuples
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -172,7 +172,7 @@ namespace LazinatorTests.Examples.Tuples
         private Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized;
         public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyTupleSerialized_Accessed)
@@ -191,7 +191,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyTupleSerialized;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -203,7 +203,7 @@ namespace LazinatorTests.Examples.Tuples
         private Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized2;
         public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyTupleSerialized2_Accessed)
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyTupleSerialized2;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Tuples
         private Tuple<uint?, ExampleChild, NonLazinatorClass> _MyTupleSerialized3;
         public Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyTupleSerialized3_Accessed)
@@ -253,7 +253,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyTupleSerialized3;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -265,7 +265,7 @@ namespace LazinatorTests.Examples.Tuples
         private Tuple<int, ExampleStruct> _MyTupleSerialized4;
         public Tuple<int, ExampleStruct> MyTupleSerialized4
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyTupleSerialized4_Accessed)
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyTupleSerialized4;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

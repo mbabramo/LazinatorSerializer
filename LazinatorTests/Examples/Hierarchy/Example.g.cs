@@ -89,9 +89,9 @@ namespace LazinatorTests.Examples
         private bool _IsDirty;
         public bool IsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -122,9 +122,9 @@ namespace LazinatorTests.Examples
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -178,12 +178,12 @@ namespace LazinatorTests.Examples
         private bool _MyBool;
         public bool MyBool
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyBool;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -193,12 +193,12 @@ namespace LazinatorTests.Examples
         private char _MyChar;
         public char MyChar
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyChar;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -208,12 +208,12 @@ namespace LazinatorTests.Examples
         private DateTime _MyDateTime;
         public DateTime MyDateTime
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyDateTime;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -223,12 +223,12 @@ namespace LazinatorTests.Examples
         private string _MyNewString;
         public string MyNewString
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyNewString;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -238,12 +238,12 @@ namespace LazinatorTests.Examples
         private string _MyOldString;
         public string MyOldString
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyOldString;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -253,12 +253,12 @@ namespace LazinatorTests.Examples
         private string _MyString;
         public string MyString
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyString;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -268,12 +268,12 @@ namespace LazinatorTests.Examples
         private TestEnum _MyTestEnum;
         public TestEnum MyTestEnum
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyTestEnum;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -283,12 +283,12 @@ namespace LazinatorTests.Examples
         private uint _MyUint;
         public uint MyUint
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyUint;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -298,12 +298,12 @@ namespace LazinatorTests.Examples
         private decimal? _MyNullableDecimal;
         public decimal? MyNullableDecimal
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyNullableDecimal;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             internal set
             {
                 IsDirty = true;
@@ -313,12 +313,12 @@ namespace LazinatorTests.Examples
         private double? _MyNullableDouble;
         public double? MyNullableDouble
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyNullableDouble;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -328,12 +328,12 @@ namespace LazinatorTests.Examples
         private TimeSpan? _MyNullableTimeSpan;
         public TimeSpan? MyNullableTimeSpan
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyNullableTimeSpan;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -343,12 +343,12 @@ namespace LazinatorTests.Examples
         private TestEnumByte? _MyTestEnumByteNullable;
         public TestEnumByte? MyTestEnumByteNullable
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyTestEnumByteNullable;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples
         private ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild1_Accessed)
@@ -376,7 +376,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild1;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -392,7 +392,7 @@ namespace LazinatorTests.Examples
         private ExampleChild _MyChild2;
         public ExampleChild MyChild2
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild2_Accessed)
@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild2;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -426,7 +426,7 @@ namespace LazinatorTests.Examples
         private ExampleChild _MyChild2Previous;
         public ExampleChild MyChild2Previous
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild2Previous_Accessed)
@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild2Previous;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples
         private IExampleNonexclusiveInterface _MyInterfaceImplementer;
         public IExampleNonexclusiveInterface MyInterfaceImplementer
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyInterfaceImplementer_Accessed)
@@ -478,7 +478,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyInterfaceImplementer;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -494,7 +494,7 @@ namespace LazinatorTests.Examples
         private NonLazinatorClass _MyNonLazinatorChild;
         public NonLazinatorClass MyNonLazinatorChild
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyNonLazinatorChild_Accessed)
@@ -513,7 +513,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyNonLazinatorChild;
             }
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -527,9 +527,9 @@ namespace LazinatorTests.Examples
         private bool _MyNonLazinatorChild_Dirty;
         public bool MyNonLazinatorChild_Dirty
         {
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _MyNonLazinatorChild_Dirty;
-            //[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_MyNonLazinatorChild_Dirty != value)
