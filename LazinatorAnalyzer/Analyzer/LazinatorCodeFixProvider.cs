@@ -17,7 +17,7 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace LazinatorAnalyzer
+namespace LazinatorAnalyzer.Analyzer
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(LazinatorCodeFixProvider)), Shared]
     public class LazinatorCodeFixProvider : CodeFixProvider

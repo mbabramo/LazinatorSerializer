@@ -4,7 +4,7 @@ using System.Linq;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 
-namespace LazinatorAnalyzer
+namespace LazinatorAnalyzer.Analyzer
 {
     public class SourceFileInformation
     {

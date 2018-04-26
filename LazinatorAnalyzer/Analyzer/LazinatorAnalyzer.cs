@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Location = Microsoft.CodeAnalysis.Location;
 
-namespace LazinatorAnalyzer
+namespace LazinatorAnalyzer.Analyzer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class LazinatorAnalyzer : DiagnosticAnalyzer

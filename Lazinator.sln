@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazinator", "Lazinator\Lazi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorTests", "LazinatorTests\LazinatorTests.csproj", "{EA9F7315-9198-4F24-AA79-6A6D050D41CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorCodeGen", "LazinatorCodeGen\LazinatorCodeGen.csproj", "{07FB8721-DD79-434F-B7E3-962663830B1C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorAnalyzer", "LazinatorAnalyzer\LazinatorAnalyzer.csproj", "{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorAnalyzer.Test", "LazinatorAnalyzer.Test\LazinatorAnalyzer.Test.csproj", "{4EC74AA9-C35A-4744-92F0-CF6B0450DA6F}"
@@ -44,10 +42,6 @@ Global
 		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07FB8721-DD79-434F-B7E3-962663830B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07FB8721-DD79-434F-B7E3-962663830B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07FB8721-DD79-434F-B7E3-962663830B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07FB8721-DD79-434F-B7E3-962663830B1C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,7 +59,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
 	EndGlobalSection
 EndGlobal
