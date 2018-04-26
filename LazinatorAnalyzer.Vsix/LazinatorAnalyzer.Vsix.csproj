@@ -89,10 +89,6 @@
       <Project>{0a58eab9-7c0f-4f68-8ddf-280caefd3600}</Project>
       <Name>LazinatorAnalyzer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LazinatorBase\LazinatorBase.csproj">
-      <Project>{ae67f799-49e1-45d9-8aff-b1c51fc9af03}</Project>
-      <Name>LazinatorBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LazinatorCodeGen\LazinatorCodeGen.csproj">
       <Project>{07fb8721-dd79-434f-b7e3-962663830b1c}</Project>
       <Name>LazinatorCodeGen</Name>

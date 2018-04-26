@@ -44,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LazinatorBase\LazinatorBase.csproj" />
     <ProjectReference Include="..\LazinatorCodeGen\LazinatorCodeGen.csproj" />
   </ItemGroup>
 

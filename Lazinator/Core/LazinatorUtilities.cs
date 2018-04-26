@@ -6,7 +6,6 @@ using Lazinator.Buffers;
 using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
-using LazinatorBase.Support;
 
 namespace Lazinator.Core
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorBase.Support
+namespace Lazinator.Support
 {
     // also change file in CodeGen with same class name
     public static class LazinatorVersionInfo

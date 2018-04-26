@@ -16,7 +16,6 @@ using Microsoft.CodeAnalysis.Rename;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-using Lazinator.Exceptions;
 
 namespace LazinatorAnalyzer
 {

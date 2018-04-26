@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples
         {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorBase.Support.LazinatorVersionInfo.LazinatorIntVersion);
+            CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
