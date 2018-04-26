@@ -50,7 +50,7 @@ namespace LazinatorTests.Tests
             ImmutableArray<AttributeData> attributes = exampleInterface.GetAttributes();
             attributes.Count().Should().Be(1);
             Attribute converted = AttributeConverter.ConvertAttribute(attributes[0]);
-            LazinatorAttribute lazinatorAttribute = converted as LazinatorAttribute;
+            LazinatorCodeGen.AttributeClones.LazinatorAttribute lazinatorAttribute = converted as LazinatorCodeGen.AttributeClones.LazinatorAttribute;
             lazinatorAttribute.UniqueID.Should().NotBe(0);
         }
 

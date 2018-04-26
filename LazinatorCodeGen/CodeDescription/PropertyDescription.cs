@@ -40,7 +40,7 @@ namespace Lazinator.CodeDescription
         public string PropertyAccessibility { get; set; }
         public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         public SetterAccessibilityAttribute SetterAccessibility { get; set; }
-        public string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice;
+        public string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
         public int? IntroducedWithVersion { get; set; }
         public int? EliminatedWithVersion { get; set; }
         public bool TrackDirtinessNonSerialized { get; set; }

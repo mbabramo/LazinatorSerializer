@@ -177,7 +177,7 @@ public class MyOtherClass
 
         private static List<string> GetDirectories()
         {
-            return new List<string>() { ReadCodeFile.GetCodeBasePath("Lazinator") + "Base/Attributes", ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections", ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers", ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples" };
+            return new List<string>() { ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes", ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections", ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers", ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples" };
         }
 
         private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws)
