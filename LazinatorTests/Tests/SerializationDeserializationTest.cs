@@ -578,6 +578,23 @@ namespace LazinatorTests.Tests
             c2.NonLazinatorStruct.MyString.Should().Be(null);
         }
 
+
+        [Fact]
+        public void NonLazinatorInterchangeWorks()
+        {
+            NonLazinatorContainer c = new NonLazinatorContainer()
+            {
+                NonLazinatorClass = null,
+                NonLazinatorStruct = new NonLazinatorStruct(),
+                NonLazinatorInterchangeableClass = new NonLazinatorInterchangeableClass() { MyInt = 5, MyString = "hi" }
+            };
+            var c2 = CloneWithOptionalVerification(c, true, false);
+            c2.NonLazinatorStruct.MyInt.Should().Be(0);
+            c2.NonLazinatorStruct.MyString.Should().Be(null);
+            c2.NonLazinatorInterchangeableClass.MyInt.Should().Be(5);
+            c2.NonLazinatorInterchangeableClass.MyString.Should().Be("hi");
+        }
+
         [Fact]
         public void LazinatorDotNetLinkedListInt()
         {
