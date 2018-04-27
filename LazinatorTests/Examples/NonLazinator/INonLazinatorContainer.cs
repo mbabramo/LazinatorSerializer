@@ -18,5 +18,10 @@ namespace LazinatorTests.Examples
             get;
             set;
         }
+        NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
+        {
+            get;
+            set;
+        }
     }
 }

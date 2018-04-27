@@ -5,12 +5,14 @@ using System.Text;
 using Lazinator.Support;
 using Lazinator.Buffers; 
 using Lazinator.Core;
+using LazinatorTests.Examples.NonLazinator;
 using static Lazinator.Core.LazinatorUtilities;
 
 namespace LazinatorTests.Examples
 {
     public partial struct NonLazinatorContainer : INonLazinatorContainer
     {
+
         public static NonLazinatorClass ConvertFromBytes_NonLazinatorClass(ReadOnlyMemory<byte> storage,
             DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate) =>
             Convert_NonLazinatorType.ConvertFromBytes_NonLazinatorClass(storage, deserializationFactory, informParentOfDirtinessDelegate);
@@ -29,5 +31,27 @@ namespace LazinatorTests.Examples
             NonLazinatorStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) =>
             Convert_NonLazinatorType.ConvertToBytes_NonLazinatorStruct(writer, itemToConvert,
                 includeChildrenMode, verifyCleanness);
+
+        public static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(
+            ReadOnlyMemory<byte> storage,
+            DeserializationFactory deserializationFactory,
+            LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        {
+
+            NonLazinatorInterchangeableClass_LazinatorInterchange interchange = new NonLazinatorInterchangeableClass_LazinatorInterchange()
+            {
+                DeserializationFactory = deserializationFactory,
+                LazinatorObjectBytes = storage
+            };
+            return interchange.Interchange();
+        }
+
+        public static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
+            NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
+            bool verifyCleanness)
+        {
+            NonLazinatorInterchangeableClass_LazinatorInterchange interchange = new NonLazinatorInterchangeableClass_LazinatorInterchange(itemToConvert);
+            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+        }
     }
 }
