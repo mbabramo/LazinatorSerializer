@@ -369,6 +369,7 @@ namespace Lazinator.CodeDescription
 ");
             var propertiesSupportedCollections = PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedCollection).ToList();
             var propertiesSupportedTuples = PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedTuple).ToList();
+            var propertiesNonSerialized = PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonSelfSerializingType).ToList();
             if (propertiesSupportedCollections.Any() || propertiesSupportedTuples.Any())
                 sb.Append($@"
                             /* Conversion of supported collections and tuples */
@@ -380,6 +381,9 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in propertiesSupportedTuples)
                 property.AppendSupportedTupleConversionMethods(sb, alreadyGenerated);
+
+            foreach (var property in propertiesNonSerialized)
+                property.AppendInterchangeTypes(sb, alreadyGenerated);
 
 
             sb.Append($@"

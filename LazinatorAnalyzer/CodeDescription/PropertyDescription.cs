@@ -1059,6 +1059,7 @@ namespace Lazinator.CodeDescription
             {
                 inner.AppendSupportedCollectionConversionMethods(sb, alreadyGenerated);
                 inner.AppendSupportedTupleConversionMethods(sb, alreadyGenerated);
+                inner.AppendInterchangeTypes(sb, alreadyGenerated);
             }
         }
 
@@ -1463,5 +1464,40 @@ namespace Lazinator.CodeDescription
 
         #endregion
 
+
+        #region Interchange types
+
+        public void AppendInterchangeTypes(CodeStringBuilder sb, HashSet<string> alreadyGenerated)
+        {
+            if (PropertyType != LazinatorPropertyType.NonSelfSerializingType || !HasInterchangeType)
+                return;
+
+            if (alreadyGenerated.Contains(TypeNameEncodable))
+                return;
+            alreadyGenerated.Add(TypeNameEncodable);
+
+            sb.Append($@"
+                   public static {TypeNameEncodable} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                        {{
+
+                            {TypeNameEncodable}_LazinatorInterchange interchange = new {TypeNameEncodable}_LazinatorInterchange()
+                            {{
+                                DeserializationFactory = deserializationFactory,
+                                LazinatorObjectBytes = storage
+                            }};
+                            return interchange.Interchange();
+                        }}
+
+                        public static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
+                            NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
+                            bool verifyCleanness)
+                        {{
+                            {TypeNameEncodable}_LazinatorInterchange interchange = new {TypeNameEncodable}_LazinatorInterchange(itemToConvert);
+                            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                        }}
+                        ");
+        }
+
+        #endregion
     }
 }
