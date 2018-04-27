@@ -20,6 +20,7 @@ using Xunit;
 using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleNonexclusiveInterfaceImplementer;
 using Lazinator.Wrappers;
 using System.Buffers;
+using System.Reflection;
 
 namespace LazinatorTests.Tests
 {
@@ -586,12 +587,13 @@ namespace LazinatorTests.Tests
             {
                 NonLazinatorClass = null,
                 NonLazinatorStruct = new NonLazinatorStruct(),
-                NonLazinatorInterchangeableClass = new NonLazinatorInterchangeableClass() { MyInt = 5, MyString = "hi" }
+                NonLazinatorInterchangeableClass = new NonLazinatorInterchangeableClass("hi", 5)
             };
             var c2 = CloneWithOptionalVerification(c, true, false);
             c2.NonLazinatorStruct.MyInt.Should().Be(0);
             c2.NonLazinatorStruct.MyString.Should().Be(null);
-            c2.NonLazinatorInterchangeableClass.MyInt.Should().Be(5);
+            // read a private field and a public field
+            typeof(NonLazinatorInterchangeableClass).GetField("MyInt", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(c2.NonLazinatorInterchangeableClass).Should().Be(5);
             c2.NonLazinatorInterchangeableClass.MyString.Should().Be("hi");
         }
 
