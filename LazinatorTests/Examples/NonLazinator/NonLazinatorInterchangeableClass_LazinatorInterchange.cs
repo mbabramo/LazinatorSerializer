@@ -4,9 +4,22 @@ using System.Text;
 
 namespace LazinatorTests.Examples.NonLazinator
 {
-    public class NonLazinatorInterchangeableClass_LazinatorInterchange : INonLazinatorInterchangeableClass_LazinatorInterchange
+    public partial struct NonLazinatorInterchangeableClass_LazinatorInterchange : INonLazinatorInterchangeableClass_LazinatorInterchange
     {
-        public string MyString { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int MyInt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public NonLazinatorInterchangeableClass_LazinatorInterchange(
+            NonLazinatorInterchangeableClass nonLazinatorInterchangeableClass) : this()
+        {
+            MyString = nonLazinatorInterchangeableClass.MyString;
+            MyInt = nonLazinatorInterchangeableClass.MyInt;
+        }
+
+        public NonLazinatorInterchangeableClass Interchange()
+        {
+            return new NonLazinatorInterchangeableClass()
+            {
+                MyString = MyString,
+                MyInt = MyInt
+            };
+        }
     }
 }
