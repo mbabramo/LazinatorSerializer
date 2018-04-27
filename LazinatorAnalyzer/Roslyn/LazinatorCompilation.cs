@@ -22,6 +22,7 @@ namespace LazinatorCodeGen.Roslyn
         public HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
         public HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
+        public HashSet<INamedTypeSymbol> TypesWithLazinatorInterchangeTypes = new HashSet<INamedTypeSymbol>();
         public Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
         public Dictionary<INamedTypeSymbol, List<(IPropertySymbol property, bool isThisLevel)>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<(IPropertySymbol, bool isThisLevel)>>();
         public Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
@@ -278,6 +279,14 @@ namespace LazinatorCodeGen.Roslyn
             {
                 propertiesInType.Add(property);
                 RelevantSymbols.Add(property.Item1);
+                if (property.Item1.Type is INamedTypeSymbol namedTypeOfProperty && !RelevantSymbols.Contains(namedTypeOfProperty))
+                {
+                    // by convention, the existence of a type with the name "_LazinatorInterchange" is assumed to be a lazinator type that we can use to interchange with a non-lazinator type.
+                    RelevantSymbols.Add(property.Item1.Type);
+                    var possibleInterchangeTypeName = property.Item1.Type.GetFullyQualifiedName() + "_LazinatorInterchange";
+                    if (Compilation.GetTypeByMetadataName(possibleInterchangeTypeName) != null)
+                        TypesWithLazinatorInterchangeTypes.Add(namedTypeOfProperty);
+                }
             }
         }
 

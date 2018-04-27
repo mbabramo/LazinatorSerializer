@@ -34,6 +34,7 @@ namespace Lazinator.CodeDescription
         public bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         public bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
         public bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
+        public bool HasInterchangeType { get; set; }
         public List<PropertyDescription> InnerProperties { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
         public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
@@ -209,6 +210,7 @@ namespace Lazinator.CodeDescription
             TypeName = PrettyTypeName(t);
             TypeNameEncodable = EncodableTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
+            HasInterchangeType = Container.CodeFiles.TypesWithLazinatorInterchangeTypes.Contains(t);
         }
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
