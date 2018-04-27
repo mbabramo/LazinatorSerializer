@@ -29,7 +29,7 @@
         ListContainer,
         ListContainerGeneric,
         NestedTuple,
-        NonLazinatorContainer,
+        NonLazinatorInterchangeableClass_LazinatorInterchange,
         RecordLikeType,
         RegularTuple,
         SpanAndMemory,
