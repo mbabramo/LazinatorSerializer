@@ -5,7 +5,7 @@ using Lazinator.Attributes;
 
 namespace LazinatorTests.Examples
 {
-    [Lazinator((int) ExampleUniqueIDs.NonLazinatorInterchangeableClass_LazinatorInterchange)]
+    [Lazinator((int) ExampleUniqueIDs.NonLazinatorContainer)]
     public interface INonLazinatorContainer
     {
         NonLazinatorClass NonLazinatorClass

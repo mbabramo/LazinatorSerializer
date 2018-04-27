@@ -36,5 +36,6 @@
         StructTuple,
         UnofficialInterface,
         UnofficialInterfaceIncorporator,
+        NonLazinatorContainer,
     }
 }

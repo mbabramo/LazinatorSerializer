@@ -9,12 +9,19 @@ namespace LazinatorTests.Examples.NonLazinator
         public NonLazinatorInterchangeableClass_LazinatorInterchange(
             NonLazinatorInterchangeableClass nonLazinatorInterchangeableClass) : this()
         {
-            MyString = nonLazinatorInterchangeableClass.MyString;
-            MyInt = nonLazinatorInterchangeableClass.MyInt;
+            if (nonLazinatorInterchangeableClass == null)
+                IsNull = true;
+            else
+            {
+                MyString = nonLazinatorInterchangeableClass.MyString;
+                MyInt = nonLazinatorInterchangeableClass.MyInt;
+            }
         }
 
         public NonLazinatorInterchangeableClass Interchange()
         {
+            if (IsNull)
+                return null;
             return new NonLazinatorInterchangeableClass()
             {
                 MyString = MyString,
