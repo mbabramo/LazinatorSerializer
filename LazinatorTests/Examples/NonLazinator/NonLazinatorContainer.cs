@@ -13,23 +13,23 @@ namespace LazinatorTests.Examples
     public partial struct NonLazinatorContainer : INonLazinatorContainer
     {
 
-        public static NonLazinatorClass ConvertFromBytes_NonLazinatorClass(ReadOnlyMemory<byte> storage,
+        public static NonLazinatorClass ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(ReadOnlyMemory<byte> storage,
             DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate) =>
-            Convert_NonLazinatorType.ConvertFromBytes_NonLazinatorClass(storage, deserializationFactory, informParentOfDirtinessDelegate);
+            Convert_NonLazinatorType.ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(storage, deserializationFactory, informParentOfDirtinessDelegate);
 
-        public static void ConvertToBytes_NonLazinatorClass(BinaryBufferWriter writer,
+        public static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(BinaryBufferWriter writer,
             NonLazinatorClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) =>
-            Convert_NonLazinatorType.ConvertToBytes_NonLazinatorClass(writer, itemToConvert,
+            Convert_NonLazinatorType.ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert,
                 includeChildrenMode, verifyCleanness);
 
 
-        public static NonLazinatorStruct ConvertFromBytes_NonLazinatorStruct(ReadOnlyMemory<byte> storage,
+        public static NonLazinatorStruct ConvertFromBytes_LazinatorTests_Examples_NonLazinatorStruct(ReadOnlyMemory<byte> storage,
             DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate) =>
-            Convert_NonLazinatorType.ConvertFromBytes_NonLazinatorStruct(storage, deserializationFactory, informParentOfDirtinessDelegate);
+            Convert_NonLazinatorType.ConvertFromBytes_LazinatorTests_Examples_NonLazinatorStruct(storage, deserializationFactory, informParentOfDirtinessDelegate);
 
-        public static void ConvertToBytes_NonLazinatorStruct(BinaryBufferWriter writer,
+        public static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorStruct(BinaryBufferWriter writer,
             NonLazinatorStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) =>
-            Convert_NonLazinatorType.ConvertToBytes_NonLazinatorStruct(writer, itemToConvert,
+            Convert_NonLazinatorType.ConvertToBytes_LazinatorTests_Examples_NonLazinatorStruct(writer, itemToConvert,
                 includeChildrenMode, verifyCleanness);
     }
 }

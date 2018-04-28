@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength);
-                        _MyLazinatorList = ConvertFromBytes_List_Example(childData, DeserializationFactory, null);
+                        _MyLazinatorList = ConvertFromBytes_System_Collections_Generic_List_Example(childData, DeserializationFactory, null);
                     }
                     _MyLazinatorList_Accessed = true;
                 }
@@ -332,7 +332,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListValues_ByteIndex, _MyListValues_ByteLength);
-                        _MyListValues = ConvertFromBytes_List_int(childData, DeserializationFactory, null);
+                        _MyListValues = ConvertFromBytes_System_Collections_Generic_List_int(childData, DeserializationFactory, null);
                     }
                     _MyListValues_Accessed = true;
                     IsDirty = true;
@@ -462,7 +462,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_Example(w, copy_MyLazinatorList, includeChildrenMode, v));
+            ConvertToBytes_System_Collections_Generic_List_Example(w, copy_MyLazinatorList, includeChildrenMode, v));
             var serializedBytesCopy_MyListValues = LazinatorObjectBytes;
             var byteIndexCopy_MyListValues = _MyListValues_ByteIndex;
             var byteLengthCopy_MyListValues = _MyListValues_ByteLength;
@@ -473,7 +473,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_int(w, copy_MyListValues, includeChildrenMode, v));
+            ConvertToBytes_System_Collections_Generic_List_int(w, copy_MyListValues, includeChildrenMode, v));
             var serializedBytesCopy_MyTuple = LazinatorObjectBytes;
             var byteIndexCopy_MyTuple = _MyTuple_ByteIndex;
             var byteLengthCopy_MyTuple = _MyTuple_ByteLength;
@@ -489,7 +489,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<LazinatorTests.Examples.Example> ConvertFromBytes_List_Example(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<LazinatorTests.Examples.Example> ConvertFromBytes_System_Collections_Generic_List_Example(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -524,7 +524,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List_Example(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_Example(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.Example>))
             {
@@ -548,7 +548,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static System.Collections.Generic.List<int> ConvertFromBytes_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<int> ConvertFromBytes_System_Collections_Generic_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -569,7 +569,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List_int(BinaryBufferWriter writer, System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_int(BinaryBufferWriter writer, System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(System.Collections.Generic.List<int>))
             {
@@ -598,7 +598,7 @@ namespace LazinatorTests.Examples
             if (lengthCollectionMember_item1 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                item1 = ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item1 = ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item1;
             
@@ -618,7 +618,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                void actionItem1(BinaryBufferWriter w) => ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item1, includeChildrenMode, verifyCleanness);
+                void actionItem1(BinaryBufferWriter w) => ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert.Item1, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithUintLengthPrefix(writer, actionItem1);
             }
             

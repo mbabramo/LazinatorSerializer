@@ -178,7 +178,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength);
-                        _MyListSerialized = ConvertFromBytes_List_ExampleChild(childData, DeserializationFactory, () => { MyListSerialized_Dirty = true; });
+                        _MyListSerialized = ConvertFromBytes_System_Collections_Generic_List_ExampleChild(childData, DeserializationFactory, () => { MyListSerialized_Dirty = true; });
                     }
                     _MyListSerialized_Accessed = true;
                 }
@@ -242,13 +242,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_ExampleChild(w, MyListSerialized,
+            ConvertToBytes_System_Collections_Generic_List_ExampleChild(w, MyListSerialized,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> ConvertFromBytes_List_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System_Collections_Generic_List_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>))
             {

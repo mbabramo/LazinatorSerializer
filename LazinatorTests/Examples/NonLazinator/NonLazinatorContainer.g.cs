@@ -181,7 +181,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength);
-                        _NonLazinatorClass = ConvertFromBytes_NonLazinatorClass(childData, DeserializationFactory, null);
+                        _NonLazinatorClass = ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, DeserializationFactory, null);
                     }
                     _NonLazinatorClass_Accessed = true;
                     IsDirty = true;
@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength);
-                        _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData, DeserializationFactory, null);
+                        _NonLazinatorInterchangeableClass = ConvertFromBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(childData, DeserializationFactory, null);
                     }
                     _NonLazinatorInterchangeableClass_Accessed = true;
                     IsDirty = true;
@@ -243,7 +243,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength);
-                        _NonLazinatorStruct = ConvertFromBytes_NonLazinatorStruct(childData, DeserializationFactory, null);
+                        _NonLazinatorStruct = ConvertFromBytes_LazinatorTests_Examples_NonLazinatorStruct(childData, DeserializationFactory, null);
                     }
                     _NonLazinatorStruct_Accessed = true;
                     IsDirty = true;
@@ -314,7 +314,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorClass, byteIndexCopy_NonLazinatorClass, byteLengthCopy_NonLazinatorClass),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v));
+            ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v));
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
@@ -325,7 +325,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorInterchangeableClass, byteIndexCopy_NonLazinatorInterchangeableClass, byteLengthCopy_NonLazinatorInterchangeableClass),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v));
+            ConvertToBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v));
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
@@ -336,10 +336,10 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorStruct, byteIndexCopy_NonLazinatorStruct, byteLengthCopy_NonLazinatorStruct),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
+            ConvertToBytes_LazinatorTests_Examples_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
         }
         
-        public static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        public static NonLazinatorInterchangeableClass ConvertFromBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass()
             {
@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples
             return interchange.Interchange();
         }
         
-        public static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
+        public static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
         NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
         bool verifyCleanness)
         {

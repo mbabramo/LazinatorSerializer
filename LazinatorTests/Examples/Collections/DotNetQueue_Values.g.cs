@@ -178,7 +178,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength);
-                        _MyQueueInt = ConvertFromBytes_Queue_int(childData, DeserializationFactory, () => { MyQueueInt_Dirty = true; });
+                        _MyQueueInt = ConvertFromBytes_System_Collections_Generic_Queue_int(childData, DeserializationFactory, () => { MyQueueInt_Dirty = true; });
                     }
                     _MyQueueInt_Accessed = true;
                 }
@@ -242,13 +242,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Queue_int(w, MyQueueInt,
+            ConvertToBytes_System_Collections_Generic_Queue_int(w, MyQueueInt,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.Queue<int> ConvertFromBytes_Queue_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.Queue<int> ConvertFromBytes_System_Collections_Generic_Queue_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Queue_int(BinaryBufferWriter writer, System.Collections.Generic.Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_Queue_int(BinaryBufferWriter writer, System.Collections.Generic.Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(System.Collections.Generic.Queue<int>))
             {

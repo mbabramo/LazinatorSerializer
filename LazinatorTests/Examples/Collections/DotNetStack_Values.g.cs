@@ -178,7 +178,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength);
-                        _MyStackInt = ConvertFromBytes_Stack_int(childData, DeserializationFactory, () => { MyStackInt_Dirty = true; });
+                        _MyStackInt = ConvertFromBytes_System_Collections_Generic_Stack_int(childData, DeserializationFactory, () => { MyStackInt_Dirty = true; });
                     }
                     _MyStackInt_Accessed = true;
                 }
@@ -242,13 +242,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Stack_int(w, MyStackInt,
+            ConvertToBytes_System_Collections_Generic_Stack_int(w, MyStackInt,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.Stack<int> ConvertFromBytes_Stack_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.Stack<int> ConvertFromBytes_System_Collections_Generic_Stack_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Stack_int(BinaryBufferWriter writer, System.Collections.Generic.Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_Stack_int(BinaryBufferWriter writer, System.Collections.Generic.Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(System.Collections.Generic.Stack<int>))
             {
