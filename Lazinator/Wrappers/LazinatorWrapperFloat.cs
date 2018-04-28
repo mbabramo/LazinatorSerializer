@@ -3,7 +3,7 @@
 namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperFloat : ILazinatorWrapperFloat
-    {
+    {   
         public override int GetHashCode()
         {
             return Value.GetHashCode();

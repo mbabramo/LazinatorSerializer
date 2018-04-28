@@ -28,7 +28,9 @@ using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
 using LazinatorTests.Examples;
+using LazinatorTests.Examples.Generics;
 using Newtonsoft.Json;
+using LazinatorListContainer = LazinatorTests.Examples.Collections.LazinatorListContainer;
 
 namespace LazinatorTests.Tests
 {
@@ -170,6 +172,9 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ExampleStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(DerivedLazinatorList<>), "LazinatorTests", "/Examples/", "Generics/", ws);
+            await CompleteGenerateCode(typeof(ClosedGenerics), "LazinatorTests", "/Examples/", "Generics/", ws);
+            await CompleteGenerateCode(typeof(OpenGenericStayingOpen<>), "LazinatorTests", "/Examples/", "Generics/", ws);
+            await CompleteGenerateCode(typeof(OpenGenericStayingOpenContainer), "LazinatorTests", "/Examples/", "Generics/", ws);
             await CompleteGenerateCode(typeof(ClosedGenerics), "LazinatorTests", "/Examples/", "Generics/", ws);
             await CompleteGenerateCode(typeof(NonLazinatorContainer), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
             await CompleteGenerateCode(typeof(NonLazinatorInterchangeClass), "LazinatorTests", "/Examples/", "NonLazinator/", ws);

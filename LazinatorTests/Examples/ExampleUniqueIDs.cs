@@ -37,5 +37,7 @@
         UnofficialInterface,
         UnofficialInterfaceIncorporator,
         NonLazinatorContainer,
+        OpenGenericStayingOpen,
+        OpenGenericStayingOpenContainer,
     }
 }

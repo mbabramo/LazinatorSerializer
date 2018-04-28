@@ -1,6 +1,5 @@
 ﻿{
   "InterchangeMappings": {
     "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass",
-    "MyNamespace.B": "AnotherNamespace.B_Interchange"
   }
 }
