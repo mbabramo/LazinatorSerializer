@@ -115,7 +115,7 @@ namespace Lazinator.CodeDescription
                 using Lazinator.Exceptions;
                 using Lazinator.Support;
                 using Lazinator.Wrappers;
-                {GetNeededNamespaces()}
+
                 namespace { Namespace }
                 {{
                     public { SealedKeyword }partial { StringEnum.GetStringValue(ObjectType) } { ObjectName } : {(IsDerived ? BaseObjectName + ", " : "")}ILazinator
@@ -390,30 +390,6 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
                         ");
-        }
-
-        public string GetNeededNamespaces()
-        {
-            HashSet<string> namespacesNeeded = null;
-            foreach (var property in PropertiesThisLevel)
-            {
-                if (property.Namespace != "System" && property.Namespace != "System.Collections.Generic" &&
-                    property.Namespace != Namespace && property.Namespace != null && property.Namespace != "")
-                {
-                    bool isSubset = Namespace.StartsWith(property.Namespace) &&
-                                    Namespace[property.Namespace.Length] == '.';
-                    if (isSubset)
-                        continue;
-                    if (namespacesNeeded == null)
-                        namespacesNeeded = new HashSet<string>();
-                    if (!property.Namespace.StartsWith("Lazinator."))
-                        namespacesNeeded.Add($"using {property.Namespace};");
-                }
-            }
-
-            if (namespacesNeeded == null)
-                return "";
-            return String.Join("\r\n", namespacesNeeded) + "\r\n";
         }
 
         public void HandleGenerics(INamedTypeSymbol iLazinatorType)
