@@ -16,6 +16,7 @@ namespace Lazinator.CodeDescription
     {
         public ObjectDescription Container { get; set; }
         public string Namespace { get; set; }
+        public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
         public string EnumEquivalentType { get; set; }
         public string TypeName { get; set; }
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
@@ -524,8 +525,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
-            string propertyString = $@"        private {TypeName} _{PropertyName};
-        {PropertyAccessibilityString}{TypeName} {PropertyName}
+            string propertyString = $@"        private {NamespacePrefixToUse}{TypeName} _{PropertyName};
+        {PropertyAccessibilityString}{NamespacePrefixToUse}{TypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -557,10 +558,10 @@ namespace Lazinator.CodeDescription
                 string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
                 if (IsNonexclusiveInterface)
                     assignment =
-                    $"_{PropertyName} = ({TypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
+                    $"_{PropertyName} = ({NamespacePrefixToUse}{TypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
                 else
                     assignment =
-                        $"_{PropertyName} = DeserializationFactory.Create({UniqueIDForLazinatorType}, () => new {TypeName}(), childData{selfReference}); ";
+                        $"_{PropertyName} = DeserializationFactory.Create({UniqueIDForLazinatorType}, () => new {NamespacePrefixToUse}{TypeName}(), childData{selfReference}); ";
             }
             else
             {
@@ -578,8 +579,8 @@ namespace Lazinator.CodeDescription
                 creation = $@"{assignment}";
 
 
-            sb.Append($@"private {TypeName} _{PropertyName};
-        public {TypeName} {PropertyName}
+            sb.Append($@"private {NamespacePrefixToUse}{TypeName} _{PropertyName};
+        public {NamespacePrefixToUse}{TypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -588,7 +589,7 @@ namespace Lazinator.CodeDescription
                 {{
                     if (LazinatorObjectBytes.Length == 0)
                     {{
-                        _{PropertyName} = default({TypeName});{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
+                        _{PropertyName} = default({NamespacePrefixToUse}{TypeName});{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
                         _{PropertyName}_Dirty = true;" : "")}
                     }}
                     else
@@ -619,7 +620,7 @@ namespace Lazinator.CodeDescription
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-                sb.Append($@"public {TypeName} {PropertyName}_Copy
+                sb.Append($@"public {NamespacePrefixToUse}{TypeName} {PropertyName}_Copy
                             {{
                                 [DebuggerStepThrough]
                                 get
@@ -628,12 +629,12 @@ namespace Lazinator.CodeDescription
                                     {{
                                         if (LazinatorObjectBytes.Length == 0)
                                         {{
-                                            return default({TypeName});
+                                            return default({NamespacePrefixToUse}{TypeName});
                                         }}
                                         else
                                         {{
                                             ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength);
-                                            return new {TypeName}()
+                                            return new {NamespacePrefixToUse}{TypeName}()
                                             {{
                                                 DeserializationFactory = DeserializationFactory,
                                                 LazinatorObjectBytes = childData,
@@ -654,13 +655,13 @@ namespace Lazinator.CodeDescription
         {
             string creation;
             if (Container.ObjectType == LazinatorObjectType.Struct)
-                creation = $@"_{PropertyName} = new {TypeName}()
+                creation = $@"_{PropertyName} = new {NamespacePrefixToUse}{TypeName}()
                         {{
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
                         }};";
             else
-                creation = $@"_{PropertyName} = new {TypeName}()
+                creation = $@"_{PropertyName} = new {NamespacePrefixToUse}{TypeName}()
                         {{
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -673,7 +674,7 @@ namespace Lazinator.CodeDescription
         {
             var innerType = InnerProperties[0].TypeName;
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        public {TypeName} {PropertyName}
+        public {NamespacePrefixToUse}{TypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -793,7 +794,7 @@ namespace Lazinator.CodeDescription
             string innerTypeEncodable = InnerProperties[0].TypeNameEncodable;
 
             sb.Append($@"
-                         private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                         private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {NamespacePrefixToUse}{TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<{innerType}, byte>(itemToConvert);
                             for (int i = 0; i < toConvert.Length; i++)
@@ -913,7 +914,7 @@ namespace Lazinator.CodeDescription
                 // we need a method for the Nullable, then an inner method for the non-nullable case
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {NamespacePrefixToUse}{TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                     {{
                         if (itemToConvert == null)
                         {{
@@ -947,9 +948,9 @@ namespace Lazinator.CodeDescription
                 string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {NamespacePrefixToUse}{TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory ? "" : $@"if (itemToConvert == default({TypeName}))
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory ? "" : $@"if (itemToConvert == default({NamespacePrefixToUse}{TypeName}))
                         {{
                             return;
                         }}
@@ -974,11 +975,11 @@ namespace Lazinator.CodeDescription
                 SupportedCollectionType == LazinatorSupportedCollectionType.Queue ||
                 SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
-                creationText = $"{TypeName} collection = new {TypeName}(collectionLength);";
+                creationText = $"{NamespacePrefixToUse}{TypeName} collection = new {NamespacePrefixToUse}{TypeName}(collectionLength);";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedSet || SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
-                creationText = $"{TypeName} collection = new {TypeName}();"; // can't initialize collection length
+                creationText = $"{NamespacePrefixToUse}{TypeName} collection = new {NamespacePrefixToUse}{TypeName}();"; // can't initialize collection length
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory)
             {
@@ -991,13 +992,13 @@ namespace Lazinator.CodeDescription
                 if (ArrayRank == 1)
                 {
                     string newExpression = ReverseBracketOrder($"{InnerProperties[0].TypeName}[collectionLength]");
-                    creationText = $"{TypeName} collection = new {newExpression};";
+                    creationText = $"{NamespacePrefixToUse}{TypeName} collection = new {newExpression};";
                 }
                 else
                 {
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"collectionLength{j}")));
                     string newExpression = ReverseBracketOrder($"{InnerProperties[0].TypeName}[{innerArrayText}]");
-                    creationText = $"{TypeName} collection = new {newExpression};";
+                    creationText = $"{NamespacePrefixToUse}{TypeName} collection = new {newExpression};";
                 }
             }
             else
@@ -1034,11 +1035,11 @@ namespace Lazinator.CodeDescription
             }
             string readCommand = InnerProperties[0].GetSupportedCollectionReadCommands(this);
             sb.Append($@"
-                    private static {TypeName} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                    private static {NamespacePrefixToUse}{TypeName} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                     {{
                         if (storage.Length == 0)
                         {{
-                            return default({TypeName});
+                            return default({NamespacePrefixToUse}{TypeName});
                         }}
                         ReadOnlySpan<byte> span = storage.Span;
 
@@ -1072,20 +1073,20 @@ namespace Lazinator.CodeDescription
                 if (outerProperty.ArrayRank == 1)
                 {
                     collectionAddItem = "collection[i] = item;";
-                    collectionAddNull = $"collection[i] = default({TypeName});";
+                    collectionAddNull = $"collection[i] = default({NamespacePrefixToUse}{TypeName});";
                 }
                 else
                 {
 
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"i{j}")));
                     collectionAddItem = $"collection[{innerArrayText}] = item;";
-                    collectionAddNull = $"collection[{innerArrayText}] = default({TypeName});";
+                    collectionAddNull = $"collection[{innerArrayText}] = default({NamespacePrefixToUse}{TypeName});";
                 }
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory)
             {
                 collectionAddItem = "collectionAsSpan[i] = item;";
-                collectionAddNull = $"collectionAsSpan[i] = default({TypeName});";
+                collectionAddNull = $"collectionAsSpan[i] = default({NamespacePrefixToUse}{TypeName});";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
@@ -1096,26 +1097,26 @@ namespace Lazinator.CodeDescription
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
             {
                 collectionAddItem = "collection.Enqueue(item);";
-                collectionAddNull = $"collection.Enqueue(default({TypeName}));";
+                collectionAddNull = $"collection.Enqueue(default({NamespacePrefixToUse}{TypeName}));";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
                 collectionAddItem = "collection.Push(item);";
-                collectionAddNull = $"collection.Push(default({TypeName}));";
+                collectionAddNull = $"collection.Push(default({NamespacePrefixToUse}{TypeName}));";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
                 collectionAddItem = "collection.AddLast(item);";
-                collectionAddNull = $"collection.AddLast(default({TypeName}));";
+                collectionAddNull = $"collection.AddLast(default({NamespacePrefixToUse}{TypeName}));";
             }
             else
             {
                 collectionAddItem = "collection.Add(item);";
-                collectionAddNull = $"collection.Add(default({TypeName}));";
+                collectionAddNull = $"collection.Add(default({NamespacePrefixToUse}{TypeName}));";
             }
             if (IsPrimitive)
                 return ($@"
-                        {TypeName} item = span.{ReadMethodName}(ref bytesSoFar);
+                        {NamespacePrefixToUse}{TypeName} item = span.{ReadMethodName}(ref bytesSoFar);
                         {collectionAddItem}");
             else if (IsNonSerializedType)
             {
@@ -1157,7 +1158,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 throw new MissingDeserializationFactoryException();
                             }}
-                            var item = ({TypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                            var item = ({NamespacePrefixToUse}{TypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         }}
                         bytesSoFar += lengthCollectionMember;");
@@ -1166,7 +1167,7 @@ namespace Lazinator.CodeDescription
                         $@"
                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                         ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = new {TypeName}()
+                        var item = new {NamespacePrefixToUse}{TypeName}()
                         {{
                             DeserializationFactory = deserializationFactory,
                             InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
@@ -1199,7 +1200,7 @@ namespace Lazinator.CodeDescription
             if (Nullable)
                 fullWriteCommands =
                     $@"
-                    if ({itemString} == default({TypeName}))
+                    if ({itemString} == default({NamespacePrefixToUse}{TypeName}))
                     {{
                         writer.Write((uint)0);
                     }}
@@ -1217,7 +1218,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(ReadVersionNumberConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({TypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
+                        CreateConditionalForSingleLine(ReadVersionNumberConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({NamespacePrefixToUse}{TypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
             else
                 sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;
@@ -1309,7 +1310,7 @@ namespace Lazinator.CodeDescription
             alreadyGenerated.Add(TypeNameEncodable);
 
             sb.Append($@"
-                    private static {TypeName} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                    private static {NamespacePrefixToUse}{TypeName} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                     {{
                         if (storage.Length == 0)
                         {{
@@ -1334,7 +1335,7 @@ namespace Lazinator.CodeDescription
                         return tupleType;
                     }}
 
-                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {NamespacePrefixToUse}{TypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                     {{
                     ");
 
@@ -1375,10 +1376,10 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 return ($@"
-                        {TypeName} {itemName} = span.{ReadMethodName}(ref bytesSoFar);");
+                        {NamespacePrefixToUse}{TypeName} {itemName} = span.{ReadMethodName}(ref bytesSoFar);");
             else if (IsNonSerializedType)
                 return ($@"
-                        {TypeName} {itemName} = default;
+                        {NamespacePrefixToUse}{TypeName} {itemName} = default;
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
@@ -1390,12 +1391,12 @@ namespace Lazinator.CodeDescription
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
                     return ($@"
-                        {TypeName} {itemName} = default;
+                        {NamespacePrefixToUse}{TypeName} {itemName} = default;
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = new {TypeName}()
+                            {itemName} = new {NamespacePrefixToUse}{TypeName}()
                             {{
                                 DeserializationFactory = deserializationFactory,
                                 InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
@@ -1404,7 +1405,7 @@ namespace Lazinator.CodeDescription
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
                 else return ($@"
-                        {TypeName} {itemName} = default;
+                        {NamespacePrefixToUse}{TypeName} {itemName} = default;
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
@@ -1413,7 +1414,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 throw new MissingDeserializationFactoryException();
                             }}
-                            {itemName} = ({TypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                            {itemName} = ({NamespacePrefixToUse}{TypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             }
