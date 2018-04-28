@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -163,8 +162,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyListSerialized_ByteIndex;
         internal int _MyListSerialized_ByteLength => LazinatorObjectBytes.Length - _MyListSerialized_ByteIndex;
         
-        private System.Collections.Generic.List<ExampleChild> _MyListSerialized;
-        public System.Collections.Generic.List<ExampleChild> MyListSerialized
+        private System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> _MyListSerialized;
+        public System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> MyListSerialized
         {
             [DebuggerStepThrough]
             get
@@ -173,7 +172,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListSerialized = default(System.Collections.Generic.List<ExampleChild>);
+                        _MyListSerialized = default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>);
                         _MyListSerialized_Dirty = true;
                     }
                     else
@@ -249,18 +248,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<ExampleChild> ConvertFromBytes_List_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> ConvertFromBytes_List_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<ExampleChild>);
+                return default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<ExampleChild> collection = new System.Collections.Generic.List<ExampleChild>(collectionLength);
+            System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> collection = new System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -284,9 +283,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.List<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<ExampleChild>))
+            if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>))
             {
                 return;
             }

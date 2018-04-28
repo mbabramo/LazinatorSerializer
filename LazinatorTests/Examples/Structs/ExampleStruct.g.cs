@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -269,8 +268,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyChild2_Accessed;
-        private System.Collections.Generic.List<Example> _MyLazinatorList;
-        public System.Collections.Generic.List<Example> MyLazinatorList
+        private System.Collections.Generic.List<LazinatorTests.Examples.Example> _MyLazinatorList;
+        public System.Collections.Generic.List<LazinatorTests.Examples.Example> MyLazinatorList
         {
             [DebuggerStepThrough]
             get
@@ -279,7 +278,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyLazinatorList = default(System.Collections.Generic.List<Example>);
+                        _MyLazinatorList = default(System.Collections.Generic.List<LazinatorTests.Examples.Example>);
                         _MyLazinatorList_Dirty = true;
                     }
                     else
@@ -349,8 +348,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyListValues_Accessed;
-        private ValueTuple<NonLazinatorClass, int?> _MyTuple;
-        public ValueTuple<NonLazinatorClass, int?> MyTuple
+        private ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> _MyTuple;
+        public ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> MyTuple
         {
             [DebuggerStepThrough]
             get
@@ -359,7 +358,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyTuple = default(ValueTuple<NonLazinatorClass, int?>);
+                        _MyTuple = default(ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?>);
                     }
                     else
                     {
@@ -490,18 +489,18 @@ namespace LazinatorTests.Examples
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<Example> ConvertFromBytes_List_Example(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<LazinatorTests.Examples.Example> ConvertFromBytes_List_Example(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<Example>);
+                return default(System.Collections.Generic.List<LazinatorTests.Examples.Example>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<Example> collection = new System.Collections.Generic.List<Example>(collectionLength);
+            System.Collections.Generic.List<LazinatorTests.Examples.Example> collection = new System.Collections.Generic.List<LazinatorTests.Examples.Example>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -525,9 +524,9 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List_Example(BinaryBufferWriter writer, System.Collections.Generic.List<Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_Example(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<Example>))
+            if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.Example>))
             {
                 return;
             }
@@ -584,7 +583,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static ValueTuple<NonLazinatorClass, int?> ConvertFromBytes_ValueTuple_NonLazinatorClass_Nullable_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> ConvertFromBytes_ValueTuple_NonLazinatorClass_Nullable_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -605,12 +604,12 @@ namespace LazinatorTests.Examples
             
             int? item2 = span.ToDecompressedNullableInt(ref bytesSoFar);
             
-            var tupleType = new ValueTuple<NonLazinatorClass, int?>(item1, item2);
+            var tupleType = new ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?>(item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_NonLazinatorClass_Nullable_int(BinaryBufferWriter writer, ValueTuple<NonLazinatorClass, int?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple_NonLazinatorClass_Nullable_int(BinaryBufferWriter writer, ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             if (itemToConvert.Item1 == null)

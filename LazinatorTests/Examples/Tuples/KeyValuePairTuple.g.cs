@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -163,8 +162,8 @@ namespace LazinatorTests.Examples.Tuples
         internal int _MyKeyValuePairSerialized_ByteIndex;
         internal int _MyKeyValuePairSerialized_ByteLength => LazinatorObjectBytes.Length - _MyKeyValuePairSerialized_ByteIndex;
         
-        private System.Collections.Generic.KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
-        public System.Collections.Generic.KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
+        private System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> _MyKeyValuePairSerialized;
+        public System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> MyKeyValuePairSerialized
         {
             [DebuggerStepThrough]
             get
@@ -173,7 +172,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyKeyValuePairSerialized = default(System.Collections.Generic.KeyValuePair<uint, ExampleChild>);
+                        _MyKeyValuePairSerialized = default(System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild>);
                     }
                     else
                     {
@@ -231,7 +230,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_uint_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> ConvertFromBytes_KeyValuePair_uint_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -256,12 +255,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new KeyValuePair<uint, ExampleChild>(item1, item2);
+            var tupleType = new System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild>(item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_KeyValuePair_uint_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.KeyValuePair<uint, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_KeyValuePair_uint_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Key);

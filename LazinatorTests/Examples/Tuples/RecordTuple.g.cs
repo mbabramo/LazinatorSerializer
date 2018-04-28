@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -302,7 +301,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new RecordLikeClass(item1, item2);
+            var tupleType = new LazinatorTests.Examples.RecordLikeClass(item1, item2);
             
             return tupleType;
         }
@@ -337,7 +336,7 @@ namespace LazinatorTests.Examples.Tuples
             
             string item2 = span.ToString_VarIntLength(ref bytesSoFar);
             
-            var tupleType = new RecordLikeType(item1, item2);
+            var tupleType = new LazinatorTests.Examples.RecordLikeType(item1, item2);
             
             return tupleType;
         }

@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -167,8 +166,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
         internal int _MySortedList_ByteLength => LazinatorObjectBytes.Length - _MySortedList_ByteIndex;
         
-        private System.Collections.Generic.Dictionary<int, ExampleChild> _MyDictionary;
-        public System.Collections.Generic.Dictionary<int, ExampleChild> MyDictionary
+        private System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> _MyDictionary;
+        public System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> MyDictionary
         {
             [DebuggerStepThrough]
             get
@@ -177,7 +176,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyDictionary = default(System.Collections.Generic.Dictionary<int, ExampleChild>);
+                        _MyDictionary = default(System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild>);
                     }
                     else
                     {
@@ -198,8 +197,8 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         internal bool _MyDictionary_Accessed;
-        private System.Collections.Generic.SortedDictionary<int, ExampleChild> _MySortedDictionary;
-        public System.Collections.Generic.SortedDictionary<int, ExampleChild> MySortedDictionary
+        private System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> _MySortedDictionary;
+        public System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> MySortedDictionary
         {
             [DebuggerStepThrough]
             get
@@ -208,7 +207,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MySortedDictionary = default(System.Collections.Generic.SortedDictionary<int, ExampleChild>);
+                        _MySortedDictionary = default(System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild>);
                     }
                     else
                     {
@@ -229,8 +228,8 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         internal bool _MySortedDictionary_Accessed;
-        private System.Collections.Generic.SortedList<int, ExampleChild> _MySortedList;
-        public System.Collections.Generic.SortedList<int, ExampleChild> MySortedList
+        private System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> _MySortedList;
+        public System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> MySortedList
         {
             [DebuggerStepThrough]
             get
@@ -239,7 +238,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MySortedList = default(System.Collections.Generic.SortedList<int, ExampleChild>);
+                        _MySortedList = default(System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild>);
                     }
                     else
                     {
@@ -323,18 +322,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.Dictionary<int, ExampleChild> ConvertFromBytes_Dictionary_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> ConvertFromBytes_Dictionary_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.Dictionary<int, ExampleChild>);
+                return default(System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.Dictionary<int, ExampleChild> collection = new System.Collections.Generic.Dictionary<int, ExampleChild>(collectionLength);
+            System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> collection = new System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -347,9 +346,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Dictionary_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.Dictionary<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Dictionary_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.Dictionary<int, ExampleChild>))
+            if (itemToConvert == default(System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild>))
             {
                 return;
             }
@@ -361,7 +360,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static KeyValuePair<int, ExampleChild> ConvertFromBytes_KeyValuePair_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.KeyValuePair<int, LazinatorTests.Examples.ExampleChild> ConvertFromBytes_KeyValuePair_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -386,12 +385,12 @@ namespace LazinatorTests.Examples.Collections
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new KeyValuePair<int, ExampleChild>(item1, item2);
+            var tupleType = new System.Collections.Generic.KeyValuePair<int, LazinatorTests.Examples.ExampleChild>(item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_KeyValuePair_int_ExampleChild(BinaryBufferWriter writer, KeyValuePair<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_KeyValuePair_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.KeyValuePair<int, LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Key);
@@ -407,18 +406,18 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
-        private static System.Collections.Generic.SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> ConvertFromBytes_SortedDictionary_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.SortedDictionary<int, ExampleChild>);
+                return default(System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.SortedDictionary<int, ExampleChild> collection = new System.Collections.Generic.SortedDictionary<int, ExampleChild>();
+            System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> collection = new System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild>();
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -431,9 +430,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedDictionary_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.SortedDictionary<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_SortedDictionary_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.SortedDictionary<int, ExampleChild>))
+            if (itemToConvert == default(System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild>))
             {
                 return;
             }
@@ -445,18 +444,18 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static System.Collections.Generic.SortedList<int, ExampleChild> ConvertFromBytes_SortedList_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> ConvertFromBytes_SortedList_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.SortedList<int, ExampleChild>);
+                return default(System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.SortedList<int, ExampleChild> collection = new System.Collections.Generic.SortedList<int, ExampleChild>(collectionLength);
+            System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> collection = new System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -469,9 +468,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedList_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.SortedList<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_SortedList_int_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.SortedList<int, ExampleChild>))
+            if (itemToConvert == default(System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild>))
             {
                 return;
             }

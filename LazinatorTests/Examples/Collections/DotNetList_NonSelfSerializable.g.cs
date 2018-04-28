@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -165,8 +164,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyListNonLazinatorType_ByteLength => _MyListNonLazinatorType2_ByteIndex - _MyListNonLazinatorType_ByteIndex;
         internal int _MyListNonLazinatorType2_ByteLength => LazinatorObjectBytes.Length - _MyListNonLazinatorType2_ByteIndex;
         
-        private System.Collections.Generic.List<NonLazinatorClass> _MyListNonLazinatorType;
-        public System.Collections.Generic.List<NonLazinatorClass> MyListNonLazinatorType
+        private System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> _MyListNonLazinatorType;
+        public System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> MyListNonLazinatorType
         {
             [DebuggerStepThrough]
             get
@@ -175,7 +174,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListNonLazinatorType = default(System.Collections.Generic.List<NonLazinatorClass>);
+                        _MyListNonLazinatorType = default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>);
                         _MyListNonLazinatorType_Dirty = true;
                     }
                     else
@@ -214,8 +213,8 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private System.Collections.Generic.List<NonLazinatorClass> _MyListNonLazinatorType2;
-        public System.Collections.Generic.List<NonLazinatorClass> MyListNonLazinatorType2
+        private System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> _MyListNonLazinatorType2;
+        public System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> MyListNonLazinatorType2
         {
             [DebuggerStepThrough]
             get
@@ -224,7 +223,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListNonLazinatorType2 = default(System.Collections.Generic.List<NonLazinatorClass>);
+                        _MyListNonLazinatorType2 = default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>);
                     }
                     else
                     {
@@ -295,18 +294,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<NonLazinatorClass> ConvertFromBytes_List_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_List_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<NonLazinatorClass>);
+                return default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<NonLazinatorClass> collection = new System.Collections.Generic.List<NonLazinatorClass>(collectionLength);
+            System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> collection = new System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -326,9 +325,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_NonLazinatorClass(BinaryBufferWriter writer, System.Collections.Generic.List<NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_NonLazinatorClass(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<NonLazinatorClass>))
+            if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>))
             {
                 return;
             }

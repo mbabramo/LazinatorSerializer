@@ -10,7 +10,6 @@
 
 using System;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -196,8 +195,8 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         internal bool _MyNullableTuple_Accessed;
-        private ValueTuple<uint, ExampleChild, NonLazinatorClass> _MyValueTupleSerialized;
-        public ValueTuple<uint, ExampleChild, NonLazinatorClass> MyValueTupleSerialized
+        private ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyValueTupleSerialized;
+        public ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyValueTupleSerialized
         {
             [DebuggerStepThrough]
             get
@@ -206,7 +205,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyValueTupleSerialized = default(ValueTuple<uint, ExampleChild, NonLazinatorClass>);
+                        _MyValueTupleSerialized = default(ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass>);
                     }
                     else
                     {
@@ -308,7 +307,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteUncompressedPrimitives.WriteDouble(writer, itemToConvert.Value.Item2);
         }
         
-        private static ValueTuple<uint, ExampleChild, NonLazinatorClass> ConvertFromBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -342,12 +341,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new ValueTuple<uint, ExampleChild, NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(BinaryBufferWriter writer, ValueTuple<uint, ExampleChild, NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(BinaryBufferWriter writer, ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Item1);
