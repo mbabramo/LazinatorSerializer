@@ -7,6 +7,5 @@ namespace LazinatorTests.Examples.Generics
 {
     public partial class OpenGenericStayingOpenContainer : IOpenGenericStayingOpenContainer
     {
-        public IOpenGenericStayingOpen<LazinatorWrapperFloat> ClosedGeneric { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
