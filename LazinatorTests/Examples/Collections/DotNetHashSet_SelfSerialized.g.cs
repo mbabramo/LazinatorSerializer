@@ -163,8 +163,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyHashSetSerialized_ByteIndex;
         internal int _MyHashSetSerialized_ByteLength => LazinatorObjectBytes.Length - _MyHashSetSerialized_ByteIndex;
         
-        private HashSet<ExampleChild> _MyHashSetSerialized;
-        public HashSet<ExampleChild> MyHashSetSerialized
+        private System.Collections.Generic.HashSet<ExampleChild> _MyHashSetSerialized;
+        public System.Collections.Generic.HashSet<ExampleChild> MyHashSetSerialized
         {
             [DebuggerStepThrough]
             get
@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyHashSetSerialized = default(HashSet<ExampleChild>);
+                        _MyHashSetSerialized = default(System.Collections.Generic.HashSet<ExampleChild>);
                     }
                     else
                     {
@@ -231,24 +231,24 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static HashSet<ExampleChild> ConvertFromBytes_HashSet_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.HashSet<ExampleChild> ConvertFromBytes_HashSet_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(HashSet<ExampleChild>);
+                return default(System.Collections.Generic.HashSet<ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            HashSet<ExampleChild> collection = new HashSet<ExampleChild>(collectionLength);
+            System.Collections.Generic.HashSet<ExampleChild> collection = new System.Collections.Generic.HashSet<ExampleChild>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(ExampleChild));
+                    collection.Add(default(LazinatorTests.Examples.ExampleChild));
                 }
                 else
                 {
@@ -257,7 +257,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         throw new MissingDeserializationFactoryException();
                     }
-                    var item = (ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                    var item = (LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -266,16 +266,16 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_HashSet_ExampleChild(BinaryBufferWriter writer, HashSet<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_HashSet_ExampleChild(BinaryBufferWriter writer, System.Collections.Generic.HashSet<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(HashSet<ExampleChild>))
+            if (itemToConvert == default(System.Collections.Generic.HashSet<ExampleChild>))
             {
                 return;
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                if (item == default(ExampleChild))
+                if (item == default(LazinatorTests.Examples.ExampleChild))
                 {
                     writer.Write((uint)0);
                 }

@@ -163,8 +163,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyStackInt_ByteIndex;
         internal int _MyStackInt_ByteLength => LazinatorObjectBytes.Length - _MyStackInt_ByteIndex;
         
-        private Stack<int> _MyStackInt;
-        public Stack<int> MyStackInt
+        private System.Collections.Generic.Stack<int> _MyStackInt;
+        public System.Collections.Generic.Stack<int> MyStackInt
         {
             [DebuggerStepThrough]
             get
@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyStackInt = default(Stack<int>);
+                        _MyStackInt = default(System.Collections.Generic.Stack<int>);
                         _MyStackInt_Dirty = true;
                     }
                     else
@@ -249,18 +249,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Stack<int> ConvertFromBytes_Stack_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.Stack<int> ConvertFromBytes_Stack_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(Stack<int>);
+                return default(System.Collections.Generic.Stack<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            Stack<int> collection = new Stack<int>(collectionLength);
+            System.Collections.Generic.Stack<int> collection = new System.Collections.Generic.Stack<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -270,9 +270,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Stack_int(BinaryBufferWriter writer, Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Stack_int(BinaryBufferWriter writer, System.Collections.Generic.Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(Stack<int>))
+            if (itemToConvert == default(System.Collections.Generic.Stack<int>))
             {
                 return;
             }

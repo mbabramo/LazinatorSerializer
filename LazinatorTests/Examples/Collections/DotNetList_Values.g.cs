@@ -167,8 +167,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyListInt_ByteLength => _MySortedSetInt_ByteIndex - _MyListInt_ByteIndex;
         internal int _MySortedSetInt_ByteLength => LazinatorObjectBytes.Length - _MySortedSetInt_ByteIndex;
         
-        private LinkedList<int> _MyLinkedListInt;
-        public LinkedList<int> MyLinkedListInt
+        private System.Collections.Generic.LinkedList<int> _MyLinkedListInt;
+        public System.Collections.Generic.LinkedList<int> MyLinkedListInt
         {
             [DebuggerStepThrough]
             get
@@ -177,7 +177,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyLinkedListInt = default(LinkedList<int>);
+                        _MyLinkedListInt = default(System.Collections.Generic.LinkedList<int>);
                         _MyLinkedListInt_Dirty = true;
                     }
                     else
@@ -216,8 +216,8 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private List<int> _MyListInt;
-        public List<int> MyListInt
+        private System.Collections.Generic.List<int> _MyListInt;
+        public System.Collections.Generic.List<int> MyListInt
         {
             [DebuggerStepThrough]
             get
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListInt = default(List<int>);
+                        _MyListInt = default(System.Collections.Generic.List<int>);
                         _MyListInt_Dirty = true;
                     }
                     else
@@ -265,8 +265,8 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private SortedSet<int> _MySortedSetInt;
-        public SortedSet<int> MySortedSetInt
+        private System.Collections.Generic.SortedSet<int> _MySortedSetInt;
+        public System.Collections.Generic.SortedSet<int> MySortedSetInt
         {
             [DebuggerStepThrough]
             get
@@ -275,7 +275,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MySortedSetInt = default(SortedSet<int>);
+                        _MySortedSetInt = default(System.Collections.Generic.SortedSet<int>);
                         _MySortedSetInt_Dirty = true;
                     }
                     else
@@ -377,18 +377,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static LinkedList<int> ConvertFromBytes_LinkedList_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.LinkedList<int> ConvertFromBytes_LinkedList_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(LinkedList<int>);
+                return default(System.Collections.Generic.LinkedList<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            LinkedList<int> collection = new LinkedList<int>();
+            System.Collections.Generic.LinkedList<int> collection = new System.Collections.Generic.LinkedList<int>();
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -398,9 +398,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_LinkedList_int(BinaryBufferWriter writer, LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_LinkedList_int(BinaryBufferWriter writer, System.Collections.Generic.LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(LinkedList<int>))
+            if (itemToConvert == default(System.Collections.Generic.LinkedList<int>))
             {
                 return;
             }
@@ -412,18 +412,18 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<int> ConvertFromBytes_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.List<int> ConvertFromBytes_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(List<int>);
+                return default(System.Collections.Generic.List<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            List<int> collection = new List<int>(collectionLength);
+            System.Collections.Generic.List<int> collection = new System.Collections.Generic.List<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -433,9 +433,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_int(BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_int(BinaryBufferWriter writer, System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(List<int>))
+            if (itemToConvert == default(System.Collections.Generic.List<int>))
             {
                 return;
             }
@@ -447,18 +447,18 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedSet<int> ConvertFromBytes_SortedSet_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static System.Collections.Generic.SortedSet<int> ConvertFromBytes_SortedSet_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(SortedSet<int>);
+                return default(System.Collections.Generic.SortedSet<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            SortedSet<int> collection = new SortedSet<int>();
+            System.Collections.Generic.SortedSet<int> collection = new System.Collections.Generic.SortedSet<int>();
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -468,9 +468,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedSet_int(BinaryBufferWriter writer, SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_SortedSet_int(BinaryBufferWriter writer, System.Collections.Generic.SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(SortedSet<int>))
+            if (itemToConvert == default(System.Collections.Generic.SortedSet<int>))
             {
                 return;
             }

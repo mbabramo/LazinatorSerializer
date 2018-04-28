@@ -178,8 +178,8 @@ namespace LazinatorTests.Examples
                 _ItemT = value;
             }
         }
-        private ExampleChild _ItemU;
-        public ExampleChild ItemU
+        private LazinatorTests.Examples.ExampleChild _ItemU;
+        public LazinatorTests.Examples.ExampleChild ItemU
         {
             [DebuggerStepThrough]
             get
@@ -188,12 +188,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ItemU = default(ExampleChild);
+                        _ItemU = default(LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ItemU_ByteIndex, _ItemU_ByteLength);
-                        _ItemU = DeserializationFactory.Create(113, () => new ExampleChild(), childData, this); 
+                        _ItemU = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _ItemU_Accessed = true;
                 }

@@ -265,8 +265,8 @@ namespace LazinatorTests.Examples
                 _MyString = value;
             }
         }
-        private TestEnum _MyTestEnum;
-        public TestEnum MyTestEnum
+        private LazinatorTests.Examples.TestEnum _MyTestEnum;
+        public LazinatorTests.Examples.TestEnum MyTestEnum
         {
             [DebuggerStepThrough]
             get
@@ -355,8 +355,8 @@ namespace LazinatorTests.Examples
                 _MyTestEnumByteNullable = value;
             }
         }
-        private ExampleChild _MyChild1;
-        public ExampleChild MyChild1
+        private LazinatorTests.Examples.ExampleChild _MyChild1;
+        public LazinatorTests.Examples.ExampleChild MyChild1
         {
             [DebuggerStepThrough]
             get
@@ -365,12 +365,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyChild1 = default(ExampleChild);
+                        _MyChild1 = default(LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength);
-                        _MyChild1 = DeserializationFactory.Create(113, () => new ExampleChild(), childData, this); 
+                        _MyChild1 = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _MyChild1_Accessed = true;
                 }
@@ -389,8 +389,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyChild1_Accessed;
-        private ExampleChild _MyChild2;
-        public ExampleChild MyChild2
+        private LazinatorTests.Examples.ExampleChild _MyChild2;
+        public LazinatorTests.Examples.ExampleChild MyChild2
         {
             [DebuggerStepThrough]
             get
@@ -399,12 +399,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyChild2 = default(ExampleChild);
+                        _MyChild2 = default(LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength);
-                        _MyChild2 = DeserializationFactory.Create(113, () => new ExampleChild(), childData, this); 
+                        _MyChild2 = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _MyChild2_Accessed = true;
                 }
@@ -423,8 +423,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyChild2_Accessed;
-        private ExampleChild _MyChild2Previous;
-        public ExampleChild MyChild2Previous
+        private LazinatorTests.Examples.ExampleChild _MyChild2Previous;
+        public LazinatorTests.Examples.ExampleChild MyChild2Previous
         {
             [DebuggerStepThrough]
             get
@@ -433,12 +433,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyChild2Previous = default(ExampleChild);
+                        _MyChild2Previous = default(LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength);
-                        _MyChild2Previous = DeserializationFactory.Create(113, () => new ExampleChild(), childData, this); 
+                        _MyChild2Previous = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _MyChild2Previous_Accessed = true;
                 }
@@ -457,8 +457,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyChild2Previous_Accessed;
-        private IExampleNonexclusiveInterface _MyInterfaceImplementer;
-        public IExampleNonexclusiveInterface MyInterfaceImplementer
+        private LazinatorTests.Examples.IExampleNonexclusiveInterface _MyInterfaceImplementer;
+        public LazinatorTests.Examples.IExampleNonexclusiveInterface MyInterfaceImplementer
         {
             [DebuggerStepThrough]
             get
@@ -467,12 +467,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyInterfaceImplementer = default(IExampleNonexclusiveInterface);
+                        _MyInterfaceImplementer = default(LazinatorTests.Examples.IExampleNonexclusiveInterface);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength);
-                        _MyInterfaceImplementer = (IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
+                        _MyInterfaceImplementer = (LazinatorTests.Examples.IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _MyInterfaceImplementer_Accessed = true;
                 }
@@ -491,8 +491,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyInterfaceImplementer_Accessed;
-        private NonLazinatorClass _MyNonLazinatorChild;
-        public NonLazinatorClass MyNonLazinatorChild
+        private LazinatorTests.Examples.NonLazinatorClass _MyNonLazinatorChild;
+        public LazinatorTests.Examples.NonLazinatorClass MyNonLazinatorChild
         {
             [DebuggerStepThrough]
             get
@@ -501,7 +501,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyNonLazinatorChild = default(NonLazinatorClass);
+                        _MyNonLazinatorChild = default(LazinatorTests.Examples.NonLazinatorClass);
                         _MyNonLazinatorChild_Dirty = true;
                     }
                     else
@@ -562,7 +562,7 @@ namespace LazinatorTests.Examples
                 _MyOldString = span.ToString_VarIntLength(ref bytesSoFar);
             }
             _MyString = span.ToString_VarIntLength(ref bytesSoFar);
-            _MyTestEnum = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
+            _MyTestEnum = (LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
             _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
             _MyNullableDouble = span.ToNullableDouble(ref bytesSoFar);

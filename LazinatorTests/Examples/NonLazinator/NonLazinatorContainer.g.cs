@@ -167,8 +167,8 @@ namespace LazinatorTests.Examples
         internal int _NonLazinatorInterchangeableClass_ByteLength => _NonLazinatorStruct_ByteIndex - _NonLazinatorInterchangeableClass_ByteIndex;
         internal int _NonLazinatorStruct_ByteLength => LazinatorObjectBytes.Length - _NonLazinatorStruct_ByteIndex;
         
-        private NonLazinatorClass _NonLazinatorClass;
-        public NonLazinatorClass NonLazinatorClass
+        private LazinatorTests.Examples.NonLazinatorClass _NonLazinatorClass;
+        public LazinatorTests.Examples.NonLazinatorClass NonLazinatorClass
         {
             [DebuggerStepThrough]
             get
@@ -177,7 +177,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _NonLazinatorClass = default(NonLazinatorClass);
+                        _NonLazinatorClass = default(LazinatorTests.Examples.NonLazinatorClass);
                     }
                     else
                     {
@@ -198,8 +198,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _NonLazinatorClass_Accessed;
-        private NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
-        public NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
+        private LazinatorTests.Examples.NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
+        public LazinatorTests.Examples.NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
         {
             [DebuggerStepThrough]
             get
@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _NonLazinatorInterchangeableClass = default(NonLazinatorInterchangeableClass);
+                        _NonLazinatorInterchangeableClass = default(LazinatorTests.Examples.NonLazinatorInterchangeableClass);
                     }
                     else
                     {
@@ -229,8 +229,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _NonLazinatorInterchangeableClass_Accessed;
-        private NonLazinatorStruct _NonLazinatorStruct;
-        public NonLazinatorStruct NonLazinatorStruct
+        private LazinatorTests.Examples.NonLazinatorStruct _NonLazinatorStruct;
+        public LazinatorTests.Examples.NonLazinatorStruct NonLazinatorStruct
         {
             [DebuggerStepThrough]
             get
@@ -239,7 +239,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _NonLazinatorStruct = default(NonLazinatorStruct);
+                        _NonLazinatorStruct = default(LazinatorTests.Examples.NonLazinatorStruct);
                     }
                     else
                     {

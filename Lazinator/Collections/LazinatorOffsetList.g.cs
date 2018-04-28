@@ -166,8 +166,8 @@ namespace Lazinator.Collections
         internal int _FourByteItems_ByteLength => _TwoByteItems_ByteIndex - _FourByteItems_ByteIndex;
         internal int _TwoByteItems_ByteLength => LazinatorObjectBytes.Length - _TwoByteItems_ByteIndex;
         
-        private LazinatorFastReadList<int> _FourByteItems;
-        public LazinatorFastReadList<int> FourByteItems
+        private Lazinator.Collections.LazinatorFastReadList<int> _FourByteItems;
+        public Lazinator.Collections.LazinatorFastReadList<int> FourByteItems
         {
             [DebuggerStepThrough]
             get
@@ -176,12 +176,12 @@ namespace Lazinator.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _FourByteItems = default(LazinatorFastReadList<int>);
+                        _FourByteItems = default(Lazinator.Collections.LazinatorFastReadList<int>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _FourByteItems_ByteIndex, _FourByteItems_ByteLength);
-                        _FourByteItems = new LazinatorFastReadList<int>()
+                        _FourByteItems = new Lazinator.Collections.LazinatorFastReadList<int>()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -205,8 +205,8 @@ namespace Lazinator.Collections
             }
         }
         internal bool _FourByteItems_Accessed;
-        private LazinatorFastReadList<short> _TwoByteItems;
-        public LazinatorFastReadList<short> TwoByteItems
+        private Lazinator.Collections.LazinatorFastReadList<short> _TwoByteItems;
+        public Lazinator.Collections.LazinatorFastReadList<short> TwoByteItems
         {
             [DebuggerStepThrough]
             get
@@ -215,12 +215,12 @@ namespace Lazinator.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _TwoByteItems = default(LazinatorFastReadList<short>);
+                        _TwoByteItems = default(Lazinator.Collections.LazinatorFastReadList<short>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength);
-                        _TwoByteItems = new LazinatorFastReadList<short>()
+                        _TwoByteItems = new Lazinator.Collections.LazinatorFastReadList<short>()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,

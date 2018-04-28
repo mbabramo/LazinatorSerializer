@@ -164,8 +164,8 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyList_ByteIndex;
         internal int _MyList_ByteLength => LazinatorObjectBytes.Length - _MyList_ByteIndex;
         
-        private LazinatorList<ExampleChild> _MyList;
-        public LazinatorList<ExampleChild> MyList
+        private Lazinator.Collections.LazinatorList<ExampleChild> _MyList;
+        public Lazinator.Collections.LazinatorList<ExampleChild> MyList
         {
             [DebuggerStepThrough]
             get
@@ -174,12 +174,12 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyList = default(LazinatorList<ExampleChild>);
+                        _MyList = default(Lazinator.Collections.LazinatorList<ExampleChild>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength);
-                        _MyList = DeserializationFactory.Create(51, () => new LazinatorList<ExampleChild>(), childData, this); 
+                        _MyList = DeserializationFactory.Create(51, () => new Lazinator.Collections.LazinatorList<ExampleChild>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }
