@@ -35,6 +35,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public LazinatorCompilation(Compilation compilation, Type type) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName)
         {
+            todo; // pass config file here, then replace TypesWith(out)LazinatorInterchangeTypes -- get the code behind to work properly and delete the front code that should be in the code behind. Test with analyzer. 
         }
 
         public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName)
