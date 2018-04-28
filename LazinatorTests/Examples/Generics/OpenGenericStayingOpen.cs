@@ -7,6 +7,5 @@ namespace LazinatorTests.Examples.Generics
 {
     public partial class OpenGenericStayingOpen<T> : IOpenGenericStayingOpen<T> where T : ILazinator, new()
     {
-        public T MyT { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
