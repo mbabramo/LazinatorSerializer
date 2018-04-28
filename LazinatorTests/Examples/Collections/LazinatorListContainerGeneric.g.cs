@@ -22,7 +22,6 @@ using Lazinator.Exceptions;
 using Lazinator.Support;
 using Lazinator.Wrappers;
 
-
 namespace LazinatorTests.Examples.Collections
 {
     public partial class LazinatorListContainerGeneric<T> : ILazinator
