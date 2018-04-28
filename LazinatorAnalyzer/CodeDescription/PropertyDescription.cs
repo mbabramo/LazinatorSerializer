@@ -1494,8 +1494,8 @@ namespace Lazinator.CodeDescription
                             return interchange.Interchange();
                         }}
 
-                        public static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
-                            NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
+                        public static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer,
+                            {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
