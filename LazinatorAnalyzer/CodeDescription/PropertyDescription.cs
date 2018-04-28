@@ -1484,7 +1484,7 @@ namespace Lazinator.CodeDescription
             alreadyGenerated.Add(FullyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                   public static {FullyQualifiedTypeNameEncodable} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                   public static {FullyQualifiedTypeName} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
