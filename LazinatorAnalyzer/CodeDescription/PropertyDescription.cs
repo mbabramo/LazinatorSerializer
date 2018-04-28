@@ -986,7 +986,7 @@ namespace Lazinator.CodeDescription
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory)
             {
                 creationText =
-                    $@"{TypeNameWithoutNullableIndicator} collection = new {TypeNameWithoutNullableIndicator}(new {InnerProperties[0].TypeName}[collectionLength]);
+                    $@"{NamespacePrefixToUse}{TypeNameWithoutNullableIndicator} collection = new {NamespacePrefixToUse}{TypeNameWithoutNullableIndicator}(new {InnerProperties[0].TypeName}[collectionLength]);
                             var collectionAsSpan = collection.Span;"; // for now, create array on the heap
             }
             else if (isArray)
@@ -1332,7 +1332,7 @@ namespace Lazinator.CodeDescription
             string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
             sb.Append(
                     $@"
-                        var tupleType = new {TypeNameWithoutNullableIndicator}({itemnamesLowercase});
+                        var tupleType = new {NamespacePrefixToUse}{TypeNameWithoutNullableIndicator}({itemnamesLowercase});
 
                         return tupleType;
                     }}
