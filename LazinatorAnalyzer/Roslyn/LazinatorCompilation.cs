@@ -33,7 +33,7 @@ namespace LazinatorCodeGen.Roslyn
         public Dictionary<INamedTypeSymbol, Guid> InterfaceTextHash = new Dictionary<INamedTypeSymbol, Guid>();
         public INamedTypeSymbol ImplementingTypeSymbol;
 
-        public LazinatorCompilation(Compilation compilation, Type type) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, null)
+        public LazinatorCompilation(Compilation compilation, Type type, LazinatorConfig config) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, config)
         {
         }
 

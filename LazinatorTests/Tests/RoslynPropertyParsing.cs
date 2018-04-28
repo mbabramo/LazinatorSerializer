@@ -136,7 +136,7 @@ namespace LazinatorTests.Tests
             };
             var ws = AdhocWorkspaceManager.CreateAdHocWorkspaceWithFiles(fileinfos);
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
-            var roslynFiles = new LazinatorCompilation(compilation, implementingType);
+            var roslynFiles = new LazinatorCompilation(compilation, implementingType, null);
             return roslynFiles;
         }
     }

@@ -206,9 +206,13 @@ public class MyOtherClass
             string projectPath = ReadCodeFile.GetCodeBasePath(project);
             string name = ReadCodeFile.GetNameOfType(existingType);
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, name, ".g.cs", out string codeBehindPath, out string codeBehind);
+            ReadCodeFile.GetCodeInFile(projectPath, "/", "", "LazinatorConfig", ".json", out string configPath, out string configText);
+            LazinatorConfig config = null;
+            if (configText != null)
+                config = JsonConvert.DeserializeObject<LazinatorConfig>(configText);
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
-            LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType);
+            LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
 
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation);
             var result = d.GetCodeBehind();
