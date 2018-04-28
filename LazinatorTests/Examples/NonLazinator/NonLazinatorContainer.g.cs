@@ -340,5 +340,23 @@ namespace LazinatorTests.Examples
             ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
         }
         
+        public static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        {
+            LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass()
+            {
+                DeserializationFactory = deserializationFactory,
+                LazinatorObjectBytes = storage
+            };
+            return interchange.Interchange();
+        }
+        
+        public static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
+        NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
+        bool verifyCleanness)
+        {
+            LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass(itemToConvert);
+            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+        }
+        
     }
 }

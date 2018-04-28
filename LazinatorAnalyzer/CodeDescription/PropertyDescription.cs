@@ -1480,7 +1480,6 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                    public static {TypeNameEncodable} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                         {{
-
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
                                 DeserializationFactory = deserializationFactory,

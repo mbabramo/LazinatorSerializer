@@ -31,27 +31,5 @@ namespace LazinatorTests.Examples
             NonLazinatorStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) =>
             Convert_NonLazinatorType.ConvertToBytes_NonLazinatorStruct(writer, itemToConvert,
                 includeChildrenMode, verifyCleanness);
-
-        public static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(
-            ReadOnlyMemory<byte> storage,
-            DeserializationFactory deserializationFactory,
-            LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
-        {
-
-            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass()
-            {
-                DeserializationFactory = deserializationFactory,
-                LazinatorObjectBytes = storage
-            };
-            return interchange.Interchange();
-        }
-
-        public static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
-            NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
-            bool verifyCleanness)
-        {
-            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
-            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-        }
     }
 }
