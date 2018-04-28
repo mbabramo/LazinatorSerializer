@@ -12,6 +12,7 @@ namespace LazinatorAnalyzer.Analyzer
         public INamedTypeSymbol LazinatorInterface;
         public List<Location> LazinatorObjectLocationsExcludingCodeBehind;
         public Location CodeBehindLocation;
+        public string Config;
 
         public SourceFileInformation()
         {
@@ -34,14 +35,16 @@ namespace LazinatorAnalyzer.Analyzer
                 CodeBehindLocation = null;
                 LazinatorObjectLocationsExcludingCodeBehind = additionalLocations.ToList();
             }
+            Config = symbolsDictionary["config"];
         }
 
-        public ImmutableDictionary<string, string> GetDictionaryForSymbols()
+        public ImmutableDictionary<string, string> GetSourceFileDictionary(string config)
         {
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
             builder.Add("object", LazinatorObject.GetFullyQualifiedName());
             builder.Add("interface", LazinatorInterface.GetFullyQualifiedName());
             builder.Add("codeBehindExists", CodeBehindLocation == null ? "false" : "true");
+            builder.Add("config", config);
             return builder.ToImmutable();
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
+using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.AttributeClones;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
@@ -37,6 +38,8 @@ namespace LazinatorAnalyzer.Analyzer
         {
             context.RegisterCompilationStartAction(compilationContext =>
             {
+                var additionalFiles = compilationContext.Options.AdditionalFiles;
+
                 // Check if the attribute type LazinatorAttribute is defined.
                 INamedTypeSymbol lazinatorAttributeType = compilationContext.Compilation.GetTypeByMetadataName(LazinatorAttributeName);
                 if (lazinatorAttributeType == null)
@@ -52,7 +55,7 @@ namespace LazinatorAnalyzer.Analyzer
                 }
 
                 // Initialize state in the start action.
-                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType);
+                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles);
 
                 // Register intermediate non-end actions that access and modify the state.
                 compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
@@ -73,6 +76,7 @@ namespace LazinatorAnalyzer.Analyzer
 
             private readonly INamedTypeSymbol _lazinatorAttributeType;
             private readonly INamedTypeSymbol _lazinatorInterfaceType;
+            private readonly ImmutableArray<AdditionalText> _additionalFiles;
 
             #endregion
 
@@ -84,10 +88,11 @@ namespace LazinatorAnalyzer.Analyzer
 
             #region State intialization
 
-            public CompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType)
+            public CompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, ImmutableArray<AdditionalText> additionalFiles)
             {
                 _lazinatorAttributeType = lazinatorAttributeType;
                 _lazinatorInterfaceType = lazinatorInterfaceType;
+                _additionalFiles = additionalFiles;
             }
 
             #endregion
@@ -208,7 +213,8 @@ namespace LazinatorAnalyzer.Analyzer
                             if (sourceFileInfo.CodeBehindLocation != null)
                                 additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
                             additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
-                            var diagnostic = Diagnostic.Create(OutOfDateRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetDictionaryForSymbols());
+                            var config = ConfigLoader.LoadConfigFileAsString(_additionalFiles, context.CancellationToken);
+                            var diagnostic = Diagnostic.Create(OutOfDateRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
                             context.ReportDiagnostic(diagnostic);
                         }
                     }

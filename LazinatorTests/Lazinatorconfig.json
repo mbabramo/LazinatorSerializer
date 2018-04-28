@@ -1,0 +1,6 @@
+﻿{
+  "InterchangeMappings": {
+    "MyNamespace.A": "AnotherNamespace.A_Interchange",
+    "MyNamespace.B": "AnotherNamespace.B_Interchange"
+  }
+}

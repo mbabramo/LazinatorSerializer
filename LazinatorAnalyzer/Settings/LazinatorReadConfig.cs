@@ -12,7 +12,7 @@ namespace LazinatorAnalyzer.Settings
 {
     public static class ConfigLoader
     {
-        private const string ConfigFileName = "LazinatorConfig.config";
+        private const string ConfigFileName = "LazinatorConfig.json";
 
         private static string LoadConfig(ImmutableArray<AdditionalText> additionalFiles,
             CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ namespace LazinatorAnalyzer.Settings
                 return null;
             }
 
-            var fileText = file.GetText(cancellationToken);
+            var fileText = file.GetText();
 
             using (var stream = new MemoryStream())
             {
@@ -42,9 +42,10 @@ namespace LazinatorAnalyzer.Settings
             }
         }
 
-        private static void HandleCompilationStart(CompilationStartAnalysisContext context)
+        public static string LoadConfigFileAsString(ImmutableArray<AdditionalText> additionalFiles, CancellationToken cancellationToken)
         {
-            var config = LoadConfig(context.Options.AdditionalFiles, context.CancellationToken);
+            string config = LoadConfig(additionalFiles, cancellationToken);
+            return config;
         }
     }
 }

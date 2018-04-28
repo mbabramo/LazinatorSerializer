@@ -7,6 +7,6 @@ namespace LazinatorAnalyzer.Settings
 
     public class LazinatorConfig
     {
-        public List<InterchangeMapping> InterchangeMappings;
+        public Dictionary<string, string> InterchangeMappings;
     }
 }

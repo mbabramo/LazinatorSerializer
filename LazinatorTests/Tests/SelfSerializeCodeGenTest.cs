@@ -24,9 +24,11 @@ using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using System.Threading.Tasks;
 using System.Collections.Immutable;
+using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
 using LazinatorTests.Examples.NonLazinator;
+using Newtonsoft.Json;
 
 namespace LazinatorTests.Tests
 {
@@ -88,6 +90,22 @@ public class MyOtherClass
                     break;
                 }
             }
+        }
+
+        [Fact]
+        public void CanJsonSerializeAndDeserializeConfigFiles()
+        {
+            LazinatorConfig config = new LazinatorConfig()
+            {
+                InterchangeMappings = new Dictionary<string, string>()
+                {
+                    { "MyNamespace.A", "AnotherNamespace.A_Interchange" },
+                    { "MyNamespace.B", "AnotherNamespace.B_Interchange" },
+                }
+            };
+            string configString = JsonConvert.SerializeObject(config, Formatting.Indented);
+            LazinatorConfig config2 = JsonConvert.DeserializeObject<LazinatorConfig>(configString);
+            config2.InterchangeMappings["MyNamespace.B"].Should().Be("AnotherNamespace.B_Interchange");
         }
 
         [Fact]

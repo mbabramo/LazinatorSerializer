@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Lazinator.CodeDescription;
+using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,6 +16,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp.Extensions;
+using Newtonsoft.Json;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LazinatorAnalyzer.Analyzer
@@ -69,6 +71,19 @@ namespace LazinatorAnalyzer.Analyzer
 
             try
             {
+                LazinatorConfig config = null;
+                if (sourceFileInformation.Config != null)
+                {
+                    try
+                    {
+                        config = JsonConvert.DeserializeObject<LazinatorConfig>(sourceFileInformation.Config);
+                    }
+                    catch
+                    {
+                        throw new LazinatorCodeGenException("Lazinator.config is not a valid JSON file.");
+                    }
+                }
+
                 var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
                 LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullyQualifiedName());
                 var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
