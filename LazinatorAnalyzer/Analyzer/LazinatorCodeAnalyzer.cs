@@ -208,7 +208,7 @@ namespace LazinatorAnalyzer.Analyzer
                             TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax) implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
                             Location interfaceSpecificationLocation = Location.Create(
                                 locationOfImplementingType.SourceTree,
-                                implementingTypeSyntaxNode.BaseList.Types.First(x => (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? false).Span);
+                                implementingTypeSyntaxNode.BaseList.Types.First(x => (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? false).Span);
                             var additionalLocations = new List<Location>();
                             if (sourceFileInfo.CodeBehindLocation != null)
                                 additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
