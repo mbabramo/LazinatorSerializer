@@ -34,7 +34,8 @@ namespace Lazinator.CodeDescription
         public bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         public bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
         public bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
-        public bool HasInterchangeType { get; set; }
+        public string InterchangeTypeName { get; set; }
+        public bool HasInterchangeType => InterchangeTypeName != null;
         public List<PropertyDescription> InnerProperties { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
         public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
@@ -210,7 +211,7 @@ namespace Lazinator.CodeDescription
             TypeName = PrettyTypeName(t);
             TypeNameEncodable = EncodableTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
-            HasInterchangeType = Container.CodeFiles.TypesWithLazinatorInterchangeTypes.Contains(t);
+            InterchangeTypeName = Container.CodeFiles.Config?.GetInterchangeTypeName(t);
         }
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
@@ -1480,7 +1481,7 @@ namespace Lazinator.CodeDescription
                    public static {TypeNameEncodable} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                         {{
 
-                            {TypeNameEncodable}_LazinatorInterchange interchange = new {TypeNameEncodable}_LazinatorInterchange()
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
                                 DeserializationFactory = deserializationFactory,
                                 LazinatorObjectBytes = storage
@@ -1492,7 +1493,7 @@ namespace Lazinator.CodeDescription
                             NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness)
                         {{
-                            {TypeNameEncodable}_LazinatorInterchange interchange = new {TypeNameEncodable}_LazinatorInterchange(itemToConvert);
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
                             interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
                         }}
                         ");

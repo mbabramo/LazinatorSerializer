@@ -27,7 +27,7 @@ using System.Collections.Immutable;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
-using LazinatorTests.Examples.NonLazinator;
+using LazinatorTests.Examples;
 using Newtonsoft.Json;
 
 namespace LazinatorTests.Tests
@@ -172,7 +172,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(DerivedLazinatorList<>), "LazinatorTests", "/Examples/", "Generics/", ws);
             await CompleteGenerateCode(typeof(ClosedGenerics), "LazinatorTests", "/Examples/", "Generics/", ws);
             await CompleteGenerateCode(typeof(NonLazinatorContainer), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
-            await CompleteGenerateCode(typeof(NonLazinatorInterchangeableClass_LazinatorInterchange), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
+            await CompleteGenerateCode(typeof(NonLazinatorInterchangeClass), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
             await CompleteGenerateCode(typeof(UnofficialInterfaceIncorporator), "LazinatorTests", "/Examples/", "UnofficialInterfaces/", ws);
             await CompleteGenerateCode(typeof(Dictionary_Values_SelfSerialized), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetHashSet_SelfSerialized), "LazinatorTests", "/Examples/", "Collections/", ws);

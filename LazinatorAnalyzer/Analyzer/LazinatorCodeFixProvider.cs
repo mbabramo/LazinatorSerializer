@@ -85,7 +85,7 @@ namespace LazinatorAnalyzer.Analyzer
                 }
 
                 var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
-                LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullyQualifiedName());
+                LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullyQualifiedName(), config);
                 var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
                 var codeBehind = d.GetCodeBehind();
 

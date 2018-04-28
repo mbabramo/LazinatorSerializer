@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace LazinatorTests.Examples.NonLazinator
+namespace LazinatorTests.Examples
 {
-    public partial struct NonLazinatorInterchangeableClass_LazinatorInterchange : INonLazinatorInterchangeableClass_LazinatorInterchange
+    public partial struct NonLazinatorInterchangeClass : INonLazinatorInterchangeableClass_LazinatorInterchange
     {
 
         static readonly FieldInfo _privateFieldInfoForMyInt = typeof(NonLazinatorInterchangeableClass).GetField("MyInt", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public NonLazinatorInterchangeableClass_LazinatorInterchange(
+        public NonLazinatorInterchangeClass(
             NonLazinatorInterchangeableClass nonLazinatorInterchangeableClass) : this()
         {
             if (nonLazinatorInterchangeableClass == null)

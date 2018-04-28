@@ -22,9 +22,9 @@ using Lazinator.Exceptions;
 using Lazinator.Support;
 using Lazinator.Wrappers;
 
-namespace LazinatorTests.Examples.NonLazinator
+namespace LazinatorTests.Examples
 {
-    public partial struct NonLazinatorInterchangeableClass_LazinatorInterchange : ILazinator
+    public partial struct NonLazinatorInterchangeClass : ILazinator
     {
         /* Boilerplate for every base class implementing ILazinator */
         
@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.NonLazinator
         public ILazinator Clone(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            var clone = new NonLazinatorInterchangeableClass_LazinatorInterchange()
+            var clone = new NonLazinatorInterchangeClass()
             {
                 DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,

@@ -5,7 +5,7 @@ using System.Text;
 using Lazinator.Support;
 using Lazinator.Buffers; 
 using Lazinator.Core;
-using LazinatorTests.Examples.NonLazinator;
+using LazinatorTests.Examples;
 using static Lazinator.Core.LazinatorUtilities;
 
 namespace LazinatorTests.Examples
@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples
             LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
 
-            NonLazinatorInterchangeableClass_LazinatorInterchange interchange = new NonLazinatorInterchangeableClass_LazinatorInterchange()
+            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass()
             {
                 DeserializationFactory = deserializationFactory,
                 LazinatorObjectBytes = storage
@@ -50,7 +50,7 @@ namespace LazinatorTests.Examples
             NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
             bool verifyCleanness)
         {
-            NonLazinatorInterchangeableClass_LazinatorInterchange interchange = new NonLazinatorInterchangeableClass_LazinatorInterchange(itemToConvert);
+            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
             interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
         }
     }

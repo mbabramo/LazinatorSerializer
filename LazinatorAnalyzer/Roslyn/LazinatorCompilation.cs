@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Immutable;
 using LazinatorCodeGen.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
+using LazinatorAnalyzer.Settings;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -19,11 +20,10 @@ namespace LazinatorCodeGen.Roslyn
         static string _disqualifyingMethodName = "IsDirty"; // this is always in the code behind.
 
         public Compilation Compilation;
+        public LazinatorConfig Config { get; private set; }
         public HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
         public HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
-        public HashSet<INamedTypeSymbol> TypesWithLazinatorInterchangeTypes = new HashSet<INamedTypeSymbol>();
-        public HashSet<INamedTypeSymbol> TypesWithoutLazinatorInterchangeTypes = new HashSet<INamedTypeSymbol>();
         public Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
         public Dictionary<INamedTypeSymbol, List<(IPropertySymbol property, bool isThisLevel)>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<(IPropertySymbol, bool isThisLevel)>>();
         public Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
@@ -33,14 +33,14 @@ namespace LazinatorCodeGen.Roslyn
         public Dictionary<INamedTypeSymbol, Guid> InterfaceTextHash = new Dictionary<INamedTypeSymbol, Guid>();
         public INamedTypeSymbol ImplementingTypeSymbol;
 
-        public LazinatorCompilation(Compilation compilation, Type type) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName)
+        public LazinatorCompilation(Compilation compilation, Type type) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, null)
         {
-            todo; // pass config file here, then replace TypesWith(out)LazinatorInterchangeTypes -- get the code behind to work properly and delete the front code that should be in the code behind. Test with analyzer. 
         }
 
-        public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName)
+        public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName, LazinatorConfig config)
         {
             Compilation = compilation;
+            Config = config;
             TypeDeclarationSyntax implementingTypeDeclaration = GetTypeDeclaration(compilation, implementingTypeName);
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
@@ -281,15 +281,6 @@ namespace LazinatorCodeGen.Roslyn
             {
                 propertiesInType.Add(property);
                 RelevantSymbols.Add(property.property);
-                if (property.property.Type is INamedTypeSymbol namedTypeOfProperty && !TypesWithLazinatorInterchangeTypes.Contains(namedTypeOfProperty) && !TypesWithoutLazinatorInterchangeTypes.Contains(namedTypeOfProperty))
-                {
-                    // by convention, the existence of a type with the name "_LazinatorInterchange" is assumed to be a lazinator type that we can use to interchange with a non-lazinator type.
-                    var possibleInterchangeTypeName = property.property.Type.GetFullyQualifiedName() + "_LazinatorInterchange";
-                    if (Compilation.GetTypeByMetadataName(possibleInterchangeTypeName) != null)
-                        TypesWithLazinatorInterchangeTypes.Add(namedTypeOfProperty);
-                    else
-                        TypesWithoutLazinatorInterchangeTypes.Add(namedTypeOfProperty);
-                }
             }
         }
 

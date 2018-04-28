@@ -2,7 +2,8 @@
 using System.IO;
 using Lazinator.Support;
 using Lazinator.Buffers; 
-using Lazinator.Core; 
+using Lazinator.Core;
+using LazinatorTests.Examples;
 using static Lazinator.Core.LazinatorUtilities;
 
 namespace LazinatorTests.Examples
