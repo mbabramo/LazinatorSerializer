@@ -17,6 +17,7 @@ namespace Lazinator.CodeDescription
         public ObjectDescription Container { get; set; }
         public string Namespace { get; set; }
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
+        public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
         public string EnumEquivalentType { get; set; }
         public string TypeName { get; set; }
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
