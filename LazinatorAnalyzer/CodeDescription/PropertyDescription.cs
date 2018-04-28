@@ -24,6 +24,7 @@ namespace Lazinator.CodeDescription
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
         public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeNameWithoutNullableIndicator;
         public string TypeNameEncodable { get; set; }
+        public string FullyQualifiedTypeNameEncodable => NamespacePrefixToUseEncodable + TypeNameEncodable;
         public string WriteMethodName { get; set; }
         public string ReadMethodName { get; set; }
         public bool Nullable { get; set; }
@@ -570,7 +571,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && Container.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
-                assignment = $"_{ PropertyName} = ConvertFromBytes_{TypeNameEncodable}(childData, DeserializationFactory, {(automaticallyMarkDirtyWhenContainedObjectIsCreated ? $"() => {{ {PropertyName}_Dirty = true; }}" : "null")});";
+                assignment = $"_{PropertyName} = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, DeserializationFactory, {(automaticallyMarkDirtyWhenContainedObjectIsCreated ? $"() => {{ {PropertyName}_Dirty = true; }}" : "null")});";
             }
 
             string creation;
@@ -772,9 +773,9 @@ namespace Lazinator.CodeDescription
             if (PropertyType != LazinatorPropertyType.SupportedCollection)
                 return;
 
-            if (alreadyGenerated.Contains(TypeNameEncodable))
+            if (alreadyGenerated.Contains(FullyQualifiedTypeNameEncodable))
                 return;
-            alreadyGenerated.Add(TypeNameEncodable);
+            alreadyGenerated.Add(FullyQualifiedTypeNameEncodable);
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
@@ -795,10 +796,10 @@ namespace Lazinator.CodeDescription
                 return;
 
             string innerFullType = InnerProperties[0].FullyQualifiedTypeName;
-            string innerTypeEncodable = InnerProperties[0].TypeNameEncodable;
+            string innerTypeEncodable = InnerProperties[0].FullyQualifiedTypeNameEncodable;
 
             sb.Append($@"
-                         private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                         private static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<{innerFullType}, byte>(itemToConvert);
                             for (int i = 0; i < toConvert.Length; i++)
@@ -918,7 +919,7 @@ namespace Lazinator.CodeDescription
                 // we need a method for the Nullable, then an inner method for the non-nullable case
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                    private static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                     {{
                         if (itemToConvert == null)
                         {{
@@ -952,7 +953,7 @@ namespace Lazinator.CodeDescription
                 string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                    private static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory ? "" : $@"if (itemToConvert == default({FullyQualifiedTypeName}))
                         {{
@@ -1039,7 +1040,7 @@ namespace Lazinator.CodeDescription
             }
             string readCommand = InnerProperties[0].GetSupportedCollectionReadCommands(this);
             sb.Append($@"
-                    private static {FullyQualifiedTypeName} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                    private static {FullyQualifiedTypeName} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                     {{
                         if (storage.Length == 0)
                         {{
@@ -1134,7 +1135,7 @@ namespace Lazinator.CodeDescription
                         else
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                            var item = ConvertFromBytes_{TypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                            var item = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         }}
                         bytesSoFar += lengthCollectionMember;");
@@ -1142,7 +1143,7 @@ namespace Lazinator.CodeDescription
                     return ($@"
                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                         ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = ConvertFromBytes_{TypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                        var item = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
             }
@@ -1191,7 +1192,7 @@ namespace Lazinator.CodeDescription
                     {WriteMethodName}(writer, {itemString});");
                 else if (IsNonSerializedType)
                     return ($@"
-                    void action(BinaryBufferWriter w) => ConvertToBytes_{TypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness);
+                    void action(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness);
                     WriteToBinaryWithUintLengthPrefix(writer, action);");
                 else
                     return ($@"
@@ -1274,7 +1275,7 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (w, v) =>
-                            ConvertToBytes_{TypeNameEncodable}(w, {PropertyName},
+                            ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, {PropertyName},
                                 includeChildrenMode, v));");
                 else
                 { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
@@ -1282,7 +1283,7 @@ namespace Lazinator.CodeDescription
                     if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                         binaryWriterAction = $"copy_Value.Write(w)";
                     else
-                        binaryWriterAction = $"ConvertToBytes_{TypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
+                        binaryWriterAction = $"ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
                     sb.AppendLine(
                         $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
@@ -1309,12 +1310,12 @@ namespace Lazinator.CodeDescription
             if (PropertyType != LazinatorPropertyType.SupportedTuple)
                 return;
 
-            if (alreadyGenerated.Contains(TypeNameEncodable))
+            if (alreadyGenerated.Contains(FullyQualifiedTypeNameEncodable))
                 return;
-            alreadyGenerated.Add(TypeNameEncodable);
+            alreadyGenerated.Add(FullyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                    private static {FullyQualifiedTypeName} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                    private static {FullyQualifiedTypeName} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                     {{
                         if (storage.Length == 0)
                         {{
@@ -1339,7 +1340,7 @@ namespace Lazinator.CodeDescription
                         return tupleType;
                     }}
 
-                    private static void ConvertToBytes_{TypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                    private static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                     {{
                     ");
 
@@ -1388,7 +1389,7 @@ namespace Lazinator.CodeDescription
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = ConvertFromBytes_{TypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                            {itemName} = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             else
@@ -1441,11 +1442,11 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                void action{itemName}(BinaryBufferWriter w) => ConvertToBytes_{TypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
+                                void action{itemName}(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
                                 WriteToBinaryWithUintLengthPrefix(writer, action{itemName});
                             }}");
                 else return $@"
-                            void action{itemName}(BinaryBufferWriter w) => ConvertToBytes_{TypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
+                            void action{itemName}(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
                             WriteToBinaryWithUintLengthPrefix(writer, action{itemName});";
             }
             else
@@ -1478,12 +1479,12 @@ namespace Lazinator.CodeDescription
             if (PropertyType != LazinatorPropertyType.NonSelfSerializingType || !HasInterchangeType)
                 return;
 
-            if (alreadyGenerated.Contains(TypeNameEncodable))
+            if (alreadyGenerated.Contains(FullyQualifiedTypeNameEncodable))
                 return;
-            alreadyGenerated.Add(TypeNameEncodable);
+            alreadyGenerated.Add(FullyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                   public static {TypeNameEncodable} ConvertFromBytes_{TypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                   public static {FullyQualifiedTypeNameEncodable} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
