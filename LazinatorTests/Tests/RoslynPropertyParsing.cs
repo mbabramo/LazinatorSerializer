@@ -20,10 +20,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Threading.Tasks;
-using static LazinatorCodeGen.Roslyn.AdhocWorkspaceManager;
+using static LazinatorTests.Support.AdhocWorkspaceManager;
 using LazinatorCodeGen.Roslyn;
 using System.Collections.Immutable;
 using Lazinator.Attributes;
+using LazinatorTests.Support;
 
 namespace LazinatorTests.Tests
 {

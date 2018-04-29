@@ -26,9 +26,10 @@ namespace LazinatorAnalyzer.Analyzer
 
         // 1. If the Lazinator code behind does not exist or is out of date, then it must be generated.
         public const string Lazin001 = "Lazin001";
-        private static readonly LocalizableString LazinatorOutOfDateTitle = new LocalizableResourceString(nameof(Resources.OutOfDateTitle), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString LazinatorOutOfDateMessageFormat = new LocalizableResourceString(nameof(Resources.OutOfDateMessageFormat), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString LazinatorOutOfDateDescription = new LocalizableResourceString(nameof(Resources.OutOfDateDescription), Resources.ResourceManager, typeof(Resources));
+        private static readonly string LazinatorOutOfDateTitle = "Lazinator out-of-date";
+        private static readonly string LazinatorOutOfDateMessageFormat = "Regenerate the code behind for this Lazinator object";
+        private static readonly string LazinatorOutOfDateDescription =
+            "This object implements an interface with the Lazinator attribute, but it is out of date.";
         private static readonly DiagnosticDescriptor LazinatorOutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle, LazinatorOutOfDateMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
         internal static DiagnosticDescriptor OutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle.ToString(), LazinatorOutOfDateMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
 

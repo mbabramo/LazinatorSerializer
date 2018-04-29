@@ -29,6 +29,7 @@ using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
 using LazinatorTests.Examples;
 using LazinatorTests.Examples.Generics;
+using LazinatorTests.Support;
 using Newtonsoft.Json;
 using LazinatorListContainer = LazinatorTests.Examples.Collections.LazinatorListContainer;
 

@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace LazinatorCodeGen.Support
+namespace LazinatorTests.Support
 {
     public static class ReadCodeFile
     {
@@ -37,7 +37,7 @@ namespace LazinatorCodeGen.Support
 
         public static string GetCodeBasePath(string project = "")
         {
-            string codeBaseLocation = typeof(ReadCodeFile).GetTypeInfo().Assembly. System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            string codeBaseLocation = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             string projectInOverallFolder = "LazinatorSerializer/" + project;
             string throughProject =
                 codeBaseLocation.Substring(0, codeBaseLocation.IndexOf(projectInOverallFolder) + projectInOverallFolder.Length);

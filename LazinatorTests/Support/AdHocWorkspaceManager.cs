@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LazinatorCodeGen.Roslyn
+namespace LazinatorTests.Support
 {
     public static class AdhocWorkspaceManager
     {
