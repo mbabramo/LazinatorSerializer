@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace LazinatorCodeGen.Support
@@ -26,9 +27,8 @@ namespace LazinatorCodeGen.Support
             fullPath = projectPath + mainFolder + subfolder + fileNameWithoutExtension + extension;
             if (File.Exists(fullPath))
             {
-                TextReader textReader = File.OpenText(fullPath);
-                code = textReader.ReadToEnd();
-                textReader.Close();
+                using (TextReader textReader = File.OpenText(fullPath))
+                    code = textReader.ReadToEnd();
             }
             else
                 code = null;
@@ -37,7 +37,7 @@ namespace LazinatorCodeGen.Support
 
         public static string GetCodeBasePath(string project = "")
         {
-            string codeBaseLocation = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            string codeBaseLocation = typeof(ReadCodeFile).GetTypeInfo().Assembly. System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             string projectInOverallFolder = "LazinatorSerializer/" + project;
             string throughProject =
                 codeBaseLocation.Substring(0, codeBaseLocation.IndexOf(projectInOverallFolder) + projectInOverallFolder.Length);

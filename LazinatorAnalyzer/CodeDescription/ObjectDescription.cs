@@ -117,7 +117,7 @@ namespace Lazinator.CodeDescription
 
                 namespace { Namespace }
                 {{
-                    public { SealedKeyword }partial { StringEnum.GetStringValue(ObjectType) } { ObjectName } : {(IsDerived ? BaseObjectName + ", " : "")}ILazinator
+                    public { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerived ? BaseObjectName + ", " : "")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
 

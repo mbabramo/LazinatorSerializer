@@ -28,9 +28,9 @@ namespace LazinatorCodeGen.Roslyn
                 foreach (string fullPathName in fullPathNames)
                     if (fullPathName.EndsWith(".cs"))
                     {
-                        TextReader textReader = File.OpenText(fullPathName);
-                        string code = textReader.ReadToEnd();
-                        textReader.Close();
+                        string code = null;
+                        using (TextReader textReader = File.OpenText(fullPathName))
+                            code = textReader.ReadToEnd();
                         filesWithCode.Add((fullPathName, code));
                     }
             }
