@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Lazinator.CodeDescription;
 using LazinatorCodeGen.Roslyn;
 using LightJson;
 
@@ -22,11 +23,18 @@ namespace LazinatorAnalyzer.Settings
             InterchangeMappings = new Dictionary<string, string>(); // default
             if (configString != null)
             {
-                JsonObject json = JsonValue.Parse(configString).AsJsonObject;
-                JsonObject interchangeMappings = json["InterchangeMappings"];
-                if (interchangeMappings != null)
-                    foreach (var pair in interchangeMappings)
-                        InterchangeMappings.Add(pair.Key, pair.Value.AsString);
+                try
+                {
+                    JsonObject json = JsonValue.Parse(configString).AsJsonObject;
+                    JsonObject interchangeMappings = json["InterchangeMappings"];
+                    if (interchangeMappings != null)
+                        foreach (var pair in interchangeMappings)
+                            InterchangeMappings.Add(pair.Key, pair.Value.AsString);
+                }
+                catch
+                {
+                    throw new LazinatorCodeGenException("Error parsing LazinatorConfig.json file. Make sure that the json is valid.");
+                }
             }
         }
 

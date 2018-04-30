@@ -110,6 +110,19 @@ public class MyOtherClass
         }
 
         [Fact]
+        public void CanJsonDeserializeConfigFile2()
+        {
+            string configString = @"
+                {
+                  ""InterchangeMappings"": {
+                    ""LazinatorTests.Examples.NonLazinatorInterchangeableClass"": ""LazinatorTests.Examples.NonLazinatorInterchangeClass""
+                  }
+                }";
+            LazinatorConfig config = new LazinatorConfig(configString);
+            config.InterchangeMappings["LazinatorTests.Examples.NonLazinatorInterchangeableClass"].Should().Be("LazinatorTests.Examples.NonLazinatorInterchangeClass");
+        }
+
+        [Fact]
         public async Task CodeGenerationProducesActualCode_LazinatorWrappers()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
