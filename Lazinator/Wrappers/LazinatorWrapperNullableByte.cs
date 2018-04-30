@@ -6,7 +6,7 @@ namespace Lazinator.Wrappers
     {
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return Value?.GetHashCode() ?? 0;
         }
 
         public override bool Equals(object obj)
