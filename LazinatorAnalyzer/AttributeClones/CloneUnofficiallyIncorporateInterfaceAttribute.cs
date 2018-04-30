@@ -4,12 +4,12 @@ using System.Text;
 
 namespace LazinatorCodeGen.AttributeClones
 {
-    public class UnofficiallyIncorporateInterfaceAttribute : Attribute
+    public class CloneUnofficiallyIncorporateInterfaceAttribute : Attribute
     {
         public string OtherInterfaceFullyQualifiedTypeName { get; private set; }
         public string Accessibility { get; private set; }
 
-        public UnofficiallyIncorporateInterfaceAttribute(string otherInterfaceFullyQualifiedTypeName, string accessibility)
+        public CloneUnofficiallyIncorporateInterfaceAttribute(string otherInterfaceFullyQualifiedTypeName, string accessibility)
         {
             OtherInterfaceFullyQualifiedTypeName = otherInterfaceFullyQualifiedTypeName;
             Accessibility = accessibility;

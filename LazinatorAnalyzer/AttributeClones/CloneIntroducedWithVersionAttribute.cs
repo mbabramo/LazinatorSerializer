@@ -3,11 +3,11 @@
 namespace LazinatorCodeGen.AttributeClones
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class IntroducedWithVersionAttribute : Attribute
+    public class CloneIntroducedWithVersionAttribute : Attribute
     {
         public int Version;
 
-        public IntroducedWithVersionAttribute(int version)
+        public CloneIntroducedWithVersionAttribute(int version)
         {
             Version = version;
         }

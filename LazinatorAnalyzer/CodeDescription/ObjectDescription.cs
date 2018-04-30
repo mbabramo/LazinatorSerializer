@@ -72,7 +72,7 @@ namespace Lazinator.CodeDescription
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
-                                .Where(x => CodeFiles.ContainsAttributeOfType<NonexclusiveLazinatorAttribute>(x));
+                                .Where(x => CodeFiles.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
                 .Select(x => new NonexclusiveInterfaceDescription(CodeFiles, x, this)).ToList();
 
@@ -397,7 +397,7 @@ namespace Lazinator.CodeDescription
             if (genericArguments.Any(x => 
                     !((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false) 
                     && 
-                    !CodeFiles.ContainsAttributeOfType<LazinatorAttribute>(x)
+                    !CodeFiles.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
                     )
                 )
                 throw new Exception("Open generic parameter must be constrained to type ILazinator.");

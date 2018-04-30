@@ -12,7 +12,7 @@ namespace LazinatorCodeGen.Roslyn
         {
             switch (attributeData.AttributeClass.Name)
             {
-                case nameof(LazinatorAttribute):
+                case "LazinatorAttribute":
                     var uniqueID = attributeData.GetAttributeConstructorValueByParameterName("uniqueID");
                     if (!(uniqueID is int))
                         throw new Exception("LazinatorAttribute uniqueID is improperly formatted");
@@ -24,39 +24,39 @@ namespace LazinatorCodeGen.Roslyn
                             throw new Exception("LazinatorAttribute version is improperly formatted");
                         if (!(autogenerate is bool))
                             throw new Exception("LazinatorAttribute autogenerate is improperly formatted");
-                        return new LazinatorAttribute((int)uniqueID, (int)version, (bool)autogenerate);
+                        return new CloneLazinatorAttribute((int)uniqueID, (int)version, (bool)autogenerate);
                     }
                     else
-                        return new LazinatorAttribute((int)uniqueID);
-                case nameof(EliminatedWithVersionAttribute):
+                        return new CloneLazinatorAttribute((int)uniqueID);
+                case "EliminatedWithVersionAttribute":
                     var version2 = attributeData.GetAttributeConstructorValueByParameterName("version");
                     if (!(version2 is int))
-                        throw new Exception("EliminatedWithVersionAttribute version is improperly formatted");
-                    return new EliminatedWithVersionAttribute((int) version2);
-                case nameof(IntroducedWithVersionAttribute):
+                        throw new Exception("CloneEliminatedWithVersionAttribute version is improperly formatted");
+                    return new CloneEliminatedWithVersionAttribute((int) version2);
+                case "IntroducedWithVersionAttribute":
                     var version3 = attributeData.GetAttributeConstructorValueByParameterName("version");
                     if (!(version3 is int))
                         throw new Exception("IntroducedWithVersionAttribute version is improperly formatted");
-                    return new IntroducedWithVersionAttribute((int)version3);
-                case nameof(SetterAccessibilityAttribute):
+                    return new CloneIntroducedWithVersionAttribute((int)version3);
+                case "SetterAccessibilityAttribute":
                     var accessibility = attributeData.GetAttributeConstructorValueByParameterName("accessibility");
                     if (!(accessibility is string))
                         throw new Exception("SetterAccessibilityAttribute accessibility is improperly formatted");
-                    return new SetterAccessibilityAttribute((string)accessibility);
-                case nameof(UnofficiallyIncorporateInterfaceAttribute):
+                    return new CloneSetterAccessibilityAttribute((string)accessibility);
+                case "UnofficiallyIncorporateInterfaceAttribute":
                     var otherInterfaceFullyQualifiedTypeName = attributeData.GetAttributeConstructorValueByParameterName("otherInterfaceFullyQualifiedTypeName");
                     if (!(otherInterfaceFullyQualifiedTypeName is string))
                         throw new Exception("UnofficiallyIncorporateInterfaceAttribute otherInterfaceType is improperly formatted");
                     var accessibility2 = attributeData.GetAttributeConstructorValueByParameterName("accessibility");
                     if (!(accessibility2 is string))
                         throw new Exception("UnofficiallyIncorporateInterfaceAttribute accessibility is improperly formatted");
-                    return new UnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (string)accessibility2);
-                case nameof(ExcludableChildAttribute):
-                    return new ExcludableChildAttribute();
-                case nameof(IgnoreRecordLikeAttribute):
-                    return new IgnoreRecordLikeAttribute();
-                case nameof(NonexclusiveLazinatorAttribute):
-                    return new NonexclusiveLazinatorAttribute();
+                    return new CloneUnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (string)accessibility2);
+                case "ExcludableChildAttribute":
+                    return new CloneExcludableChildAttribute();
+                case "IgnoreRecordLikeAttribute":
+                    return new CloneIgnoreRecordLikeAttribute();
+                case "NonexclusiveLazinatorAttribute":
+                    return new CloneNonexclusiveLazinatorAttribute();
                 default:
                     return null;
             }

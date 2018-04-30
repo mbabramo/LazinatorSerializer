@@ -25,7 +25,7 @@ namespace Lazinator.CodeDescription
         public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container)
         {
             Container = container;
-            var lazinatorAttribute = Container.CodeFiles.GetFirstAttributeOfType<LazinatorAttribute>(t);
+            var lazinatorAttribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
                 throw new Exception("Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
             UniqueID = lazinatorAttribute.UniqueID;
@@ -43,7 +43,7 @@ namespace Lazinator.CodeDescription
 
         private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
         {
-            var attributes = Container.CodeFiles.GetAttributesOfType<UnofficiallyIncorporateInterfaceAttribute>(t);
+            var attributes = Container.CodeFiles.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
             foreach (var a in attributes)
             {
                 INamedTypeSymbol namedInterfaceType = Container.CodeFiles.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);

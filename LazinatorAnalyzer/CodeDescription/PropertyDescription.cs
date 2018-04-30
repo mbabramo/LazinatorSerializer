@@ -46,7 +46,7 @@ namespace Lazinator.CodeDescription
         public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
         public string PropertyAccessibility { get; set; }
         public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
-        public SetterAccessibilityAttribute SetterAccessibility { get; set; }
+        public CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
         public string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
         public int? IntroducedWithVersion { get; set; }
         public int? EliminatedWithVersion { get; set; }
@@ -113,15 +113,15 @@ namespace Lazinator.CodeDescription
 
         private void ParseAccessibilityAttribute()
         {
-            SetterAccessibilityAttribute attribute = UserAttributes.OfType<SetterAccessibilityAttribute>().FirstOrDefault();
+            CloneSetterAccessibilityAttribute attribute = UserAttributes.OfType<CloneSetterAccessibilityAttribute>().FirstOrDefault();
             SetterAccessibility = attribute;
         }
 
         private void ParseVersionAttributes()
         {
-            EliminatedWithVersionAttribute eliminated = UserAttributes.OfType<EliminatedWithVersionAttribute>().FirstOrDefault();
+            CloneEliminatedWithVersionAttribute eliminated = UserAttributes.OfType<CloneEliminatedWithVersionAttribute>().FirstOrDefault();
             EliminatedWithVersion = eliminated?.Version;
-            IntroducedWithVersionAttribute introduced = UserAttributes.OfType<IntroducedWithVersionAttribute>().FirstOrDefault();
+            CloneIntroducedWithVersionAttribute introduced = UserAttributes.OfType<CloneIntroducedWithVersionAttribute>().FirstOrDefault();
             IntroducedWithVersion = introduced?.Version;
         }
 
@@ -276,7 +276,7 @@ namespace Lazinator.CodeDescription
             if (!IsNonexclusiveInterface)
             {
                 var exclusiveInterface = Container.CodeFiles.TypeToExclusiveInterface[t.OriginalDefinition];
-                LazinatorAttribute attribute = Container.CodeFiles.GetFirstAttributeOfType<LazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
+                CloneLazinatorAttribute attribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                 if (attribute == null)
                     throw new Exception(
                         "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");

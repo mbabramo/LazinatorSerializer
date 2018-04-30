@@ -6,9 +6,9 @@ namespace LazinatorCodeGen.AttributeClones
     /// Used to mark a field. This indicates that if IncludeChildrenMode is set to ExcludeOnlyExcludableChildren, then this field should be excluded. Otherwise, it will be included.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    public class ExcludableChildAttribute : Attribute
+    public class CloneExcludableChildAttribute : Attribute
     {
-        public ExcludableChildAttribute()
+        public CloneExcludableChildAttribute()
         {
         }
     }

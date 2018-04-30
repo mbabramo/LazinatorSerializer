@@ -5,11 +5,11 @@ using System.Text;
 namespace LazinatorCodeGen.AttributeClones
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class SetterAccessibilityAttribute : Attribute
+    public class CloneSetterAccessibilityAttribute : Attribute
     {
         public string Choice { get; set; }
 
-        public SetterAccessibilityAttribute(string accessibility)
+        public CloneSetterAccessibilityAttribute(string accessibility)
         {
             Choice = accessibility;
         }

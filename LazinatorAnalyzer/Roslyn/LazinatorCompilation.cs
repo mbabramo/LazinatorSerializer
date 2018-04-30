@@ -119,7 +119,7 @@ namespace LazinatorCodeGen.Roslyn
             if (type is INamedTypeSymbol namedTypeSymbol)
             {
                 AddKnownAttributesForSymbol(type);
-                if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<LazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<NonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
+                if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
                 ImmutableArray<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces;
                 foreach (var @interface in allInterfaces.Where(x => x != type && x.Name != "ILazinator"))
@@ -133,7 +133,7 @@ namespace LazinatorCodeGen.Roslyn
                 {
                     foreach (var @interface in allInterfaces)
                     {
-                        LazinatorCodeGen.AttributeClones.LazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.LazinatorAttribute>(@interface);
+                        LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute>(@interface);
                         if (attribute != null)
                         {
                             AddLinkFromTypeToInterface(namedTypeSymbol, @interface);
@@ -146,12 +146,12 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 else if (namedTypeSymbol.TypeKind == TypeKind.Interface)
                 {
-                    if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.LazinatorAttribute>(type) != null)
+                    if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute>(type) != null)
                     {
                         ExclusiveInterfaces.Add(namedTypeSymbol);
                         RecordPropertiesForInterface(namedTypeSymbol);
                     }
-                    else if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.NonexclusiveLazinatorAttribute>(type) != null)
+                    else if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.CloneNonexclusiveLazinatorAttribute>(type) != null)
                         NonexclusiveInterfaces.Add(namedTypeSymbol);
                 }
             }
@@ -184,8 +184,8 @@ namespace LazinatorCodeGen.Roslyn
             if (type != type.OriginalDefinition)
                 foreach (ITypeSymbol t in GetTypeAndInnerTypes(type.OriginalDefinition))
                     yield return t;
-            var attributes = (GetAttributesOfType<UnofficiallyIncorporateInterfaceAttribute>(type)).ToList();
-            foreach (UnofficiallyIncorporateInterfaceAttribute attribute in attributes)
+            var attributes = (GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(type)).ToList();
+            foreach (CloneUnofficiallyIncorporateInterfaceAttribute attribute in attributes)
             {
                 foreach (ITypeSymbol t in GetTypeAndInnerTypes(Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName)))
                     yield return t;

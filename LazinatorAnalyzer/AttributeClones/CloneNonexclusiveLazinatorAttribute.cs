@@ -3,9 +3,9 @@
 namespace LazinatorCodeGen.AttributeClones
 {
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
-    public class NonexclusiveLazinatorAttribute : Attribute
+    public class CloneNonexclusiveLazinatorAttribute : Attribute
     {
-        public NonexclusiveLazinatorAttribute()
+        public CloneNonexclusiveLazinatorAttribute()
         {
         }
         
