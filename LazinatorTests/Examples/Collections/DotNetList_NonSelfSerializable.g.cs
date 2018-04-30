@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Collections
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DotNetList_NonSelfSerializable()
