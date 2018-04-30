@@ -1486,8 +1486,7 @@ namespace Lazinator.CodeDescription
         }
 
         #endregion
-
-
+        
         #region Interchange types
 
         public void AppendInterchangeTypes(CodeStringBuilder sb, HashSet<string> alreadyGenerated)

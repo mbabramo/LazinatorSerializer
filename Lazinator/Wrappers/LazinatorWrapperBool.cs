@@ -2,11 +2,11 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperSByte : ILazinatorWrapperSByte
+    public partial struct LazinatorWrapperBool : ILazinatorWrapperBool
     {
-        public static implicit operator LazinatorWrapperSByte(sbyte x)
+        public static implicit operator LazinatorWrapperBool(bool x)
         {
-            return new LazinatorWrapperSByte() { Value = x };
+            return new LazinatorWrapperBool() {Value = x};
         }
 
         public override int GetHashCode()
@@ -16,7 +16,7 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            var other = (LazinatorWrapperSByte)obj;
+            var other = (LazinatorWrapperBool)obj;
             return Value == other.Value;
         }
     }

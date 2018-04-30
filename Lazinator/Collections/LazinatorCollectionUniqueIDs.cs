@@ -41,6 +41,8 @@ namespace Lazinator.Collections
         LazinatorWrapperDateTime,
         LazinatorWrapperChar,
         LazinatorWrapperDecimal,
-        WrapperNullableStruct
+        WrapperNullableStruct,
+        LazinatorWrapperBool,
+        LazinatorWrapperNullableBool
     }
 }

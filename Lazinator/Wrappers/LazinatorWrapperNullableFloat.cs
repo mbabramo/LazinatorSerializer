@@ -4,6 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableFloat : ILazinatorWrapperNullableFloat
     {
+        public static implicit operator LazinatorWrapperNullableFloat(float? x)
+        {
+            return new LazinatorWrapperNullableFloat() { Value = x };
+        }
+
         public override int GetHashCode()
         {
             return Value?.GetHashCode() ?? 0;

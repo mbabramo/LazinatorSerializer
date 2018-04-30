@@ -4,6 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperLong : ILazinatorWrapperLong
     {
+        public static implicit operator LazinatorWrapperLong(long x)
+        {
+            return new LazinatorWrapperLong() { Value = x };
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();
