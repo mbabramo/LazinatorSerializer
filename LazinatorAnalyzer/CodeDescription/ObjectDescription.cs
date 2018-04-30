@@ -14,6 +14,7 @@ namespace Lazinator.CodeDescription
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
+        public bool IsAbstract { get; set; }
         public bool IsSealed { get; set; }
         public string SealedKeyword => IsSealed ? "sealed " : "";
         public ExclusiveInterfaceDescription ExclusiveInterface { get; set; }
@@ -47,6 +48,7 @@ namespace Lazinator.CodeDescription
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
             {
                 ObjectType = LazinatorObjectType.Class;
+                IsAbstract = iLazinatorTypeSymbol.IsAbstract;
                 IsSealed = iLazinatorTypeSymbol.IsSealed;
             }
             else
@@ -140,7 +142,9 @@ namespace Lazinator.CodeDescription
 
                         public ILazinator LazinatorParentClass {{ get; set; }}
 
-                        {(ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")}internal IncludeChildrenMode OriginalIncludeChildrenMode;
+                        {
+                        (ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")
+                    }internal IncludeChildrenMode OriginalIncludeChildrenMode;
 
                         public void Deserialize()
                         {{
@@ -163,12 +167,20 @@ namespace Lazinator.CodeDescription
 
                             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
-                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{(ImplementsLazinatorObjectVersionUpgrade ? $@"
+                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
+                        (ImplementsLazinatorObjectVersionUpgrade
+                            ? $@"
                             if (serializedVersionNumber < LazinatorObjectVersion)
                             {{
                                 LazinatorObjectVersionUpgrade(serializedVersionNumber);
-                            }}" : "")}{(ImplementsPostDeserialization ? $@"
-                            PostDeserialization();" : "")}
+                            }}"
+                            : "")
+                    }{
+                        (ImplementsPostDeserialization
+                            ? $@"
+                            PostDeserialization();"
+                            : "")
+                    }
                         }}
 
                         public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
@@ -181,9 +193,21 @@ namespace Lazinator.CodeDescription
                         public ILazinator CloneLazinator()
                         {{
                             return CloneLazinator(OriginalIncludeChildrenMode);
-                        }}
+                        }}";
 
-                        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                sb.Append(boilerplate);
+
+                if (IsAbstract)
+                    sb.Append($@"
+
+                        public {DeriveKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        {{
+                            throw new NotImplementedException();
+                        }}"); // marked virtual rather than abstract to make it easier to convert large codebases starting with the abstract base class
+
+                else sb.Append($@"
+
+                        public {DeriveKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {ObjectName}()
@@ -195,7 +219,9 @@ namespace Lazinator.CodeDescription
                                 HierarchyBytes = bytes
                             }};
                             return clone;
-                        }}
+                        }}");
+
+                sb.Append($@"
 
                         private bool _IsDirty;
                         public bool IsDirty
@@ -275,8 +301,7 @@ namespace Lazinator.CodeDescription
 
                         /* Field boilerplate */
         
-                ";
-                sb.Append(boilerplate);
+                ");
             }
 
             var thisLevel = PropertiesThisLevel;
