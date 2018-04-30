@@ -10,5 +10,6 @@ namespace LazinatorTests.Examples.Generics
     public interface IOpenGenericStayingOpen<T> where T : ILazinator, new()
     {
         T MyT { get; set; }
+        List<T> MyListT { get; set; }
     }
 }
