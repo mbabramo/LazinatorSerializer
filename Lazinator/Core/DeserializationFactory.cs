@@ -11,6 +11,7 @@ using static Lazinator.Core.LazinatorUtilities;
 
 namespace Lazinator.Core
 {
+    [Serializable]
     public class DeserializationFactory
     {
         private Dictionary<int, Func<ILazinator>> FactoriesByID =

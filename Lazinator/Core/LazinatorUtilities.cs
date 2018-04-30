@@ -267,7 +267,7 @@ namespace Lazinator.Core
         /// <returns>A clone of the Lazinator class</returns>
         public static T CloneTyped<T>(this T lazinator) where T : class, ILazinator
         {
-            return lazinator.Clone() as T;
+            return lazinator.CloneLazinator() as T;
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace Lazinator.Core
         /// <returns>A clone of the Lazinator class</returns>
         public static T CloneTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode) where T : class, ILazinator
         {
-            return lazinator.Clone(includeChildrenMode) as T;
+            return lazinator.CloneLazinator(includeChildrenMode) as T;
         }
 
         /// <summary>

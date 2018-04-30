@@ -62,12 +62,12 @@ namespace Lazinator.Wrappers
         
         internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBuffer(this, includeChildrenMode, verifyCleanness);
         
-        public ILazinator Clone()
+        public ILazinator CloneLazinator()
         {
-            return Clone(OriginalIncludeChildrenMode);
+            return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public ILazinator Clone(IncludeChildrenMode includeChildrenMode)
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorWrapperNullableFloat()

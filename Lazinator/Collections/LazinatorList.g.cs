@@ -51,12 +51,12 @@ namespace Lazinator.Collections
 
         public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (IncludeChildrenMode a, bool b) => EncodeToNewBuffer(a, b));
         
-        public ILazinator Clone()
+        public ILazinator CloneLazinator()
         {
-            return Clone(OriginalIncludeChildrenMode);
+            return CloneLazinator(OriginalIncludeChildrenMode);
         }
 
-        public ILazinator Clone(IncludeChildrenMode includeChildrenMode)
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = SerializeNewBuffer(includeChildrenMode, false);
             var clone = new LazinatorList<T>()

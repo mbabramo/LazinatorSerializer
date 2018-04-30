@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Lazinator.Core
 {
+    [Serializable]
     public readonly struct MemoryInBuffer
     {
         public readonly IMemoryOwner<byte> OwnedMemory;

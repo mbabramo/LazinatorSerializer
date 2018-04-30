@@ -51,13 +51,13 @@ namespace Lazinator.Core
         /// Clones the class/struct by serializing, including all children, and then deserializing.
         /// </summary>
         /// <returns>A cloned copy of the class/struct</returns>
-        ILazinator Clone();
+        ILazinator CloneLazinator();
         /// <summary>
         /// Clones the class/struct, possibly excluding some or all children
         /// </summary>
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
         /// <returns>A cloned copy of the class/struct</returns>
-        ILazinator Clone(IncludeChildrenMode includeChildrenMode);
+        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
 
         /// <summary>
         /// Indicates whether a self-serialized object is dirty, meaning that one of its fields has changed. A change in a child of the self-serialized object does not change this field.
