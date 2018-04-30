@@ -7,6 +7,5 @@ namespace LazinatorTests.Examples.Generics
 {
     public partial class OpenGenericStayingOpen<T> : IOpenGenericStayingOpen<T> where T : ILazinator, new()
     {
-        public List<T> MyListT { get; set; }
     }
 }
