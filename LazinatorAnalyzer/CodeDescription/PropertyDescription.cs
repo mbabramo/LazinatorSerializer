@@ -1203,8 +1203,22 @@ namespace Lazinator.CodeDescription
             string writeCommand = GetSupportedCollectionWriteCommandsHelper();
             string fullWriteCommands;
             if (Nullable)
-                fullWriteCommands =
-                    $@"
+            {
+                if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                    fullWriteCommands =
+                        $@"
+                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals({itemString}, default({FullyQualifiedTypeName})))
+                    {{
+                        writer.Write((uint)0);
+                    }}
+                    else 
+                    {{
+                        {writeCommand}
+                    }}
+                    ";
+                else
+                    fullWriteCommands =
+                        $@"
                     if ({itemString} == default({FullyQualifiedTypeName}))
                     {{
                         writer.Write((uint)0);
@@ -1214,6 +1228,8 @@ namespace Lazinator.CodeDescription
                         {writeCommand}
                     }}
                     ";
+
+            }
             else
                 fullWriteCommands = writeCommand;
             return fullWriteCommands;
