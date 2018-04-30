@@ -21,7 +21,6 @@ using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleN
 using Lazinator.Wrappers;
 using System.Buffers;
 using System.Reflection;
-using LazinatorTests.Examples;
 
 namespace LazinatorTests.Tests
 {
