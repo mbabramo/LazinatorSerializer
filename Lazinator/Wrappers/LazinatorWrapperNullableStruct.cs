@@ -16,7 +16,7 @@ namespace Lazinator.Wrappers
                 if (value == null)
                 {
                     HasValue = false;
-                    NonNullValue = default(T);
+                    NonNullValue = default;
                 }
                 else
                 {

@@ -34,7 +34,7 @@ namespace Lazinator.Core
         {
             // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.Length <= 1)
-                return default(T);
+                return default;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
             T itemToReturn;
@@ -84,7 +84,7 @@ namespace Lazinator.Core
         {
             // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.Length <= 1)
-                return default(T);
+                return default;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
             T itemToReturn;
@@ -132,7 +132,7 @@ namespace Lazinator.Core
         {
             // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.Length <= 1)
-                return default(T);
+                return default;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
             T itemToReturn;

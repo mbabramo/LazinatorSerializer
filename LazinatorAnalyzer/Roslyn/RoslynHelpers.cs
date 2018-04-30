@@ -68,9 +68,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel(this INamedTypeSymbol namedSymbolType)
         {
-            ImmutableList<IPropertySymbol> propertiesThisLevel;
-            ImmutableList<IPropertySymbol> propertiesLowerLevels;
-            namedSymbolType.GetPropertiesForType(out propertiesThisLevel, out propertiesLowerLevels);
+            namedSymbolType.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name))
                 yield return (p, true);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))

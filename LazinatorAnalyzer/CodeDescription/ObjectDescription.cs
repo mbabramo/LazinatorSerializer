@@ -67,7 +67,7 @@ namespace Lazinator.CodeDescription
             }
 
             INamedTypeSymbol interfaceType = CodeFiles.TypeToExclusiveInterface[iLazinatorTypeSymbol.OriginalDefinition];
-            Hash = CodeFiles.InterfaceTextHash.ContainsKey(interfaceType) ? CodeFiles.InterfaceTextHash[interfaceType] : default(Guid);
+            Hash = CodeFiles.InterfaceTextHash.ContainsKey(interfaceType) ? CodeFiles.InterfaceTextHash[interfaceType] : default;
             ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceType, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);

@@ -28,7 +28,7 @@ namespace Lazinator.Collections
                 ItemsAccessedBeforeFullyDeserialized = new List<bool>(CountWhenDeserialized);
                 for (int i = 0; i < CountWhenDeserialized; i++)
                 {
-                    UnderlyingList.Add(default(T));
+                    UnderlyingList.Add(default);
                     ItemsAccessedBeforeFullyDeserialized.Add(false);
                 }
             }
@@ -53,7 +53,7 @@ namespace Lazinator.Collections
         {
             var byteSpan = GetListMemberSlice(index);
             if (byteSpan.Length == 0)
-                return default(T);
+                return default;
             if (DeserializationFactory == null)
                 throw new MissingDeserializationFactoryException();
             T n2 = (T) DeserializationFactory.FactoryCreate(byteSpan, this);
@@ -87,7 +87,7 @@ namespace Lazinator.Collections
                 if (current == null)
                 {
                     if (ItemsAccessedBeforeFullyDeserialized[index])
-                        return default(T);
+                        return default;
                     current = GetSerializedContents(index);
                     UnderlyingList[index] = current;
                     ItemsAccessedBeforeFullyDeserialized[index] = true;

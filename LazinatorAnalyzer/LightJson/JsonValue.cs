@@ -19,7 +19,7 @@ namespace LightJson
 		/// <summary>
 		/// Represents a null JsonValue.
 		/// </summary>
-		public static readonly JsonValue Null = new JsonValue(JsonValueType.Null, default(double), null);
+		public static readonly JsonValue Null = new JsonValue(JsonValueType.Null, default, null);
 
 		/// <summary>
 		/// Gets the type of this JsonValue.
@@ -439,7 +439,7 @@ namespace LightJson
 		{
 			if (value != null)
 			{
-				this.value = default(double);
+				this.value = default;
 
 				this.type = JsonValueType.String;
 
@@ -459,7 +459,7 @@ namespace LightJson
 		{
 			if (value != null)
 			{
-				this.value = default(double);
+				this.value = default;
 
 				this.type = JsonValueType.Object;
 
@@ -479,7 +479,7 @@ namespace LightJson
 		{
 			if (value != null)
 			{
-				this.value = default(double);
+				this.value = default;
 
 				this.type = JsonValueType.Array;
 
