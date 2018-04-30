@@ -41,8 +41,8 @@ namespace LazinatorAnalyzer.Analyzer
         public ImmutableDictionary<string, string> GetSourceFileDictionary(string config)
         {
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
-            builder.Add("object", LazinatorObject.GetFullyQualifiedName());
-            builder.Add("interface", LazinatorInterface.GetFullyQualifiedName());
+            builder.Add("object", LazinatorObject.GetFullNamespace() + "." + LazinatorObject.MetadataName);
+            builder.Add("interface", LazinatorInterface.GetFullNamespace() + "." + LazinatorInterface.MetadataName);
             builder.Add("codeBehindExists", CodeBehindLocation == null ? "false" : "true");
             builder.Add("config", config);
             return builder.ToImmutable();
