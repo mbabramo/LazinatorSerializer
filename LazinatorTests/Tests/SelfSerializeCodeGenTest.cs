@@ -27,6 +27,7 @@ using System.Collections.Immutable;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
+using LazinatorTests.Examples;
 using LazinatorTests.Examples.Generics;
 using LazinatorTests.Support;
 using Newtonsoft.Json;
@@ -95,18 +96,19 @@ public class MyOtherClass
         }
 
         [Fact]
-        public void CanJsonDeserializeConfigFile()
+        public void CanJsonSerializeAndDeserializeConfigFiles()
         {
-            string configString = @"
+            LazinatorConfig config = new LazinatorConfig()
+            {
+                InterchangeMappings = new Dictionary<string, string>()
                 {
-                  ""InterchangeMappings"": {
-                    ""MyNamespace.A"": ""AnotherNamespace.A_Interchange"",
-                    ""MyNamespace.B"": ""AnotherNamespace.B_Interchange""
-                  }
-                }";
-            LazinatorConfig config = new LazinatorConfig(configString);
-            config.InterchangeMappings["MyNamespace.A"].Should().Be("AnotherNamespace.A_Interchange");
-            config.InterchangeMappings["MyNamespace.B"].Should().Be("AnotherNamespace.B_Interchange");
+                    { "MyNamespace.A", "AnotherNamespace.A_Interchange" },
+                    { "MyNamespace.B", "AnotherNamespace.B_Interchange" },
+                }
+            };
+            string configString = JsonConvert.SerializeObject(config, Formatting.Indented);
+            LazinatorConfig config2 = JsonConvert.DeserializeObject<LazinatorConfig>(configString);
+            config2.InterchangeMappings["MyNamespace.B"].Should().Be("AnotherNamespace.B_Interchange");
         }
 
         [Fact]

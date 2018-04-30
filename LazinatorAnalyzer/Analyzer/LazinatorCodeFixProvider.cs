@@ -16,6 +16,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp.Extensions;
+using Newtonsoft.Json;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace LazinatorAnalyzer.Analyzer
@@ -75,7 +76,7 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     try
                     {
-                        config = new LazinatorConfig(sourceFileInformation.Config);
+                        config = JsonConvert.DeserializeObject<LazinatorConfig>(sourceFileInformation.Config);
                     }
                     catch
                     {
