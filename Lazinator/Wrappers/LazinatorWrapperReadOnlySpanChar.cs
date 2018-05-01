@@ -8,5 +8,10 @@ namespace Lazinator.Wrappers
         {
             return new LazinatorWrapperReadOnlySpanChar() { Value = x };
         }
+
+        public static implicit operator ReadOnlySpan<char>(LazinatorWrapperReadOnlySpanChar x)
+        {
+            return x.Value;
+        }
     }
 }

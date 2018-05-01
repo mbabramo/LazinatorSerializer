@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperNullableBool() { Value = x };
         }
 
+        public static implicit operator bool?(LazinatorWrapperNullableBool x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value?.GetHashCode() ?? 0;

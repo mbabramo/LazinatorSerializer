@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperTimeSpan() { Value = x };
         }
 
+        public static implicit operator TimeSpan(LazinatorWrapperTimeSpan x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperNullableChar() { Value = x };
         }
 
+        public static implicit operator char? (LazinatorWrapperNullableChar x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value?.GetHashCode() ?? 0;

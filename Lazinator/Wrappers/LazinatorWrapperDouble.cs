@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperDouble() { Value = x };
         }
 
+        public static implicit operator double(LazinatorWrapperDouble x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

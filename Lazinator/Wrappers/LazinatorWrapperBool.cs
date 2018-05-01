@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperBool() {Value = x};
         }
 
+        public static implicit operator bool(LazinatorWrapperBool x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

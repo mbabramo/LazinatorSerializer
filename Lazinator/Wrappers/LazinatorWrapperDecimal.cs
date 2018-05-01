@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperDecimal() { Value = x };
         }
 
+        public static implicit operator decimal(LazinatorWrapperDecimal x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

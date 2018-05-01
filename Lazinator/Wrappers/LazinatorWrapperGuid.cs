@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperGuid() { Value = x };
         }
 
+        public static implicit operator Guid(LazinatorWrapperGuid x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

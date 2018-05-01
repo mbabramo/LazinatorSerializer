@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperNullableUshort() { Value = x };
         }
 
+        public static implicit operator ushort? (LazinatorWrapperNullableUshort x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value?.GetHashCode() ?? 0;

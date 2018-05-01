@@ -9,6 +9,11 @@ namespace Lazinator.Wrappers
             return new LazinatorWrapperUint() { Value = x };
         }
 
+        public static implicit operator uint(LazinatorWrapperUint x)
+        {
+            return x.Value;
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();
