@@ -265,7 +265,7 @@ namespace Lazinator.Core
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
         /// <param name="lazinator">The lazinator object</param>
         /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneTyped<T>(this T lazinator) where T : class, ILazinator
+        public static T CloneLazinatorTyped<T>(this T lazinator) where T : class, ILazinator
         {
             return lazinator.CloneLazinator() as T;
         }
@@ -277,7 +277,7 @@ namespace Lazinator.Core
         /// <param name="lazinator">The lazinator object</param>
         /// <param name="includeChildrenMode">Whether to include children of the class being cloned.</param>
         /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode) where T : class, ILazinator
+        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode) where T : class, ILazinator
         {
             return lazinator.CloneLazinator(includeChildrenMode) as T;
         }

@@ -123,7 +123,9 @@ namespace LazinatorAnalyzer.Analyzer
 
                         if (namedInterfaceType != null)
                         {
-                            var lazinatorAttribute = RoslynHelpers.GetKnownAttributes<CloneLazinatorAttribute>(namedInterfaceType).First();
+                            var lazinatorAttribute = RoslynHelpers.GetKnownAttributes<CloneLazinatorAttribute>(namedInterfaceType).FirstOrDefault();
+                            if (lazinatorAttribute == null)
+                                return;
                             if (lazinatorAttribute.Autogenerate == false)
                                 return;
                             var locationsExcludingCodeBehind = namedType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(".g.cs")).ToList();

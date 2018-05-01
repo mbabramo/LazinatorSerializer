@@ -585,7 +585,7 @@ namespace Lazinator.CodeDescription
 
 
             sb.Append($@"private {FullyQualifiedTypeName} _{PropertyName};
-        public {FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -625,7 +625,7 @@ namespace Lazinator.CodeDescription
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-                sb.Append($@"public {FullyQualifiedTypeName} {PropertyName}_Copy
+                sb.Append($@"{PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}_Copy
                             {{
                                 [DebuggerStepThrough]
                                 get
@@ -679,7 +679,7 @@ namespace Lazinator.CodeDescription
         {
             var innerFullType = InnerProperties[0].FullyQualifiedTypeName;
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        public {FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get

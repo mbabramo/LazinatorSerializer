@@ -78,7 +78,7 @@ namespace LazinatorTests.Tests
         {
             var original = GetHierarchy(1, 1, 1, 1, 0);
             var copy = GetHierarchy(1, 1, 1, 1, 0);
-            var result = original.CloneTyped(); 
+            var result = original.CloneLazinatorTyped(); 
             ExampleEqual(copy, result).Should().BeTrue();
         }
 
@@ -86,9 +86,9 @@ namespace LazinatorTests.Tests
         public void SelfSerializationCanSetChildToNull()
         {
             var original = GetHierarchy(1, 1, 1, 1, 0);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyChild1 = null;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             result2.MyChild1.Should().Be(null);
         }
 
@@ -151,7 +151,7 @@ namespace LazinatorTests.Tests
                 MyExampleStruct = new ExampleStruct() {MyChar = 'z', MyLazinatorList = new List<Example>()}
             };
 
-            var c2 = c.CloneTyped();
+            var c2 = c.CloneLazinatorTyped();
             c2.MyExampleStruct.MyChar.Should().Be('z');
         }
 
@@ -163,7 +163,7 @@ namespace LazinatorTests.Tests
                 MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };
 
-            var c2 = c.CloneTyped();
+            var c2 = c.CloneLazinatorTyped();
             var copyOfStruct = c2.MyExampleStruct_Copy;
             copyOfStruct.MyChar.Should().Be('z');
             copyOfStruct.MyChar = 'x';
@@ -287,13 +287,13 @@ namespace LazinatorTests.Tests
             copy.MyChild1 = null;
             copy.MyChild2 = null;
             copy.MyInterfaceImplementer = null;
-            var result = original.CloneTyped(IncludeChildrenMode.ExcludeAllChildren);
+            var result = original.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
             ExampleEqual(copy, result).Should().BeTrue();
             // now, serialize again
-            var result2 = result.CloneTyped(IncludeChildrenMode.ExcludeAllChildren);
+            var result2 = result.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
             ExampleEqual(copy, result2).Should().BeTrue();
             // and again -- this time include children but they should be null
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             ExampleEqual(copy, result3).Should().BeTrue();
         }
 
@@ -312,16 +312,16 @@ namespace LazinatorTests.Tests
             var copy = GetObject(5);
             var copyWithGoal = GetObject(5);
             copyWithGoal.MyListInt[2] = 6;
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             copy.MyListInt.SequenceEqual(result.MyListInt).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyListInt[2] = 6;
             result.MyListInt_Dirty = true;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             copyWithGoal.MyListInt.SequenceEqual(result2.MyListInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyListInt[2] = 7;
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             result3.MyListInt[2].Should().Be(6); // the change is ignored, since dirtiness flag wasn't set
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
@@ -342,7 +342,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListInt.Should().BeNull();
         }
 
@@ -361,7 +361,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListInt.Count().Should().Be(0);
         }
 
@@ -380,7 +380,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListExampleStruct.Should().BeNull();
         }
 
@@ -403,7 +403,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListNullableExampleStruct.Count().Should().Be(2);
             result.MyListNullableExampleStruct[0].AsNullableStruct.Value.MyChar.Should().Be('d');
             result.MyListNullableExampleStruct[1].AsNullableStruct.Should().BeNull();
@@ -424,7 +424,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListExampleStruct.Count().Should().Be(0);
         }
 
@@ -447,7 +447,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListExampleStruct.Count().Should().Be(2);
             result.MyListExampleStruct[0].MyChar.Should().Be('d');
             result.MyListExampleStruct[1].MyChar.Should().Be('e');
@@ -469,7 +469,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListSerialized.Should().BeNull();
         }
 
@@ -487,7 +487,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyListSerialized.Count().Should().Be(0);
         }
 
@@ -505,7 +505,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyTupleSerialized.Should().BeNull();
         }
 
@@ -524,7 +524,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyTupleSerialized4.Item2.MyChar.Should().Be('5');
         }
 
@@ -542,7 +542,7 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var copyWithGoal = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             result.MyNullableTuple.Should().BeNull();
         }
 
@@ -610,7 +610,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject(5);
             var copy = GetObject(5);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             copy.MyLinkedListInt.SequenceEqual(result.MyLinkedListInt).Should().BeTrue();
         }
 
@@ -627,7 +627,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject(5);
             var copy = GetObject(5);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             copy.MySortedSetInt.SequenceEqual(result.MySortedSetInt).Should().BeTrue();
         }
 
@@ -647,16 +647,16 @@ namespace LazinatorTests.Tests
             var copy = GetObject(5);
             var copyWithGoal = GetObject(5);
             copyWithGoal.MyQueueInt.Enqueue(6);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             copy.MyQueueInt.SequenceEqual(result.MyQueueInt).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyQueueInt.Enqueue(6);
             result.MyQueueInt_Dirty = true;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             copyWithGoal.MyQueueInt.SequenceEqual(result2.MyQueueInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyQueueInt.Enqueue(7);
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             result3.MyQueueInt.Count().Should().Be(4); // the change is ignored, since dirtiness flag wasn't set
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
@@ -679,16 +679,16 @@ namespace LazinatorTests.Tests
             var copy = GetObject(5);
             var copyWithGoal = GetObject(5);
             copyWithGoal.MyStackInt.Push(6);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             copy.MyStackInt.SequenceEqual(result.MyStackInt).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyStackInt.Push(6);
             result.MyStackInt_Dirty = true;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             copyWithGoal.MyStackInt.SequenceEqual(result2.MyStackInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyStackInt.Push(7);
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             result3.MyStackInt.Count().Should().Be(4); // the change is ignored, since dirtiness flag wasn't set
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
@@ -710,16 +710,16 @@ namespace LazinatorTests.Tests
             var copy = GetObject(5);
             var copyWithGoal = GetObject(5);
             copyWithGoal.MyArrayInt[2] = 6;
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             copy.MyArrayInt.SequenceEqual(result.MyArrayInt).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyArrayInt[2] = 6;
             result.MyArrayInt_Dirty = true;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             copyWithGoal.MyArrayInt.SequenceEqual(result2.MyArrayInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyArrayInt[2] = 7;
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             result3.MyArrayInt[2].Should().Be(6); // the change is ignored, since dirtiness flag wasn't set
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
@@ -740,7 +740,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             for (int i0 = 0; i0 < 2; i0++)
                 for (int i1 = 0; i1 < 3; i1++)
                     result.MyArrayInt[i0, i1].Equals(copy.MyArrayInt[i0, i1]).Should().BeTrue();
@@ -760,7 +760,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             for (int i0 = 0; i0 < 2; i0++)
                 for (int i1 = 0; i1 < 3; i1++)
                     result.MyJaggedArrayInt[i0][i1].Equals(copy.MyJaggedArrayInt[i0] [i1]).Should().BeTrue();
@@ -806,7 +806,7 @@ namespace LazinatorTests.Tests
             var copy = GetObject(false);
             for (int i = 0; i < 3; i++)
             {
-                var result = copy.CloneTyped();
+                var result = copy.CloneLazinatorTyped();
                 result.MyReadOnlySpanByte.Length.Should().Be(3);
                 result.MyReadOnlySpanByte[1].Should().Be(4);
                 result.MyReadOnlySpanDateTime.Length.Should().Be(1);
@@ -822,12 +822,49 @@ namespace LazinatorTests.Tests
             copy = GetObject(true);
             for (int i = 0; i < 3; i++)
             {
-                var result = copy.CloneTyped();
+                var result = copy.CloneLazinatorTyped();
                 result.MyReadOnlySpanByte.Length.Should().Be(0);
                 result.MyReadOnlySpanDateTime.Length.Should().Be(0);
                 result.MyReadOnlySpanLong.Length.Should().Be(0);
                 copy = result;
             }
+        }
+
+        [Fact]
+        public void LazinatorByteSpan()
+        {
+            byte[] originalBytes = new byte[] { 1, 2, 3 };
+            LazinatorByteSpan lazinatorBytes = new LazinatorByteSpan(originalBytes);
+            lazinatorBytes.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone = lazinatorBytes.CloneLazinatorTyped();
+            byte[] bytesConverted = clone.GetSpanToReadOnly().ToArray();
+            clone.GetIsReadOnlyMode().Should().BeTrue();
+            bytesConverted.SequenceEqual(originalBytes).Should().BeTrue();
+            clone.GetSpanToReadOrWrite()[0] = 4;
+            clone.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone2 = clone.CloneLazinatorTyped();
+            clone2.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted2 = clone2.GetSpanToReadOnly().ToArray();
+            clone2.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] expectedBytes = new byte[] { 4, 2, 3 };
+            bytesConverted2.SequenceEqual(expectedBytes).Should().BeTrue();
+
+            byte[] anotherSequence = new byte[] { 10, 11, 12, 13 };
+            clone2.SetMemory(anotherSequence);
+            clone2.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone3 = clone2.CloneLazinatorTyped();
+            clone3.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted3 = clone3.GetSpanToReadOnly().ToArray();
+            bytesConverted3.SequenceEqual(anotherSequence).Should().BeTrue();
+
+            byte[] lastSequence = new byte[] { 20, 21, 22, 23, 24, 25 };
+            clone3.SetReadOnlySpan(lastSequence);
+            clone3.GetIsReadOnlyMode().Should().BeTrue();
+            LazinatorByteSpan clone4 = clone3.CloneLazinatorTyped();
+            clone4.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted4 = clone4.GetSpanToReadOnly().ToArray();
+            bytesConverted4.SequenceEqual(lastSequence).Should().BeTrue();
+
         }
 
         [Fact]
@@ -863,7 +900,7 @@ namespace LazinatorTests.Tests
             SetIndex(copy.MyMemoryInt, 2, 6);
             var span = copy.MyMemoryInt.Span;
             span[2].Should().Be(6);
-            var result = copy.CloneTyped();
+            var result = copy.CloneLazinatorTyped();
             SequenceEqual(copy.MyMemoryInt, result.MyMemoryInt).Should().BeTrue();
         }
 
@@ -912,19 +949,19 @@ namespace LazinatorTests.Tests
             SetIndex(copy.MyNullableMemoryInt.Value, 2, 6);
             var span = copy.MyNullableMemoryInt.Value.Span;
             span[2].Should().Be(6);
-            var result = copy.CloneTyped();
+            var result = copy.CloneLazinatorTyped();
             SequenceEqual(copy.MyNullableMemoryInt.Value, result.MyNullableMemoryInt.Value).Should().BeTrue();
             result.MyMemoryInt.Length.Should().Be(0);
 
             // now, let's make sure that null serializes correctly
             original = new SpanAndMemory();
-            result = original.CloneTyped();
+            result = original.CloneLazinatorTyped();
             result.MyNullableMemoryInt.Should().Be(null);
             result.MyMemoryInt.Length.Should().Be(0);
 
             // and empty list must serialize correctly too
             original = GetEmptyMemoryObject();
-            result = original.CloneTyped();
+            result = original.CloneLazinatorTyped();
             result.MyNullableMemoryInt.Should().NotBeNull();
             result.MyNullableMemoryInt.Value.Length.Should().Be(0);
             result.MyMemoryInt.Length.Should().Be(0);
@@ -961,7 +998,7 @@ namespace LazinatorTests.Tests
             var original = GetObject(1);
             var copy = GetObject(1);
             var copyWithGoal = GetObject(2);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             HashSetsEqual(result.MyHashSetSerialized, copy.MyHashSetSerialized).Should().BeTrue();
         }
 
@@ -995,17 +1032,17 @@ namespace LazinatorTests.Tests
             var original = GetObject(1);
             var copy = GetObject(1);
             var copyWithGoal = GetObject(2);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             ListsEqual(result.MyListSerialized, copy.MyListSerialized).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyListSerialized[2] = GetExampleChild(2);
             result.MyListSerialized_Dirty = true;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             ListsEqual(result2.MyListSerialized, copyWithGoal.MyListSerialized).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             var itemRemoved = result2.MyListSerialized[2];
             result2.MyListSerialized.Add(null);
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             ListsEqual(result3.MyListSerialized, copyWithGoal.MyListSerialized).Should().BeTrue(); // the change is ignored, since dirtiness flag wasn't set
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
@@ -1046,7 +1083,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             DictionariesEqual(result.MyDictionary, copy.MyDictionary).Should().BeTrue();
         }
 
@@ -1080,7 +1117,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             DictionariesEqual(result.MySortedDictionary, copy.MySortedDictionary).Should().BeTrue();
         }
 
@@ -1115,7 +1152,7 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             DictionariesEqual(result.MySortedList, copy.MySortedList).Should().BeTrue();
         }
 
@@ -1136,7 +1173,7 @@ namespace LazinatorTests.Tests
                 }
 
                 var original = GetObject();
-                var result = original.CloneTyped();
+                var result = original.CloneLazinatorTyped();
                 result.MyValueTupleSerialized.Item1.Should().Be(original.MyValueTupleSerialized.Item1);
                 ExampleChildEqual(result.MyValueTupleSerialized.Item2, original.MyValueTupleSerialized.Item2)
                     .Should().BeTrue();
@@ -1166,7 +1203,7 @@ namespace LazinatorTests.Tests
                 }
 
                 var original = GetObject();
-                var result = original.CloneTyped();
+                var result = original.CloneLazinatorTyped();
                 result.MyTupleSerialized.Item1.Should().Be(original.MyTupleSerialized.Item1);
                 ExampleChildEqual(result.MyTupleSerialized.Item2, original.MyTupleSerialized.Item2)
                     .Should().BeTrue();
@@ -1195,7 +1232,7 @@ namespace LazinatorTests.Tests
                 }
 
                 var original = GetObject();
-                var result = original.CloneTyped();
+                var result = original.CloneLazinatorTyped();
                 result.MyTupleSerialized4.Item1.Should().Be(original.MyTupleSerialized4.Item1);
                 result.MyTupleSerialized4.Item2.MyChar.Should().Be(original.MyTupleSerialized4.Item2.MyChar);
             }
@@ -1231,17 +1268,17 @@ namespace LazinatorTests.Tests
             var original = GetNonObject(1);
             var copy = GetNonObject(1);
             var copyWithGoal = GetNonObject(2);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             ListsEqual(result.MyListNonLazinatorType, copy.MyListNonLazinatorType).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyListNonLazinatorType[2] = GetNonLazinatorType(2);
             result.MyListNonLazinatorType_Dirty = true;
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             ListsEqual(result2.MyListNonLazinatorType, copyWithGoal.MyListNonLazinatorType).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             var itemRemoved = result2.MyListNonLazinatorType[2];
             result2.MyListNonLazinatorType[2] = null;
-            var result3 = result2.CloneTyped();
+            var result3 = result2.CloneLazinatorTyped();
             ListsEqual(result3.MyListNonLazinatorType, copyWithGoal.MyListNonLazinatorType).Should().BeTrue(); // the change is ignored, since dirtiness flag wasn't set
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
@@ -1294,11 +1331,11 @@ namespace LazinatorTests.Tests
             var original = GetNestedList(2);
             var copy = GetNestedList(2);
             var copyWithGoal = GetNestedList(1);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             ListsEqual(result.MyListNestedNonLazinatorType, copy.MyListNestedNonLazinatorType).Should().BeTrue();
             // make sure that updates serialize; because we're not tracking dirtiness, the reserialization should occur simply because this was deserialized
             result.MyListNestedNonLazinatorType[1][1] = GetNonLazinatorType(1);
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             ListsEqual(result2.MyListNestedNonLazinatorType, copyWithGoal.MyListNestedNonLazinatorType).Should().BeTrue();
         }
 
@@ -1307,7 +1344,7 @@ namespace LazinatorTests.Tests
         {
             var original = GetHierarchy(1, 1, 3, 1, 2);
             var copy = GetHierarchy(1, 1, 3, 1, 2);
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
         }
 
@@ -1323,7 +1360,7 @@ namespace LazinatorTests.Tests
                     new ExampleChildInherited() { MyShort = 21, MyInt = 23 }
                 }
             };
-            var result = original.CloneTyped(); // no immediate exception, because we haven't deserialized yet
+            var result = original.CloneLazinatorTyped(); // no immediate exception, because we haven't deserialized yet
             LazinatorList<ExampleChild> l = null;
             Action action = () => l = result.MyList;
             action.Should().Throw<Exception>();
@@ -1343,12 +1380,12 @@ namespace LazinatorTests.Tests
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.IsDirty.Should().BeTrue();
-            hierarchy = hierarchy.CloneTyped();
+            hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.MyDateTime = DateTime.Now - TimeSpan.FromHours(1);
             hierarchy.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.IsDirty.Should().BeFalse();
-            hierarchy = hierarchy.CloneTyped();
+            hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.MyChild1 = new ExampleChild() {MyLong = 232344};
             hierarchy.IsDirty.Should().BeTrue();
@@ -1359,7 +1396,7 @@ namespace LazinatorTests.Tests
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.IsDirty.Should().BeTrue();
-            hierarchy = hierarchy.CloneTyped();
+            hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyLong = 987654;
@@ -1426,12 +1463,12 @@ namespace LazinatorTests.Tests
             LazinatorFastReadList<int> r = new LazinatorFastReadList<int>();
             r.AsList = new List<int>() { 3, 4, 5 };
             r.IsDirty.Should().BeTrue();
-            LazinatorFastReadList<int> r2 = r.CloneTyped();
+            LazinatorFastReadList<int> r2 = r.CloneLazinatorTyped();
             r2[0].Should().Be(3);
             r2.IsDirty.Should().BeFalse();
             r2.AsList.Add(6);
             r2.IsDirty.Should().BeTrue();
-            LazinatorFastReadList<int> r3 = r2.CloneTyped();
+            LazinatorFastReadList<int> r3 = r2.CloneLazinatorTyped();
             r3.AsList.Count().Should().Be(4);
         }
         
@@ -1449,9 +1486,9 @@ namespace LazinatorTests.Tests
             void CheckBeforeAndAfterSerialization()
             {
                 CheckList();
-                x = x.CloneTyped();
+                x = x.CloneLazinatorTyped();
                 CheckList();
-                x = x.CloneTyped();
+                x = x.CloneLazinatorTyped();
                 CheckList();
             }
             // set the list
@@ -1598,13 +1635,13 @@ namespace LazinatorTests.Tests
                 switch (containerOption)
                 {
                     case ContainerForLazinatorList.NoContainer:
-                        SetList(GetList().CloneTyped(IncludeChildrenMode.ExcludeAllChildren));
+                        SetList(GetList().CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren));
                         break;
                     case ContainerForLazinatorList.NonGenericContainer:
-                        nonGenericContainer = nonGenericContainer.CloneTyped();
+                        nonGenericContainer = nonGenericContainer.CloneLazinatorTyped();
                         break;
                     case ContainerForLazinatorList.GenericContainer:
-                        genericContainer = genericContainer.CloneTyped();
+                        genericContainer = genericContainer.CloneLazinatorTyped();
                         break;
                 }
 
@@ -1638,7 +1675,7 @@ namespace LazinatorTests.Tests
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
             if (serializeAndDeserializeFirst)
             {
-                hierarchy = hierarchy.CloneTyped();
+                hierarchy = hierarchy.CloneLazinatorTyped();
                 ExampleEqual(hierarchy, copy).Should().BeTrue();
             }
             hierarchy.MyNonLazinatorChild.MyString = goal.MyNonLazinatorChild.MyString;
@@ -1679,12 +1716,12 @@ namespace LazinatorTests.Tests
             var copy = GetHierarchy(indexUpTo2, indexUpTo3a, indexUpTo3b, indexUpTo3c, indexUpTo2b);
             var anotherCopyForReference = GetHierarchy(indexUpTo2, indexUpTo3a, indexUpTo3b, indexUpTo3c, indexUpTo2b);
             // do an initial serialization / deserialization cycle
-            var result = original.CloneTyped();
+            var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
             result.MyChild1?.LazinatorParentClass.Should().Be(result);
             result.MyChild2?.LazinatorParentClass.Should().Be(result);
             // repeat the cycle
-            var result2 = result.CloneTyped();
+            var result2 = result.CloneLazinatorTyped();
             ExampleEqual(copy, result2).Should().BeTrue();
             // and now again, verifying cleanness
             var result3 = CloneWithOptionalVerification(result2, true, true);

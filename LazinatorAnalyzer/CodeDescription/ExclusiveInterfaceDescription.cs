@@ -47,6 +47,9 @@ namespace Lazinator.CodeDescription
             foreach (var a in attributes)
             {
                 INamedTypeSymbol namedInterfaceType = Container.CodeFiles.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);
+                if (namedInterfaceType == null)
+                    throw new LazinatorCodeGenException(
+                        $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                 ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, Container);
                 foreach (var p in d.PropertiesThisLevel)
                     if (!PropertiesThisLevel.Any(x => x.PropertyName == p.PropertyName))

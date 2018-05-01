@@ -123,9 +123,10 @@ public class MyOtherClass
         }
 
         [Fact]
-        public async Task CodeGenerationProducesActualCode_LazinatorWrappers()
+        public async Task CodeGenerationProducesActualCode_LazinatorBuiltIns()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
+            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperBool), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperByte), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);

@@ -43,6 +43,8 @@ namespace Lazinator.Collections
         LazinatorWrapperDecimal,
         WrapperNullableStruct,
         LazinatorWrapperBool,
-        LazinatorWrapperNullableBool
+        LazinatorWrapperNullableBool,
+        ByteSpan,
+        ByteSpanUnofficial
     }
 }
