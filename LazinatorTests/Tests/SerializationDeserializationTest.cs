@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using FluentAssertions;
 using Lazinator.Collections;
 using LazinatorTests.Examples;
@@ -14,13 +9,13 @@ using Lazinator.Exceptions;
 using Lazinator.Support;
 using Lazinator.Buffers; 
 using Lazinator.Core; 
-using static Lazinator.Core.LazinatorUtilities;
 using LazinatorTests.Examples.Tuples;
 using Xunit;
 using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleNonexclusiveInterfaceImplementer;
 using Lazinator.Wrappers;
 using System.Buffers;
 using System.Reflection;
+using Lazinator.Spans;
 
 namespace LazinatorTests.Tests
 {
@@ -864,7 +859,6 @@ namespace LazinatorTests.Tests
             clone4.GetIsReadOnlyMode().Should().BeTrue();
             byte[] bytesConverted4 = clone4.GetSpanToReadOnly().ToArray();
             bytesConverted4.SequenceEqual(lastSequence).Should().BeTrue();
-
         }
 
         [Fact]

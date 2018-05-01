@@ -1,10 +1,11 @@
 ﻿using System;
 using Lazinator.Attributes;
+using Lazinator.Collections;
 
-namespace Lazinator.Collections
+namespace Lazinator.Spans
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ByteSpan)]
-    [UnofficiallyIncorporateInterface("Lazinator.Collections.ILazinatorByteSpanUnofficial", "internal")]
+    [UnofficiallyIncorporateInterface("Lazinator.Spans.ILazinatorByteSpanUnofficial", "internal")]
     public interface ILazinatorByteSpan
     {
     }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Immutable;
+using Lazinator.CodeDescription;
 using LazinatorCodeGen.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
 using LazinatorAnalyzer.Settings;
@@ -187,8 +188,13 @@ namespace LazinatorCodeGen.Roslyn
             var attributes = (GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(type)).ToList();
             foreach (CloneUnofficiallyIncorporateInterfaceAttribute attribute in attributes)
             {
-                foreach (ITypeSymbol t in GetTypeAndInnerTypes(Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName)))
+                foreach (ITypeSymbol t in GetTypeAndInnerTypes(
+                    Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName)))
+                {
+                    if (t == null)
+                        throw new LazinatorCodeGenException($"Unofficial type {attribute.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                     yield return t;
+                }
             }
         }
 

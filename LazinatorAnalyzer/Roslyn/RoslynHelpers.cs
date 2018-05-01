@@ -55,7 +55,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static bool HasAttribute(this ISymbol symbol, INamedTypeSymbol attributeSymbol)
         {
-            return symbol.GetAttributes().Any(x => x.AttributeClass.Equals(attributeSymbol));
+            return symbol.GetAttributes().Any(x => x.AttributeClass.GetFullyQualifiedName().Equals(attributeSymbol.GetFullyQualifiedName()));
         }
 
         public static INamedTypeSymbol GetTopLevelInterfaceImplementingAttribute(this INamedTypeSymbol lazinatorObject, INamedTypeSymbol attributeType)
@@ -63,7 +63,7 @@ namespace LazinatorCodeGen.Roslyn
             return lazinatorObject.Interfaces
                         .Where(x => x.HasAttribute(attributeType))
                         .OrderByDescending(x => x.GetMembers().Count())
-                        .SingleOrDefault();
+                        .FirstOrDefault();
         }
 
         public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel(this INamedTypeSymbol namedSymbolType)

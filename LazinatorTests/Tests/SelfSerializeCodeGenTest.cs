@@ -24,6 +24,7 @@ using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using System.Threading.Tasks;
 using System.Collections.Immutable;
+using Lazinator.Spans;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
@@ -126,7 +127,7 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_LazinatorBuiltIns()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperBool), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperByte), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
@@ -216,7 +217,14 @@ public class MyOtherClass
 
         private static List<string> GetDirectories()
         {
-            return new List<string>() { ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes", ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections", ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers", ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples" };
+            return new List<string>()
+            {
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Spans",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
+                ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples"
+            };
         }
 
         private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws)

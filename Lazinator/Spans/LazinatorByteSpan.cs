@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Lazinator.Collections
+namespace Lazinator.Spans
 {
     public partial class LazinatorByteSpan : ILazinatorByteSpan
     {
@@ -35,6 +36,11 @@ namespace Lazinator.Collections
             return ReadOrWrite.Span;
         }
 
+        //public ReadOnlySpan<T> GetSpanToReadOnly<T>() where T : struct
+        //{
+        //    return MemoryMarshal.
+        //}
+
         public void SetReadOnlySpan(ReadOnlySpan<byte> span)
         {
             ReadOnlyMode = true;
@@ -56,9 +62,10 @@ namespace Lazinator.Collections
             if (!ReadOnlyMode)
             {
                 // Convert to read only mode. This is a bit inefficient, because we're allocating memory before serialization. A better implementation might override the code behind so that we write as if we were in read only mode without actually allocating memory. In any event, this improves efficiency for reading the bitarray post-deserialization if no writing is needed.
-                byte[] underlyingStorage = new byte[ReadOrWrite.Length];
-                ReadOrWrite.CopyTo(underlyingStorage);
-                ReadOnly = new ReadOnlySpan<byte>(underlyingStorage);
+                ReadOnly = MemoryMarshal.CreateReadOnlySpan<byte>(ref ReadOrWrite.Span[0], ReadOrWrite.Length);
+                //byte[] underlyingStorage = new byte[ReadOrWrite.Length];
+                //ReadOrWrite.CopyTo(underlyingStorage);
+                //ReadOnly = new ReadOnlySpan<byte>(underlyingStorage);
                 ReadOnlyMode = false;
             }
         }

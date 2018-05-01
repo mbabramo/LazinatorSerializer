@@ -678,6 +678,10 @@ namespace Lazinator.CodeDescription
         private void AppendReadOnlySpanProperty(CodeStringBuilder sb)
         {
             var innerFullType = InnerProperties[0].FullyQualifiedTypeName;
+            string castToSpanOfCorrectType;
+            if (innerFullType == "byte")
+                castToSpanOfCorrectType = $"_{PropertyName}.Span";
+            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}.Span)";
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
         {PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}
         {{
@@ -690,7 +694,7 @@ namespace Lazinator.CodeDescription
                     _{PropertyName} = childData;
                     _{PropertyName}_Accessed = true;
                 }}
-                return MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}.Span);
+                return {castToSpanOfCorrectType};
             }}
             [DebuggerStepThrough]
             set

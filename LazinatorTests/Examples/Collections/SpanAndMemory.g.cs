@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Collections
                     _MyReadOnlySpanByte = childData;
                     _MyReadOnlySpanByte_Accessed = true;
                 }
-                return MemoryMarshal.Cast<byte, byte>(_MyReadOnlySpanByte.Span);
+                return _MyReadOnlySpanByte.Span;
             }
             [DebuggerStepThrough]
             set
