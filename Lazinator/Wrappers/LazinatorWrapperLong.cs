@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperLong : ILazinatorWrapperLong
+    public partial struct LazinatorWrapperLong : ILazinatorWrapperLong, IComparable
     {
         public static implicit operator LazinatorWrapperLong(long x)
         {
@@ -23,6 +23,11 @@ namespace Lazinator.Wrappers
         {
             var other = (LazinatorWrapperLong)obj;
             return Value == other.Value;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return Value.CompareTo(obj);
         }
     }
 }

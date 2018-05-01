@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperInt : ILazinatorWrapperInt
+    public partial struct LazinatorWrapperInt : ILazinatorWrapperInt, IComparable
     {
         public static implicit operator LazinatorWrapperInt(int x)
         {
@@ -23,6 +23,11 @@ namespace Lazinator.Wrappers
         {
             var other = (LazinatorWrapperInt)obj;
             return Value == other.Value;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return Value.CompareTo(obj);
         }
     }
 }

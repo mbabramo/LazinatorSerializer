@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperSByte : ILazinatorWrapperSByte
+    public partial struct LazinatorWrapperSByte : ILazinatorWrapperSByte, IComparable
     {
         public static implicit operator LazinatorWrapperSByte(sbyte x)
         {
@@ -23,6 +23,11 @@ namespace Lazinator.Wrappers
         {
             var other = (LazinatorWrapperSByte)obj;
             return Value == other.Value;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return Value.CompareTo(obj);
         }
     }
 }
