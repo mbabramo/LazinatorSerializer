@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperTimeSpan : ILazinatorWrapperTimeSpan, IComparable
+    public partial struct LazinatorWrapperTimeSpan : ILazinatorWrapperTimeSpan, IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>, IComparable<LazinatorWrapperTimeSpan>, IEquatable<LazinatorWrapperTimeSpan>
     {
         public static implicit operator LazinatorWrapperTimeSpan(TimeSpan x)
         {
@@ -28,6 +28,26 @@ namespace Lazinator.Wrappers
         public int CompareTo(object obj)
         {
             return ((IComparable)Value).CompareTo(obj);
+        }
+
+        public int CompareTo(TimeSpan other)
+        {
+            return Value.CompareTo(other);
+        }
+
+        public bool Equals(TimeSpan other)
+        {
+            return Value.Equals(other);
+        }
+
+        public int CompareTo(LazinatorWrapperTimeSpan other)
+        {
+            return Value.CompareTo(other.Value);
+        }
+
+        public bool Equals(LazinatorWrapperTimeSpan other)
+        {
+            return Value.Equals(other.Value);
         }
     }
 }

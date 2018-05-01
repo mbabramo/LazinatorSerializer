@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperDateTime : ILazinatorWrapperDateTime, IComparable
+    public partial struct LazinatorWrapperDateTime : ILazinatorWrapperDateTime, IComparable, IComparable<DateTime>, IEquatable<DateTime>, IComparable<LazinatorWrapperDateTime>, IEquatable<LazinatorWrapperDateTime>
     {
         public static implicit operator LazinatorWrapperDateTime(DateTime x)
         {
@@ -28,6 +28,26 @@ namespace Lazinator.Wrappers
         public int CompareTo(object obj)
         {
             return Value.CompareTo(obj);
+        }
+
+        public int CompareTo(DateTime other)
+        {
+            return Value.CompareTo(other);
+        }
+
+        public bool Equals(DateTime other)
+        {
+            return Value.Equals(other);
+        }
+
+        public int CompareTo(LazinatorWrapperDateTime other)
+        {
+            return Value.CompareTo(other.Value);
+        }
+
+        public bool Equals(LazinatorWrapperDateTime other)
+        {
+            return Value.Equals(other.Value);
         }
     }
 }
