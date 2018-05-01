@@ -117,6 +117,8 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     case SymbolKind.NamedType:
                         var namedType = (INamedTypeSymbol)context.Symbol;
+                        if (namedType.TypeKind == TypeKind.Interface)
+                            return;
                         var namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
 
                         if (namedInterfaceType != null)
