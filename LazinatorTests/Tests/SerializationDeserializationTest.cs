@@ -16,6 +16,7 @@ using Lazinator.Wrappers;
 using System.Buffers;
 using System.Reflection;
 using Lazinator.Spans;
+using System.Collections;
 
 namespace LazinatorTests.Tests
 {
@@ -859,6 +860,30 @@ namespace LazinatorTests.Tests
             clone4.GetIsReadOnlyMode().Should().BeTrue();
             byte[] bytesConverted4 = clone4.GetSpanToReadOnly().ToArray();
             bytesConverted4.SequenceEqual(lastSequence).Should().BeTrue();
+        }
+        
+        [Fact]
+        public void LazinatorBitArrayWorks()
+        {
+            bool[] values1 = new bool[]
+                {true, false, true, false, true, false, true, false, true};
+            bool[] values2 = new bool[]
+                {true, true, true, true, true, false, false, false, false};
+            LazinatorBitArray bits1 = new LazinatorBitArray(values1);
+            LazinatorBitArray bits2 = new LazinatorBitArray(values2);
+            bits1.Count.Should().Be(9);
+            var opposite = new LazinatorBitArray(bits1).Not();
+            for (int i = 0; i < values1.Length; i++)
+                opposite[i].Should().Be(!values1[i]);
+            var and = new LazinatorBitArray(bits1).And(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                and[i].Should().Be(values1[i] & values2[i]);
+            var or = new LazinatorBitArray(bits1).Or(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                or[i].Should().Be(values1[i] | values2[i]);
+            var xor = new LazinatorBitArray(bits1.Xor(bits2));
+            for (int i = 0; i < values1.Length; i++)
+                xor[i].Should().Be(values1[i] ^ values2[i]);
         }
 
         [Fact]
