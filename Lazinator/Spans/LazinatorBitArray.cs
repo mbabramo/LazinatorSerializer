@@ -10,13 +10,8 @@ namespace Lazinator.Spans
     // shifting yourself.
     [System.Runtime.InteropServices.ComVisible(true)]
     [Serializable()]
-    public sealed class LazinatorBitArray : ICollection, ICloneable
+    public sealed partial class LazinatorBitArray : ICollection, ICloneable, ILazinatorBitArray
     {
-
-        public LazinatorByteSpan ByteSpan { get; set; }
-
-        public int m_length { get; set; }
-        public int _version { get; set; }
 
         private LazinatorBitArray()
         {

@@ -45,6 +45,8 @@ namespace Lazinator.Collections
         LazinatorWrapperBool,
         LazinatorWrapperNullableBool,
         ByteSpan,
-        ByteSpanUnofficial
+        ByteSpanUnofficial,
+        LazinatorBitArray,
+        LazinatorBitArrayUnofficial
     }
 }

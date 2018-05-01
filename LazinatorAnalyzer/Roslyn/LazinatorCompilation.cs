@@ -46,6 +46,8 @@ namespace LazinatorCodeGen.Roslyn
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
+            if (exclusiveInterfaceTypeSymbol == null)
+                throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} does not implement an exclusive interface.");
             Initialize(implementingTypeDeclaration, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
         }
 
