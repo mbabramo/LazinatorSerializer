@@ -96,7 +96,11 @@ namespace LazinatorCodeGen.Roslyn
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
             List<(IPropertySymbol property, bool isThisLevel)> propertiesInInterfaceWithLevel = new List<(IPropertySymbol, bool isThisLevel)>();
-            AddPropertiesForTypeToList(@interface, propertiesInInterfaceWithLevel);
+            foreach (var property in @interface.GetPropertiesAndWhetherThisLevel_MovingAbstractPropertiesUp())
+            {
+                propertiesInInterfaceWithLevel.Add(property);
+                RelevantSymbols.Add(property.property);
+            }
             PropertiesForType[@interface] = propertiesInInterfaceWithLevel;
             PropertiesRecursionDepth++;
             foreach (var propertyWithLevel in propertiesInInterfaceWithLevel)
@@ -266,6 +270,8 @@ namespace LazinatorCodeGen.Roslyn
             if (RecordLikeTypes.ContainsKey(type) || NonRecordLikeTypes.Contains(type))
                 return;
             // Consider whether to add this as a record-like type
+            if (type.IsAbstract)
+                return; 
             var constructorWithMostParameters = type.Constructors.OrderByDescending(x => x.Parameters.Count()).FirstOrDefault();
             if (constructorWithMostParameters == null)
                 NonRecordLikeTypes.Add(type);
@@ -287,15 +293,6 @@ namespace LazinatorCodeGen.Roslyn
                         RecordInformationAboutTypeAndRelatedTypes(property.property.Type);
                     RecordLikeTypes[type] = parametersAndProperties;
                 }
-            }
-        }
-
-        private void AddPropertiesForTypeToList(INamedTypeSymbol type, List<(IPropertySymbol, bool isThisLevel)> propertiesInType)
-        {
-            foreach (var property in type.GetPropertiesAndWhetherThisLevel())
-            {
-                propertiesInType.Add(property);
-                RelevantSymbols.Add(property.property);
             }
         }
 

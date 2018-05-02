@@ -66,6 +66,34 @@ namespace LazinatorCodeGen.Roslyn
                         .FirstOrDefault();
         }
 
+        public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel_MovingAbstractPropertiesUp(this INamedTypeSymbol namedSymbolType)
+        {
+            // if concrete interface inherits directly (with no intervening concrete interface) from another interface, then this method will count those properties as being in this level, rather than being in the lower level
+            if (namedSymbolType.BaseType == null || !namedSymbolType.BaseType.IsAbstract)
+            { // nothing special to do
+                foreach (var propertyWithLevel in GetPropertiesAndWhetherThisLevel(namedSymbolType))
+                    yield return propertyWithLevel;
+                yield break; // we're done
+            }
+            HashSet<IPropertySymbol> propertiesToMoveUp = new HashSet<IPropertySymbol>();
+            INamedTypeSymbol lowerLevelInterface = namedSymbolType.BaseType;
+            while (lowerLevelInterface != null && lowerLevelInterface.IsAbstract)
+            {
+                lowerLevelInterface.GetPropertiesForType(out ImmutableList<IPropertySymbol> additionalSymbolsToMoveUp, out ImmutableList<IPropertySymbol> _);
+                foreach (IPropertySymbol symbolToMoveUp in additionalSymbolsToMoveUp)
+                    propertiesToMoveUp.Add(symbolToMoveUp);
+                lowerLevelInterface = lowerLevelInterface.BaseType; // look another level down
+            }
+
+            foreach (var propertyWithLevel in GetPropertiesAndWhetherThisLevel(namedSymbolType))
+            {
+                if (propertyWithLevel.isThisLevel || !propertiesToMoveUp.Contains(propertyWithLevel.property))
+                    yield return propertyWithLevel;
+                else
+                    yield return (propertyWithLevel.property, true); // move it to this level
+            }
+        }
+
         public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel(this INamedTypeSymbol namedSymbolType)
         {
             namedSymbolType.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
