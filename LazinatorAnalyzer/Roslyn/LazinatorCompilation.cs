@@ -45,6 +45,8 @@ namespace LazinatorCodeGen.Roslyn
             Compilation = compilation;
             Config = config;
             TypeDeclarationSyntax implementingTypeDeclaration = GetTypeDeclaration(compilation, implementingTypeName);
+            if (implementingTypeDeclaration == null)
+                throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {implementingTypeName} not found.");
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
