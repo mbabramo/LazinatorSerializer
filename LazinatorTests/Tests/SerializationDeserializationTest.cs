@@ -1432,7 +1432,8 @@ namespace LazinatorTests.Tests
             {
                 AnotherProperty = "hi",
                 MyT = 5, // now is an int
-                LazinatorExample = GetExample(3)
+                LazinatorExample = GetExample(2),
+                DeserializationFactory = GetDeserializationFactory()
             };
             var cg2a_clone = cg2a.CloneLazinatorTyped();
             cg2a_clone.AnotherProperty.Should().Be("hi");
@@ -1443,13 +1444,13 @@ namespace LazinatorTests.Tests
             {
                 AnotherProperty = "hi",
                 MyT = GetExample(2),
-                LazinatorExample = GetExample(3)
+                LazinatorExample = GetExample(1),
+                DeserializationFactory = GetDeserializationFactory()
             };
             var cg2b_clone = cg2b.CloneLazinatorTyped();
             cg2b_clone.AnotherProperty.Should().Be("hi");
             cg2b_clone.MyT.Should().NotBeNull();
             cg2b_clone.LazinatorExample.Should().NotBeNull();
-
         }
 
         [Fact]
