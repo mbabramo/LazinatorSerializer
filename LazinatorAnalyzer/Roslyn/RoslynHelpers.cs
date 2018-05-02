@@ -72,9 +72,9 @@ namespace LazinatorCodeGen.Roslyn
             ImmutableArray<ISymbol> members = namedTypeSymbol.GetMembers();
             var interfaces =
                 namedTypeSymbol.AllInterfaces
-                    .Where(x => x.IsAbstract)
                     .Where(x => x.HasAttributeOfType<CloneLazinatorAttribute>())
                     .OrderByDescending(x => x.GetMembers().Length)
+                    .TakeWhile(x => x.IsAbstract) // stop after first nonabstract
                     .ToList();
             return interfaces;
         }
