@@ -19,6 +19,7 @@ namespace Lazinator.CodeDescription
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
         public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
         public string EnumEquivalentType { get; set; }
+        public string DeriveKeyword { get; set; }
         public string TypeName { get; set; }
         public string FullyQualifiedTypeName => NamespacePrefixToUse + TypeName;
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
@@ -544,7 +545,7 @@ namespace Lazinator.CodeDescription
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
             string propertyString = $@"        private {FullyQualifiedTypeName} _{PropertyName};
-        {PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{DeriveKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -598,7 +599,7 @@ namespace Lazinator.CodeDescription
 
 
             sb.Append($@"private {FullyQualifiedTypeName} _{PropertyName};
-        {PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{DeriveKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -638,7 +639,7 @@ namespace Lazinator.CodeDescription
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-                sb.Append($@"{PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}_Copy
+                sb.Append($@"{PropertyAccessibilityString}{DeriveKeyword}{FullyQualifiedTypeName} {PropertyName}_Copy
                             {{
                                 [DebuggerStepThrough]
                                 get
@@ -696,7 +697,7 @@ namespace Lazinator.CodeDescription
                 castToSpanOfCorrectType = $"_{PropertyName}.Span";
             else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}.Span)";
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        {PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{DeriveKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get

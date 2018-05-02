@@ -35,8 +35,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPreSerialization { get; set; }
         public bool ImplementsPostDeserialization { get; set; }
         public List<string> GenericArgumentNames { get; set; }
-        public List<PropertyDescription> PropertiesThisLevel => ExclusiveInterface.PropertiesThisLevel;
-        public List<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface.PropertiesIncludingInherited;
+        public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public LazinatorCompilation CodeFiles;
         public Guid Hash;
 
@@ -133,7 +132,7 @@ namespace Lazinator.CodeDescription
             if (ObjectType != LazinatorObjectType.Class)
             {
                 // a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
-                foreach (var property in PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                         additionalDirtinessChecks += $" || ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty)";
@@ -355,7 +354,7 @@ namespace Lazinator.CodeDescription
                 sb.Append(boilerplate);
             }
 
-            var thisLevel = PropertiesThisLevel;
+            var thisLevel = PropertiesToDefineThisLevel;
             var withRecordedIndices = thisLevel.Where(property =>
                 property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
                 property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
@@ -461,9 +460,9 @@ namespace Lazinator.CodeDescription
 
             sb.Append($@"}}
 ");
-            var propertiesSupportedCollections = PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedCollection).ToList();
-            var propertiesSupportedTuples = PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedTuple).ToList();
-            var propertiesNonSerialized = PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonSelfSerializingType).ToList();
+            var propertiesSupportedCollections = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedCollection).ToList();
+            var propertiesSupportedTuples = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedTuple).ToList();
+            var propertiesNonSerialized = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonSelfSerializingType).ToList();
             if (propertiesSupportedCollections.Any() || propertiesSupportedTuples.Any())
                 sb.Append($@"
                             /* Conversion of supported collections and tuples */

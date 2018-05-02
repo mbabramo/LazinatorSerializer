@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LazinatorAnalyzer.Roslyn;
 using LazinatorCodeGen.AttributeClones;
 using Microsoft.CodeAnalysis;
 
@@ -13,7 +14,7 @@ namespace Lazinator.CodeDescription
         public int Version;
         public ObjectDescription Container;
         public List<PropertyDescription> PropertiesIncludingInherited;
-        public List<PropertyDescription> PropertiesThisLevel;
+        public List<PropertyDescription> PropertiesToDefineThisLevel;
         public List<string> GenericArgumentNames;
         public int TotalNumProperties;
 
@@ -51,11 +52,11 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                 ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, Container);
-                foreach (var p in d.PropertiesThisLevel)
-                    if (!PropertiesThisLevel.Any(x => x.PropertyName == p.PropertyName))
+                foreach (var p in d.PropertiesToDefineThisLevel)
+                    if (!PropertiesToDefineThisLevel.Any(x => x.PropertyName == p.PropertyName))
                     {
                         p.PropertyAccessibility = a.Accessibility;
-                        PropertiesThisLevel.Add(p);
+                        PropertiesToDefineThisLevel.Add(p);
                     }
             }
         }
@@ -63,29 +64,38 @@ namespace Lazinator.CodeDescription
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
             var propertiesWithLevel = Container.CodeFiles.PropertiesForType[interfaceSymbol];
-            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.property, Container) })
+            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container) })
                 .OrderBy(x => x.description.PropertyType)
                 .ThenBy(x => x.description.PropertyName).ToList();
 
-            var dirtyPropertiesWithLevel = propertiesWithLevel.Where(x => x.property.Name.EndsWith("_Dirty")).ToList();
-            if (dirtyPropertiesWithLevel.Any(x => (x.property.Type as INamedTypeSymbol)?.Name != "Boolean"))
+            // A property that ends with "_Dirty" is designed to track dirtiness of another property. We will thus treat it specially.
+            var dirtyPropertiesWithLevel = propertiesWithLevel.Where(x => x.Property.Name.EndsWith("_Dirty")).ToList();
+            if (dirtyPropertiesWithLevel.Any(x => (x.Property.Type as INamedTypeSymbol)?.Name != "Boolean"))
                 throw new LazinatorCodeGenException($"Property ending with _Dirty must be of type bool.");
             PropertiesIncludingInherited = new List<PropertyDescription>();
-            PropertiesThisLevel = new List<PropertyDescription>();
+            PropertiesToDefineThisLevel = new List<PropertyDescription>();
 
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
-                if (!dirtyPropertiesWithLevel.Any(x => x.property.Name == orderedProperty.propertyWithLevel.property.Name))
-                {
+                if (!dirtyPropertiesWithLevel.Any(x => x.Property.Name == orderedProperty.propertyWithLevel.Property.Name))
+                { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
-                    if (orderedProperty.propertyWithLevel.isThisLevel || Container?.BaseLazinatorObject == null)
-                        PropertiesThisLevel.Add(orderedProperty.description);
+                    if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel ||
+                        orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel ||
+                        Container?.BaseLazinatorObject == null)
+                    {
+                        if (orderedProperty.propertyWithLevel.LevelInfo ==
+                            PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel)
+                            orderedProperty.description.DeriveKeyword = "override ";
+                        PropertiesToDefineThisLevel.Add(orderedProperty.description);
+                    }
                 }
             }
 
+            // for each _dirty property, set TrackDirtinessNonSerialized on the corresponding property.
             foreach (var dirtyWithLevel in dirtyPropertiesWithLevel)
             {
-                var match = PropertiesIncludingInherited.SingleOrDefault(x => x.PropertyName + "_Dirty" == dirtyWithLevel.property.Name);
+                var match = PropertiesIncludingInherited.SingleOrDefault(x => x.PropertyName + "_Dirty" == dirtyWithLevel.Property.Name);
                 if (match == null)
                     throw new LazinatorCodeGenException(
                         $"Property ending with _Dirty must have a corresponding property without the ending.");
@@ -93,7 +103,7 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException(
                         $"Property ending with _Dirty must correspond to a nonserialized property without the ending (not to a Lazinator or primitive type).");
                 match.TrackDirtinessNonSerialized = true;
-                match = PropertiesThisLevel.SingleOrDefault(x => x.PropertyName + "_Dirty" == dirtyWithLevel.property.Name);
+                match = PropertiesToDefineThisLevel.SingleOrDefault(x => x.PropertyName + "_Dirty" == dirtyWithLevel.Property.Name);
                 if (match != null)
                     match.TrackDirtinessNonSerialized = true;
             }

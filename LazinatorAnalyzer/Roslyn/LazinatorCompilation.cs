@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using Lazinator.CodeDescription;
 using LazinatorCodeGen.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
+using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
 
 namespace LazinatorCodeGen.Roslyn
@@ -26,7 +27,7 @@ namespace LazinatorCodeGen.Roslyn
         public HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
-        public Dictionary<INamedTypeSymbol, List<(IPropertySymbol property, bool isThisLevel)>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<(IPropertySymbol, bool isThisLevel)>>();
+        public Dictionary<INamedTypeSymbol, List<PropertyWithLevelInfo>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<PropertyWithLevelInfo>>();
         public Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
         public HashSet<(INamedTypeSymbol type, string methodName)> TypeImplementsMethod = new HashSet<(INamedTypeSymbol type, string methodName)>();
         private Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
@@ -95,17 +96,17 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
-            List<(IPropertySymbol property, bool isThisLevel)> propertiesInInterfaceWithLevel = new List<(IPropertySymbol, bool isThisLevel)>();
-            foreach (var property in @interface.GetPropertiesAndWhetherThisLevel_MovingAbstractPropertiesUp())
+            List<PropertyWithLevelInfo> propertiesInInterfaceWithLevel = new List<PropertyWithLevelInfo>();
+            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo())
             {
-                propertiesInInterfaceWithLevel.Add(property);
-                RelevantSymbols.Add(property.property);
+                propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
+                RelevantSymbols.Add(propertyWithLevelInfo.Property);
             }
             PropertiesForType[@interface] = propertiesInInterfaceWithLevel;
             PropertiesRecursionDepth++;
             foreach (var propertyWithLevel in propertiesInInterfaceWithLevel)
             {
-                IPropertySymbol property = propertyWithLevel.property;
+                IPropertySymbol property = propertyWithLevel.Property;
                 AddKnownAttributesForSymbol(property);
                 RecordInformationAboutTypeAndRelatedTypes(property.Type);
             }
@@ -278,10 +279,10 @@ namespace LazinatorCodeGen.Roslyn
             else
             {
                 var parameters = constructorWithMostParameters.Parameters.ToList();
-                var properties = type.GetPropertiesAndWhetherThisLevel();
-                if (parameters.Any() && parameters.All(x => properties.Any(y => y.property.Name == x.Name || y.property.Name == FirstCharToUpper(x.Name))))
+                var properties = type.GetPropertyWithLevelInfo();
+                if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                 {
-                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.property.Name == x.Name || y.property.Name == FirstCharToUpper(x.Name)).property)).ToList();
+                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();
                     if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
                     {
                         NonRecordLikeTypes.Add(type);
@@ -290,7 +291,7 @@ namespace LazinatorCodeGen.Roslyn
 
                     PropertiesForType[type] = properties.ToList();
                     foreach (var property in properties)
-                        RecordInformationAboutTypeAndRelatedTypes(property.property.Type);
+                        RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
                     RecordLikeTypes[type] = parametersAndProperties;
                 }
             }
@@ -312,7 +313,7 @@ namespace LazinatorCodeGen.Roslyn
             if (PropertiesForType.ContainsKey(type))
             {
                 var properties = PropertiesForType[type];
-                var match = properties.FirstOrDefault(x => x.property.Name == name).property;
+                var match = properties.FirstOrDefault(x => x.Property.Name == name).Property;
                 if (match != null)
                     return match;
                 if (tryCapitalizingProperty)

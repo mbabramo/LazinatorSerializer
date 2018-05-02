@@ -27,7 +27,7 @@ namespace Lazinator.CodeDescription
             if (nonexclusiveLazinatorAttribute == null)
                 throw new Exception("Expected nonexclusive self-serialize attribute.");
             if (fileSet.PropertiesForType.ContainsKey(t))
-                Properties = fileSet.PropertiesForType[t].Select(x => new PropertyDescription(x.property, container)).ToList();
+                Properties = fileSet.PropertiesForType[t].Select(x => new PropertyDescription(x.Property, container)).ToList();
         }
     }
 }

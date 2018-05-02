@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Threading.Tasks;
 using Lazinator.CodeDescription;
 using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.Roslyn;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -66,41 +67,31 @@ namespace LazinatorCodeGen.Roslyn
                         .FirstOrDefault();
         }
 
-        public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel_MovingAbstractPropertiesUp(this INamedTypeSymbol namedSymbolType)
+        public static IEnumerable<PropertyWithLevelInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedSymbolType)
         {
-            // if concrete interface inherits directly (with no intervening concrete interface) from another interface, then this method will count those properties as being in this level, rather than being in the lower level
-            if (namedSymbolType.BaseType == null || !namedSymbolType.BaseType.IsAbstract)
-            { // nothing special to do
-                foreach (var propertyWithLevel in GetPropertiesAndWhetherThisLevel(namedSymbolType))
-                    yield return propertyWithLevel;
-                yield break; // we're done
-            }
-            HashSet<IPropertySymbol> propertiesToMoveUp = new HashSet<IPropertySymbol>();
-            INamedTypeSymbol lowerLevelInterface = namedSymbolType.BaseType;
-            while (lowerLevelInterface != null && lowerLevelInterface.IsAbstract)
+            // check whether there are lower level abstract types 
+            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelAbstractTypes = new Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>>();
+            INamedTypeSymbol lowerLevelType = namedSymbolType.BaseType;
+            while (lowerLevelType != null && lowerLevelType.IsAbstract)
             {
-                lowerLevelInterface.GetPropertiesForType(out ImmutableList<IPropertySymbol> additionalSymbolsToMoveUp, out ImmutableList<IPropertySymbol> _);
-                foreach (IPropertySymbol symbolToMoveUp in additionalSymbolsToMoveUp)
-                    propertiesToMoveUp.Add(symbolToMoveUp);
-                lowerLevelInterface = lowerLevelInterface.BaseType; // look another level down
+                lowerLevelAbstractTypes[lowerLevelType] = lowerLevelType.GetPropertySymbols();
+                lowerLevelType = lowerLevelType.BaseType; // look another level down
             }
 
-            foreach (var propertyWithLevel in GetPropertiesAndWhetherThisLevel(namedSymbolType))
-            {
-                if (propertyWithLevel.isThisLevel || !propertiesToMoveUp.Contains(propertyWithLevel.property))
-                    yield return propertyWithLevel;
-                else
-                    yield return (propertyWithLevel.property, true); // move it to this level
-            }
-        }
-
-        public static IEnumerable<(IPropertySymbol property, bool isThisLevel)> GetPropertiesAndWhetherThisLevel(this INamedTypeSymbol namedSymbolType)
-        {
             namedSymbolType.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name))
-                yield return (p, true);
+                yield return new PropertyWithLevelInfo(p, PropertyWithLevelInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))
-                yield return (p, false);
+            {
+                if (lowerLevelAbstractTypes.Any(x => x.Value.Any(y => y.Equals(p))))
+                    yield return
+                        new PropertyWithLevelInfo(p,
+                            PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel);
+                else
+                    yield return
+                        new PropertyWithLevelInfo(p,
+                            PropertyWithLevelInfo.Level.IsDefinedConcretelyLowerLevel);
+            }
         }
 
         public static object GetAttributeConstructorValueByParameterName
