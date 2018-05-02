@@ -17,6 +17,7 @@ using System.Buffers;
 using System.Reflection;
 using Lazinator.Spans;
 using System.Collections;
+using LazinatorTests.Examples.Abstract;
 
 namespace LazinatorTests.Tests
 {
@@ -1402,6 +1403,53 @@ namespace LazinatorTests.Tests
             //innerDerived.Should().NotBeNull();
             //innerDerived.MyShort.Should().Be(21);
             //innerDerived.MyInt.Should().Be(23);
+        }
+
+        [Fact]
+        public void ConcreteClassesInheritingFromAbstractSerialize()
+        {
+            // serialize the concrete classes inheriting from the abstract ones
+            Concrete5 c = new Concrete5()
+            {
+                String1 = "1",
+                String2 = "2",
+                String3 = "3",
+                String4 = "4",
+                String5 = "5"
+            };
+            var c2 = c.CloneLazinatorTyped();
+            c2.String1.Should().Be("1");
+            c2.String2.Should().Be("2");
+            c2.String3.Should().Be("3");
+            c2.String4.Should().Be("4");
+            c2.String5.Should().Be("5");
+        }
+
+        [Fact]
+        public void ConcreteGenericClassesSerialize()
+        {
+            ConcreteGeneric2a cg2a = new ConcreteGeneric2a()
+            {
+                AnotherProperty = "hi",
+                MyT = 5, // now is an int
+                LazinatorExample = GetExample(3)
+            };
+            var cg2a_clone = cg2a.CloneLazinatorTyped();
+            cg2a_clone.AnotherProperty.Should().Be("hi");
+            cg2a_clone.MyT.Should().Be(5);
+            cg2a_clone.LazinatorExample.Should().NotBeNull();
+
+            ConcreteGeneric2b cg2b = new ConcreteGeneric2b()
+            {
+                AnotherProperty = "hi",
+                MyT = GetExample(2),
+                LazinatorExample = GetExample(3)
+            };
+            var cg2b_clone = cg2b.CloneLazinatorTyped();
+            cg2b_clone.AnotherProperty.Should().Be("hi");
+            cg2b_clone.MyT.Should().NotBeNull();
+            cg2b_clone.LazinatorExample.Should().NotBeNull();
+
         }
 
         [Fact]
