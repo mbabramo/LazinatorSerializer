@@ -26,21 +26,6 @@ namespace LazinatorTests.Examples.Abstract
     public partial class Abstract4 : Concrete3, ILazinator
     {
         
-        public abstract string String1
-        {
-            get;
-            set;
-        }
-        public abstract string String2
-        {
-            get;
-            set;
-        }
-        public abstract string String3
-        {
-            get;
-            set;
-        }
         public abstract string String4
         {
             get;

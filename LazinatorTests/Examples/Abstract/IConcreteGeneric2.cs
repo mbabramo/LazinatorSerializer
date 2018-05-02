@@ -10,5 +10,6 @@ namespace LazinatorTests.Examples.Abstract
     interface IConcreteGeneric2 : IAbstractGeneric1<int>
     {
         string AnotherProperty { get; set; }
+        Example LazinatorExample { get; set; }
     }
 }

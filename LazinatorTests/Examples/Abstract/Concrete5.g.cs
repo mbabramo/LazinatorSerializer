@@ -26,51 +26,6 @@ namespace LazinatorTests.Examples.Abstract
     public partial class Concrete5 : Abstract4, ILazinator
     {
         
-        private string _String1;
-        public override string String1
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _String1;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _String1 = value;
-            }
-        }
-        private string _String2;
-        public override string String2
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _String2;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _String2 = value;
-            }
-        }
-        private string _String3;
-        public override string String3
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _String3;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _String3 = value;
-            }
-        }
         private string _String4;
         public override string String4
         {
@@ -112,9 +67,6 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _String1 = span.ToString_VarIntLength(ref bytesSoFar);
-            _String2 = span.ToString_VarIntLength(ref bytesSoFar);
-            _String3 = span.ToString_VarIntLength(ref bytesSoFar);
             _String4 = span.ToString_VarIntLength(ref bytesSoFar);
             _String5 = span.ToString_VarIntLength(ref bytesSoFar);
         }
@@ -123,9 +75,6 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String1);
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String2);
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String3);
             EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String4);
             EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String5);
         }
