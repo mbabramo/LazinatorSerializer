@@ -37,6 +37,7 @@ namespace Lazinator.CodeDescription
         public LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         public int? ArrayRank { get; set; }
         public LazinatorSupportedTupleType? SupportedTupleType { get; set; }
+        public bool IsDefinedAbstractlyLowerLevel { get; set; }
         public bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         public bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
         public bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;

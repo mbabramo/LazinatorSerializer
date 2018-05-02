@@ -77,6 +77,13 @@ namespace Lazinator.CodeDescription
 
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
+                if (orderedProperty.propertyWithLevel.LevelInfo ==
+                    PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel)
+                {
+                    orderedProperty.description.IsDefinedAbstractlyLowerLevel = true;
+                    orderedProperty.description.DeriveKeyword = "override ";
+                }
+
                 if (!dirtyPropertiesWithLevel.Any(x => x.Property.Name == orderedProperty.propertyWithLevel.Property.Name))
                 { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
@@ -84,9 +91,6 @@ namespace Lazinator.CodeDescription
                         orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel ||
                         Container?.BaseLazinatorObject == null)
                     {
-                        if (orderedProperty.propertyWithLevel.LevelInfo ==
-                            PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel)
-                            orderedProperty.description.DeriveKeyword = "override ";
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
                     }
                 }

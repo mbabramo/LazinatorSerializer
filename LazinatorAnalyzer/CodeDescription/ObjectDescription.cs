@@ -35,7 +35,9 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPreSerialization { get; set; }
         public bool ImplementsPostDeserialization { get; set; }
         public List<string> GenericArgumentNames { get; set; }
-        public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
+        public List<PropertyDescription> PropertiesToDefineThisLevel => IsAbstract
+            ? ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => !x.IsDefinedAbstractlyLowerLevel).ToList() // if this is abstract, we're not yet read to include abstract properties defined on a lower level
+            : ExclusiveInterface.PropertiesToDefineThisLevel;
         public LazinatorCompilation CodeFiles;
         public Guid Hash;
 
