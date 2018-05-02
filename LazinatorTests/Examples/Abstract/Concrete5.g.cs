@@ -45,6 +45,9 @@ namespace LazinatorTests.Examples.Abstract
             };
             return clone;
         }
+        
+        /* Properties */
+        
         private string _String4;
         public override string String4
         {

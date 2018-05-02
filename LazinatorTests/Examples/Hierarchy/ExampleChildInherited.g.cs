@@ -45,6 +45,9 @@ namespace LazinatorTests.Examples
             };
             return clone;
         }
+        
+        /* Properties */
+        
         private int _MyInt;
         public int MyInt
         {

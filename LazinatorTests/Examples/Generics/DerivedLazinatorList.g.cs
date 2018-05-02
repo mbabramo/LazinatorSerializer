@@ -45,6 +45,9 @@ namespace LazinatorTests.Examples
             };
             return clone;
         }
+        
+        /* Properties */
+        
         private string _MyListName;
         public string MyListName
         {

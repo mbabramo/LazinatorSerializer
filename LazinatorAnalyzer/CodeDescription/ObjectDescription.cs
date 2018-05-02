@@ -379,7 +379,10 @@ namespace Lazinator.CodeDescription
                                 HierarchyBytes = bytes
                             }};
                             return clone;
-                        }}");
+                        }}
+
+                        /* Properties */
+");
             }
 
             var thisLevel = PropertiesToDefineThisLevel;
