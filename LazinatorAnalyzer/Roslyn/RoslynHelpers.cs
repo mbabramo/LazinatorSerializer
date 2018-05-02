@@ -67,14 +67,13 @@ namespace LazinatorCodeGen.Roslyn
                         .FirstOrDefault();
         }
 
-        public static List<INamedTypeSymbol> GetAbstractInterfacesWithAttributeOfType<T>(this INamedTypeSymbol namedTypeSymbol)
+        public static List<INamedTypeSymbol> GetInterfacesWithAttributeOfType<T>(this INamedTypeSymbol namedTypeSymbol)
         {
             ImmutableArray<ISymbol> members = namedTypeSymbol.GetMembers();
             var interfaces =
                 namedTypeSymbol.AllInterfaces
                     .Where(x => x.HasAttributeOfType<CloneLazinatorAttribute>())
                     .OrderByDescending(x => x.GetMembers().Length)
-                    .TakeWhile(x => x.IsAbstract) // stop after first nonabstract
                     .ToList();
             return interfaces;
         }
@@ -82,10 +81,10 @@ namespace LazinatorCodeGen.Roslyn
         public static IEnumerable<PropertyWithLevelInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol)
         {
             // check whether there are lower level abstract types 
-            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelAbstractInterfaces = null;
+            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
             if (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
             {
-                lowerLevelAbstractInterfaces = GetAbstractInterfacesWithAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol)
+                lowerLevelInterfaces = GetInterfacesWithAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol)
                     .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
                     .ToDictionary(x => x.Key, x => x.Value);
             }
@@ -95,14 +94,14 @@ namespace LazinatorCodeGen.Roslyn
                 yield return new PropertyWithLevelInfo(p, PropertyWithLevelInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))
             {
-                if (lowerLevelAbstractInterfaces != null && lowerLevelAbstractInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
+                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
                     yield return
                         new PropertyWithLevelInfo(p,
-                            PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel);
+                            PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface);
                 else
                     yield return
                         new PropertyWithLevelInfo(p,
-                            PropertyWithLevelInfo.Level.IsDefinedConcretelyLowerLevel);
+                            PropertyWithLevelInfo.Level.IsDefinedLowerLevelButNotInInterface);
             }
         }
 

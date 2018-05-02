@@ -35,9 +35,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPreSerialization { get; set; }
         public bool ImplementsPostDeserialization { get; set; }
         public List<string> GenericArgumentNames { get; set; }
-        public List<PropertyDescription> PropertiesToDefineThisLevel => IsAbstract
-            ? ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => !x.IsDefinedAbstractlyLowerLevel).ToList() // if this is abstract, we're not yet read to include abstract properties defined on a lower level
-            : ExclusiveInterface.PropertiesToDefineThisLevel;
+        public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public LazinatorCompilation CodeFiles;
         public Guid Hash;
 
@@ -87,6 +85,16 @@ namespace Lazinator.CodeDescription
             ImplementsLazinatorObjectVersionUpgrade = CodeFiles.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "LazinatorObjectVersionUpgrade"));
             ImplementsPreSerialization = CodeFiles.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PreSerialization"));
             ImplementsPostDeserialization = CodeFiles.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PostDeserialization"));
+        }
+
+        public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
+        {
+            var b = BaseLazinatorObject;
+            while (b != null)
+            {
+                yield return b;
+                b = b.BaseLazinatorObject;
+            }
         }
 
         public string GetCodeBehind()

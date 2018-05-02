@@ -10,8 +10,8 @@ namespace LazinatorAnalyzer.Roslyn
         public enum Level
         {
             IsDefinedThisLevel,
-            IsDefinedConcretelyLowerLevel,
-            IsDefinedAbstractlyLowerLevel
+            IsDefinedLowerLevelButNotInInterface,
+            IsDefinedInLowerLevelInterface
         }
 
         public IPropertySymbol Property;

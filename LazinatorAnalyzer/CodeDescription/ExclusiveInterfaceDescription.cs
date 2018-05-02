@@ -78,9 +78,9 @@ namespace Lazinator.CodeDescription
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
                 if (orderedProperty.propertyWithLevel.LevelInfo ==
-                    PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel)
+                    PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface)
                 {
-                    orderedProperty.description.IsDefinedAbstractlyLowerLevel = true;
+                    orderedProperty.description.IsDefinedInLowerLevelInterface = true;
                     orderedProperty.description.DeriveKeyword = "override ";
                 }
 
@@ -88,7 +88,9 @@ namespace Lazinator.CodeDescription
                 { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
                     if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel ||
-                        orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel ||
+                            (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface 
+                         && 
+                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable))) ||
                         Container?.BaseLazinatorObject == null)
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
