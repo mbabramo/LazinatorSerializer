@@ -522,10 +522,23 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyDefinitionString(CodeStringBuilder sb)
         {
-            if (PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
+            if (Container.IsAbstract)
+                AppendAbstractPropertyDefinitionString(sb);
+            else if (PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
                 AppendPrimitivePropertyDefinitionString(sb);
             else
                 AppendNonPrimitivePropertyDefinitionString(sb);
+        }
+
+        private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
+        {
+            string propertyString = $@"{PropertyAccessibilityString}abstract {FullyQualifiedTypeName} {PropertyName}
+        {{
+            get;
+            set;
+        }}
+";
+            sb.Append(propertyString);
         }
 
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)

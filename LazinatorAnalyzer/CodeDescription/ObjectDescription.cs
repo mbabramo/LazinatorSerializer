@@ -138,15 +138,76 @@ namespace Lazinator.CodeDescription
                     }
                 }
 
-                string boilerplate = $@"        /* Boilerplate for every base class implementing ILazinator */
+                string boilerplate;
+                if (IsAbstract && BaseLazinatorObject?.IsAbstract == true) // abstract class inheriting from abstract class
+                    boilerplate = $@"        /* Boilerplate for abstract ILazinator object */
+                            
+                            "; // everything is inherited from parent abstract class
+                else if (IsAbstract)
+                    boilerplate = $@"        /* Boilerplate for abstract ILazinator object */
+			            public abstract ILazinator LazinatorParentClass {{ get; set; }}
+                    
+                        public abstract void Deserialize();
+                        
+                        public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        
+                        internal abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        
+                        public abstract ILazinator CloneLazinator();
+                        {{
+                            return CloneLazinator(OriginalIncludeChildrenMode);
+                        }}
+                        
+                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
+                        
+                        public abstract bool IsDirty
+                        {{
+			                get;
+			                set;
+                        }}
+                        
+                        public abstract InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
+                        public abstract void InformParentOfDirtiness();
+                        
+                        public abstract bool DescendantIsDirty
+                        {{
+			                get;
+			                set;
+                        }}
+                        
+                        public abstract DeserializationFactory DeserializationFactory {{ get; set; }}
+		                
+                        public abstract MemoryInBuffer HierarchyBytes
+                        {{
+			                get;
+			                set;
+                        }}
+                        
+                        public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+                        {{
+			                get;
+			                set;
+                        }}
 
-                        public ILazinator LazinatorParentClass {{ get; set; }}
+                        /* Field boilerplate */
+        
+                ";
+                else
+                {
+                    string overrideKeyword;
+                    if (BaseLazinatorObject?.IsAbstract == true)
+                        overrideKeyword = "override ";
+                    else
+                        overrideKeyword = "";
+                    boilerplate = $@"        /* Boilerplate for every non-abstract ILazinator object */
+
+                        public {overrideKeyword}ILazinator LazinatorParentClass {{ get; set; }}
 
                         {
-                        (ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")
-                    }internal IncludeChildrenMode OriginalIncludeChildrenMode;
+                            (ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")
+                        }internal IncludeChildrenMode OriginalIncludeChildrenMode;
 
-                        public void Deserialize()
+                        public {overrideKeyword}void Deserialize()
                         {{
                             int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
@@ -168,46 +229,34 @@ namespace Lazinator.CodeDescription
                             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
                             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
-                        (ImplementsLazinatorObjectVersionUpgrade
-                            ? $@"
+                            (ImplementsLazinatorObjectVersionUpgrade
+                                ? $@"
                             if (serializedVersionNumber < LazinatorObjectVersion)
                             {{
                                 LazinatorObjectVersionUpgrade(serializedVersionNumber);
                             }}"
-                            : "")
-                    }{
-                        (ImplementsPostDeserialization
-                            ? $@"
+                                : "")
+                        }{
+                            (ImplementsPostDeserialization
+                                ? $@"
                             PostDeserialization();"
-                            : "")
-                    }
+                                : "")
+                        }
                         }}
 
-                        public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        public {overrideKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
                         }}
 
-                        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBuffer(this, includeChildrenMode, verifyCleanness);
+                        internal {overrideKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBuffer(this, includeChildrenMode, verifyCleanness);
 
-                        public ILazinator CloneLazinator()
+                        public {overrideKeyword}ILazinator CloneLazinator()
                         {{
                             return CloneLazinator(OriginalIncludeChildrenMode);
-                        }}";
+                        }}
 
-                sb.Append(boilerplate);
-
-                if (IsAbstract)
-                    sb.Append($@"
-
-                        public {DeriveKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
-                        {{
-                            throw new NotImplementedException();
-                        }}"); // marked virtual rather than abstract to make it easier to convert large codebases starting with the abstract base class
-
-                else sb.Append($@"
-
-                        public {DeriveKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        public {overrideKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {ObjectName}()
@@ -219,12 +268,10 @@ namespace Lazinator.CodeDescription
                                 HierarchyBytes = bytes
                             }};
                             return clone;
-                        }}");
-
-                sb.Append($@"
+                        }}
 
                         private bool _IsDirty;
-                        public bool IsDirty
+                        public {overrideKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _IsDirty;
@@ -242,8 +289,8 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
-                        public void InformParentOfDirtiness()
+                        public {overrideKeyword}InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
+                        public {overrideKeyword}void InformParentOfDirtiness()
                         {{
                             if (InformParentOfDirtinessDelegate == null)
                             {{
@@ -257,7 +304,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private bool _DescendantIsDirty;
-                        public bool DescendantIsDirty
+                        public {overrideKeyword}bool DescendantIsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _DescendantIsDirty{additionalDirtinessChecks};
@@ -275,10 +322,10 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public DeserializationFactory DeserializationFactory {{ get; set; }}
+                        public {overrideKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
         
                         private MemoryInBuffer _HierarchyBytes;
-                        public MemoryInBuffer HierarchyBytes
+                        public {overrideKeyword}MemoryInBuffer HierarchyBytes
                         {{
                             get => _HierarchyBytes;
                             set
@@ -289,7 +336,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private ReadOnlyMemory<byte> _LazinatorObjectBytes;
-                        public ReadOnlyMemory<byte> LazinatorObjectBytes
+                        public {overrideKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
                             get => _LazinatorObjectBytes;
                             set
@@ -301,7 +348,10 @@ namespace Lazinator.CodeDescription
 
                         /* Field boilerplate */
         
-                ");
+                ";
+                }
+
+                sb.Append(boilerplate);
             }
 
             var thisLevel = PropertiesThisLevel;
