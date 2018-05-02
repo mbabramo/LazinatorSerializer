@@ -54,6 +54,7 @@ namespace Lazinator.Collections
         Abstract4,
         Concrete5,
         AbstractGeneric1,
-        ConcreteGeneric2
+        ConcreteGeneric2a,
+        ConcreteGeneric2b
     }
 }
