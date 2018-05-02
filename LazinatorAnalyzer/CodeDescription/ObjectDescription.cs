@@ -372,13 +372,16 @@ namespace Lazinator.CodeDescription
                 property.PropertyType == LazinatorPropertyType.SupportedCollection ||
                 property.PropertyType == LazinatorPropertyType.SupportedTuple ||
                 property.PropertyType == LazinatorPropertyType.OpenGenericParameter).ToList();
-            for (int i = 0; i < withRecordedIndices.Count(); i++)
-                sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
-            for (int i = 0; i < withRecordedIndices.Count(); i++)
-                sb.AppendLine(
-                    $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => {(i == withRecordedIndices.Count() - 1 ? "LazinatorObjectBytes.Length" : $"_{withRecordedIndices[i + 1].PropertyName}_ByteIndex")} - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
 
-            sb.AppendLine();
+            if (!IsAbstract)
+            {
+                for (int i = 0; i < withRecordedIndices.Count(); i++)
+                    sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                for (int i = 0; i < withRecordedIndices.Count(); i++)
+                    sb.AppendLine(
+                        $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => {(i == withRecordedIndices.Count() - 1 ? "LazinatorObjectBytes.Length" : $"_{withRecordedIndices[i + 1].PropertyName}_ByteIndex")} - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                sb.AppendLine();
+            }
 
             foreach (var property in thisLevel)
             {

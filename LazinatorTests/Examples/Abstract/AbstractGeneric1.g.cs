@@ -69,9 +69,6 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        internal int _MyT_ByteIndex;
-        internal int _MyT_ByteLength => LazinatorObjectBytes.Length - _MyT_ByteIndex;
-        
         public abstract T MyT
         {
             get;
