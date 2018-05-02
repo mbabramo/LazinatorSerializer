@@ -31,6 +31,7 @@ namespace LazinatorCodeGen.Roslyn
         public HashSet<(INamedTypeSymbol type, string methodName)> TypeImplementsMethod = new HashSet<(INamedTypeSymbol type, string methodName)>();
         private Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
         public Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
+        public HashSet<INamedTypeSymbol> NonRecordLikeTypes = new HashSet<INamedTypeSymbol>();
         public Dictionary<INamedTypeSymbol, Guid> InterfaceTextHash = new Dictionary<INamedTypeSymbol, Guid>();
         public INamedTypeSymbol ImplementingTypeSymbol;
 
@@ -113,17 +114,25 @@ namespace LazinatorCodeGen.Roslyn
                 RecordInformationAboutType(t);
         }
 
+        private int DEBUG_level = 0;
         private void RecordInformationAboutType(ITypeSymbol type)
         {
             if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
             if (RelevantSymbols.Contains(type))
                 return;
+            RelevantSymbols.Add(type);
             if (type is INamedTypeSymbol namedTypeSymbol)
             {
                 AddKnownAttributesForSymbol(type);
                 if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
+
+                DEBUG_level++;
+                if (DEBUG_level == 25)
+                {
+                    var DEBUG = 0;
+                }
                 ImmutableArray<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces;
                 foreach (var @interface in allInterfaces.Where(x => x != type && x.Name != "ILazinator"))
                 {
@@ -158,7 +167,7 @@ namespace LazinatorCodeGen.Roslyn
                         NonexclusiveInterfaces.Add(namedTypeSymbol);
                 }
             }
-            RelevantSymbols.Add(type);
+            DEBUG_level--;
         }
 
         private void AddLinkFromTypeToInterface(INamedTypeSymbol namedTypeSymbol, INamedTypeSymbol @interface)
@@ -261,24 +270,29 @@ namespace LazinatorCodeGen.Roslyn
 
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
-            if (!RelevantSymbols.Contains(type))
+            if (RecordLikeTypes.ContainsKey(type) || NonRecordLikeTypes.Contains(type))
+                return;
+            // Consider whether to add this as a record-like type
+            var constructorWithMostParameters = type.Constructors.OrderByDescending(x => x.Parameters.Count()).FirstOrDefault();
+            if (constructorWithMostParameters == null)
+                NonRecordLikeTypes.Add(type);
+            else
             {
-                // Consider whether to add this as a record-like type
-                var constructorWithMostParameters = type.Constructors.OrderByDescending(x => x.Parameters.Count()).FirstOrDefault();
-                if (constructorWithMostParameters != null)
+                var parameters = constructorWithMostParameters.Parameters.ToList();
+                var properties = type.GetPropertiesAndWhetherThisLevel();
+                if (parameters.Any() && parameters.All(x => properties.Any(y => y.property.Name == x.Name || y.property.Name == FirstCharToUpper(x.Name))))
                 {
-                    var parameters = constructorWithMostParameters.Parameters.ToList();
-                    var properties = type.GetPropertiesAndWhetherThisLevel();
-                    if (parameters.Any() && parameters.All(x => properties.Any(y => y.property.Name == x.Name || y.property.Name == FirstCharToUpper(x.Name))))
+                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.property.Name == x.Name || y.property.Name == FirstCharToUpper(x.Name)).property)).ToList();
+                    if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
                     {
-                        List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.property.Name == x.Name || y.property.Name == FirstCharToUpper(x.Name)).property)).ToList();
-                        if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
-                            return;
-                        PropertiesForType[type] = properties.ToList();
-                        foreach (var property in properties)
-                            RecordInformationAboutTypeAndRelatedTypes(property.property.Type);
-                        RecordLikeTypes[type] = parametersAndProperties;
+                        NonRecordLikeTypes.Add(type);
+                        return;
                     }
+
+                    PropertiesForType[type] = properties.ToList();
+                    foreach (var property in properties)
+                        RecordInformationAboutTypeAndRelatedTypes(property.property.Type);
+                    RecordLikeTypes[type] = parametersAndProperties;
                 }
             }
         }
