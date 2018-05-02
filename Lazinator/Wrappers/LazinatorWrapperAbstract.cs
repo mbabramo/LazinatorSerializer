@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Lazinator.Wrappers
 {
-    public abstract partial class LazinatorWrapper<T> : ILazinatorWrapper<T>
+    public abstract partial class LazinatorWrapperAbstract<T> : ILazinatorWrapperAbstract<T>
     {
-        public T Value { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        
         public override int GetHashCode()
         {
             return Value.GetHashCode();
@@ -15,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            var other = (LazinatorWrapper<T>)obj;
+            var other = (LazinatorWrapperAbstract<T>)obj;
             if (Value == null)
                 return other.Value == null;
             return Value.Equals(other.Value);
@@ -28,7 +26,7 @@ namespace Lazinator.Wrappers
             return Value.Equals(other);
         }
 
-        public bool Equals(LazinatorWrapper<T> other)
+        public bool Equals(LazinatorWrapperAbstract<T> other)
         {
             if (Value == null)
                 return other.Value == null;
