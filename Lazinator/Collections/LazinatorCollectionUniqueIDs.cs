@@ -47,6 +47,11 @@ namespace Lazinator.Collections
         ByteSpan,
         ByteSpanUnofficial,
         LazinatorBitArray,
-        LazinatorBitArrayUnofficial
+        LazinatorBitArrayUnofficial,
+        Abstract1,
+        Abstract2,
+        Concrete3,
+        Abstract4,
+        Concrete5
     }
 }

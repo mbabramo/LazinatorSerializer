@@ -40,17 +40,17 @@ namespace LazinatorTests.Support
         public static AdhocWorkspace CreateAdHocWorkspaceWithFiles(List<(string project, string mainFolder, string subfolder, string filename)> fileinfos)
         {
             List<(string filename, string code)> files = new List<(string filename, string code)>();
-            foreach (var fileinfo in fileinfos)
+            foreach (var (project, mainFolder, subfolder, filename) in fileinfos)
             {
-                string projectPath = ReadCodeFile.GetCodeBasePath(fileinfo.project);
-                ReadCodeFile.GetCodeInFile(projectPath, fileinfo.mainFolder, fileinfo.subfolder, fileinfo.filename, ".cs", out string mainCodePath, out string mainCode);
+                string projectPath = ReadCodeFile.GetCodeBasePath(project);
+                ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, filename, ".cs", out string mainCodePath, out string mainCode);
                 if (mainCode == null)
-                    ReadCodeFile.GetCodeInFile(projectPath, fileinfo.mainFolder, "", fileinfo.filename, ".cs", out mainCodePath, out mainCode);
-                files.Add((fileinfo.filename + ".cs", mainCode));
-                ReadCodeFile.GetCodeInFile(projectPath, fileinfo.mainFolder, fileinfo.subfolder, fileinfo.filename, ".g.cs", out string codeBehindPath, out string codeBehind);
+                    ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "", filename, ".cs", out mainCodePath, out mainCode);
+                files.Add((filename + ".cs", mainCode));
+                ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, filename, ".g.cs", out string codeBehindPath, out string codeBehind);
                 if (codeBehind == null)
-                    ReadCodeFile.GetCodeInFile(projectPath, fileinfo.mainFolder, "", fileinfo.filename, ".g.cs", out codeBehindPath, out codeBehind);
-                files.Add((fileinfo.filename + ".g.cs", codeBehind));
+                    ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "", filename, ".g.cs", out codeBehindPath, out codeBehind);
+                files.Add((filename + ".g.cs", codeBehind));
             }
             return CreateAdHocWorkspaceWithFiles(files.Where(x => x.code != null).ToList());
         }

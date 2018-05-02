@@ -113,8 +113,7 @@ namespace LazinatorCodeGen.Roslyn
             foreach (ITypeSymbol t in GetTypeAndInnerTypes(type))
                 RecordInformationAboutType(t);
         }
-
-        private int DEBUG_level = 0;
+        
         private void RecordInformationAboutType(ITypeSymbol type)
         {
             if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
@@ -127,12 +126,7 @@ namespace LazinatorCodeGen.Roslyn
                 AddKnownAttributesForSymbol(type);
                 if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
-
-                DEBUG_level++;
-                if (DEBUG_level == 25)
-                {
-                    var DEBUG = 0;
-                }
+                
                 ImmutableArray<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces;
                 foreach (var @interface in allInterfaces.Where(x => x != type && x.Name != "ILazinator"))
                 {
@@ -167,7 +161,6 @@ namespace LazinatorCodeGen.Roslyn
                         NonexclusiveInterfaces.Add(namedTypeSymbol);
                 }
             }
-            DEBUG_level--;
         }
 
         private void AddLinkFromTypeToInterface(INamedTypeSymbol namedTypeSymbol, INamedTypeSymbol @interface)
