@@ -8,6 +8,8 @@ namespace LazinatorTests.Examples.Abstract
 {
     public partial class ConcreteGeneric2a : AbstractGeneric1<int>, IConcreteGeneric2a
     {
+        public string AnotherProperty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Example LazinatorExample { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override ILazinator LazinatorParentClass { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override bool IsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override LazinatorUtilities.InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -20,8 +22,6 @@ namespace LazinatorTests.Examples.Abstract
         public override int LazinatorUniqueID => throw new NotImplementedException();
 
         public override int LazinatorObjectVersion { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string AnotherProperty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Example LazinatorExample { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override ILazinator CloneLazinator()
         {

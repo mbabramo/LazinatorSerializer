@@ -69,8 +69,8 @@ namespace LazinatorCodeGen.Roslyn
                     .DescendantNodes()
                     .OfType<TypeDeclarationSyntax>()
                     .Cast<TypeDeclarationSyntax>()
-                    .Where(x => !x.DescendantNodes().OfType<PropertyDeclarationSyntax>().
-                               Any(y => y.Identifier.Text == "IsDirty"))
+                    .Where(x => !x.DescendantNodes().OfType<VariableDeclaratorSyntax>().
+                               Any(y => y.Identifier.Text == "_IsDirty"))
                     .FirstOrDefault(y => y.Identifier.Text == name);
                 if (node != null)
                     return node;
