@@ -489,13 +489,13 @@ namespace Lazinator.CodeDescription
         public void HandleGenerics(INamedTypeSymbol iLazinatorType)
         {
             var genericArguments = iLazinatorType.TypeArguments;
-            if (genericArguments.Any(x => 
+            if (!iLazinatorType.IsAbstract && genericArguments.Any(x => 
                     !((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false) 
                     && 
                     !CodeFiles.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
                     )
                 )
-                throw new Exception("Open generic parameter must be constrained to type ILazinator.");
+                throw new Exception("Open generic parameter in non-abstract type must be constrained to type ILazinator.");
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
             ObjectName = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";
         }
