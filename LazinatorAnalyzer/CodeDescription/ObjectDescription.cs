@@ -28,7 +28,7 @@ namespace Lazinator.CodeDescription
         public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
                                                          (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
                                                           BaseLazinatorObject.IsAbstract);
-        public string DeriveKeyword => IsDerivedFromNonAbstractLazinator ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
+        public string DeriveKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject?.ObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
