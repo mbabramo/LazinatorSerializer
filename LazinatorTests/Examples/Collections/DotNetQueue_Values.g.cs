@@ -25,7 +25,7 @@ namespace LazinatorTests.Examples.Collections
 {
     public partial class DotNetQueue_Values : ILazinator
     {
-        /* Boilerplate for every base class implementing ILazinator */
+        /* Boilerplate for every non-abstract ILazinator object */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Collections
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DotNetQueue_Values()

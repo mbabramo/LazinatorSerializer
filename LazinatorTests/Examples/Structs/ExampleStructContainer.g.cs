@@ -25,7 +25,7 @@ namespace LazinatorTests.Examples
 {
     public partial class ExampleStructContainer : ILazinator
     {
-        /* Boilerplate for every base class implementing ILazinator */
+        /* Boilerplate for every non-abstract ILazinator object */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ExampleStructContainer()

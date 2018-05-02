@@ -25,7 +25,7 @@ namespace Lazinator.Collections
 {
     public sealed partial class LazinatorOffsetList : ILazinator
     {
-        /* Boilerplate for every base class implementing ILazinator */
+        /* Boilerplate for every non-abstract ILazinator object */
         
         public ILazinator LazinatorParentClass { get; set; }
         

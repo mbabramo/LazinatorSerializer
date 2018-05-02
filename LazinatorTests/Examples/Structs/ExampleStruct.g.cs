@@ -25,7 +25,7 @@ namespace LazinatorTests.Examples
 {
     public partial struct ExampleStruct : ILazinator
     {
-        /* Boilerplate for every base class implementing ILazinator */
+        /* Boilerplate for every non-abstract ILazinator object */
         
         public ILazinator LazinatorParentClass { get; set; }
         
