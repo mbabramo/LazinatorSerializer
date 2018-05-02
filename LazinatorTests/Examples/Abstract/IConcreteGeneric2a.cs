@@ -7,7 +7,7 @@ using Lazinator.Collections;
 namespace LazinatorTests.Examples.Abstract
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ConcreteGeneric2)]
-    interface IConcreteGeneric2 : IAbstractGeneric1<int>
+    interface IConcreteGeneric2a : IAbstractGeneric1<int>
     {
         string AnotherProperty { get; set; }
         Example LazinatorExample { get; set; }

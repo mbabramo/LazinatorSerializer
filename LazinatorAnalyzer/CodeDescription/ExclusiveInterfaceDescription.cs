@@ -75,11 +75,6 @@ namespace Lazinator.CodeDescription
             PropertiesIncludingInherited = new List<PropertyDescription>();
             PropertiesToDefineThisLevel = new List<PropertyDescription>();
 
-            if (interfaceSymbol.Name.Contains("Concrete5"))
-            {
-                var DEBUG = 0;
-            }
-
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
                 if (orderedProperty.propertyWithLevel.LevelInfo ==
