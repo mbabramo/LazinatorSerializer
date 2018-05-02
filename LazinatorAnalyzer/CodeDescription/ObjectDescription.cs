@@ -204,20 +204,15 @@ namespace Lazinator.CodeDescription
                 ";
                 else
                 {
-                    string overrideKeyword;
-                    if (BaseLazinatorObject?.IsAbstract == true)
-                        overrideKeyword = "override ";
-                    else
-                        overrideKeyword = "";
                     boilerplate = $@"        /* Boilerplate for every non-abstract ILazinator object */
 
-                        public {overrideKeyword}ILazinator LazinatorParentClass {{ get; set; }}
+                        public {DeriveKeyword}ILazinator LazinatorParentClass {{ get; set; }}
 
                         {
                             (ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")
                         }internal IncludeChildrenMode OriginalIncludeChildrenMode;
 
-                        public {overrideKeyword}void Deserialize()
+                        public {DeriveKeyword}void Deserialize()
                         {{
                             int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
@@ -254,19 +249,19 @@ namespace Lazinator.CodeDescription
                         }
                         }}
 
-                        public {overrideKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        public {DeriveKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
                         }}
 
-                        internal {overrideKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBuffer(this, includeChildrenMode, verifyCleanness);
+                        internal {DeriveKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBuffer(this, includeChildrenMode, verifyCleanness);
 
-                        public {overrideKeyword}ILazinator CloneLazinator()
+                        public {DeriveKeyword}ILazinator CloneLazinator()
                         {{
                             return CloneLazinator(OriginalIncludeChildrenMode);
                         }}
 
-                        public {overrideKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        public {DeriveKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {ObjectName}()
@@ -281,7 +276,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private bool _IsDirty;
-                        public {overrideKeyword}bool IsDirty
+                        public {DeriveKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _IsDirty;
@@ -299,8 +294,8 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {overrideKeyword}InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
-                        public {overrideKeyword}void InformParentOfDirtiness()
+                        public {DeriveKeyword}InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
+                        public {DeriveKeyword}void InformParentOfDirtiness()
                         {{
                             if (InformParentOfDirtinessDelegate == null)
                             {{
@@ -314,7 +309,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private bool _DescendantIsDirty;
-                        public {overrideKeyword}bool DescendantIsDirty
+                        public {DeriveKeyword}bool DescendantIsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _DescendantIsDirty{additionalDirtinessChecks};
@@ -332,10 +327,10 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {overrideKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
+                        public {DeriveKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
         
                         private MemoryInBuffer _HierarchyBytes;
-                        public {overrideKeyword}MemoryInBuffer HierarchyBytes
+                        public {DeriveKeyword}MemoryInBuffer HierarchyBytes
                         {{
                             get => _HierarchyBytes;
                             set
@@ -346,7 +341,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private ReadOnlyMemory<byte> _LazinatorObjectBytes;
-                        public {overrideKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
+                        public {DeriveKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
                             get => _LazinatorObjectBytes;
                             set
