@@ -67,23 +67,35 @@ namespace LazinatorCodeGen.Roslyn
                         .FirstOrDefault();
         }
 
-        public static IEnumerable<PropertyWithLevelInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedSymbolType)
+        public static List<INamedTypeSymbol> GetAbstractInterfacesWithAttributeOfType<T>(this INamedTypeSymbol namedTypeSymbol)
+        {
+            ImmutableArray<ISymbol> members = namedTypeSymbol.GetMembers();
+            var interfaces =
+                namedTypeSymbol.AllInterfaces
+                    .Where(x => x.IsAbstract)
+                    .Where(x => x.HasAttributeOfType<CloneLazinatorAttribute>())
+                    .OrderByDescending(x => x.GetMembers().Length)
+                    .ToList();
+            return interfaces;
+        }
+
+        public static IEnumerable<PropertyWithLevelInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol)
         {
             // check whether there are lower level abstract types 
-            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelAbstractTypes = new Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>>();
-            INamedTypeSymbol lowerLevelType = namedSymbolType.BaseType;
-            while (lowerLevelType != null && lowerLevelType.IsAbstract)
+            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelAbstractInterfaces = null;
+            if (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
             {
-                lowerLevelAbstractTypes[lowerLevelType] = lowerLevelType.GetPropertySymbols();
-                lowerLevelType = lowerLevelType.BaseType; // look another level down
+                lowerLevelAbstractInterfaces = GetAbstractInterfacesWithAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol)
+                    .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
+                    .ToDictionary(x => x.Key, x => x.Value);
             }
 
-            namedSymbolType.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
+            namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name))
                 yield return new PropertyWithLevelInfo(p, PropertyWithLevelInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))
             {
-                if (lowerLevelAbstractTypes.Any(x => x.Value.Any(y => y.Equals(p))))
+                if (lowerLevelAbstractInterfaces != null && lowerLevelAbstractInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
                     yield return
                         new PropertyWithLevelInfo(p,
                             PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel);
