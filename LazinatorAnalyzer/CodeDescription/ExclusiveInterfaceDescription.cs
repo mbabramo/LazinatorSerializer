@@ -89,7 +89,9 @@ namespace Lazinator.CodeDescription
                     PropertiesIncludingInherited.Add(orderedProperty.description);
                     if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel ||
                             (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface 
-                         && 
+                            && 
+                             !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
+                             &&
                             !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable))) ||
                         Container?.BaseLazinatorObject == null)
                     {
