@@ -25,6 +25,9 @@ namespace Lazinator.CodeDescription
         public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
                                       (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
                                        !BaseLazinatorObject.IsAbstract);
+        public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
+                                                         (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
+                                                          BaseLazinatorObject.IsAbstract);
         public string DeriveKeyword => IsDerivedFromNonAbstractLazinator ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject?.ObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
@@ -155,9 +158,6 @@ namespace Lazinator.CodeDescription
                         internal abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         
                         public abstract ILazinator CloneLazinator();
-                        {{
-                            return CloneLazinator(OriginalIncludeChildrenMode);
-                        }}
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
                         
@@ -374,6 +374,25 @@ namespace Lazinator.CodeDescription
             foreach (var property in thisLevel)
             {
                 property.AppendPropertyDefinitionString(sb);
+            }
+
+            if (IsAbstract)
+            {
+                if (IsDerivedFromAbstractLazinator || IsDerivedFromNonAbstractLazinator)
+                { // lowere level has already defined these methods, so nothing more to do
+                    sb.AppendLine($@"}}
+                            }}");
+                    return;
+                }
+
+                sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
+                        public abstract int LazinatorObjectVersion {{ get; set; }}
+                        public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                        public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                }}
+            }}
+");
+                return;
             }
 
             string selfSerializationVersionString;
