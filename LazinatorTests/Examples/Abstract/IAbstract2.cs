@@ -9,6 +9,6 @@ namespace LazinatorTests.Examples.Abstract
     [Lazinator((int)LazinatorCollectionUniqueIDs.Abstract2)]
     interface IAbstract2 : IAbstract1
     {
-        string String1 { get; set; }
+        string String2 { get; set; }
     }
 }
