@@ -25,7 +25,6 @@ namespace LazinatorTests.Examples.Abstract
 {
     public partial class Abstract4 : Concrete3, ILazinator
     {
-        
         public abstract string String4
         {
             get;

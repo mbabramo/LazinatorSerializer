@@ -69,7 +69,6 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        
         public abstract string String1
         {
             get;
