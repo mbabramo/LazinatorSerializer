@@ -22,8 +22,10 @@ namespace Lazinator.CodeDescription
         public int UniqueID => (int)ExclusiveInterface.UniqueID;
         public List<NonexclusiveInterfaceDescription> NonexclusiveInterfaces { get; set; }
         public ObjectDescription BaseLazinatorObject { get; set; }
-        public bool IsDerived => BaseLazinatorObject != null;
-        public string DeriveKeyword => IsDerived ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
+        public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
+                                      (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
+                                       !BaseLazinatorObject.IsAbstract);
+        public string DeriveKeyword => IsDerivedFromNonAbstractLazinator ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject?.ObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
@@ -119,30 +121,29 @@ namespace Lazinator.CodeDescription
 
                 namespace { Namespace }
                 {{
-                    public { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerived ? BaseObjectName + ", " : "")}ILazinator
+                    public { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
 
-            if (!IsDerived)
-            {
-                string additionalDirtinessChecks = "";
-                if (ObjectType != LazinatorObjectType.Class)
-                {
-                    // a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
-                    foreach (var property in PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
-                    {
-                        if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                            additionalDirtinessChecks += $" || ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty)";
-                        else
-                            additionalDirtinessChecks += $" || ({property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
-                    }
-                }
 
+            string additionalDirtinessChecks = "";
+            if (ObjectType != LazinatorObjectType.Class)
+            {
+                // a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
+                foreach (var property in PropertiesThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+                {
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                        additionalDirtinessChecks += $" || ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty)";
+                    else
+                        additionalDirtinessChecks += $" || ({property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                }
+            }
+
+            if (!IsDerivedFromNonAbstractLazinator)
+            {
                 string boilerplate;
                 if (IsAbstract && BaseLazinatorObject?.IsAbstract == true) // abstract class inheriting from abstract class
-                    boilerplate = $@"        /* Boilerplate for abstract ILazinator object */
-                            
-                            "; // everything is inherited from parent abstract class
+                    boilerplate = $@""; // everything is inherited from parent abstract class
                 else if (IsAbstract)
                     boilerplate = $@"        /* Boilerplate for abstract ILazinator object */
 			            public abstract ILazinator LazinatorParentClass {{ get; set; }}
@@ -403,7 +404,7 @@ namespace Lazinator.CodeDescription
 
                 public {DeriveKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{
-                    {(!IsDerived ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+                    {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                     ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;");
 
             foreach (var property in thisLevel)
@@ -415,7 +416,7 @@ namespace Lazinator.CodeDescription
 
         ");
 
-            if (IsDerived)
+            if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
