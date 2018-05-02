@@ -27,11 +27,11 @@ namespace LazinatorTests.Examples
     {
         /* Boilerplate for every non-abstract ILazinator object */
         
-        public ILazinator LazinatorParentClass { get; set; }
+        public virtual ILazinator LazinatorParentClass { get; set; }
         
         protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
         
-        public void Deserialize()
+        public virtual void Deserialize()
         {
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
@@ -59,19 +59,19 @@ namespace LazinatorTests.Examples
             }
         }
         
-        public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBuffer(this, includeChildrenMode, verifyCleanness);
+        internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
-        public ILazinator CloneLazinator()
+        public virtual ILazinator CloneLazinator()
         {
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new Example()
@@ -86,7 +86,7 @@ namespace LazinatorTests.Examples
         }
         
         private bool _IsDirty;
-        public bool IsDirty
+        public virtual bool IsDirty
         {
             [DebuggerStepThrough]
             get => _IsDirty;
@@ -104,8 +104,8 @@ namespace LazinatorTests.Examples
             }
         }
         
-        public InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
-        public void InformParentOfDirtiness()
+        public virtual InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
+        public virtual void InformParentOfDirtiness()
         {
             if (InformParentOfDirtinessDelegate == null)
             {
@@ -119,7 +119,7 @@ namespace LazinatorTests.Examples
         }
         
         private bool _DescendantIsDirty;
-        public bool DescendantIsDirty
+        public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
             get => _DescendantIsDirty;
@@ -137,10 +137,10 @@ namespace LazinatorTests.Examples
             }
         }
         
-        public DeserializationFactory DeserializationFactory { get; set; }
+        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
-        public MemoryInBuffer HierarchyBytes
+        public virtual MemoryInBuffer HierarchyBytes
         {
             get => _HierarchyBytes;
             set
@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples
         }
         
         private ReadOnlyMemory<byte> _LazinatorObjectBytes;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get => _LazinatorObjectBytes;
             set

@@ -25,7 +25,26 @@ namespace LazinatorTests.Examples
 {
     public partial class ExampleChildInherited : ExampleChild, ILazinator
     {
+        /* Clone overrides */
         
+        public override ILazinator CloneLazinator()
+        {
+            return CloneLazinator(OriginalIncludeChildrenMode);
+        }
+        
+        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        {
+            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            var clone = new ExampleChildInherited()
+            {
+                DeserializationFactory = DeserializationFactory,
+                LazinatorParentClass = LazinatorParentClass,
+                InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
+                OriginalIncludeChildrenMode = includeChildrenMode,
+                HierarchyBytes = bytes
+            };
+            return clone;
+        }
         private int _MyInt;
         public int MyInt
         {

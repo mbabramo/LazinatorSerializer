@@ -25,7 +25,26 @@ namespace LazinatorTests.Examples.Abstract
 {
     public partial class Concrete5 : Abstract4, ILazinator
     {
+        /* Clone overrides */
         
+        public override ILazinator CloneLazinator()
+        {
+            return CloneLazinator(OriginalIncludeChildrenMode);
+        }
+        
+        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        {
+            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            var clone = new Concrete5()
+            {
+                DeserializationFactory = DeserializationFactory,
+                LazinatorParentClass = LazinatorParentClass,
+                InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
+                OriginalIncludeChildrenMode = includeChildrenMode,
+                HierarchyBytes = bytes
+            };
+            return clone;
+        }
         private string _String4;
         public override string String4
         {
