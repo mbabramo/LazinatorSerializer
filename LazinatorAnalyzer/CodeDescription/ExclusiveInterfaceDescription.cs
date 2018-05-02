@@ -81,7 +81,7 @@ namespace Lazinator.CodeDescription
                 { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
                     if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel ||
-                        (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel && !interfaceSymbol.IsAbstract) ||
+                        orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedAbstractlyLowerLevel ||
                         Container?.BaseLazinatorObject == null)
                     {
                         if (orderedProperty.propertyWithLevel.LevelInfo ==
