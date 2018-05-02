@@ -363,6 +363,29 @@ namespace Lazinator.CodeDescription
 
                 sb.Append(boilerplate);
             }
+            else if (!IsAbstract)
+            {
+                sb.Append($@"        /* Clone overrides */
+
+                        public override ILazinator CloneLazinator()
+                        {{
+                            return CloneLazinator(OriginalIncludeChildrenMode);
+                        }}
+
+                        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        {{
+                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            var clone = new {ObjectName}()
+                            {{
+                                DeserializationFactory = DeserializationFactory,
+                                LazinatorParentClass = LazinatorParentClass,
+                                InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
+                                OriginalIncludeChildrenMode = includeChildrenMode,
+                                HierarchyBytes = bytes
+                            }};
+                            return clone;
+                        }}");
+            }
 
             var thisLevel = PropertiesToDefineThisLevel;
             var withRecordedIndices = thisLevel.Where(property =>
