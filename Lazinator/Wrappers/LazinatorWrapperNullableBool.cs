@@ -4,6 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableBool : ILazinatorWrapperNullableBool
     {
+        public override string ToString()
+        {
+            return Value?.ToString() ?? "";
+        }
+
         public static implicit operator LazinatorWrapperNullableBool(bool? x)
         {
             return new LazinatorWrapperNullableBool() { Value = x };

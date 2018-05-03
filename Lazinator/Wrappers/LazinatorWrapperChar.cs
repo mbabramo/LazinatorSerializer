@@ -14,6 +14,11 @@ namespace Lazinator.Wrappers
             return x.Value;
         }
 
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

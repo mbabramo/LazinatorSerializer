@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
 {
     public abstract partial class LazinatorWrapperAbstract<T> : ILazinatorWrapperAbstract<T>
     {
+        public override string ToString()
+        {
+            return Value?.ToString() ?? "";
+        }
+
         public override int GetHashCode()
         {
             return Value.GetHashCode();

@@ -25,5 +25,12 @@ namespace Lazinator.Wrappers
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return AsNullableStruct?.ToString() ?? "";
+        }
+
+
     }
 }
