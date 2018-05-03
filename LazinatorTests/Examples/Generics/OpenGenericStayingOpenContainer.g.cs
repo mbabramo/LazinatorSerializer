@@ -177,7 +177,7 @@ namespace LazinatorTests.Examples.Generics
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength);
-                        _ClosedGeneric = DeserializationFactory.Create(133, () => new LazinatorTests.Examples.Generics.OpenGenericStayingOpen<Lazinator.Wrappers.LazinatorWrapperFloat>(), childData, this); 
+                        _ClosedGeneric = DeserializationFactory.Create(233, () => new LazinatorTests.Examples.Generics.OpenGenericStayingOpen<Lazinator.Wrappers.LazinatorWrapperFloat>(), childData, this); 
                     }
                     _ClosedGeneric_Accessed = true;
                 }
@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Generics
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 134;
+        public virtual int LazinatorUniqueID => 234;
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

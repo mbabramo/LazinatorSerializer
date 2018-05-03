@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Generics
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 133;
+        public virtual int LazinatorUniqueID => 233;
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

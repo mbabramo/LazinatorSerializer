@@ -193,7 +193,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 113;
+        public virtual int LazinatorUniqueID => 213;
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

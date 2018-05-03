@@ -223,7 +223,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public int LazinatorUniqueID => 118;
+        public int LazinatorUniqueID => 218;
         
         private bool _LazinatorObjectVersionChanged;
         private int _LazinatorObjectVersionOverride;

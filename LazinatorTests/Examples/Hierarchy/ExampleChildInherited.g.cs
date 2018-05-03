@@ -66,7 +66,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public override int LazinatorUniqueID => 114;
+        public override int LazinatorUniqueID => 214;
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         

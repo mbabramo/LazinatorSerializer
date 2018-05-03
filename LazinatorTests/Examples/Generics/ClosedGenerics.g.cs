@@ -192,7 +192,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ItemU_ByteIndex, _ItemU_ByteLength);
-                        _ItemU = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
+                        _ItemU = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _ItemU_Accessed = true;
                 }
@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 102;
+        public virtual int LazinatorUniqueID => 202;
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

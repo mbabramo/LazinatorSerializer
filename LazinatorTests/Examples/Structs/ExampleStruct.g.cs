@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength);
-                        _MyChild1 = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData); 
+                        _MyChild1 = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData); 
                     }
                     _MyChild1_Accessed = true;
                 }
@@ -249,7 +249,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength);
-                        _MyChild2 = DeserializationFactory.Create(113, () => new LazinatorTests.Examples.ExampleChild(), childData); 
+                        _MyChild2 = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData); 
                     }
                     _MyChild2_Accessed = true;
                 }
@@ -382,7 +382,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public int LazinatorUniqueID => 116;
+        public int LazinatorUniqueID => 216;
         
         private bool _LazinatorObjectVersionChanged;
         private int _LazinatorObjectVersionOverride;

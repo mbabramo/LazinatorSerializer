@@ -196,7 +196,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 120;
+        public virtual int LazinatorUniqueID => 220;
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
