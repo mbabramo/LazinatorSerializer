@@ -178,7 +178,7 @@ namespace Lazinator.Wrappers
         
         /* Conversion */
         
-        public int LazinatorUniqueID => 87;
+        public int LazinatorUniqueID => 86;
         
         private bool _LazinatorObjectVersionChanged;
         private int _LazinatorObjectVersionOverride;

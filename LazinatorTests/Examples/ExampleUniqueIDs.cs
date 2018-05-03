@@ -50,6 +50,7 @@
         FromNonLazinatorBase,
         AbstractGenericContainer,
         ConcreteGenericContainer,
-        ExampleInterfaceContainer
+        ExampleInterfaceContainer,
+        ReflexiveExample
     }
 }

@@ -223,7 +223,7 @@ namespace Lazinator.Spans
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 88;
+        public virtual int LazinatorUniqueID => 89;
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
