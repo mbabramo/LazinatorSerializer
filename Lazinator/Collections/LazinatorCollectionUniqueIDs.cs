@@ -57,6 +57,8 @@ namespace Lazinator.Collections
         ConcreteGeneric2a,
         ConcreteGeneric2b,
         LazinatorWrapperAbstract,
-        FromNonLazinatorBase
+        FromNonLazinatorBase,
+        AbstractGenericContainer,
+        ConcreteGenericContainer
     }
 }

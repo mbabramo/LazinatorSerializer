@@ -8,11 +8,11 @@ namespace Lazinator.Collections.AVL
 {
 	public sealed class AvlNode<TKey, TValue>
 	{
-		public AvlNode<TKey, TValue> Parent;
-		public AvlNode<TKey, TValue> Left;
-		public AvlNode<TKey, TValue> Right;
-		public TKey Key;
-		public TValue Value;
-		public int Balance;
+		public AvlNode<TKey, TValue> Parent { get; set; }
+		public AvlNode<TKey, TValue> Left { get; set; }
+		public AvlNode<TKey, TValue> Right { get; set; }
+		public TKey Key { get; set; }
+		public TValue Value { get; set; }
+		public int Balance { get; set; }
 	}
 }

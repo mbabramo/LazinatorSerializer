@@ -139,7 +139,7 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (t.IsGenericType)
             {
-                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => PrettyTypeName((INamedTypeSymbol)x));
+                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx) : x.Name);
                 return string.Format(
                     "{0}<{1}>",
                     t.Name,
