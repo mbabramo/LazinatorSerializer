@@ -177,7 +177,12 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength);
-                        _Item = (LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
+                        Item = (LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _Item_Accessed = true;
                 }

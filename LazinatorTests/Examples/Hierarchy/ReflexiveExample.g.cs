@@ -179,6 +179,11 @@ namespace LazinatorTests.Examples.Hierarchy
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReflexiveClass_ByteIndex, _ReflexiveClass_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
                         _ReflexiveClass = DeserializationFactory.Create(247, () => new LazinatorTests.Examples.Hierarchy.ReflexiveExample(), childData, this); 
                     }
                     _ReflexiveClass_Accessed = true;
@@ -213,7 +218,12 @@ namespace LazinatorTests.Examples.Hierarchy
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReflexiveInterface_ByteIndex, _ReflexiveInterface_ByteLength);
-                        _ReflexiveInterface = (LazinatorTests.Examples.Hierarchy.IReflexiveExample)DeserializationFactory.FactoryCreate(childData, this); 
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
+                        ReflexiveInterface = (LazinatorTests.Examples.Hierarchy.IReflexiveExample)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _ReflexiveInterface_Accessed = true;
                 }

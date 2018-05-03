@@ -177,6 +177,11 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
                         _MyList = DeserializationFactory.Create(51, () => new Lazinator.Collections.LazinatorList<T>(), childData, this); 
                     }
                     _MyList_Accessed = true;

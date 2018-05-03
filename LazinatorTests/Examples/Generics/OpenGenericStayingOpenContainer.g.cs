@@ -177,6 +177,11 @@ namespace LazinatorTests.Examples.Generics
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
                         _ClosedGeneric = DeserializationFactory.Create(233, () => new LazinatorTests.Examples.Generics.OpenGenericStayingOpen<Lazinator.Wrappers.LazinatorWrapperFloat>(), childData, this); 
                     }
                     _ClosedGeneric_Accessed = true;

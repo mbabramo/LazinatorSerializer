@@ -215,9 +215,11 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength);
+                        
                         if (DeserializationFactory == null)
-                            throw new LazinatorDeserializationException(
-                                "The object could not be deserialized, because the deserialization factory has not been set. Assign the DeserializationFactory property before deserialization.");
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
                         _MyChild1 = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData); 
                     }
                     _MyChild1_Accessed = true;
@@ -252,6 +254,11 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
                         _MyChild2 = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData); 
                     }
                     _MyChild2_Accessed = true;

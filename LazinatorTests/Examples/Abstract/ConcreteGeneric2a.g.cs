@@ -207,6 +207,11 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
                         _LazinatorExample = DeserializationFactory.Create(212, () => new LazinatorTests.Examples.Example(), childData, this); 
                     }
                     _LazinatorExample_Accessed = true;

@@ -177,7 +177,12 @@ namespace LazinatorTests.Examples.Hierarchy
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength);
-                        _ExampleByInterface = (LazinatorTests.Examples.IExample)DeserializationFactory.FactoryCreate(childData, this); 
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
+                        ExampleByInterface = (LazinatorTests.Examples.IExample)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _ExampleByInterface_Accessed = true;
                 }
