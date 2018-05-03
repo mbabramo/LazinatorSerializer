@@ -14,6 +14,7 @@ namespace Lazinator.CodeDescription
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
+        public bool IsNonLazinatorBaseClass { get; set; }
         public bool IsAbstract { get; set; }
         public bool IsSealed { get; set; }
         public string SealedKeyword => IsSealed ? "sealed " : "";
@@ -69,9 +70,19 @@ namespace Lazinator.CodeDescription
             {
                 var baseILazinatorType = iLazinatorTypeSymbol.BaseType;
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
+                {
                     BaseLazinatorObject = new ObjectDescription(baseILazinatorType, codeFiles);
+                    if (BaseLazinatorObject.IsNonLazinatorBaseClass)
+                        BaseLazinatorObject = null; // ignore base non-lazinator
+                }
             }
 
+            if (!CodeFiles.TypeToExclusiveInterface.ContainsKey(iLazinatorTypeSymbol.OriginalDefinition))
+            {
+                // This is a nonlazinator base class
+                IsNonLazinatorBaseClass = true;
+                return;
+            }
             INamedTypeSymbol interfaceType = CodeFiles.TypeToExclusiveInterface[iLazinatorTypeSymbol.OriginalDefinition];
             Hash = CodeFiles.InterfaceTextHash.ContainsKey(interfaceType) ? CodeFiles.InterfaceTextHash[interfaceType] : default;
             ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceType, this);
