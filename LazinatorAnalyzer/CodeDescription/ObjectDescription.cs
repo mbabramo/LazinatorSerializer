@@ -11,6 +11,8 @@ namespace Lazinator.CodeDescription
 {
     public class ObjectDescription
     {
+        public INamedTypeSymbol ILazinatorTypeSymbol { get; set; }
+        public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
@@ -47,6 +49,7 @@ namespace Lazinator.CodeDescription
 
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation codeFiles)
         {
+            ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             CodeFiles = codeFiles;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
             ObjectName = iLazinatorTypeSymbol.Name;
@@ -83,9 +86,10 @@ namespace Lazinator.CodeDescription
                 IsNonLazinatorBaseClass = true;
                 return;
             }
-            INamedTypeSymbol interfaceType = CodeFiles.TypeToExclusiveInterface[iLazinatorTypeSymbol.OriginalDefinition];
-            Hash = CodeFiles.InterfaceTextHash.ContainsKey(interfaceType) ? CodeFiles.InterfaceTextHash[interfaceType] : default;
-            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceType, this);
+            INamedTypeSymbol interfaceTypeSymbol = CodeFiles.TypeToExclusiveInterface[iLazinatorTypeSymbol.OriginalDefinition];
+            InterfaceTypeSymbol = interfaceTypeSymbol;
+            Hash = CodeFiles.InterfaceTextHash.ContainsKey(interfaceTypeSymbol) ? CodeFiles.InterfaceTextHash[interfaceTypeSymbol] : default;
+            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces

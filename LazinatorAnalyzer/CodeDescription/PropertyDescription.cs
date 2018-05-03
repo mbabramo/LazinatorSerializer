@@ -195,7 +195,17 @@ namespace Lazinator.CodeDescription
                 }
             }
 
-            bool isSelfSerializable = typeSymbol.Interfaces.Any(x => x.Name == "ILazinator");
+            bool isILazinator = typeSymbol.Interfaces.Any(x => x.Name == "ILazinator");
+            bool isReflexiveDefinition = false;
+            if (namedTypeSymbol != null)
+            {
+                if (namedTypeSymbol.Equals(Container?.ILazinatorTypeSymbol))
+                    throw new LazinatorCodeGenException("If an interface defines itself recursively, then it must explicitly declare that it implements ILazinator.");
+                if (namedTypeSymbol.Equals(Container?.InterfaceTypeSymbol))
+                    isReflexiveDefinition = true;
+            }
+
+            bool isSelfSerializable = isReflexiveDefinition || isILazinator;
             if (isSelfSerializable)
                 SetSelfSerializableTypeNameAndPropertyType(namedTypeSymbol);
             else
