@@ -18,6 +18,7 @@ using System.Reflection;
 using Lazinator.Spans;
 using System.Collections;
 using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.NonLazinator;
 
 namespace LazinatorTests.Tests
 {
@@ -592,6 +593,16 @@ namespace LazinatorTests.Tests
             // read a private field and a public field
             typeof(NonLazinatorInterchangeableClass).GetField("MyInt", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(c2.NonLazinatorInterchangeableClass).Should().Be(5);
             c2.NonLazinatorInterchangeableClass.MyString.Should().Be("hi");
+        }
+
+        [Fact]
+        public void ClassWithNonLazinatorBaseWorks()
+        {
+            FromNonLazinatorBase b = new FromNonLazinatorBase()
+            {
+                MyInt = 3 // property defined virtually in base class
+            };
+            b.CloneLazinatorTyped().MyInt.Should().Be(3);
         }
 
         [Fact]
