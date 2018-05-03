@@ -7,7 +7,7 @@ using Lazinator.Core;
 
 namespace LazinatorTests.Examples.Abstract
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.AbstractGenericContainer)]
+    [Lazinator((int)ExampleUniqueIDs.AbstractGenericContainer)]
     public interface IAbstractGenericContainer<T> : ILazinator
     {
         IAbstractGeneric1<T> Item { get; set; }

@@ -1,11 +1,12 @@
 ﻿using System;
 using Lazinator.Attributes;
+using Lazinator.Core;
 using LazinatorTests.Examples;
 
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.Example, 3, true)]
-    public interface IExample : Lazinator.Core.ILazinator
+    public interface IExample : ILazinator // note that this ILazinator reference is unnecessary
     {
         bool MyBool { get; set; }
         char MyChar { get; set; }

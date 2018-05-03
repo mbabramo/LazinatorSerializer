@@ -6,7 +6,7 @@ using Lazinator.Collections;
 
 namespace LazinatorTests.Examples.Abstract
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.Abstract1)]
+    [Lazinator((int)ExampleUniqueIDs.Abstract1)]
     interface IAbstract1
     {
         string String1 { get; set; }

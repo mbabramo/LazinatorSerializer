@@ -4,7 +4,7 @@
 
     public enum ExampleUniqueIDs
     {
-        ArrayMultidimensionalAndJagged = 100,
+        ArrayMultidimensionalAndJagged = 200,
         Array_Values,
         ClosedGeneric,
         DerivedLazinatorList,
@@ -39,5 +39,16 @@
         NonLazinatorContainer,
         OpenGenericStayingOpen,
         OpenGenericStayingOpenContainer,
+        Abstract1,
+        Abstract2,
+        Concrete3,
+        Abstract4,
+        Concrete5,
+        AbstractGeneric1,
+        ConcreteGeneric2a,
+        ConcreteGeneric2b,
+        FromNonLazinatorBase,
+        AbstractGenericContainer,
+        ConcreteGenericContainer
     }
 }

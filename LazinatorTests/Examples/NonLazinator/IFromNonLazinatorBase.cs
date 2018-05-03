@@ -6,7 +6,7 @@ using Lazinator.Collections;
 
 namespace LazinatorTests.Examples.NonLazinator
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.FromNonLazinatorBase)]
+    [Lazinator((int)ExampleUniqueIDs.FromNonLazinatorBase)]
     interface IFromNonLazinatorBase
     {
         [DerivationKeyword("override")]

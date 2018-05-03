@@ -177,7 +177,6 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength);
-                        _Item = ConvertFromBytes_LazinatorTests_Examples_Abstract_IAbstractGeneric1_int(childData, DeserializationFactory, null);
                     }
                     _Item_Accessed = true;
                     IsDirty = true;
@@ -218,14 +217,6 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _Item, isBelievedDirty: _Item_Accessed,
-            isAccessed: _Item_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength),
-            verifyCleanness: false,
-            binaryWriterAction: (w, v) =>
-            ConvertToBytes_LazinatorTests_Examples_Abstract_IAbstractGeneric1_int(w, Item,
-            includeChildrenMode, v));
         }
         
     }
