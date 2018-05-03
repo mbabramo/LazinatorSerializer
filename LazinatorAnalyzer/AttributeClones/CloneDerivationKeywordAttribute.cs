@@ -7,9 +7,9 @@ namespace LazinatorCodeGen.AttributeClones
     {
         public string Choice { get; set; }
 
-        public CloneDerivationKeywordAttribute(string accessibility)
+        public CloneDerivationKeywordAttribute(string derivationKeyword)
         {
-            Choice = accessibility;
+            Choice = derivationKeyword;
         }
     }
 }

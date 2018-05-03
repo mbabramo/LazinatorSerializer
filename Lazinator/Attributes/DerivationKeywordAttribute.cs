@@ -7,9 +7,9 @@ namespace Lazinator.Attributes
     {
         public string Choice { get; set; }
 
-        public DerivationKeywordAttribute(string accessibility)
+        public DerivationKeywordAttribute(string derivationKeyword)
         {
-            Choice = accessibility;
+            Choice = derivationKeyword;
         }
     }
 }

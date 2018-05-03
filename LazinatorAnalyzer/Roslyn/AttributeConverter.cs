@@ -43,6 +43,11 @@ namespace LazinatorCodeGen.Roslyn
                     if (!(accessibility is string))
                         return null;
                     return new CloneSetterAccessibilityAttribute((string)accessibility);
+                case "DerivationKeywordAttribute":
+                    var derivationKeyword = attributeData.GetAttributeConstructorValueByParameterName("derivationKeyword");
+                    if (!(derivationKeyword is string))
+                        return null;
+                    return new CloneDerivationKeywordAttribute((string)derivationKeyword);
                 case "UnofficiallyIncorporateInterfaceAttribute":
                     var otherInterfaceFullyQualifiedTypeName = attributeData.GetAttributeConstructorValueByParameterName("otherInterfaceFullyQualifiedTypeName");
                     if (!(otherInterfaceFullyQualifiedTypeName is string))
