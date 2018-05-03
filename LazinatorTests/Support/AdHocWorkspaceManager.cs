@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LazinatorCodeGen.Roslyn;
 
 namespace LazinatorTests.Support
 {
@@ -50,7 +51,7 @@ namespace LazinatorTests.Support
                 ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, filename, ".g.cs", out string codeBehindPath, out string codeBehind);
                 if (codeBehind == null)
                     ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "", filename, ".g.cs", out codeBehindPath, out codeBehind);
-                files.Add((filename + ".g.cs", codeBehind));
+                files.Add((RoslynHelpers.GetNameWithoutGenericArity(filename) + ".g.cs", codeBehind));
             }
             return CreateAdHocWorkspaceWithFiles(files.Where(x => x.code != null).ToList());
         }

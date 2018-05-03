@@ -133,8 +133,8 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
+            await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperBool), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
