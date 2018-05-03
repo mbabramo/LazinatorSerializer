@@ -83,8 +83,8 @@ namespace LazinatorTests.Tests
             // load the inherited interface and make sure its properties and base properties can be parsed
             string interfaceName = nameof(IExampleChildInherited);
             var properties = lazinatorFiles.PropertiesForType[lazinatorFiles.LookupSymbol(interfaceName)];
-            var propertiesThisLevel = properties.Where(x => x.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
-            var propertiesLowerLevels = properties.Where(x => x.LevelInfo != PropertyWithLevelInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
+            var propertiesThisLevel = properties.Where(x => x.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
+            var propertiesLowerLevels = properties.Where(x => x.LevelInfo != PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
             propertiesThisLevel.Count().Should().Be(1);
             propertiesLowerLevels.Count().Should().Be(2);
             propertiesThisLevel[0].Name.Should().Be("MyInt");
@@ -109,8 +109,8 @@ namespace LazinatorTests.Tests
             // make sure we can also parse the intermediate type IExampleChild
             string intermediateInterfaceName = nameof(IExampleChild);
             var properties = lazinatorFiles.PropertiesForType[lazinatorFiles.LookupSymbol(intermediateInterfaceName)];
-            var propertiesThisLevel = properties.Where(x => x.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
-            var propertiesLowerLevels = properties.Where(x => x.LevelInfo != PropertyWithLevelInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
+            var propertiesThisLevel = properties.Where(x => x.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
+            var propertiesLowerLevels = properties.Where(x => x.LevelInfo != PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
             propertiesThisLevel[0].Name.Should().Be("MyLong");
             propertiesThisLevel[0].GetMethod.Name.Should().Be("get_MyLong");
             propertiesThisLevel[0].SetMethod.Name.Should().Be("set_MyLong");

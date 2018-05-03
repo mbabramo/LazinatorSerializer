@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 
 namespace LazinatorAnalyzer.Roslyn
 {
-    public class PropertyWithLevelInfo
+    public class PropertyWithDefinitionInfo
     {
         public enum Level
         {
@@ -16,11 +16,13 @@ namespace LazinatorAnalyzer.Roslyn
 
         public IPropertySymbol Property;
         public Level LevelInfo;
+        public string DerivationKeyword;
 
-        public PropertyWithLevelInfo(IPropertySymbol property, Level levelInfo)
+        public PropertyWithDefinitionInfo(IPropertySymbol property, Level levelInfo, string derivationKeyword)
         {
             this.Property = property;
             this.LevelInfo = levelInfo;
+            this.DerivationKeyword = derivationKeyword;
         }
     }
 }

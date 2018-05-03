@@ -27,7 +27,7 @@ namespace LazinatorCodeGen.Roslyn
         public HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
-        public Dictionary<INamedTypeSymbol, List<PropertyWithLevelInfo>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<PropertyWithLevelInfo>>();
+        public Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>>();
         public Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
         public HashSet<(INamedTypeSymbol type, string methodName)> TypeImplementsMethod = new HashSet<(INamedTypeSymbol type, string methodName)>();
         private Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
@@ -98,8 +98,8 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
-            List<PropertyWithLevelInfo> propertiesInInterfaceWithLevel = new List<PropertyWithLevelInfo>();
-            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo())
+            List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
+            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo(this))
             {
                 propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
                 RelevantSymbols.Add(propertyWithLevelInfo.Property);
@@ -281,7 +281,7 @@ namespace LazinatorCodeGen.Roslyn
             else
             {
                 var parameters = constructorWithMostParameters.Parameters.ToList();
-                var properties = type.GetPropertyWithLevelInfo();
+                var properties = type.GetPropertyWithLevelInfo(this);
                 if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                 {
                     List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();

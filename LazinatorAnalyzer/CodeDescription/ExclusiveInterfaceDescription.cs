@@ -64,7 +64,7 @@ namespace Lazinator.CodeDescription
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
             var propertiesWithLevel = Container.CodeFiles.PropertiesForType[interfaceSymbol];
-            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container) })
+            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword) })
                 .OrderBy(x => x.description.PropertyType)
                 .ThenBy(x => x.description.PropertyName).ToList();
 
@@ -78,17 +78,17 @@ namespace Lazinator.CodeDescription
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
                 if (orderedProperty.propertyWithLevel.LevelInfo ==
-                    PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface)
+                    PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface)
                 {
                     orderedProperty.description.IsDefinedInLowerLevelInterface = true;
-                    orderedProperty.description.DeriveKeyword = "override ";
+                    orderedProperty.description.DerivationKeyword = "override ";
                 }
 
                 if (!dirtyPropertiesWithLevel.Any(x => x.Property.Name == orderedProperty.propertyWithLevel.Property.Name))
                 { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
-                    if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedThisLevel ||
-                            (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface 
+                    if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel ||
+                            (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface 
                             && 
                              !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
                              &&

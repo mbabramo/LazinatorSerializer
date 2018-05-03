@@ -48,6 +48,11 @@ namespace LazinatorCodeGen.Roslyn
             return symbol.GetAttributes().Select(x => AttributeConverter.ConvertAttribute(x)).OfType<T>();
         }
 
+        public static T GetKnownAttribute<T>(ISymbol symbol) where T : Attribute
+        {
+            return GetKnownAttributes<T>(symbol).SingleOrDefault();
+        }
+
 
         public static bool HasAttributeOfType<T>(this ISymbol symbol) where T : Attribute
         {
@@ -78,7 +83,7 @@ namespace LazinatorCodeGen.Roslyn
             return interfaces;
         }
 
-        public static IEnumerable<PropertyWithLevelInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol)
+        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol, LazinatorCompilation compilation)
         {
             // check whether there are lower level abstract types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
@@ -91,18 +96,28 @@ namespace LazinatorCodeGen.Roslyn
 
             namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name))
-                yield return new PropertyWithLevelInfo(p, PropertyWithLevelInfo.Level.IsDefinedThisLevel);
+                yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel, GetDerivationKeyword(p, compilation));
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))
             {
                 if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
                     yield return
-                        new PropertyWithLevelInfo(p,
-                            PropertyWithLevelInfo.Level.IsDefinedInLowerLevelInterface);
+                        new PropertyWithDefinitionInfo(p,
+                            PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface, GetDerivationKeyword(p, compilation));
                 else
                     yield return
-                        new PropertyWithLevelInfo(p,
-                            PropertyWithLevelInfo.Level.IsDefinedLowerLevelButNotInInterface);
+                        new PropertyWithDefinitionInfo(p,
+                            PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface, GetDerivationKeyword(p, compilation));
             }
+        }
+
+        private static string GetDerivationKeyword(IPropertySymbol symbol, LazinatorCompilation compilation)
+        {
+            var attribute = compilation.GetFirstAttributeOfType<CloneDerivationKeywordAttribute>(symbol);
+            if (attribute == null)
+                return null;
+            if (attribute.Choice != "virtual" && attribute.Choice != "override" && attribute.Choice != "new")
+                throw new LazinatorCodeGenException($"Property {symbol.Name}'s DerivationKeyWordAttribution must have choice of 'virtual', 'override', or 'new'.");
+            return attribute.Choice + " ";
         }
 
         public static object GetAttributeConstructorValueByParameterName

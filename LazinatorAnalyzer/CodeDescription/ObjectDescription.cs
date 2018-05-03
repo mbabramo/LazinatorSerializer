@@ -28,7 +28,7 @@ namespace Lazinator.CodeDescription
         public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
                                                          (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
                                                           BaseLazinatorObject.IsAbstract);
-        public string DeriveKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
+        public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject?.ObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
@@ -206,13 +206,13 @@ namespace Lazinator.CodeDescription
                 {
                     boilerplate = $@"        /* Boilerplate for every non-abstract ILazinator object */
 
-                        public {DeriveKeyword}ILazinator LazinatorParentClass {{ get; set; }}
+                        public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
 
                         {
                             (ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")
                         }internal IncludeChildrenMode OriginalIncludeChildrenMode;
 
-                        public {DeriveKeyword}void Deserialize()
+                        public {DerivationKeyword}void Deserialize()
                         {{
                             int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
@@ -249,19 +249,19 @@ namespace Lazinator.CodeDescription
                         }
                         }}
 
-                        public {DeriveKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        public {DerivationKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
                         }}
 
-                        {(ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")}internal {DeriveKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+                        {(ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")}internal {DerivationKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
 
-                        public {DeriveKeyword}ILazinator CloneLazinator()
+                        public {DerivationKeyword}ILazinator CloneLazinator()
                         {{
                             return CloneLazinator(OriginalIncludeChildrenMode);
                         }}
 
-                        public {DeriveKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {ObjectName}()
@@ -276,7 +276,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private bool _IsDirty;
-                        public {DeriveKeyword}bool IsDirty
+                        public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _IsDirty;
@@ -294,8 +294,8 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {DeriveKeyword}InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
-                        public {DeriveKeyword}void InformParentOfDirtiness()
+                        public {DerivationKeyword}InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
+                        public {DerivationKeyword}void InformParentOfDirtiness()
                         {{
                             if (InformParentOfDirtinessDelegate == null)
                             {{
@@ -309,7 +309,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private bool _DescendantIsDirty;
-                        public {DeriveKeyword}bool DescendantIsDirty
+                        public {DerivationKeyword}bool DescendantIsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _DescendantIsDirty{additionalDirtinessChecks};
@@ -327,10 +327,10 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {DeriveKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
+                        public {DerivationKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
         
                         private MemoryInBuffer _HierarchyBytes;
-                        public {DeriveKeyword}MemoryInBuffer HierarchyBytes
+                        public {DerivationKeyword}MemoryInBuffer HierarchyBytes
                         {{
                             get => _HierarchyBytes;
                             set
@@ -341,7 +341,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         private ReadOnlyMemory<byte> _LazinatorObjectBytes;
-                        public {DeriveKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
+                        public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
                             get => _LazinatorObjectBytes;
                             set
@@ -430,7 +430,7 @@ namespace Lazinator.CodeDescription
 
             string selfSerializationVersionString;
             if (ObjectType == LazinatorObjectType.Class)
-                selfSerializationVersionString = $@"public {DeriveKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};";
+                selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};";
             else
             {
                 selfSerializationVersionString =
@@ -450,11 +450,11 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
                 /* Conversion */
 
-                public {DeriveKeyword}int LazinatorUniqueID => { UniqueID };
+                public {DerivationKeyword}int LazinatorUniqueID => { UniqueID };
 
                 { selfSerializationVersionString }
 
-                public {DeriveKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+                public {DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{
                     {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                     ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;");
@@ -476,7 +476,7 @@ namespace Lazinator.CodeDescription
                             " : "")}base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);");
             else
                 sb.AppendLine(
-                        $@"public {DeriveKeyword}void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        $@"public {DerivationKeyword}void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             {(ImplementsPreSerialization ? $@"PreSerialization();
                             " : "")}// header information

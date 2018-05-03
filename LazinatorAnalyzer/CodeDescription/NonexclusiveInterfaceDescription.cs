@@ -21,13 +21,13 @@ namespace Lazinator.CodeDescription
         public NonexclusiveInterfaceDescription(LazinatorCompilation fileSet, INamedTypeSymbol t, ObjectDescription container)
         {
             if (!fileSet.NonexclusiveInterfaces.Contains(t))
-                throw new Exception("NonexclusiveLazinator must be applied to a nonexclusive interface.");
+                throw new LazinatorCodeGenException("NonexclusiveLazinator must be applied to a nonexclusive interface.");
             Container = container;
             CloneNonexclusiveLazinatorAttribute nonexclusiveLazinatorAttribute = fileSet.GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(t);
             if (nonexclusiveLazinatorAttribute == null)
-                throw new Exception("Expected nonexclusive self-serialize attribute.");
+                throw new LazinatorCodeGenException("Expected nonexclusive self-serialize attribute.");
             if (fileSet.PropertiesForType.ContainsKey(t))
-                Properties = fileSet.PropertiesForType[t].Select(x => new PropertyDescription(x.Property, container)).ToList();
+                Properties = fileSet.PropertiesForType[t].Select(x => new PropertyDescription(x.Property, container, null)).ToList();
         }
     }
 }
