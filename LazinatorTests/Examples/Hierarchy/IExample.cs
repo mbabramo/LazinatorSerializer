@@ -5,7 +5,7 @@ using LazinatorTests.Examples;
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.Example, 3, true)]
-    public interface IExample
+    public interface IExample : Lazinator.Core.ILazinator
     {
         bool MyBool { get; set; }
         char MyChar { get; set; }

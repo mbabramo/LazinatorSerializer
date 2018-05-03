@@ -93,16 +93,28 @@ namespace LazinatorCodeGen.Roslyn
             TypeToExclusiveInterface[implementingTypeSymbol] = exclusiveInterfaceTypeSymbol;
         }
 
+        private HashSet<IPropertySymbol> ILazinatorProperties = null; 
+        private void RecordILazinatorProperties()
+        {
+            INamedTypeSymbol iLazinatorSymbol = Compilation.GetTypeByMetadataName("Lazinator.Core.ILazinator");
+            ILazinatorProperties = new HashSet<IPropertySymbol>(iLazinatorSymbol.GetPropertySymbols());
+        }
+
         int PropertiesRecursionDepth = 0;
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
         {
+            if (ILazinatorProperties == null)
+                RecordILazinatorProperties();
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
             foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo())
             {
-                propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
-                RelevantSymbols.Add(propertyWithLevelInfo.Property);
+                if (!ILazinatorProperties.Contains(propertyWithLevelInfo.Property))
+                { // ignore a property that is actually an ILazinator property rather than a property we are looking for
+                    propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
+                    RelevantSymbols.Add(propertyWithLevelInfo.Property);
+                }
             }
             PropertiesForType[@interface] = propertiesInInterfaceWithLevel;
             PropertiesRecursionDepth++;
