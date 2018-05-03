@@ -1480,6 +1480,24 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ConcreteGenericContainerWorks()
+        {
+            ConcreteGenericContainer c = new ConcreteGenericContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                Item = new ConcreteGeneric2a()
+                {
+                    AnotherProperty = "hi",
+                    MyT = 5, // now is an int
+                    LazinatorExample = GetExample(2),
+                },
+            };
+            var c2 = c.CloneLazinatorTyped();
+            ExampleEqual(((ConcreteGeneric2a) c.Item).LazinatorExample, ((ConcreteGeneric2a) c2.Item).LazinatorExample)
+                .Should().BeTrue();
+        }
+
+        [Fact]
         public void DirtinessSetsCorrectly()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);

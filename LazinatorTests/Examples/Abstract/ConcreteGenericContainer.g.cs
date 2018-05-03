@@ -177,9 +177,9 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength);
+                        _Item = (LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _Item_Accessed = true;
-                    IsDirty = true;
                 }
                 return _Item;
             }
@@ -188,6 +188,10 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _Item = value;
+                if (_Item != null)
+                {
+                    _Item.IsDirty = true;
+                }
                 _Item_Accessed = true;
             }
         }
@@ -217,6 +221,10 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            {
+                WriteChildWithLength(writer, _Item, includeChildrenMode, _Item_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength), verifyCleanness);
+            }
         }
         
     }
