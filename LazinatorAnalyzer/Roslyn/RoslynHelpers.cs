@@ -83,7 +83,7 @@ namespace LazinatorCodeGen.Roslyn
             return interfaces;
         }
 
-        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol, LazinatorCompilation compilation)
+        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol)
         {
             // check whether there are lower level abstract types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
@@ -96,28 +96,18 @@ namespace LazinatorCodeGen.Roslyn
 
             namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name))
-                yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel, GetDerivationKeyword(p, compilation));
+                yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))
             {
                 if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
                     yield return
                         new PropertyWithDefinitionInfo(p,
-                            PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface, GetDerivationKeyword(p, compilation));
+                            PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface);
                 else
                     yield return
                         new PropertyWithDefinitionInfo(p,
-                            PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface, GetDerivationKeyword(p, compilation));
+                            PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface);
             }
-        }
-
-        private static string GetDerivationKeyword(IPropertySymbol symbol, LazinatorCompilation compilation)
-        {
-            var attribute = compilation.GetFirstAttributeOfType<CloneDerivationKeywordAttribute>(symbol);
-            if (attribute == null)
-                return null;
-            if (attribute.Choice != "virtual" && attribute.Choice != "override" && attribute.Choice != "new")
-                throw new LazinatorCodeGenException($"Property {symbol.Name}'s DerivationKeyWordAttribution must have choice of 'virtual', 'override', or 'new'.");
-            return attribute.Choice + " ";
         }
 
         public static object GetAttributeConstructorValueByParameterName

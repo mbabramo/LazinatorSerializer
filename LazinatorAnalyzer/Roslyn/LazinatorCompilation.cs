@@ -99,7 +99,7 @@ namespace LazinatorCodeGen.Roslyn
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
-            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo(this))
+            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo())
             {
                 propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
                 RelevantSymbols.Add(propertyWithLevelInfo.Property);
@@ -110,9 +110,22 @@ namespace LazinatorCodeGen.Roslyn
             {
                 IPropertySymbol property = propertyWithLevel.Property;
                 AddKnownAttributesForSymbol(property);
+                propertyWithLevel.SpecifyDerivationKeyword(GetDerivationKeyword(property));
                 RecordInformationAboutTypeAndRelatedTypes(property.Type);
             }
             PropertiesRecursionDepth--;
+        }
+
+
+
+        public string GetDerivationKeyword(IPropertySymbol symbol)
+        {
+            var attribute = GetFirstAttributeOfType<CloneDerivationKeywordAttribute>(symbol);
+            if (attribute == null)
+                return null;
+            if (attribute.Choice != "virtual" && attribute.Choice != "override" && attribute.Choice != "new")
+                throw new LazinatorCodeGenException($"Property {symbol.Name}'s DerivationKeyWordAttribution must have choice of 'virtual', 'override', or 'new'.");
+            return attribute.Choice + " ";
         }
 
         private void RecordInformationAboutTypeAndRelatedTypes(ITypeSymbol type)
@@ -281,7 +294,7 @@ namespace LazinatorCodeGen.Roslyn
             else
             {
                 var parameters = constructorWithMostParameters.Parameters.ToList();
-                var properties = type.GetPropertyWithLevelInfo(this);
+                var properties = type.GetPropertyWithLevelInfo();
                 if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                 {
                     List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();

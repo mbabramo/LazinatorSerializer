@@ -18,10 +18,14 @@ namespace LazinatorAnalyzer.Roslyn
         public Level LevelInfo;
         public string DerivationKeyword;
 
-        public PropertyWithDefinitionInfo(IPropertySymbol property, Level levelInfo, string derivationKeyword)
+        public PropertyWithDefinitionInfo(IPropertySymbol property, Level levelInfo)
         {
             this.Property = property;
             this.LevelInfo = levelInfo;
+        }
+
+        public void SpecifyDerivationKeyword(string derivationKeyword)
+        {
             this.DerivationKeyword = derivationKeyword;
         }
     }

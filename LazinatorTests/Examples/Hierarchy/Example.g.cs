@@ -310,7 +310,7 @@ namespace LazinatorTests.Examples
             }
         }
         private double? _MyNullableDouble;
-        public double? MyNullableDouble
+        public virtual double? MyNullableDouble
         {
             [DebuggerStepThrough]
             get
