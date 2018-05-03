@@ -49,5 +49,7 @@ namespace Lazinator.Collections
         ByteSpanUnofficial,
         LazinatorBitArray,
         LazinatorBitArrayUnofficial,
+        AvlNode,
+        AvlTree,
     }
 }

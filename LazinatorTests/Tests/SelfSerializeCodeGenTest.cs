@@ -24,6 +24,7 @@ using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using System.Threading.Tasks;
 using System.Collections.Immutable;
+using Lazinator.Collections.Avl;
 using Lazinator.Spans;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
@@ -132,6 +133,8 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperBool), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
@@ -239,6 +242,7 @@ public class MyOtherClass
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections/Avl",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Spans",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",

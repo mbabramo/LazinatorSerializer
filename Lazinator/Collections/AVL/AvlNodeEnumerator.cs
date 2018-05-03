@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Core;
 
-namespace Lazinator.Collections.AVL
+namespace Lazinator.Collections.Avl
 {
 	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {

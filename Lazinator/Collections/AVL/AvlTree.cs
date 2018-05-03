@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Core;
 
-namespace Lazinator.Collections.AVL
+namespace Lazinator.Collections.Avl
 {
 	public class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
 		private IComparer<TKey> _comparer;
-		private AvlNode<TKey, TValue> _root;
+		public AvlNode<TKey, TValue> Root { get; set; }
 
 		public AvlTree(IComparer<TKey> comparer)
 		{
@@ -24,22 +24,14 @@ namespace Lazinator.Collections.AVL
 
 		}
 
-		public AvlNode<TKey, TValue> Root
-		{
-			get
-			{
-				return _root;
-			}
-		}
-
 		public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
 		{
-			return new AvlNodeEnumerator<TKey, TValue>(_root);
+			return new AvlNodeEnumerator<TKey, TValue>(Root);
 		}
 
 		public bool Search(TKey key, out TValue value)
 		{
-			AvlNode<TKey, TValue> node = _root;
+			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
@@ -66,7 +58,7 @@ namespace Lazinator.Collections.AVL
 
 		public bool Insert(TKey key, TValue value)
 		{
-			AvlNode<TKey, TValue> node = _root;
+			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
@@ -114,7 +106,7 @@ namespace Lazinator.Collections.AVL
 				}
 			}
 			
-			_root = new AvlNode<TKey, TValue> { Key = key, Value = value };
+			Root = new AvlNode<TKey, TValue> { Key = key, Value = value };
 
 			return true;
 		}
@@ -183,9 +175,9 @@ namespace Lazinator.Collections.AVL
 				rightLeft.Parent = node;
 			}
 
-			if (node == _root)
+			if (node == Root)
 			{
-				_root = right;
+				Root = right;
 			}
 			else if (parent.Right == node)
 			{
@@ -218,9 +210,9 @@ namespace Lazinator.Collections.AVL
 				leftRight.Parent = node;
 			}
 
-			if (node == _root)
+			if (node == Root)
 			{
-				_root = left;
+				Root = left;
 			}
 			else if (parent.Left == node)
 			{
@@ -263,9 +255,9 @@ namespace Lazinator.Collections.AVL
 				leftRightLeft.Parent = left;
 			}
 
-			if (node == _root)
+			if (node == Root)
 			{
-				_root = leftRight;
+				Root = leftRight;
 			}
 			else if (parent.Left == node)
 			{
@@ -323,9 +315,9 @@ namespace Lazinator.Collections.AVL
 				rightLeftRight.Parent = right;
 			}
 
-			if (node == _root)
+			if (node == Root)
 			{
-				_root = rightLeft;
+				Root = rightLeft;
 			}
 			else if (parent.Right == node)
 			{
@@ -359,7 +351,7 @@ namespace Lazinator.Collections.AVL
 
 		public bool Delete(TKey key)
 		{
-			AvlNode<TKey, TValue> node = _root;
+			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
@@ -380,9 +372,9 @@ namespace Lazinator.Collections.AVL
 					{
 						if (right == null)
 						{
-							if (node == _root)
+							if (node == Root)
 							{
-								_root = null;
+								Root = null;
 							}
 							else
 							{
@@ -428,9 +420,9 @@ namespace Lazinator.Collections.AVL
 							successor.Balance = node.Balance;
 							left.Parent = successor;
 
-							if (node == _root)
+							if (node == Root)
 							{
-								_root = successor;
+								Root = successor;
 							}
 							else
 							{
@@ -478,9 +470,9 @@ namespace Lazinator.Collections.AVL
 							right.Parent = successor;
 							left.Parent = successor;
 
-							if (node == _root)
+							if (node == Root)
 							{
-								_root = successor;
+								Root = successor;
 							}
 							else
 							{

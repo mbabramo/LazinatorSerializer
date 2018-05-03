@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Lazinator.Collections.AVL;
+using Lazinator.Collections.Avl;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
