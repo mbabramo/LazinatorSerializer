@@ -2,12 +2,211 @@
 using System.Text;
 using static System.Buffers.Binary.BinaryPrimitives;
 using System.Buffers.Text;
+using Lazinator.Exceptions;
 
 namespace Lazinator.Buffers
 {
     public static class ReadUncompressedPrimitives
     {
         #region Reading data types without compression
+
+        public static T ReadPrimitiveOfType<T>(this ReadOnlySpan<byte> b, ref int index)
+        {
+            // This is a slower method if we know (or require) that T is a primitive but don't know what type
+            if (typeof(T) == typeof(bool))
+            {
+                var result = b.ToBoolean(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(byte))
+            {
+                var result = b.ToByte(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                var result = b.ToInt32(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(Guid))
+            {
+                var result = b.ToGuid(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(sbyte))
+            {
+                var result = b.ToSByte(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(char))
+            {
+                var result = b.ToChar(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                var result = b.ToSingle(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                var result = b.ToDouble(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(short))
+            {
+                var result = b.ToInt16(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(long))
+            {
+                var result = b.ToInt64(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(ushort))
+            {
+                var result = b.ToUInt16(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(uint))
+            {
+                var result = b.ToUInt32(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(ulong))
+            {
+                var result = b.ToUInt64(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(DateTime))
+            {
+                var result = b.ToDateTime(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(TimeSpan))
+            {
+                var result = b.ToTimeSpan(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(decimal))
+            {
+                var result = b.ToDecimal(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(bool?))
+            {
+                var result = b.ToNullableBoolean(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(byte?))
+            {
+                var result = b.ToNullableByte(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(sbyte?))
+            {
+                var result = b.ToNullableSByte(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(char?))
+            {
+                var result = b.ToNullableChar(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(float?))
+            {
+                var result = b.ToNullableSingle(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(double?))
+            {
+                var result = b.ToNullableDouble(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(short?))
+            {
+                var result = b.ToNullableInt16(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(int?))
+            {
+                var result = b.ToNullableInt32(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(long?))
+            {
+                var result = b.ToNullableInt64(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(ushort?))
+            {
+                var result = b.ToNullableUint16(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(uint?))
+            {
+                var result = b.ToNullableUint32(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(ulong?))
+            {
+                var result = b.ToNullableUint64(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(DateTime?))
+            {
+                var result = b.ToNullableDateTime(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(TimeSpan?))
+            {
+                var result = b.ToNullableTimeSpan(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(Guid?))
+            {
+                var result = b.ToNullableGuid(ref index);
+                if (result is T t)
+                    return t;
+            }
+            else if (typeof(T) == typeof(decimal?))
+            {
+                var result = b.ToNullableDecimal(ref index);
+                if (result is T t)
+                    return t;
+            }
+            throw new LazinatorDeserializationException($"Type {typeof(T)} is not a primitive type and thus cannot be used as a non-Lazinator closed generic parameter. ");
+        }
 
         public static bool? ToNullableBoolean(this ReadOnlySpan<byte> b, ref int index)
         {

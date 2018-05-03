@@ -2,11 +2,63 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Lazinator.Exceptions;
 
 namespace Lazinator.Buffers
 {
     public static class WriteUncompressedPrimitives
     {
+        public static byte WritePrimitiveOfType<T>(BinaryBufferWriter writer, T value)
+        {
+            switch (value)
+            {
+                case bool b:
+                    WriteBool(writer, b);
+                    break;
+                case byte b2:
+                    WriteByte(writer, b2);
+                    break;
+                case sbyte b3:
+                    WriteSByte(writer, b3);
+                    break;
+                case short s:
+                    WriteShort(writer, s);
+                        break;
+                case ushort us:
+                    WriteUshort(writer, us);
+                        break;
+                case int i:
+                    WriteInt(writer, i);
+                    break;
+                case uint ui:
+                    WriteUint(writer, ui);
+                    break;
+                case long l:
+                    WriteLong(writer, l);
+                        break;
+                case ulong ul:
+                    WriteUlong(writer, ul);
+                    break;
+                case float f:
+                    WriteSingle(writer, f);
+                    break;
+                case double d:
+                    WriteDouble(writer, d);
+                    break;
+                case Guid g:
+                    WriteGuid(writer, g);
+                    break;
+                case decimal d2:
+                    CompressedDecimal.WriteCompressedDecimal(writer, d2);
+                    break;
+                case DateTime dt:
+                    WriteLong(writer, dt.L)
+                    break;
+                default:
+                    throw new LazinatorDeserializationException($"Type {typeof(T)} is not a primitive type and thus cannot be used as a non-Lazinator closed generic parameter. ");
+            }
+        }
+
         public static byte WriteBool(BinaryBufferWriter writer, bool value)
         {
             writer.Write(value);
