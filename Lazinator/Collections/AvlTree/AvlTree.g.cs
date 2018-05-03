@@ -177,7 +177,6 @@ namespace Lazinator.Collections.Avl
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength);
-                        _Root = ConvertFromBytes_Lazinator_Collections_Avl_AvlNode_TKey_TValue(childData, DeserializationFactory, null);
                     }
                     _Root_Accessed = true;
                     IsDirty = true;
@@ -218,14 +217,6 @@ namespace Lazinator.Collections.Avl
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _Root, isBelievedDirty: _Root_Accessed,
-            isAccessed: _Root_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength),
-            verifyCleanness: false,
-            binaryWriterAction: (w, v) =>
-            ConvertToBytes_Lazinator_Collections_Avl_AvlNode_TKey_TValue(w, Root,
-            includeChildrenMode, v));
         }
         
     }

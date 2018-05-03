@@ -10,7 +10,7 @@ namespace LazinatorTests.AVL
 {
 	public static class AvlNodeExtensions
 	{
-		public static int Count<TKey>(this AvlNode<TKey, TKey> source) where TKey : ILazinator
+		public static int Count<TKey>(this AvlNode<TKey, TKey> source) where TKey : ILazinator, new()
 		{
 			int count = 1;
 

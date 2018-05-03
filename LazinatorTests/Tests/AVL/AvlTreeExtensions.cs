@@ -9,7 +9,7 @@ namespace LazinatorTests.AVL
 {
 	public static class AvlTreeExtensions
 	{
-		public static string Description<TKey>(this AvlTree<TKey, TKey> tree) where TKey : ILazinator
+		public static string Description<TKey>(this AvlTree<TKey, TKey> tree) where TKey : ILazinator, new()
 		{
 			StringBuilder builder = new StringBuilder();
 
@@ -18,12 +18,12 @@ namespace LazinatorTests.AVL
 			return builder.ToString();
 		}
 
-		public static bool Insert<TKey>(this AvlTree<TKey, TKey> source, TKey key) where TKey : ILazinator
+		public static bool Insert<TKey>(this AvlTree<TKey, TKey> source, TKey key) where TKey : ILazinator, new()
         {
 			return source.Insert(key, key);
 		}
 
-		public static int Count<TKey>(this AvlTree<TKey, TKey> source) where TKey : ILazinator
+		public static int Count<TKey>(this AvlTree<TKey, TKey> source) where TKey : ILazinator, new()
         {
 			AvlNode<TKey, TKey> node = source.Root;
 
@@ -37,7 +37,7 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, TKey> node) where TKey : ILazinator
+		private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, TKey> node) where TKey : ILazinator, new()
         {
 			if (node != null)
 			{
