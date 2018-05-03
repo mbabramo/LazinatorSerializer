@@ -21,6 +21,7 @@ namespace LazinatorTests.Examples
         bool MyNonLazinatorChild_Dirty { get; set; }
         [SetterAccessibility("internal")]
         decimal? MyNullableDecimal { get; }
+        [DerivationKeyword("virtual")]
         double? MyNullableDouble { get; set; }
         TimeSpan? MyNullableTimeSpan { get; set; }
         [EliminatedWithVersion(3)]
