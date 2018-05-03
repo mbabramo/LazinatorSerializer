@@ -12,12 +12,9 @@ namespace LazinatorTests.Support
         public static string GetNameOfType(Type existingType)
         {
             string name = existingType.Name;
-            int initialGenericIndex = 1;
-            while (name.Contains($"`{initialGenericIndex}"))
-            {
-                name = name.Replace($"`{initialGenericIndex}", "");
-                initialGenericIndex++;
-            }
+            for (int genericIndex = 1; genericIndex < 5; genericIndex++)
+            if (name.Contains($"`{genericIndex}"))
+                name = name.Replace($"`{genericIndex}", "");
 
             return name;
         }
