@@ -49,6 +49,7 @@
         ConcreteGeneric2b,
         FromNonLazinatorBase,
         AbstractGenericContainer,
-        ConcreteGenericContainer
+        ConcreteGenericContainer,
+        ExampleInterfaceContainer
     }
 }

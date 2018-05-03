@@ -33,6 +33,7 @@ using LazinatorTests.Support;
 using Newtonsoft.Json;
 using LazinatorListContainer = LazinatorTests.Examples.Collections.LazinatorListContainer;
 using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 
 namespace LazinatorTests.Tests
@@ -185,6 +186,7 @@ public class MyOtherClass
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
+            await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleChild), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleChildInherited), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleNonexclusiveInterfaceImplementer), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
