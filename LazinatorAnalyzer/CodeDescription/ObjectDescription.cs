@@ -68,7 +68,7 @@ namespace Lazinator.CodeDescription
             if (iLazinatorTypeSymbol.TypeKind != TypeKind.Struct)
             {
                 var baseILazinatorType = iLazinatorTypeSymbol.BaseType;
-                if (baseILazinatorType != null && baseILazinatorType.Name != "Object" && baseILazinatorType.HasAttributeOfType<CloneLazinatorAttribute>())
+                if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                     BaseLazinatorObject = new ObjectDescription(baseILazinatorType, codeFiles);
             }
 
