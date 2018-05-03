@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using Lazinator.Collections.AVL;
+using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
@@ -250,7 +251,7 @@ namespace LazinatorTests.AVL
 			AssertTreeValid("30+:{20-:{10,25+:{24,~}},35-:{~,36}}", tree);
 		}
 
-		private void AssertTreeValid(string description, AvlTree<int, int> tree)
+		private void AssertTreeValid(string description, AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree)
 		{
 			Console.WriteLine(tree.Description());
 
@@ -266,9 +267,9 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private AvlTree<int, int> SetupTree(params int[] values)
+		private AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<int, int>();
+			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
 
 			foreach (int value in values)
 			{

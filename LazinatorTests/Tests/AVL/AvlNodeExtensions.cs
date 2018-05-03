@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Collections.AVL;
+using Lazinator.Core;
 
 namespace LazinatorTests.AVL
 {
 	public static class AvlNodeExtensions
 	{
-		public static int Count<TKey>(this AvlNode<TKey, TKey> source)
+		public static int Count<TKey>(this AvlNode<TKey, TKey> source) where TKey : ILazinator
 		{
 			int count = 1;
 

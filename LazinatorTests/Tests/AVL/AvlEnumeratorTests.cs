@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Lazinator.Collections.AVL;
+using Lazinator.Wrappers;
 using Xunit;
 
 namespace LazinatorTests.AVL
@@ -15,13 +16,13 @@ namespace LazinatorTests.AVL
 		{
 			var tree = SetupTree(5, 4, 3, 2, 1);
 
-			var enumerator = new AvlNodeEnumerator<int, int>(tree.Root);
+			var enumerator = new AvlNodeEnumerator<LazinatorWrapperInt, LazinatorWrapperInt>(tree.Root);
 
 			for (int i = 1; i <= 5; i++)
 			{
 				Assert.True(enumerator.MoveNext());
 
-				Assert.Equal(i, enumerator.Current.Key);
+				Assert.Equal(i, enumerator.Current.Key.Value);
 			}
 
 			Assert.False(enumerator.MoveNext());
@@ -66,7 +67,7 @@ namespace LazinatorTests.AVL
 			{
 				count++;
 
-				Assert.Equal(count, node.Key);
+				Assert.Equal(count, node.Key.Value);
 			}
 
 			Assert.Equal(5, count);
@@ -87,15 +88,15 @@ namespace LazinatorTests.AVL
 			{
 				count++;
 
-				Assert.Equal(count, ((AvlNode<int, int>)enumerator.Current).Key);
+				Assert.Equal(count, ((AvlNode<LazinatorWrapperInt, LazinatorWrapperInt>)enumerator.Current).Key.Value);
 			}
 
 			Assert.Equal(5, count);
 		}
 
-		private AvlTree<int, int> SetupTree(params int[] values)
+		private AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<int, int>();
+			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
 
 			foreach (int value in values)
 			{

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Lazinator.Collections.AVL;
+using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
@@ -12,7 +13,7 @@ namespace LazinatorTests.AVL
 		[Fact]
 		public void Empty()
 		{
-			var tree = new AvlTree<int, int>();
+			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
 
 			Assert.Equal(0, tree.Count());
 			AssertTreeValid("", tree);
@@ -29,7 +30,7 @@ namespace LazinatorTests.AVL
 		[Fact]
 		public void DuplicateFails()
 		{
-			var tree = new AvlTree<int, int>();
+			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
 
 			bool success0a = tree.Insert(0);
 			bool success0b = tree.Insert(0);
@@ -232,7 +233,7 @@ namespace LazinatorTests.AVL
 			AssertTreeValid("2-:{1,8:{4,20}}", tree);
 		}
 
-		private void AssertTreeValid(string description, AvlTree<int, int> tree)
+		private void AssertTreeValid(string description, AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree)
 		{
 			Assert.Equal(description, tree.Description());
 			
@@ -246,9 +247,9 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private AvlTree<int, int> SetupTree(params int[] values)
+		private AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<int, int>();
+			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
 
 			foreach (int value in values)
 			{

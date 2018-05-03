@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Lazinator.Collections.AVL;
+using Lazinator.Core;
 
 namespace LazinatorTests.AVL
 {
 	public static class AvlTreeExtensions
 	{
-		public static string Description<TKey>(this AvlTree<TKey, TKey> tree)
+		public static string Description<TKey>(this AvlTree<TKey, TKey> tree) where TKey : ILazinator
 		{
 			StringBuilder builder = new StringBuilder();
 
@@ -17,13 +18,13 @@ namespace LazinatorTests.AVL
 			return builder.ToString();
 		}
 
-		public static bool Insert<TKey>(this AvlTree<TKey, TKey> source, TKey key)
-		{
+		public static bool Insert<TKey>(this AvlTree<TKey, TKey> source, TKey key) where TKey : ILazinator
+        {
 			return source.Insert(key, key);
 		}
 
-		public static int Count<TKey>(this AvlTree<TKey, TKey> source)
-		{
+		public static int Count<TKey>(this AvlTree<TKey, TKey> source) where TKey : ILazinator
+        {
 			AvlNode<TKey, TKey> node = source.Root;
 
 			if (node == null)
@@ -36,8 +37,8 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, TKey> node)
-		{
+		private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, TKey> node) where TKey : ILazinator
+        {
 			if (node != null)
 			{
 				builder.Append(node.Key);

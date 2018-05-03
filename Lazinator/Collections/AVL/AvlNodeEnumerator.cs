@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lazinator.Core;
 
 namespace Lazinator.Collections.AVL
 {
-	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>>
-	{
+	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
+    {
 		private AvlNode<TKey, TValue> _root;
 		private Action _action;
 		private AvlNode<TKey, TValue> _current;

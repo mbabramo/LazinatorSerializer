@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lazinator.Core;
 
 namespace Lazinator.Collections.AVL
 {
-	public class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>
-	{
+	public class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
+    {
 		private IComparer<TKey> _comparer;
 		private AvlNode<TKey, TValue> _root;
 
