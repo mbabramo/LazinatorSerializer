@@ -7,14 +7,8 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-	public sealed partial class AvlNode<TKey, TValue> : IAvlNode<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
-	{
+	public sealed partial class AvlNode<TKey, TValue> : IAvlNode<TKey, TValue> where TKey : ILazinator, new() where TValue : ILazinator, new()
+    {
 		public AvlNode<TKey, TValue> Parent { get; set; }
-
-        public AvlNode<TKey, TValue> Left { get; set; }
-        public AvlNode<TKey, TValue> Right { get; set; }
-        public TKey Key { get; set; }
-        public TValue Value { get; set; }
-        public int Balance { get; set; }
     }
 }

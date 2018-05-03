@@ -8,7 +8,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
+	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator, new() where TValue : ILazinator, new()
     {
 		private AvlNode<TKey, TValue> _root;
 		private Action _action;

@@ -8,10 +8,9 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-	public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+	public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator, new() where TValue : ILazinator, new()
     {
 		private IComparer<TKey> _comparer;
-		public AvlNode<TKey, TValue> Root { get; set; }
 
 		public AvlTree(IComparer<TKey> comparer)
 		{
