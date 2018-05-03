@@ -18,6 +18,7 @@ using System.Reflection;
 using Lazinator.Spans;
 using System.Collections;
 using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 
 namespace LazinatorTests.Tests
@@ -139,6 +140,20 @@ namespace LazinatorTests.Tests
             s2.MyRecordLikeType.Name.Should().Be("Sam");
             s2.DescendantIsDirty.Should().BeFalse(); // no automatic dirtiness tracking
             s2.IsDirty.Should().BeTrue(); // since no automatic dirtiness tracking, assumed dirty on first access
+        }
+
+
+        [Fact]
+        public void ExampleInterfaceContainerWorks()
+        {
+            ExampleInterfaceContainer c = new ExampleInterfaceContainer()
+            {
+                ExampleByInterface = GetExample(2),
+                DeserializationFactory = GetDeserializationFactory()
+            };
+
+            var c2 = c.CloneLazinatorTyped();
+            ExampleEqual((Example) c.ExampleByInterface, (Example) c2.ExampleByInterface).Should().BeTrue();
         }
 
         [Fact]

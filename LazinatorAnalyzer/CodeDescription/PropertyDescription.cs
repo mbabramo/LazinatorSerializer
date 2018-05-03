@@ -32,7 +32,7 @@ namespace Lazinator.CodeDescription
         public string PropertyName { get; set; }
         public string NullableStructValueAccessor => PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable ? ".Value" : "";
         public LazinatorPropertyType PropertyType { get; set; }
-        public bool IsNonexclusiveInterface { get; set; }
+        public bool IsInterface { get; set; }
         public int UniqueIDForLazinatorType { get; set; }
         public LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         public int? ArrayRank { get; set; }
@@ -275,8 +275,8 @@ namespace Lazinator.CodeDescription
             else
                 PropertyType = LazinatorPropertyType.LazinatorStruct;
 
-            IsNonexclusiveInterface = t.TypeKind == TypeKind.Interface;
-            if (!IsNonexclusiveInterface)
+            IsInterface = t.TypeKind == TypeKind.Interface;
+            if (!IsInterface)
             {
                 var exclusiveInterface = Container.CodeFiles.TypeToExclusiveInterface[t.OriginalDefinition];
                 CloneLazinatorAttribute attribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
@@ -577,7 +577,7 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
-                if (IsNonexclusiveInterface)
+                if (IsInterface)
                     assignment =
                     $"_{PropertyName} = ({FullyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
                 else
