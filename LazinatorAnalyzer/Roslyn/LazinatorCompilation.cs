@@ -108,7 +108,7 @@ namespace LazinatorCodeGen.Roslyn
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
-            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithLevelInfo())
+            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithDefinitionInfo())
             {
                 if (!ILazinatorProperties.Contains(propertyWithLevelInfo.Property))
                 { // ignore a property that is actually an ILazinator property rather than a property we are looking for
@@ -306,7 +306,7 @@ namespace LazinatorCodeGen.Roslyn
             else
             {
                 var parameters = constructorWithMostParameters.Parameters.ToList();
-                var properties = type.GetPropertyWithLevelInfo();
+                var properties = type.GetPropertyWithDefinitionInfo();
                 if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                 {
                     List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();

@@ -83,7 +83,13 @@ namespace LazinatorCodeGen.Roslyn
             return interfaces;
         }
 
-        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithLevelInfo(this INamedTypeSymbol namedTypeSymbol)
+        public static List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
+            this INamedTypeSymbol namedTypeSymbol)
+        {
+            return GetPropertyWithDefinitionInfoHelper(namedTypeSymbol).ToList().Distinct().ToList();
+        }
+
+        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfoHelper(this INamedTypeSymbol namedTypeSymbol)
         {
             // check whether there are lower level abstract types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;

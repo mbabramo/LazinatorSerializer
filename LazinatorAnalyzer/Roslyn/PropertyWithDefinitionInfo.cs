@@ -28,5 +28,19 @@ namespace LazinatorAnalyzer.Roslyn
         {
             this.DerivationKeyword = derivationKeyword;
         }
+
+        public override bool Equals(object obj)
+        {
+            PropertyWithDefinitionInfo other = (PropertyWithDefinitionInfo) obj;
+            if (other == null)
+                return false;
+            return Property.Equals(other.Property) && LevelInfo == other.LevelInfo &&
+                   DerivationKeyword == other.DerivationKeyword;
+        }
+
+        public override int GetHashCode()
+        {
+            return (Property, LevelInfo, DerivationKeyword).GetHashCode();
+        }
     }
 }
