@@ -199,9 +199,15 @@ namespace Lazinator.CodeDescription
             bool isReflexiveDefinition = false;
             if (namedTypeSymbol != null)
             {
-                if (namedTypeSymbol.Equals(Container?.ILazinatorTypeSymbol))
-                    throw new LazinatorCodeGenException("If an interface defines itself recursively, then it must explicitly declare that it implements ILazinator.");
                 if (namedTypeSymbol.Equals(Container?.InterfaceTypeSymbol))
+                {
+                    if (!isILazinator)
+                        throw new LazinatorCodeGenException(
+                        "If an interface defines itself recursively, then it must explicitly declare that it implements ILazinator.");
+                    isReflexiveDefinition = true;
+                }
+
+                if (namedTypeSymbol.Equals(Container?.ILazinatorTypeSymbol))
                     isReflexiveDefinition = true;
             }
 

@@ -157,6 +157,25 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ReflexiveExampleWorks()
+        {
+            // the reflexive example allows us to build a tree
+            ReflexiveExample r = new ReflexiveExample()
+            {
+                ReflexiveClass = new ReflexiveExample(),
+                ReflexiveInterface = new ReflexiveExample()
+                {
+                    ReflexiveClass = new ReflexiveExample()
+                },
+                DeserializationFactory = GetDeserializationFactory()
+            };
+            var r2 = r.CloneLazinatorTyped();
+            r2.ReflexiveClass.Should().NotBeNull();
+            r2.ReflexiveInterface.Should().NotBeNull();
+            r2.ReflexiveInterface.ReflexiveClass.Should().NotBeNull();
+        }
+
+        [Fact]
         public void ClassContainingStructWorks()
         {
             ExampleStructContainer c = new ExampleStructContainer()
