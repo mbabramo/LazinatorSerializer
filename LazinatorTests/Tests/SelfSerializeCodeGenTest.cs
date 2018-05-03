@@ -242,7 +242,7 @@ public class MyOtherClass
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections",
-                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections/Avl",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections/AvlTree",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Spans",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",
