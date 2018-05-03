@@ -86,7 +86,20 @@ namespace LazinatorCodeGen.Roslyn
         public static List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
             this INamedTypeSymbol namedTypeSymbol)
         {
-            return GetPropertyWithDefinitionInfoHelper(namedTypeSymbol).ToList().Distinct().ToList();
+            return GetPropertyWithDefinitionInfoHelper(namedTypeSymbol).ToList().DistinctBy(x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
+        }
+
+        private static IEnumerable<TSource> DistinctBy<TSource, TKey>
+            (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
         }
 
         public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfoHelper(this INamedTypeSymbol namedTypeSymbol)
