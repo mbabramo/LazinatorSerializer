@@ -595,10 +595,20 @@ namespace Lazinator.CodeDescription
                 string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
                 if (IsInterface)
                     assignment =
-                    $"_{PropertyName} = ({FullyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
+                    $@"
+                        if (DeserializationFactory == null)
+                        {{
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }}
+                        {PropertyName} = ({FullyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
                 else
                     assignment =
-                        $"_{PropertyName} = DeserializationFactory.Create({UniqueIDForLazinatorType}, () => new {FullyQualifiedTypeName}(), childData{selfReference}); ";
+                        $@"
+                        if (DeserializationFactory == null)
+                        {{
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }}
+                        _{PropertyName} = DeserializationFactory.Create({UniqueIDForLazinatorType}, () => new {FullyQualifiedTypeName}(), childData{selfReference}); ";
             }
             else
             {
