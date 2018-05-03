@@ -33,6 +33,7 @@ using LazinatorTests.Support;
 using Newtonsoft.Json;
 using LazinatorListContainer = LazinatorTests.Examples.Collections.LazinatorListContainer;
 using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.NonLazinator;
 
 namespace LazinatorTests.Tests
 {
@@ -205,6 +206,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ClosedGenerics), "LazinatorTests", "/Examples/", "Generics/", ws);
             await CompleteGenerateCode(typeof(NonLazinatorContainer), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
             await CompleteGenerateCode(typeof(NonLazinatorInterchangeClass), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
+            await CompleteGenerateCode(typeof(FromNonLazinatorBase), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
             await CompleteGenerateCode(typeof(UnofficialInterfaceIncorporator), "LazinatorTests", "/Examples/", "UnofficialInterfaces/", ws);
             await CompleteGenerateCode(typeof(Dictionary_Values_SelfSerialized), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetHashSet_SelfSerialized), "LazinatorTests", "/Examples/", "Collections/", ws);
