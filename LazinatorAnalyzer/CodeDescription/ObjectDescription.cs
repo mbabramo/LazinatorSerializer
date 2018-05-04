@@ -244,9 +244,9 @@ namespace Lazinator.CodeDescription
 
                             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
                             
-                            {(Version == -1 ? "" : $@" int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+                            int serializedVersionNumber ={(Version == -1 ? "-1; /* versioning disabled */" : $@" span.ToDecompressedInt(ref bytesSoFar);")}
 
-                        ")}OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+                            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
                             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
                             (ImplementsLazinatorObjectVersionUpgrade && Version != -1
@@ -434,8 +434,8 @@ namespace Lazinator.CodeDescription
                 }
 
                 sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
-                        {(Version == -1 ? "" : $@"public abstract int LazinatorObjectVersion {{ get; set; }}
-                        ")}public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                        public abstract int LazinatorObjectVersion {{ get; set; }}
+                        public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                 }}
             }}
@@ -444,10 +444,8 @@ namespace Lazinator.CodeDescription
             }
 
             string selfSerializationVersionString;
-            if (Version == -1)
-                selfSerializationVersionString = "";
-            else if (ObjectType == LazinatorObjectType.Class)
-                selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};";
+            if (Version == -1 || ObjectType == LazinatorObjectType.Class)
+                selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
             else
             { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 
                 selfSerializationVersionString =
