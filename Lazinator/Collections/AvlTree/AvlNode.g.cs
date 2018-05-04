@@ -39,7 +39,9 @@ namespace Lazinator.Collections.Avl
             {
                 return;
             }
-            
+
+            Debug.WriteLine("Begin deserializing node at " + bytesSoFar); // DEBUG
+
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
             {
@@ -84,9 +86,7 @@ namespace Lazinator.Collections.Avl
         private bool _IsDirty;
         public bool IsDirty
         {
-            [DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -117,9 +117,7 @@ namespace Lazinator.Collections.Avl
         private bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
-            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -171,22 +169,19 @@ namespace Lazinator.Collections.Avl
         private int _Balance;
         public int Balance
         {
-            [DebuggerStepThrough]
             get
             {
                 return _Balance;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _Balance = value;
             }
         }
-        private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Left;
+        public /* DEBUG */ Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Left;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Left
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Left_Accessed)
@@ -209,7 +204,6 @@ namespace Lazinator.Collections.Avl
                 }
                 return _Left;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -222,10 +216,9 @@ namespace Lazinator.Collections.Avl
             }
         }
         internal bool _Left_Accessed;
-        private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Right;
+        public /* DEBUG */ Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Right;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Right
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Right_Accessed)
@@ -248,7 +241,6 @@ namespace Lazinator.Collections.Avl
                 }
                 return _Right;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -264,7 +256,6 @@ namespace Lazinator.Collections.Avl
         private TKey _Key;
         public TKey Key
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Key_Accessed)
@@ -287,7 +278,6 @@ namespace Lazinator.Collections.Avl
                 }
                 return _Key;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -299,7 +289,6 @@ namespace Lazinator.Collections.Avl
         private TValue _Value;
         public TValue Value
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Value_Accessed)
@@ -322,7 +311,6 @@ namespace Lazinator.Collections.Avl
                 }
                 return _Value;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -341,6 +329,7 @@ namespace Lazinator.Collections.Avl
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            Debug.WriteLine($"Balance {bytesSoFar}"); // DEBUG
             _Balance = span.ToDecompressedInt(ref bytesSoFar);
             _Left_ByteIndex = bytesSoFar;
             Debug.WriteLine($"_Left_ByteIndex {_Left_ByteIndex}"); // DEBUG
@@ -372,11 +361,13 @@ namespace Lazinator.Collections.Avl
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             // header information
+            Debug.WriteLine($"Begin node {writer.Position}"); // DEBUG
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            Debug.WriteLine($"Balance {writer.Position}"); // DEBUG
             CompressedIntegralTypes.WriteCompressedInt(writer, _Balance);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
