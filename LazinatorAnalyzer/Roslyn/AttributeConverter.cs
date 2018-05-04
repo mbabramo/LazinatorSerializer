@@ -18,13 +18,22 @@ namespace LazinatorCodeGen.Roslyn
                         return null;
                     var version = attributeData.GetAttributeConstructorValueByParameterName("version");
                     var autogenerate = attributeData.GetAttributeConstructorValueByParameterName("autogenerate");
-                    if (version != null && autogenerate != null)
+                    if (version != null)
                     {
-                        if (!(version is int))
-                            return null;
-                        if (!(autogenerate is bool))
-                            return null;
-                        return new CloneLazinatorAttribute((int)uniqueID, (int)version, (bool)autogenerate);
+                        if (autogenerate == null)
+                        {
+                            if (!(version is int))
+                                return null;
+                            return new CloneLazinatorAttribute((int) uniqueID, (int) version);
+                        }
+                        else
+                        {
+                            if (!(version is int))
+                                return null;
+                            if (!(autogenerate is bool))
+                                return null;
+                            return new CloneLazinatorAttribute((int) uniqueID, (int) version, (bool) autogenerate);
+                        }
                     }
                     else
                         return new CloneLazinatorAttribute((int)uniqueID);

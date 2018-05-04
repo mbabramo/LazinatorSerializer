@@ -16,6 +16,12 @@ namespace Lazinator.Attributes
             Autogenerate = true;
         }
 
+        public LazinatorAttribute(int uniqueID, int version)
+        {
+            UniqueID = uniqueID;
+            Version = version;
+            Autogenerate = true;
+        }
 
         public LazinatorAttribute(int uniqueID, int version, bool autogenerate)
         {

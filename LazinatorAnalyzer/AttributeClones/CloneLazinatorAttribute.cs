@@ -16,6 +16,12 @@ namespace LazinatorCodeGen.AttributeClones
             Autogenerate = true;
         }
 
+        public CloneLazinatorAttribute(int uniqueID, int version)
+        {
+            UniqueID = uniqueID;
+            Version = version;
+            Autogenerate = true;
+        }
 
         public CloneLazinatorAttribute(int uniqueID, int version, bool autogenerate)
         {
