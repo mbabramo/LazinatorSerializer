@@ -700,24 +700,21 @@ namespace Lazinator.CodeDescription
 
         private string GetManualObjectCreation()
         {
-            string creation;
-            if (Container.ObjectType == LazinatorObjectType.Struct)
-                creation = $@"_{PropertyName} = new {FullyQualifiedTypeName}()
-                        {{
-                            DeserializationFactory = DeserializationFactory,
-                            LazinatorObjectBytes = childData,
-                        }};";
-            else 
-                creation = $@"if (childData.Length == 0)
+            // if the container object containing this property is a struct, then we can't set LazinatorParentClass. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
+            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct
+                ? ""
+                : $@"if (childData.Length == 0)
                         {{
                             _{PropertyName} = default;
                         }}
-                        else _{PropertyName} = new {FullyQualifiedTypeName}()
-                        {{
-                            DeserializationFactory = DeserializationFactory,
-                            LazinatorParentClass = this,
-                            LazinatorObjectBytes = childData,
-                        }};";
+                        else ";
+            string lazinatorParentClassSet = Container.ObjectType == LazinatorObjectType.Struct ? "" : $@"
+                            LazinatorParentClass = this,";
+            string creation = $@"{nullItemCheck}_{PropertyName} = new {FullyQualifiedTypeName}()
+                    {{
+                        DeserializationFactory = DeserializationFactory,{lazinatorParentClassSet}
+                        LazinatorObjectBytes = childData,
+                    }};";
             return creation;
         }
 
