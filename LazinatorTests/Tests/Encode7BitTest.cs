@@ -27,7 +27,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedUlong(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedUlong(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -51,7 +51,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedUint(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedUint(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -78,7 +78,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedInt(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedInt(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -106,7 +106,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedShort(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedShort(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -134,7 +134,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableShort(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableShort(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -158,7 +158,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableUshort(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableUshort(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -181,7 +181,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableByte(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableByte(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -201,7 +201,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableBool(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableBool(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -229,7 +229,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableInt(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableInt(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -259,7 +259,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedLong(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedLong(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -290,7 +290,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableLong(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableLong(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -314,7 +314,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedTimeSpan(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedTimeSpan(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -339,7 +339,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableTimeSpan(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableTimeSpan(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -363,7 +363,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedDateTime(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedDateTime(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
@@ -388,7 +388,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedIntegralTypes.WriteCompressedNullableDateTime(writer, valueToWrite);
-                numBytesWritten.Should().Be((int)writer.EndPosition);
+                numBytesWritten.Should().Be((int)writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToDecompressedNullableDateTime(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);

@@ -24,6 +24,9 @@ namespace Lazinator.Collections.Avl
                         _Parent = (AvlNode<TKey, TValue>)LazinatorParentClass;
                 }
 
+	            if (_Parent == this)
+	                throw new Exception("DEBUG -- internal error");
+
 	            return _Parent;
 	        }
 	        set { _Parent = value; }

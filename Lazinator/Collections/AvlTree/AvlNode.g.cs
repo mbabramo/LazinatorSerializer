@@ -343,25 +343,30 @@ namespace Lazinator.Collections.Avl
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Balance = span.ToDecompressedInt(ref bytesSoFar);
             _Left_ByteIndex = bytesSoFar;
+            Debug.WriteLine($"_Left_ByteIndex {_Left_ByteIndex}"); // DEBUG
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             _Right_ByteIndex = bytesSoFar;
+            Debug.WriteLine($"_Right_ByteIndex {_Right_ByteIndex}"); // DEBUG
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             _Key_ByteIndex = bytesSoFar;
+            Debug.WriteLine($"_Key_ByteIndex {_Key_ByteIndex}"); // DEBUG
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             _Value_ByteIndex = bytesSoFar;
+            Debug.WriteLine($"_Value_ByteIndex {_Value_ByteIndex}"); // DEBUG
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            Debug.WriteLine($"After value read {bytesSoFar}"); // DEBUG
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
@@ -375,19 +380,24 @@ namespace Lazinator.Collections.Avl
             CompressedIntegralTypes.WriteCompressedInt(writer, _Balance);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
+                Debug.WriteLine($"Before left {writer.Position}"); // DEBUG
                 WriteChildWithLength(writer, _Left, includeChildrenMode, _Left_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Left_ByteIndex, _Left_ByteLength), verifyCleanness);
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
+                Debug.WriteLine($"Before right {writer.Position}"); // DEBUG
                 WriteChildWithLength(writer, _Right, includeChildrenMode, _Right_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Right_ByteIndex, _Right_ByteLength), verifyCleanness);
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
+                Debug.WriteLine($"Before key {writer.Position}"); // DEBUG
                 WriteChildWithLength(writer, _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength), verifyCleanness);
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
+                Debug.WriteLine($"Before value {writer.Position}"); // DEBUG
                 WriteChildWithLength(writer, _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength), verifyCleanness);
+                Debug.WriteLine($"After value {writer.Position}"); // DEBUG
             }
         }
         

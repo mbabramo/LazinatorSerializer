@@ -260,12 +260,12 @@ namespace Lazinator.Collections
                 _Offsets.IsDirty = true;
                 LazinatorUtilities.WriteToBinaryWithUintLengthPrefix(writer, w =>
                 {
-                    int startingPosition = w.EndPosition;
+                    int startingPosition = w.Position;
                     for (int i = 0; i < UnderlyingList.Count; i++)
                     {
                         var item = i; // avoid closure problem
                         LazinatorUtilities.WriteChildWithoutLength(w, UnderlyingList[item], includeChildrenMode, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness);
-                        var offset = (int) (w.EndPosition - startingPosition);
+                        var offset = (int) (w.Position - startingPosition);
                         _Offsets.AddOffset(offset);
                     }
                 });

@@ -21,7 +21,7 @@ namespace LazinatorTests.Tests
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
                 numBytesWritten = CompressedDecimal.WriteCompressedNullableDecimal(writer, valueToWrite);
-                numBytesWritten.Should().Be((int) writer.EndPosition);
+                numBytesWritten.Should().Be((int) writer.Position);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = CompressedDecimal.ToDecompressedNullableDecimal(bytes.Span, ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);

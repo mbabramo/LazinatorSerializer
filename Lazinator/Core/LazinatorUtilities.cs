@@ -110,14 +110,14 @@ namespace Lazinator.Core
         /// <param name="action">The action to complete</param>
         public static void WriteToBinaryWithUintLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
         {
-            int lengthPosition = writer.EndPosition;
+            int lengthPosition = writer.Position;
             writer.Write((uint)0);
             action(writer);
-            int afterPosition = writer.EndPosition;
-            writer.EndPosition = lengthPosition;
+            int afterPosition = writer.Position;
+            writer.Position = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(uint));
             writer.Write(length);
-            writer.EndPosition = afterPosition; 
+            writer.Position = afterPosition; 
         }
 
         /// <summary>

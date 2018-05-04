@@ -165,7 +165,7 @@ namespace Lazinator.Collections.Avl
         private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Root;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Root
         {
-            [DebuggerStepThrough]
+            //DEBUG[DebuggerStepThrough]
             get
             {
                 if (!_Root_Accessed)
@@ -226,6 +226,7 @@ namespace Lazinator.Collections.Avl
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            Debug.WriteLine("Starting root node at " + writer.Position); // DEBUG
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 WriteChildWithLength(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength), verifyCleanness);

@@ -27,11 +27,11 @@ namespace Lazinator.Buffers
             MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
         }
 
-        public Span<byte> Free => _buffer.Slice(EndPosition);
+        public Span<byte> Free => _buffer.Slice(Position);
 
-        public Span<byte> Written => _buffer.Slice(0, EndPosition);
+        public Span<byte> Written => _buffer.Slice(0, Position);
 
-        public int EndPosition
+        public int Position
         {
             get { return MemoryInBuffer.BytesFilled; }
             set
@@ -42,7 +42,7 @@ namespace Lazinator.Buffers
         }
 
         public void Clear()
-            => EndPosition = 0;
+            => Position = 0;
 
         private void Resize(int desiredBufferSize = 0)
         {
@@ -55,43 +55,43 @@ namespace Lazinator.Buffers
             else if (desiredBufferSize < _buffer.Length + 1) throw new ArgumentOutOfRangeException(nameof(desiredBufferSize));
             var newMemoryInBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
             Written.CopyTo(newMemoryInBuffer.Memory.Span);
-            MemoryInBuffer = new MemoryInBuffer(newMemoryInBuffer, EndPosition); // size written stays the same
+            MemoryInBuffer = new MemoryInBuffer(newMemoryInBuffer, Position); // size written stays the same
         }
 
         public void Write(bool value)
         {
             WriteEnlargingIfNecessary(ref value);
-            EndPosition += sizeof(byte);
+            Position += sizeof(byte);
         }
 
         public void Write(byte value)
         {
             WriteEnlargingIfNecessary(ref value);
-            EndPosition += sizeof(byte);
+            Position += sizeof(byte);
         }
 
         public void Write(sbyte value)
         {
             WriteEnlargingIfNecessary(ref value);
-            EndPosition += sizeof(sbyte);
+            Position += sizeof(sbyte);
         }
 
         public void Write(char value)
         {
             WriteEnlargingIfNecessary(ref value);
-            EndPosition += sizeof(char);
+            Position += sizeof(char);
         }
 
         public void Write(float value)
         {
             WriteEnlargingIfNecessary(ref value);
-            EndPosition += sizeof(float);
+            Position += sizeof(float);
         }
 
         public void Write(double value)
         {
             WriteEnlargingIfNecessary(ref value);
-            EndPosition += sizeof(double);
+            Position += sizeof(double);
         }
 
         public void Write(decimal value)
@@ -117,7 +117,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += 16; // trywritebytes always writes exactly 16 bytes even though sizeof(Guid) is not defined
+            Position += 16; // trywritebytes always writes exactly 16 bytes even though sizeof(Guid) is not defined
         }
 
         private void WriteEnlargingIfNecessary<T>(ref T value) where T : struct
@@ -140,7 +140,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += value.Length;
+            Position += value.Length;
         }
 
         public void Write(short value)
@@ -152,7 +152,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += sizeof(short);
+            Position += sizeof(short);
         }
 
         public void Write(ushort value)
@@ -164,7 +164,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += sizeof(ushort);
+            Position += sizeof(ushort);
         }
 
         public void Write(int value)
@@ -176,7 +176,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += sizeof(int);
+            Position += sizeof(int);
         }
 
         public void Write(uint value)
@@ -188,7 +188,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += sizeof(uint);
+            Position += sizeof(uint);
         }
 
         public void Write(long value)
@@ -200,7 +200,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += sizeof(long);
+            Position += sizeof(long);
         }
 
         public void Write(ulong value)
@@ -212,7 +212,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     Resize();
             }
-            EndPosition += sizeof(ulong);
+            Position += sizeof(ulong);
         }
 
         public void Dispose()

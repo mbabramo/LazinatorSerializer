@@ -20,7 +20,7 @@ namespace LazinatorTests.Tests.AVL
             AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
             tree.DeserializationFactory = new DeserializationFactory(new Type[] { typeof(AvlTree<,>) }, true);
             Dictionary<int, int> items = new Dictionary<int, int>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
                 int k;
                 do
