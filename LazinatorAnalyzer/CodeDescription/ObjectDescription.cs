@@ -243,13 +243,13 @@ namespace Lazinator.CodeDescription
                             }}
 
                             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+                            
+                            {(Version == -1 ? "" : $@" int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
 
-                            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
-
-                            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+                        ")}OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
                             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
-                            (ImplementsLazinatorObjectVersionUpgrade
+                            (ImplementsLazinatorObjectVersionUpgrade && Version != -1
                                 ? $@"
                             if (serializedVersionNumber < LazinatorObjectVersion)
                             {{
@@ -434,8 +434,8 @@ namespace Lazinator.CodeDescription
                 }
 
                 sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
-                        public abstract int LazinatorObjectVersion {{ get; set; }}
-                        public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                        {(Version == -1 ? "" : $@"public abstract int LazinatorObjectVersion {{ get; set; }}
+                        ")}public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                 }}
             }}
@@ -444,7 +444,9 @@ namespace Lazinator.CodeDescription
             }
 
             string selfSerializationVersionString;
-            if (ObjectType == LazinatorObjectType.Class)
+            if (Version == -1)
+                selfSerializationVersionString = "";
+            else if (ObjectType == LazinatorObjectType.Class)
                 selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};";
             else
             { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 
@@ -497,8 +499,8 @@ namespace Lazinator.CodeDescription
                             " : "")}// header information
                             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
-                            writer.Write((byte)includeChildrenMode);");
+                            {(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
+                        ")}writer.Write((byte)includeChildrenMode);");
 
             sb.AppendLine("// write properties");
 
