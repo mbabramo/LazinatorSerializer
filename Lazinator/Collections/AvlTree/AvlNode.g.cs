@@ -215,7 +215,7 @@ namespace Lazinator.Collections.Avl
                 _Left_Accessed = true;
             }
         }
-        internal bool _Left_Accessed;
+        public bool _Left_Accessed;
         public /* DEBUG */ Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Right;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Right
         {

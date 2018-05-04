@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
@@ -34,6 +35,8 @@ namespace LazinatorTests.Tests.AVL
 
             var enumerated = tree.Select(x => x.Value.Value).ToList();
             AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> clone = tree.CloneLazinatorTyped();
+            Debug.WriteLine("DEBUG1");
+            var DEBUG = clone.Root.Left;
             var enumerated2 = clone.Select(x => x.Value.Value).ToList();
             var correctOrder = items.OrderBy(x => x.Key).Select(x => x.Value).ToList();
             enumerated.SequenceEqual(correctOrder).Should().BeTrue();

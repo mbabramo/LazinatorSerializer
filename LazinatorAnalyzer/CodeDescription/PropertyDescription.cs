@@ -619,7 +619,7 @@ namespace Lazinator.CodeDescription
             string creation;
             if (PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && Container.IsSealed) || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We just follow the same pattern for sealed classes, because we don't have to worry about inheritance. 
+                // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
                 creation = GetManualObjectCreation();
             }
             else
@@ -707,8 +707,12 @@ namespace Lazinator.CodeDescription
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
                         }};";
-            else
-                creation = $@"_{PropertyName} = new {FullyQualifiedTypeName}()
+            else 
+                creation = $@"if (childData.Length == 0)
+                        {{
+                            _{PropertyName} = default;
+                        }}
+                        else _{PropertyName} = new {FullyQualifiedTypeName}()
                         {{
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
