@@ -210,7 +210,11 @@ namespace LazinatorTests.Examples.Generics
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength);
-                        _MyT = new T()
+                        if (childData.Length == 0)
+                        {
+                            _MyT = default;
+                        }
+                        else _MyT = new T()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,

@@ -17,6 +17,11 @@ namespace Lazinator.Core
         private Dictionary<int, Func<ILazinator>> FactoriesByID =
             new Dictionary<int, Func<ILazinator>>();
 
+        public DeserializationFactory(Type type) : this(new Type[] {type}, true)
+        {
+
+        }
+
         public DeserializationFactory(Type[] types, bool loadAllEligibleTypesInCorrespondingAssemblies)
         {
             if (!loadAllEligibleTypesInCorrespondingAssemblies)

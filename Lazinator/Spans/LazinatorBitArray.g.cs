@@ -207,7 +207,11 @@ namespace Lazinator.Spans
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength);
-                        _ByteSpan = new Lazinator.Spans.LazinatorByteSpan()
+                        if (childData.Length == 0)
+                        {
+                            _ByteSpan = default;
+                        }
+                        else _ByteSpan = new Lazinator.Spans.LazinatorByteSpan()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,

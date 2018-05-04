@@ -447,7 +447,7 @@ namespace Lazinator.CodeDescription
             if (ObjectType == LazinatorObjectType.Class)
                 selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};";
             else
-            {
+            { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 
                 selfSerializationVersionString =
                         $@"private bool _LazinatorObjectVersionChanged;
                         private int _LazinatorObjectVersionOverride;

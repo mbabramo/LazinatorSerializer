@@ -165,7 +165,7 @@ namespace Lazinator.Collections.Avl
         private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Root;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Root
         {
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_Root_Accessed)
@@ -211,27 +211,23 @@ namespace Lazinator.Collections.Avl
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            Debug.WriteLine($"_Root_ByteIndex {_Root_ByteIndex}"); // DEBUG
             _Root_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            Debug.WriteLine($"Tree total bytes {bytesSoFar}"); // DEBUG
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            Debug.WriteLine("Serializing tree at " + writer.Position); // DEBUG
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                Debug.WriteLine("Serializing root node at " + writer.Position); // DEBUG
                 WriteChildWithLength(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength), verifyCleanness);
             }
         }

@@ -19,13 +19,10 @@ namespace Lazinator.Collections.Avl
 	            if (_Parent == null)
 	            {
                     if (LazinatorParentClass is AvlTree<TKey, TValue> p)
-	                    _Parent = p.Root;
+	                    _Parent = null;
                     else
                         _Parent = (AvlNode<TKey, TValue>)LazinatorParentClass;
                 }
-
-	            if (_Parent == this)
-	                throw new Exception("DEBUG -- internal error");
 
 	            return _Parent;
 	        }
