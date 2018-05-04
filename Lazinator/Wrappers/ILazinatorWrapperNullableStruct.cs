@@ -8,7 +8,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WrapperNullableStruct)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.WrapperNullableStruct, -1)]
     public interface ILazinatorWrapperNullableStruct<T> where T : struct, ILazinator
     {
         bool HasValue { get; set; }

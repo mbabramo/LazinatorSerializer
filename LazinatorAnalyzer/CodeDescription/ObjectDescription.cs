@@ -244,7 +244,7 @@ namespace Lazinator.CodeDescription
 
                             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
                             
-                            int serializedVersionNumber ={(Version == -1 ? "-1; /* versioning disabled */" : $@" span.ToDecompressedInt(ref bytesSoFar);")}
+                            int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
 
                             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
@@ -444,7 +444,13 @@ namespace Lazinator.CodeDescription
             }
 
             string selfSerializationVersionString;
-            if (Version == -1 || ObjectType == LazinatorObjectType.Class)
+            if (Version == -1)
+                selfSerializationVersionString = $@"public int LazinatorObjectVersion
+                {{
+                    get => -1;
+                    set => throw new Exception(""Lazinator versioning disabled for {ObjectName}."");
+                }}";
+            else if (ObjectType == LazinatorObjectType.Class)
                 selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
             else
             { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 

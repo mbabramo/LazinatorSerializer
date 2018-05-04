@@ -4,7 +4,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableGuid)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableGuid, -1)]
     public interface ILazinatorWrapperNullableGuid : ILazinatorWrapper<Guid?>
     {
     }

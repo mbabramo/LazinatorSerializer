@@ -48,7 +48,7 @@ namespace Lazinator.Wrappers
             
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = -1; /* versioning disabled */
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -180,16 +180,10 @@ namespace Lazinator.Wrappers
         
         public int LazinatorUniqueID => 57;
         
-        private bool _LazinatorObjectVersionChanged;
-        private int _LazinatorObjectVersionOverride;
         public int LazinatorObjectVersion
         {
-            get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : 0;
-            set
-            {
-                _LazinatorObjectVersionOverride = value;
-                _LazinatorObjectVersionChanged = true;
-            }
+            get => -1;
+            set => throw new Exception("Lazinator versioning disabled for LazinatorWrapperInt.");
         }
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
@@ -203,7 +197,6 @@ namespace Lazinator.Wrappers
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _Value);

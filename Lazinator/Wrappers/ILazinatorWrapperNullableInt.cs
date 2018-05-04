@@ -3,7 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableInt)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableInt, -1)]
     public interface ILazinatorWrapperNullableInt : ILazinatorWrapper<int?>
     {
     }
