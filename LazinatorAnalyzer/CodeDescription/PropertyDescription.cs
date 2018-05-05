@@ -646,7 +646,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{(IsGuaranteedSmall ? ", true" : "")});
                         {creation}
                     }}
                     _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized ? $@"
@@ -1245,11 +1245,11 @@ namespace Lazinator.CodeDescription
                 else if (IsNonSerializedType)
                     return ($@"
                     void action(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);");
+                    WriteToBinaryWith{(IsGuaranteedSmall ? "Byte" : "Uint")}LengthPrefix(writer, action);");
                 else
                     return ($@"
                     void action(BinaryBufferWriter w) => {itemString}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);");
+                    WriteToBinaryWith{(IsGuaranteedSmall ? "Byte" : "Uint")}LengthPrefix(writer, action);");
             }
 
             string writeCommand = GetSupportedCollectionWriteCommandsHelper();
@@ -1273,7 +1273,7 @@ namespace Lazinator.CodeDescription
                         $@"
                     if ({itemString} == default({FullyQualifiedTypeName}))
                     {{
-                        writer.Write((uint)0);
+                        writer.Write(({(IsGuaranteedSmall ? "byte" : "uint")})0);
                     }}
                     else 
                     {{
@@ -1515,7 +1515,7 @@ namespace Lazinator.CodeDescription
                     return ($@"
                             if ({itemToConvertItemName} == null)
                             {{
-                                writer.Write((uint) 0);
+                                writer.Write(({(IsGuaranteedSmall ? "byte" : "uint")}) 0);
                             }}
                             else
                             {{
@@ -1531,17 +1531,17 @@ namespace Lazinator.CodeDescription
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
                     return ($@"
                         void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                        WriteToBinaryWithUintLengthPrefix(writer, action{itemName});");
+                        WriteToBinaryWith{(IsGuaranteedSmall ? "Byte" : "Uint")}LengthPrefix(writer, action{itemName});");
                 else
                     return ($@"
                         if ({itemToConvertItemName} == null)
                         {{
-                            writer.Write((uint) 0);
+                            writer.Write(({(IsGuaranteedSmall ? "byte" : "uint")}) 0);
                         }}
                         else
                         {{
                             void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                            WriteToBinaryWithUintLengthPrefix(writer, action{itemName});
+                            WriteToBinaryWith{(IsGuaranteedSmall ? "Byte" : "Uint")}LengthPrefix(writer, action{itemName});
                         }};");
             }
         }

@@ -36,6 +36,7 @@ using LazinatorListContainer = LazinatorTests.Examples.Collections.LazinatorList
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
+using LazinatorTests.Examples.Structs;
 
 namespace LazinatorTests.Tests
 {
@@ -196,6 +197,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ExampleStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
+            await CompleteGenerateCode(typeof(WrapperContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ReflexiveExample), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
             await CompleteGenerateCode(typeof(Abstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(Abstract2), "LazinatorTests", "/Examples/", "Abstract/", ws);

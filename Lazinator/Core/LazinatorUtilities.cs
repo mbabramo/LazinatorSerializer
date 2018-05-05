@@ -198,7 +198,12 @@ namespace Lazinator.Core
             else
             {
                 if (child == null)
-                    writer.Write((uint) 0); // child has been changed to null
+                {
+                    if (restrictLengthTo250Bytes)
+                        writer.Write((byte)0); 
+                    else
+                        writer.Write((uint)0);
+                }
                 else
                 {
                     void action(BinaryBufferWriter w)
@@ -264,13 +269,16 @@ namespace Lazinator.Core
         /// <param name="byteOffset">The byte offset into the parent object of the length prefix for the child object</param>
         /// <param name="byteLength">The byte length of the child, including the length prefix</param>
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength)
+        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool lengthInSingleByte = false)
         {
             if (byteLength <= sizeof(int))
             {
                 return new ReadOnlyMemory<byte>();
             }
-            return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
+            if (lengthInSingleByte)
+                return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
+            else
+                return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
 
         /// <summary>

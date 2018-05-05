@@ -51,6 +51,7 @@
         AbstractGenericContainer,
         ConcreteGenericContainer,
         ExampleInterfaceContainer,
-        ReflexiveExample
+        ReflexiveExample,
+        WrapperContainer
     }
 }

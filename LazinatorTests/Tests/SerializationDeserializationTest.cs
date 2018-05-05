@@ -20,6 +20,7 @@ using System.Collections;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
+using LazinatorTests.Examples.Structs;
 
 namespace LazinatorTests.Tests
 {
@@ -599,7 +600,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void WrapperHasDefaultValue()
         {
-            Example e = new Example();
+            WrapperContainer e = new WrapperContainer();
             var wrappedInt = e.WrappedInt;
             wrappedInt.Value.Should().Be(0);
             var clone = e.CloneLazinatorTyped();
