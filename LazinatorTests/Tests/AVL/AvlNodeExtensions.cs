@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Collections.Avl;
 using Lazinator.Core;
+using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
 	public static class AvlNodeExtensions
 	{
-		public static int Count<TKey>(this AvlNode<TKey, TKey> source) where TKey : ILazinator, new()
+		public static int Count<TKey>(this AvlNode<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
 		{
 			int count = 1;
 
-			AvlNode<TKey, TKey> left = source.Left;
-			AvlNode<TKey, TKey> right = source.Right;
+			AvlNode<TKey, LazinatorWrapperByte> left = source.Left;
+			AvlNode<TKey, LazinatorWrapperByte> right = source.Right;
 
 			if (right != null)
 			{

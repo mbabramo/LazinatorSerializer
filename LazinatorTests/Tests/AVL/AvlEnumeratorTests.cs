@@ -16,7 +16,7 @@ namespace LazinatorTests.AVL
 		{
 			var tree = SetupTree(5, 4, 3, 2, 1);
 
-			var enumerator = new AvlNodeEnumerator<LazinatorWrapperInt, LazinatorWrapperInt>(tree.Root);
+			var enumerator = new AvlNodeEnumerator<LazinatorWrapperInt, LazinatorWrapperByte>(tree.Root);
 
 			for (int i = 1; i <= 5; i++)
 			{
@@ -88,19 +88,19 @@ namespace LazinatorTests.AVL
 			{
 				count++;
 
-				Assert.Equal(count, ((AvlNode<LazinatorWrapperInt, LazinatorWrapperInt>)enumerator.Current).Key.Value);
+				Assert.Equal(count, ((AvlNode<LazinatorWrapperInt, LazinatorWrapperByte>)enumerator.Current).Key.Value);
 			}
 
 			Assert.Equal(5, count);
 		}
 
-		private AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> SetupTree(params int[] values)
+		private AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
+			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperByte>();
 
 			foreach (int value in values)
 			{
-				tree.Insert(value, value);
+				tree.Insert(value, 0);
 			}
 
 			return tree;
