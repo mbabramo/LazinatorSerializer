@@ -55,6 +55,7 @@ namespace Lazinator.CodeDescription
         public bool TrackDirtinessNonSerialized { get; set; }
         public string ReadVersionNumberConditional { get; set; }
         public string WriteVersionNumberConditional { get; set; }
+        public bool IsGuaranteedSmall { get; set; }
 
         public override string ToString()
         {
@@ -300,6 +301,10 @@ namespace Lazinator.CodeDescription
                     throw new Exception(
                         "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
                 UniqueIDForLazinatorType = attribute.UniqueID;
+                CloneSmallLazinatorAttribute smallAttribute =
+                    Container.CodeFiles.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
+                if (smallAttribute != null)
+                    IsGuaranteedSmall = true;
             }
 
             if (t.IsGenericType)

@@ -121,6 +121,23 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Completes an action to write to binary, but then prefixes the binary writer with the total length of what was written, excluding the length itself
+        /// </summary>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="action">The action to complete</param>
+        public static void WriteToBinaryWithByteLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
+        {
+            int lengthPosition = writer.Position;
+            writer.Write((byte)0);
+            action(writer);
+            int afterPosition = writer.Position;
+            writer.Position = lengthPosition;
+            int length = (afterPosition - lengthPosition - sizeof(byte));
+            writer.Write(length);
+            writer.Position = afterPosition;
+        }
+
+        /// <summary>
         /// Initiates a binary write to a child of a self-serialized object, without any length information. 
         /// </summary>
         /// <param name="writer">The binary writer</param>

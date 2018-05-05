@@ -71,6 +71,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneIgnoreRecordLikeAttribute();
                 case "NonexclusiveLazinatorAttribute":
                     return new CloneNonexclusiveLazinatorAttribute();
+                case "SmallLazinatorAttribute":
+                    return new CloneSmallLazinatorAttribute();
                 default:
                     return null;
             }
