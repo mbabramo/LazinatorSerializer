@@ -166,6 +166,14 @@ namespace Lazinator.CodeDescription
                 }
             }
 
+            string resetAccessed = "";
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            {
+                resetAccessed += $"_{property.PropertyName}_Accessed = ";
+            }
+            if (resetAccessed != "")
+                resetAccessed += "false;";
+
             if (!IsDerivedFromNonAbstractLazinator)
             {
                 string boilerplate;
@@ -213,6 +221,10 @@ namespace Lazinator.CodeDescription
 			                get;
 			                set;
                         }}
+
+                        public abstract void LazinatorConvertToBytes();
+                        public abstract GetBinaryHashCode32();
+                        public abstract GetBinaryHashCode64();
 
                         /* Field boilerplate */
         
@@ -366,11 +378,36 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
+                        public {DerivationKeyword}void LazinatorConvertToBytes()
+                        {{
+                            if (!IsDirty)
+                            {{
+                                return;
+                            }}
+                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            _IsDirty = false;
+                            LazinatorObjectBytes = bytes.FilledMemory;{(resetAccessed != "" ? $@"
+                            {resetAccessed}": "")}
+                        }}
+
+                        public {DerivationKeyword}uint GetBinaryHashCode32()
+                        {{
+                            LazinatorConvertToBytes();
+                            return Farmhash.Hash32(LazinatorObjectBytes.Span);
+                        }}
+
+                        public {DerivationKeyword}ulong GetBinaryHashCode64()
+                        {{
+                            LazinatorConvertToBytes();
+                            return Farmhash.Hash64(LazinatorObjectBytes.Span);
+                        }}
+
                         /* Field boilerplate */
         
                 ";
                 }
 
+                
                 sb.Append(boilerplate);
             }
             else if (!IsAbstract)
