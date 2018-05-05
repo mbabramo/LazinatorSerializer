@@ -39,6 +39,7 @@ namespace Lazinator.Collections.Avl
 	                return null;
 	            if (p.Left == current)
 	                return p;
+	            current = p;
 	        }
 	    }
 

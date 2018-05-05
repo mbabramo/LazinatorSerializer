@@ -48,7 +48,7 @@ namespace LazinatorTests.AVL
                 if (!ints.Contains(x))
                 {
                     var node = tree.SearchMatchOrNext(x);
-                    if (x == ints.Max())
+                    if (x > ints.Max())
                         node.Should().BeNull();
                     else
                     {
