@@ -26,8 +26,11 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            var other = (LazinatorWrapperNullableDateTime)obj;
-            return Equals(Value, other.Value);
+            if (obj is DateTime v)
+                return Value == v;
+            else if (obj is LazinatorWrapperNullableDateTime w)
+                return Value == w.Value;
+            return false;
         }
     }
 }

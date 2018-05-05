@@ -26,8 +26,11 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            var other = (LazinatorWrapperNullableTimeSpan)obj;
-            return Equals(Value, other.Value);
+            if (obj is TimeSpan v)
+                return Value == v;
+            else if (obj is LazinatorWrapperNullableTimeSpan w)
+                return Value == w.Value;
+            return false;
         }
     }
 }

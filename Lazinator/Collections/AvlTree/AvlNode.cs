@@ -28,5 +28,19 @@ namespace Lazinator.Collections.Avl
 	        }
 	        set { _Parent = value; }
 	    }
+
+	    public AvlNode<TKey, TValue> GetNextNode()
+	    {
+	        AvlNode<TKey, TValue> current = this;
+	        while (true)
+	        {
+	            var p = current.Parent;
+	            if (p == null)
+	                return null;
+	            if (p.Left == current)
+	                return p;
+	        }
+	    }
+
     }
 }

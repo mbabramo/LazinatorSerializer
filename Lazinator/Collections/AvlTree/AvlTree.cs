@@ -55,7 +55,32 @@ namespace Lazinator.Collections.Avl
 			return false;
 		}
 
-		public bool Insert(TKey key, TValue value)
+        public AvlNode<TKey, TValue> SearchMatchOrNext(TKey key)
+        {
+            AvlNode<TKey, TValue> node = Root;
+
+            while (true)
+            {
+                if (_comparer.Compare(key, node.Key) < 0)
+                {
+                    if (node.Left == null)
+                        return node;
+                    node = node.Left;
+                }
+                else if (_comparer.Compare(key, node.Key) > 0)
+                {
+                    if (node.Right == null)
+                        return node.GetNextNode();
+                    node = node.Right;
+                }
+                else
+                {
+                    return node;
+                }
+            }
+        }
+
+        public bool Insert(TKey key, TValue value)
 		{
 			AvlNode<TKey, TValue> node = Root;
 

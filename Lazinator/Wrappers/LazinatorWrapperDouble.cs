@@ -26,8 +26,11 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            var other = (LazinatorWrapperDouble)obj;
-            return Value == other.Value;
+            if (obj is double v)
+                return Value == v;
+            else if (obj is LazinatorWrapperDouble w)
+                return Value == w.Value;
+            return false;
         }
 
         public int CompareTo(object obj)

@@ -26,8 +26,11 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            var other = (LazinatorWrapperNullableDecimal)obj;
-            return Equals(Value, other.Value);
+            if (obj is decimal v)
+                return Value == v;
+            else if (obj is LazinatorWrapperNullableDecimal w)
+                return Value == w.Value;
+            return false;
         }
     }
 }
