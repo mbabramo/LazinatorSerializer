@@ -1,6 +1,7 @@
 ﻿using System;
-using Lazinator.Buffers; 
+using Lazinator.Buffers;
 using Lazinator.Core;
+using Lazinator.Wrappers;
 using static Lazinator.Core.LazinatorUtilities;
 
 namespace LazinatorTests.Examples

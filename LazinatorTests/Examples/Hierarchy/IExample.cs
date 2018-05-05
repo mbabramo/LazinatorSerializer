@@ -1,6 +1,7 @@
 ﻿using System;
 using Lazinator.Attributes;
 using Lazinator.Core;
+using Lazinator.Wrappers;
 using LazinatorTests.Examples;
 
 namespace LazinatorTests.Examples
@@ -31,5 +32,6 @@ namespace LazinatorTests.Examples
         uint MyUint { get; set; }
         TestEnum MyTestEnum { get; set; }
         TestEnumByte? MyTestEnumByteNullable { get; set; }
+        LazinatorWrapperInt WrappedInt { get; set; }
     }
 }
