@@ -133,7 +133,9 @@ namespace Lazinator.Core
             int afterPosition = writer.Position;
             writer.Position = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(byte));
-            writer.Write(length);
+            if (length > 250)
+                throw new Exception("Writing with byte length prefix limited to items no more than 250 bytes.");
+            writer.Write((byte) length);
             writer.Position = afterPosition;
         }
 

@@ -597,6 +597,16 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void WrapperHasDefaultValue()
+        {
+            Example e = new Example();
+            var wrappedInt = e.WrappedInt;
+            wrappedInt.Value.Should().Be(0);
+            var clone = e.CloneLazinatorTyped();
+            clone.WrappedInt.Value.Should().Be(0);
+        }
+
+        [Fact]
         public void NonLazinatorContainerWorks()
         {
             NonLazinatorContainer c = new NonLazinatorContainer()
@@ -1939,7 +1949,7 @@ namespace LazinatorTests.Tests
                     MyNullableTimeSpan = TimeSpan.FromHours(3),
                     MyDateTime = new DateTime(2000, 1, 1),
                     MyTestEnum = TestEnum.MyTestValue2,
-                    MyTestEnumByteNullable = null
+                    MyTestEnumByteNullable = null,
                     WrappedInt = 5
 
                 };
@@ -2018,7 +2028,7 @@ namespace LazinatorTests.Tests
             if ((example1 == null) != (example2 == null))
                 return false;
             example1.DeserializationFactory = example2.DeserializationFactory = GetDeserializationFactory();
-            return example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUint == example2.MyUint && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan && example1.WrappedInt.Equals(example2.WrappedInt) && ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2) && InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer) && NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
+            return example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUint == example2.MyUint && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan && ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2) && InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer) && NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
         }
 
         public bool ExampleChildEqual(ExampleChild child1, ExampleChild child2)
