@@ -157,6 +157,30 @@ namespace LazinatorTests.Examples.Generics
             }
         }
         
+        public virtual void LazinatorConvertToBytes()
+        {
+            if (!IsDirty)
+            {
+                return;
+            }
+            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _IsDirty = false;
+            LazinatorObjectBytes = bytes.FilledMemory;
+            _ClosedGeneric_Accessed = false;
+        }
+        
+        public virtual uint GetBinaryHashCode32()
+        {
+            LazinatorConvertToBytes();
+            return Farmhash.Hash32(LazinatorObjectBytes.Span);
+        }
+        
+        public virtual ulong GetBinaryHashCode64()
+        {
+            LazinatorConvertToBytes();
+            return Farmhash.Hash64(LazinatorObjectBytes.Span);
+        }
+        
         /* Field boilerplate */
         
         internal int _ClosedGeneric_ByteIndex;

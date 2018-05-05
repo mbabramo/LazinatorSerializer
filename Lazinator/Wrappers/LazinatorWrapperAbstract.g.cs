@@ -67,6 +67,10 @@ namespace Lazinator.Wrappers
             set;
         }
         
+        public abstract void LazinatorConvertToBytes();
+        public abstract uint GetBinaryHashCode32();
+        public abstract ulong GetBinaryHashCode64();
+        
         /* Field boilerplate */
         
         public abstract T Value

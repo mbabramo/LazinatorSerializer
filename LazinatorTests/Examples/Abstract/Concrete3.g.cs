@@ -157,6 +157,29 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
+        public override void LazinatorConvertToBytes()
+        {
+            if (!IsDirty)
+            {
+                return;
+            }
+            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _IsDirty = false;
+            LazinatorObjectBytes = bytes.FilledMemory;
+        }
+        
+        public override uint GetBinaryHashCode32()
+        {
+            LazinatorConvertToBytes();
+            return Farmhash.Hash32(LazinatorObjectBytes.Span);
+        }
+        
+        public override ulong GetBinaryHashCode64()
+        {
+            LazinatorConvertToBytes();
+            return Farmhash.Hash64(LazinatorObjectBytes.Span);
+        }
+        
         /* Field boilerplate */
         
         

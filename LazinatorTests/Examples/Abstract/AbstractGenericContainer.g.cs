@@ -67,6 +67,10 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
+        public abstract void LazinatorConvertToBytes();
+        public abstract uint GetBinaryHashCode32();
+        public abstract ulong GetBinaryHashCode64();
+        
         /* Field boilerplate */
         
         public abstract LazinatorTests.Examples.Abstract.IAbstractGeneric1<T> Item

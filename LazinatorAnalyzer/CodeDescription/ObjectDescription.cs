@@ -223,8 +223,8 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void LazinatorConvertToBytes();
-                        public abstract GetBinaryHashCode32();
-                        public abstract GetBinaryHashCode64();
+                        public abstract uint GetBinaryHashCode32();
+                        public abstract ulong GetBinaryHashCode64();
 
                         /* Field boilerplate */
         

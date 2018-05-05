@@ -157,6 +157,29 @@ namespace Lazinator.Wrappers
             }
         }
         
+        public void LazinatorConvertToBytes()
+        {
+            if (!IsDirty)
+            {
+                return;
+            }
+            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _IsDirty = false;
+            LazinatorObjectBytes = bytes.FilledMemory;
+        }
+        
+        public uint GetBinaryHashCode32()
+        {
+            LazinatorConvertToBytes();
+            return Farmhash.Hash32(LazinatorObjectBytes.Span);
+        }
+        
+        public ulong GetBinaryHashCode64()
+        {
+            LazinatorConvertToBytes();
+            return Farmhash.Hash64(LazinatorObjectBytes.Span);
+        }
+        
         /* Field boilerplate */
         
         internal int _NonNullValue_ByteIndex;
