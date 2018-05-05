@@ -3,6 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
+    [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableLong, -1)]
     public interface ILazinatorWrapperNullableLong : ILazinatorWrapper<long?>
     {

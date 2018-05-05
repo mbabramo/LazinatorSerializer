@@ -3,6 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
+    [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperFloat, -1)]
     public interface ILazinatorWrapperFloat : ILazinatorWrapper<float>
     {
