@@ -159,7 +159,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void LazinatorConvertToBytes()
         {
-            if (!IsDirty)
+            if (!IsDirty && !DescendantIsDirty)
             {
                 return;
             }

@@ -160,7 +160,7 @@ namespace Lazinator.Collections
         
         public void LazinatorConvertToBytes()
         {
-            if (!IsDirty)
+            if (!IsDirty && !DescendantIsDirty)
             {
                 return;
             }

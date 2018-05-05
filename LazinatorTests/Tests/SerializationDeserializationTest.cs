@@ -1866,7 +1866,6 @@ namespace LazinatorTests.Tests
             var clone3 = example.CloneLazinatorTyped();
             clone3.GetBinaryHashCode32().Should().Be(hash32c);
             clone3.GetBinaryHashCode64().Should().Be(hash64c);
-
         }
 
         [Fact]

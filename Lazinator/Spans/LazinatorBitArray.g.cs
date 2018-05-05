@@ -159,7 +159,7 @@ namespace Lazinator.Spans
         
         public void LazinatorConvertToBytes()
         {
-            if (!IsDirty)
+            if (!IsDirty && !DescendantIsDirty)
             {
                 return;
             }

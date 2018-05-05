@@ -159,7 +159,7 @@ namespace Lazinator.Collections.Avl
         
         public virtual void LazinatorConvertToBytes()
         {
-            if (!IsDirty)
+            if (!IsDirty && !DescendantIsDirty)
             {
                 return;
             }
