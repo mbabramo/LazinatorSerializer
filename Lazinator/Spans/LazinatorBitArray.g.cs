@@ -290,7 +290,7 @@ namespace Lazinator.Spans
             CompressedIntegralTypes.WriteCompressedInt(writer, _m_length);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                WriteChildWithLength(writer, _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength), verifyCleanness);
+                WriteChildWithLength(writer, _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength), verifyCleanness, false);
             }
         }
         

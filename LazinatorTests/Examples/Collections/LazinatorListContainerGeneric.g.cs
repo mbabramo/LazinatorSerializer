@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                WriteChildWithLength(writer, _MyList, includeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength), verifyCleanness);
+                WriteChildWithLength(writer, _MyList, includeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength), verifyCleanness, false);
             }
         }
         

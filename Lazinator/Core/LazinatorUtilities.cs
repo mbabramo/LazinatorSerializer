@@ -173,10 +173,14 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child</param>
+        /// <param name="includeChildrenMode"></param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child, IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed, ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness) where T : ILazinator
+        /// <param name="restrictLengthTo250Bytes"></param>
+        public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child,
+            IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
+            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes) where T : ILazinator
         {
             if (!childHasBeenAccessed && child != null)
                 childHasBeenAccessed = true; // child is an uninitialized struct
@@ -184,7 +188,10 @@ namespace Lazinator.Core
             {
                 // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
                 ReadOnlyMemory<byte> childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
-                childStorage.Span.Write_WithUintLengthPrefix(writer);
+                if (restrictLengthTo250Bytes)
+                    childStorage.Span.Write_WithUintLengthPrefix(writer);
+                else
+                    childStorage.Span.Write_WithByteLengthPrefix(writer);
             }
             else
             {
@@ -199,7 +206,10 @@ namespace Lazinator.Core
                         else
                             child.LazinatorObjectBytes.Span.Write(w); // the child has been accessed, but is unchanged, so we can use the storage holding the child
                     }
-                    LazinatorUtilities.WriteToBinaryWithUintLengthPrefix(writer, action);
+                    if (restrictLengthTo250Bytes)
+                        LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(writer, action);
+                    else
+                        LazinatorUtilities.WriteToBinaryWithUintLengthPrefix(writer, action);
                 }
             }
         }

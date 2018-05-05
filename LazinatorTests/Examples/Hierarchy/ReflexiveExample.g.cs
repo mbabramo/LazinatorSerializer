@@ -298,11 +298,11 @@ namespace LazinatorTests.Examples.Hierarchy
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                WriteChildWithLength(writer, _ReflexiveClass, includeChildrenMode, _ReflexiveClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ReflexiveClass_ByteIndex, _ReflexiveClass_ByteLength), verifyCleanness);
+                WriteChildWithLength(writer, _ReflexiveClass, includeChildrenMode, _ReflexiveClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ReflexiveClass_ByteIndex, _ReflexiveClass_ByteLength), verifyCleanness, false);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                WriteChildWithLength(writer, _ReflexiveInterface, includeChildrenMode, _ReflexiveInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ReflexiveInterface_ByteIndex, _ReflexiveInterface_ByteLength), verifyCleanness);
+                WriteChildWithLength(writer, _ReflexiveInterface, includeChildrenMode, _ReflexiveInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ReflexiveInterface_ByteIndex, _ReflexiveInterface_ByteLength), verifyCleanness, false);
             }
         }
         

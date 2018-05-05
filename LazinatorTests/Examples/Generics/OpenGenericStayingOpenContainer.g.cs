@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples.Generics
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                WriteChildWithLength(writer, _ClosedGeneric, includeChildrenMode, _ClosedGeneric_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength), verifyCleanness);
+                WriteChildWithLength(writer, _ClosedGeneric, includeChildrenMode, _ClosedGeneric_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength), verifyCleanness, false);
             }
         }
         
