@@ -23,6 +23,12 @@ namespace Lazinator.Collections.Avl
 
 		}
 
+        public void SetComparer(IComparer<TKey> comparer)
+        {
+            // this method can be used to reset the comparer after deserialization
+            _comparer = comparer;
+        }
+
 		public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
 		{
 			return new AvlNodeEnumerator<TKey, TValue>(Root);
