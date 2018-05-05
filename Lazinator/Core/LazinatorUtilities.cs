@@ -189,9 +189,9 @@ namespace Lazinator.Core
                 // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
                 ReadOnlyMemory<byte> childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
                 if (restrictLengthTo250Bytes)
-                    childStorage.Span.Write_WithUintLengthPrefix(writer);
-                else
                     childStorage.Span.Write_WithByteLengthPrefix(writer);
+                else
+                    childStorage.Span.Write_WithUintLengthPrefix(writer);
             }
             else
             {
