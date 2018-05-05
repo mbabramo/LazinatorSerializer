@@ -1838,6 +1838,38 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void BinaryHashCodesWork()
+        {
+            var example = GetHierarchy(1, 1, 1, 1, 0);
+            var hash32 = example.GetBinaryHashCode32();
+            var hash64 = example.GetBinaryHashCode64();
+            var clone = example.CloneLazinatorTyped();
+            clone.GetBinaryHashCode32().Should().Be(hash32);
+            clone.GetBinaryHashCode64().Should().Be(hash64);
+
+            example.MyBool = !example.MyBool;
+            var hash32b = example.GetBinaryHashCode32();
+            var hash64b = example.GetBinaryHashCode64();
+            hash32b.Should().NotBe(hash32);
+            hash64b.Should().NotBe(hash64);
+            var clone2 = example.CloneLazinatorTyped();
+            clone2.GetBinaryHashCode32().Should().Be(hash32b);
+            clone2.GetBinaryHashCode64().Should().Be(hash64b);
+
+            example.MyChild1.MyShort = (short) (example.MyChild1.MyShort + 1);
+            var hash32c = example.GetBinaryHashCode32();
+            var hash64c = example.GetBinaryHashCode64();
+            hash32c.Should().NotBe(hash32);
+            hash64c.Should().NotBe(hash64);
+            hash32c.Should().NotBe(hash32b);
+            hash64c.Should().NotBe(hash64b);
+            var clone3 = example.CloneLazinatorTyped();
+            clone3.GetBinaryHashCode32().Should().Be(hash32c);
+            clone3.GetBinaryHashCode64().Should().Be(hash64c);
+
+        }
+
+        [Fact]
         public void ConfirmSerialization()
         {
             for (int i = 0; i <= 2; i++)

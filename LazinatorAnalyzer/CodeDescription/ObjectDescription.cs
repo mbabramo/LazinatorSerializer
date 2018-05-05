@@ -380,7 +380,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}void LazinatorConvertToBytes()
                         {{
-                            if (!IsDirty)
+                            if (!IsDirty && !DescendantIsDirty)
                             {{
                                 return;
                             }}
