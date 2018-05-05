@@ -69,6 +69,19 @@ namespace Lazinator.Core
         bool DescendantIsDirty { get; set; }
 
         /// <summary>
+        /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.
+        /// </summary>
+        void LazinatorConvertToBytes();
+        /// <summary>
+        /// Calculates a 32-bit noncryptographic hash code based on the bytes of the object.
+        /// </summary>
+        uint GetBinaryHashCode32();
+        /// <summary>
+        /// Calculates a 64-bit noncryptographic hash code based on the bytes of the object.
+        /// </summary>
+        ulong GetBinaryHashCode64();
+
+        /// <summary>
         /// The version number for this object.
         /// </summary>
         int LazinatorObjectVersion { get; set; }
