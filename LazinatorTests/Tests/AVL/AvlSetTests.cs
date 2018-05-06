@@ -10,7 +10,7 @@ using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
-    public class AvlTreeSearchTests
+    public class AvlSetTests
     {
         [Fact]
         public void AvlSetSearchWorks()
@@ -35,6 +35,28 @@ namespace LazinatorTests.AVL
             ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
                 set.Insert(x);
+        }
+
+        [Fact]
+        public void AvlMultisetWorks()
+        {
+            AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>();
+            s.Insert(3);
+            s.Insert(5);
+            s.Insert(5);
+            s.Contains(2).Should().BeFalse();
+            s.Contains(3).Should().BeTrue();
+            s.Contains(4).Should().BeFalse();
+            s.Contains(5).Should().BeTrue();
+            s.Contains(6).Should().BeFalse();
+            s.NumItemsAdded.Should().Be(3);
+            s.RemoveFirstMatchIfExists(5);
+            s.Contains(5).Should().BeTrue();
+            s.RemoveFirstMatchIfExists(5);
+            s.Contains(5).Should().BeFalse();
+            s.RemoveFirstMatchIfExists(4);
+            // DEBUG -- must implement Count (also for AvlSet) and GetEnumerator().
+            
         }
 
         [Fact]
