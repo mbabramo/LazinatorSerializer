@@ -8,10 +8,8 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.AvlTree
 {
-    public class AvlSet<TKey> : IEnumerable<TKey> where TKey : ILazinator, new()
+    public partial class AvlSet<TKey> : IAvlSet<TKey>, IEnumerable<TKey> where TKey : ILazinator, new()
     {
-
-        private AvlTree<TKey, LazinatorWrapperByte> UnderlyingTree;
 
         public AvlSet(IComparer<TKey> comparer)
         {
@@ -21,6 +19,11 @@ namespace Lazinator.Collections.AvlTree
         public AvlSet() : base()
         {
             UnderlyingTree = new AvlTree<TKey, LazinatorWrapperByte>();
+        }
+
+        public void SetComparer(IComparer<TKey> comparer)
+        {
+            UnderlyingTree.SetComparer(comparer);
         }
 
         public bool Contains(TKey key)
@@ -37,6 +40,11 @@ namespace Lazinator.Collections.AvlTree
         public bool Insert(TKey key)
         {
             return UnderlyingTree.Insert(key, 0);
+        }
+
+        public void Delete(TKey key)
+        {
+            UnderlyingTree.Delete(key);
         }
 
         public IEnumerator GetEnumerator()

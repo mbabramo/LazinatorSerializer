@@ -52,5 +52,7 @@ namespace Lazinator.Collections
         AvlNode,
         AvlTree,
         LazinatorTuple,
+        AvlMultiset,
+        AvlSet,
     }
 }
