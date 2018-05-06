@@ -134,6 +134,7 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);

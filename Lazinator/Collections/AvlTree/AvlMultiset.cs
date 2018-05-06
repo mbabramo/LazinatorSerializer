@@ -7,6 +7,8 @@
 //{
 //    public class AvlMultiset<T> where T : ILazinator, new()
 //    {
+//        private AvlSet<Tuple<int, int>> UnderlyingSet;
+
 //        public AvlSet(IComparer<TKey> comparer) : base(comparer)
 //        {
 //        }

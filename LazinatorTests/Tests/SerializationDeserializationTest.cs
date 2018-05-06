@@ -1275,6 +1275,17 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorTuple()
         {
+            LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString> item =
+                new LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString>(new LazinatorWrapperInt() {Value = 5},
+                    new LazinatorWrapperString() {Value = "hello"});
+            var clone = item.CloneLazinatorTyped();
+            clone.Item1.Value.Should().Be(5);
+            clone.Item2.Value.Should().Be("hello");
+        }
+
+        [Fact]
+        public void LazinatorRegularTuple()
+        {
 
             void ConfirmSerializeAndDeserialize(int secondIndex, int thirdIndex)
             {

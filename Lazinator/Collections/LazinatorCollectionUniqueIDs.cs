@@ -51,5 +51,6 @@ namespace Lazinator.Collections
         LazinatorBitArrayUnofficial,
         AvlNode,
         AvlTree,
+        LazinatorTuple,
     }
 }
