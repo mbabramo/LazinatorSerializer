@@ -24,10 +24,10 @@ namespace Lazinator.Collections.AvlTree
             return Search(key, out _);
         }
 
-        public (bool isPastEnd, TKey valueIfNotPastEnd) GetMatchOrNext(TKey key)
+        public (bool valueFound, TKey valueIfFound) GetMatchOrNext(TKey key)
         {
             var matchOrNext = SearchMatchOrNext(key);
-            return (matchOrNext == null, (matchOrNext == null) ? default(TKey) : matchOrNext.Key);
+            return (matchOrNext != null, (matchOrNext == null) ? default(TKey) : matchOrNext.Key);
         }
 
         public bool Insert(TKey key)
@@ -35,14 +35,22 @@ namespace Lazinator.Collections.AvlTree
             return Insert(key, 0);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return AsKeyEnumerator();
+        }
+
+        private IEnumerator<TKey> AsKeyEnumerator()
+        {
+            var baseEnumerator = base.GetEnumerator() as AvlNodeEnumerator<TKey, LazinatorWrapperByte>;
+            return new AvlNodeKeyEnumerator<TKey>(baseEnumerator);
+        }
+
+        public IEnumerable<TKey> AsEnumerable()
+        {
+            var iterator = AsKeyEnumerator();
+            while (iterator.MoveNext())
+                yield return iterator.Current;
         }
     }
 }
