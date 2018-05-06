@@ -8,31 +8,40 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.AvlTree
 {
-    public class AvlSet<TKey> : AvlTree<TKey, LazinatorWrapperByte>, IEnumerable<TKey> where TKey : ILazinator, new()
+    public class AvlSet<TKey> : IEnumerable<TKey> where TKey : ILazinator, new()
     {
-        public AvlSet(IComparer<TKey> comparer) : base(comparer)
+
+        private AvlTree<TKey, LazinatorWrapperByte> UnderlyingTree;
+
+        public AvlSet(IComparer<TKey> comparer)
         {
+            UnderlyingTree = new AvlTree<TKey, LazinatorWrapperByte>(comparer);
         }
 
         public AvlSet() : base()
         {
-
+            UnderlyingTree = new AvlTree<TKey, LazinatorWrapperByte>();
         }
 
         public bool Contains(TKey key)
         {
-            return Search(key, out _);
+            return UnderlyingTree.Search(key, out _);
         }
 
         public (bool valueFound, TKey valueIfFound) GetMatchOrNext(TKey key)
         {
-            var matchOrNext = SearchMatchOrNext(key);
+            var matchOrNext = UnderlyingTree.SearchMatchOrNext(key);
             return (matchOrNext != null, (matchOrNext == null) ? default(TKey) : matchOrNext.Key);
         }
 
         public bool Insert(TKey key)
         {
-            return Insert(key, 0);
+            return UnderlyingTree.Insert(key, 0);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return AsKeyEnumerator();
         }
 
         IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator()
@@ -42,8 +51,8 @@ namespace Lazinator.Collections.AvlTree
 
         private IEnumerator<TKey> AsKeyEnumerator()
         {
-            var baseEnumerator = base.GetEnumerator() as AvlNodeEnumerator<TKey, LazinatorWrapperByte>;
-            return new AvlNodeKeyEnumerator<TKey>(baseEnumerator);
+            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<TKey, LazinatorWrapperByte>;
+            return new AvlNodeKeyEnumerator<TKey>(underlyingEnumerator);
         }
 
         public IEnumerable<TKey> AsEnumerable()

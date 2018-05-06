@@ -15,9 +15,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlSetSearchWorks()
         {
-            AvlSet<LazinatorWrapperInt> set;
-            int[] ints;
-            GetAvlSet(out set, out ints);
+            GetAvlSet(out var set, out var ints);
             foreach (int x in ints)
             {
                 bool found = set.Contains(x);
@@ -42,9 +40,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlSetGetMatchOrNextWorks()
         {
-            AvlSet<LazinatorWrapperInt> set;
-            int[] ints;
-            GetAvlSet(out set, out ints);
+            GetAvlSet(out var set, out var ints);
             foreach (int x in ints)
             {
                 (bool valueFound, LazinatorWrapperInt valueIfFound) = set.GetMatchOrNext(x);
@@ -67,12 +63,9 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlSetEnumeratorWorks()
         {
-            AvlSet<LazinatorWrapperInt> set;
-            int[] ints;
-            GetAvlSet(out set, out ints);
-            var list = set.ToList<LazinatorWrapperInt>();
+            GetAvlSet(out var set, out var ints);
+            var list = set.ToList();
             list.Select(x => x.Value).SequenceEqual(ints).Should().BeTrue();
-            set.AsEnumerable().Select(x => x.Value).SequenceEqual(ints).Should().BeTrue();
         }
 
         [Fact]
