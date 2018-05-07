@@ -39,6 +39,13 @@ namespace LazinatorTests.AVL
         }
 
         [Fact]
+        public void AvlSetSkipWorks()
+        {
+            GetAvlSet(out var set, out var ints);
+            set.Skip(2).Skip(2).First().Value.Should().Be(6);
+        }
+
+        [Fact]
         public void AvlMultisetWorks()
         {
             AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>();
@@ -61,6 +68,16 @@ namespace LazinatorTests.AVL
             s.Count.Should().Be(1);
             s.RemoveFirstMatchIfExists(4);
             s.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void AvlMultisetSkipWorks()
+        {
+            AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>();
+            s.Insert(3);
+            s.Insert(5);
+            s.Insert(5);
+            s.Skip(2).First().Value.Should().Be(5);
         }
 
         [Fact]
