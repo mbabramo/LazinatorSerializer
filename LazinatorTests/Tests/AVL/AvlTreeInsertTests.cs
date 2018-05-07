@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
@@ -31,6 +32,7 @@ namespace LazinatorTests.AVL
                 int itemsToInsertThenDelete = 20;
                 int insertions = itemsToInsert + itemsToInsertThenDelete;
                 AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> tree = BuildTreeInRandomOrder(insertions);
+                tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
                 tree.Root.Count.Should().Be(insertions);
 
                 if (r % 2 == 0)
@@ -47,17 +49,33 @@ namespace LazinatorTests.AVL
 	    [Fact]
 	    public void SkippingWorks()
 	    {
-	        int treeSize = 4;
-	        for (int i = 0; i < treeSize + 1; i++)
-	        {
-	            var tree = BuildTreeInRandomOrder(treeSize);
-	            tree.Root.Print("", false);
-	            var result = tree.Skip(i).FirstOrDefault();
-	            if (i >= treeSize)
-	                result.Should().Be(null);
-	            else
-	                result.Key.Should().Be(i + 1);
-	        }
+	        int treeSize = 100;
+	        var tree = BuildTreeInRandomOrder(treeSize);
+	        //tree.Root.Print("", false);
+            for (int i = 0; i < treeSize + 1; i++)
+            {
+                //Debug.WriteLine($"Skipping {i}");
+                var result = tree.Skip(i).FirstOrDefault();
+                if (i >= treeSize)
+                    result.Should().Be(null);
+                else
+                    result.Key.Should().Be(i + 1);
+            }
+	    }
+
+	    [Fact]
+	    public void SkippingWorksLargeClonedTree()
+	    {
+	        int treeSize = 10000;
+	        var tree = BuildTreeInRandomOrder(treeSize);
+            tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
+	        tree = tree.CloneLazinatorTyped();
+	        int i = 3432;
+	        var result = tree.Skip(i).FirstOrDefault();
+	        if (i >= treeSize)
+	            result.Should().Be(null);
+	        else
+	            result.Key.Should().Be(i + 1);
 	    }
 
         private AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> BuildTreeInRandomOrder(int insertions)

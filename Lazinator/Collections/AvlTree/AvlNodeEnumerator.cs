@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Lazinator.Collections.Avl
 
 		public AvlNodeEnumerator(AvlNode<TKey, TValue> root)
 		{
-			_right = _root = root;
+			_current = _right = _root = root;
 			_nextAction = _root == null ? NextAction.End : NextAction.Right;
 		}
 
@@ -45,72 +46,81 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        private void ConsiderSkip()
+        private bool ConsiderSkip()
         {
-            if (_current == null && _right != null)
-                _current = _right; // we're at root
-            if (SkipPending > 0 && _current?.Left != null)
+            if (_current != null && SkipPending >= _current.Count && SkipPending > 1)
             {
-                // see if we can skip a bunch of nodes
-                int leftCount = _current.Left.Count;
-                if (leftCount > 0 && SkipPending >= leftCount)
-                {
-                    SkipPending -= leftCount;
-                    _current = _current.Left;
-                    _nextAction = NextAction.Parent;
-                }
+                Debug.WriteLine($"Skipping {SkipPending} at {_current.Key}, next action is parent");
+                SkipPending -= _current.Count;
+                _nextAction = NextAction.Parent;
+                return true;
             }
+
+            return false;
         }
 
         public bool MoveNext()
         {
             ProcessPendingSkips();
+            if (SkipPending == -1)
+                return true;
             if (_current == null)
                 return false;
             return MoveNextHelper();
         }
 
         private bool MoveNextHelper()
-		{
-		    switch (_nextAction)
+        {
+            startAgain: // acceptable use of goto
+            switch (_nextAction)
 		    {
 		        case NextAction.Right:
-                    ConsiderSkip();
-                    if (_nextAction == NextAction.Parent)
-                        goto parentMove; // do next switch statement
+		            Debug.WriteLine($"Action right at {_current.Key}");
+                    if (ConsiderSkip())
+                        goto startAgain;
 
                     _current = _right;
 
 		            while (_current.Left != null)
 		            {
+		                Debug.WriteLine($"Moving left at {_current.Key}");
                         _current = _current.Left;
-		            }
+		                Debug.WriteLine($"Now at {_current.Key}");
+                        if (ConsiderSkip())
+		                    goto startAgain;
+                    }
 
 		            _right = _current.Right;
 		            _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
-		            return true;
+		            Debug.WriteLine($"Enumerating {_current.Key}, next action is {_nextAction}");
+
+                    return true;
 
 		        case NextAction.Parent:
-                    parentMove:
-		            while (_current.Parent != null)
+		            Debug.WriteLine($"Taking parent action at {_current.Key}");
+                    while (_current.Parent != null)
 		            {
 		                AvlNode<TKey, TValue> previous = _current;
 
 		                _current = _current.Parent;
 
-		                if (_current.Left == previous)
+		                Debug.WriteLine($"Now at {_current.Key}");
+
+                        if (_current.Left == previous)
 		                {
 		                    _right = _current.Right;
 		                    _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
-
-		                    return true;
+		                    Debug.WriteLine($"Enumerating {_current.Key}, next action is {_nextAction}");
+                            return true;
 		                }
 		            }
 
 		            _nextAction = NextAction.End;
 
-		            return false;
+		            Debug.WriteLine($"Next action is {_nextAction}");
+
+                    return false;
 
 		        default:
 		            return false;
