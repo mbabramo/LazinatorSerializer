@@ -24,7 +24,7 @@ namespace LazinatorTests.AVL
             return source.Insert(key, 0);
         }
 
-        public static int Count<TKey>(this AvlTree<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
+        public static int CountByEnumerating<TKey>(this AvlTree<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
         {
             AvlNode<TKey, LazinatorWrapperByte> node = source.Root;
 
@@ -34,7 +34,7 @@ namespace LazinatorTests.AVL
             }
             else
             {
-                return node.Count();
+                return node.CountByEnumerating();
             }
         }
 

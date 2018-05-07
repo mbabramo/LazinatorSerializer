@@ -11,21 +11,42 @@ namespace Lazinator.Collections.Avl
 	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator, new() where TValue : ILazinator, new()
     {
 		private AvlNode<TKey, TValue> _root;
-		private Action _action;
+		private NextAction _nextAction;
 		private AvlNode<TKey, TValue> _current;
 		private AvlNode<TKey, TValue> _right;
+        private int SkipPending = 0;
 
 		public AvlNodeEnumerator(AvlNode<TKey, TValue> root)
 		{
 			_right = _root = root;
-			_action = _root == null ? Action.End : Action.Right;
+			_nextAction = _root == null ? NextAction.End : NextAction.Right;
 		}
+
+        public void Skip(int i)
+        {
+            SkipPending += i;
+        }
+
+        private void ProcessPendingSkips()
+        {
+            while (SkipPending > 0)
+            {
+                bool more = MoveNext();
+                if (more)
+                    SkipPending--;
+                else
+                {
+                    SkipPending = 0;
+                    _current = null;
+                }
+            }
+        }
 
 		public bool MoveNext()
 		{
-			switch (_action)
+			switch (_nextAction)
 			{
-				case Action.Right:
+				case NextAction.Right:
 					_current = _right;
 
 					while (_current.Left != null)
@@ -34,11 +55,11 @@ namespace Lazinator.Collections.Avl
 					}
 
 					_right = _current.Right;
-					_action = _right != null ? Action.Right : Action.Parent;
+					_nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
 					return true;
 
-				case Action.Parent:
+				case NextAction.Parent:
 					while (_current.Parent != null)
 					{
 						AvlNode<TKey, TValue> previous = _current;
@@ -48,13 +69,13 @@ namespace Lazinator.Collections.Avl
 						if (_current.Left == previous)
 						{
 							_right = _current.Right;
-							_action = _right != null ? Action.Right : Action.Parent;
+							_nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
 							return true;
 						}
 					}
 
-					_action = Action.End;
+					_nextAction = NextAction.End;
 
 					return false;
 
@@ -66,14 +87,15 @@ namespace Lazinator.Collections.Avl
 		public void Reset()
 		{
 			_right = _root;
-			_action = _root == null ? Action.End : Action.Right;
+			_nextAction = _root == null ? NextAction.End : NextAction.Right;
 		}
 
 		public AvlNode<TKey, TValue> Current
 		{
 			get
 			{
-				return _current;
+			    ProcessPendingSkips();
+			    return _current;
 			}
 		}
 
@@ -89,7 +111,7 @@ namespace Lazinator.Collections.Avl
 		{
 		}
 
-		enum Action
+		enum NextAction
 		{
 			Parent,
 			Right,

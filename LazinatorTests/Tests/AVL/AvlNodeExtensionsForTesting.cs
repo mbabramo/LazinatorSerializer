@@ -11,7 +11,7 @@ namespace LazinatorTests.AVL
 {
 	public static class AvlNodeExtensionsForTesting
 	{
-		public static int Count<TKey>(this AvlNode<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
+		public static int CountByEnumerating<TKey>(this AvlNode<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
 		{
 			int count = 1;
 
@@ -20,12 +20,12 @@ namespace LazinatorTests.AVL
 
 			if (right != null)
 			{
-				count += Count(left);
+				count += CountByEnumerating(left);
 			}
 
 			if (right != null)
 			{
-				count += Count(right);
+				count += CountByEnumerating(right);
 			}
 
 			return count;

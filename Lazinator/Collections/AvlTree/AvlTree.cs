@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,9 +30,18 @@ namespace Lazinator.Collections.Avl
             _comparer = comparer;
         }
 
+        public IEnumerable<AvlNode<TKey, TValue>> Skip(int i)
+        {
+            var enumerator = new AvlNodeEnumerator<TKey, TValue>(Root);
+            enumerator.Skip(i);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
 		public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
 		{
-			return new AvlNodeEnumerator<TKey, TValue>(Root);
+			var enumerator = new AvlNodeEnumerator<TKey, TValue>(Root);
+		    return enumerator;
 		}
 
 		public bool Search(TKey key, out TValue value)
@@ -87,11 +97,24 @@ namespace Lazinator.Collections.Avl
         }
 
         public bool Insert(TKey key, TValue value)
+        {
+            bool returnVal = InsertHelper(key, value);
+            if (Root != null)
+            {
+                Root.RecalculateCount();
+                //Root.Print("", false);
+            }
+            return returnVal;
+        }
+
+        private bool InsertHelper(TKey key, TValue value)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
+			    node.NodeVisitedDuringChange = true;
+
 				int compare = _comparer.Compare(key, node.Key);
 
 				if (compare < 0)
@@ -100,7 +123,7 @@ namespace Lazinator.Collections.Avl
 
 					if (left == null)
 					{
-						node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node };
+						node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
 
 						InsertBalance(node, 1);
 
@@ -117,7 +140,7 @@ namespace Lazinator.Collections.Avl
 
 					if (right == null)
 					{
-						node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node };
+						node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true};
 
 						InsertBalance(node, -1);
 
@@ -136,7 +159,7 @@ namespace Lazinator.Collections.Avl
 				}
 			}
 			
-			Root = new AvlNode<TKey, TValue> { Key = key, Value = value };
+			Root = new AvlNode<TKey, TValue> { Key = key, Value = value, NodeVisitedDuringChange = true };
 
 			return true;
 		}
@@ -194,6 +217,9 @@ namespace Lazinator.Collections.Avl
 			AvlNode<TKey, TValue> right = node.Right;
 			AvlNode<TKey, TValue> rightLeft = right.Left;
 			AvlNode<TKey, TValue> parent = node.Parent;
+		    right.NodeVisitedDuringChange = true;
+            if (rightLeft != null)
+		        rightLeft.NodeVisitedDuringChange = true;
 
 			right.Parent = parent;
 			right.Left = node;
@@ -229,6 +255,9 @@ namespace Lazinator.Collections.Avl
 			AvlNode<TKey, TValue> left = node.Left;
 			AvlNode<TKey, TValue> leftRight = left.Right;
 			AvlNode<TKey, TValue> parent = node.Parent;
+		    left.NodeVisitedDuringChange = true;
+            if (leftRight != null)
+		        leftRight.NodeVisitedDuringChange = true;
 
 			left.Parent = parent;
 			left.Right = node;
@@ -266,8 +295,14 @@ namespace Lazinator.Collections.Avl
 			AvlNode<TKey, TValue> parent = node.Parent;
 			AvlNode<TKey, TValue> leftRightRight = leftRight.Right;
 			AvlNode<TKey, TValue> leftRightLeft = leftRight.Left;
+		    left.NodeVisitedDuringChange = true;
+		    leftRight.NodeVisitedDuringChange = true;
+            if (leftRightRight != null)
+		        leftRightRight.NodeVisitedDuringChange = true;
+            if (leftRightLeft != null)
+		        leftRightLeft.NodeVisitedDuringChange = true;
 
-			leftRight.Parent = parent;
+            leftRight.Parent = parent;
 			node.Left = leftRightRight;
 			left.Right = leftRightLeft;
 			leftRight.Left = left;
@@ -326,8 +361,14 @@ namespace Lazinator.Collections.Avl
 			AvlNode<TKey, TValue> parent = node.Parent;
 			AvlNode<TKey, TValue> rightLeftLeft = rightLeft.Left;
 			AvlNode<TKey, TValue> rightLeftRight = rightLeft.Right;
+		    right.NodeVisitedDuringChange = true;
+		    rightLeft.NodeVisitedDuringChange = true;
+            if (rightLeftLeft != null)
+		        rightLeftLeft.NodeVisitedDuringChange = true;
+            if (rightLeftRight != null)
+		        rightLeftRight.NodeVisitedDuringChange = true;
 
-			rightLeft.Parent = parent;
+            rightLeft.Parent = parent;
 			node.Right = rightLeftLeft;
 			right.Left = rightLeftRight;
 			rightLeft.Right = right;
@@ -379,12 +420,25 @@ namespace Lazinator.Collections.Avl
 			return rightLeft;
 		}
 
-		public bool Delete(TKey key)
+        public bool Delete(TKey key)
+        {
+            bool returnVal = DeleteHelper(key);
+            if (Root != null)
+            {
+                Root.RecalculateCount();
+                //Root.Print("", false);
+            }
+            return returnVal;
+        }
+
+		private bool DeleteHelper(TKey key)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
+			    node.NodeVisitedDuringChange = true;
+
 				if (_comparer.Compare(key, node.Key) < 0)
 				{
 					node = node.Left;
@@ -427,6 +481,7 @@ namespace Lazinator.Collections.Avl
 						else
 						{
 							Replace(node, right);
+						    right.NodeVisitedDuringChange = true;
 
 							DeleteBalance(node, 0);
 						}
@@ -434,12 +489,14 @@ namespace Lazinator.Collections.Avl
 					else if (right == null)
 					{
 						Replace(node, left);
+					    left.NodeVisitedDuringChange = true;
 
 						DeleteBalance(node, 0);
 					}
 					else
 					{
 						AvlNode<TKey, TValue> successor = right;
+					    successor.NodeVisitedDuringChange = true;
 
 						if (successor.Left == null)
 						{
@@ -473,11 +530,14 @@ namespace Lazinator.Collections.Avl
 							while (successor.Left != null)
 							{
 								successor = successor.Left;
+							    successor.NodeVisitedDuringChange = true;
 							}
 
 							AvlNode<TKey, TValue> parent = node.Parent;
 							AvlNode<TKey, TValue> successorParent = successor.Parent;
 							AvlNode<TKey, TValue> successorRight = successor.Right;
+                            if (successorRight != null)
+						        successorRight.NodeVisitedDuringChange = true;
 
 							if (successorParent.Left == successor)
 							{

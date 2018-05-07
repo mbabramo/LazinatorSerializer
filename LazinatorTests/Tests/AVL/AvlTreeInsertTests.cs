@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using Lazinator.Collections.Avl;
+using Lazinator.Core;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
@@ -16,20 +17,58 @@ namespace LazinatorTests.AVL
 		{
 			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperByte>();
 
-			Assert.Equal(0, tree.Count());
+			Assert.Equal(0, tree.CountByEnumerating());
 			AssertTreeValid("", tree);
 		}
 
 	    [Fact]
 	    public void CountingWorks()
 	    {
-	        var items = Enumerable.Range(1, 5).ToList();
-	        Shuffle(items);
-	        var tree = SetupTree(items.ToArray());
-	        tree.Root.Count.Should().Be(5);
+	        for (int r = 0; r < 10; r++)
+            {
+                rng = new Random(r);
+                int itemsToInsert = 100;
+                int itemsToInsertThenDelete = 20;
+                int insertions = itemsToInsert + itemsToInsertThenDelete;
+                AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> tree = BuildTreeInRandomOrder(insertions);
+                tree.Root.Count.Should().Be(insertions);
+
+                if (r % 2 == 0)
+                    tree = tree.CloneLazinatorTyped(); // make sure that cloning has no effect
+
+                var deleteItems = Enumerable.Range(itemsToInsert + 1, itemsToInsertThenDelete).ToList();
+                Shuffle(deleteItems);
+                foreach (int i in deleteItems)
+                    tree.Delete(i).Should().BeTrue();
+                tree.Root.Count.Should().Be(itemsToInsert);
+            }
+        }
+
+	    [Fact]
+	    public void SkippingWorks()
+	    {
+	        int treeSize = 8;
+	        for (int i = 0; i < treeSize + 1; i++)
+	        {
+	            var tree = BuildTreeInRandomOrder(treeSize);
+	            var x = new int[] {3, 5}.Skip(1);
+	            var result = tree.Skip(i).FirstOrDefault();
+	            if (i >= treeSize)
+	                result.Should().Be(null);
+	            else
+	                result.Key.Should().Be(i + 1);
+	        }
 	    }
 
-	    private static Random rng = new Random();
+        private AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> BuildTreeInRandomOrder(int insertions)
+        {
+            var insertItems = Enumerable.Range(1, insertions).ToList();
+            Shuffle(insertItems);
+            var tree = SetupTree(insertItems.ToArray());
+            return tree;
+        }
+
+        private static Random rng = new Random(0);
 
         private static void Shuffle<T>(IList<T> list)
 	    {
@@ -45,11 +84,11 @@ namespace LazinatorTests.AVL
 	    }
 
         [Fact]
-		public void CountMultiple()
+		public void CountByEnumerating()
 		{
 			var tree = SetupTree(20, 8, 22);
 
-			Assert.Equal(3, tree.Count());
+			Assert.Equal(3, tree.CountByEnumerating());
 		}
 
 		[Fact]

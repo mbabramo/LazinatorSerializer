@@ -13,7 +13,6 @@ namespace Lazinator.Collections.Avl
     {
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.
         private AvlNode<TKey, TValue> _Parent;
-
         public AvlNode<TKey, TValue> Parent
         {
             get
@@ -45,19 +44,17 @@ namespace Lazinator.Collections.Avl
             }
         }
 
+        public bool NodeVisitedDuringChange { get; set; }
+
         public void RecalculateCount()
         {
-            var current = this;
-            while (current != null)
+            // The approach here is to recursively visit all nodes visited during a change
+            if (NodeVisitedDuringChange)
             {
-                int count = (current.Left?.Count ?? 0) + (current.Right?.Count ?? 0) + 1;
-                if (current.Count != count)
-                {
-                    current.Count = count;
-                    current = current.Parent;
-                }
-                else
-                    current = null;
+                Left?.RecalculateCount();
+                Right?.RecalculateCount();
+                Count = (Left?.Count ?? 0) + (Right?.Count ?? 0) + 1;
+                NodeVisitedDuringChange = false;
             }
         }
 
@@ -75,7 +72,7 @@ namespace Lazinator.Collections.Avl
                 indent += "| ";
             }
 
-            Debug.WriteLine($"{Key} ({Count})");
+            Debug.WriteLine($"{Key} ({Count}, {NodeVisitedDuringChange})");
 
             Left?.Print(indent, false);
             Right?.Print(indent, true);
