@@ -10,5 +10,7 @@ namespace Lazinator.Collections.Dictionary
     interface ILazinatorDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         LazinatorList<DictionaryBucket<TKey, TValue>> Buckets { get; set; }
+        [SetterAccessibility("private")]
+        int Count { get; }
     }
 }

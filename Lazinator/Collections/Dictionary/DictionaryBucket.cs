@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Lazinator.Core;
 
@@ -7,6 +8,16 @@ namespace Lazinator.Collections.Dictionary
 {
     public partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
+        private bool Initialized;
+        private void Initialize()
+        {
+            Keys = new LazinatorList<TKey>();
+            Values = new LazinatorList<TValue>();
+            Initialized = true;
+        }
+
+        public int Count => Keys.Count;
+
         public bool ContainsKey(TKey key, uint? binaryHashOfKey = null)
         {
             int index = GetKeyIndex(key, binaryHashOfKey);
@@ -21,7 +32,7 @@ namespace Lazinator.Collections.Dictionary
             return Values[index];
         }
 
-        public void DeleteItemAtKey(TKey key, uint? binaryHashOfKey = null)
+        public void RemoveItemAtKey(TKey key, uint? binaryHashOfKey = null)
         {
             int index = GetKeyIndex(key, binaryHashOfKey);
             if (index == -1)
@@ -29,10 +40,18 @@ namespace Lazinator.Collections.Dictionary
             Values.RemoveAt(index);
             Keys.RemoveAt(index);
             _lastSearchRemembered = false;
+            if (!Keys.Any())
+            {
+                Keys = null;
+                Values = null;
+                Initialized = false;
+            }
         }
 
         public void InsertItemAtKey(TKey key, TValue value, uint? binaryHashOfKey = null)
         {
+            if (!Initialized)
+                Initialize();
             int index = GetKeyIndex(key, binaryHashOfKey);
             if (index != -1)
                 Values[index] = value;
@@ -50,6 +69,8 @@ namespace Lazinator.Collections.Dictionary
 
         private int GetKeyIndex(TKey key, uint? binaryHashOfKey)
         {
+            if (!Initialized)
+                return -1;
             if (_lastSearchRemembered && _lastKeySearched.Equals(key))
                 return _lastResult;
             _lastKeySearched = key;
@@ -66,6 +87,11 @@ namespace Lazinator.Collections.Dictionary
                 }
             }
             return _lastResult = -1;
+        }
+
+        public KeyValuePair<TKey, TValue> GetKeyValuePair(int index)
+        {
+            return new KeyValuePair<TKey, TValue>(Keys[index], Values[index]);
         }
     }
 }
