@@ -29,20 +29,12 @@ namespace Lazinator.Collections.Avl
 
         private void ProcessPendingSkips()
         {
-            if (_nextAction == NextAction.Right && SkipPending > 0 && _current.Left != null)
-            {
-                // see if we can skip a bunch of nodes
-                int leftCount = _current.Left.Count;
-                if (leftCount > 0 && SkipPending >= leftCount)
-                {
-                    SkipPending -= leftCount;
-                    _nextAction = NextAction.Parent;
-                }
-            }
+            if (_nextAction == NextAction.Right)
+                ConsiderSkip();
 
             while (SkipPending > 0)
             {
-                bool more = MoveNext();
+                bool more = MoveNextHelper();
                 if (more)
                     SkipPending--;
                 else
@@ -53,12 +45,41 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-		public bool MoveNext()
+        private void ConsiderSkip()
+        {
+            if (_current == null && _right != null)
+                _current = _right; // we're at root
+            if (SkipPending > 0 && _current?.Left != null)
+            {
+                // see if we can skip a bunch of nodes
+                int leftCount = _current.Left.Count;
+                if (leftCount > 0 && SkipPending >= leftCount)
+                {
+                    SkipPending -= leftCount;
+                    _current = _current.Left;
+                    _nextAction = NextAction.Parent;
+                }
+            }
+        }
+
+        public bool MoveNext()
+        {
+            ProcessPendingSkips();
+            if (_current == null)
+                return false;
+            return MoveNextHelper();
+        }
+
+        private bool MoveNextHelper()
 		{
 		    switch (_nextAction)
 		    {
 		        case NextAction.Right:
-		            _current = _right;
+                    ConsiderSkip();
+                    if (_nextAction == NextAction.Parent)
+                        goto parentMove; // do next switch statement
+
+                    _current = _right;
 
 		            while (_current.Left != null)
 		            {
@@ -71,6 +92,7 @@ namespace Lazinator.Collections.Avl
 		            return true;
 
 		        case NextAction.Parent:
+                    parentMove:
 		            while (_current.Parent != null)
 		            {
 		                AvlNode<TKey, TValue> previous = _current;
@@ -105,7 +127,6 @@ namespace Lazinator.Collections.Avl
 		{
 			get
 			{
-			    ProcessPendingSkips();
 			    return _current;
 			}
 		}
