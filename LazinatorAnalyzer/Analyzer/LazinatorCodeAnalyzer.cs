@@ -162,39 +162,45 @@ namespace LazinatorAnalyzer.Analyzer
 
             public void SemanticModelEndAction(SemanticModelAnalysisContext context)
             {
-                if (!CompilationInformation.Any())
+                try
                 {
-                    // No types to consider
-                    return;
-                }
 
-                // Analyze types
-                foreach (var compilationInfoEntry in CompilationInformation)
-                {
-                    var sourceFileInfo = compilationInfoEntry.Value;
-                    if (sourceFileInfo.LazinatorInterface != null 
-                        && sourceFileInfo.LazinatorObject != null 
-                        && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
-                        && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
+                    if (!CompilationInformation.Any())
                     {
-                        bool needsGeneration = sourceFileInfo.CodeBehindLocation == null;
-                        if (!needsGeneration)
+                        // No types to consider
+                        return;
+                    }
+
+                    // Analyze types
+                    foreach (var compilationInfoEntry in CompilationInformation)
+                    {
+                        var sourceFileInfo = compilationInfoEntry.Value;
+                        if (sourceFileInfo.LazinatorInterface != null 
+                            && sourceFileInfo.LazinatorObject != null 
+                            && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
+                            && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                         {
-                            var success = sourceFileInfo.CodeBehindLocation.SourceTree.TryGetRoot(out SyntaxNode root);
-                            if (success)
+                            bool needsGeneration = sourceFileInfo.CodeBehindLocation == null;
+                            if (!needsGeneration)
                             {
-                                SyntaxTrivia possibleComment = root.DescendantTrivia().FirstOrDefault();
-                                if (possibleComment.IsKind(SyntaxKind.SingleLineCommentTrivia))
+                                var success = sourceFileInfo.CodeBehindLocation.SourceTree.TryGetRoot(out SyntaxNode root);
+                                if (success)
                                 {
-                                    string commentContent = possibleComment.ToString().Substring(2);
-                                    bool parse = Guid.TryParse(commentContent, out Guid codeBehindGuid);
-                                    if (parse)
+                                    SyntaxTrivia possibleComment = root.DescendantTrivia().FirstOrDefault();
+                                    if (possibleComment.IsKind(SyntaxKind.SingleLineCommentTrivia))
                                     {
-                                        var interfaceLocations = sourceFileInfo.LazinatorInterface.Locations;
-                                        if (interfaceLocations.Count() != 1)
-                                            return;
-                                        var hash = LazinatorCompilation.GetHashForInterface(sourceFileInfo.LazinatorInterface, sourceFileInfo.LazinatorObject);
-                                        if (hash != codeBehindGuid)
+                                        string commentContent = possibleComment.ToString().Substring(2);
+                                        bool parse = Guid.TryParse(commentContent, out Guid codeBehindGuid);
+                                        if (parse)
+                                        {
+                                            var interfaceLocations = sourceFileInfo.LazinatorInterface.Locations;
+                                            if (interfaceLocations.Count() != 1)
+                                                return;
+                                            var hash = LazinatorCompilation.GetHashForInterface(sourceFileInfo.LazinatorInterface, sourceFileInfo.LazinatorObject);
+                                            if (hash != codeBehindGuid)
+                                                needsGeneration = true;
+                                        }
+                                        else
                                             needsGeneration = true;
                                     }
                                     else
@@ -203,31 +209,34 @@ namespace LazinatorAnalyzer.Analyzer
                                 else
                                     needsGeneration = true;
                             }
-                            else
-                                needsGeneration = true;
-                        }
-                        if (needsGeneration)
-                        {
-                            var locationOfImplementingType = sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
-                            var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
-                            TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax) implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
-                            Location interfaceSpecificationLocation = Location.Create(
-                                locationOfImplementingType.SourceTree,
-                                implementingTypeSyntaxNode.BaseList.Types.First(x => (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? false).Span);
-                            var additionalLocations = new List<Location>();
-                            if (sourceFileInfo.CodeBehindLocation != null)
-                                additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
-                            additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
-                            var config = ConfigLoader.LoadConfigFileAsString(_additionalFiles, context.CancellationToken);
-                            var diagnostic = Diagnostic.Create(OutOfDateRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
-                            context.ReportDiagnostic(diagnostic);
+                            if (needsGeneration)
+                            {
+                                var locationOfImplementingType = sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
+                                var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
+                                TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax) implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
+                                Location interfaceSpecificationLocation = Location.Create(
+                                    locationOfImplementingType.SourceTree,
+                                    implementingTypeSyntaxNode.BaseList.Types.First(x => (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? false).Span);
+                                var additionalLocations = new List<Location>();
+                                if (sourceFileInfo.CodeBehindLocation != null)
+                                    additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
+                                additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
+                                var config = ConfigLoader.LoadConfigFileAsString(_additionalFiles, context.CancellationToken);
+                                var diagnostic = Diagnostic.Create(OutOfDateRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
+                                context.ReportDiagnostic(diagnostic);
+                            }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
-            #endregion
-        }
+        #endregion
+    }
 
         private static TypeDeclarationSyntax GetTypeDeclarationContainingAttribute(SyntaxNode syntaxNode)
         {
