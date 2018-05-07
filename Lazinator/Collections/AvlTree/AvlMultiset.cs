@@ -1,17 +1,49 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Lazinator.Collections.Avl;
 using Lazinator.Core;
+using Lazinator.Support;
 using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.AvlTree
 {
-    public partial class AvlMultiset<T> : IAvlMultiset<T> where T : ILazinator, new()
+    public partial class AvlMultiset<T> : IAvlMultiset<T>, IEnumerable<T> where T : ILazinator, new()
     {
+        public AvlMultiset(IComparer<T> comparer)
+        {
+            // Given comparer, we must define a custom comparer for tuples containing T and an int that indicates the item number added.
+            var customComparer = GetComparerForWrapper(comparer);
+
+            UnderlyingSet = new AvlSet<LazinatorTuple<T, LazinatorWrapperInt>>(customComparer);
+        }
+
+        public void SetComparer(IComparer<T> comparer)
+        {
+            UnderlyingSet.UnderlyingTree.SetComparer(GetComparerForWrapper(comparer));
+        }
+
+        private static CustomComparer<LazinatorTuple<T, LazinatorWrapperInt>> GetComparerForWrapper(IComparer<T> comparer)
+        {
+            var c2 = new CustomComparer<LazinatorTuple<T, LazinatorWrapperInt>>((p0, p1) =>
+            {
+                var r = comparer.Compare(p0.Item1, p1.Item1);
+                if (r == 0)
+                {
+                    return p0.Item2.CompareTo(p1.Item2);
+                }
+                else return r;
+            });
+            return c2;
+        }
+
         public AvlMultiset()
         {
             UnderlyingSet = new AvlSet<LazinatorTuple<T, LazinatorWrapperInt>>();
         }
+
+        public int Count => UnderlyingSet.Count;
 
         public bool Contains(T key)
         {
@@ -39,6 +71,28 @@ namespace Lazinator.Collections.AvlTree
                 UnderlyingSet.Delete(matchOrNext.valueIfFound);
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return AsKeyEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return AsKeyEnumerator();
+        }
+
+        private IEnumerator<T> AsKeyEnumerator()
+        {
+            IEnumerator<LazinatorTuple<T,LazinatorWrapperInt>> underlyingEnumerator = UnderlyingSet.AsKeyEnumerator();
+            return new AvlMultisetEnumerator<T>(underlyingEnumerator);
+        }
+
+        public IEnumerable<T> AsEnumerable()
+        {
+            var iterator = AsKeyEnumerator();
+            while (iterator.MoveNext())
+                yield return iterator.Current;
+        }
 
     }
 }

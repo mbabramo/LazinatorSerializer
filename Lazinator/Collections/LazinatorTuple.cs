@@ -5,7 +5,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorTuple<T, U> : ILazinatorTuple<T, U>, IComparable where T : ILazinator, new() where U : ILazinator, new()
+    public partial class LazinatorTuple<T, U> : ILazinatorTuple<T, U>, IComparable<LazinatorTuple<T,U>> where T : ILazinator, new() where U : ILazinator, new()
     {
         public LazinatorTuple()
         {
@@ -17,9 +17,9 @@ namespace Lazinator.Collections
             Item2 = item2;
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(LazinatorTuple<T, U> other)
         {
-            return ((Item1, Item2)).CompareTo((Item1, Item2));
+            return ((Item1, Item2)).CompareTo((other.Item1, other.Item2));
         }
     }
 }

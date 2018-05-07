@@ -6,6 +6,7 @@ using System.Text;
 using FluentAssertions;
 using Lazinator.Collections.Avl;
 using Lazinator.Collections.AvlTree;
+using Lazinator.Support;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
@@ -47,16 +48,33 @@ namespace LazinatorTests.AVL
             s.Contains(2).Should().BeFalse();
             s.Contains(3).Should().BeTrue();
             s.Contains(4).Should().BeFalse();
+            s.Count.Should().Be(3);
             s.Contains(5).Should().BeTrue();
             s.Contains(6).Should().BeFalse();
             s.NumItemsAdded.Should().Be(3);
+            s.ToList().Select(x => x.Value).SequenceEqual(new int[] {3, 5, 5}).Should().BeTrue();
             s.RemoveFirstMatchIfExists(5);
+            s.Count.Should().Be(2);
             s.Contains(5).Should().BeTrue();
             s.RemoveFirstMatchIfExists(5);
             s.Contains(5).Should().BeFalse();
+            s.Count.Should().Be(1);
             s.RemoveFirstMatchIfExists(4);
-            // DEBUG -- must implement Count (also for AvlSet) and GetEnumerator().
-            
+            s.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void AvlMultisetComparerWorks()
+        {
+            // The AvlMultiset comparer sets the comparer of the underlying set, which sets the comparer of the underlying tree, so this serves to check all their functionality. 
+            CustomComparer<LazinatorWrapperInt> reverseComparer =
+                new CustomComparer<LazinatorWrapperInt>((x, y) => 0 - x.CompareTo(y));
+            AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>(reverseComparer);
+            s.Insert(3);
+            s.Insert(5);
+            s.Insert(5);
+            List<LazinatorWrapperInt> list = s.ToList();
+            list.Select(x => x.Value).SequenceEqual(new int[] {5, 5, 3}).Should().BeTrue();
         }
 
         [Fact]

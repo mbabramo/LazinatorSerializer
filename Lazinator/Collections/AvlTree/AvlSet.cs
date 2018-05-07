@@ -10,7 +10,6 @@ namespace Lazinator.Collections.AvlTree
 {
     public partial class AvlSet<TKey> : IAvlSet<TKey>, IEnumerable<TKey> where TKey : ILazinator, new()
     {
-
         public AvlSet(IComparer<TKey> comparer)
         {
             UnderlyingTree = new AvlTree<TKey, LazinatorWrapperByte>(comparer);
@@ -39,12 +38,18 @@ namespace Lazinator.Collections.AvlTree
 
         public bool Insert(TKey key)
         {
-            return UnderlyingTree.Insert(key, 0);
+            bool notAlreadyPresent = UnderlyingTree.Insert(key, 0);
+            if (notAlreadyPresent)
+                Count++;
+            return notAlreadyPresent;
         }
 
-        public void Delete(TKey key)
+        public bool Delete(TKey key)
         {
-            UnderlyingTree.Delete(key);
+            bool deleted = UnderlyingTree.Delete(key);
+            if (deleted)
+                Count--;
+            return deleted;
         }
 
         public IEnumerator GetEnumerator()
@@ -57,7 +62,7 @@ namespace Lazinator.Collections.AvlTree
             return AsKeyEnumerator();
         }
 
-        private IEnumerator<TKey> AsKeyEnumerator()
+        public IEnumerator<TKey> AsKeyEnumerator()
         {
             var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<TKey, LazinatorWrapperByte>;
             return new AvlNodeKeyEnumerator<TKey>(underlyingEnumerator);

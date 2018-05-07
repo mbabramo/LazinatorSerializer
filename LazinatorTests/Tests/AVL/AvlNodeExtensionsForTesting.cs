@@ -9,7 +9,7 @@ using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
-	public static class AvlNodeExtensions
+	public static class AvlNodeExtensionsForTesting
 	{
 		public static int Count<TKey>(this AvlNode<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
 		{

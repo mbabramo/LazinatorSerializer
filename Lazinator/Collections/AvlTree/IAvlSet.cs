@@ -11,6 +11,7 @@ namespace Lazinator.Collections.AvlTree
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlSet)]
     interface IAvlSet<TKey> where TKey : ILazinator, new()
     {
+        int Count { get; set; }
         AvlTree<TKey, LazinatorWrapperByte> UnderlyingTree { get; set; }
     }
 }
