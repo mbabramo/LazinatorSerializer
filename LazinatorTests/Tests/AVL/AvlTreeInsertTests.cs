@@ -71,7 +71,7 @@ namespace LazinatorTests.AVL
             tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
 	        tree = tree.CloneLazinatorTyped();
 	        Random r = new Random(0);
-	        for (int j = 0; j < 100000; j++)
+	        for (int j = 0; j < 10000; j++)
 	        {
 	            int i = r.Next(11000);
 	            var result = tree.Skip(i).FirstOrDefault();
