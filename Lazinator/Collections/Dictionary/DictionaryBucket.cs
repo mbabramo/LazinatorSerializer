@@ -5,11 +5,8 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
-    internal partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        public LazinatorList<TKey> Keys { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public LazinatorList<TValue> Values { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public bool ContainsKey(TKey key, uint? binaryHashOfKey = null)
         {
             int index = GetKeyIndex(key, binaryHashOfKey);
