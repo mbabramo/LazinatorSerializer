@@ -12,9 +12,6 @@ namespace Lazinator.Collections.Dictionary
         private const int InitialNumBuckets = 10;
         private int NumBuckets => Buckets.Count;
 
-        // DEBUG -- todo: Dynamically adjust number of buckets.
-
-
         public bool IsReadOnly => false;
 
         private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
@@ -218,6 +215,33 @@ namespace Lazinator.Collections.Dictionary
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
             enumerator.Dispose();
+        }
+
+        private void ConsiderResize()
+        {
+            const double sizeDownThreshold = 0.1; // size down rarely
+            const double sizeUpThreshold = 0.8;
+            if (Count < (int) NumBuckets * sizeDownThreshold && NumBuckets > InitialNumBuckets)
+                CompleteResize();
+            else if (Count > (int) NumBuckets * sizeUpThreshold)
+                CompleteResize();
+        }
+
+        private void CompleteResize()
+        {
+            // Note: This is a bit inefficient because it deserializes everything.
+
+            int numBuckets = Count * 3;
+            if (numBuckets < InitialNumBuckets)
+                numBuckets = InitialNumBuckets;
+            var results = GetKeysAndValues().ToList();
+
+            Buckets = new LazinatorList<DictionaryBucket<TKey, TValue>>();
+            for (int i = 0; i < numBuckets; i++)
+                Buckets.Add(new DictionaryBucket<TKey, TValue>());
+
+            foreach (var item in results)
+                Add(item);
         }
     }
 }
