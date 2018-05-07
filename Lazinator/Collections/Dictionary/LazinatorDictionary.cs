@@ -14,6 +14,15 @@ namespace Lazinator.Collections.Dictionary
 
         // DEBUG -- todo: Dynamically adjust number of buckets.
 
+
+        public bool IsReadOnly => false;
+
+        private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
+        {
+            hash = key.GetBinaryHashCode32();
+            bucket = Buckets[(int)hash % InitialNumBuckets];
+        }
+
         public LazinatorDictionary()
         {
             Clear();
@@ -32,42 +41,11 @@ namespace Lazinator.Collections.Dictionary
             set
             {
                 GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+                bool contained = bucket.ContainsKey(key, hash);
                 bucket.InsertItemAtKey(key, value, hash);
+                if (!contained)
+                    Count++;
             }
-        }
-
-        private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
-        {
-            hash = key.GetBinaryHashCode32();
-            bucket = Buckets[(int)hash % InitialNumBuckets];
-        }
-
-        public bool IsReadOnly => throw new NotImplementedException();
-
-        public void Add(TKey key, TValue value)
-        {
-            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            bool contained = bucket.ContainsKey(key, hash);
-            if (contained)
-                throw new ArgumentException();
-            this[key] = value;
-        }
-
-        public void Add(KeyValuePair<TKey, TValue> item)
-        {
-            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            bool contained = bucket.ContainsKey(item.Key, hash);
-            if (contained)
-                throw new ArgumentException();
-            this[item.Key] = item.Value;
-        }
-
-        public void Clear()
-        {
-            Buckets = new LazinatorList<DictionaryBucket<TKey, TValue>>();
-            for (int i = 0; i < InitialNumBuckets; i++)
-                Buckets.Add(new DictionaryBucket<TKey, TValue>());
-            Count = 0;
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -87,9 +65,73 @@ namespace Lazinator.Collections.Dictionary
             return bucket.ContainsKey(key, hash);
         }
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        public bool TryGetValue(TKey key, out TValue value)
         {
-            throw new NotImplementedException();
+            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            if (bucket.ContainsKey(key, hash))
+            {
+                value = bucket.GetValueAtKey(key, hash);
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
+        public void Add(TKey key, TValue value)
+        {
+            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            bool contained = bucket.ContainsKey(key, hash);
+            if (contained)
+                throw new ArgumentException();
+            this[key] = value;
+            Count++;
+        }
+
+        public void Add(KeyValuePair<TKey, TValue> item)
+        {
+            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            bool contained = bucket.ContainsKey(item.Key, hash);
+            if (contained)
+                throw new ArgumentException();
+            this[item.Key] = item.Value;
+            Count++;
+        }
+
+        public bool Remove(TKey key)
+        {
+            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            if (bucket.ContainsKey(key, hash))
+            {
+                bucket.RemoveItemAtKey(key, hash);
+                Count--;
+                return true;
+            }
+            return false;
+        }
+
+        public bool Remove(KeyValuePair<TKey, TValue> item)
+        {
+            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            if (bucket.ContainsKey(item.Key, hash))
+            {
+                TValue itemAtKey = bucket.GetValueAtKey(item.Key, hash);
+                if (item.Value.Equals(itemAtKey))
+                {
+                    bucket.RemoveItemAtKey(item.Key, hash);
+                    Count--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Clear()
+        {
+            Buckets = new LazinatorList<DictionaryBucket<TKey, TValue>>();
+            for (int i = 0; i < InitialNumBuckets; i++)
+                Buckets.Add(new DictionaryBucket<TKey, TValue>());
+            Count = 0;
         }
 
         public class DictionaryEnumerator : IEnumerator<KeyValuePair<TKey, TValue>>
@@ -152,6 +194,15 @@ namespace Lazinator.Collections.Dictionary
             return new DictionaryEnumerator(Buckets);
         }
 
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            int i = 0;
+            foreach (KeyValuePair<TKey, TValue> pair in GetKeysAndValues())
+            {
+                array[arrayIndex + i++] = pair;
+            }
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new DictionaryEnumerator(Buckets);
@@ -167,45 +218,6 @@ namespace Lazinator.Collections.Dictionary
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
             enumerator.Dispose();
-        }
-
-        public bool Remove(TKey key)
-        {
-            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            if (bucket.ContainsKey(key, hash))
-            {
-                bucket.RemoveItemAtKey(key, hash);
-                return true;
-            }
-            return false;
-        }
-
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            if (bucket.ContainsKey(item.Key, hash))
-            {
-                TValue itemAtKey = bucket.GetValueAtKey(item.Key, hash);
-                if (item.Value.Equals(itemAtKey))
-                {
-                    bucket.RemoveItemAtKey(item.Key, hash);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool TryGetValue(TKey key, out TValue value)
-        {
-            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            if (bucket.ContainsKey(key, hash))
-            {
-                value = bucket.GetValueAtKey(key, hash);
-                return true;
-            }
-
-            value = default;
-            return false;
         }
     }
 }
