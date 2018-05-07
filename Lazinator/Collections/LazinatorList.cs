@@ -62,11 +62,12 @@ namespace Lazinator.Collections
 
         public uint GetListMemberHash32(int index)
         {
-            debug; // check whether item is in memory. add test for this.
+            if (FullyDeserialized || (UnderlyingList != null && ItemsAccessedBeforeFullyDeserialized[index]))
+                return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();
+            
             var byteSpan = GetListMemberSlice(index);
-            if (byteSpan.Length == 0)
-                return this[index].GetBinaryHashCode32();
             return Farmhash.Hash32(byteSpan.Span);
+            debug; // test, including nulls
         }
 
         private ReadOnlyMemory<byte> GetListMemberSlice(int index)
