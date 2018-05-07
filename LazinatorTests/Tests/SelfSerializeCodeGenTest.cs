@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using System.Collections.Immutable;
 using Lazinator.Collections.Avl;
 using Lazinator.Collections.AvlTree;
+using Lazinator.Collections.Dictionary;
 using Lazinator.Spans;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
@@ -135,6 +136,7 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(AvlSet<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(AvlMultiset<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);

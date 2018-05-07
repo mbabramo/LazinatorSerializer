@@ -60,6 +60,11 @@ namespace Lazinator.Collections
             return n2;
         }
 
+        public uint GetListMemberHash32(int index)
+        {
+            return Farmhash.Hash32(GetListMemberSlice(index).Span);
+        }
+
         private ReadOnlyMemory<byte> GetListMemberSlice(int index)
         {
             // The 1st item (# 0) has index 0 always, so it's not stored in Offsets.

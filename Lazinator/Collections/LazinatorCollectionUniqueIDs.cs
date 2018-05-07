@@ -54,5 +54,6 @@ namespace Lazinator.Collections
         LazinatorTuple,
         AvlMultiset,
         AvlSet,
+        DictionaryBucket,
     }
 }
