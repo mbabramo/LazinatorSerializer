@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,7 +88,9 @@ namespace Lazinator.Collections.Avl
         }
 
         public bool Insert(TKey key, TValue value)
-		{
+        {
+            Debug.WriteLine($"Insert {key}, {value}");
+
 			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
@@ -100,9 +103,12 @@ namespace Lazinator.Collections.Avl
 
 					if (left == null)
 					{
-						node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node };
+						node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, Count = 1 };
+					    node.RecalculateCount();
 
 						InsertBalance(node, 1);
+
+                        Root.Print("", false); // DEBUG
 
 						return true;
 					}
@@ -117,11 +123,14 @@ namespace Lazinator.Collections.Avl
 
 					if (right == null)
 					{
-						node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node };
+						node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, Count = 1 };
+                        node.RecalculateCount();
 
 						InsertBalance(node, -1);
 
-						return true;
+					    Root.Print("", false); // DEBUG
+
+                        return true;
 					}
 					else
 					{
@@ -132,13 +141,19 @@ namespace Lazinator.Collections.Avl
 				{
 					node.Value = value;
 
-					return false;
+				    Root.Print("", false); // DEBUG
+
+                    return false;
 				}
 			}
 			
 			Root = new AvlNode<TKey, TValue> { Key = key, Value = value };
 
-			return true;
+            Root.Count = 1;
+
+            Root.Print("", false); // DEBUG
+
+            return true;
 		}
 
 		private void InsertBalance(AvlNode<TKey, TValue> node, int balance)
@@ -216,9 +231,10 @@ namespace Lazinator.Collections.Avl
 			else
 			{
 				parent.Left = right;
-			}
+		    }
+		    right.RecalculateCount();
 
-			right.Balance++;
+            right.Balance++;
 			node.Balance = -right.Balance;
 
 			return right;
@@ -251,9 +267,10 @@ namespace Lazinator.Collections.Avl
 			else
 			{
 				parent.Right = left;
-			}
+		    }
+		    left.RecalculateCount();
 
-			left.Balance--;
+            left.Balance--;
 			node.Balance = -left.Balance;
 
 			return left;
@@ -296,9 +313,10 @@ namespace Lazinator.Collections.Avl
 			else
 			{
 				parent.Right = leftRight;
-			}
+		    }
+		    leftRight.RecalculateCount();
 
-			if (leftRight.Balance == -1)
+            if (leftRight.Balance == -1)
 			{
 				node.Balance = 0;
 				left.Balance = 1;
@@ -356,9 +374,10 @@ namespace Lazinator.Collections.Avl
 			else
 			{
 				parent.Left = rightLeft;
-			}
+		    }
+		    rightLeft.RecalculateCount();
 
-			if (rightLeft.Balance == 1)
+            if (rightLeft.Balance == 1)
 			{
 				node.Balance = 0;
 				right.Balance = -1;
@@ -420,9 +439,11 @@ namespace Lazinator.Collections.Avl
 								{
 									parent.Right = null;
 
-									DeleteBalance(parent, 1);
-								}
-							}
+                                    DeleteBalance(parent, 1);
+							    }
+
+							    parent.RecalculateCount();
+                            }
 						}
 						else
 						{
@@ -453,6 +474,7 @@ namespace Lazinator.Collections.Avl
 							if (node == Root)
 							{
 								Root = successor;
+                                Root.RecalculateCount();
 							}
 							else
 							{
@@ -464,6 +486,7 @@ namespace Lazinator.Collections.Avl
 								{
 									parent.Right = successor;
 								}
+                                parent.RecalculateCount();
 							}
 
 							DeleteBalance(successor, 1);
@@ -503,6 +526,7 @@ namespace Lazinator.Collections.Avl
 							if (node == Root)
 							{
 								Root = successor;
+                                Root.RecalculateCount();
 							}
 							else
 							{
@@ -514,6 +538,7 @@ namespace Lazinator.Collections.Avl
 								{
 									parent.Right = successor;
 								}
+                                parent.RecalculateCount();
 							}
 
 							DeleteBalance(successorParent, -1);
@@ -601,6 +626,8 @@ namespace Lazinator.Collections.Avl
 			{
 				right.Parent = target;
 			}
+
+            target.RecalculateCount();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
