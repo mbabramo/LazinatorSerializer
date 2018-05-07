@@ -44,44 +44,63 @@ namespace Lazinator.Collections.Avl
 
 		public bool MoveNext()
 		{
-			switch (_nextAction)
-			{
-				case NextAction.Right:
-					_current = _right;
+		    bool keepGoing = true;
+		    while (keepGoing)
+		    {
+		        keepGoing = false;
+		        switch (_nextAction)
+		        {
+		            case NextAction.Right:
+		                _current = _right;
 
-					while (_current.Left != null)
-					{
-						_current = _current.Left;
-					}
+		                while (_current.Left != null)
+		                {
+                            if (SkipPending > 0)
+                            {
+                                int leftCount = _current.Left.Count;
+                                if (leftCount > 0 && SkipPending >= leftCount)
+                                {
+                                    SkipPending -= leftCount;
+                                    _nextAction = NextAction.Parent;
+                                    keepGoing = true;
+                                    goto afterSwitch;
+                                }
+                            }
 
-					_right = _current.Right;
-					_nextAction = _right != null ? NextAction.Right : NextAction.Parent;
+                            _current = _current.Left;
+		                }
 
-					return true;
+		                _right = _current.Right;
+		                _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
-				case NextAction.Parent:
-					while (_current.Parent != null)
-					{
-						AvlNode<TKey, TValue> previous = _current;
+		                return true;
 
-						_current = _current.Parent;
+		            case NextAction.Parent:
+		                while (_current.Parent != null)
+		                {
+		                    AvlNode<TKey, TValue> previous = _current;
 
-						if (_current.Left == previous)
-						{
-							_right = _current.Right;
-							_nextAction = _right != null ? NextAction.Right : NextAction.Parent;
+		                    _current = _current.Parent;
 
-							return true;
-						}
-					}
+		                    if (_current.Left == previous)
+		                    {
+		                        _right = _current.Right;
+		                        _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
-					_nextAction = NextAction.End;
+		                        return true;
+		                    }
+		                }
 
-					return false;
+		                _nextAction = NextAction.End;
 
-				default:
-					return false;
-			}
+		                return false;
+
+		            default:
+		                return false;
+		        }
+                afterSwitch: ;
+		    }
+            throw new NotImplementedException(); // code will not get here
 		}
 
 		public void Reset()

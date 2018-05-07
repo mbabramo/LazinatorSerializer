@@ -51,6 +51,7 @@ namespace LazinatorTests.AVL
 	        for (int i = 0; i < treeSize + 1; i++)
 	        {
 	            var tree = BuildTreeInRandomOrder(treeSize);
+	            tree.Root.Print("", false);
 	            var x = new int[] {3, 5}.Skip(1);
 	            var result = tree.Skip(i).FirstOrDefault();
 	            if (i >= treeSize)
