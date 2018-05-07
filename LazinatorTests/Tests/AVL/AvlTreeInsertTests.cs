@@ -70,12 +70,16 @@ namespace LazinatorTests.AVL
 	        var tree = BuildTreeInRandomOrder(treeSize);
             tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
 	        tree = tree.CloneLazinatorTyped();
-	        int i = 3432;
-	        var result = tree.Skip(i).FirstOrDefault();
-	        if (i >= treeSize)
-	            result.Should().Be(null);
-	        else
-	            result.Key.Should().Be(i + 1);
+	        Random r = new Random(0);
+	        for (int j = 0; j < 100000; j++)
+	        {
+	            int i = r.Next(11000);
+	            var result = tree.Skip(i).FirstOrDefault();
+	            if (i >= treeSize)
+	                result.Should().Be(null);
+	            else
+	                result.Key.Should().Be(i + 1);
+	        }
 	    }
 
         private AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> BuildTreeInRandomOrder(int insertions)

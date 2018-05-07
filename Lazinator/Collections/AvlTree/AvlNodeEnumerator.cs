@@ -50,7 +50,7 @@ namespace Lazinator.Collections.Avl
         {
             if (_current != null && SkipPending >= _current.Count && SkipPending > 1)
             {
-                Debug.WriteLine($"Skipping {SkipPending} at {_current.Key}, next action is parent");
+                //Debug.WriteLine($"Skipping {_current.Count} at {_current.Key}, next action is parent");
                 SkipPending -= _current.Count;
                 _nextAction = NextAction.Parent;
                 return true;
@@ -71,21 +71,18 @@ namespace Lazinator.Collections.Avl
 
         private bool MoveNextHelper()
         {
-            startAgain: // acceptable use of goto
+            startAgain: // acceptable use of goto to break out of multiple loops
             switch (_nextAction)
 		    {
 		        case NextAction.Right:
-		            Debug.WriteLine($"Action right at {_current.Key}");
-                    if (ConsiderSkip())
-                        goto startAgain;
-
+		            //Debug.WriteLine($"Action right at {_current.Key}");
                     _current = _right;
 
 		            while (_current.Left != null)
 		            {
-		                Debug.WriteLine($"Moving left at {_current.Key}");
+		                //Debug.WriteLine($"Moving left at {_current.Key}");
                         _current = _current.Left;
-		                Debug.WriteLine($"Now at {_current.Key}");
+		                //Debug.WriteLine($"Now at {_current.Key}");
                         if (ConsiderSkip())
 		                    goto startAgain;
                     }
@@ -93,32 +90,32 @@ namespace Lazinator.Collections.Avl
 		            _right = _current.Right;
 		            _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
-		            Debug.WriteLine($"Enumerating {_current.Key}, next action is {_nextAction}");
+		            //Debug.WriteLine($"Enumerating {_current.Key}, next action is {_nextAction}");
 
                     return true;
 
 		        case NextAction.Parent:
-		            Debug.WriteLine($"Taking parent action at {_current.Key}");
+		            //Debug.WriteLine($"Taking parent action at {_current.Key}");
                     while (_current.Parent != null)
 		            {
 		                AvlNode<TKey, TValue> previous = _current;
 
 		                _current = _current.Parent;
 
-		                Debug.WriteLine($"Now at {_current.Key}");
+		                //Debug.WriteLine($"Now at {_current.Key}");
 
                         if (_current.Left == previous)
 		                {
 		                    _right = _current.Right;
 		                    _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
-		                    Debug.WriteLine($"Enumerating {_current.Key}, next action is {_nextAction}");
+		                    //Debug.WriteLine($"Enumerating {_current.Key}, next action is {_nextAction}");
                             return true;
 		                }
 		            }
 
 		            _nextAction = NextAction.End;
 
-		            Debug.WriteLine($"Next action is {_nextAction}");
+		            //Debug.WriteLine($"Next action is {_nextAction}");
 
                     return false;
 
