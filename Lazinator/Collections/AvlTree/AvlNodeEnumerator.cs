@@ -29,6 +29,17 @@ namespace Lazinator.Collections.Avl
 
         private void ProcessPendingSkips()
         {
+            if (_nextAction == NextAction.Right && SkipPending > 0 && _current.Left != null)
+            {
+                // see if we can skip a bunch of nodes
+                int leftCount = _current.Left.Count;
+                if (leftCount > 0 && SkipPending >= leftCount)
+                {
+                    SkipPending -= leftCount;
+                    _nextAction = NextAction.Parent;
+                }
+            }
+
             while (SkipPending > 0)
             {
                 bool more = MoveNext();
@@ -44,63 +55,44 @@ namespace Lazinator.Collections.Avl
 
 		public bool MoveNext()
 		{
-		    bool keepGoing = true;
-		    while (keepGoing)
+		    switch (_nextAction)
 		    {
-		        keepGoing = false;
-		        switch (_nextAction)
-		        {
-		            case NextAction.Right:
-		                _current = _right;
+		        case NextAction.Right:
+		            _current = _right;
 
-		                while (_current.Left != null)
+		            while (_current.Left != null)
+		            {
+                        _current = _current.Left;
+		            }
+
+		            _right = _current.Right;
+		            _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
+
+		            return true;
+
+		        case NextAction.Parent:
+		            while (_current.Parent != null)
+		            {
+		                AvlNode<TKey, TValue> previous = _current;
+
+		                _current = _current.Parent;
+
+		                if (_current.Left == previous)
 		                {
-                            if (SkipPending > 0)
-                            {
-                                int leftCount = _current.Left.Count;
-                                if (leftCount > 0 && SkipPending >= leftCount)
-                                {
-                                    SkipPending -= leftCount;
-                                    _nextAction = NextAction.Parent;
-                                    keepGoing = true;
-                                    goto afterSwitch;
-                                }
-                            }
+		                    _right = _current.Right;
+		                    _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
 
-                            _current = _current.Left;
+		                    return true;
 		                }
+		            }
 
-		                _right = _current.Right;
-		                _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
+		            _nextAction = NextAction.End;
 
-		                return true;
+		            return false;
 
-		            case NextAction.Parent:
-		                while (_current.Parent != null)
-		                {
-		                    AvlNode<TKey, TValue> previous = _current;
-
-		                    _current = _current.Parent;
-
-		                    if (_current.Left == previous)
-		                    {
-		                        _right = _current.Right;
-		                        _nextAction = _right != null ? NextAction.Right : NextAction.Parent;
-
-		                        return true;
-		                    }
-		                }
-
-		                _nextAction = NextAction.End;
-
-		                return false;
-
-		            default:
-		                return false;
-		        }
-                afterSwitch: ;
+		        default:
+		            return false;
 		    }
-            throw new NotImplementedException(); // code will not get here
 		}
 
 		public void Reset()
