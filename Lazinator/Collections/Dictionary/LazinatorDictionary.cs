@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Dictionary
         private const int InitialNumBuckets = 10;
         private int NumBuckets => Buckets.Count;
 
-        public int Count { get; set; }
+        // DEBUG -- todo: Dynamically adjust number of buckets.
 
         public LazinatorDictionary()
         {
