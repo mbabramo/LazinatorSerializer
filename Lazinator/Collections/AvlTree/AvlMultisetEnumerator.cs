@@ -8,9 +8,9 @@ namespace Lazinator.Collections.AvlTree
 {
     public sealed class AvlMultisetEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, new()
     {
-        private IEnumerator<LazinatorTuple<TKey, LazinatorWrapperInt>> UnderlyingEnumerator;
+        private AvlNodeKeyEnumerator<LazinatorTuple<TKey, LazinatorWrapperInt>> UnderlyingEnumerator;
 
-        public AvlMultisetEnumerator(IEnumerator<LazinatorTuple<TKey, LazinatorWrapperInt>> underlyingEnumerator)
+        public AvlMultisetEnumerator(AvlNodeKeyEnumerator<LazinatorTuple<TKey, LazinatorWrapperInt>> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }
@@ -18,6 +18,11 @@ namespace Lazinator.Collections.AvlTree
         public TKey Current => UnderlyingEnumerator.Current.Item1;
 
         object IEnumerator.Current => Current;
+
+        public void Skip(int i)
+        {
+            UnderlyingEnumerator.Skip(i);
+        }
 
         public void Dispose()
         {

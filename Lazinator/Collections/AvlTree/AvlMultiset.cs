@@ -81,9 +81,9 @@ namespace Lazinator.Collections.AvlTree
             return AsKeyEnumerator();
         }
 
-        private IEnumerator<T> AsKeyEnumerator()
+        private AvlMultisetEnumerator<T> AsKeyEnumerator()
         {
-            IEnumerator<LazinatorTuple<T,LazinatorWrapperInt>> underlyingEnumerator = UnderlyingSet.AsKeyEnumerator();
+            AvlNodeKeyEnumerator<LazinatorTuple<T,LazinatorWrapperInt>> underlyingEnumerator = UnderlyingSet.AsKeyEnumerator();
             return new AvlMultisetEnumerator<T>(underlyingEnumerator);
         }
 
@@ -92,6 +92,14 @@ namespace Lazinator.Collections.AvlTree
             var iterator = AsKeyEnumerator();
             while (iterator.MoveNext())
                 yield return iterator.Current;
+        }
+
+        public IEnumerable<T> Skip(int i)
+        {
+            var enumerator = AsKeyEnumerator();
+            enumerator.Skip(i);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
         }
 
     }
