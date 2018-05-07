@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Lazinator.Core;
 
@@ -41,19 +42,23 @@ namespace Lazinator.Collections.Dictionary
             bucket = Buckets[(int)hash % InitialNumBuckets];
         }
 
-        public ICollection<TKey> Keys => throw new NotImplementedException();
-
-        public ICollection<TValue> Values => throw new NotImplementedException();
-
         public bool IsReadOnly => throw new NotImplementedException();
 
         public void Add(TKey key, TValue value)
         {
+            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            bool contained = bucket.ContainsKey(key, hash);
+            if (contained)
+                throw new ArgumentException();
             this[key] = value;
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            bool contained = bucket.ContainsKey(item.Key, hash);
+            if (contained)
+                throw new ArgumentException();
             this[item.Key] = item.Value;
         }
 
@@ -150,6 +155,18 @@ namespace Lazinator.Collections.Dictionary
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new DictionaryEnumerator(Buckets);
+        }
+
+        public ICollection<TKey> Keys => GetKeysAndValues().Select(x => x.Key).ToList();
+
+        public ICollection<TValue> Values => GetKeysAndValues().Select(x => x.Value).ToList();
+
+        private IEnumerable<KeyValuePair<TKey, TValue>> GetKeysAndValues()
+        {
+            var enumerator = GetEnumerator();
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+            enumerator.Dispose();
         }
 
         public bool Remove(TKey key)
