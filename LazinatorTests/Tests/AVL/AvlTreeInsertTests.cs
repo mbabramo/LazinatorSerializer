@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using Lazinator.Collections.Avl;
 using Lazinator.Wrappers;
 
@@ -19,7 +20,31 @@ namespace LazinatorTests.AVL
 			AssertTreeValid("", tree);
 		}
 
-		[Fact]
+	    [Fact]
+	    public void CountingWorks()
+	    {
+	        var items = Enumerable.Range(1, 5).ToList();
+	        Shuffle(items);
+	        var tree = SetupTree(items.ToArray());
+	        tree.Root.Count.Should().Be(5);
+	    }
+
+	    private static Random rng = new Random();
+
+        private static void Shuffle<T>(IList<T> list)
+	    {
+	        int n = list.Count;
+	        while (n > 1)
+	        {
+	            n--;
+	            int k = rng.Next(n + 1);
+	            T value = list[k];
+	            list[k] = list[n];
+	            list[n] = value;
+	        }
+	    }
+
+        [Fact]
 		public void CountMultiple()
 		{
 			var tree = SetupTree(20, 8, 22);
