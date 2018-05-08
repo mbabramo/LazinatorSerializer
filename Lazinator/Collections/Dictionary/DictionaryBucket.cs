@@ -16,7 +16,7 @@ namespace Lazinator.Collections.Dictionary
             Initialized = true;
         }
 
-        public int Count => Keys.Count;
+        public int Count => Initialized ? Keys.Count : 0;
 
         public bool ContainsKey(TKey key, uint? binaryHashOfKey = null)
         {

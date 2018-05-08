@@ -17,7 +17,7 @@ namespace Lazinator.Collections.Dictionary
         private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
         {
             hash = key.GetBinaryHashCode32();
-            bucket = Buckets[(int)hash % InitialNumBuckets];
+            bucket = Buckets[(int)(hash % InitialNumBuckets)];
         }
 
         public LazinatorDictionary()
@@ -82,7 +82,6 @@ namespace Lazinator.Collections.Dictionary
             if (contained)
                 throw new ArgumentException();
             this[key] = value;
-            Count++;
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
@@ -92,7 +91,6 @@ namespace Lazinator.Collections.Dictionary
             if (contained)
                 throw new ArgumentException();
             this[item.Key] = item.Value;
-            Count++;
         }
 
         public bool Remove(TKey key)
@@ -156,7 +154,7 @@ namespace Lazinator.Collections.Dictionary
 
             public bool MoveNext()
             {
-                if (_completed)
+                if (_initialized && _completed)
                     return false;
                 if (!_initialized)
                 {
@@ -173,6 +171,7 @@ namespace Lazinator.Collections.Dictionary
                         return true;
                     }
                     currentBucket++;
+                    indexInCurrentBucket = -1;
                 }
 
                 _completed = false;
