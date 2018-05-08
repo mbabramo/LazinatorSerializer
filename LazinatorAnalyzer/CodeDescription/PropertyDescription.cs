@@ -420,7 +420,7 @@ namespace Lazinator.CodeDescription
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = Container.CodeFiles.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(t))
+            if (!recordLikeTypes.ContainsKey(t) || IgnoreRecordLike)
                 return false;
 
             PropertyType = LazinatorPropertyType.SupportedTuple;
