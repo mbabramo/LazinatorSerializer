@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Dictionary
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.DictionaryUnofficial)]
-    public interface ILazinatorDictionaryUnofficial<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    internal interface ILazinatorDictionaryUnofficial<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         LazinatorList<DictionaryBucket<TKey, TValue>> Buckets { get; set; }
     }

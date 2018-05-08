@@ -134,7 +134,7 @@ namespace Lazinator.Collections.Dictionary
             Count = 0;
         }
 
-        public class DictionaryEnumerator : IEnumerator<KeyValuePair<TKey, TValue>>
+        internal class DictionaryEnumerator : IEnumerator<KeyValuePair<TKey, TValue>>
         {
             private bool _initialized;
             public bool _completed;
@@ -142,7 +142,7 @@ namespace Lazinator.Collections.Dictionary
             public int currentBucket;
             public int indexInCurrentBucket = -1;
 
-            public DictionaryEnumerator(LazinatorList<DictionaryBucket<TKey, TValue>> buckets)
+            internal DictionaryEnumerator(LazinatorList<DictionaryBucket<TKey, TValue>> buckets)
             {
                 _buckets = buckets;
             }

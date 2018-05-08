@@ -23,7 +23,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Dictionary
 {
-    public partial class DictionaryBucket<TKey, TValue> : ILazinator
+    internal partial class DictionaryBucket<TKey, TValue> : ILazinator
     {
         /* Boilerplate for every non-abstract ILazinator object */
         
