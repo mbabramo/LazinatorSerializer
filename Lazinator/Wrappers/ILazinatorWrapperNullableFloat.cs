@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableFloat, -1)]
-    public interface ILazinatorWrapperNullableFloat : ILazinatorWrapper<float?>
+    interface ILazinatorWrapperNullableFloat : ILazinatorWrapper<float?>
     {
     }
 }

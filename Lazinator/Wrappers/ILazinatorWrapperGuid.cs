@@ -6,7 +6,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperGuid, -1)]
-    public interface ILazinatorWrapperGuid : ILazinatorWrapper<Guid>
+    interface ILazinatorWrapperGuid : ILazinatorWrapper<Guid>
     {
     }
 }

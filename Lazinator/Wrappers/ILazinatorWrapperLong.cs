@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperLong, -1)]
-    public interface ILazinatorWrapperLong : ILazinatorWrapper<long>
+    interface ILazinatorWrapperLong : ILazinatorWrapper<long>
     {
     }
 }

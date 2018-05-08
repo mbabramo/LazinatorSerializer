@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperBool, -1)]
-    public interface ILazinatorWrapperBool : ILazinatorWrapper<bool>
+    interface ILazinatorWrapperBool : ILazinatorWrapper<bool>
     {
     }
 }

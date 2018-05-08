@@ -3,7 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    public interface ILazinatorWrapper<T>
+    interface ILazinatorWrapper<T>
     {
         T Value { get; set; }
     }

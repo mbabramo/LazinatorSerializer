@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableDecimal, -1)]
-    public interface ILazinatorWrapperNullableDecimal : ILazinatorWrapper<decimal?>
+    interface ILazinatorWrapperNullableDecimal : ILazinatorWrapper<decimal?>
     {
     }
 }

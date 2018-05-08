@@ -6,7 +6,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorNullableTimeSpan, -1)]
-    public interface ILazinatorWrapperNullableTimeSpan : ILazinatorWrapper<TimeSpan?>
+    interface ILazinatorWrapperNullableTimeSpan : ILazinatorWrapper<TimeSpan?>
     {
     }
 }

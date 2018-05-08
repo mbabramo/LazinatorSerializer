@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperByte, -1)]
-    public interface ILazinatorWrapperByte : ILazinatorWrapper<byte>
+    interface ILazinatorWrapperByte : ILazinatorWrapper<byte>
     {
     }
 }

@@ -6,7 +6,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperNullableDateTime, -1)]
-    public interface ILazinatorWrapperNullableDateTime : ILazinatorWrapper<DateTime?>
+    interface ILazinatorWrapperNullableDateTime : ILazinatorWrapper<DateTime?>
     {
     }
 }
