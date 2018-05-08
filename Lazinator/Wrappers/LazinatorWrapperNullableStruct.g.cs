@@ -254,7 +254,7 @@ namespace Lazinator.Wrappers
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _HasValue = span.ToBoolean(ref bytesSoFar);
             _NonNullValue_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
@@ -268,7 +268,7 @@ namespace Lazinator.Wrappers
             writer.Write((byte)includeChildrenMode);
             // write properties
             WriteUncompressedPrimitives.WriteBool(writer, _HasValue);
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)  
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _NonNullValue_ByteIndex;

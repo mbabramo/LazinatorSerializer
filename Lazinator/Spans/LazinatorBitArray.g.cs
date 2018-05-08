@@ -272,7 +272,7 @@ namespace Lazinator.Spans
             __version = span.ToDecompressedInt(ref bytesSoFar);
             _m_length = span.ToDecompressedInt(ref bytesSoFar);
             _ByteSpan_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
@@ -288,7 +288,7 @@ namespace Lazinator.Spans
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, __version);
             CompressedIntegralTypes.WriteCompressedInt(writer, _m_length);
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength), verifyCleanness, false);
             }
