@@ -51,6 +51,8 @@ namespace LazinatorCodeGen.Roslyn
                 throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {implementingTypeName} not found.");
             ImplementingTypeAccessibility = implementingTypeDeclaration.GetAccessibility();
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
+            if (ImplementingTypeSymbol.Constructors.Any() && !ImplementingTypeSymbol.Constructors.Any(x => x.Parameters.Length == 0) && ImplementingTypeSymbol.TypeKind == TypeKind.Class)
+                throw new LazinatorCodeGenException($"If a Lazinator class has a constructor, it must have a parameterless constructor as well.");
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
             if (exclusiveInterfaceTypeSymbol == null)
