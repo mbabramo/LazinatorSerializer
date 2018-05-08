@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Lazinator.CodeDescription;
 using LazinatorCodeGen.AttributeClones;
 using LazinatorAnalyzer.Roslyn;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorCodeGen.Roslyn
 {

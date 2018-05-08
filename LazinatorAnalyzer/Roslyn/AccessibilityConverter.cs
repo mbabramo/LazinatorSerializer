@@ -1,30 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LazinatorCodeGen.Roslyn
 {
     public static class AccessibilityConverter
     {
-        public static string Convert(Microsoft.CodeAnalysis.Accessibility accessibility)
+        public static string Convert(Accessibility accessibility)
         {
             switch (accessibility)
             {
-                case Microsoft.CodeAnalysis.Accessibility.Internal:
+                case Accessibility.Internal:
                     return "internal";
-                case Microsoft.CodeAnalysis.Accessibility.NotApplicable:
+                case Accessibility.NotApplicable:
                     return null;
-                case Microsoft.CodeAnalysis.Accessibility.Private:
+                case Accessibility.Private:
                     return "private";
-                case Microsoft.CodeAnalysis.Accessibility.Protected:
+                case Accessibility.Protected:
                     return "protected";
-                case Microsoft.CodeAnalysis.Accessibility.ProtectedOrInternal:
+                case Accessibility.ProtectedOrInternal:
                     return "protected internal";
-                case Microsoft.CodeAnalysis.Accessibility.Public:
+                case Accessibility.Public:
                     return "public";
                 default:
                     throw new NotSupportedException("Accessibility type not supported.");
             }
+        }
+
+
+        public static Accessibility GetAccessibility(this TypeDeclarationSyntax typeDeclaration)
+        {
+            bool isPrivate = typeDeclaration.Modifiers.Any(x => x.Kind() == SyntaxKind.PrivateKeyword);
+            bool isInternal = typeDeclaration.Modifiers.Any(x => x.Kind() == SyntaxKind.InternalKeyword);
+            bool isProtected = typeDeclaration.Modifiers.Any(x => x.Kind() == SyntaxKind.ProtectedKeyword);
+            Accessibility typeAccessibility;
+            if (isPrivate)
+                typeAccessibility = Accessibility.Private;
+            else if (isProtected)
+            {
+                if (isInternal)
+                    typeAccessibility = Accessibility.ProtectedOrInternal;
+                else
+                    typeAccessibility = Accessibility.Protected;
+            }
+            else if (isInternal)
+                typeAccessibility = Accessibility.Internal;
+            else
+                typeAccessibility = Accessibility.Public;
+
+            return typeAccessibility;
         }
     }
 }

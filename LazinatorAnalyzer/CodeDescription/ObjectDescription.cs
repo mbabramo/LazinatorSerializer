@@ -13,6 +13,7 @@ namespace Lazinator.CodeDescription
     {
         public INamedTypeSymbol ILazinatorTypeSymbol { get; set; }
         public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
+        public Accessibility Accessibility { get; set; }
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
@@ -51,6 +52,7 @@ namespace Lazinator.CodeDescription
         {
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             CodeFiles = codeFiles;
+            Accessibility = codeFiles.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
             ObjectName = iLazinatorTypeSymbol.Name;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
@@ -148,7 +150,7 @@ namespace Lazinator.CodeDescription
 
                 namespace { Namespace }
                 {{
-                    public { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
+                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
 

@@ -11,6 +11,7 @@ using LazinatorCodeGen.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
 using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -23,6 +24,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public Compilation Compilation;
         public LazinatorConfig Config { get; private set; }
+        public Accessibility ImplementingTypeAccessibility { get; private set; }
         public HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
         public HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
         public HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
@@ -47,6 +49,7 @@ namespace LazinatorCodeGen.Roslyn
             TypeDeclarationSyntax implementingTypeDeclaration = GetTypeDeclaration(compilation, implementingTypeName);
             if (implementingTypeDeclaration == null)
                 throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {implementingTypeName} not found.");
+            ImplementingTypeAccessibility = implementingTypeDeclaration.GetAccessibility();
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
@@ -54,7 +57,6 @@ namespace LazinatorCodeGen.Roslyn
                 throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} does not implement an exclusive interface.");
             Initialize(implementingTypeDeclaration, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
         }
-
 
         public LazinatorCompilation(TypeDeclarationSyntax implementingTypeDeclaration, INamedTypeSymbol implementingTypeSymbol, INamedTypeSymbol exclusiveInterfaceTypeSymbol)
         {
