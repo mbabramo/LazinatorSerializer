@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public enum LazinatorCollectionUniqueIDs
+    internal enum LazinatorCollectionUniqueIDs
     {
         LazinatorOffsetList = 50, // leave room for built-in types
         LazinatorList,

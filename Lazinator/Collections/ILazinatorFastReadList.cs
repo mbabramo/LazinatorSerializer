@@ -6,7 +6,7 @@ using Lazinator.Attributes;
 namespace Lazinator.Collections
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorFastReadList, 0, false)]
-    public interface ILazinatorFastReadList<T> where T : struct
+    interface ILazinatorFastReadList<T> where T : struct
     {
         ReadOnlySpan<T> ReadOnly { get; set; }
     }
