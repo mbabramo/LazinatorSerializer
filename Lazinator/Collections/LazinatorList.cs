@@ -67,7 +67,6 @@ namespace Lazinator.Collections
             
             var byteSpan = GetListMemberSlice(index);
             return Farmhash.Hash32(byteSpan.Span);
-            debug; // test, including nulls
         }
 
         private ReadOnlyMemory<byte> GetListMemberSlice(int index)

@@ -1891,6 +1891,19 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        void BinaryHashInList()
+        {
+            var wrapped = new LazinatorWrapperInt() {Value = 1};
+            var wrapped2 = new LazinatorWrapperInt() { Value = 1 };
+            LazinatorList<LazinatorWrapperInt> x = new LazinatorList<LazinatorWrapperInt>();
+            x.Add(wrapped2);
+            x.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
+            x.DeserializationFactory = GetDeserializationFactory();
+            var clone = x.CloneLazinatorTyped();
+            clone.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
+        }
+
+        [Fact]
         public void ConfirmSerialization()
         {
             for (int i = 0; i <= 2; i++)
