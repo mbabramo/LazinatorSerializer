@@ -290,7 +290,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (itemToConvert.Value == null)
             {
-                writer.Write((uint) 0);
+                writer.Write((int) 0);
             }
             else
             {

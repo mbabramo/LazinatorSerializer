@@ -420,7 +420,7 @@ namespace LazinatorTests.Examples.Collections
             
             if (itemToConvert.Value == null)
             {
-                writer.Write((uint) 0);
+                writer.Write((int) 0);
             }
             else
             {
