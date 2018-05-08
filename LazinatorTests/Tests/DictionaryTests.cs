@@ -70,5 +70,18 @@ namespace LazinatorTests.Tests
             d.ToList().OrderBy(x => x).Select(x => x.Key).ToArray().SequenceEqual(new LazinatorWrapperLong[] { }).Should().BeTrue();
             d.ToList().OrderBy(x => x).Select(x => x.Value).ToArray().SequenceEqual(new LazinatorWrapperString[] { }).Should().BeTrue();
         }
+
+
+        [Fact]
+        public void DictionaryCanGrowAndShrink()
+        {
+            LazinatorDictionary<LazinatorWrapperLong, LazinatorWrapperString> d = new LazinatorDictionary<LazinatorWrapperLong, LazinatorWrapperString>();
+            d.Count.Should().Be(0);
+            for (long i = 0; i < 25; i++)
+                d[i] = i.ToString();
+            for (long i = 0; i < 25; i++)
+                d.Remove(i);
+            d.Count().Should().Be(0);
+        }
     }
 }

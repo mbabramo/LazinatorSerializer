@@ -41,7 +41,10 @@ namespace Lazinator.Collections.Dictionary
                 bool contained = bucket.ContainsKey(key, hash);
                 bucket.InsertItemAtKey(key, value, hash);
                 if (!contained)
+                {
                     Count++;
+                    ConsiderResize();
+                }
             }
         }
 
@@ -100,6 +103,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 bucket.RemoveItemAtKey(key, hash);
                 Count--;
+                ConsiderResize();
                 return true;
             }
             return false;
@@ -115,6 +119,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     bucket.RemoveItemAtKey(item.Key, hash);
                     Count--;
+                    ConsiderResize();
                     return true;
                 }
             }
@@ -229,7 +234,7 @@ namespace Lazinator.Collections.Dictionary
         private void CompleteResize()
         {
             // Note: This is a bit inefficient because it deserializes everything.
-
+            // We might be able to reconstitute the dictionary in binary fashion.
             int numBuckets = Count * 3;
             if (numBuckets < InitialNumBuckets)
                 numBuckets = InitialNumBuckets;
@@ -241,6 +246,8 @@ namespace Lazinator.Collections.Dictionary
 
             foreach (var item in results)
                 Add(item);
+
+            Count = results.Count();
         }
     }
 }
