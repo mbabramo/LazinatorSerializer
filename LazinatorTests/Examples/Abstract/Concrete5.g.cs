@@ -89,16 +89,16 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _String4 = span.ToString_VarIntLength(ref bytesSoFar);
-            _String5 = span.ToString_VarIntLength(ref bytesSoFar);
+            _String4 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _String5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String4);
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _String5);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String4);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String5);
         }
         
     }

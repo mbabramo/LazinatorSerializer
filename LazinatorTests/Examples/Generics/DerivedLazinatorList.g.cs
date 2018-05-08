@@ -74,14 +74,14 @@ namespace LazinatorTests.Examples
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyListName = span.ToString_VarIntLength(ref bytesSoFar);
+            _MyListName = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _MyListName);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyListName);
         }
         
     }

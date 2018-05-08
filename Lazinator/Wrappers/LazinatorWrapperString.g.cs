@@ -212,7 +212,7 @@ namespace Lazinator.Wrappers
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _Value = span.ToString_VarIntLength(ref bytesSoFar);
+            _Value = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
@@ -222,7 +222,7 @@ namespace Lazinator.Wrappers
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _Value);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _Value);
         }
         
     }

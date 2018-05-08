@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            string item2 = span.ToString_VarIntLength(ref bytesSoFar);
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
             var tupleType = new LazinatorTests.Examples.RecordLikeType(item1, item2);
             
@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
             
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, itemToConvert.Name);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Name);
         }
         
     }

@@ -659,13 +659,13 @@ namespace LazinatorTests.Examples
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
             if (serializedVersionNumber >= 3) 
             {
-                _MyNewString = span.ToString_VarIntLength(ref bytesSoFar);
+                _MyNewString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             if (serializedVersionNumber < 3) 
             {
-                _MyOldString = span.ToString_VarIntLength(ref bytesSoFar);
+                _MyOldString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
-            _MyString = span.ToString_VarIntLength(ref bytesSoFar);
+            _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyTestEnum = (LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
             _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
@@ -717,13 +717,13 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedDateTime(writer, _MyDateTime);
             if (LazinatorObjectVersion >= 3) 
             {
-                EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _MyNewString);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyNewString);
             }
             if (LazinatorObjectVersion < 3) 
             {
-                EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _MyOldString);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyOldString);
             }
-            EncodeCharAndString.WriteStringWithVarIntPrefix(writer, _MyString);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
             CompressedIntegralTypes.WriteCompressedInt(writer, (int)_MyTestEnum);
             CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
             CompressedDecimal.WriteCompressedNullableDecimal(writer, _MyNullableDecimal);
