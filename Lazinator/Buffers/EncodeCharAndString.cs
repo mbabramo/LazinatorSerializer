@@ -61,7 +61,7 @@ namespace Lazinator.Buffers
             return s;
         }
 
-        public static void WriteCompressed(this BinaryBufferWriter writer, string s)
+        public static void WriteBrotliCompressed(this BinaryBufferWriter writer, string s)
         {
             bool success = false;
             int bytesWritten = 0;
@@ -75,12 +75,12 @@ namespace Lazinator.Buffers
             writer.Position += bytesWritten;
         }
 
-        public static void WriteCompressedWithUintPrefix(this BinaryBufferWriter writer, string s)
+        public static void WriteBrotliCompressedWithIntPrefix(this BinaryBufferWriter writer, string s)
         {
             if (s == null)
                 writer.Write((int) -1); // signify null
             else
-                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, (w) => { WriteCompressed(w, s); });
+                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, (w) => { WriteBrotliCompressed(w, s); });
         }
 
 
