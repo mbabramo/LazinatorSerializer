@@ -401,7 +401,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(BinaryBufferWriter w) => ConvertToBytes_Array_int(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }

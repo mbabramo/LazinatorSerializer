@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using Lazinator.Core;
 
 namespace Lazinator.Buffers
 {
@@ -57,6 +59,48 @@ namespace Lazinator.Buffers
                 return null;
             string s = b.ToString(ref index, (int)length);
             return s;
+        }
+
+        public static void WriteCompressed(this BinaryBufferWriter writer, string s)
+        {
+            bool success = false;
+            int bytesWritten = 0;
+            while (!success)
+            {
+                success = System.IO.Compression.BrotliEncoder.TryCompress(MemoryMarshal.Cast<char, byte>(s.AsSpan()), writer.Free, out bytesWritten);
+                if (!success)
+                    writer.Resize();
+            }
+
+            writer.Position += bytesWritten;
+        }
+
+        public static void WriteCompressedWithUintPrefix(this BinaryBufferWriter writer, string s)
+        {
+            if (s == null)
+                writer.Write((int) -1); // signify null
+            else
+                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, (w) => { WriteCompressed(w, s); });
+        }
+
+
+        public static string ToString_BrotliCompressedWithLength(this ReadOnlySpan<byte> b, ref int index)
+        {
+            int length = b.ToInt32(ref index);
+            if (length == -1)
+                return null;
+            ReadOnlySpan<byte> source = b.Slice(4, length);
+            BinaryBufferWriter decompressionBuffer = new BinaryBufferWriter(100);
+            bool success = false;
+            while (!success)
+            {
+                success = System.IO.Compression.BrotliDecoder.TryDecompress(b, decompressionBuffer.Free,
+                    out int bytesWritten);
+                if (!success)
+                    decompressionBuffer.Resize();
+            }
+
+            return new string(MemoryMarshal.Cast<byte, char>(decompressionBuffer.Written));
         }
     }
 }

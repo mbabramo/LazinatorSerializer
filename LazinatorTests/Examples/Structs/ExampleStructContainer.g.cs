@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
                 void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, action);
+                WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         
@@ -454,7 +454,7 @@ namespace LazinatorTests.Examples
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
                 void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, action);
+                WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         

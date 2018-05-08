@@ -381,7 +381,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem2(BinaryBufferWriter w) => itemToConvert.Item2.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem2);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             };
             
             if (itemToConvert.Item3 == null)
@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem3(BinaryBufferWriter w) => ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem3);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
         

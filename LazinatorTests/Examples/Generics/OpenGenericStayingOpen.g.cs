@@ -356,7 +356,7 @@ namespace LazinatorTests.Examples.Generics
                 {
                     
                     void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }

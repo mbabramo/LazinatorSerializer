@@ -366,7 +366,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(BinaryBufferWriter w) => ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }

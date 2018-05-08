@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(BinaryBufferWriter w) => ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(writer, item, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, action);
+                WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         
@@ -425,7 +425,7 @@ namespace LazinatorTests.Examples.Collections
             else
             {
                 void actionValue(BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionValue);
+                WriteToBinaryWithIntLengthPrefix(writer, actionValue);
             };
         }
         
@@ -463,7 +463,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(BinaryBufferWriter w) => ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(writer, item, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, action);
+                WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         
@@ -501,7 +501,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(BinaryBufferWriter w) => ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(writer, item, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, action);
+                WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         

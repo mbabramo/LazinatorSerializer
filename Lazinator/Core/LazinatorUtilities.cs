@@ -84,13 +84,13 @@ namespace Lazinator.Core
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.Span.Write_WithUintLengthPrefix(writer);
+                original.Span.Write_WithIntLengthPrefix(writer);
             }
             else if (isBelievedDirty || original.Length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
                 void action(BinaryBufferWriter w) => binaryWriterAction(w, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, action);
+                WriteToBinaryWithIntLengthPrefix(writer, action);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace Lazinator.Core
                     ReadOnlyMemory<byte> revised = CreateStreamForNonLazinatorObject(nonLazinatorObject, binaryWriterAction);
                     ConfirmMatch(original, revised);
                 }
-                original.Span.Write_WithUintLengthPrefix(writer);
+                original.Span.Write_WithIntLengthPrefix(writer);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithUintLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithIntLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
         {
             int lengthPosition = writer.Position;
             writer.Write((uint)0);
@@ -193,7 +193,7 @@ namespace Lazinator.Core
                 if (restrictLengthTo250Bytes)
                     childStorage.Span.Write_WithByteLengthPrefix(writer);
                 else
-                    childStorage.Span.Write_WithUintLengthPrefix(writer);
+                    childStorage.Span.Write_WithIntLengthPrefix(writer);
             }
             else
             {
@@ -216,7 +216,7 @@ namespace Lazinator.Core
                     if (restrictLengthTo250Bytes)
                         LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(writer, action);
                     else
-                        LazinatorUtilities.WriteToBinaryWithUintLengthPrefix(writer, action);
+                        LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
             }
         }

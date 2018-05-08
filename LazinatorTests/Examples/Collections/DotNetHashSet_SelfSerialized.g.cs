@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(BinaryBufferWriter w) => item.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }

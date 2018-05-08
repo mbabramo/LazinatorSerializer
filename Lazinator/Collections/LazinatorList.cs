@@ -267,7 +267,7 @@ namespace Lazinator.Collections
                 _Offsets_Accessed = true;
                 _Offsets = new LazinatorOffsetList();
                 _Offsets.IsDirty = true;
-                LazinatorUtilities.WriteToBinaryWithUintLengthPrefix(writer, w =>
+                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, w =>
                 {
                     int startingPosition = w.Position;
                     for (int i = 0; i < UnderlyingList.Count; i++)

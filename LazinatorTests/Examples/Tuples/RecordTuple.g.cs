@@ -341,7 +341,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionExample);
+                WriteToBinaryWithIntLengthPrefix(writer, actionExample);
             };
         }
         

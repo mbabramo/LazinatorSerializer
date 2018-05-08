@@ -295,7 +295,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionValue(BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionValue);
+                WriteToBinaryWithIntLengthPrefix(writer, actionValue);
             };
         }
         

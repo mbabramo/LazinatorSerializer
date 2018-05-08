@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedNullableUint(writer, itemToConvert.Item1);
             
             void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
-            WriteToBinaryWithUintLengthPrefix(writer, actionItem2);
+            WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             
             if (itemToConvert.Item3 == null)
             {
@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem3(BinaryBufferWriter w) => ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem3);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
         
@@ -358,11 +358,11 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem1(BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem1);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem1);
             };
             
             void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
-            WriteToBinaryWithUintLengthPrefix(writer, actionItem2);
+            WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
         }
         
         private static ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>> ConvertFromBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
@@ -412,7 +412,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem2(BinaryBufferWriter w) => ConvertToBytes_Nullable_ValueTuple_int_string(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem2);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             }
             
             if (itemToConvert.Item3 == null)
@@ -422,7 +422,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem3(BinaryBufferWriter w) => ConvertToBytes_Tuple_short_long(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem3);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
         

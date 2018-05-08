@@ -452,7 +452,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(BinaryBufferWriter w) => ConvertToBytes_Array3_Array4_int(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }
@@ -517,7 +517,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(BinaryBufferWriter w) => ConvertToBytes_Array4_int(writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }

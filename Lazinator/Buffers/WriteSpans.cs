@@ -18,7 +18,7 @@ namespace Lazinator.Buffers
             b.Write(writer);
         }
 
-        public static void Write_WithUintLengthPrefix(this ReadOnlySpan<byte> b, BinaryBufferWriter writer)
+        public static void Write_WithIntLengthPrefix(this ReadOnlySpan<byte> b, BinaryBufferWriter writer)
         {
             writer.Write((uint)b.Length);
             b.Write(writer);

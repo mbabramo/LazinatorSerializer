@@ -44,7 +44,7 @@ namespace Lazinator.Buffers
         public void Clear()
             => Position = 0;
 
-        private void Resize(int desiredBufferSize = 0)
+        public void Resize(int desiredBufferSize = 0)
         {
             if (desiredBufferSize <= 0)
             {

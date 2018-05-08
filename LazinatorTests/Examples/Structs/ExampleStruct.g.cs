@@ -576,7 +576,7 @@ namespace LazinatorTests.Examples
                 {
                     
                     void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
-                    WriteToBinaryWithUintLengthPrefix(writer, action);
+                    WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
             }
@@ -653,7 +653,7 @@ namespace LazinatorTests.Examples
             else
             {
                 void actionItem1(BinaryBufferWriter w) => ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert.Item1, includeChildrenMode, verifyCleanness);
-                WriteToBinaryWithUintLengthPrefix(writer, actionItem1);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem1);
             }
             
             CompressedIntegralTypes.WriteCompressedNullableInt(writer, itemToConvert.Item2);
