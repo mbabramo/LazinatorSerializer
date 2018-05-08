@@ -6,10 +6,10 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
+    [UnofficiallyIncorporateInterface("Lazinator.Collections.Dictionary.ILazinatorDictionaryUnofficial", "internal")]
     [Lazinator((int)LazinatorCollectionUniqueIDs.Dictionary)]
     interface ILazinatorDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        LazinatorList<DictionaryBucket<TKey, TValue>> Buckets { get; set; }
         [SetterAccessibility("private")]
         int Count { get; }
     }

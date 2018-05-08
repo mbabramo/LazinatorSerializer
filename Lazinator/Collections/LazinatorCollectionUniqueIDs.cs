@@ -56,5 +56,6 @@ namespace Lazinator.Collections
         AvlSet,
         DictionaryBucket,
         Dictionary,
+        DictionaryUnofficial,
     }
 }
