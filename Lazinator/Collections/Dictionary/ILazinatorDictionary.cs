@@ -6,7 +6,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
-    [UnofficiallyIncorporateInterface("Lazinator.Collections.Dictionary.ILazinatorDictionaryUnofficial", "internal")]
+    [UnofficiallyIncorporateInterface("Lazinator.Collections.Dictionary.ILazinatorDictionaryUnofficial`2", "internal")]
     [Lazinator((int)LazinatorCollectionUniqueIDs.Dictionary)]
     interface ILazinatorDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {

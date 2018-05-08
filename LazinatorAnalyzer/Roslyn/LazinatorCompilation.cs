@@ -398,8 +398,15 @@ namespace LazinatorCodeGen.Roslyn
         public INamedTypeSymbol LookupSymbol(string name)
         {
             foreach (var symbol in RelevantSymbols)
-                if (symbol is INamedTypeSymbol namedSymbol && (namedSymbol.Name == name || RoslynHelpers.GetFullyQualifiedName(namedSymbol) == name))
-                    return namedSymbol;
+            {
+                if (symbol is INamedTypeSymbol namedSymbol)
+                {
+                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedName(namedSymbol);
+                    if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name))
+                        return namedSymbol;
+                }
+            }
+
             return null;
         }
 
