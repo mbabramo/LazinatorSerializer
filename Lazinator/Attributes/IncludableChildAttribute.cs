@@ -6,9 +6,9 @@ namespace Lazinator.Attributes
     /// Used to mark a field. This indicates that if IncludeChildrenMode is set to ExcludeOnlyExcludableChildren, then this field should be excluded. Otherwise, it will be included.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class ExcludableChildAttribute : Attribute
+    public class IncludableChildAttribute : Attribute
     {
-        public ExcludableChildAttribute()
+        public IncludableChildAttribute()
         {
         }
     }

@@ -67,6 +67,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneUnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (string)accessibility2);
                 case "ExcludableChildAttribute":
                     return new CloneExcludableChildAttribute();
+                case "IncludableChildAttribute":
+                    return new CloneIncludableChildAttribute();
                 case "IgnoreRecordLikeAttribute":
                     return new CloneIgnoreRecordLikeAttribute();
                 case "NonexclusiveLazinatorAttribute":

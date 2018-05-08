@@ -8,6 +8,7 @@ namespace Lazinator.Core
     {
         IncludeAllChildren,
         ExcludeAllChildren,
-        ExcludeOnlyExcludableChildren
+        ExcludeOnlyExcludableChildren,
+        IncludeOnlyIncludableChildren
     }
 }

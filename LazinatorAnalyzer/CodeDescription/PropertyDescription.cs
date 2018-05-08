@@ -56,6 +56,9 @@ namespace Lazinator.CodeDescription
         public string ReadVersionNumberConditional { get; set; }
         public string WriteVersionNumberConditional { get; set; }
         public bool IsGuaranteedSmall { get; set; }
+        public bool IncludableWhenExcludingMostChildren { get; private set; }
+        public bool ExcludableWhenIncludingMostChildren { get; private set; }
+        public bool IgnoreRecordLike { get; private set; }
 
         public override string ToString()
         {
@@ -86,11 +89,13 @@ namespace Lazinator.CodeDescription
 
             ParseVersionAttributes();
 
+            ParseOtherPropertyAttributes();
+
             SetTypeNameAndPropertyType(propertySymbol.Type as ITypeSymbol);
 
             SetReadAndWriteMethodNames();
 
-            SetVersionNumberConditionals();
+            SetInclusionConditionals();
         }
 
         public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription container, string propertyName = null)
@@ -129,18 +134,34 @@ namespace Lazinator.CodeDescription
             IntroducedWithVersion = introduced?.Version;
         }
 
-        private void SetVersionNumberConditionals()
+        private void ParseOtherPropertyAttributes()
         {
-            ReadVersionNumberConditional = VersionNumberConditionalHelper(true);
-            WriteVersionNumberConditional = VersionNumberConditionalHelper(false);
+            CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
+            IncludableWhenExcludingMostChildren = includable != null;
+            CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
+            ExcludableWhenIncludingMostChildren = excludable != null;
+            CloneIgnoreRecordLikeAttribute ignoreRecordLike = UserAttributes.OfType<CloneIgnoreRecordLikeAttribute>().FirstOrDefault();
+            IgnoreRecordLike = ignoreRecordLike != null;
         }
 
-        private string VersionNumberConditionalHelper(bool readVersion)
+        private void SetInclusionConditionals()
+        {
+            ReadVersionNumberConditional = InclusionConditionalHelper(true);
+            WriteVersionNumberConditional = InclusionConditionalHelper(false);
+        }
+
+        private string InclusionConditionalHelper(bool readVersion)
         {
             string versionNumberVariable = readVersion ? "serializedVersionNumber" : "LazinatorObjectVersion";
             List<string> conditions = new List<string>();
             if (!IsPrimitive)
+            {
                 conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren");
+                if (!IncludableWhenExcludingMostChildren)
+                    conditions.Add("includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren");
+                if (ExcludableWhenIncludingMostChildren)
+                    conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren");
+            }
             if (IntroducedWithVersion != null)
                 conditions.Add($"{versionNumberVariable} >= {IntroducedWithVersion}");
             if (EliminatedWithVersion != null)
