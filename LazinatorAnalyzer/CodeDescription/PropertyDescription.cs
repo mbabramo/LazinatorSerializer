@@ -1007,7 +1007,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            ConvertToBytes_{TypeNameEncodable.Substring("Nullable_".Length)}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
+                            {DirectConverterTypeNamePrefix}ConvertToBytes_{TypeNameEncodable.Substring("Nullable_".Length)}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
                         }}
                     }}
 ");
@@ -1215,7 +1215,7 @@ namespace Lazinator.CodeDescription
                         else
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                            var item = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                            var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         }}
                         bytesSoFar += lengthCollectionMember;");
@@ -1223,7 +1223,7 @@ namespace Lazinator.CodeDescription
                     return ($@"
                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                         ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                        var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
             }
@@ -1272,7 +1272,7 @@ namespace Lazinator.CodeDescription
                     {WriteMethodName}(writer, {itemString});");
                 else if (IsNonSerializedType)
                     return ($@"
-                    void action(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness);
+                    void action(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness);
                     WriteToBinaryWith{(IsGuaranteedSmall ? "Byte" : "Int")}LengthPrefix(writer, action);");
                 else
                     return ($@"
@@ -1420,7 +1420,7 @@ namespace Lazinator.CodeDescription
             alreadyGenerated.Add(FullyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                    private static {FullyQualifiedTypeName} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                    private static {FullyQualifiedTypeName} {DirectConverterTypeNamePrefix}ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                     {{
                         if (storage.Length == 0)
                         {{
@@ -1494,7 +1494,7 @@ namespace Lazinator.CodeDescription
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                            {itemName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, deserializationFactory, informParentOfDirtinessDelegate);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             else
@@ -1547,11 +1547,11 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                void action{itemName}(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
+                                void action{itemName}(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
                                 WriteToBinaryWithIntLengthPrefix(writer, action{itemName});
                             }}");
                 else return $@"
-                            void action{itemName}(BinaryBufferWriter w) => ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
+                            void action{itemName}(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness);
                             WriteToBinaryWithIntLengthPrefix(writer, action{itemName});";
             }
             else
