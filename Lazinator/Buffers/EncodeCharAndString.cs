@@ -65,14 +65,21 @@ namespace Lazinator.Buffers
         {
             bool success = false;
             int bytesWritten = 0;
+            const int maxTries = 1000;
+            int tryNum = 0;
             while (!success)
             {
                 success = System.IO.Compression.BrotliEncoder.TryCompress(MemoryMarshal.Cast<char, byte>(s.AsSpan()), writer.Free, out bytesWritten);
-                if (!success)
+                if (success)
+                    writer.Position += bytesWritten;
+                else
+                {
+                    tryNum++;
+                    if (tryNum > maxTries)
+                        throw new Exception("BadBrotliString");
                     writer.Resize();
+                }
             }
-
-            writer.Position += bytesWritten;
         }
 
         public static void WriteBrotliCompressedWithIntPrefix(this BinaryBufferWriter writer, string s)
@@ -89,17 +96,27 @@ namespace Lazinator.Buffers
             int length = b.ToInt32(ref index);
             if (length == -1)
                 return null;
-            ReadOnlySpan<byte> source = b.Slice(4, length);
-            BinaryBufferWriter decompressionBuffer = new BinaryBufferWriter(100);
+            ReadOnlySpan<byte> source = b.Slice(index, length);
+            BinaryBufferWriter decompressionBuffer = new BinaryBufferWriter(4096); // rent a buffer
             bool success = false;
+            const int maxTries = 1000;
+            int tryNum = 0;
             while (!success)
             {
                 success = System.IO.Compression.BrotliDecoder.TryDecompress(source, decompressionBuffer.Free,
-                    out int bytesWritten);
+                    out int bytesRead);
                 if (success)
-                    decompressionBuffer.Position = bytesWritten;
+                {
+                    decompressionBuffer.Position += bytesRead;
+                    index += length;
+                }
                 else
+                {
+                    tryNum++;
+                    if (tryNum > maxTries)
+                        throw new Exception("BadBrotliString");
                     decompressionBuffer.Resize();
+                }
             }
 
             return new string(MemoryMarshal.Cast<byte, char>(decompressionBuffer.Written));

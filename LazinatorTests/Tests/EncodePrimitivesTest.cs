@@ -315,6 +315,7 @@ namespace LazinatorTests.Tests
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, valueToWrite);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToString_BrotliCompressedWithLength(ref numBytesRead);
+                numBytesRead.Should().Be(bytes.Length);
                 valueRead.Should().Be(valueToWrite);
             }
         }
