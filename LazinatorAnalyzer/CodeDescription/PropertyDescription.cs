@@ -142,8 +142,6 @@ namespace Lazinator.CodeDescription
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
             ExcludableWhenIncludingMostChildren = excludable != null;
-            CloneIgnoreRecordLikeAttribute ignoreRecordLike = UserAttributes.OfType<CloneIgnoreRecordLikeAttribute>().FirstOrDefault();
-            IgnoreRecordLike = ignoreRecordLike != null;
         }
 
         private void SetInclusionConditionals()

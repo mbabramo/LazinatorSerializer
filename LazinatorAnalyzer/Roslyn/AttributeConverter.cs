@@ -69,8 +69,6 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneExcludableChildAttribute();
                 case "IncludableChildAttribute":
                     return new CloneIncludableChildAttribute();
-                case "IgnoreRecordLikeAttribute":
-                    return new CloneIgnoreRecordLikeAttribute();
                 case "NonexclusiveLazinatorAttribute":
                     return new CloneNonexclusiveLazinatorAttribute();
                 case "SmallLazinatorAttribute":
