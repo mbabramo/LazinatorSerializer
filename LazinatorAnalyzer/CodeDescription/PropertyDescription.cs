@@ -60,7 +60,6 @@ namespace Lazinator.CodeDescription
         public bool IsGuaranteedSmall { get; set; }
         public bool IncludableWhenExcludingMostChildren { get; private set; }
         public bool ExcludableWhenIncludingMostChildren { get; private set; }
-        public bool IgnoreRecordLike { get; private set; }
 
         public override string ToString()
         {
@@ -425,7 +424,7 @@ namespace Lazinator.CodeDescription
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = Container.CodeFiles.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(t) || IgnoreRecordLike)
+            if (!recordLikeTypes.ContainsKey(t) || Container.CodeFiles.Config.IgnoreRecordLikeTypes.Any(x => x == t.GetFullyQualifiedName()))
                 return false;
 
             PropertyType = LazinatorPropertyType.SupportedTuple;
