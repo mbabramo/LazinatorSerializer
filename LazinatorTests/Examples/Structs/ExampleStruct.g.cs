@@ -632,7 +632,7 @@ namespace LazinatorTests.Examples
             if (lengthCollectionMember_item1 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                item1 = ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item1 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item1;
             
@@ -652,7 +652,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                void actionItem1(BinaryBufferWriter w) => ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert.Item1, includeChildrenMode, verifyCleanness);
+                void actionItem1(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(writer, itemToConvert.Item1, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem1);
             }
             
