@@ -5,5 +5,8 @@
   },
   "InterchangeConverters": {
     "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass"
-  }
+  },
+  "IgnoreRecordLikeTypes": [
+    "LazinatorTests.Examples.NonLazinatorStruct"
+  ]
 }

@@ -13,6 +13,7 @@ namespace LazinatorAnalyzer.Settings
     {
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
+        public List<string> IgnoreRecordLikeTypes;
 
         public LazinatorConfig()
         {
@@ -23,6 +24,7 @@ namespace LazinatorAnalyzer.Settings
         {
             InterchangeConverters = new Dictionary<string, string>(); // default
             DirectConverters = new Dictionary<string, string>();
+            IgnoreRecordLikeTypes = new List<string>();
             if (configString != null)
             {
                 try
@@ -32,12 +34,21 @@ namespace LazinatorAnalyzer.Settings
                     LoadDictionary(json, InterchangeConvertersString, InterchangeConverters);
                     const string DirectConvertersString = "DirectConverters";
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
+                    LoadIgnoreRecordLikeTypes(json);
                 }
                 catch
                 {
                     throw new LazinatorCodeGenException("Error parsing LazinatorConfig.json file. Make sure that the json is valid.");
                 }
             }
+        }
+
+        private void LoadIgnoreRecordLikeTypes(JsonObject json)
+        {
+            JsonArray typeList = json["IgnoreRecordLikeTypes"];
+            if (typeList != null)
+                foreach (var item in typeList)
+                    IgnoreRecordLikeTypes.Add(item.AsString);
         }
 
         private void LoadDictionary(JsonObject json, string mappingPropertyName, Dictionary<string, string> dictionary)
