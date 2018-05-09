@@ -308,7 +308,7 @@ namespace LazinatorTests.Tests
         private static void CanEncodeStringBrotliHelper(string valueToWrite)
         {
             string valueRead = "";
-            int numBytesExpected = 0, numBytesRead = 0;
+            int numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {

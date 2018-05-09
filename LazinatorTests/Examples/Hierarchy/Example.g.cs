@@ -693,7 +693,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength);
-                        _MyNonLazinatorChild = ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, DeserializationFactory, () => { MyNonLazinatorChild_Dirty = true; });
+                        _MyNonLazinatorChild = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, DeserializationFactory, () => { MyNonLazinatorChild_Dirty = true; });
                     }
                     _MyNonLazinatorChild_Accessed = true;
                 }
@@ -856,7 +856,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(w, MyNonLazinatorChild,
+            LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(w, MyNonLazinatorChild,
             includeChildrenMode, v));
         }
         

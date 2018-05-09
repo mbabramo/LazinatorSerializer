@@ -4,6 +4,6 @@
     "LazinatorTests.Examples.NonLazinatorStruct": "LazinatorTests.Examples.NonLazinatorDirectConverter"
   },
   "InterchangeConverters": {
-    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass",
+    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass"
   }
 }
