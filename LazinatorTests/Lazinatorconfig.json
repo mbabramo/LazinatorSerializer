@@ -1,7 +1,7 @@
 ﻿{
   "DirectConverters": {
-    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "",
-    "LazinatorTests.Examples.NonLazinatorInterchangeableStruct": ""
+    "LazinatorTests.Examples.NonLazinatorClass": "",
+    "LazinatorTests.Examples.NonLazinatorStruct": ""
   },
   "InterchangeConverters": {
     "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass",

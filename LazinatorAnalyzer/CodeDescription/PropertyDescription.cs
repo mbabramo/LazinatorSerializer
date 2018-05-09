@@ -43,7 +43,7 @@ namespace Lazinator.CodeDescription
         public bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         public string InterchangeTypeName { get; set; }
         public string DirectConverterTypeName { get; set; }
-        public string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" ? "" : DirectConverterTypeName + ".";
+        public string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" || DirectConverterTypeName == null ? "" : DirectConverterTypeName + ".";
         public bool HasInterchangeType => InterchangeTypeName != null;
         public List<PropertyDescription> InnerProperties { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
