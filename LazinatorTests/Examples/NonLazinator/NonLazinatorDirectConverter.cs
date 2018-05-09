@@ -27,6 +27,8 @@ namespace LazinatorTests.Examples
 
         public static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(BinaryBufferWriter writer, NonLazinatorClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            if (itemToConvert == null)
+                return;
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.MyInt);
             writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
         }
