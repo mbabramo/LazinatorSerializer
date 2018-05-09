@@ -22,7 +22,7 @@ namespace LazinatorTests.Examples
             int bytesSoFar = 0;
             int myInt = span.ToDecompressedInt(ref bytesSoFar);
 
-            string myString = span.ToString_VarIntLength(ref bytesSoFar);
+            string myString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
 
             return new NonLazinatorClass() { MyInt = myInt, MyString = myString };
         }
@@ -32,7 +32,7 @@ namespace LazinatorTests.Examples
             if (itemToConvert != null)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.MyInt);
-                writer.WriteStringWithVarIntPrefix(itemToConvert.MyString);
+                writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
             }
         }
 
@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples
             int bytesSoFar = 0;
             int myInt = span.ToDecompressedInt(ref bytesSoFar);
 
-            string myString = span.ToString_VarIntLength(ref bytesSoFar);
+            string myString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
 
             return new NonLazinatorStruct() { MyInt = myInt, MyString = myString };
         }
@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples
         public static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorStruct(BinaryBufferWriter writer, NonLazinatorStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.MyInt);
-            writer.WriteStringWithVarIntPrefix(itemToConvert.MyString);
+            writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
         }
     }
 }

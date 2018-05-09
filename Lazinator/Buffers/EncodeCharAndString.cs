@@ -32,7 +32,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="s"></param>
-        public static void WriteStringWithVarIntPrefix(this BinaryBufferWriter writer, string s)
+        public static void WriteStringUtf8WithVarIntPrefix(this BinaryBufferWriter writer, string s)
         {
             if (s == null)
                 CompressedIntegralTypes.WriteCompressedNullableInt(writer, null);
@@ -52,7 +52,7 @@ namespace Lazinator.Buffers
             return result;
         }
 
-        public static string ToString_VarIntLength(this ReadOnlySpan<byte> b, ref int index)
+        public static string ToString_VarIntLengthUtf8(this ReadOnlySpan<byte> b, ref int index)
         {
             int? length = b.ToDecompressedNullableInt(ref index);
             if (length == null)
@@ -94,9 +94,11 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = System.IO.Compression.BrotliDecoder.TryDecompress(b, decompressionBuffer.Free,
+                success = System.IO.Compression.BrotliDecoder.TryDecompress(source, decompressionBuffer.Free,
                     out int bytesWritten);
-                if (!success)
+                if (success)
+                    decompressionBuffer.Position = bytesWritten;
+                else
                     decompressionBuffer.Resize();
             }
 

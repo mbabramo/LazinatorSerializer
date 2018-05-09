@@ -331,6 +331,34 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ChildInclusionOptionsWork_IncludeAllChildren()
+        {
+            var original = GetHierarchy(1, 1, 1, 1, 1);
+            original.IncludableChild = GetExampleChild(1);
+            original.ExcludableChild = GetExampleChild(1);
+
+            var result = original.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
+            result.IncludableChild.Should().BeNull();
+            result.ExcludableChild.Should().BeNull();
+            result.MyChild1.Should().BeNull();
+
+            result = original.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren);
+            result.IncludableChild.Should().NotBeNull();
+            result.ExcludableChild.Should().NotBeNull();
+            result.MyChild1.Should().NotBeNull();
+
+            result = original.CloneLazinatorTyped(IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+            result.IncludableChild.Should().NotBeNull();
+            result.ExcludableChild.Should().BeNull();
+            result.MyChild1.Should().NotBeNull();
+
+            result = original.CloneLazinatorTyped(IncludeChildrenMode.IncludeOnlyIncludableChildren);
+            result.IncludableChild.Should().NotBeNull();
+            result.ExcludableChild.Should().BeNull();
+            result.MyChild1.Should().BeNull();
+        }
+
+        [Fact]
         public void LazinatorDotNetListInt()
         {
             DotNetList_Values GetObject(int thirdItem)

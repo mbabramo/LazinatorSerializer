@@ -251,17 +251,71 @@ namespace LazinatorTests.Tests
         public void ReadOnlySpan_CanEncodeString()
         {
             string valueToWrite = "Hello, World";
+            CanEncodeShortStringHelper(valueToWrite);
+        }
+
+        [Fact]
+        public void ReadOnlySpan_CanEncodeString_Null()
+        {
+            string valueToWrite = null;
+            CanEncodeShortStringHelper(valueToWrite);
+        }
+
+        [Fact]
+        public void ReadOnlySpan_CanEncodeString_Empty()
+        {
+            string valueToWrite = "";
+            CanEncodeShortStringHelper(valueToWrite);
+        }
+
+        private static void CanEncodeShortStringHelper(string valueToWrite)
+        {
             string valueRead = "";
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
             using (BinaryBufferWriter writer = new BinaryBufferWriter())
             {
-                EncodeCharAndString.WriteStringWithVarIntPrefix(writer, valueToWrite);
-                numBytesExpected = 13; // 12 characters (1 byte each) + 1 byte for length
+                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, valueToWrite);
+                numBytesExpected = (valueToWrite?.Length ?? 0) + 1; // 12 characters (1 byte each) + 1 byte for length
                 bytes = writer.MemoryInBuffer.FilledMemory;
-                valueRead = bytes.Span.ToString_VarIntLength(ref numBytesRead);
+                valueRead = bytes.Span.ToString_VarIntLengthUtf8(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
+            }
+        }
+
+        [Fact]
+        public void ReadOnlySpan_CanEncodeStringBrotli()
+        {
+            string valueToWrite = "Hello, World";
+            CanEncodeStringBrotliHelper(valueToWrite);
+        }
+
+        [Fact]
+        public void ReadOnlySpan_CanEncodeStringBrotli_Null()
+        {
+            string valueToWrite = null;
+            CanEncodeStringBrotliHelper(valueToWrite);
+        }
+
+        [Fact]
+        public void ReadOnlySpan_CanEncodeStringBrotli_Empty()
+        {
+            string valueToWrite = "";
+            CanEncodeStringBrotliHelper(valueToWrite);
+        }
+
+        private static void CanEncodeStringBrotliHelper(string valueToWrite)
+        {
+            string valueRead = "";
+            int numBytesExpected = 0, numBytesRead = 0;
+            ReadOnlyMemory<byte> bytes;
+            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            {
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, valueToWrite);
+                bytes = writer.MemoryInBuffer.FilledMemory;
+                valueRead = bytes.Span.ToString_BrotliCompressedWithLength(ref numBytesRead);
+                valueRead.Should().Be(valueToWrite);
             }
         }
     }
