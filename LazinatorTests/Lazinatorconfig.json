@@ -1,5 +1,9 @@
 ﻿{
-  "InterchangeMappings": {
+  "DirectConverters": {
+    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "",
+    "LazinatorTests.Examples.NonLazinatorInterchangeableStruct": ""
+  },
+  "InterchangeConverters": {
     "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass",
   }
 }

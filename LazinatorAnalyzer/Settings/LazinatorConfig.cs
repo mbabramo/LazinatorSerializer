@@ -11,7 +11,8 @@ namespace LazinatorAnalyzer.Settings
 
     public class LazinatorConfig
     {
-        public Dictionary<string, string> InterchangeMappings;
+        public Dictionary<string, string> InterchangeConverters;
+        public Dictionary<string, string> DirectConverters;
 
         public LazinatorConfig()
         {
@@ -20,16 +21,17 @@ namespace LazinatorAnalyzer.Settings
 
         public LazinatorConfig(string configString)
         {
-            InterchangeMappings = new Dictionary<string, string>(); // default
+            InterchangeConverters = new Dictionary<string, string>(); // default
+            DirectConverters = new Dictionary<string, string>();
             if (configString != null)
             {
                 try
                 {
                     JsonObject json = JsonValue.Parse(configString).AsJsonObject;
-                    JsonObject interchangeMappings = json["InterchangeMappings"];
-                    if (interchangeMappings != null)
-                        foreach (var pair in interchangeMappings)
-                            InterchangeMappings.Add(pair.Key, pair.Value.AsString);
+                    const string InterchangeConvertersString = "InterchangeConverters";
+                    LoadDictionary(json, InterchangeConvertersString, InterchangeConverters);
+                    const string DirectConvertersString = "DirectConverters";
+                    LoadDictionary(json, DirectConvertersString, DirectConverters);
                 }
                 catch
                 {
@@ -38,11 +40,27 @@ namespace LazinatorAnalyzer.Settings
             }
         }
 
-        public string GetInterchangeTypeName(INamedTypeSymbol type)
+        private void LoadDictionary(JsonObject json, string mappingPropertyName, Dictionary<string, string> dictionary)
+        {
+            JsonObject mappings = json[mappingPropertyName];
+            if (mappings != null)
+                foreach (var pair in mappings)
+                    dictionary.Add(pair.Key, pair.Value.AsString);
+        }
+
+        public string GetInterchangeConverterTypeName(INamedTypeSymbol type)
         {
             string fullyQualifiedName = type.GetFullyQualifiedName();
-            if (InterchangeMappings.ContainsKey(fullyQualifiedName))
-                return InterchangeMappings[fullyQualifiedName];
+            if (InterchangeConverters.ContainsKey(fullyQualifiedName))
+                return InterchangeConverters[fullyQualifiedName];
+            return null;
+        }
+
+        public string GetDirectConverterTypeName(INamedTypeSymbol type)
+        {
+            string fullyQualifiedName = type.GetFullyQualifiedName();
+            if (DirectConverters.ContainsKey(fullyQualifiedName))
+                return DirectConverters[fullyQualifiedName];
             return null;
         }
     }

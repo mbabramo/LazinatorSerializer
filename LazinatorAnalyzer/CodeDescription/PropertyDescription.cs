@@ -42,6 +42,8 @@ namespace Lazinator.CodeDescription
         public bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
         public bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         public string InterchangeTypeName { get; set; }
+        public string DirectConverterTypeName { get; set; }
+        public string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" ? "" : DirectConverterTypeName + ".";
         public bool HasInterchangeType => InterchangeTypeName != null;
         public List<PropertyDescription> InnerProperties { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
@@ -258,7 +260,12 @@ namespace Lazinator.CodeDescription
             TypeName = PrettyTypeName(t);
             TypeNameEncodable = EncodableTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
-            InterchangeTypeName = Container.CodeFiles.Config?.GetInterchangeTypeName(t);
+            InterchangeTypeName = Container.CodeFiles.Config?.GetInterchangeConverterTypeName(t);
+            DirectConverterTypeName = Container.CodeFiles.Config?.GetDirectConverterTypeName(t);
+            if (InterchangeTypeName != null && DirectConverterTypeName != null)
+                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} has both an interchange converter and a direct converter type listed. Only one should be used.");
+            if (InterchangeTypeName == null && DirectConverterTypeName == null)
+                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it.");
         }
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
@@ -639,7 +646,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && Container.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
-                assignment = $"_{PropertyName} = ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, DeserializationFactory, {(automaticallyMarkDirtyWhenContainedObjectIsCreated ? $"() => {{ {PropertyName}_Dirty = true; }}" : "null")});";
+                assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, DeserializationFactory, {(automaticallyMarkDirtyWhenContainedObjectIsCreated ? $"() => {{ {PropertyName}_Dirty = true; }}" : "null")});";
             }
 
             string creation;
@@ -1373,7 +1380,7 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (w, v) =>
-                            ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, {PropertyName},
+                            {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, {PropertyName},
                                 includeChildrenMode, v));");
                 else
                 { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
@@ -1381,7 +1388,7 @@ namespace Lazinator.CodeDescription
                     if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                         binaryWriterAction = $"copy_Value.Write(w)";
                     else
-                        binaryWriterAction = $"ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
+                        binaryWriterAction = $"{DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
                     sb.AppendLine(
                         $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
