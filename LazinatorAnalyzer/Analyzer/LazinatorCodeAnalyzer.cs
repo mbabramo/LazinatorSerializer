@@ -27,11 +27,19 @@ namespace LazinatorAnalyzer.Analyzer
         // 1. If the Lazinator code behind does not exist or is out of date, then it must be generated.
         public const string Lazin001 = "Lazin001";
         private static readonly string LazinatorOutOfDateTitle = "Lazinator out-of-date";
-        private static readonly string LazinatorOutOfDateMessageFormat = "Regenerate the code behind for this Lazinator object";
+        private static readonly string LazinatorOutOfDateMessageFormat = "Generate the code behind for this Lazinator object";
         private static readonly string LazinatorOutOfDateDescription =
             "This object implements an interface with the Lazinator attribute, but it is out of date.";
         private static readonly DiagnosticDescriptor LazinatorOutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle, LazinatorOutOfDateMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
         internal static DiagnosticDescriptor OutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle.ToString(), LazinatorOutOfDateMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
+        // 2. Otherwise, we can create an option to regenerate the Lazinator code.
+        public const string Lazin002 = "Lazin001";
+        private static readonly string LazinatorOptionalRegenerationTitle = "Lazinator regeneration";
+        private static readonly string LazinatorOptionalRegenerationMessageFormat = "Regenerate the code behind for this Lazinator object";
+        private static readonly string LazinatorOptionalRegenerationDescription =
+            "This object implements an interface with the Lazinator attribute.";
+        private static readonly DiagnosticDescriptor LazinatorOptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle, LazinatorOptionalRegenerationMessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
+        internal static DiagnosticDescriptor OptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle.ToString(), LazinatorOptionalRegenerationMessageFormat.ToString(), Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule); } }
 
@@ -174,12 +182,14 @@ namespace LazinatorAnalyzer.Analyzer
                     // Analyze types
                     foreach (var compilationInfoEntry in CompilationInformation)
                     {
+                        bool couldBeGenerated = false;
                         var sourceFileInfo = compilationInfoEntry.Value;
                         if (sourceFileInfo.LazinatorInterface != null 
                             && sourceFileInfo.LazinatorObject != null 
                             && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
                             && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                         {
+                            couldBeGenerated = true;
                             bool needsGeneration = sourceFileInfo.CodeBehindLocation == null;
                             if (!needsGeneration)
                             {
@@ -209,7 +219,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 else
                                     needsGeneration = true;
                             }
-                            if (needsGeneration)
+                            if (needsGeneration || couldBeGenerated)
                             {
                                 var locationOfImplementingType = sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
                                 var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
@@ -222,7 +232,7 @@ namespace LazinatorAnalyzer.Analyzer
                                     additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
                                 additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
                                 var config = ConfigLoader.LoadConfigFileAsString(_additionalFiles, context.CancellationToken);
-                                var diagnostic = Diagnostic.Create(OutOfDateRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
+                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
                                 context.ReportDiagnostic(diagnostic);
                             }
                         }

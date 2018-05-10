@@ -12,8 +12,7 @@ namespace Lazinator.Spans
     [Serializable()]
     public sealed partial class LazinatorBitArray : ICollection, ICloneable, ILazinatorBitArray
     {
-
-        private LazinatorBitArray()
+        public LazinatorBitArray()
         {
         }
 
