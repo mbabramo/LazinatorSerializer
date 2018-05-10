@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperTimeSpan : ILazinatorWrapperTimeSpan, IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>, IComparable<LazinatorWrapperTimeSpan>, IEquatable<LazinatorWrapperTimeSpan>
     {
+        public bool IsNull => false;
+
         public static implicit operator LazinatorWrapperTimeSpan(TimeSpan x)
         {
             return new LazinatorWrapperTimeSpan() { Value = x };

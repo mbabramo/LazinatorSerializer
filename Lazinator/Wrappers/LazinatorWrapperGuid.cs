@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperGuid : ILazinatorWrapperGuid
     {
+        public bool IsNull => false;
+
         public static implicit operator LazinatorWrapperGuid(Guid x)
         {
             return new LazinatorWrapperGuid() { Value = x };

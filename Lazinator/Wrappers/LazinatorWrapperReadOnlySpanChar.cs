@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperReadOnlySpanChar : ILazinatorWrapperReadOnlySpanChar
     {
+        public bool IsNull => Value == null;
+
         public static implicit operator LazinatorWrapperReadOnlySpanChar(ReadOnlySpan<char> x)
         {
             return new LazinatorWrapperReadOnlySpanChar() { Value = x };

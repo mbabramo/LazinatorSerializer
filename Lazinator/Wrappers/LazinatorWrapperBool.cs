@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperBool : ILazinatorWrapperBool
     {
+        public bool IsNull => false;
+
         public static implicit operator LazinatorWrapperBool(bool x)
         {
             return new LazinatorWrapperBool() {Value = x};

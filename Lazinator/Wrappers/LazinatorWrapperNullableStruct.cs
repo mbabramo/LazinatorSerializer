@@ -8,6 +8,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableStruct<T> : ILazinatorWrapperNullableStruct<T> where T : struct, ILazinator
     {
+        public bool IsNull => !HasValue;
+
         public T? AsNullableStruct
         {
             get => HasValue ? (T?)NonNullValue : null;

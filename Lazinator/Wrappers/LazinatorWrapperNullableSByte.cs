@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableSByte : ILazinatorWrapperNullableSByte
     {
+        public bool IsNull => Value == null;
+
         public static implicit operator LazinatorWrapperNullableSByte(sbyte? x)
         {
             return new LazinatorWrapperNullableSByte() { Value = x };

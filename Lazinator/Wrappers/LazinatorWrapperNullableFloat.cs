@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableFloat : ILazinatorWrapperNullableFloat
     {
+        public bool IsNull => Value == null;
+
         public static implicit operator LazinatorWrapperNullableFloat(float? x)
         {
             return new LazinatorWrapperNullableFloat() { Value = x };

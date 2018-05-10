@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableChar : ILazinatorWrapperNullableChar
     {
+        public bool IsNull => Value == null;
+
         public static implicit operator LazinatorWrapperNullableChar(char? x)
         {
             return new LazinatorWrapperNullableChar() { Value = x };

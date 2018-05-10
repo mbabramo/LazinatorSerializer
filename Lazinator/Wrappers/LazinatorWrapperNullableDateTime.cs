@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableDateTime : ILazinatorWrapperNullableDateTime
     {
+        public bool IsNull => Value == null;
+
         public static implicit operator LazinatorWrapperNullableDateTime(DateTime? x)
         {
             return new LazinatorWrapperNullableDateTime() { Value = x };

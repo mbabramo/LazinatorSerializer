@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperString : ILazinatorWrapperString, IComparable, IComparable<string>, IEquatable<string>, IComparable<LazinatorWrapperString>, IEquatable<LazinatorWrapperString>
     {
+        public bool IsNull => false;
+
         public static implicit operator LazinatorWrapperString(string x)
         {
             return new LazinatorWrapperString() { Value = x };

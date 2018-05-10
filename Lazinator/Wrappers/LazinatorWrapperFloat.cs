@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperFloat : ILazinatorWrapperFloat, IComparable, IComparable<float>, IEquatable<float>, IComparable<LazinatorWrapperFloat>, IEquatable<LazinatorWrapperFloat>
     {
+        public bool IsNull => false;
+
         public static implicit operator LazinatorWrapperFloat(float x)
         {
             return new LazinatorWrapperFloat() { Value = x };

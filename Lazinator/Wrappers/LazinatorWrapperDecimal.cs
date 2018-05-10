@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperDecimal : ILazinatorWrapperDecimal, IComparable, IComparable<decimal>, IEquatable<decimal>, IComparable<LazinatorWrapperDecimal>, IEquatable<LazinatorWrapperDecimal>
     {
+        public bool IsNull => false;
+
         public static implicit operator LazinatorWrapperDecimal(decimal x)
         {
             return new LazinatorWrapperDecimal() { Value = x };

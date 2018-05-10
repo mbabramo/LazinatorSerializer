@@ -4,6 +4,8 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableTimeSpan : ILazinatorWrapperNullableTimeSpan
     {
+        public bool IsNull => Value == null;
+
         public static implicit operator LazinatorWrapperNullableTimeSpan(TimeSpan? x)
         {
             return new LazinatorWrapperNullableTimeSpan() { Value = x };
