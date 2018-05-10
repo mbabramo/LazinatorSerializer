@@ -4,7 +4,7 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperDateTime : ILazinatorWrapperDateTime, IComparable, IComparable<DateTime>, IEquatable<DateTime>, IComparable<LazinatorWrapperDateTime>, IEquatable<LazinatorWrapperDateTime>
     {
-        public bool IsNull => false;
+        public bool HasValue => true;
 
         public static implicit operator LazinatorWrapperDateTime(DateTime x)
         {

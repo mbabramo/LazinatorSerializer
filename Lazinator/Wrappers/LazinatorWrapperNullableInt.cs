@@ -4,7 +4,7 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableInt : ILazinatorWrapperNullableInt
     {
-        public bool IsNull => Value == null;
+        public bool HasValue => Value != null;
 
         public static implicit operator LazinatorWrapperNullableInt(int? x)
         {

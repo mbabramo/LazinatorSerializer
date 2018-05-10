@@ -4,7 +4,7 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperUlong : ILazinatorWrapperUlong, IComparable, IComparable<ulong>, IEquatable<ulong>, IComparable<LazinatorWrapperUlong>, IEquatable<LazinatorWrapperUlong>
     {
-        public bool IsNull => false;
+        public bool HasValue => true;
 
         public static implicit operator LazinatorWrapperUlong(ulong x)
         {

@@ -4,7 +4,7 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableBool : ILazinatorWrapperNullableBool
     {
-        public bool IsNull => Value == null;
+        public bool HasValue => Value != null;
 
         public override string ToString()
         {

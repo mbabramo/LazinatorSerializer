@@ -3,12 +3,9 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    interface ILazinatorWrapper<T>
+    interface ILazinatorWrapper<T> : ILazinatorHasValue
     {
         T Value { get; set; }
-        
-        [DoNotAutogenerate]
-        bool IsNull { get; }
     }
 
     // ReadOnlySpan etc. need their own interfaces. For now, we'll define only ReadOnlySpan<char>

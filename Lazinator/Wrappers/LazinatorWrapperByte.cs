@@ -4,7 +4,7 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperByte : ILazinatorWrapperByte, IComparable, IComparable<byte>, IEquatable<byte>, IComparable<LazinatorWrapperByte>, IEquatable<LazinatorWrapperByte>
     {
-        public bool IsNull => false;
+        public bool HasValue => true;
 
         public static implicit operator LazinatorWrapperByte(byte x)
         {
