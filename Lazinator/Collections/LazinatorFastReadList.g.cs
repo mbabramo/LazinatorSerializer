@@ -159,13 +159,13 @@ namespace Lazinator.Collections
         public virtual uint GetBinaryHashCode32()
         {
             LazinatorConvertToBytes();
-            return Farmhash.Hash32(LazinatorObjectBytes.Span);
+            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
         }
 
         public virtual ulong GetBinaryHashCode64()
         {
             LazinatorConvertToBytes();
-            return Farmhash.Hash64(LazinatorObjectBytes.Span);
+            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
 
         /* Field boilerplate */

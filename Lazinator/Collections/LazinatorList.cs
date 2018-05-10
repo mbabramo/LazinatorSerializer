@@ -66,7 +66,7 @@ namespace Lazinator.Collections
                 return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();
             
             var byteSpan = GetListMemberSlice(index);
-            return Farmhash.Hash32(byteSpan.Span);
+            return FarmhashByteSpans.Hash32(byteSpan.Span);
         }
 
         private ReadOnlyMemory<byte> GetListMemberSlice(int index)

@@ -395,13 +395,13 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}uint GetBinaryHashCode32()
                         {{
                             LazinatorConvertToBytes();
-                            return Farmhash.Hash32(LazinatorObjectBytes.Span);
+                            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
                         }}
 
                         public {DerivationKeyword}ulong GetBinaryHashCode64()
                         {{
                             LazinatorConvertToBytes();
-                            return Farmhash.Hash64(LazinatorObjectBytes.Span);
+                            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
                         }}
 
                         /* Field boilerplate */
