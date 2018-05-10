@@ -42,13 +42,6 @@ namespace Lazinator.Support
 
         private static uint Rotate(uint val, int shift) => Rotate32(val, shift);
 
-        private static ulong Fetch64(ReadOnlySpan<byte> p) => MemoryMarshal.Read<ulong>(p);
-        private static uint Fetch32(ReadOnlySpan<byte> p) => MemoryMarshal.Read<uint>(p);
-        private static uint Fetch(ReadOnlySpan<byte> p) => MemoryMarshal.Read<uint>(p);
-        private static ulong Fetch64(ReadOnlySpan<byte> p, uint i) => MemoryMarshal.Read<ulong>(p.Slice((int) i));
-        private static uint Fetch32(ReadOnlySpan<byte> p, uint i) => MemoryMarshal.Read<uint>(p.Slice((int) i));
-        private static uint Fetch(ReadOnlySpan<byte> p, uint i) => MemoryMarshal.Read<uint>(p.Slice((int)i));
-
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L192-L196
         private static unsafe ulong Fetch64(byte* p) => *(ulong*)p;
 
@@ -98,14 +91,14 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L1025-L1040
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe uint Hash32Len13to24(Span<byte> s, uint len, uint seed = 0)
+        private static unsafe uint Hash32Len13to24(byte* s, uint len, uint seed = 0)
         {
-            uint a = Fetch(s,  (uint) (-4 + (len >> 1)));
-            uint b = Fetch(s,  4);
-            uint c = Fetch(s,  len - 8);
-            uint d = Fetch(s,  (len >> 1));
+            uint a = Fetch(s - 4 + (len >> 1));
+            uint b = Fetch(s + 4);
+            uint c = Fetch(s + len - 8);
+            uint d = Fetch(s + (len >> 1));
             uint e = Fetch(s);
-            uint f = Fetch(s,  len - 4);
+            uint f = Fetch(s + len - 4);
             uint h = d * c1 + len + seed;
             a = Rotate(a, 12) + f;
             h = Mur(c, h) + a;
@@ -118,18 +111,18 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L1053-L1059
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe uint Hash32Len5to12(Span<byte> s, uint len, uint seed = 0)
+        private static unsafe uint Hash32Len5to12(byte* s, uint len, uint seed = 0)
         {
             uint a = len, b = len * 5, c = 9, d = b + seed;
             a += Fetch(s);
-            b += Fetch(s,  len - 4);
-            c += Fetch(s,  ((len >> 1) & 4));
+            b += Fetch(s + len - 4);
+            c += Fetch(s + ((len >> 1) & 4));
             return fmix(seed ^ Mur(c, Mur(b, Mur(a, d))));
         }
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L1061-L1117
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe uint Hash32(Span<byte> s, uint len)
+        public static unsafe uint Hash32(byte* s, uint len)
         {
             if (len <= 24)
             {
@@ -138,11 +131,11 @@ namespace Lazinator.Support
             }
 
             uint h = len, g = c1 * len, f = g;
-            uint a0 = Rotate(Fetch(s,  len - 4) * c1, 17) * c2;
-            uint a1 = Rotate(Fetch(s,  len - 8) * c1, 17) * c2;
-            uint a2 = Rotate(Fetch(s,  len - 16) * c1, 17) * c2;
-            uint a3 = Rotate(Fetch(s,  len - 12) * c1, 17) * c2;
-            uint a4 = Rotate(Fetch(s,  len - 20) * c1, 17) * c2;
+            uint a0 = Rotate(Fetch(s + len - 4) * c1, 17) * c2;
+            uint a1 = Rotate(Fetch(s + len - 8) * c1, 17) * c2;
+            uint a2 = Rotate(Fetch(s + len - 16) * c1, 17) * c2;
+            uint a3 = Rotate(Fetch(s + len - 12) * c1, 17) * c2;
+            uint a4 = Rotate(Fetch(s + len - 20) * c1, 17) * c2;
             h ^= a0;
             h = Rotate(h, 19);
             h = h * 5 + 0xe6546b64;
@@ -161,10 +154,10 @@ namespace Lazinator.Support
             do
             {
                 uint a = Fetch(s);
-                uint b = Fetch(s,  4);
-                uint c = Fetch(s,  8);
-                uint d = Fetch(s,  12);
-                uint e = Fetch(s,  16);
+                uint b = Fetch(s + 4);
+                uint c = Fetch(s + 8);
+                uint d = Fetch(s + 12);
+                uint e = Fetch(s + 16);
                 h += a;
                 g += b;
                 f += c;
@@ -284,25 +277,25 @@ namespace Lazinator.Support
         // Return a 16-byte hash for s[0] ... s[31], a, and b.  Quick and dirty.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe uint128_t WeakHashLen32WithSeeds(
-            Span<byte> s, ulong a, ulong b)
+            byte* s, ulong a, ulong b)
         {
             return WeakHashLen32WithSeeds(Fetch64(s),
-                                        Fetch64(s, 8),
-                                        Fetch64(s, 16),
-                                        Fetch64(s, 24),
+                                        Fetch64(s + 8),
+                                        Fetch64(s + 16),
+                                        Fetch64(s + 24),
                                         a,
                                         b);
         }
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L1710-L1733
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong HashLen0to16(Span<byte> s, uint len)
+        private static unsafe ulong HashLen0to16(byte* s, uint len)
         {
             if (len >= 8)
             {
                 ulong mul = k2 + len * 2;
                 ulong a = Fetch64(s) + k2;
-                ulong b = Fetch64(s, len - 8);
+                ulong b = Fetch64(s + len - 8);
                 ulong c = Rotate64(b, 37) * mul + a;
                 ulong d = (Rotate64(a, 25) + b) * mul;
                 return HashLen16(c, d, mul);
@@ -316,8 +309,8 @@ namespace Lazinator.Support
             if (len > 0)
             {
                 ushort a = s[0];
-                ushort b = s[(int) (len >> 1)];
-                ushort c = s[(int) (len - 1)];
+                ushort b = s[len >> 1];
+                ushort c = s[len - 1];
                 uint y = a + ((uint)b << 8);
                 uint z = len + ((uint)c << 2);
                 return ShiftMix(y * k2 ^ z * k0) * k2;
@@ -327,13 +320,13 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L460-L470
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong HashLen17to32(Span<byte> s, uint len)
+        private static unsafe ulong HashLen17to32(byte* s, uint len)
         {
             ulong mul = k2 + len * 2;
             ulong a = Fetch64(s) * k1;
-            ulong b = Fetch64(s, 8);
-            ulong c = Fetch64(s, len - 8) * mul;
-            ulong d = Fetch64(s, len - 16) * k2;
+            ulong b = Fetch64(s + 8);
+            ulong c = Fetch64(s + len - 8) * mul;
+            ulong d = Fetch64(s + len - 16) * k2;
             return HashLen16(Rotate64(a + b, 43) + Rotate64(c, 30) + d,
                         a + Rotate64(b + k2, 18) + c, mul);
         }
@@ -350,13 +343,13 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L700-L711
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong H32(Span<byte> s, uint len, ulong mul,
+        private static unsafe ulong H32(byte* s, uint len, ulong mul,
                                         ulong seed0 = 0, ulong seed1 = 0)
         {
             ulong a = Fetch64(s) * k1;
-            ulong b = Fetch64(s, 8);
-            ulong c = Fetch64(s, len - 8) * mul;
-            ulong d = Fetch64(s, len - 16) * k2;
+            ulong b = Fetch64(s + 8);
+            ulong c = Fetch64(s + len - 8) * mul;
+            ulong d = Fetch64(s + len - 16) * k2;
             ulong u = Rotate64(a + b, 43) + Rotate64(c, 30) + d + seed0;
             ulong v = a + Rotate64(b + k2, 18) + c + seed1;
             a = ShiftMix((u ^ v) * mul);
@@ -367,31 +360,31 @@ namespace Lazinator.Support
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L713-L720
         // Return an 8-byte hash for 33 to 64 bytes.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong HashLen33to64(Span<byte> s, uint len)
+        private static unsafe ulong HashLen33to64(byte* s, uint len)
         {
             const ulong mul0 = k2 - 30;
             ulong mul1 = k2 - 30 + 2 * len;
             ulong h0 = H32(s, 32, mul0);
-            ulong h1 = H32(s, len - 32, 32, mul1);
+            ulong h1 = H32(s + len - 32, 32, mul1);
             return (h1 * mul1 + h0) * mul1;
         }
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L722-L730
         // Return an 8-byte hash for 65 to 96 bytes.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong HashLen65to96(Span<byte> s, uint len)
+        private static unsafe ulong HashLen65to96(byte* s, uint len)
         {
             const ulong mul0 = k2 - 114;
             ulong mul1 = k2 - 114 + 2 * len;
             ulong h0 = H32(s, 32, mul0);
-            ulong h1 = H32(s, 32, 32, mul1);
-            ulong h2 = H32(s, len - 32, 32, mul1, h0, h1);
+            ulong h1 = H32(s + 32, 32, mul1);
+            ulong h2 = H32(s + len - 32, 32, mul1, h0, h1);
             return (h2 * 9 + (h0 >> 17) + (h1 >> 21)) * mul1;
         }
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L592-L681
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong Hash64_uo(Span<byte> s, uint len)
+        private static unsafe ulong Hash64_uo(byte* s, uint len)
         {
             const ulong seed0 = 81;
             const ulong seed1 = 0;
@@ -414,19 +407,18 @@ namespace Lazinator.Support
             ulong mul = k2 + (u & 0x82);
 
             // Set end so that after the loop we have 1 to 64 bytes left to process.
-            uint end = (len - 1) / 64 * 64;
-            uint last64 = end + ((len - 1) & 63) - 63;
-            uint s_index = 0;
+            byte* end = s + (len - 1) / 64 * 64;
+            byte* last64 = end + ((len - 1) & 63) - 63;
             do
             {
                 ulong a0 = Fetch64(s);
-                ulong a1 = Fetch64(s, 8);
-                ulong a2 = Fetch64(s, 16);
-                ulong a3 = Fetch64(s, 24);
-                ulong a4 = Fetch64(s, 32);
-                ulong a5 = Fetch64(s, 40);
-                ulong a6 = Fetch64(s, 48);
-                ulong a7 = Fetch64(s, 56);
+                ulong a1 = Fetch64(s + 8);
+                ulong a2 = Fetch64(s + 16);
+                ulong a3 = Fetch64(s + 24);
+                ulong a4 = Fetch64(s + 32);
+                ulong a5 = Fetch64(s + 40);
+                ulong a6 = Fetch64(s + 48);
+                ulong a7 = Fetch64(s + 56);
                 x += a0 + a1;
                 y += a2;
                 z += a3;
@@ -470,23 +462,23 @@ namespace Lazinator.Support
                 tmp = u;
                 u = z;
                 z = tmp;
-                s_index += 64;
-            } while (s_index != end);
+                s += 64;
+            } while (s != end);
             // Make s point to the last 64 bytes of input.
-            s_index = last64;
+            s = last64;
             u *= 9;
             v_second = Rotate64(v_second, 28);
             v_first = Rotate64(v_first, 20);
             w_first += (len - 1) & 63;
             u += y;
             y += u;
-            x = Rotate64(y - x + v_first + Fetch64(s, 8), 37) * mul;
-            y = Rotate64(y ^ v_second ^ Fetch64(s, 48), 42) * mul;
+            x = Rotate64(y - x + v_first + Fetch64(s + 8), 37) * mul;
+            y = Rotate64(y ^ v_second ^ Fetch64(s + 48), 42) * mul;
             x ^= w_second * 9;
-            y += v_first + Fetch64(s, 40);
+            y += v_first + Fetch64(s + 40);
             z = Rotate64(z + w_first, 33) * mul;
-            uint128_t v = WeakHashLen32WithSeeds(s.Slice((int) s_index), v_second * mul, x + w_first);
-            uint128_t w = WeakHashLen32WithSeeds(s.Slice((int) (s_index + 32)), z + w_second, y + Fetch64(s, 16));
+            uint128_t v = WeakHashLen32WithSeeds(s, v_second * mul, x + w_first);
+            uint128_t w = WeakHashLen32WithSeeds(s + 32, z + w_second, y + Fetch64(s + 16));
             return H(HashLen16(v.first + x, w.first ^ y, mul) + z - u,
                     H(v.second + y, w.second + z, k2, 30) ^ x,
                     k2,
@@ -496,7 +488,7 @@ namespace Lazinator.Support
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L513-L566
         // Return an 8-byte hash for 65 to 96 bytes.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe ulong Hash64_na(Span<byte> s, uint len)
+        private static unsafe ulong Hash64_na(byte* s, uint len)
         {
             const ulong seed = 81;
 
@@ -512,39 +504,38 @@ namespace Lazinator.Support
             ulong tmp;
 
             // Set end so that after the loop we have 1 to 64 bytes left to process.
-            uint end = (len - 1) / 64 * 64;
-            uint last64 = end + ((len - 1) & 63) - 63;
-            uint s_index = 0;
+            byte* end = s + (len - 1) / 64 * 64;
+            byte* last64 = end + ((len - 1) & 63) - 63;
             do
             {
-                x = Rotate64(x + y + v.first + Fetch64(s, 8), 37) * k1;
-                y = Rotate64(y + v.second + Fetch64(s, 48), 42) * k1;
+                x = Rotate64(x + y + v.first + Fetch64(s + 8), 37) * k1;
+                y = Rotate64(y + v.second + Fetch64(s + 48), 42) * k1;
                 x ^= w.second;
-                y += v.first + Fetch64(s, 40);
+                y += v.first + Fetch64(s + 40);
                 z = Rotate64(z + w.first, 33) * k1;
-                v = WeakHashLen32WithSeeds(s.Slice((int)s_index), v.second * k1, x + w.first);
-                w = WeakHashLen32WithSeeds(s.Slice((int)s_index + 32), z + w.second, y + Fetch64(s, 16));
+                v = WeakHashLen32WithSeeds(s, v.second * k1, x + w.first);
+                w = WeakHashLen32WithSeeds(s + 32, z + w.second, y + Fetch64(s + 16));
 
                 tmp = z;
                 z = x;
                 x = tmp;
 
-                s_index += 64;
-            } while (s_index != end);
+                s += 64;
+            } while (s != end);
 
             ulong mul = k1 + ((z & 0xff) << 1);
             // Make s point to the last 64 bytes of input.
-            s_index = last64;
+            s = last64;
             w.first += (len - 1) & 63;
             v.first += w.first;
             w.first += v.first;
-            x = Rotate64(x + y + v.first + Fetch64(s, 8), 37) * mul;
-            y = Rotate64(y + v.second + Fetch64(s, 48), 42) * mul;
+            x = Rotate64(x + y + v.first + Fetch64(s + 8), 37) * mul;
+            y = Rotate64(y + v.second + Fetch64(s + 48), 42) * mul;
             x ^= w.second * 9;
-            y += v.first * 9 + Fetch64(s, 40);
+            y += v.first * 9 + Fetch64(s + 40);
             z = Rotate64(z + w.first, 33) * mul;
-            v = WeakHashLen32WithSeeds(s.Slice((int) s_index), v.second * mul, x + w.first);
-            w = WeakHashLen32WithSeeds(s.Slice((int)s_index + 32), z + w.second, y + Fetch64(s, 16));
+            v = WeakHashLen32WithSeeds(s, v.second * mul, x + w.first);
+            w = WeakHashLen32WithSeeds(s + 32, z + w.second, y + Fetch64(s + 16));
 
             tmp = z;
             z = x;
@@ -557,7 +548,7 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L732-L748
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe ulong Hash64(Span<byte> s, uint len)
+        public static unsafe ulong Hash64(byte* s, uint len)
         {
             if (len <= 32)
             {
@@ -575,6 +566,29 @@ namespace Lazinator.Support
                 return HashLen65to96(s, len);
             }
             return len <= 256 ? Hash64_na(s, len) : Hash64_uo(s, len);
+        }
+
+        /// <summary>
+        /// Calculates a 64bit hash from a given byte array upto a certain length
+        /// </summary>
+        /// <param name="s">Byte array to calculate the hash on</param>
+        /// <param name="len">Number of bytes from the buffer to calculate the hash with</param>
+        /// <returns>A 64bit hash</returns>
+        public static unsafe ulong Hash64(byte[] s, int len)
+        {
+            fixed (byte* buf = s)
+            {
+                return Hash64(buf, (uint)len);
+            }
+        }
+
+        /// <summary>Calculates a 64bit hash from a given string</summary>
+        public static unsafe ulong Hash64(string s)
+        {
+            fixed (char* buffer = s)
+            {
+                return Hash64((byte*)buffer, (uint)(s.Length * sizeof(char)));
+            }
         }
     }
 }
