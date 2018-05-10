@@ -178,6 +178,11 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableUlong), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableTimeSpan), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableDateTime), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorWrapperDecimalArray), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorWrapperDoubleArray), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorWrapperFloatArray), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorWrapperIntArray), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorWrapperLongArray), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperNullableGuid), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorWrapperReadOnlySpanChar), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
         }

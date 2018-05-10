@@ -57,5 +57,10 @@ namespace Lazinator.Collections
         DictionaryBucket,
         Dictionary,
         DictionaryUnofficial,
+        LazinatorWrapperDecimalArray,
+        LazinatorWrapperDoubleArray,
+        LazinatorWrapperFloatArray,
+        LazinatorWrapperIntArray,
+        LazinatorWrapperLongArray,
     }
 }
