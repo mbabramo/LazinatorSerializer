@@ -82,11 +82,11 @@ namespace Lazinator.CodeDescription
             
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
-                throw new Exception($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a get method.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a get method.");
             if (propertySymbol.SetMethod == null && SetterAccessibility == null)
-                throw new Exception($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a set method or a SetterAccessibilityAttribute.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a set method or a SetterAccessibilityAttribute.");
             if (propertySymbol.SetMethod != null && SetterAccessibility != null && SetterAccessibility.Choice != "public")
-                throw new Exception($"ILazinator interface property {PropertyName} in {Container?.ObjectName} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {Container?.ObjectName} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
 
             ParseVersionAttributes();
 
@@ -197,7 +197,7 @@ namespace Lazinator.CodeDescription
                 // handle a nullable type (which might be a nullable primitive type or a nullable struct / valuetuple
                 SetNullableTypeNameAndPropertyType(namedTypeSymbol);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    throw new Exception($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use LazinatorWrapperNullableStruct instead.");
+                    throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use LazinatorWrapperNullableStruct instead.");
                 return;
             }
             else
@@ -323,7 +323,7 @@ namespace Lazinator.CodeDescription
                 var exclusiveInterface = Container.CodeFiles.TypeToExclusiveInterface[t.OriginalDefinition];
                 CloneLazinatorAttribute attribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                 if (attribute == null)
-                    throw new Exception(
+                    throw new LazinatorCodeGenException(
                         "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
                 UniqueIDForLazinatorType = attribute.UniqueID;
                 CloneSmallLazinatorAttribute smallAttribute =
@@ -547,7 +547,7 @@ namespace Lazinator.CodeDescription
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                 if (InnerProperties[0].Nullable)
-                    throw new Exception("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
+                    throw new LazinatorCodeGenException("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
