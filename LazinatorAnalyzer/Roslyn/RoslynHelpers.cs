@@ -87,7 +87,7 @@ namespace LazinatorCodeGen.Roslyn
         public static List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
             this INamedTypeSymbol namedTypeSymbol)
         {
-            return GetPropertyWithDefinitionInfoHelper(namedTypeSymbol).ToList().DistinctBy(x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
+            return GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol).ToList().DistinctBy(x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
         }
 
         private static IEnumerable<TSource> DistinctBy<TSource, TKey>
@@ -103,7 +103,7 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
-        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfoHelper(this INamedTypeSymbol namedTypeSymbol)
+        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(this INamedTypeSymbol namedTypeSymbol)
         {
             // check whether there are lower level abstract types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
@@ -115,9 +115,9 @@ namespace LazinatorCodeGen.Roslyn
             }
 
             namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
-            foreach (var p in propertiesThisLevel.OrderBy(x => x.Name))
+            foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
                 yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
-            foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name))
+            foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
             {
                 if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
                     yield return

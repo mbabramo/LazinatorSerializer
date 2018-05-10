@@ -7,6 +7,7 @@ namespace Lazinator.Wrappers
     {
         T Value { get; set; }
         
+        [DoNotAutogenerate]
         bool IsNull { get; }
     }
 
