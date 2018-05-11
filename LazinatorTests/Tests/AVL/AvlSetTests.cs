@@ -39,6 +39,18 @@ namespace LazinatorTests.AVL
         }
 
         [Fact]
+        public void AvlSetWithNullableWorks()
+        {
+            var set = new AvlSet<LazinatorWrapperNullableInt>();
+            var nullableints = new int?[] { null, 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
+            var nullableintsreordered = new int?[] { null, 2, 3, 4, 6, 7, 13, 14, 8, 10, 1 };
+            foreach (int? x in nullableintsreordered)
+                set.Insert(x);
+            int?[] fromSet = set.ToList().Select(x => x.Value).ToArray();
+            fromSet.SequenceEqual(nullableints).Should().BeTrue();
+        }
+
+        [Fact]
         public void AvlSetSkipWorks()
         {
             GetAvlSet(out var set, out var ints);
