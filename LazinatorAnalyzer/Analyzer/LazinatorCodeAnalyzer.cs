@@ -33,7 +33,7 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly DiagnosticDescriptor LazinatorOutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle, LazinatorOutOfDateMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
         internal static DiagnosticDescriptor OutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle.ToString(), LazinatorOutOfDateMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
         // 2. Otherwise, we can create an option to regenerate the Lazinator code.
-        public const string Lazin002 = "Lazin001";
+        public const string Lazin002 = "Lazin002";
         private static readonly string LazinatorOptionalRegenerationTitle = "Lazinator regeneration";
         private static readonly string LazinatorOptionalRegenerationMessageFormat = "Regenerate the code behind for this Lazinator object";
         private static readonly string LazinatorOptionalRegenerationDescription =
@@ -125,10 +125,30 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     case SymbolKind.NamedType:
                         var namedType = (INamedTypeSymbol)context.Symbol;
+                        INamedTypeSymbol lazinatorObjectType;
+                        INamedTypeSymbol namedInterfaceType;
+                        // We want to be able to present a diagnostic starting either with the Lazinator class or vice-versa.
                         if (namedType.TypeKind == TypeKind.Interface)
+                        {
+                            // If this is a Lazinator interface and we can find the Lazinator class, we'll consider doing an analysis.
+                            if (namedType.HasAttributeOfType<CloneLazinatorAttribute>())
+                            {
+                                // find candidate matching classes
+                                IEnumerable<ISymbol> candidates = context.Compilation.GetSymbolsWithName(name => name.Substring(1) == namedType.MetadataName, SymbolFilter.Type);
+                                lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType) == namedType);
+                                if (lazinatorObjectType == null)
+                                    return;
+                                namedInterfaceType = namedType;
+                                // Note: A more comprehensive, but slower approach would be to use context.Compilation.GlobalNamespace...
+                            }
                             return;
-                        var namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
-
+                        }
+                        else
+                        {
+                            // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
+                            lazinatorObjectType = namedType;
+                            namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
+                        }
                         if (namedInterfaceType != null)
                         {
                             var lazinatorAttribute = RoslynHelpers.GetKnownAttributes<CloneLazinatorAttribute>(namedInterfaceType).FirstOrDefault();
@@ -136,7 +156,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 return;
                             if (lazinatorAttribute.Autogenerate == false)
                                 return;
-                            var locationsExcludingCodeBehind = namedType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(".g.cs")).ToList();
+                            var locationsExcludingCodeBehind = lazinatorObjectType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(".g.cs")).ToList();
                             string locationToIndexBy = locationsExcludingCodeBehind
                                 .Select(x => x.SourceTree.FilePath)
                                 .OrderBy(x => x)
@@ -144,14 +164,14 @@ namespace LazinatorAnalyzer.Analyzer
                             if (locationToIndexBy != null)
                             {
                                 SourceFileInformation sourceFileInfo = CompilationInformation[locationToIndexBy];
-                                sourceFileInfo.LazinatorObject = namedType;
+                                sourceFileInfo.LazinatorObject = lazinatorObjectType;
                                 sourceFileInfo.LazinatorInterface = namedInterfaceType;
                                 sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind =
                                     locationsExcludingCodeBehind
                                         .OrderByDescending(x => x.SourceTree.FilePath == locationToIndexBy)
                                         .ToList(); // place indexed location first
                                 sourceFileInfo.CodeBehindLocation =
-                                    namedType.Locations
+                                    lazinatorObjectType.Locations
                                         .FirstOrDefault(x => x.SourceTree.FilePath.EndsWith(".g.cs"));
                             }
                         }
