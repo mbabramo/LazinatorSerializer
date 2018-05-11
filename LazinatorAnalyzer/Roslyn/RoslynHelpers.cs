@@ -84,52 +84,6 @@ namespace LazinatorCodeGen.Roslyn
             return interfaces;
         }
 
-        public static List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
-            this INamedTypeSymbol namedTypeSymbol)
-        {
-            return GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol).ToList().DistinctBy(x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
-        }
-
-        private static IEnumerable<TSource> DistinctBy<TSource, TKey>
-            (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            HashSet<TKey> seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
-            {
-                if (seenKeys.Add(keySelector(element)))
-                {
-                    yield return element;
-                }
-            }
-        }
-
-        public static IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(this INamedTypeSymbol namedTypeSymbol)
-        {
-            // check whether there are lower level abstract types 
-            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
-            if (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
-            {
-                lowerLevelInterfaces = GetInterfacesWithAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol)
-                    .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
-                    .ToDictionary(x => x.Key, x => x.Value);
-            }
-
-            namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
-            foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
-                yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
-            foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
-            {
-                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
-                    yield return
-                        new PropertyWithDefinitionInfo(p,
-                            PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface);
-                else
-                    yield return
-                        new PropertyWithDefinitionInfo(p,
-                            PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface);
-            }
-        }
-
         public static object GetAttributeConstructorValueByParameterName
         (
             this AttributeData attributeData,

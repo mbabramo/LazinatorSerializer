@@ -52,6 +52,7 @@
         ConcreteGenericContainer,
         ExampleInterfaceContainer,
         ReflexiveExample,
-        WrapperContainer
+        WrapperContainer,
+        Concrete6
     }
 }

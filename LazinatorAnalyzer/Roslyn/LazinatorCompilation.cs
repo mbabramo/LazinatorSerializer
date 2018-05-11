@@ -106,7 +106,7 @@ namespace LazinatorCodeGen.Roslyn
             {
                 INamedTypeSymbol exclusiveInterfaceForBaseType = TypeToExclusiveInterface[implementingTypeSymbol.BaseType];
                 if (!exclusiveInterfaceTypeSymbol.AllInterfaces.Any(x => x.Equals(exclusiveInterfaceForBaseType)))
-                    throw new LazinatorCodeGenException($"Type {implementingTypeSymbol} inherits from abstract type {implementingTypeSymbol.BaseType} with Lazinator interface {exclusiveInterfaceForBaseType}, so the Lazinator interface {exclusiveInterfaceTypeSymbol} should inherit from {exclusiveInterfaceForBaseType}.");
+                    throw new LazinatorCodeGenException($"Type {implementingTypeSymbol} inherits from abstract type {implementingTypeSymbol.BaseType} with Lazinator interface {exclusiveInterfaceForBaseType}, so the Lazinator interface {exclusiveInterfaceTypeSymbol} should inherit directly or indirectly from {exclusiveInterfaceForBaseType}.");
             }
         }
 
@@ -125,7 +125,7 @@ namespace LazinatorCodeGen.Roslyn
             if (PropertiesRecursionDepth > 0)
                 return; // we only need to know about properties of the main interface, not of other classes
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
-            foreach (var propertyWithLevelInfo in @interface.GetPropertyWithDefinitionInfo())
+            foreach (var propertyWithLevelInfo in GetPropertyWithDefinitionInfo(@interface))
             {
                 if (!ILazinatorProperties.Contains(propertyWithLevelInfo.Property))
                 { // ignore a property that is actually an ILazinator property rather than a property we are looking for
@@ -145,6 +145,51 @@ namespace LazinatorCodeGen.Roslyn
             PropertiesRecursionDepth--;
         }
 
+        public List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
+            INamedTypeSymbol namedTypeSymbol)
+        {
+            return DistinctBy(GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol).ToList(), x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
+        }
+
+        private IEnumerable<TSource> DistinctBy<TSource, TKey>
+            (IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+        }
+
+        public IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(INamedTypeSymbol namedTypeSymbol)
+        {
+            // check whether there are lower level abstract types 
+            Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
+            if (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
+            {
+                lowerLevelInterfaces = namedTypeSymbol.GetInterfacesWithAttributeOfType<CloneLazinatorAttribute>()
+                    .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
+                    .ToDictionary(x => x.Key, x => x.Value);
+            }
+
+            namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
+            foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
+                yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
+            foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
+            {
+                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
+                    yield return
+                        new PropertyWithDefinitionInfo(p,
+                            PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface);
+                else
+                    yield return
+                        new PropertyWithDefinitionInfo(p,
+                            PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface);
+            }
+        }
 
 
         public string GetDerivationKeyword(IPropertySymbol symbol)
@@ -323,7 +368,7 @@ namespace LazinatorCodeGen.Roslyn
             else
             {
                 var parameters = constructorWithMostParameters.Parameters.ToList();
-                var properties = type.GetPropertyWithDefinitionInfo();
+                var properties = GetPropertyWithDefinitionInfo(type);
                 if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                 {
                     List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();

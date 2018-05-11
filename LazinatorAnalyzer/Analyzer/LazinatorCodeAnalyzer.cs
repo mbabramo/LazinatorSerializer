@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.FindSymbols;
 using Location = Microsoft.CodeAnalysis.Location;
 
 namespace LazinatorAnalyzer.Analyzer
@@ -41,7 +42,7 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly DiagnosticDescriptor LazinatorOptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle, LazinatorOptionalRegenerationMessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
         internal static DiagnosticDescriptor OptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle.ToString(), LazinatorOptionalRegenerationMessageFormat.ToString(), Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule, LazinatorOptionalRegenerationRule); } }
 
         public override void Initialize(AnalysisContext context)
         {
@@ -134,8 +135,9 @@ namespace LazinatorAnalyzer.Analyzer
                             if (namedType.HasAttributeOfType<CloneLazinatorAttribute>())
                             {
                                 // find candidate matching classes
-                                IEnumerable<ISymbol> candidates = context.Compilation.GetSymbolsWithName(name => name.Substring(1) == namedType.MetadataName, SymbolFilter.Type);
-                                lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType) == namedType);
+                                // maybe another approach would be to use SymbolFinder, but we can't load the Solution in the code analyzer. var implementations = SymbolFinder.FindImplementationsAsync(namedType, ... See https://stackoverflow.com/questions/23203206/roslyn-current-workspace-in-diagnostic-with-code-fix-project for a possible workaround
+                                IEnumerable<ISymbol> candidates = context.Compilation.GetSymbolsWithName(name => RoslynHelpers.GetNameWithoutGenericArity(name) == RoslynHelpers.GetNameWithoutGenericArity(namedType.MetadataName).Substring(1), SymbolFilter.Type);
+                                lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => namedType.GetFullyQualifiedName() == x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType).GetFullyQualifiedName());
                                 if (lazinatorObjectType == null)
                                     return;
                                 namedInterfaceType = namedType;

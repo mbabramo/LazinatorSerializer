@@ -24,16 +24,17 @@ namespace LazinatorAnalyzer.Analyzer
     public class LazinatorCodeFixProvider : CodeFixProvider
     {
         private const string Lazin001Title = "Generate Lazinator code behind";
+        private const string Lazin002Title = "Regenerate Lazinator code behind";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(LazinatorCodeAnalyzer.Lazin001); }
+            get { return ImmutableArray.Create(LazinatorCodeAnalyzer.Lazin001, LazinatorCodeAnalyzer.Lazin002); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
             // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
-            return WellKnownFixAllProviders.BatchFixer;
+            return new LazinatorCustomFixAllProvider();
         }
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
@@ -44,20 +45,23 @@ namespace LazinatorAnalyzer.Analyzer
             SourceFileInformation sourceFileInfo = new SourceFileInformation(
                 await context.Document.GetSemanticModelAsync(), diagnostic.Properties, diagnostic.AdditionalLocations);
 
+            System.Diagnostics.Debug.WriteLine($"document {context.Document.Name} span {diagnostic.Location.SourceSpan}"); // DEBUG
+
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             // Find the type declaration identified by the diagnostic.
-            if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin001)
+            if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin001 || diagnostic.Id == LazinatorCodeAnalyzer.Lazin002)
             {
                 var syntaxToken = root.FindToken(diagnosticSpan.Start);
                 var declaration = syntaxToken.Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
 
                 // Register a code action that will invoke the fix.
+                string title = diagnostic.Id == LazinatorCodeAnalyzer.Lazin001 ? Lazin001Title : Lazin002Title;
                 context.RegisterCodeFix(
                     CodeAction.Create(
-                        title: Lazin001Title,
+                        title: title,
                         createChangedSolution: c => FixGenerateLazinatorCodeBehind(context.Document, declaration, sourceFileInfo, c),
-                        equivalenceKey: Lazin001Title),
+                        equivalenceKey: title),
                     diagnostic);
             }
         }
