@@ -62,5 +62,6 @@ namespace Lazinator.Collections
         LazinatorWrapperFloatArray,
         LazinatorWrapperIntArray,
         LazinatorWrapperLongArray,
+        LazinatorTriple,
     }
 }

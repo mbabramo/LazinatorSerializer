@@ -139,6 +139,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(AvlSet<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(AvlMultiset<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
             await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
