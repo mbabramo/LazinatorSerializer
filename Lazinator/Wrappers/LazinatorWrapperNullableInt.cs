@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    public partial struct LazinatorWrapperNullableInt : ILazinatorWrapperNullableInt, IComparable, IComparable<int?>, IEquatable<int?>, IComparable<LazinatorWrapperNullableInt>, IEquatable<LazinatorWrapperNullableInt>
+    public partial struct LazinatorWrapperNullableInt : ILazinatorWrapperNullableInt
     {
         public bool HasValue => Value != null;
 
@@ -33,46 +33,6 @@ namespace Lazinator.Wrappers
             else if (obj is LazinatorWrapperNullableInt w)
                 return Value == w.Value;
             return false;
-        }
-
-        public int CompareTo(object obj)
-        {
-            LazinatorWrapperNullableInt other = obj as LazinatorWrapperNullableInt;
-            //Compare nulls acording MSDN specification
-
-            //Two nulls are equal
-            if (!HasValue && !other.HasValue)
-                return 0;
-
-            //Any object is greater than null
-            if (HasValue && !other.HasValue)
-                return 1;
-
-            if (other.HasValue && !HasValue)
-                return -1;
-
-            //Otherwise compare the two values
-            return Value.CompareTo(other.Value);
-        }
-
-        public int CompareTo(int other)
-        {
-            return Value.CompareTo(other);
-        }
-
-        public bool Equals(int other)
-        {
-            return Value.Equals(other);
-        }
-
-        public int CompareTo(LazinatorWrapperInt other)
-        {
-            return Value.CompareTo(other.Value);
-        }
-
-        public bool Equals(LazinatorWrapperInt other)
-        {
-            return Value.Equals(other.Value);
         }
     }
 }
