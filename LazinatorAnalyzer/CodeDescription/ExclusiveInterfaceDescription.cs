@@ -88,11 +88,12 @@ namespace Lazinator.CodeDescription
                 { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
                     if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel ||
-                            (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface 
-                            && 
+                            (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface
+                            &&
                              !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
                              &&
-                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName && y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable))) ||
+                            !Container.GetConcreteBaseObjectDescriptions().Any(x => x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName && y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable))) 
+                        ||
                         Container?.BaseLazinatorObject == null)
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);

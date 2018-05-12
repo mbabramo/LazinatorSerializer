@@ -114,6 +114,16 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        public IEnumerable<ObjectDescription> GetConcreteBaseObjectDescriptions()
+        {
+            foreach (ObjectDescription o in GetBaseObjectDescriptions())
+            {
+                if (o.IsAbstract)
+                    yield break; // there might be more concrete base object descriptions lower than base objects, but we don't want them
+                yield return o;
+            }
+        }
+
         public string GetCodeBehind()
         {
             CodeStringBuilder sb = new CodeStringBuilder();
