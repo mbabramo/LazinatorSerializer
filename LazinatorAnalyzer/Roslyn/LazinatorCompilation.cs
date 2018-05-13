@@ -102,11 +102,12 @@ namespace LazinatorCodeGen.Roslyn
 
         private void ConfirmBaseTypeInheritance(INamedTypeSymbol implementingTypeSymbol, INamedTypeSymbol exclusiveInterfaceTypeSymbol)
         {
+            // DEBUG
             if (implementingTypeSymbol.BaseType?.IsAbstract == true && TypeToExclusiveInterface.ContainsKey(implementingTypeSymbol.BaseType))
             {
                 INamedTypeSymbol exclusiveInterfaceForBaseType = TypeToExclusiveInterface[implementingTypeSymbol.BaseType];
                 if (!exclusiveInterfaceTypeSymbol.AllInterfaces.Any(x => x.Equals(exclusiveInterfaceForBaseType)))
-                    throw new LazinatorCodeGenException($"Type {implementingTypeSymbol} inherits from abstract type {implementingTypeSymbol.BaseType} with Lazinator interface {exclusiveInterfaceForBaseType}, so the Lazinator interface {exclusiveInterfaceTypeSymbol} should inherit directly or indirectly from {exclusiveInterfaceForBaseType}.");
+                    throw new LazinatorCodeGenException($"Because type {implementingTypeSymbol} inherits from an abstract type {implementingTypeSymbol.BaseType} with a Lazinator interface {exclusiveInterfaceForBaseType}, the Lazinator interface {exclusiveInterfaceTypeSymbol} must inherit directly or indirectly from {exclusiveInterfaceForBaseType}.");
             }
         }
 

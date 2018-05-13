@@ -64,6 +64,19 @@ namespace Lazinator.CodeDescription
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
             var propertiesWithLevel = Container.CodeFiles.PropertiesForType[interfaceSymbol];
+            foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
+            {
+                if (Container.CodeFiles.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol))
+                {
+                    var baseExclusiveInterface = Container.CodeFiles.TypeToExclusiveInterface[baseType.ILazinatorTypeSymbol];
+                    var additionalPropertiesWithLevel = Container.CodeFiles.PropertiesForType[baseExclusiveInterface];
+                    foreach (var basePropertyWithLevel in additionalPropertiesWithLevel)
+                    {
+                        if (!propertiesWithLevel.Any(x => x.Property.MetadataName == basePropertyWithLevel.Property.MetadataName))
+                            propertiesWithLevel.Add(new PropertyWithDefinitionInfo(basePropertyWithLevel.Property, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface));
+                    }
+                }
+            }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword) })
                 .OrderBy(x => x.description.PropertyType)
                 .ThenBy(x => x.description.PropertyName).ToList();

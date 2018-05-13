@@ -6,7 +6,7 @@ using System.Text;
 namespace LazinatorTests.Examples.Abstract
 {
     [Lazinator((int)ExampleUniqueIDs.Concrete6)]
-    interface IConcrete6 : IConcrete5
+    interface IConcrete6
     {
     }
 }
