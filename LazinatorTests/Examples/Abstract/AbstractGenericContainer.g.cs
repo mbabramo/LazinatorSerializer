@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        public abstract LazinatorTests.Examples.Abstract.IAbstractGeneric1<T> Item
+        public virtual LazinatorTests.Examples.Abstract.IAbstractGeneric1<T> Item
         {
             get;
             set;

@@ -46,6 +46,7 @@ namespace Lazinator.CodeDescription
         public string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" || DirectConverterTypeName == null ? "" : DirectConverterTypeName + ".";
         public bool HasInterchangeType => InterchangeTypeName != null;
         public List<PropertyDescription> InnerProperties { get; set; }
+        public bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         public IPropertySymbol PropertySymbol { get; set; }
         public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
         public string PropertyAccessibility { get; set; }
@@ -187,6 +188,7 @@ namespace Lazinator.CodeDescription
                 Nullable = true;
                 TypeName = TypeNameEncodable = typeSymbol.Name;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
+                DerivationKeyword = "virtual ";
                 return;
             }
 
@@ -581,13 +583,28 @@ namespace Lazinator.CodeDescription
 
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
-            string propertyString = $@"{PropertyAccessibilityString}{DerivationKeyword ?? "abstract "}{FullyQualifiedTypeName} {PropertyName}
+            string abstractDerivationKeyword = GetAbstractDerivationKeyword();
+            string propertyString = $@"{PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             get;
             set;
         }}
 ";
             sb.Append(propertyString);
+        }
+
+        private string GetAbstractDerivationKeyword()
+        {
+            string abstractDerivationKeyword = DerivationKeyword;
+            if (Container.IsAbstract && abstractDerivationKeyword == null)
+            {
+                if (ContainsOpenGenericInnerProperty)
+                    abstractDerivationKeyword = "virtual ";
+                else
+                    abstractDerivationKeyword = "abstract ";
+            }
+
+            return abstractDerivationKeyword;
         }
 
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)

@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        public abstract T MyT
+        public virtual T MyT
         {
             get;
             set;
