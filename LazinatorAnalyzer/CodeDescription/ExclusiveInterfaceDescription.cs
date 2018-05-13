@@ -73,7 +73,7 @@ namespace Lazinator.CodeDescription
                     foreach (var basePropertyWithLevel in additionalPropertiesWithLevel)
                     {
                         if (!propertiesWithLevel.Any(x => x.Property.MetadataName == basePropertyWithLevel.Property.MetadataName))
-                            propertiesWithLevel.Add(new PropertyWithDefinitionInfo(basePropertyWithLevel.Property, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface));
+                            propertiesWithLevel.Add(new PropertyWithDefinitionInfo(basePropertyWithLevel.Property, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override " });
                     }
                 }
             }

@@ -95,20 +95,6 @@ namespace LazinatorCodeGen.Roslyn
 
             // And save the pair
             TypeToExclusiveInterface[implementingTypeSymbol] = exclusiveInterfaceTypeSymbol;
-
-            // Finally, check whether abstract base types are handled correctly.
-            ConfirmBaseTypeInheritance(implementingTypeSymbol, exclusiveInterfaceTypeSymbol);
-        }
-
-        private void ConfirmBaseTypeInheritance(INamedTypeSymbol implementingTypeSymbol, INamedTypeSymbol exclusiveInterfaceTypeSymbol)
-        {
-            // DEBUG
-            if (implementingTypeSymbol.BaseType?.IsAbstract == true && TypeToExclusiveInterface.ContainsKey(implementingTypeSymbol.BaseType))
-            {
-                INamedTypeSymbol exclusiveInterfaceForBaseType = TypeToExclusiveInterface[implementingTypeSymbol.BaseType];
-                if (!exclusiveInterfaceTypeSymbol.AllInterfaces.Any(x => x.Equals(exclusiveInterfaceForBaseType)))
-                    throw new LazinatorCodeGenException($"Because type {implementingTypeSymbol} inherits from an abstract type {implementingTypeSymbol.BaseType} with a Lazinator interface {exclusiveInterfaceForBaseType}, the Lazinator interface {exclusiveInterfaceTypeSymbol} must inherit directly or indirectly from {exclusiveInterfaceForBaseType}.");
-            }
         }
 
         private HashSet<IPropertySymbol> ILazinatorProperties = null; 
