@@ -1592,7 +1592,7 @@ namespace Lazinator.CodeDescription
                                 DeserializationFactory = deserializationFactory,
                                 LazinatorObjectBytes = storage
                             }};
-                            return interchange.Interchange();
+                            return interchange.Interchange_{FullyQualifiedTypeNameEncodable}();
                         }}
 
                         public static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer,

@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples
                 DeserializationFactory = deserializationFactory,
                 LazinatorObjectBytes = storage
             };
-            return interchange.Interchange();
+            return interchange.Interchange_LazinatorTests_Examples_NonLazinatorInterchangeableClass();
         }
         
         public static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
