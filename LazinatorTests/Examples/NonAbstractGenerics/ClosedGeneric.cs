@@ -4,9 +4,7 @@ using System.Text;
 
 namespace LazinatorTests.Examples.NonAbstractGenerics
 {
-    public partial class ClosedGeneric : IClosedGeneric
+    public partial class ClosedGeneric : OpenGeneric<ExampleChild>, IClosedGeneric
     {
-        public ExampleChild MyT { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public List<ExampleChild> MyListT { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
