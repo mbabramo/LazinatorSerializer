@@ -114,12 +114,16 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public IEnumerable<ObjectDescription> GetConcreteBaseObjectDescriptions()
+        /// <summary>
+        /// Returns base objects that are abstract if there properties are not implemented by base objects that are concrete.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ObjectDescription> GetAbstractBaseObjectDescriptions()
         {
             foreach (ObjectDescription o in GetBaseObjectDescriptions())
             {
-                if (o.IsAbstract)
-                    yield break; // there might be more concrete base object descriptions lower than base objects, but we don't want them
+                if (!o.IsAbstract)
+                    yield break;
                 yield return o;
             }
         }
