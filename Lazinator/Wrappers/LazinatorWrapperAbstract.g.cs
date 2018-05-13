@@ -73,7 +73,7 @@ namespace Lazinator.Wrappers
         
         /* Field boilerplate */
         
-        public abstract T Value
+        public virtual T Value
         {
             get;
             set;

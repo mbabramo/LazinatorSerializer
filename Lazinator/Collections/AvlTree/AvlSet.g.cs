@@ -202,7 +202,7 @@ namespace Lazinator.Collections.AvlTree
             }
         }
         private Lazinator.Collections.Avl.AvlTree<TKey, Lazinator.Wrappers.LazinatorWrapperByte> _UnderlyingTree;
-        public Lazinator.Collections.Avl.AvlTree<TKey, Lazinator.Wrappers.LazinatorWrapperByte> UnderlyingTree
+        public virtual Lazinator.Collections.Avl.AvlTree<TKey, Lazinator.Wrappers.LazinatorWrapperByte> UnderlyingTree
         {
             [DebuggerStepThrough]
             get

@@ -187,7 +187,7 @@ namespace Lazinator.Collections.Avl
         internal int _Root_ByteLength => LazinatorObjectBytes.Length - _Root_ByteIndex;
         
         private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Root;
-        public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Root
+        public virtual Lazinator.Collections.Avl.AvlNode<TKey, TValue> Root
         {
             [DebuggerStepThrough]
             get

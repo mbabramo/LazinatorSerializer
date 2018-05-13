@@ -189,7 +189,7 @@ namespace Lazinator.Collections.Dictionary
         internal int _Values_ByteLength => LazinatorObjectBytes.Length - _Values_ByteIndex;
         
         private Lazinator.Collections.LazinatorList<TKey> _Keys;
-        public Lazinator.Collections.LazinatorList<TKey> Keys
+        public virtual Lazinator.Collections.LazinatorList<TKey> Keys
         {
             [DebuggerStepThrough]
             get
@@ -228,7 +228,7 @@ namespace Lazinator.Collections.Dictionary
         }
         internal bool _Keys_Accessed;
         private Lazinator.Collections.LazinatorList<TValue> _Values;
-        public Lazinator.Collections.LazinatorList<TValue> Values
+        public virtual Lazinator.Collections.LazinatorList<TValue> Values
         {
             [DebuggerStepThrough]
             get

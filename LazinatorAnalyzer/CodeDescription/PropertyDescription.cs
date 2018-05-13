@@ -595,6 +595,8 @@ namespace Lazinator.CodeDescription
 
         private string GetModifiedDerivationKeyword()
         {
+            if (Container.ObjectType == LazinatorObjectType.Struct || Container.IsSealed)
+                return "";
             string modifiedDerivationKeyword = DerivationKeyword;
             if (modifiedDerivationKeyword == null)
             {

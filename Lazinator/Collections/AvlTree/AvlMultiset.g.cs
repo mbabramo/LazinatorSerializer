@@ -202,7 +202,7 @@ namespace Lazinator.Collections.AvlTree
             }
         }
         private Lazinator.Collections.AvlTree.AvlSet<Lazinator.Collections.LazinatorTuple<T, Lazinator.Wrappers.LazinatorWrapperInt>> _UnderlyingSet;
-        public Lazinator.Collections.AvlTree.AvlSet<Lazinator.Collections.LazinatorTuple<T, Lazinator.Wrappers.LazinatorWrapperInt>> UnderlyingSet
+        public virtual Lazinator.Collections.AvlTree.AvlSet<Lazinator.Collections.LazinatorTuple<T, Lazinator.Wrappers.LazinatorWrapperInt>> UnderlyingSet
         {
             [DebuggerStepThrough]
             get

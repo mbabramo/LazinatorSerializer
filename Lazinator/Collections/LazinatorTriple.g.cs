@@ -190,7 +190,7 @@ namespace Lazinator.Collections
         internal int _Item3_ByteLength => LazinatorObjectBytes.Length - _Item3_ByteIndex;
         
         private T _Item1;
-        public T Item1
+        public virtual T Item1
         {
             [DebuggerStepThrough]
             get
@@ -229,7 +229,7 @@ namespace Lazinator.Collections
         }
         internal bool _Item1_Accessed;
         private U _Item2;
-        public U Item2
+        public virtual U Item2
         {
             [DebuggerStepThrough]
             get
@@ -268,7 +268,7 @@ namespace Lazinator.Collections
         }
         internal bool _Item2_Accessed;
         private V _Item3;
-        public V Item3
+        public virtual V Item3
         {
             [DebuggerStepThrough]
             get

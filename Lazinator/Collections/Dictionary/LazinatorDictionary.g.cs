@@ -202,7 +202,7 @@ namespace Lazinator.Collections.Dictionary
             }
         }
         private Lazinator.Collections.LazinatorList<Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>> _Buckets;
-        internal Lazinator.Collections.LazinatorList<Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>> Buckets
+        internal virtual Lazinator.Collections.LazinatorList<Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>> Buckets
         {
             [DebuggerStepThrough]
             get
