@@ -21,7 +21,7 @@ using Lazinator.Exceptions;
 using Lazinator.Support;
 using Lazinator.Wrappers;
 
-namespace LazinatorTests.Examples.Generics
+namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     public partial class OpenGeneric<T> : ILazinator
     {

@@ -4,7 +4,7 @@ using System.Text;
 using Lazinator.Attributes;
 using Lazinator.Wrappers;
 
-namespace LazinatorTests.Examples.Generics
+namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     [Lazinator((int) ExampleUniqueIDs.OpenGenericStayingOpenContainer)]
     interface IOpenGenericStayingOpenContainer

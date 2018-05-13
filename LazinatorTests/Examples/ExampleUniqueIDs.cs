@@ -6,7 +6,7 @@
     {
         ArrayMultidimensionalAndJagged = 200,
         Array_Values,
-        ClosedGeneric,
+        ClosedGenericWithoutBase,
         DerivedLazinatorList,
         Dictionary_Values_SelfSerialized,
         DotNetHash_SelfSerialized,
@@ -37,7 +37,7 @@
         UnofficialInterface,
         UnofficialInterfaceIncorporator,
         NonLazinatorContainer,
-        OpenGenericStayingOpen,
+        OpenGeneric,
         OpenGenericStayingOpenContainer,
         Abstract1,
         Abstract2,
@@ -53,6 +53,7 @@
         ExampleInterfaceContainer,
         ReflexiveExample,
         WrapperContainer,
-        Concrete6
+        Concrete6,
+        ClosedGeneric
     }
 }

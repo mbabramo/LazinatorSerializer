@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorTests.Examples.Generics
+namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     [Lazinator((int) ExampleUniqueIDs.LazinatorListContainer)]
     public interface ILazinatorListContainer

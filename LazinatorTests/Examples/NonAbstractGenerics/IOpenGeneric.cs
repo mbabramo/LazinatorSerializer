@@ -4,9 +4,9 @@ using System.Text;
 using Lazinator.Attributes;
 using Lazinator.Core;
 
-namespace LazinatorTests.Examples.Generics
+namespace LazinatorTests.Examples.NonAbstractGenerics
 {
-    [Lazinator((int) ExampleUniqueIDs.OpenGenericStayingOpen)]
+    [Lazinator((int) ExampleUniqueIDs.OpenGeneric)]
     public interface IOpenGeneric<T> where T : ILazinator, new()
     {
         T MyT { get; set; }

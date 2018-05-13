@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Lazinator.Collections;
 
-namespace LazinatorTests.Examples.Generics
+namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     public class LazinatorListContainer : ILazinatorListContainer
     {
