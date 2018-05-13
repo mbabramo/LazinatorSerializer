@@ -68,8 +68,9 @@ namespace Lazinator.Support
         public static Type GetCorrespondingExclusiveInterface(Type type)
         {
             var allInterfaces = type.GetInterfaces();
-            var minimalInterfaces = allInterfaces.Except
-                    (allInterfaces.SelectMany(t => t.GetInterfaces()))
+            var minimalInterfaces = allInterfaces
+                .Except(allInterfaces.SelectMany(t => t.GetInterfaces()))
+                .Except(BaseTypes(type).SelectMany(t => t.GetInterfaces()))
                 .Where(x => x.GetCustomAttributes(typeof(LazinatorAttribute), false).Any())
                 .ToList();
             if (minimalInterfaces.Count() != 1)
@@ -77,6 +78,16 @@ namespace Lazinator.Support
                     $"There must be a one-to-one relationship between each ILazinator type and an interface, directly implemented by that type, with a Lazinator attribute. The type {type} directly implements {minimalInterfaces.Count()} interfaces with a Lazinator attribute.");
             var correspondingInterface = minimalInterfaces.Single();
             return correspondingInterface;
+        }
+
+        private static IEnumerable<Type> BaseTypes(Type t)
+        {
+            Type currentType = t.BaseType;
+            while (currentType != null)
+            {
+                yield return currentType;
+                currentType = currentType.BaseType;
+            }
         }
 
         public static List<Type> GetCorrespondingNonexclusiveInterfaces(Type type)
