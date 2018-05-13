@@ -187,7 +187,7 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyList_ByteLength => LazinatorObjectBytes.Length - _MyList_ByteIndex;
         
         private Lazinator.Collections.LazinatorList<T> _MyList;
-        public Lazinator.Collections.LazinatorList<T> MyList
+        public virtual Lazinator.Collections.LazinatorList<T> MyList
         {
             [DebuggerStepThrough]
             get

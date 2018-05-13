@@ -583,7 +583,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
-            string abstractDerivationKeyword = GetAbstractDerivationKeyword();
+            string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"{PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             get;
@@ -593,24 +593,24 @@ namespace Lazinator.CodeDescription
             sb.Append(propertyString);
         }
 
-        private string GetAbstractDerivationKeyword()
+        private string GetModifiedDerivationKeyword()
         {
-            string abstractDerivationKeyword = DerivationKeyword;
-            if (Container.IsAbstract && abstractDerivationKeyword == null)
+            string modifiedDerivationKeyword = DerivationKeyword;
+            if (modifiedDerivationKeyword == null)
             {
                 if (ContainsOpenGenericInnerProperty)
-                    abstractDerivationKeyword = "virtual ";
-                else
-                    abstractDerivationKeyword = "abstract ";
+                    modifiedDerivationKeyword = "virtual ";
+                else if (Container.IsAbstract)
+                    modifiedDerivationKeyword = "abstract ";
             }
 
-            return abstractDerivationKeyword;
+            return modifiedDerivationKeyword;
         }
 
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
             string propertyString = $@"        private {FullyQualifiedTypeName} _{PropertyName};
-        {PropertyAccessibilityString}{DerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -674,7 +674,7 @@ namespace Lazinator.CodeDescription
 
 
             sb.Append($@"private {FullyQualifiedTypeName} _{PropertyName};
-        {PropertyAccessibilityString}{DerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -773,7 +773,7 @@ namespace Lazinator.CodeDescription
                 castToSpanOfCorrectType = $"_{PropertyName}.Span";
             else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}.Span)";
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        {PropertyAccessibilityString}{DerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
+        {PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
