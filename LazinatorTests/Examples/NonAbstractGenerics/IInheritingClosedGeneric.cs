@@ -5,9 +5,9 @@ using System.Text;
 
 namespace LazinatorTests.Examples.NonAbstractGenerics
 {
-    [Lazinator((int)ExampleUniqueIDs.ClosedGeneric)]
-    interface IClosedGeneric : IOpenGeneric<ExampleChild>
+    [Lazinator((int)ExampleUniqueIDs.InheritingClosedGeneric)]
+    interface IInheritingClosedGeneric : IClosedGeneric
     {
-        int AnotherPropertyAdded { get; set; }
+        int YetAnotherInt { get; set; }
     }
 }

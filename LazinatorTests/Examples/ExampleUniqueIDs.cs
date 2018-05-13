@@ -54,6 +54,7 @@
         ReflexiveExample,
         WrapperContainer,
         Concrete6,
-        ClosedGeneric
+        ClosedGeneric,
+        InheritingClosedGeneric
     }
 }
