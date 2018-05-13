@@ -714,9 +714,9 @@ namespace Lazinator.CodeDescription
         internal bool _{PropertyName}_Accessed;
 ");
 
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-                sb.Append($@"{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}_Copy
+                sb.Append($@"{PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}_Copy
                             {{
                                 [DebuggerStepThrough]
                                 get

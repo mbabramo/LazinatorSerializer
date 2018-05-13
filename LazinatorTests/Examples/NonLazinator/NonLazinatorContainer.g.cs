@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples
             LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests_Examples_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
         }
         
-        public static LazinatorTests.Examples.NonLazinatorInterchangeableClass ConvertFromBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static LazinatorTests.Examples.NonLazinatorInterchangeableClass ConvertFromBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass()
             {
