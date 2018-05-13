@@ -716,7 +716,7 @@ namespace Lazinator.CodeDescription
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-                sb.Append($@"{PropertyAccessibilityString}{DerivationKeyword}{FullyQualifiedTypeName} {PropertyName}_Copy
+                sb.Append($@"{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}_Copy
                             {{
                                 [DebuggerStepThrough]
                                 get
@@ -1604,7 +1604,7 @@ namespace Lazinator.CodeDescription
             alreadyGenerated.Add(FullyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                   public static {FullyQualifiedTypeName} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+                   private static {FullyQualifiedTypeName} ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
