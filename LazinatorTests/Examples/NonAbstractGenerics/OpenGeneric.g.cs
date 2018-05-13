@@ -23,7 +23,7 @@ using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.Generics
 {
-    public partial class OpenGenericStayingOpen<T> : ILazinator
+    public partial class OpenGeneric<T> : ILazinator
     {
         /* Boilerplate for every non-abstract ILazinator object */
         
@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Generics
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            var clone = new OpenGenericStayingOpen<T>()
+            var clone = new OpenGeneric<T>()
             {
                 DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,

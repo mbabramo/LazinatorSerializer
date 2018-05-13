@@ -5,7 +5,7 @@ using Lazinator.Core;
 
 namespace LazinatorTests.Examples.Generics
 {
-    public partial class OpenGenericStayingOpen<T> : IOpenGenericStayingOpen<T> where T : ILazinator, new()
+    public partial class OpenGeneric<T> : IOpenGeneric<T> where T : ILazinator, new()
     {
     }
 }

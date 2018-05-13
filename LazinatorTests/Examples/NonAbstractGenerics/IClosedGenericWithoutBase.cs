@@ -6,7 +6,7 @@ using Lazinator.Attributes;
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.ClosedGeneric)]
-    public interface IClosedGenericWithoutBase : IOpenGenerics<int, ExampleChild>
+    public interface IClosedGenericWithoutBase : IOpenGenericWithoutAttribute<int, ExampleChild>
     {
     }
 }
