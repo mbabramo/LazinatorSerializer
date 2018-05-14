@@ -666,7 +666,7 @@ namespace Lazinator.CodeDescription
                         {{
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }}
-                        {PropertyName} = ({FullyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
+                        _{PropertyName} = ({FullyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
                 else
                     assignment =
                         $@"
