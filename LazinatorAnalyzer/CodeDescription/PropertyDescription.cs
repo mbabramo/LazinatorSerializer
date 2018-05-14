@@ -22,6 +22,7 @@ namespace Lazinator.CodeDescription
         public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
         public string EnumEquivalentType { get; set; }
         public string DerivationKeyword { get; set; }
+        public bool IsAbstract { get; set; }
         public string TypeName { get; set; }
         public string FullyQualifiedTypeName => NamespacePrefixToUse + TypeName;
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
@@ -76,6 +77,7 @@ namespace Lazinator.CodeDescription
         public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, string derivationKeyword)
         {
             PropertySymbol = propertySymbol;
+            IsAbstract = PropertySymbol.IsAbstract;
             Container = container;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
@@ -101,9 +103,10 @@ namespace Lazinator.CodeDescription
 
         public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription container, string propertyName = null)
         {
+            // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             Container = container;
             PropertyName = propertyName;
-            // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
+            IsAbstract = typeSymbol.IsAbstract;
             SetTypeNameAndPropertyType(typeSymbol);
             SetReadAndWriteMethodNames();
         }
@@ -112,6 +115,7 @@ namespace Lazinator.CodeDescription
         {
             Container = container;
             Namespace = @namespace;
+            IsAbstract = typeArguments.Any(x => x.IsAbstract);
             SetTypeNameWithInnerProperties(name, typeArguments);
             CheckSupportedCollections(name);
             CheckSupportedTuples(name);
@@ -647,7 +651,7 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
-                if (IsInterface)
+                if (IsInterface || IsAbstract)
                     assignment =
                     $@"
                         if (DeserializationFactory == null)
