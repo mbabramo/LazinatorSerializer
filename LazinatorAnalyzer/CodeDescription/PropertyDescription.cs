@@ -14,6 +14,8 @@ namespace Lazinator.CodeDescription
 {
     public class PropertyDescription
     {
+        #region Properties
+
         public ObjectDescription Container { get; set; }
         public string Namespace { get; set; }
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
@@ -62,10 +64,7 @@ namespace Lazinator.CodeDescription
         public bool IncludableWhenExcludingMostChildren { get; private set; }
         public bool ExcludableWhenIncludingMostChildren { get; private set; }
 
-        public override string ToString()
-        {
-            return $"{TypeNameEncodable} {PropertyName}";
-        }
+        #endregion
 
         #region Constructors
 
@@ -116,6 +115,11 @@ namespace Lazinator.CodeDescription
             SetTypeNameWithInnerProperties(name, typeArguments);
             CheckSupportedCollections(name);
             CheckSupportedTuples(name);
+        }
+
+        public override string ToString()
+        {
+            return $"{TypeNameEncodable} {PropertyName}";
         }
 
         #endregion
@@ -860,6 +864,98 @@ namespace Lazinator.CodeDescription
         }
 
 
+
+        public void AppendPropertyReadString(CodeStringBuilder sb)
+        {
+            if (IsPrimitive)
+                sb.AppendLine(
+                        CreateConditionalForSingleLine(ReadVersionNumberConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
+            else
+            {
+                if (IsGuaranteedSmall)
+                    sb.AppendLine(
+                        $@"_{PropertyName}_ByteIndex = bytesSoFar;
+                            " + CreateConditionalForSingleLine(ReadVersionNumberConditional,
+                            "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
+                else
+                    sb.AppendLine(
+                        $@"_{PropertyName}_ByteIndex = bytesSoFar;
+                            " + CreateConditionalForSingleLine(ReadVersionNumberConditional,
+                            "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
+            }
+        }
+
+        private string CreateConditionalForSingleLine(string conditional, string innerCondition)
+        {
+            if (conditional.Trim() == "")
+                return innerCondition;
+            return $@"{conditional}
+                        {{
+                            {innerCondition}
+                        }}";
+        }
+
+        public void AppendPropertyWriteString(CodeStringBuilder sb)
+        {
+            if (IsPrimitive)
+                sb.AppendLine(
+                        CreateConditionalForSingleLine(WriteVersionNumberConditional, $"{WriteMethodName}(writer, {(EnumEquivalentType != null ? $"({EnumEquivalentType})" : $"")}_{PropertyName});"));
+            else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            {
+                if (Container.ObjectType == LazinatorObjectType.Class)
+                {
+                    sb.AppendLine(
+                        CreateConditionalForSingleLine(WriteVersionNumberConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});"));
+                }
+                else
+                {
+                    // for structs, we can't pass local struct variables in the lambda, so we have to copy them over. We'll assume we have to do this with open generics too.
+                    sb.AppendLine(
+                        $@"{WriteVersionNumberConditional} 
+                        {{
+                            var serializedBytesCopy = LazinatorObjectBytes;
+                            var byteIndexCopy = _{PropertyName}_ByteIndex;
+                            var byteLengthCopy = _{PropertyName}_ByteLength;
+                            WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});
+                        }}");
+                }
+            }
+            else
+            {
+                if (Container.ObjectType == LazinatorObjectType.Class)
+                    sb.AppendLine(
+                        $@"WriteNonLazinatorObject(
+                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
+                        isAccessed: _{PropertyName}_Accessed, writer: writer,
+                        getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength),
+                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
+                        binaryWriterAction: (w, v) =>
+                            {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, {PropertyName},
+                                includeChildrenMode, v));");
+                else
+                { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
+                    string binaryWriterAction;
+                    if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                        binaryWriterAction = $"copy_Value.Write(w)";
+                    else
+                        binaryWriterAction = $"{DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
+                    sb.AppendLine(
+                        $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
+                        var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
+                        var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
+                        var copy_{PropertyName} = {(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? "_" : "")}{PropertyName};
+                        WriteNonLazinatorObject(
+                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
+                        isAccessed: _{PropertyName}_Accessed, writer: writer,
+                        getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}),
+                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
+                        binaryWriterAction: (w, v) =>
+                            {binaryWriterAction});");
+
+                }
+            }
+        }
+
         #endregion
 
         #region Supported collections
@@ -1329,97 +1425,6 @@ namespace Lazinator.CodeDescription
             else
                 fullWriteCommands = writeCommand;
             return fullWriteCommands;
-        }
-
-        public void AppendPropertyReadInSupportedCollectionString(CodeStringBuilder sb)
-        {
-            if (IsPrimitive)
-                sb.AppendLine(
-                        CreateConditionalForSingleLine(ReadVersionNumberConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
-            else
-            {
-                if (IsGuaranteedSmall)
-                    sb.AppendLine(
-                        $@"_{PropertyName}_ByteIndex = bytesSoFar;
-                            " + CreateConditionalForSingleLine(ReadVersionNumberConditional,
-                            "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
-                else
-                    sb.AppendLine(
-                        $@"_{PropertyName}_ByteIndex = bytesSoFar;
-                            " + CreateConditionalForSingleLine(ReadVersionNumberConditional,
-                            "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
-            }
-        }
-
-        private string CreateConditionalForSingleLine(string conditional, string innerCondition)
-        {
-            if (conditional.Trim() == "")
-                return innerCondition;
-            return $@"{conditional}
-                        {{
-                            {innerCondition}
-                        }}";
-        }
-
-        public void AppendPropertyWriteInSupportedCollectionString(CodeStringBuilder sb)
-        {
-            if (IsPrimitive)
-                sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteVersionNumberConditional, $"{WriteMethodName}(writer, {(EnumEquivalentType != null ? $"({EnumEquivalentType})" : $"")}_{PropertyName});"));
-            else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
-            {
-                if (Container.ObjectType == LazinatorObjectType.Class)
-                {
-                    sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteVersionNumberConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});"));
-                }
-                else
-                {
-                    // for structs, we can't pass local struct variables in the lambda, so we have to copy them over. We'll assume we have to do this with open generics too.
-                    sb.AppendLine(
-                        $@"{WriteVersionNumberConditional} 
-                        {{
-                            var serializedBytesCopy = LazinatorObjectBytes;
-                            var byteIndexCopy = _{PropertyName}_ByteIndex;
-                            var byteLengthCopy = _{PropertyName}_ByteLength;
-                            WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});
-                        }}");
-                }
-            }
-            else
-            {
-                if (Container.ObjectType == LazinatorObjectType.Class)
-                    sb.AppendLine(
-                        $@"WriteNonLazinatorObject(
-                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
-                        isAccessed: _{PropertyName}_Accessed, writer: writer,
-                        getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength),
-                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
-                        binaryWriterAction: (w, v) =>
-                            {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, {PropertyName},
-                                includeChildrenMode, v));");
-                else
-                { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
-                    string binaryWriterAction;
-                    if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
-                        binaryWriterAction = $"copy_Value.Write(w)";
-                    else
-                        binaryWriterAction = $"{DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
-                    sb.AppendLine(
-                        $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
-                        var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
-                        var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
-                        var copy_{PropertyName} = {(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? "_" : "")}{PropertyName};
-                        WriteNonLazinatorObject(
-                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
-                        isAccessed: _{PropertyName}_Accessed, writer: writer,
-                        getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}),
-                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
-                        binaryWriterAction: (w, v) =>
-                            {binaryWriterAction});");
-
-                }
-            }
         }
 
         #endregion

@@ -464,11 +464,18 @@ namespace Lazinator.CodeDescription
 
             if (!IsAbstract)
             {
+                var lastWithRecordedIndices = withRecordedIndices.LastOrDefault();
                 for (int i = 0; i < withRecordedIndices.Count(); i++)
                     sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
-                for (int i = 0; i < withRecordedIndices.Count(); i++)
+                if (lastWithRecordedIndices != null)
                     sb.AppendLine(
-                        $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => {(i == withRecordedIndices.Count() - 1 ? "LazinatorObjectBytes.Length" : $"_{withRecordedIndices[i + 1].PropertyName}_ByteIndex")} - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                        $"internal int _{lastWithRecordedIndices.PropertyName}_EndByteIndex;");
+                for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
+                    sb.AppendLine(
+                        $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                if (lastWithRecordedIndices != null)
+                    sb.AppendLine(
+                        $"internal int _{lastWithRecordedIndices.PropertyName}_ByteLength => _{lastWithRecordedIndices.PropertyName}_EndByteIndex - _{lastWithRecordedIndices.PropertyName}_ByteIndex;");
                 sb.AppendLine();
             }
 
@@ -535,7 +542,13 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
-                property.AppendPropertyReadInSupportedCollectionString(sb);
+                property.AppendPropertyReadString(sb);
+            }
+            var lastProperty = thisLevel.LastOrDefault();
+            if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
+            {
+                sb.Append($@"_{lastProperty.PropertyName}_EndByteIndex = bytesSoFar;
+                    ");
             }
 
             sb.Append($@"        }}
@@ -563,7 +576,7 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
-                property.AppendPropertyWriteInSupportedCollectionString(sb);
+                property.AppendPropertyWriteString(sb);
             }
 
             sb.Append($@"}}
