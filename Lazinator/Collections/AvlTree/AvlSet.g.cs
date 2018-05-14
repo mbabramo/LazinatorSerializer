@@ -184,8 +184,8 @@ namespace Lazinator.Collections.AvlTree
         /* Field boilerplate */
         
         internal int _UnderlyingTree_ByteIndex;
-        internal int _UnderlyingTree_EndByteIndex;
-        internal int _UnderlyingTree_ByteLength => _UnderlyingTree_EndByteIndex - _UnderlyingTree_ByteIndex;
+        private int _AvlSet_TKey_EndByteIndex;
+        internal virtual int _UnderlyingTree_ByteLength => _AvlSet_TKey_EndByteIndex - _UnderlyingTree_ByteIndex;
         
         private int _Count;
         public int Count
@@ -257,7 +257,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _UnderlyingTree_EndByteIndex = bytesSoFar;
+            _AvlSet_TKey_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -184,8 +184,8 @@ namespace Lazinator.Spans
         /* Field boilerplate */
         
         internal int _ByteSpan_ByteIndex;
-        internal int _ByteSpan_EndByteIndex;
-        internal int _ByteSpan_ByteLength => _ByteSpan_EndByteIndex - _ByteSpan_ByteIndex;
+        private int _LazinatorBitArray_EndByteIndex;
+        internal int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
         
         private int __version;
         private int _version
@@ -277,7 +277,7 @@ namespace Lazinator.Spans
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _ByteSpan_EndByteIndex = bytesSoFar;
+            _LazinatorBitArray_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

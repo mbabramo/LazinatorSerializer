@@ -185,10 +185,10 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyDictionary_ByteIndex;
         internal int _MySortedDictionary_ByteIndex;
         internal int _MySortedList_ByteIndex;
-        internal int _MySortedList_EndByteIndex;
-        internal int _MyDictionary_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionary_ByteIndex;
-        internal int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
-        internal int _MySortedList_ByteLength => _MySortedList_EndByteIndex - _MySortedList_ByteIndex;
+        internal virtual int _MyDictionary_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionary_ByteIndex;
+        internal virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
+        private int _Dictionary_Values_SelfSerialized_EndByteIndex;
+        internal virtual int _MySortedList_ByteLength => _Dictionary_Values_SelfSerialized_EndByteIndex - _MySortedList_ByteIndex;
         
         private System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> _MyDictionary;
         public System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> MyDictionary
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Collections
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MySortedList_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MySortedList_EndByteIndex = bytesSoFar;
+            _Dictionary_Values_SelfSerialized_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -183,8 +183,8 @@ namespace Lazinator.Wrappers
         /* Field boilerplate */
         
         internal int _NonNullValue_ByteIndex;
-        internal int _NonNullValue_EndByteIndex;
-        internal int _NonNullValue_ByteLength => _NonNullValue_EndByteIndex - _NonNullValue_ByteIndex;
+        private int _LazinatorWrapperNullableStruct_T_EndByteIndex;
+        internal int _NonNullValue_ByteLength => _LazinatorWrapperNullableStruct_T_EndByteIndex - _NonNullValue_ByteIndex;
         
         private bool _HasValue;
         public bool HasValue
@@ -259,7 +259,7 @@ namespace Lazinator.Wrappers
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _NonNullValue_EndByteIndex = bytesSoFar;
+            _LazinatorWrapperNullableStruct_T_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

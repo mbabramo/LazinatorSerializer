@@ -188,13 +188,13 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyReadOnlySpanChar_ByteIndex;
         internal int _MyReadOnlySpanDateTime_ByteIndex;
         internal int _MyReadOnlySpanLong_ByteIndex;
-        internal int _MyReadOnlySpanLong_EndByteIndex;
-        internal int _MyMemoryInt_ByteLength => _MyNullableMemoryInt_ByteIndex - _MyMemoryInt_ByteIndex;
-        internal int _MyNullableMemoryInt_ByteLength => _MyReadOnlySpanByte_ByteIndex - _MyNullableMemoryInt_ByteIndex;
-        internal int _MyReadOnlySpanByte_ByteLength => _MyReadOnlySpanChar_ByteIndex - _MyReadOnlySpanByte_ByteIndex;
-        internal int _MyReadOnlySpanChar_ByteLength => _MyReadOnlySpanDateTime_ByteIndex - _MyReadOnlySpanChar_ByteIndex;
-        internal int _MyReadOnlySpanDateTime_ByteLength => _MyReadOnlySpanLong_ByteIndex - _MyReadOnlySpanDateTime_ByteIndex;
-        internal int _MyReadOnlySpanLong_ByteLength => _MyReadOnlySpanLong_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
+        internal virtual int _MyMemoryInt_ByteLength => _MyNullableMemoryInt_ByteIndex - _MyMemoryInt_ByteIndex;
+        internal virtual int _MyNullableMemoryInt_ByteLength => _MyReadOnlySpanByte_ByteIndex - _MyNullableMemoryInt_ByteIndex;
+        internal virtual int _MyReadOnlySpanByte_ByteLength => _MyReadOnlySpanChar_ByteIndex - _MyReadOnlySpanByte_ByteIndex;
+        internal virtual int _MyReadOnlySpanChar_ByteLength => _MyReadOnlySpanDateTime_ByteIndex - _MyReadOnlySpanChar_ByteIndex;
+        internal virtual int _MyReadOnlySpanDateTime_ByteLength => _MyReadOnlySpanLong_ByteIndex - _MyReadOnlySpanDateTime_ByteIndex;
+        private int _SpanAndMemory_EndByteIndex;
+        internal virtual int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
         
         private Memory<int> _MyMemoryInt;
         public Memory<int> MyMemoryInt
@@ -376,7 +376,7 @@ namespace LazinatorTests.Examples.Collections
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlySpanLong_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyReadOnlySpanLong_EndByteIndex = bytesSoFar;
+            _SpanAndMemory_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

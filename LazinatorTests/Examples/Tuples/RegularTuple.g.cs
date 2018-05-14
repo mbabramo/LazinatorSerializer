@@ -186,11 +186,11 @@ namespace LazinatorTests.Examples.Tuples
         internal int _MyTupleSerialized2_ByteIndex;
         internal int _MyTupleSerialized3_ByteIndex;
         internal int _MyTupleSerialized4_ByteIndex;
-        internal int _MyTupleSerialized4_EndByteIndex;
-        internal int _MyTupleSerialized_ByteLength => _MyTupleSerialized2_ByteIndex - _MyTupleSerialized_ByteIndex;
-        internal int _MyTupleSerialized2_ByteLength => _MyTupleSerialized3_ByteIndex - _MyTupleSerialized2_ByteIndex;
-        internal int _MyTupleSerialized3_ByteLength => _MyTupleSerialized4_ByteIndex - _MyTupleSerialized3_ByteIndex;
-        internal int _MyTupleSerialized4_ByteLength => _MyTupleSerialized4_EndByteIndex - _MyTupleSerialized4_ByteIndex;
+        internal virtual int _MyTupleSerialized_ByteLength => _MyTupleSerialized2_ByteIndex - _MyTupleSerialized_ByteIndex;
+        internal virtual int _MyTupleSerialized2_ByteLength => _MyTupleSerialized3_ByteIndex - _MyTupleSerialized2_ByteIndex;
+        internal virtual int _MyTupleSerialized3_ByteLength => _MyTupleSerialized4_ByteIndex - _MyTupleSerialized3_ByteIndex;
+        private int _RegularTuple_EndByteIndex;
+        internal virtual int _MyTupleSerialized4_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized4_ByteIndex;
         
         private Tuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized;
         public Tuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized
@@ -334,7 +334,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyTupleSerialized4_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyTupleSerialized4_EndByteIndex = bytesSoFar;
+            _RegularTuple_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

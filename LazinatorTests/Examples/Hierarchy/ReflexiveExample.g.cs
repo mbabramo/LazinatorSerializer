@@ -185,9 +185,9 @@ namespace LazinatorTests.Examples.Hierarchy
         
         internal int _ReflexiveClass_ByteIndex;
         internal int _ReflexiveInterface_ByteIndex;
-        internal int _ReflexiveInterface_EndByteIndex;
-        internal int _ReflexiveClass_ByteLength => _ReflexiveInterface_ByteIndex - _ReflexiveClass_ByteIndex;
-        internal int _ReflexiveInterface_ByteLength => _ReflexiveInterface_EndByteIndex - _ReflexiveInterface_ByteIndex;
+        internal virtual int _ReflexiveClass_ByteLength => _ReflexiveInterface_ByteIndex - _ReflexiveClass_ByteIndex;
+        private int _ReflexiveExample_EndByteIndex;
+        internal virtual int _ReflexiveInterface_ByteLength => _ReflexiveExample_EndByteIndex - _ReflexiveInterface_ByteIndex;
         
         private LazinatorTests.Examples.Hierarchy.ReflexiveExample _ReflexiveClass;
         public LazinatorTests.Examples.Hierarchy.ReflexiveExample ReflexiveClass
@@ -287,7 +287,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _ReflexiveInterface_EndByteIndex = bytesSoFar;
+            _ReflexiveExample_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

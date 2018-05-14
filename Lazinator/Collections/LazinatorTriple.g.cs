@@ -185,10 +185,10 @@ namespace Lazinator.Collections
         internal int _Item1_ByteIndex;
         internal int _Item2_ByteIndex;
         internal int _Item3_ByteIndex;
-        internal int _Item3_EndByteIndex = 0;
-        internal int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
-        internal int _Item2_ByteLength => _Item3_ByteIndex - _Item2_ByteIndex;
-        internal int _Item3_ByteLength => _Item3_EndByteIndex - _Item3_ByteIndex;
+        internal virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
+        internal virtual int _Item2_ByteLength => _Item3_ByteIndex - _Item2_ByteIndex;
+        private int _LazinatorTriple_T_U_V_EndByteIndex = 0;
+        internal virtual int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
         
         private T _Item1;
         public virtual T Item1
@@ -332,7 +332,7 @@ namespace Lazinator.Collections
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _Item3_EndByteIndex = bytesSoFar;
+            _LazinatorTriple_T_U_V_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples.Tuples
         
         internal int _MyRecordLikeClass_ByteIndex;
         internal int _MyRecordLikeType_ByteIndex;
-        internal int _MyRecordLikeType_EndByteIndex;
-        internal int _MyRecordLikeClass_ByteLength => _MyRecordLikeType_ByteIndex - _MyRecordLikeClass_ByteIndex;
-        internal int _MyRecordLikeType_ByteLength => _MyRecordLikeType_EndByteIndex - _MyRecordLikeType_ByteIndex;
+        internal virtual int _MyRecordLikeClass_ByteLength => _MyRecordLikeType_ByteIndex - _MyRecordLikeClass_ByteIndex;
+        private int _RecordTuple_EndByteIndex;
+        internal virtual int _MyRecordLikeType_ByteLength => _RecordTuple_EndByteIndex - _MyRecordLikeType_ByteIndex;
         
         private LazinatorTests.Examples.RecordLikeClass _MyRecordLikeClass;
         public LazinatorTests.Examples.RecordLikeClass MyRecordLikeClass
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyRecordLikeType_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyRecordLikeType_EndByteIndex = bytesSoFar;
+            _RecordTuple_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

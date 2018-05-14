@@ -481,7 +481,7 @@ namespace Lazinator.CodeDescription
                 if (IsAbstract)
                 {
                     sb.AppendLine(
-                            $"internal abstract int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}");
+                            $"internal virtual int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
                 }
                 else
                 {

@@ -185,10 +185,10 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyLinkedListInt_ByteIndex;
         internal int _MyListInt_ByteIndex;
         internal int _MySortedSetInt_ByteIndex;
-        internal int _MySortedSetInt_EndByteIndex;
-        internal int _MyLinkedListInt_ByteLength => _MyListInt_ByteIndex - _MyLinkedListInt_ByteIndex;
-        internal int _MyListInt_ByteLength => _MySortedSetInt_ByteIndex - _MyListInt_ByteIndex;
-        internal int _MySortedSetInt_ByteLength => _MySortedSetInt_EndByteIndex - _MySortedSetInt_ByteIndex;
+        internal virtual int _MyLinkedListInt_ByteLength => _MyListInt_ByteIndex - _MyLinkedListInt_ByteIndex;
+        internal virtual int _MyListInt_ByteLength => _MySortedSetInt_ByteIndex - _MyListInt_ByteIndex;
+        private int _DotNetList_Values_EndByteIndex;
+        internal virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         
         private System.Collections.Generic.LinkedList<int> _MyLinkedListInt;
         public System.Collections.Generic.LinkedList<int> MyLinkedListInt
@@ -353,7 +353,7 @@ namespace LazinatorTests.Examples.Collections
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MySortedSetInt_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MySortedSetInt_EndByteIndex = bytesSoFar;
+            _DotNetList_Values_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -185,10 +185,10 @@ namespace LazinatorTests.Examples
         internal int _NonLazinatorClass_ByteIndex;
         internal int _NonLazinatorInterchangeableClass_ByteIndex;
         internal int _NonLazinatorStruct_ByteIndex;
-        internal int _NonLazinatorStruct_EndByteIndex;
         internal int _NonLazinatorClass_ByteLength => _NonLazinatorInterchangeableClass_ByteIndex - _NonLazinatorClass_ByteIndex;
         internal int _NonLazinatorInterchangeableClass_ByteLength => _NonLazinatorStruct_ByteIndex - _NonLazinatorInterchangeableClass_ByteIndex;
-        internal int _NonLazinatorStruct_ByteLength => _NonLazinatorStruct_EndByteIndex - _NonLazinatorStruct_ByteIndex;
+        private int _NonLazinatorContainer_EndByteIndex;
+        internal int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
         
         private LazinatorTests.Examples.NonLazinatorClass _NonLazinatorClass;
         public LazinatorTests.Examples.NonLazinatorClass NonLazinatorClass
@@ -309,7 +309,7 @@ namespace LazinatorTests.Examples
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorStruct_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _NonLazinatorStruct_EndByteIndex = bytesSoFar;
+            _NonLazinatorContainer_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

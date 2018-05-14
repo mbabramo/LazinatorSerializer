@@ -186,10 +186,10 @@ namespace LazinatorTests.Examples
         internal int _MyExampleStruct_ByteIndex;
         internal int _MyListExampleStruct_ByteIndex;
         internal int _MyListNullableExampleStruct_ByteIndex;
-        internal int _MyListNullableExampleStruct_EndByteIndex;
-        internal int _MyExampleStruct_ByteLength => _MyListExampleStruct_ByteIndex - _MyExampleStruct_ByteIndex;
-        internal int _MyListExampleStruct_ByteLength => _MyListNullableExampleStruct_ByteIndex - _MyListExampleStruct_ByteIndex;
-        internal int _MyListNullableExampleStruct_ByteLength => _MyListNullableExampleStruct_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
+        internal virtual int _MyExampleStruct_ByteLength => _MyListExampleStruct_ByteIndex - _MyExampleStruct_ByteIndex;
+        internal virtual int _MyListExampleStruct_ByteLength => _MyListNullableExampleStruct_ByteIndex - _MyListExampleStruct_ByteIndex;
+        private int _ExampleStructContainer_EndByteIndex;
+        internal virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
         
         private LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
         public LazinatorTests.Examples.ExampleStruct MyExampleStruct
@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListNullableExampleStruct_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyListNullableExampleStruct_EndByteIndex = bytesSoFar;
+            _ExampleStructContainer_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

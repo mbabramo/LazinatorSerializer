@@ -183,8 +183,8 @@ namespace LazinatorTests.Examples.Tuples
         /* Field boilerplate */
         
         internal int _MyNestedTuple_ByteIndex;
-        internal int _MyNestedTuple_EndByteIndex;
-        internal int _MyNestedTuple_ByteLength => _MyNestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
+        private int _NestedTuple_EndByteIndex;
+        internal virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
         
         private Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> _MyNestedTuple;
         public Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> MyNestedTuple
@@ -229,7 +229,7 @@ namespace LazinatorTests.Examples.Tuples
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyNestedTuple_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyNestedTuple_EndByteIndex = bytesSoFar;
+            _NestedTuple_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -183,8 +183,8 @@ namespace LazinatorTests.Examples.Collections
         /* Field boilerplate */
         
         internal int _MyHashSetSerialized_ByteIndex;
-        internal int _MyHashSetSerialized_EndByteIndex;
-        internal int _MyHashSetSerialized_ByteLength => _MyHashSetSerialized_EndByteIndex - _MyHashSetSerialized_ByteIndex;
+        private int _DotNetHashSet_SelfSerialized_EndByteIndex;
+        internal virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_SelfSerialized_EndByteIndex - _MyHashSetSerialized_ByteIndex;
         
         private System.Collections.Generic.HashSet<LazinatorTests.Examples.ExampleChild> _MyHashSetSerialized;
         public System.Collections.Generic.HashSet<LazinatorTests.Examples.ExampleChild> MyHashSetSerialized
@@ -229,7 +229,7 @@ namespace LazinatorTests.Examples.Collections
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyHashSetSerialized_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyHashSetSerialized_EndByteIndex = bytesSoFar;
+            _DotNetHashSet_SelfSerialized_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

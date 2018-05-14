@@ -184,8 +184,8 @@ namespace LazinatorTests.Examples.Structs
         /* Field boilerplate */
         
         internal int _WrappedInt_ByteIndex;
-        internal int _WrappedInt_EndByteIndex;
-        internal int _WrappedInt_ByteLength => _WrappedInt_EndByteIndex - _WrappedInt_ByteIndex;
+        private int _WrapperContainer_EndByteIndex;
+        internal virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         
         private Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
         public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
@@ -261,7 +261,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
             }
-            _WrappedInt_EndByteIndex = bytesSoFar;
+            _WrapperContainer_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -185,9 +185,9 @@ namespace Lazinator.Collections.Dictionary
         
         internal int _Keys_ByteIndex;
         internal int _Values_ByteIndex;
-        internal int _Values_EndByteIndex;
-        internal int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
-        internal int _Values_ByteLength => _Values_EndByteIndex - _Values_ByteIndex;
+        internal virtual int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
+        private int _DictionaryBucket_TKey_TValue_EndByteIndex;
+        internal virtual int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
         
         private Lazinator.Collections.LazinatorList<TKey> _Keys;
         public virtual Lazinator.Collections.LazinatorList<TKey> Keys
@@ -287,7 +287,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _Values_EndByteIndex = bytesSoFar;
+            _DictionaryBucket_TKey_TValue_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -183,8 +183,8 @@ namespace LazinatorTests.Examples.Collections
         /* Field boilerplate */
         
         internal int _MyListNestedNonLazinatorType_ByteIndex;
-        internal int _MyListNestedNonLazinatorType_EndByteIndex;
-        internal int _MyListNestedNonLazinatorType_ByteLength => _MyListNestedNonLazinatorType_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
+        private int _DotNetList_Nested_NonSelfSerializable_EndByteIndex;
+        internal virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonSelfSerializable_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
         
         private System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> _MyListNestedNonLazinatorType;
         public System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> MyListNestedNonLazinatorType
@@ -229,7 +229,7 @@ namespace LazinatorTests.Examples.Collections
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyListNestedNonLazinatorType_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyListNestedNonLazinatorType_EndByteIndex = bytesSoFar;
+            _DotNetList_Nested_NonSelfSerializable_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

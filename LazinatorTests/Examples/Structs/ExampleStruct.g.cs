@@ -188,12 +188,12 @@ namespace LazinatorTests.Examples
         internal int _MyLazinatorList_ByteIndex;
         internal int _MyListValues_ByteIndex;
         internal int _MyTuple_ByteIndex;
-        internal int _MyTuple_EndByteIndex;
         internal int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
         internal int _MyChild2_ByteLength => _MyLazinatorList_ByteIndex - _MyChild2_ByteIndex;
         internal int _MyLazinatorList_ByteLength => _MyListValues_ByteIndex - _MyLazinatorList_ByteIndex;
         internal int _MyListValues_ByteLength => _MyTuple_ByteIndex - _MyListValues_ByteIndex;
-        internal int _MyTuple_ByteLength => _MyTuple_EndByteIndex - _MyTuple_ByteIndex;
+        private int _ExampleStruct_EndByteIndex;
+        internal int _MyTuple_ByteLength => _ExampleStruct_EndByteIndex - _MyTuple_ByteIndex;
         
         private bool _MyBool;
         public bool MyBool
@@ -452,7 +452,7 @@ namespace LazinatorTests.Examples
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyTuple_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyTuple_EndByteIndex = bytesSoFar;
+            _ExampleStruct_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

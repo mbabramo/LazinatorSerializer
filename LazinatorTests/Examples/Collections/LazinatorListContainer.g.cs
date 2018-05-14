@@ -184,8 +184,8 @@ namespace LazinatorTests.Examples.Collections
         /* Field boilerplate */
         
         internal int _MyList_ByteIndex;
-        internal int _MyList_EndByteIndex;
-        internal int _MyList_ByteLength => _MyList_EndByteIndex - _MyList_ByteIndex;
+        private int _LazinatorListContainer_EndByteIndex;
+        internal virtual int _MyList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyList_ByteIndex;
         
         private Lazinator.Collections.LazinatorList<LazinatorTests.Examples.ExampleChild> _MyList;
         public Lazinator.Collections.LazinatorList<LazinatorTests.Examples.ExampleChild> MyList
@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _MyList_EndByteIndex = bytesSoFar;
+            _LazinatorListContainer_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

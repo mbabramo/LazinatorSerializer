@@ -183,8 +183,8 @@ namespace LazinatorTests.Examples
         /* Field boilerplate */
         
         internal int _ByteSpan_ByteIndex;
-        internal int _ByteSpan_EndByteIndex;
-        internal int _ByteSpan_ByteLength => _ByteSpan_EndByteIndex - _ByteSpan_ByteIndex;
+        private int _ExampleChild_EndByteIndex;
+        internal virtual int _ByteSpan_ByteLength => _ExampleChild_EndByteIndex - _ByteSpan_ByteIndex;
         
         private long _MyLong;
         public long MyLong
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples
             _MyShort = span.ToDecompressedShort(ref bytesSoFar);
             _ByteSpan_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _ByteSpan_EndByteIndex = bytesSoFar;
+            _ExampleChild_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -183,8 +183,8 @@ namespace Lazinator.Wrappers
         /* Field boilerplate */
         
         internal int _Value_ByteIndex;
-        internal int _Value_EndByteIndex;
-        internal int _Value_ByteLength => _Value_EndByteIndex - _Value_ByteIndex;
+        private int _LazinatorWrapperReadOnlySpanChar_EndByteIndex;
+        internal int _Value_ByteLength => _LazinatorWrapperReadOnlySpanChar_EndByteIndex - _Value_ByteIndex;
         
         private ReadOnlyMemory<byte> _Value;
         public ReadOnlySpan<char> Value
@@ -226,7 +226,7 @@ namespace Lazinator.Wrappers
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Value_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _Value_EndByteIndex = bytesSoFar;
+            _LazinatorWrapperReadOnlySpanChar_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

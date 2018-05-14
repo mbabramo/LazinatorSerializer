@@ -74,8 +74,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Field boilerplate */
         
         internal int _MyT_ByteIndex;
-        internal int _MyT_EndByteIndex = 0;
-        internal int _MyT_ByteLength => _MyT_EndByteIndex - _MyT_ByteIndex;
+        internal virtual int _MyT_ByteLength { get; }
         
         internal bool _MyT_Accessed = false;
         public virtual T MyT

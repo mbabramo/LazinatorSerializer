@@ -183,8 +183,8 @@ namespace LazinatorTests.Examples.Collections
         /* Field boilerplate */
         
         internal int _MyQueueInt_ByteIndex;
-        internal int _MyQueueInt_EndByteIndex;
-        internal int _MyQueueInt_ByteLength => _MyQueueInt_EndByteIndex - _MyQueueInt_ByteIndex;
+        private int _DotNetQueue_Values_EndByteIndex;
+        internal virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
         
         private System.Collections.Generic.Queue<int> _MyQueueInt;
         public System.Collections.Generic.Queue<int> MyQueueInt
@@ -247,7 +247,7 @@ namespace LazinatorTests.Examples.Collections
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyQueueInt_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _MyQueueInt_EndByteIndex = bytesSoFar;
+            _DotNetQueue_Values_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
