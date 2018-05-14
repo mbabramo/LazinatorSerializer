@@ -23,6 +23,7 @@ namespace Lazinator.CodeDescription
         public string EnumEquivalentType { get; set; }
         public string DerivationKeyword { get; set; }
         public bool IsAbstract { get; set; }
+        public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         public string TypeName { get; set; }
         public string FullyQualifiedTypeName => NamespacePrefixToUse + TypeName;
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
@@ -651,7 +652,14 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
-                if (IsInterface || IsAbstract)
+                if (PropertyName == "AbstractProperty")
+                {
+                    var DEBUG = 0;
+                    var namedTypeSymbol = PropertySymbol.Type as INamedTypeSymbol;
+                    var DEBUG2 = namedTypeSymbol.InstanceConstructors;
+                    var DEBUG3 = DEBUG2.Any(y => !y.Parameters.Any());
+                }
+                if (IsInterface || !HasParameterlessConstructor)
                     assignment =
                     $@"
                         if (DeserializationFactory == null)
