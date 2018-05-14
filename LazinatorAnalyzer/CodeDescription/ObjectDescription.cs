@@ -478,13 +478,22 @@ namespace Lazinator.CodeDescription
                         $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex;");
                 }
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
-                if (withRecordedIndices[i].DerivationKeyword != "override ")
+            {
+                if (withRecordedIndices[i].DerivationKeyword == "override ")
                     sb.AppendLine(
-                        $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                        $"internal override int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                else sb.AppendLine(
+                        $"internal virtual int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+            }
             if (lastPropertyToIndex != null)
-                if (lastPropertyToIndex.DerivationKeyword != "override ")
+            {
+                if (lastPropertyToIndex.DerivationKeyword == "override ")
                     sb.AppendLine(
-                        $"internal int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                        $"internal override int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                else
+                    sb.AppendLine(
+                        $"internal virtual int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+            }
             sb.AppendLine();
 
             foreach (var property in thisLevel)
