@@ -58,8 +58,8 @@ namespace Lazinator.CodeDescription
         public int? IntroducedWithVersion { get; set; }
         public int? EliminatedWithVersion { get; set; }
         public bool TrackDirtinessNonSerialized { get; set; }
-        public string ReadVersionNumberConditional { get; set; }
-        public string WriteVersionNumberConditional { get; set; }
+        public string ReadInclusionConditional { get; set; }
+        public string WriteInclusionConditional { get; set; }
         public bool IsGuaranteedSmall { get; set; }
         public bool IncludableWhenExcludingMostChildren { get; private set; }
         public bool ExcludableWhenIncludingMostChildren { get; private set; }
@@ -150,15 +150,15 @@ namespace Lazinator.CodeDescription
 
         private void SetInclusionConditionals()
         {
-            ReadVersionNumberConditional = InclusionConditionalHelper(true);
-            WriteVersionNumberConditional = InclusionConditionalHelper(false);
+            ReadInclusionConditional = InclusionConditionalHelper(true);
+            WriteInclusionConditional = InclusionConditionalHelper(false);
         }
 
         private string InclusionConditionalHelper(bool readVersion)
         {
             string versionNumberVariable = readVersion ? "serializedVersionNumber" : "LazinatorObjectVersion";
             List<string> conditions = new List<string>();
-            if (!IsPrimitive)
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
                 conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren");
                 if (!IncludableWhenExcludingMostChildren)
@@ -869,18 +869,18 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(ReadVersionNumberConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
+                        CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
             else
             {
                 if (IsGuaranteedSmall)
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;
-                            " + CreateConditionalForSingleLine(ReadVersionNumberConditional,
+                            " + CreateConditionalForSingleLine(ReadInclusionConditional,
                             "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
                 else
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;
-                            " + CreateConditionalForSingleLine(ReadVersionNumberConditional,
+                            " + CreateConditionalForSingleLine(ReadInclusionConditional,
                             "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
             }
         }
@@ -899,19 +899,19 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteVersionNumberConditional, $"{WriteMethodName}(writer, {(EnumEquivalentType != null ? $"({EnumEquivalentType})" : $"")}_{PropertyName});"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {(EnumEquivalentType != null ? $"({EnumEquivalentType})" : $"")}_{PropertyName});"));
             else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
                 if (Container.ObjectType == LazinatorObjectType.Class)
                 {
                     sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteVersionNumberConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});"));
                 }
                 else
                 {
                     // for structs, we can't pass local struct variables in the lambda, so we have to copy them over. We'll assume we have to do this with open generics too.
                     sb.AppendLine(
-                        $@"{WriteVersionNumberConditional} 
+                        $@"{WriteInclusionConditional} 
                         {{
                             var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
