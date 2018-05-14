@@ -255,15 +255,9 @@ namespace Lazinator.Spans
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _ReadOnly_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ReadOrWrite_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ReadOrWrite_EndByteIndex = bytesSoFar;
         }
         

@@ -304,20 +304,11 @@ namespace LazinatorTests.Examples
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _NonLazinatorClass_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorInterchangeableClass_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorStruct_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorStruct_EndByteIndex = bytesSoFar;
         }
         

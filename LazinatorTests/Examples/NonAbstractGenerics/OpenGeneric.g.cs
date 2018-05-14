@@ -269,10 +269,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyListT_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

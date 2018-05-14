@@ -447,20 +447,11 @@ namespace LazinatorTests.Examples
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             _MyLazinatorList_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListValues_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyTuple_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyTuple_EndByteIndex = bytesSoFar;
         }
         

@@ -156,10 +156,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             _MyListT_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListT_EndByteIndex = bytesSoFar;
         }
         

@@ -791,10 +791,7 @@ namespace LazinatorTests.Examples
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
             }
             _MyNonLazinatorChild_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyNonLazinatorChild_EndByteIndex = bytesSoFar;
         }
         

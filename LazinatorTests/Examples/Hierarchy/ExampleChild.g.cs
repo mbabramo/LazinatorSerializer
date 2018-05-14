@@ -253,10 +253,7 @@ namespace LazinatorTests.Examples
             _MyLong = span.ToDecompressedLong(ref bytesSoFar);
             _MyShort = span.ToDecompressedShort(ref bytesSoFar);
             _ByteSpan_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ByteSpan_EndByteIndex = bytesSoFar;
         }
         
