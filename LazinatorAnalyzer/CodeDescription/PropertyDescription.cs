@@ -659,7 +659,7 @@ namespace Lazinator.CodeDescription
                     var DEBUG2 = namedTypeSymbol.InstanceConstructors;
                     var DEBUG3 = DEBUG2.Any(y => !y.Parameters.Any());
                 }
-                if (IsInterface || !HasParameterlessConstructor)
+                if (IsInterface || IsAbstract)
                     assignment =
                     $@"
                         if (DeserializationFactory == null)
