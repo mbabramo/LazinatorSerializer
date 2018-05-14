@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             _IsDirty = false;
             LazinatorObjectBytes = bytes.FilledMemory;
-            _LazinatorExample_Accessed = _MyT_Accessed = false;
+            _MyT_Accessed = _LazinatorExample_Accessed = false;
         }
         
         public override uint GetBinaryHashCode32()
@@ -184,11 +184,48 @@ namespace LazinatorTests.Examples.Abstract
         /* Field boilerplate */
         
         internal int _LazinatorExample_ByteIndex;
-        internal int _MyT_ByteIndex;
-        internal int _MyT_EndByteIndex;
-        internal int _LazinatorExample_ByteLength => _MyT_ByteIndex - _LazinatorExample_ByteIndex;
-        internal int _MyT_ByteLength => _MyT_EndByteIndex - _MyT_ByteIndex;
+        internal int _LazinatorExample_EndByteIndex;
+        internal int _LazinatorExample_ByteLength => _LazinatorExample_EndByteIndex - _LazinatorExample_ByteIndex;
         
+        private LazinatorTests.Examples.Example _MyT;
+        public override LazinatorTests.Examples.Example MyT
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_MyT_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyT = default(LazinatorTests.Examples.Example);
+                    }
+                    else
+                    {
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                        }
+                        _MyT = DeserializationFactory.Create(212, () => new LazinatorTests.Examples.Example(), childData, this); 
+                    }
+                    _MyT_Accessed = true;
+                }
+                return _MyT;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyT = value;
+                if (_MyT != null)
+                {
+                    _MyT.IsDirty = true;
+                }
+                _MyT_Accessed = true;
+            }
+        }
+        internal bool _MyT_Accessed;
         private string _AnotherProperty;
         public string AnotherProperty
         {
@@ -243,45 +280,6 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         internal bool _LazinatorExample_Accessed;
-        private LazinatorTests.Examples.Example _MyT;
-        public override LazinatorTests.Examples.Example MyT
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_MyT_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyT = default(LazinatorTests.Examples.Example);
-                    }
-                    else
-                    {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength);
-                        
-                        if (DeserializationFactory == null)
-                        {
-                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
-                        }
-                        _MyT = DeserializationFactory.Create(212, () => new LazinatorTests.Examples.Example(), childData, this); 
-                    }
-                    _MyT_Accessed = true;
-                }
-                return _MyT;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyT = value;
-                if (_MyT != null)
-                {
-                    _MyT.IsDirty = true;
-                }
-                _MyT_Accessed = true;
-            }
-        }
-        internal bool _MyT_Accessed;
         
         /* Conversion */
         
@@ -292,18 +290,18 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyT_ByteIndex = bytesSoFar;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            }
             _AnotherProperty = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _LazinatorExample_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _MyT_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            _MyT_EndByteIndex = bytesSoFar;
+            _LazinatorExample_EndByteIndex = bytesSoFar;
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
@@ -314,14 +312,14 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                WriteChildWithLength(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength), verifyCleanness, false);
+            }
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _AnotherProperty);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _LazinatorExample, includeChildrenMode, _LazinatorExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength), verifyCleanness, false);
-            }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                WriteChildWithLength(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength), verifyCleanness, false);
             }
         }
         
