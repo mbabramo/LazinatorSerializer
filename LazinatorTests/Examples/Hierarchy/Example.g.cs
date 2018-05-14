@@ -193,17 +193,17 @@ namespace LazinatorTests.Examples
         internal int _MyChild2_ByteIndex;
         internal int _MyChild2Previous_ByteIndex;
         internal int _MyInterfaceImplementer_ByteIndex;
-        internal int _WrappedInt_ByteIndex;
         internal int _MyNonLazinatorChild_ByteIndex;
+        internal int _WrappedInt_ByteIndex;
         internal virtual int _ExcludableChild_ByteLength => _IncludableChild_ByteIndex - _ExcludableChild_ByteIndex;
         internal virtual int _IncludableChild_ByteLength => _MyChild1_ByteIndex - _IncludableChild_ByteIndex;
         internal virtual int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
         internal virtual int _MyChild2_ByteLength => _MyChild2Previous_ByteIndex - _MyChild2_ByteIndex;
         internal virtual int _MyChild2Previous_ByteLength => _MyInterfaceImplementer_ByteIndex - _MyChild2Previous_ByteIndex;
-        internal virtual int _MyInterfaceImplementer_ByteLength => _WrappedInt_ByteIndex - _MyInterfaceImplementer_ByteIndex;
-        internal virtual int _WrappedInt_ByteLength => _MyNonLazinatorChild_ByteIndex - _WrappedInt_ByteIndex;
+        internal virtual int _MyInterfaceImplementer_ByteLength => _MyNonLazinatorChild_ByteIndex - _MyInterfaceImplementer_ByteIndex;
+        internal virtual int _MyNonLazinatorChild_ByteLength => _WrappedInt_ByteIndex - _MyNonLazinatorChild_ByteIndex;
         private int _Example_EndByteIndex;
-        internal virtual int _MyNonLazinatorChild_ByteLength => _Example_EndByteIndex - _MyNonLazinatorChild_ByteIndex;
+        internal virtual int _WrappedInt_ByteLength => _Example_EndByteIndex - _WrappedInt_ByteIndex;
         
         private bool _MyBool;
         public bool MyBool
@@ -265,66 +265,6 @@ namespace LazinatorTests.Examples
                 _MyNewString = value;
             }
         }
-        private string _MyOldString;
-        public string MyOldString
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _MyOldString;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyOldString = value;
-            }
-        }
-        private string _MyString;
-        public string MyString
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _MyString;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyString = value;
-            }
-        }
-        private LazinatorTests.Examples.TestEnum _MyTestEnum;
-        public LazinatorTests.Examples.TestEnum MyTestEnum
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _MyTestEnum;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyTestEnum = value;
-            }
-        }
-        private uint _MyUint;
-        public uint MyUint
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _MyUint;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyUint = value;
-            }
-        }
         private decimal? _MyNullableDecimal;
         public decimal? MyNullableDecimal
         {
@@ -370,6 +310,51 @@ namespace LazinatorTests.Examples
                 _MyNullableTimeSpan = value;
             }
         }
+        private string _MyOldString;
+        public string MyOldString
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _MyOldString;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyOldString = value;
+            }
+        }
+        private string _MyString;
+        public string MyString
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _MyString;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyString = value;
+            }
+        }
+        private LazinatorTests.Examples.TestEnum _MyTestEnum;
+        public LazinatorTests.Examples.TestEnum MyTestEnum
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _MyTestEnum;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyTestEnum = value;
+            }
+        }
         private TestEnumByte? _MyTestEnumByteNullable;
         public TestEnumByte? MyTestEnumByteNullable
         {
@@ -383,6 +368,21 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyTestEnumByteNullable = value;
+            }
+        }
+        private uint _MyUint;
+        public uint MyUint
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _MyUint;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyUint = value;
             }
         }
         private LazinatorTests.Examples.ExampleChild _ExcludableChild;
@@ -619,6 +619,55 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyInterfaceImplementer_Accessed;
+        private LazinatorTests.Examples.NonLazinatorClass _MyNonLazinatorChild;
+        public LazinatorTests.Examples.NonLazinatorClass MyNonLazinatorChild
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_MyNonLazinatorChild_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyNonLazinatorChild = default(LazinatorTests.Examples.NonLazinatorClass);
+                        _MyNonLazinatorChild_Dirty = true;
+                    }
+                    else
+                    {
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength);
+                        _MyNonLazinatorChild = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, DeserializationFactory, () => { MyNonLazinatorChild_Dirty = true; });
+                    }
+                    _MyNonLazinatorChild_Accessed = true;
+                }
+                return _MyNonLazinatorChild;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyNonLazinatorChild = value;
+                _MyNonLazinatorChild_Dirty = true;
+                _MyNonLazinatorChild_Accessed = true;
+            }
+        }
+        internal bool _MyNonLazinatorChild_Accessed;
+        
+        private bool _MyNonLazinatorChild_Dirty;
+        public bool MyNonLazinatorChild_Dirty
+        {
+            [DebuggerStepThrough]
+            get => _MyNonLazinatorChild_Dirty;
+            [DebuggerStepThrough]
+            set
+            {
+                if (_MyNonLazinatorChild_Dirty != value)
+                {
+                    _MyNonLazinatorChild_Dirty = value;
+                    if (value && !IsDirty)
+                    IsDirty = true;
+                }
+            }
+        }
         private Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
         public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
         {
@@ -678,55 +727,6 @@ namespace LazinatorTests.Examples
                 return _WrappedInt;
             }
         }
-        private LazinatorTests.Examples.NonLazinatorClass _MyNonLazinatorChild;
-        public LazinatorTests.Examples.NonLazinatorClass MyNonLazinatorChild
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_MyNonLazinatorChild_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyNonLazinatorChild = default(LazinatorTests.Examples.NonLazinatorClass);
-                        _MyNonLazinatorChild_Dirty = true;
-                    }
-                    else
-                    {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength);
-                        _MyNonLazinatorChild = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_LazinatorTests_Examples_NonLazinatorClass(childData, DeserializationFactory, () => { MyNonLazinatorChild_Dirty = true; });
-                    }
-                    _MyNonLazinatorChild_Accessed = true;
-                }
-                return _MyNonLazinatorChild;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyNonLazinatorChild = value;
-                _MyNonLazinatorChild_Dirty = true;
-                _MyNonLazinatorChild_Accessed = true;
-            }
-        }
-        internal bool _MyNonLazinatorChild_Accessed;
-        
-        private bool _MyNonLazinatorChild_Dirty;
-        public bool MyNonLazinatorChild_Dirty
-        {
-            [DebuggerStepThrough]
-            get => _MyNonLazinatorChild_Dirty;
-            [DebuggerStepThrough]
-            set
-            {
-                if (_MyNonLazinatorChild_Dirty != value)
-                {
-                    _MyNonLazinatorChild_Dirty = value;
-                    if (value && !IsDirty)
-                    IsDirty = true;
-                }
-            }
-        }
         
         /* Conversion */
         
@@ -744,17 +744,17 @@ namespace LazinatorTests.Examples
             {
                 _MyNewString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
+            _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
+            _MyNullableDouble = span.ToNullableDouble(ref bytesSoFar);
+            _MyNullableTimeSpan = span.ToDecompressedNullableTimeSpan(ref bytesSoFar);
             if (serializedVersionNumber < 3) 
             {
                 _MyOldString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyTestEnum = (LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
-            _MyUint = span.ToDecompressedUint(ref bytesSoFar);
-            _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
-            _MyNullableDouble = span.ToNullableDouble(ref bytesSoFar);
-            _MyNullableTimeSpan = span.ToDecompressedNullableTimeSpan(ref bytesSoFar);
             _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
+            _MyUint = span.ToDecompressedUint(ref bytesSoFar);
             _ExcludableChild_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
@@ -785,13 +785,13 @@ namespace LazinatorTests.Examples
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyNonLazinatorChild_ByteIndex = bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _WrappedInt_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
             }
-            _MyNonLazinatorChild_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _Example_EndByteIndex = bytesSoFar;
         }
         
@@ -810,17 +810,17 @@ namespace LazinatorTests.Examples
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyNewString);
             }
+            CompressedDecimal.WriteCompressedNullableDecimal(writer, _MyNullableDecimal);
+            WriteUncompressedPrimitives.WriteNullableDouble(writer, _MyNullableDouble);
+            CompressedIntegralTypes.WriteCompressedNullableTimeSpan(writer, _MyNullableTimeSpan);
             if (LazinatorObjectVersion < 3) 
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyOldString);
             }
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
             CompressedIntegralTypes.WriteCompressedInt(writer, (int)_MyTestEnum);
-            CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
-            CompressedDecimal.WriteCompressedNullableDecimal(writer, _MyNullableDecimal);
-            WriteUncompressedPrimitives.WriteNullableDouble(writer, _MyNullableDouble);
-            CompressedIntegralTypes.WriteCompressedNullableTimeSpan(writer, _MyNullableTimeSpan);
             CompressedIntegralTypes.WriteCompressedNullableByte(writer, (byte?)_MyTestEnumByteNullable);
+            CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
                 WriteChildWithLength(writer, _ExcludableChild, includeChildrenMode, _ExcludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength), verifyCleanness, false);
@@ -845,10 +845,6 @@ namespace LazinatorTests.Examples
             {
                 WriteChildWithLength(writer, _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength), verifyCleanness, false);
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength), verifyCleanness, true);
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty,
             isAccessed: _MyNonLazinatorChild_Accessed, writer: writer,
@@ -857,6 +853,10 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests_Examples_NonLazinatorClass(w, MyNonLazinatorChild,
             includeChildrenMode, v));
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength), verifyCleanness, true);
+            }
         }
         
     }

@@ -183,13 +183,13 @@ namespace Lazinator.Collections.Avl
         
         /* Field boilerplate */
         
+        internal int _Key_ByteIndex;
         internal int _Left_ByteIndex;
         internal int _Right_ByteIndex;
-        internal int _Key_ByteIndex;
         internal int _Value_ByteIndex;
+        internal int _Key_ByteLength => _Left_ByteIndex - _Key_ByteIndex;
         internal int _Left_ByteLength => _Right_ByteIndex - _Left_ByteIndex;
-        internal int _Right_ByteLength => _Key_ByteIndex - _Right_ByteIndex;
-        internal int _Key_ByteLength => _Value_ByteIndex - _Key_ByteIndex;
+        internal int _Right_ByteLength => _Value_ByteIndex - _Right_ByteIndex;
         private int _AvlNode_TKey_TValue_EndByteIndex = 0;
         internal int _Value_ByteLength => _AvlNode_TKey_TValue_EndByteIndex - _Value_ByteIndex;
         
@@ -223,6 +223,45 @@ namespace Lazinator.Collections.Avl
                 _Count = value;
             }
         }
+        private TKey _Key;
+        public TKey Key
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Key_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Key = default(TKey);
+                    }
+                    else
+                    {
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength);
+                        if (childData.Length == 0)
+                        {
+                            _Key = default;
+                        }
+                        else _Key = new TKey()
+                        {
+                            DeserializationFactory = DeserializationFactory,
+                            LazinatorParentClass = this,
+                            LazinatorObjectBytes = childData,
+                        };
+                    }
+                    _Key_Accessed = true;
+                }
+                return _Key;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _Key = value;
+                _Key_Accessed = true;
+            }
+        }
+        internal bool _Key_Accessed;
         private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Left;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Left
         {
@@ -309,45 +348,6 @@ namespace Lazinator.Collections.Avl
             }
         }
         internal bool _Right_Accessed;
-        private TKey _Key;
-        public TKey Key
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Key_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Key = default(TKey);
-                    }
-                    else
-                    {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength);
-                        if (childData.Length == 0)
-                        {
-                            _Key = default;
-                        }
-                        else _Key = new TKey()
-                        {
-                            DeserializationFactory = DeserializationFactory,
-                            LazinatorParentClass = this,
-                            LazinatorObjectBytes = childData,
-                        };
-                    }
-                    _Key_Accessed = true;
-                }
-                return _Key;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _Key = value;
-                _Key_Accessed = true;
-            }
-        }
-        internal bool _Key_Accessed;
         private TValue _Value;
         public TValue Value
         {
@@ -399,17 +399,17 @@ namespace Lazinator.Collections.Avl
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Balance = span.ToDecompressedInt(ref bytesSoFar);
             _Count = span.ToDecompressedInt(ref bytesSoFar);
+            _Key_ByteIndex = bytesSoFar;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            }
             _Left_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             _Right_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            _Key_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -434,15 +434,15 @@ namespace Lazinator.Collections.Avl
             CompressedIntegralTypes.WriteCompressedInt(writer, _Count);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                WriteChildWithLength(writer, _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength), verifyCleanness, false);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
                 WriteChildWithLength(writer, _Left, includeChildrenMode, _Left_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Left_ByteIndex, _Left_ByteLength), verifyCleanness, false);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _Right, includeChildrenMode, _Right_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Right_ByteIndex, _Right_ByteLength), verifyCleanness, false);
-            }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                WriteChildWithLength(writer, _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength), verifyCleanness, false);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

@@ -188,6 +188,21 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGeneric2b_EndByteIndex;
         internal virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
         
+        private string _AnotherProperty;
+        public string AnotherProperty
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _AnotherProperty;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _AnotherProperty = value;
+            }
+        }
         private LazinatorTests.Examples.Example _MyT;
         public override LazinatorTests.Examples.Example MyT
         {
@@ -224,21 +239,6 @@ namespace LazinatorTests.Examples.Abstract
                     _MyT.IsDirty = true;
                 }
                 _MyT_Accessed = true;
-            }
-        }
-        private string _AnotherProperty;
-        public string AnotherProperty
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _AnotherProperty;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _AnotherProperty = value;
             }
         }
         private LazinatorTests.Examples.Example _LazinatorExample;
@@ -290,12 +290,12 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _AnotherProperty = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _AnotherProperty = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _LazinatorExample_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -312,11 +312,11 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _AnotherProperty);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength), verifyCleanness, false);
             }
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _AnotherProperty);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _LazinatorExample, includeChildrenMode, _LazinatorExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength), verifyCleanness, false);

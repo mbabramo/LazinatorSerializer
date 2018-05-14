@@ -47,10 +47,55 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         
         /* Properties */
-        internal override int _MyT_ByteLength => _MyListT_ByteIndex - _MyT_ByteIndex;
+        internal override int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
         private int _ClosedGeneric_EndByteIndex;
-        internal override int _MyListT_ByteLength => _ClosedGeneric_EndByteIndex - _MyListT_ByteIndex;
+        internal override int _MyT_ByteLength => _ClosedGeneric_EndByteIndex - _MyT_ByteIndex;
         
+        private int _AnotherPropertyAdded;
+        public int AnotherPropertyAdded
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _AnotherPropertyAdded;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _AnotherPropertyAdded = value;
+            }
+        }
+        private System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> _MyListT;
+        public override System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> MyListT
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_MyListT_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyListT = default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>);
+                    }
+                    else
+                    {
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListT_ByteIndex, _MyListT_ByteLength);
+                        _MyListT = ConvertFromBytes_System_Collections_Generic_List_ExampleChild(childData, DeserializationFactory, null);
+                    }
+                    _MyListT_Accessed = true;
+                    IsDirty = true;
+                }
+                return _MyListT;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyListT = value;
+                _MyListT_Accessed = true;
+            }
+        }
         private LazinatorTests.Examples.ExampleChild _MyT;
         public override LazinatorTests.Examples.ExampleChild MyT
         {
@@ -89,51 +134,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 _MyT_Accessed = true;
             }
         }
-        private System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> _MyListT;
-        public override System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> MyListT
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_MyListT_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListT = default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild>);
-                    }
-                    else
-                    {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListT_ByteIndex, _MyListT_ByteLength);
-                        _MyListT = ConvertFromBytes_System_Collections_Generic_List_ExampleChild(childData, DeserializationFactory, null);
-                    }
-                    _MyListT_Accessed = true;
-                    IsDirty = true;
-                }
-                return _MyListT;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyListT = value;
-                _MyListT_Accessed = true;
-            }
-        }
-        private int _AnotherPropertyAdded;
-        public int AnotherPropertyAdded
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _AnotherPropertyAdded;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _AnotherPropertyAdded = value;
-            }
-        }
         
         /* Conversion */
         
@@ -145,24 +145,22 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _AnotherPropertyAdded = span.ToDecompressedInt(ref bytesSoFar);
+            _MyListT_ByteIndex = bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
-            _MyListT_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _AnotherPropertyAdded = span.ToDecompressedInt(ref bytesSoFar);
+            _ClosedGeneric_EndByteIndex = bytesSoFar;
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                WriteChildWithLength(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength), verifyCleanness, false);
-            }
+            CompressedIntegralTypes.WriteCompressedInt(writer, _AnotherPropertyAdded);
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListT, isBelievedDirty: _MyListT_Accessed,
             isAccessed: _MyListT_Accessed, writer: writer,
@@ -171,7 +169,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             binaryWriterAction: (w, v) =>
             ConvertToBytes_System_Collections_Generic_List_ExampleChild(w, MyListT,
             includeChildrenMode, v));
-            CompressedIntegralTypes.WriteCompressedInt(writer, _AnotherPropertyAdded);
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                WriteChildWithLength(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength), verifyCleanness, false);
+            }
         }
         
         /* Conversion of supported collections and tuples */
