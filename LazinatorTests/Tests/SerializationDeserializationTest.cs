@@ -2092,7 +2092,7 @@ namespace LazinatorTests.Tests
                 return false;
             if ((child1 is ExampleChildInherited) != (child2 is ExampleChildInherited))
                 return false;
-            bool basicFieldsEqual = (child1.MyLong == child2.MyLong && child1.MyShort == child2.MyShort);
+            bool basicFieldsEqual = (child1.MyLong == child2.MyLong && child1.MyShort == child2.MyShort && child1.ByteSpan.ToArray().SequenceEqual(child2.ByteSpan.ToArray()));
             bool inheritedFieldsEqual = !(child1 is ExampleChildInherited child1Inherited) || child1Inherited.MyInt == ((ExampleChildInherited) child2).MyInt;
             return basicFieldsEqual && inheritedFieldsEqual;
         }

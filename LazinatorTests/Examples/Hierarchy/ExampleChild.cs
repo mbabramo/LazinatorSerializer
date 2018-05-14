@@ -1,4 +1,5 @@
-﻿using Lazinator.Attributes;
+﻿using System;
+using Lazinator.Attributes;
 
 namespace LazinatorTests.Examples
 {

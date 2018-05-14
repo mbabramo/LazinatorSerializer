@@ -103,14 +103,11 @@ namespace LazinatorCodeGen.Roslyn
             INamedTypeSymbol iLazinatorSymbol = Compilation.GetTypeByMetadataName("Lazinator.Core.ILazinator");
             ILazinatorProperties = new HashSet<IPropertySymbol>(iLazinatorSymbol.GetPropertySymbols());
         }
-
-        int PropertiesRecursionDepth = 0;
+        
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
         {
             if (ILazinatorProperties == null)
                 RecordILazinatorProperties();
-            if (PropertiesRecursionDepth > 0)
-                return; // we only need to know about properties of the main interface, not of other classes
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
             foreach (var propertyWithLevelInfo in GetPropertyWithDefinitionInfo(@interface))
             {
@@ -121,7 +118,6 @@ namespace LazinatorCodeGen.Roslyn
                 }
             }
             PropertiesForType[@interface] = propertiesInInterfaceWithLevel;
-            PropertiesRecursionDepth++;
             foreach (var propertyWithLevel in propertiesInInterfaceWithLevel)
             {
                 IPropertySymbol property = propertyWithLevel.Property;
@@ -129,7 +125,6 @@ namespace LazinatorCodeGen.Roslyn
                 propertyWithLevel.SpecifyDerivationKeyword(GetDerivationKeyword(property));
                 RecordInformationAboutTypeAndRelatedTypes(property.Type);
             }
-            PropertiesRecursionDepth--;
         }
 
         public List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
@@ -191,7 +186,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private void RecordInformationAboutTypeAndRelatedTypes(ITypeSymbol type)
         {
-            foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(type))
+            foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type))
                 RecordInformationAboutType(t);
         }
         
@@ -261,41 +256,72 @@ namespace LazinatorCodeGen.Roslyn
                 TypeToExclusiveInterface[namedTypeSymbol.OriginalDefinition] = @interface.OriginalDefinition;
         }
 
-        private IEnumerable<ITypeSymbol> GetUnrecordedTypeAndInnerTypes(ITypeSymbol type)
+        HashSet<ITypeSymbol> alreadyProduced = new HashSet<ITypeSymbol>();
+        private IEnumerable<ITypeSymbol> GetTypeAndRelatedTypes(ITypeSymbol type)
         {
-            if (RelevantSymbols.Contains(type))
+            if (alreadyProduced.Contains(type))
                 yield break;
+            alreadyProduced.Add(type);
+            if (type.Name.ToString().Contains("IActor"))
+            {
+                var DEBUGX = 0;
+            }
             yield return type;
             if (type is INamedTypeSymbol namedType)
             {
                 foreach (ITypeSymbol t in namedType.TypeArguments)
-                    foreach (ITypeSymbol t2 in GetUnrecordedTypeAndInnerTypes(t))
+                    foreach (ITypeSymbol t2 in GetTypeAndRelatedTypes(t))
+                    {
+                        alreadyProduced.Add(t2);
                         yield return t2;
+                    }
                 if (namedType.TupleUnderlyingType != null)
-                    foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(namedType.TupleUnderlyingType))
+                    foreach (ITypeSymbol t in GetTypeAndRelatedTypes(namedType.TupleUnderlyingType))
+                    {
+                        alreadyProduced.Add(t);
                         yield return t;
+                    }
             }
             else if (type is IArrayTypeSymbol arrayType)
             {
-                foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(arrayType.ElementType))
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(arrayType.ElementType))
+                {
+                    alreadyProduced.Add(t);
                     yield return t;
+                }
             }
             if (type != type.OriginalDefinition)
-                foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(type.OriginalDefinition))
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.OriginalDefinition))
+                {
+                    alreadyProduced.Add(t);
                     yield return t;
+                }
             var attributes = (GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(type)).ToList();
             foreach (CloneUnofficiallyIncorporateInterfaceAttribute attribute in attributes)
             {
-                foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(
                     Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName)))
                 {
                     if (t == null)
                         throw new LazinatorCodeGenException($"Unofficial type {attribute.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
+                    alreadyProduced.Add(t);
                     yield return t;
                 }
             }
+            foreach (var @interface in type.AllInterfaces)
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(@interface))
+                {
+                    alreadyProduced.Add(t);
+                    yield return t;
+                }
             if (type.BaseType != null)
-                yield return type.BaseType;
+            {
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.BaseType))
+                {
+                    alreadyProduced.Add(t);
+                    yield return t;
+                }
+            }
         }
 
         private void RecordInterfaceTextHash(INamedTypeSymbol @interface, INamedTypeSymbol implementingType)
