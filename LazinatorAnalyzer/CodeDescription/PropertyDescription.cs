@@ -1620,7 +1620,7 @@ namespace Lazinator.CodeDescription
                             return interchange.Interchange_{FullyQualifiedTypeNameEncodable}();
                         }}
 
-                        public static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer,
+                        private static void ConvertToBytes_{FullyQualifiedTypeNameEncodable}(BinaryBufferWriter writer,
                             {FullyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness)
                         {{

@@ -213,6 +213,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(WrapperContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ReflexiveExample), "LazinatorTests", "/Examples/", "Hierarchy/", ws);
             await CompleteGenerateCode(typeof(Abstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
+            await CompleteGenerateCode(typeof(ContainerWithAbstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(Abstract2), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(Concrete3), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(Abstract4), "LazinatorTests", "/Examples/", "Abstract/", ws);

@@ -55,6 +55,7 @@
         WrapperContainer,
         Concrete6,
         ClosedGeneric,
-        InheritingClosedGeneric
+        InheritingClosedGeneric,
+        ContainerWithAbstract1
     }
 }
