@@ -14,6 +14,6 @@ namespace LazinatorTests.Examples
         List<int> MyListValues { get; set; }
         List<Example> MyLazinatorList { get; set; }
         bool MyLazinatorList_Dirty { get; set; }
-        (NonLazinatorClass item1, int? item2) MyTuple { get; set; }
+        (NonLazinatorClass myitem1, int? myitem2) MyTuple { get; set; }
     }
 }

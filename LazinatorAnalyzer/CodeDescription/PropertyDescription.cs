@@ -489,7 +489,18 @@ namespace Lazinator.CodeDescription
         {
             InnerProperties = typeArguments
                             .Select(x => new PropertyDescription(x, Container)).ToList();
-            TypeName = name + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
+            TypeName = null;
+            if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple)
+            {
+                var namedTypeSymbol = PropertySymbol.Type as INamedTypeSymbol;
+                if (namedTypeSymbol != null && namedTypeSymbol.TupleElements != null && namedTypeSymbol.TupleElements.Count() == InnerProperties.Count() && namedTypeSymbol.TupleElements.First().Name != "Item1")
+                {
+                    var zipped = namedTypeSymbol.TupleElements.Zip(InnerProperties, (x, y) => new { TupleElement = x, InnerProperty = y });
+                    TypeName = "(" + string.Join(", ", zipped.Select(x => x.InnerProperty.FullyQualifiedTypeName + " " + x.TupleElement.Name)) + ")";
+                }
+            }
+            if (TypeName == null)
+                TypeName = name + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
             TypeNameEncodable = EncodableTypeName(name, typeArguments);
         }
 
@@ -652,13 +663,6 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
-                if (PropertyName == "AbstractProperty")
-                {
-                    var DEBUG = 0;
-                    var namedTypeSymbol = PropertySymbol.Type as INamedTypeSymbol;
-                    var DEBUG2 = namedTypeSymbol.InstanceConstructors;
-                    var DEBUG3 = DEBUG2.Any(y => !y.Parameters.Any());
-                }
                 if (IsInterface || IsAbstract)
                     assignment =
                     $@"
