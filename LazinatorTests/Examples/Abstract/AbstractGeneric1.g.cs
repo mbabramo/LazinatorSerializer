@@ -77,6 +77,7 @@ namespace LazinatorTests.Examples.Abstract
         internal int _MyT_EndByteIndex;
         internal int _MyT_ByteLength => _MyT_EndByteIndex - _MyT_ByteIndex;
         
+        internal bool _MyT_Accessed;
         public virtual T MyT
         {
             get;

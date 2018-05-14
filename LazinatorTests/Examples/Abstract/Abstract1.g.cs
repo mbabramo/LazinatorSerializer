@@ -74,6 +74,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Field boilerplate */
         
         
+        internal bool _String1_Accessed;
         public abstract string String1
         {
             get;

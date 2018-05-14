@@ -86,7 +86,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 _MyT_Accessed = true;
             }
         }
-        internal bool _MyT_Accessed;
         private System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> _MyListT;
         public override System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> MyListT
         {
@@ -117,7 +116,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 _MyListT_Accessed = true;
             }
         }
-        internal bool _MyListT_Accessed;
         private int _AnotherPropertyAdded;
         public int AnotherPropertyAdded
         {

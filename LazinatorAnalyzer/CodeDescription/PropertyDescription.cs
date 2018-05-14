@@ -588,7 +588,7 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
-            string propertyString = $@"internal bool _{PropertyName}_Accessed;
+            string propertyString = $@"internal bool _{PropertyName}_Accessed = false;
         {PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             get;

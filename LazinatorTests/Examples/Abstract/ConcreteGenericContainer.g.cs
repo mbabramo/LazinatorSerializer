@@ -222,7 +222,6 @@ namespace LazinatorTests.Examples.Abstract
                 _Item_Accessed = true;
             }
         }
-        internal bool _Item_Accessed;
         
         /* Conversion */
         

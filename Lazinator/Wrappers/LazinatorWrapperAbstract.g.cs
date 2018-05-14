@@ -77,6 +77,7 @@ namespace Lazinator.Wrappers
         internal int _Value_EndByteIndex;
         internal int _Value_ByteLength => _Value_EndByteIndex - _Value_ByteIndex;
         
+        internal bool _Value_Accessed;
         public virtual T Value
         {
             get;

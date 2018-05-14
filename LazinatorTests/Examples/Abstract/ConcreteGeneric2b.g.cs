@@ -225,7 +225,6 @@ namespace LazinatorTests.Examples.Abstract
                 _MyT_Accessed = true;
             }
         }
-        internal bool _MyT_Accessed;
         private string _AnotherProperty;
         public string AnotherProperty
         {
