@@ -470,8 +470,13 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
             if (lastPropertyToIndex != null)
                 if (lastPropertyToIndex.DerivationKeyword != "override ")
-                    sb.AppendLine(
-                        $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex = 0;"); // make default so that we don't get a warning if this is never used (we can't know in cases where this involves an open generic parameter, since we don't know if there is a subclass). In any event, this shows that it defaults to 0.
+                {
+                    if (ObjectType != LazinatorObjectType.Struct && lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                        sb.AppendLine(
+                            $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
+                    else sb.AppendLine(
+                        $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex;");
+                }
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
                 if (withRecordedIndices[i].DerivationKeyword != "override ")
                     sb.AppendLine(
