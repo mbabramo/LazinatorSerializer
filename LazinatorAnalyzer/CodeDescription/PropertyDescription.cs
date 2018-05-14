@@ -714,8 +714,8 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Dirty = true;" : "")}
                 _{PropertyName}_Accessed = true;
             }}
-        }}
-        internal bool _{PropertyName}_Accessed;
+        }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
+        internal bool _{PropertyName}_Accessed;")}
 ");
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
