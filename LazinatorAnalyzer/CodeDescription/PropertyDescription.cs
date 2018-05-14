@@ -605,7 +605,7 @@ namespace Lazinator.CodeDescription
             if (modifiedDerivationKeyword == null)
             {
                 if (ContainsOpenGenericInnerProperty)
-                    modifiedDerivationKeyword = "virtual ";
+                    modifiedDerivationKeyword = "virtual "; // whether the container is or isn't abstract, this could be closed later on, so "virtual" is appropriate.
                 else if (Container.IsAbstract)
                     modifiedDerivationKeyword = "abstract ";
             }

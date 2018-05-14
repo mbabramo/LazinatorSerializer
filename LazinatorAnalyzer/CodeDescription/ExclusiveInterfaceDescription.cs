@@ -81,7 +81,7 @@ namespace Lazinator.CodeDescription
                 }
             }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword) })
-                .OrderByDescending(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
+                .OrderBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
                 .ThenBy(x => x.description.PropertyType)
                 .ThenBy(x => x.description.PropertyName).ToList();
 
