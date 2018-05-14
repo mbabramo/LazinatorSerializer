@@ -13,6 +13,7 @@ namespace Lazinator.CodeDescription
         public int UniqueID;
         public int Version;
         public ObjectDescription Container;
+        public INamedTypeSymbol NamedTypeSymbol;
         public List<PropertyDescription> PropertiesIncludingInherited;
         public List<PropertyDescription> PropertiesToDefineThisLevel;
         public List<string> GenericArgumentNames;
@@ -25,6 +26,7 @@ namespace Lazinator.CodeDescription
 
         public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container)
         {
+            NamedTypeSymbol = t;
             Container = container;
             var lazinatorAttribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
@@ -44,6 +46,7 @@ namespace Lazinator.CodeDescription
 
         private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
         {
+            NamedTypeSymbol = t;
             var attributes = Container.CodeFiles.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
             foreach (var a in attributes)
             {
@@ -63,6 +66,10 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
+            if (interfaceSymbol.Name.ToString().Contains("ValueTrackerPercentile"))
+            {
+                var DEBUG = 0;
+            }
             var propertiesWithLevel = Container.CodeFiles.PropertiesForType[interfaceSymbol];
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
@@ -126,6 +133,10 @@ namespace Lazinator.CodeDescription
                 match = PropertiesToDefineThisLevel.SingleOrDefault(x => x.PropertyName + "_Dirty" == dirtyWithLevel.Property.Name);
                 if (match != null)
                     match.TrackDirtinessNonSerialized = true;
+            }
+            if (NamedTypeSymbol.ToString().Contains("Summary"))
+            {
+                var DEBUG = 0;
             }
         }
     }

@@ -208,8 +208,15 @@ namespace LazinatorCodeGen.Roslyn
                 if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
                 
-                ImmutableArray<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces;
-                foreach (var @interface in allInterfaces.Where(x => x != type && x.Name != "ILazinator"))
+                if (namedTypeSymbol.ToString().Contains("ValueTrackerSummaryStatistics"))
+                {
+                    var DEBUG = 0;
+                }
+                List<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces.Where(x => x != type && x.Name != "ILazinator")
+                    .OrderByDescending(x => namedTypeSymbol.Interfaces.Contains(x))
+                    .ThenByDescending(x => x.AllInterfaces.Count())
+                    .ToList();
+                foreach (var @interface in allInterfaces)
                 {
                     if (@interface.GetFullNamespace().StartsWith("System.Collections"))
                         continue;
@@ -246,7 +253,11 @@ namespace LazinatorCodeGen.Roslyn
 
         private void AddLinkFromTypeToInterface(INamedTypeSymbol namedTypeSymbol, INamedTypeSymbol @interface)
         {
-            if (ExclusiveInterfaces.Contains(@interface) && !TypeToExclusiveInterface.ContainsKey(namedTypeSymbol))
+            if (namedTypeSymbol.Name.ToString().Contains("ValueTrackerPercentileConverter"))
+            {
+                var DEBUG = 0;
+            }
+            if (namedTypeSymbol.TypeKind != TypeKind.Interface && ExclusiveInterfaces.Contains(@interface) && !TypeToExclusiveInterface.ContainsKey(namedTypeSymbol))
                 TypeToExclusiveInterface[namedTypeSymbol.OriginalDefinition] = @interface.OriginalDefinition;
         }
 
