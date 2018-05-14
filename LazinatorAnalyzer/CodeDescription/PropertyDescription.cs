@@ -78,7 +78,7 @@ namespace Lazinator.CodeDescription
         public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, string derivationKeyword)
         {
             PropertySymbol = propertySymbol;
-            IsAbstract = PropertySymbol.IsAbstract;
+            IsAbstract = PropertySymbol.Type.IsAbstract;
             Container = container;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
@@ -116,7 +116,7 @@ namespace Lazinator.CodeDescription
         {
             Container = container;
             Namespace = @namespace;
-            IsAbstract = typeArguments.Any(x => x.IsAbstract);
+            // IsAbstract = typeArguments.Any(x => x.IsAbstract);
             SetTypeNameWithInnerProperties(name, typeArguments);
             CheckSupportedCollections(name);
             CheckSupportedTuples(name);
