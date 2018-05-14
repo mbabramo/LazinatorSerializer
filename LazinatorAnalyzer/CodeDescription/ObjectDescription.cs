@@ -486,7 +486,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
-                    if (ObjectType != LazinatorObjectType.Struct && lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                    if (ObjectType != LazinatorObjectType.Struct && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter || derivationKeyword == "override "))
                         sb.AppendLine(
                             $"private int _{ObjectNameEncodable}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
                     else sb.AppendLine(
