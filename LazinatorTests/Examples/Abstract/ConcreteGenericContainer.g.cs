@@ -183,7 +183,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        private int _ConcreteGenericContainer_EndByteIndex;
+        private int _ConcreteGenericContainer_EndByteIndex = 0;
         internal override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
         
         private LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> _Item;
