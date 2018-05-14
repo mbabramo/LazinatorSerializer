@@ -479,20 +479,16 @@ namespace Lazinator.CodeDescription
                 }
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
             {
-                if (withRecordedIndices[i].DerivationKeyword == "override ")
-                    sb.AppendLine(
-                        $"internal override int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
-                else sb.AppendLine(
-                        $"internal virtual int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                PropertyDescription propertyDescription = withRecordedIndices[i];
+                string derivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
+                sb.AppendLine(
+                        $"internal {derivationKeyword}int _{propertyDescription.PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{propertyDescription.PropertyName}_ByteIndex;");
             }
             if (lastPropertyToIndex != null)
             {
-                if (lastPropertyToIndex.DerivationKeyword == "override ")
-                    sb.AppendLine(
-                        $"internal override int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
-                else
-                    sb.AppendLine(
-                        $"internal virtual int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
+                sb.AppendLine(
+                        $"internal {derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
             }
             sb.AppendLine();
 
@@ -621,6 +617,20 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
                         ");
+        }
+
+        private string GetDerivationKeywordForLengthProperty(PropertyDescription propertyDescription)
+        {
+            string derivationKeyword;
+            if (ObjectType == LazinatorObjectType.Struct)
+                derivationKeyword = "";
+            else if (propertyDescription.DerivationKeyword == "override ")
+                derivationKeyword = "override ";
+            else if (IsSealed)
+                derivationKeyword = "";
+            else
+                derivationKeyword = "virtual ";
+            return derivationKeyword;
         }
 
         public void HandleGenerics(INamedTypeSymbol iLazinatorType)
