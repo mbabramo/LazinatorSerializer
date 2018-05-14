@@ -184,7 +184,8 @@ namespace LazinatorTests.Examples
         /* Field boilerplate */
         
         internal int _MyExampleStruct_ByteIndex;
-        internal int _MyExampleStruct_ByteLength => LazinatorObjectBytes.Length - _MyExampleStruct_ByteIndex;
+        internal int _MyExampleStruct_EndByteIndex;
+        internal int _MyExampleStruct_ByteLength => _MyExampleStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
         
         private LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
         public LazinatorTests.Examples.ExampleStruct MyExampleStruct
@@ -269,6 +270,7 @@ namespace LazinatorTests.Examples
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyExampleStruct_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -184,8 +184,9 @@ namespace LazinatorTests.Examples.Tuples
         
         internal int _MyNullableTuple_ByteIndex;
         internal int _MyValueTupleSerialized_ByteIndex;
+        internal int _MyValueTupleSerialized_EndByteIndex;
         internal int _MyNullableTuple_ByteLength => _MyValueTupleSerialized_ByteIndex - _MyNullableTuple_ByteIndex;
-        internal int _MyValueTupleSerialized_ByteLength => LazinatorObjectBytes.Length - _MyValueTupleSerialized_ByteIndex;
+        internal int _MyValueTupleSerialized_ByteLength => _MyValueTupleSerialized_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
         
         private ValueTuple<int, double>? _MyNullableTuple;
         public ValueTuple<int, double>? MyNullableTuple
@@ -269,6 +270,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyValueTupleSerialized_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

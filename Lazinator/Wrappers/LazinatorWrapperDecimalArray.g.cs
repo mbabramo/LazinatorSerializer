@@ -183,7 +183,8 @@ namespace Lazinator.Wrappers
         /* Field boilerplate */
         
         internal int _Value_ByteIndex;
-        internal int _Value_ByteLength => LazinatorObjectBytes.Length - _Value_ByteIndex;
+        internal int _Value_EndByteIndex;
+        internal int _Value_ByteLength => _Value_EndByteIndex - _Value_ByteIndex;
         
         private decimal[] _Value;
         public decimal[] Value
@@ -235,6 +236,7 @@ namespace Lazinator.Wrappers
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _Value_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

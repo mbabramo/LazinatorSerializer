@@ -184,7 +184,8 @@ namespace LazinatorTests.Examples.Abstract
         /* Field boilerplate */
         
         internal int _Item_ByteIndex;
-        internal int _Item_ByteLength => LazinatorObjectBytes.Length - _Item_ByteIndex;
+        internal int _Item_EndByteIndex;
+        internal int _Item_ByteLength => _Item_EndByteIndex - _Item_ByteIndex;
         
         private LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> _Item;
         public override LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> Item
@@ -240,6 +241,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _Item_EndByteIndex = bytesSoFar;
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

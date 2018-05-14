@@ -183,7 +183,8 @@ namespace LazinatorTests.Examples.Tuples
         /* Field boilerplate */
         
         internal int _MyKeyValuePairSerialized_ByteIndex;
-        internal int _MyKeyValuePairSerialized_ByteLength => LazinatorObjectBytes.Length - _MyKeyValuePairSerialized_ByteIndex;
+        internal int _MyKeyValuePairSerialized_EndByteIndex;
+        internal int _MyKeyValuePairSerialized_ByteLength => _MyKeyValuePairSerialized_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
         
         private System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> _MyKeyValuePairSerialized;
         public System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> MyKeyValuePairSerialized
@@ -231,6 +232,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyKeyValuePairSerialized_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

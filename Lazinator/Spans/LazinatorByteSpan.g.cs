@@ -185,8 +185,9 @@ namespace Lazinator.Spans
         
         internal int _ReadOnly_ByteIndex;
         internal int _ReadOrWrite_ByteIndex;
+        internal int _ReadOrWrite_EndByteIndex;
         internal int _ReadOnly_ByteLength => _ReadOrWrite_ByteIndex - _ReadOnly_ByteIndex;
-        internal int _ReadOrWrite_ByteLength => LazinatorObjectBytes.Length - _ReadOrWrite_ByteIndex;
+        internal int _ReadOrWrite_ByteLength => _ReadOrWrite_EndByteIndex - _ReadOrWrite_ByteIndex;
         
         private ReadOnlyMemory<byte> _ReadOnly;
         internal ReadOnlySpan<byte> ReadOnly
@@ -263,6 +264,7 @@ namespace Lazinator.Spans
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _ReadOrWrite_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

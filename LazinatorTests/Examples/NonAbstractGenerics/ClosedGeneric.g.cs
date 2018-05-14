@@ -49,8 +49,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         /* Properties */
         internal int _MyT_ByteIndex;
         internal int _MyListT_ByteIndex;
+        internal int _MyListT_EndByteIndex;
         internal int _MyT_ByteLength => _MyListT_ByteIndex - _MyT_ByteIndex;
-        internal int _MyListT_ByteLength => LazinatorObjectBytes.Length - _MyListT_ByteIndex;
+        internal int _MyListT_ByteLength => _MyListT_EndByteIndex - _MyListT_ByteIndex;
         
         private int _AnotherPropertyAdded;
         public int AnotherPropertyAdded
@@ -159,6 +160,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyListT_EndByteIndex = bytesSoFar;
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

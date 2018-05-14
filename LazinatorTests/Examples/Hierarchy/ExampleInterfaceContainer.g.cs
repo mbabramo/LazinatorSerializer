@@ -184,7 +184,8 @@ namespace LazinatorTests.Examples.Hierarchy
         /* Field boilerplate */
         
         internal int _ExampleByInterface_ByteIndex;
-        internal int _ExampleByInterface_ByteLength => LazinatorObjectBytes.Length - _ExampleByInterface_ByteIndex;
+        internal int _ExampleByInterface_EndByteIndex;
+        internal int _ExampleByInterface_ByteLength => _ExampleByInterface_EndByteIndex - _ExampleByInterface_ByteIndex;
         
         private LazinatorTests.Examples.IExample _ExampleByInterface;
         public LazinatorTests.Examples.IExample ExampleByInterface
@@ -240,6 +241,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _ExampleByInterface_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

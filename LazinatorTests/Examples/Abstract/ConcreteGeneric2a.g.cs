@@ -184,7 +184,8 @@ namespace LazinatorTests.Examples.Abstract
         /* Field boilerplate */
         
         internal int _LazinatorExample_ByteIndex;
-        internal int _LazinatorExample_ByteLength => LazinatorObjectBytes.Length - _LazinatorExample_ByteIndex;
+        internal int _LazinatorExample_EndByteIndex;
+        internal int _LazinatorExample_ByteLength => _LazinatorExample_EndByteIndex - _LazinatorExample_ByteIndex;
         
         private string _AnotherProperty;
         public string AnotherProperty
@@ -272,6 +273,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _LazinatorExample_EndByteIndex = bytesSoFar;
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

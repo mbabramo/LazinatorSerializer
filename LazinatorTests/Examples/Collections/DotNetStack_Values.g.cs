@@ -183,7 +183,8 @@ namespace LazinatorTests.Examples.Collections
         /* Field boilerplate */
         
         internal int _MyStackInt_ByteIndex;
-        internal int _MyStackInt_ByteLength => LazinatorObjectBytes.Length - _MyStackInt_ByteIndex;
+        internal int _MyStackInt_EndByteIndex;
+        internal int _MyStackInt_ByteLength => _MyStackInt_EndByteIndex - _MyStackInt_ByteIndex;
         
         private System.Collections.Generic.Stack<int> _MyStackInt;
         public System.Collections.Generic.Stack<int> MyStackInt
@@ -249,6 +250,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyStackInt_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

@@ -187,10 +187,11 @@ namespace Lazinator.Collections.Avl
         internal int _Right_ByteIndex;
         internal int _Key_ByteIndex;
         internal int _Value_ByteIndex;
+        internal int _Value_EndByteIndex;
         internal int _Left_ByteLength => _Right_ByteIndex - _Left_ByteIndex;
         internal int _Right_ByteLength => _Key_ByteIndex - _Right_ByteIndex;
         internal int _Key_ByteLength => _Value_ByteIndex - _Key_ByteIndex;
-        internal int _Value_ByteLength => LazinatorObjectBytes.Length - _Value_ByteIndex;
+        internal int _Value_ByteLength => _Value_EndByteIndex - _Value_ByteIndex;
         
         private int _Balance;
         public int Balance
@@ -418,6 +419,7 @@ namespace Lazinator.Collections.Avl
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _Value_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

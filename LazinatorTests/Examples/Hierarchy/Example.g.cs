@@ -195,6 +195,7 @@ namespace LazinatorTests.Examples
         internal int _MyInterfaceImplementer_ByteIndex;
         internal int _WrappedInt_ByteIndex;
         internal int _MyNonLazinatorChild_ByteIndex;
+        internal int _MyNonLazinatorChild_EndByteIndex;
         internal int _ExcludableChild_ByteLength => _IncludableChild_ByteIndex - _ExcludableChild_ByteIndex;
         internal int _IncludableChild_ByteLength => _MyChild1_ByteIndex - _IncludableChild_ByteIndex;
         internal int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
@@ -202,7 +203,7 @@ namespace LazinatorTests.Examples
         internal int _MyChild2Previous_ByteLength => _MyInterfaceImplementer_ByteIndex - _MyChild2Previous_ByteIndex;
         internal int _MyInterfaceImplementer_ByteLength => _WrappedInt_ByteIndex - _MyInterfaceImplementer_ByteIndex;
         internal int _WrappedInt_ByteLength => _MyNonLazinatorChild_ByteIndex - _WrappedInt_ByteIndex;
-        internal int _MyNonLazinatorChild_ByteLength => LazinatorObjectBytes.Length - _MyNonLazinatorChild_ByteIndex;
+        internal int _MyNonLazinatorChild_ByteLength => _MyNonLazinatorChild_EndByteIndex - _MyNonLazinatorChild_ByteIndex;
         
         private bool _MyBool;
         public bool MyBool
@@ -794,6 +795,7 @@ namespace LazinatorTests.Examples
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyNonLazinatorChild_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

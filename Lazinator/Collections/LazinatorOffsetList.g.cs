@@ -186,8 +186,9 @@ namespace Lazinator.Collections
         
         internal int _FourByteItems_ByteIndex;
         internal int _TwoByteItems_ByteIndex;
+        internal int _TwoByteItems_EndByteIndex;
         internal int _FourByteItems_ByteLength => _TwoByteItems_ByteIndex - _FourByteItems_ByteIndex;
-        internal int _TwoByteItems_ByteLength => LazinatorObjectBytes.Length - _TwoByteItems_ByteIndex;
+        internal int _TwoByteItems_ByteLength => _TwoByteItems_EndByteIndex - _TwoByteItems_ByteIndex;
         
         private Lazinator.Collections.LazinatorFastReadList<int> _FourByteItems;
         public Lazinator.Collections.LazinatorFastReadList<int> FourByteItems
@@ -295,6 +296,7 @@ namespace Lazinator.Collections
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _TwoByteItems_EndByteIndex = bytesSoFar;
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

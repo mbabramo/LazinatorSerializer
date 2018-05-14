@@ -316,10 +316,12 @@ namespace LazinatorTests.Tests
         public void SerializationWithoutChildrenWorks()
         {
             var original = GetHierarchy(1, 1, 1, 1, 1);
+            // make a copy, but manually delete all children
             var copy = GetHierarchy(1, 1, 1, 1, 1);
             copy.MyChild1 = null;
             copy.MyChild2 = null;
             copy.MyInterfaceImplementer = null;
+            copy.MyNonLazinatorChild = null;
             var result = original.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
             ExampleEqual(copy, result).Should().BeTrue();
             // now, serialize again

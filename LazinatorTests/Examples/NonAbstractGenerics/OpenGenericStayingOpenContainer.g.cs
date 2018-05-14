@@ -184,7 +184,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         /* Field boilerplate */
         
         internal int _ClosedGeneric_ByteIndex;
-        internal int _ClosedGeneric_ByteLength => LazinatorObjectBytes.Length - _ClosedGeneric_ByteIndex;
+        internal int _ClosedGeneric_EndByteIndex;
+        internal int _ClosedGeneric_ByteLength => _ClosedGeneric_EndByteIndex - _ClosedGeneric_ByteIndex;
         
         private LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<Lazinator.Wrappers.LazinatorWrapperFloat> _ClosedGeneric;
         public LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<Lazinator.Wrappers.LazinatorWrapperFloat> ClosedGeneric
@@ -240,6 +241,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _ClosedGeneric_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

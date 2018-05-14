@@ -185,9 +185,10 @@ namespace LazinatorTests.Examples.Collections
         internal int _MyArrayInt_ByteIndex;
         internal int _MyCrazyJaggedArray_ByteIndex;
         internal int _MyThreeDimArrayInt_ByteIndex;
+        internal int _MyThreeDimArrayInt_EndByteIndex;
         internal int _MyArrayInt_ByteLength => _MyCrazyJaggedArray_ByteIndex - _MyArrayInt_ByteIndex;
         internal int _MyCrazyJaggedArray_ByteLength => _MyThreeDimArrayInt_ByteIndex - _MyCrazyJaggedArray_ByteIndex;
-        internal int _MyThreeDimArrayInt_ByteLength => LazinatorObjectBytes.Length - _MyThreeDimArrayInt_ByteIndex;
+        internal int _MyThreeDimArrayInt_ByteLength => _MyThreeDimArrayInt_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
         
         private int[,] _MyArrayInt;
         public int[,] MyArrayInt
@@ -325,6 +326,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            _MyThreeDimArrayInt_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
