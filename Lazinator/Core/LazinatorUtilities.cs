@@ -69,7 +69,7 @@ namespace Lazinator.Core
         /// Initiates the convertion to binary of a non-lazinator object. 
         /// </summary>
         /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
-        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, i.e. has had its dirty flag set.</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
         /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
         /// <param name="writer">The binary writer</param>
         /// <param name="getChildSliceForFieldFn"></param>
