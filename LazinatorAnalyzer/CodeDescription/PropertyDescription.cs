@@ -1478,7 +1478,7 @@ namespace Lazinator.CodeDescription
             string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
             sb.Append(
                     $@"
-                        var tupleType = new {FullyQualifiedNameWithoutNullableIndicator}({itemnamesLowercase});
+                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {FullyQualifiedNameWithoutNullableIndicator}")}({itemnamesLowercase});
 
                         return tupleType;
                     }}

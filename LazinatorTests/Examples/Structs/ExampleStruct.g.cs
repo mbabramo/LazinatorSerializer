@@ -383,8 +383,8 @@ namespace LazinatorTests.Examples
             }
         }
         internal bool _MyListValues_Accessed;
-        private ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> _MyTuple;
-        public ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> MyTuple
+        private (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) _MyTuple;
+        public (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) MyTuple
         {
             [DebuggerStepThrough]
             get
@@ -393,7 +393,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyTuple = default(ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?>);
+                        _MyTuple = default((LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2));
                     }
                     else
                     {
@@ -610,7 +610,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> ConvertFromBytes_ValueTuple_NonLazinatorClass_Nullable_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes_ValueTuple_NonLazinatorClass_Nullable_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -631,12 +631,12 @@ namespace LazinatorTests.Examples
             
             int? item2 = span.ToDecompressedNullableInt(ref bytesSoFar);
             
-            var tupleType = new ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?>(item1, item2);
+            var tupleType = (item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_NonLazinatorClass_Nullable_int(BinaryBufferWriter writer, ValueTuple<LazinatorTests.Examples.NonLazinatorClass, int?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple_NonLazinatorClass_Nullable_int(BinaryBufferWriter writer, (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             if (itemToConvert.Item1 == null)
