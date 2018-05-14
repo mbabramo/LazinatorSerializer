@@ -191,7 +191,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private void RecordInformationAboutTypeAndRelatedTypes(ITypeSymbol type)
         {
-            foreach (ITypeSymbol t in GetTypeAndInnerTypes(type))
+            foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(type))
                 RecordInformationAboutType(t);
         }
         
@@ -261,30 +261,32 @@ namespace LazinatorCodeGen.Roslyn
                 TypeToExclusiveInterface[namedTypeSymbol.OriginalDefinition] = @interface.OriginalDefinition;
         }
 
-        private IEnumerable<ITypeSymbol> GetTypeAndInnerTypes(ITypeSymbol type)
+        private IEnumerable<ITypeSymbol> GetUnrecordedTypeAndInnerTypes(ITypeSymbol type)
         {
+            if (RelevantSymbols.Contains(type))
+                yield break;
             yield return type;
             if (type is INamedTypeSymbol namedType)
             {
                 foreach (ITypeSymbol t in namedType.TypeArguments)
-                    foreach (ITypeSymbol t2 in GetTypeAndInnerTypes(t))
+                    foreach (ITypeSymbol t2 in GetUnrecordedTypeAndInnerTypes(t))
                         yield return t2;
                 if (namedType.TupleUnderlyingType != null)
-                    foreach (ITypeSymbol t in GetTypeAndInnerTypes(namedType.TupleUnderlyingType))
+                    foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(namedType.TupleUnderlyingType))
                         yield return t;
             }
             else if (type is IArrayTypeSymbol arrayType)
             {
-                foreach (ITypeSymbol t in GetTypeAndInnerTypes(arrayType.ElementType))
+                foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(arrayType.ElementType))
                     yield return t;
             }
             if (type != type.OriginalDefinition)
-                foreach (ITypeSymbol t in GetTypeAndInnerTypes(type.OriginalDefinition))
+                foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(type.OriginalDefinition))
                     yield return t;
             var attributes = (GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(type)).ToList();
             foreach (CloneUnofficiallyIncorporateInterfaceAttribute attribute in attributes)
             {
-                foreach (ITypeSymbol t in GetTypeAndInnerTypes(
+                foreach (ITypeSymbol t in GetUnrecordedTypeAndInnerTypes(
                     Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName)))
                 {
                     if (t == null)
@@ -292,6 +294,8 @@ namespace LazinatorCodeGen.Roslyn
                     yield return t;
                 }
             }
+            if (type.BaseType != null)
+                yield return type.BaseType;
         }
 
         private void RecordInterfaceTextHash(INamedTypeSymbol @interface, INamedTypeSymbol implementingType)
