@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        ExampleByInterface = (LazinatorTests.Examples.IExample)DeserializationFactory.FactoryCreate(childData, this); 
+                        _ExampleByInterface = (LazinatorTests.Examples.IExample)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _ExampleByInterface_Accessed = true;
                 }

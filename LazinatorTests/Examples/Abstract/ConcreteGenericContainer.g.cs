@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        Item = (LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
+                        _Item = (LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _Item_Accessed = true;
                 }

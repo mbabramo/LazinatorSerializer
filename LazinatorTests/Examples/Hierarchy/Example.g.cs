@@ -600,7 +600,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        MyInterfaceImplementer = (LazinatorTests.Examples.IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
+                        _MyInterfaceImplementer = (LazinatorTests.Examples.IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _MyInterfaceImplementer_Accessed = true;
                 }

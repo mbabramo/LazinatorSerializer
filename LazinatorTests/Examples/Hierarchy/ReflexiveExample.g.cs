@@ -248,7 +248,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        ReflexiveInterface = (LazinatorTests.Examples.Hierarchy.IReflexiveExample)DeserializationFactory.FactoryCreate(childData, this); 
+                        _ReflexiveInterface = (LazinatorTests.Examples.Hierarchy.IReflexiveExample)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _ReflexiveInterface_Accessed = true;
                 }
