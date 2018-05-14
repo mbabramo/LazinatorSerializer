@@ -254,7 +254,7 @@ namespace LazinatorAnalyzer.Analyzer
                                     additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
                                 additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
                                 var config = ConfigLoader.LoadConfigFileAsString(_additionalFiles, context.CancellationToken);
-                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
+                                var diagnostic = Diagnostic.Create(needsGeneration || config.RegenerateAll ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
                                 context.ReportDiagnostic(diagnostic);
                             }
                         }

@@ -14,6 +14,7 @@ namespace LazinatorAnalyzer.Settings
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
         public List<string> IgnoreRecordLikeTypes;
+        //public bool RegenerateAll;
 
         public LazinatorConfig()
         {
@@ -35,6 +36,7 @@ namespace LazinatorAnalyzer.Settings
                     const string DirectConvertersString = "DirectConverters";
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);
+                    //RegenerateAll = json["RegenerateAll"].AsBoolean;
                 }
                 catch
                 {
