@@ -468,15 +468,6 @@ namespace Lazinator.CodeDescription
             for (int i = 0; i < withRecordedIndices.Count(); i++)
                 if (withRecordedIndices[i].DerivationKeyword != "override ")
                     sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
-            if (lastPropertyToIndex != null)
-                if (lastPropertyToIndex.DerivationKeyword != "override ")
-                {
-                    if (ObjectType != LazinatorObjectType.Struct && lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                        sb.AppendLine(
-                            $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
-                    else sb.AppendLine(
-                        $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex;");
-                }
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
             {
                 PropertyDescription propertyDescription = withRecordedIndices[i];
@@ -486,9 +477,22 @@ namespace Lazinator.CodeDescription
             }
             if (lastPropertyToIndex != null)
             {
-                string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
-                sb.AppendLine(
-                        $"internal {derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                if (IsAbstract)
+                {
+                    sb.AppendLine(
+                            $"public abstract int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}");
+                }
+                else
+                {
+                    string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
+                    if (ObjectType != LazinatorObjectType.Struct && lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                        sb.AppendLine(
+                            $"private int _{ObjectName}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
+                    else sb.AppendLine(
+                            $"private int _{ObjectName}_EndByteIndex;");
+                    sb.AppendLine(
+                            $"internal {derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{ObjectName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                }
             }
             sb.AppendLine();
 
@@ -560,7 +564,7 @@ namespace Lazinator.CodeDescription
             var lastProperty = thisLevel.LastOrDefault();
             if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
             {
-                sb.Append($@"_{lastProperty.PropertyName}_EndByteIndex = bytesSoFar;
+                sb.Append($@"_{ObjectName}_EndByteIndex = bytesSoFar;
                     ");
             }
 
