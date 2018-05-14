@@ -4,8 +4,7 @@ using System.Text;
 
 namespace LazinatorTests.Examples.Abstract
 {
-    public class ContainerWithAbstract1 : IContainerWithAbstract1
+    public partial class ContainerWithAbstract1 : IContainerWithAbstract1
     {
-        public Abstract1 AbstractProperty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
