@@ -184,7 +184,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         internal int _MyListT_ByteIndex;
         internal int _MyT_ByteIndex;
-        internal int _MyT_EndByteIndex;
+        internal int _MyT_EndByteIndex = 0;
         internal int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
         internal int _MyT_ByteLength => _MyT_EndByteIndex - _MyT_ByteIndex;
         

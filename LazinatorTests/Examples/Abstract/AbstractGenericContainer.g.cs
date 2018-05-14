@@ -77,7 +77,7 @@ namespace LazinatorTests.Examples.Abstract
         internal int _Item_EndByteIndex;
         internal int _Item_ByteLength => _Item_EndByteIndex - _Item_ByteIndex;
         
-        internal bool _Item_Accessed;
+        internal bool _Item_Accessed = false;
         public virtual LazinatorTests.Examples.Abstract.IAbstractGeneric1<T> Item
         {
             get;

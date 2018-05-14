@@ -184,7 +184,7 @@ namespace Lazinator.Collections
         
         internal int _Item1_ByteIndex;
         internal int _Item2_ByteIndex;
-        internal int _Item2_EndByteIndex;
+        internal int _Item2_EndByteIndex = 0;
         internal int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
         internal int _Item2_ByteLength => _Item2_EndByteIndex - _Item2_ByteIndex;
         

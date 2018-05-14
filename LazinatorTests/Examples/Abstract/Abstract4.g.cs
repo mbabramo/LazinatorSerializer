@@ -26,7 +26,7 @@ namespace LazinatorTests.Examples.Abstract
     public partial class Abstract4 : Concrete3, ILazinator
     {
         
-        internal bool _String4_Accessed;
+        internal bool _String4_Accessed = false;
         public abstract string String4
         {
             get;
