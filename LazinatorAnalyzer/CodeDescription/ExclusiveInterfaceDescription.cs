@@ -131,10 +131,6 @@ namespace Lazinator.CodeDescription
                 if (match != null)
                     match.TrackDirtinessNonSerialized = true;
             }
-            if (NamedTypeSymbol.ToString().Contains("Summary"))
-            {
-                var DEBUG = 0;
-            }
         }
     }
 }

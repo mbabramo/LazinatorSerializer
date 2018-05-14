@@ -309,7 +309,7 @@ namespace LazinatorTests.Examples.Tuples
             
             double item2 = span.ToDouble(ref bytesSoFar);
             
-            var tupleType = new ValueTuple<int, double>(item1, item2);
+            var tupleType = (item1, item2);
             
             return tupleType;
         }
@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = (item1, item2, item3);
             
             return tupleType;
         }

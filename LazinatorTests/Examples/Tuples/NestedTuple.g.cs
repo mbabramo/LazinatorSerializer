@@ -342,7 +342,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>(item1, item2);
+            var tupleType = (item1, item2);
             
             return tupleType;
         }
@@ -394,7 +394,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>(item1, item2, item3);
+            var tupleType = (item1, item2, item3);
             
             return tupleType;
         }
@@ -439,7 +439,7 @@ namespace LazinatorTests.Examples.Tuples
             
             string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
-            var tupleType = new ValueTuple<int, string>(item1, item2);
+            var tupleType = (item1, item2);
             
             return tupleType;
         }

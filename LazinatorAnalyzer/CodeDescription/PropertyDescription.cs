@@ -52,6 +52,7 @@ namespace Lazinator.CodeDescription
         public List<PropertyDescription> InnerProperties { get; set; }
         public bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         public IPropertySymbol PropertySymbol { get; set; }
+        public ITypeSymbol TypeSymbol { get; set; } // if we don't have a property
         public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
         public string PropertyAccessibility { get; set; }
         public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
@@ -105,6 +106,7 @@ namespace Lazinator.CodeDescription
         public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription container, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
+            TypeSymbol = typeSymbol;
             Container = container;
             PropertyName = propertyName;
             IsAbstract = typeSymbol.IsAbstract;
@@ -492,7 +494,7 @@ namespace Lazinator.CodeDescription
             TypeName = null;
             if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple)
             {
-                var namedTypeSymbol = PropertySymbol.Type as INamedTypeSymbol;
+                var namedTypeSymbol = (PropertySymbol?.Type ?? TypeSymbol) as INamedTypeSymbol;
                 if (namedTypeSymbol != null && namedTypeSymbol.TupleElements != null && namedTypeSymbol.TupleElements.Count() == InnerProperties.Count() && namedTypeSymbol.TupleElements.First().Name != "Item1")
                 {
                     var zipped = namedTypeSymbol.TupleElements.Zip(InnerProperties, (x, y) => new { TupleElement = x, InnerProperty = y });
