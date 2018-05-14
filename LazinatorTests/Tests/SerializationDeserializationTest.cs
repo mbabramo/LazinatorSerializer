@@ -1523,6 +1523,21 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void AbstractPropertySerializes()
+        {
+            ContainerWithAbstract1 c = new ContainerWithAbstract1()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                AbstractProperty = new Concrete3() { String1 = "1", String2 = "2", String3 = "3" }
+            };
+            var c2 = c.CloneLazinatorTyped();
+            var c2_abstractProperty = (c2.AbstractProperty as Concrete3);
+            c2_abstractProperty.String1.Should().Be("1");
+            c2_abstractProperty.String2.Should().Be("2");
+            c2_abstractProperty.String3.Should().Be("3");
+        }
+
+        [Fact]
         public void ConcreteGenericClassesSerialize()
         {
             ConcreteGeneric2a cg2a = new ConcreteGeneric2a()
