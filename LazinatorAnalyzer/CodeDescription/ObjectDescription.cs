@@ -16,6 +16,7 @@ namespace Lazinator.CodeDescription
         public Accessibility Accessibility { get; set; }
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
+        public string ObjectNameEncodable => RoslynHelpers.EncodableTypeName(ILazinatorTypeSymbol);
         public LazinatorObjectType ObjectType { get; set; }
         public bool IsNonLazinatorBaseClass { get; set; }
         public bool IsAbstract { get; set; }
@@ -480,18 +481,18 @@ namespace Lazinator.CodeDescription
                 if (IsAbstract)
                 {
                     sb.AppendLine(
-                            $"public abstract int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}");
+                            $"internal abstract int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}");
                 }
                 else
                 {
                     string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
                     if (ObjectType != LazinatorObjectType.Struct && lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter)
                         sb.AppendLine(
-                            $"private int _{ObjectName}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
+                            $"private int _{ObjectNameEncodable}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
                     else sb.AppendLine(
-                            $"private int _{ObjectName}_EndByteIndex;");
+                            $"private int _{ObjectNameEncodable}_EndByteIndex;");
                     sb.AppendLine(
-                            $"internal {derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{ObjectName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                            $"internal {derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{ObjectNameEncodable}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
                 }
             }
             sb.AppendLine();
@@ -564,7 +565,7 @@ namespace Lazinator.CodeDescription
             var lastProperty = thisLevel.LastOrDefault();
             if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
             {
-                sb.Append($@"_{ObjectName}_EndByteIndex = bytesSoFar;
+                sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = bytesSoFar;
                     ");
             }
 
