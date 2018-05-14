@@ -454,28 +454,34 @@ namespace Lazinator.CodeDescription
             }
 
             var thisLevel = PropertiesToDefineThisLevel;
-            var withRecordedIndices = thisLevel.Where(property =>
-                property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
-                property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
-                property.PropertyType == LazinatorPropertyType.NonSelfSerializingType ||
-                property.PropertyType == LazinatorPropertyType.SupportedCollection ||
-                property.PropertyType == LazinatorPropertyType.SupportedTuple ||
-                property.PropertyType == LazinatorPropertyType.OpenGenericParameter).ToList();
+            var withRecordedIndices = thisLevel
+                .Where(property =>
+                    property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
+                    property.PropertyType == LazinatorPropertyType.NonSelfSerializingType ||
+                    property.PropertyType == LazinatorPropertyType.SupportedCollection ||
+                    property.PropertyType == LazinatorPropertyType.SupportedTuple ||
+                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                .ToList();
 
             if (!IsAbstract)
             {
-                var lastWithRecordedIndices = withRecordedIndices.LastOrDefault();
+                var lastPropertyToIndex = withRecordedIndices.LastOrDefault();
                 for (int i = 0; i < withRecordedIndices.Count(); i++)
-                    sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
-                if (lastWithRecordedIndices != null)
-                    sb.AppendLine(
-                        $"internal int _{lastWithRecordedIndices.PropertyName}_EndByteIndex;");
+                    if (withRecordedIndices[i].DerivationKeyword != "override ")
+                        sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                if (lastPropertyToIndex != null)
+                    if (lastPropertyToIndex.DerivationKeyword != "override ")
+                        sb.AppendLine(
+                            $"internal int _{lastPropertyToIndex.PropertyName}_EndByteIndex;");
                 for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
-                    sb.AppendLine(
-                        $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
-                if (lastWithRecordedIndices != null)
-                    sb.AppendLine(
-                        $"internal int _{lastWithRecordedIndices.PropertyName}_ByteLength => _{lastWithRecordedIndices.PropertyName}_EndByteIndex - _{lastWithRecordedIndices.PropertyName}_ByteIndex;");
+                    if (withRecordedIndices[i].DerivationKeyword != "override ")
+                        sb.AppendLine(
+                            $"internal int _{withRecordedIndices[i].PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                if (lastPropertyToIndex != null)
+                    if (lastPropertyToIndex.DerivationKeyword != "override ")
+                        sb.AppendLine(
+                            $"internal int _{lastPropertyToIndex.PropertyName}_ByteLength => _{lastPropertyToIndex.PropertyName}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
                 sb.AppendLine();
             }
 

@@ -66,10 +66,6 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
-            if (interfaceSymbol.Name.ToString().Contains("ValueTrackerPercentile"))
-            {
-                var DEBUG = 0;
-            }
             var propertiesWithLevel = Container.CodeFiles.PropertiesForType[interfaceSymbol];
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
@@ -85,7 +81,8 @@ namespace Lazinator.CodeDescription
                 }
             }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword) })
-                .OrderBy(x => x.description.PropertyType)
+                .OrderByDescending(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
+                .ThenBy(x => x.description.PropertyType)
                 .ThenBy(x => x.description.PropertyName).ToList();
 
             // A property that ends with "_Dirty" is designed to track dirtiness of another property. We will thus treat it specially.
