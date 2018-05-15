@@ -659,7 +659,7 @@ namespace Lazinator.CodeDescription
                     !CodeFiles.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
                     )
                 )
-                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator and also implement new(). Add a clause like 'where T : ILazinator, new()'");
+                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator and also implement new() or struct. Add a clause like 'where T : ILazinator, new()'");
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
             if (GenericArgumentNames.Any())
                 ObjectName = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";
