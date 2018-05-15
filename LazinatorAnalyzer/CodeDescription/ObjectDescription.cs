@@ -643,12 +643,19 @@ namespace Lazinator.CodeDescription
             var genericArguments = iLazinatorType.TypeArguments;
             if (!iLazinatorType.IsAbstract && genericArguments.Any(x => 
                     !(
-                        (x.Interfaces.Any(y => y.Name == "ILazinator") ||
-                        (((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false)))
+                        ( // each generic argument must implement ILazinator or be constrained to ILazinator
+                            x.Interfaces.Any(y => y.Name == "ILazinator") 
+                            ||
+                            (((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false))
+                        )
                             &&
-                        ((x as ITypeParameterSymbol)?.HasConstructorConstraint ?? false)
+                        ( // if the generic argument is a type parameter, as opposed to a bound type, then it must be constrained to have a new() constructor or to be a struct (which can always be instantiated with new())
+                            ((x as ITypeParameterSymbol)?.HasConstructorConstraint ?? true)
+                            ||
+                            ((x as ITypeParameterSymbol)?.HasValueTypeConstraint ?? true)
+                        )
                     )
-                    && 
+                    && // but if this is a Lazinator interface type, that's fine too.
                     !CodeFiles.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
                     )
                 )
