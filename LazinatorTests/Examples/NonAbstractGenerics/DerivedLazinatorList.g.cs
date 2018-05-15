@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples
     using Lazinator.Wrappers;
     
     
-    public partial class DerivedLazinatorList<T> : LazinatorList<T>, ILazinator
+    public partial class DerivedLazinatorList<T> : Lazinator.Collections.LazinatorList<T>, ILazinator
     {
         /* Clone overrides */
         

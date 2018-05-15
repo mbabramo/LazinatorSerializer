@@ -35,7 +35,7 @@ namespace Lazinator.CodeDescription
                                                          (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
                                                           BaseLazinatorObject.IsAbstract);
         public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
-        public string BaseFullyQualifiedObjectName => BaseLazinatorObject?.FullyQualifiedObjectName;
+        public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.ObjectName : BaseLazinatorObject.FullyQualifiedObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
         public bool ImplementsPreSerialization { get; set; }
@@ -148,7 +148,7 @@ namespace Lazinator.CodeDescription
             string theBeginning =
                 $@"{GetFileHeader(Hash.ToString(), Namespace)}
 
-                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseFullyQualifiedObjectName + ", " : "")}ILazinator
+                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
 
