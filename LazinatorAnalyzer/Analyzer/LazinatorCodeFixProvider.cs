@@ -79,7 +79,7 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     try
                     {
-                        config = new LazinatorConfig(sourceFileInformation.Config);
+                        config = new LazinatorConfig(sourceFileInformation.ConfigPath, sourceFileInformation.Config);
                     }
                     catch
                     {

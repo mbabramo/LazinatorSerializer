@@ -14,14 +14,16 @@ namespace LazinatorAnalyzer.Settings
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
         public List<string> IgnoreRecordLikeTypes;
-        //public bool RegenerateAll;
+        public string ConfigFilePath;
+        public string ConversionCodePath;
+        public bool DefineConversionCodeOutsideClass => ConversionCodePath != null;
 
         public LazinatorConfig()
         {
 
         }
 
-        public LazinatorConfig(string configString)
+        public LazinatorConfig(string configPath, string configString)
         {
             InterchangeConverters = new Dictionary<string, string>(); // default
             DirectConverters = new Dictionary<string, string>();
@@ -36,7 +38,9 @@ namespace LazinatorAnalyzer.Settings
                     const string DirectConvertersString = "DirectConverters";
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);
-                    //RegenerateAll = json["RegenerateAll"].AsBoolean;
+                    ConfigFilePath = configPath;
+                    if (ConfigFilePath != null)
+                        ConversionCodePath = ConfigFilePath + "\\" + (json["ConversionCodePath"]);
                 }
                 catch
                 {

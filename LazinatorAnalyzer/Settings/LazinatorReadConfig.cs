@@ -14,14 +14,14 @@ namespace LazinatorAnalyzer.Settings
     {
         private const string ConfigFileName = "LazinatorConfig.json";
 
-        private static string LoadConfig(ImmutableArray<AdditionalText> additionalFiles,
+        public static (string path, string text) GetConfigTextAndPath(ImmutableArray<AdditionalText> additionalFiles,
             CancellationToken cancellationToken)
         {
             var file = additionalFiles.SingleOrDefault(f =>
                 string.Compare(Path.GetFileName(f.Path), ConfigFileName, StringComparison.OrdinalIgnoreCase) == 0);
             if (file == null)
             {
-                return null;
+                return (null, null);
             }
 
             var fileText = file.GetText();
@@ -37,15 +37,9 @@ namespace LazinatorAnalyzer.Settings
 
                 using (var reader = new StreamReader(stream))
                 {
-                    return reader.ReadToEnd();
+                    return (file.Path, reader.ReadToEnd());
                 }
             }
-        }
-
-        public static string LoadConfigFileAsString(ImmutableArray<AdditionalText> additionalFiles, CancellationToken cancellationToken)
-        {
-            string config = LoadConfig(additionalFiles, cancellationToken);
-            return config;
         }
     }
 }

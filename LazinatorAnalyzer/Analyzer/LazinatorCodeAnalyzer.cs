@@ -253,8 +253,8 @@ namespace LazinatorAnalyzer.Analyzer
                                 if (sourceFileInfo.CodeBehindLocation != null)
                                     additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
                                 additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
-                                var config = ConfigLoader.LoadConfigFileAsString(_additionalFiles, context.CancellationToken);
-                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(config));
+                                (string configString, string configPath) = ConfigLoader.GetConfigTextAndPath(_additionalFiles, context.CancellationToken);
+                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(configString, configPath));
                                 context.ReportDiagnostic(diagnostic);
                             }
                         }

@@ -13,6 +13,7 @@ namespace LazinatorAnalyzer.Analyzer
         public List<Location> LazinatorObjectLocationsExcludingCodeBehind;
         public Location CodeBehindLocation;
         public string Config;
+        public string ConfigPath;
 
         public SourceFileInformation()
         {
@@ -36,15 +37,17 @@ namespace LazinatorAnalyzer.Analyzer
                 LazinatorObjectLocationsExcludingCodeBehind = additionalLocations.ToList();
             }
             Config = symbolsDictionary["config"];
+            ConfigPath = symbolsDictionary["configPath"];
         }
 
-        public ImmutableDictionary<string, string> GetSourceFileDictionary(string config)
+        public ImmutableDictionary<string, string> GetSourceFileDictionary(string config, string configPath)
         {
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
             builder.Add("object", LazinatorObject.GetFullNamespace() + "." + LazinatorObject.MetadataName);
             builder.Add("interface", LazinatorInterface.GetFullNamespace() + "." + LazinatorInterface.MetadataName);
             builder.Add("codeBehindExists", CodeBehindLocation == null ? "false" : "true");
             builder.Add("config", config);
+            builder.Add("configPath", configPath);
             return builder.ToImmutable();
         }
     }
