@@ -16,6 +16,7 @@ namespace Lazinator.CodeDescription
         public Accessibility Accessibility { get; set; }
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
+        public string FullyQualifiedObjectName { get; set; }
         public string ObjectNameEncodable => RoslynHelpers.EncodableTypeName(ILazinatorTypeSymbol);
         public LazinatorObjectType ObjectType { get; set; }
         public bool IsNonLazinatorBaseClass { get; set; }
@@ -34,7 +35,7 @@ namespace Lazinator.CodeDescription
                                                          (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
                                                           BaseLazinatorObject.IsAbstract);
         public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
-        public string BaseObjectName => BaseLazinatorObject?.ObjectName;
+        public string BaseFullyQualifiedObjectName => BaseLazinatorObject?.FullyQualifiedObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
         public bool ImplementsPreSerialization { get; set; }
@@ -57,6 +58,7 @@ namespace Lazinator.CodeDescription
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
+            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedName();
             ObjectName = iLazinatorTypeSymbol.Name;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
             {
@@ -146,7 +148,7 @@ namespace Lazinator.CodeDescription
             string theBeginning =
                 $@"{GetFileHeader(Hash.ToString(), Namespace)}
 
-                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
+                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { ObjectName } : {(IsDerivedFromNonAbstractLazinator ? BaseFullyQualifiedObjectName + ", " : "")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
 
@@ -680,6 +682,7 @@ namespace Lazinator.CodeDescription
                 ObjectName = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";
             else
                 ObjectName = iLazinatorType.Name;
+            FullyQualifiedObjectName = iLazinatorType.GetFullNamespace() + "." + ObjectName;
         }
     }
 }

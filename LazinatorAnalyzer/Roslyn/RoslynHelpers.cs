@@ -194,12 +194,14 @@ namespace LazinatorCodeGen.Roslyn
 
         public static string GetFullyQualifiedName(this ISymbol symbol)
         {
+            if (symbol == null)
+                return "";
             return GetFullNamespace(symbol) + "." + symbol.Name;
         }
 
         public static string GetFullNamespace(this ISymbol symbol)
         {
-            if (symbol.ContainingNamespace == null)
+            if (symbol?.ContainingNamespace == null)
                 return "";
             string higherNamespace = GetFullNamespace(symbol.ContainingNamespace);
             if (higherNamespace != "")
