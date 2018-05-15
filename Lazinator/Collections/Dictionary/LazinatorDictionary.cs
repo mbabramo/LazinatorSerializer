@@ -7,7 +7,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
-    public partial class LazinatorDictionary<TKey, TValue> : ILazinatorDictionary<TKey, TValue>, IDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class LazinatorDictionary<TKey, TValue> : ILazinatorDictionary<TKey, TValue>, IDictionary<TKey, TValue> where TKey : ILazinator, new() where TValue : ILazinator, new()
     {
         private const int InitialNumBuckets = 10;
         private int NumBuckets => Buckets.Count;

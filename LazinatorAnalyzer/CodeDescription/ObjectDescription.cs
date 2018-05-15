@@ -644,13 +644,15 @@ namespace Lazinator.CodeDescription
             if (!iLazinatorType.IsAbstract && genericArguments.Any(x => 
                     !(
                         (x.Interfaces.Any(y => y.Name == "ILazinator") ||
-                        ((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false))
+                        (((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false)))
+                            &&
+                        ((x as ITypeParameterSymbol)?.HasConstructorConstraint ?? false)
                     )
                     && 
                     !CodeFiles.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
                     )
                 )
-                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator.");
+                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator and also implement new(). Add a clause like 'where T : ILazinator, new()'");
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
             if (GenericArgumentNames.Any())
                 ObjectName = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";

@@ -58,7 +58,7 @@ namespace Lazinator.Core
             return writer.MemoryInBuffer;
         }
 
-        public static MemoryInBuffer EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) where T : ILazinator
+        public static MemoryInBuffer EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) where T : ILazinator, new()
         {
             BinaryBufferWriter writer = new BinaryBufferWriter(BinaryBufferWriter.MinMinBufferSize);
             selfSerialized.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
@@ -147,7 +147,7 @@ namespace Lazinator.Core
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        public static void WriteChildWithoutLength<T>(BinaryBufferWriter writer, T child, IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed, ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness) where T : ILazinator
+        public static void WriteChildWithoutLength<T>(BinaryBufferWriter writer, T child, IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed, ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness) where T : ILazinator, new()
         {
             if (!childHasBeenAccessed && child != null)
                 childHasBeenAccessed = true; // child is an uninitialized struct

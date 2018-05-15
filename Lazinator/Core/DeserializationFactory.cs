@@ -53,7 +53,7 @@ namespace Lazinator.Core
             return itemToReturn;
         }
 
-        public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator => (T)FactoryCreate(storage, parent);
+        public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator, new() => (T)FactoryCreate(storage, parent);
 
         public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage, ILazinator parent)
         {
