@@ -14,7 +14,7 @@ namespace LazinatorAnalyzer.Settings
     {
         private const string ConfigFileName = "LazinatorConfig.json";
 
-        public static (string path, string text) GetConfigTextAndPath(ImmutableArray<AdditionalText> additionalFiles,
+        public static (string path, string text) GetConfigPathAndText(ImmutableArray<AdditionalText> additionalFiles,
             CancellationToken cancellationToken)
         {
             var file = additionalFiles.SingleOrDefault(f =>
