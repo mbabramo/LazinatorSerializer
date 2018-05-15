@@ -28,7 +28,7 @@ namespace Lazinator.CodeDescription
         {
             NamedTypeSymbol = t;
             Container = container;
-            var lazinatorAttribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
+            var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
                 throw new LazinatorCodeGenException("Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
             UniqueID = lazinatorAttribute.UniqueID;
@@ -47,10 +47,10 @@ namespace Lazinator.CodeDescription
         private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
         {
             NamedTypeSymbol = t;
-            var attributes = Container.CodeFiles.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
+            var attributes = Container.Compilation.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
             foreach (var a in attributes)
             {
-                INamedTypeSymbol namedInterfaceType = Container.CodeFiles.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);
+                INamedTypeSymbol namedInterfaceType = Container.Compilation.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);
                 if (namedInterfaceType == null)
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
@@ -66,13 +66,13 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
-            var propertiesWithLevel = Container.CodeFiles.PropertiesForType[interfaceSymbol];
+            var propertiesWithLevel = Container.Compilation.PropertiesForType[interfaceSymbol];
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
-                if (Container.CodeFiles.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol))
+                if (Container.Compilation.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol))
                 {
-                    var baseExclusiveInterface = Container.CodeFiles.TypeToExclusiveInterface[baseType.ILazinatorTypeSymbol];
-                    var additionalPropertiesWithLevel = Container.CodeFiles.PropertiesForType[baseExclusiveInterface];
+                    var baseExclusiveInterface = Container.Compilation.TypeToExclusiveInterface[baseType.ILazinatorTypeSymbol];
+                    var additionalPropertiesWithLevel = Container.Compilation.PropertiesForType[baseExclusiveInterface];
                     foreach (var basePropertyWithLevel in additionalPropertiesWithLevel)
                     {
                         if (!propertiesWithLevel.Any(x => x.Property.MetadataName == basePropertyWithLevel.Property.MetadataName))

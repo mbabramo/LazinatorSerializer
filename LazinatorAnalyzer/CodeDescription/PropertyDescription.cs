@@ -53,7 +53,7 @@ namespace Lazinator.CodeDescription
         public bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         public IPropertySymbol PropertySymbol { get; set; }
         public ITypeSymbol TypeSymbol { get; set; } // if we don't have a property
-        public IEnumerable<Attribute> UserAttributes => Container.CodeFiles.GetAttributes(PropertySymbol);
+        public IEnumerable<Attribute> UserAttributes => Container.Compilation.GetAttributes(PropertySymbol);
         public string PropertyAccessibility { get; set; }
         public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         public CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
@@ -270,8 +270,8 @@ namespace Lazinator.CodeDescription
             TypeName = PrettyTypeName(t);
             TypeNameEncodable = EncodableTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
-            InterchangeTypeName = Container.CodeFiles.Config?.GetInterchangeConverterTypeName(t);
-            DirectConverterTypeName = Container.CodeFiles.Config?.GetDirectConverterTypeName(t);
+            InterchangeTypeName = Container.Compilation.Config?.GetInterchangeConverterTypeName(t);
+            DirectConverterTypeName = Container.Compilation.Config?.GetDirectConverterTypeName(t);
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
                 throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} has both an interchange converter and a direct converter type listed. Only one should be used.");
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
@@ -333,14 +333,14 @@ namespace Lazinator.CodeDescription
             IsInterface = t.TypeKind == TypeKind.Interface;
             if (!IsInterface)
             {
-                var exclusiveInterface = Container.CodeFiles.TypeToExclusiveInterface[t.OriginalDefinition];
-                CloneLazinatorAttribute attribute = Container.CodeFiles.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
+                var exclusiveInterface = Container.Compilation.TypeToExclusiveInterface[t.OriginalDefinition];
+                CloneLazinatorAttribute attribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                 if (attribute == null)
                     throw new LazinatorCodeGenException(
                         "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
                 UniqueIDForLazinatorType = attribute.UniqueID;
                 CloneSmallLazinatorAttribute smallAttribute =
-                    Container.CodeFiles.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
+                    Container.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
                 if (smallAttribute != null)
                     IsGuaranteedSmall = true;
             }
@@ -436,8 +436,8 @@ namespace Lazinator.CodeDescription
         private bool HandleRecordLikeType(INamedTypeSymbol t)
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
-            var recordLikeTypes = Container.CodeFiles.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(t) || Container.CodeFiles.Config.IgnoreRecordLikeTypes.Any(x => x == t.GetFullyQualifiedName()))
+            var recordLikeTypes = Container.Compilation.RecordLikeTypes;
+            if (!recordLikeTypes.ContainsKey(t) || Container.Compilation.Config.IgnoreRecordLikeTypes.Any(x => x == t.GetFullyQualifiedName()))
                 return false;
 
             PropertyType = LazinatorPropertyType.SupportedTuple;
