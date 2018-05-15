@@ -10,5 +10,6 @@ namespace LazinatorTests.Examples.Abstract
     interface IConcrete3 : IAbstract2
     {
         string String3 { get; set; }
+        List<int> IntList3 { get; set; }
     }
 }

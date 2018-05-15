@@ -112,7 +112,7 @@ public class MyOtherClass
                     ""MyNamespace.B"": ""AnotherNamespace.B_Interchange""
                   }
                 }";
-            LazinatorConfig config = new LazinatorConfig(configString);
+            LazinatorConfig config = new LazinatorConfig(null, configString);
             config.InterchangeConverters["MyNamespace.A"].Should().Be("AnotherNamespace.A_Interchange");
             config.InterchangeConverters["MyNamespace.B"].Should().Be("AnotherNamespace.B_Interchange");
         }
@@ -126,7 +126,7 @@ public class MyOtherClass
                     ""LazinatorTests.Examples.NonLazinatorInterchangeableClass"": ""LazinatorTests.Examples.NonLazinatorInterchangeClass""
                   }
                 }";
-            LazinatorConfig config = new LazinatorConfig(configString);
+            LazinatorConfig config = new LazinatorConfig(null, configString);
             config.InterchangeConverters["LazinatorTests.Examples.NonLazinatorInterchangeableClass"].Should().Be("LazinatorTests.Examples.NonLazinatorInterchangeClass");
         }
 

@@ -10,5 +10,6 @@ namespace LazinatorTests.Examples.Abstract
     interface IConcrete5
     {
         string String5 { get; set; }
+        List<int> IntList5 { get; set; }
     }
 }
