@@ -45,6 +45,7 @@ namespace Lazinator.CodeDescription
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }
+        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed) ? "" : "protected ";
 
         public ObjectDescription()
         {
@@ -187,7 +188,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         
-                        protected internal abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        protected abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         
                         public abstract ILazinator CloneLazinator();
                         
@@ -235,9 +236,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
 
-                        {
-                            (ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")
-                        }internal IncludeChildrenMode OriginalIncludeChildrenMode;
+                        {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
                         public {DerivationKeyword}void Deserialize()
                         {{
@@ -281,7 +280,7 @@ namespace Lazinator.CodeDescription
                             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
                         }}
 
-                        {(ObjectType == LazinatorObjectType.Struct || IsSealed ? "" : "protected ")}internal {DerivationKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+                        {ProtectedIfApplicable}{DerivationKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
 
                         public {DerivationKeyword}ILazinator CloneLazinator()
                         {{
@@ -451,20 +450,20 @@ namespace Lazinator.CodeDescription
             var lastPropertyToIndex = withRecordedIndices.LastOrDefault();
             for (int i = 0; i < withRecordedIndices.Count(); i++)
                 if (withRecordedIndices[i].DerivationKeyword != "override ")
-                    sb.AppendLine($"        internal int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                    sb.AppendLine($"        {ProtectedIfApplicable}int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
             {
                 PropertyDescription propertyDescription = withRecordedIndices[i];
                 string derivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
                 sb.AppendLine(
-                        $"internal {derivationKeyword}int _{propertyDescription.PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{propertyDescription.PropertyName}_ByteIndex;");
+                        $"{ProtectedIfApplicable}{derivationKeyword}int _{propertyDescription.PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{propertyDescription.PropertyName}_ByteIndex;");
             }
             if (lastPropertyToIndex != null)
             {
                 if (IsAbstract)
                 {
                     sb.AppendLine(
-                            $"internal virtual int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
+                            $"{ProtectedIfApplicable}virtual int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
                 }
                 else
                 {
@@ -475,7 +474,7 @@ namespace Lazinator.CodeDescription
                     else sb.AppendLine(
                             $"private int _{ObjectNameEncodable}_EndByteIndex;");
                     sb.AppendLine(
-                            $"internal {derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{ObjectNameEncodable}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                            $"{ProtectedIfApplicable}{derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{ObjectNameEncodable}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
                 }
             }
             sb.AppendLine();

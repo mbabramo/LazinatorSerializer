@@ -43,7 +43,7 @@
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
-    <VSSDKTargetPlatformRegRootSuffix>Roslyn7</VSSDKTargetPlatformRegRootSuffix>
+    <VSSDKTargetPlatformRegRootSuffix>Roslyn8</VSSDKTargetPlatformRegRootSuffix>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -65,7 +65,7 @@
   <PropertyGroup>
     <StartAction>Program</StartAction>
     <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
-    <StartArguments>/rootsuffix Roslyn7</StartArguments>
+    <StartArguments>/rootsuffix Roslyn8</StartArguments>
   </PropertyGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">

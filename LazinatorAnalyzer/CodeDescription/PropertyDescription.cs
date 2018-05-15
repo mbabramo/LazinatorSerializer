@@ -606,7 +606,7 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
-            string propertyString = $@"internal bool _{PropertyName}_Accessed{(Container.ObjectType != LazinatorObjectType.Struct ? " = false" : "")};
+            string propertyString = $@"{Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed{(Container.ObjectType != LazinatorObjectType.Struct ? " = false" : "")};
         {PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             get;
@@ -734,7 +734,7 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
-        internal bool _{PropertyName}_Accessed;")}
+        {Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
 ");
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
@@ -820,7 +820,7 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;
             }}
         }}
-        internal bool _{PropertyName}_Accessed;
+        {Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
 ");
         }
 
