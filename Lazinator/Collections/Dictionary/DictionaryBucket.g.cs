@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Collections.Dictionary
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,11 +184,11 @@ namespace Lazinator.Collections.Dictionary
         
         /* Field boilerplate */
         
-        internal int _Keys_ByteIndex;
-        internal int _Values_ByteIndex;
-        internal virtual int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
+        protected int _Keys_ByteIndex;
+        protected int _Values_ByteIndex;
+        protected virtual int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
         private int _DictionaryBucket_TKey_TValue_EndByteIndex;
-        internal virtual int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
+        protected virtual int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
         
         private Lazinator.Collections.LazinatorList<TKey> _Keys;
         public virtual Lazinator.Collections.LazinatorList<TKey> Keys
@@ -228,7 +228,7 @@ namespace Lazinator.Collections.Dictionary
                 _Keys_Accessed = true;
             }
         }
-        internal bool _Keys_Accessed;
+        protected bool _Keys_Accessed;
         private Lazinator.Collections.LazinatorList<TValue> _Values;
         public virtual Lazinator.Collections.LazinatorList<TValue> Values
         {
@@ -267,7 +267,7 @@ namespace Lazinator.Collections.Dictionary
                 _Values_Accessed = true;
             }
         }
-        internal bool _Values_Accessed;
+        protected bool _Values_Accessed;
         
         /* Conversion */
         

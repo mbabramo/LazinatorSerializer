@@ -30,7 +30,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Collections.AvlTree
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace Lazinator.Collections.AvlTree
         
         /* Field boilerplate */
         
-        internal int _UnderlyingTree_ByteIndex;
+        protected int _UnderlyingTree_ByteIndex;
         private int _AvlSet_TKey_EndByteIndex;
-        internal virtual int _UnderlyingTree_ByteLength => _AvlSet_TKey_EndByteIndex - _UnderlyingTree_ByteIndex;
+        protected virtual int _UnderlyingTree_ByteLength => _AvlSet_TKey_EndByteIndex - _UnderlyingTree_ByteIndex;
         
         private int _Count;
         public int Count
@@ -241,7 +241,7 @@ namespace Lazinator.Collections.AvlTree
                 _UnderlyingTree_Accessed = true;
             }
         }
-        internal bool _UnderlyingTree_Accessed;
+        protected bool _UnderlyingTree_Accessed;
         
         /* Conversion */
         

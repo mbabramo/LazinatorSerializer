@@ -48,9 +48,9 @@ namespace LazinatorTests.Examples.Abstract
         }
         
         /* Properties */
-        internal int _IntList6_ByteIndex;
+        protected int _IntList6_ByteIndex;
         private int _Concrete6_EndByteIndex;
-        internal virtual int _IntList6_ByteLength => _Concrete6_EndByteIndex - _IntList6_ByteIndex;
+        protected virtual int _IntList6_ByteLength => _Concrete6_EndByteIndex - _IntList6_ByteIndex;
         
         private System.Collections.Generic.List<int> _IntList6;
         public System.Collections.Generic.List<int> IntList6
@@ -82,7 +82,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList6_Accessed = true;
             }
         }
-        internal bool _IntList6_Accessed;
+        protected bool _IntList6_Accessed;
         
         /* Conversion */
         

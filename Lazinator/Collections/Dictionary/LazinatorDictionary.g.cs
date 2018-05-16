@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Collections.Dictionary
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace Lazinator.Collections.Dictionary
         
         /* Field boilerplate */
         
-        internal int _Buckets_ByteIndex;
+        protected int _Buckets_ByteIndex;
         private int _LazinatorDictionary_TKey_TValue_EndByteIndex;
-        internal virtual int _Buckets_ByteLength => _LazinatorDictionary_TKey_TValue_EndByteIndex - _Buckets_ByteIndex;
+        protected virtual int _Buckets_ByteLength => _LazinatorDictionary_TKey_TValue_EndByteIndex - _Buckets_ByteIndex;
         
         private int _Count;
         public int Count
@@ -241,7 +241,7 @@ namespace Lazinator.Collections.Dictionary
                 _Buckets_Accessed = true;
             }
         }
-        internal bool _Buckets_Accessed;
+        protected bool _Buckets_Accessed;
         
         /* Conversion */
         

@@ -30,7 +30,7 @@ namespace Lazinator.Spans
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -62,7 +62,7 @@ namespace Lazinator.Spans
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,11 +184,11 @@ namespace Lazinator.Spans
         
         /* Field boilerplate */
         
-        internal int _ReadOnly_ByteIndex;
-        internal int _ReadOrWrite_ByteIndex;
-        internal virtual int _ReadOnly_ByteLength => _ReadOrWrite_ByteIndex - _ReadOnly_ByteIndex;
+        protected int _ReadOnly_ByteIndex;
+        protected int _ReadOrWrite_ByteIndex;
+        protected virtual int _ReadOnly_ByteLength => _ReadOrWrite_ByteIndex - _ReadOnly_ByteIndex;
         private int _LazinatorByteSpan_EndByteIndex;
-        internal virtual int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
+        protected virtual int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
         
         private ReadOnlyMemory<byte> _ReadOnly;
         internal ReadOnlySpan<byte> ReadOnly
@@ -213,7 +213,7 @@ namespace Lazinator.Spans
                 _ReadOnly_Accessed = true;
             }
         }
-        internal bool _ReadOnly_Accessed;
+        protected bool _ReadOnly_Accessed;
         private Memory<byte> _ReadOrWrite;
         internal Memory<byte> ReadOrWrite
         {
@@ -244,7 +244,7 @@ namespace Lazinator.Spans
                 _ReadOrWrite_Accessed = true;
             }
         }
-        internal bool _ReadOrWrite_Accessed;
+        protected bool _ReadOrWrite_Accessed;
         
         /* Conversion */
         

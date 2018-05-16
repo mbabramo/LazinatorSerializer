@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,11 +184,11 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Field boilerplate */
         
-        internal int _ReflexiveClass_ByteIndex;
-        internal int _ReflexiveInterface_ByteIndex;
-        internal virtual int _ReflexiveClass_ByteLength => _ReflexiveInterface_ByteIndex - _ReflexiveClass_ByteIndex;
+        protected int _ReflexiveClass_ByteIndex;
+        protected int _ReflexiveInterface_ByteIndex;
+        protected virtual int _ReflexiveClass_ByteLength => _ReflexiveInterface_ByteIndex - _ReflexiveClass_ByteIndex;
         private int _ReflexiveExample_EndByteIndex;
-        internal virtual int _ReflexiveInterface_ByteLength => _ReflexiveExample_EndByteIndex - _ReflexiveInterface_ByteIndex;
+        protected virtual int _ReflexiveInterface_ByteLength => _ReflexiveExample_EndByteIndex - _ReflexiveInterface_ByteIndex;
         
         private LazinatorTests.Examples.Hierarchy.ReflexiveExample _ReflexiveClass;
         public LazinatorTests.Examples.Hierarchy.ReflexiveExample ReflexiveClass
@@ -228,7 +228,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 _ReflexiveClass_Accessed = true;
             }
         }
-        internal bool _ReflexiveClass_Accessed;
+        protected bool _ReflexiveClass_Accessed;
         private LazinatorTests.Examples.Hierarchy.IReflexiveExample _ReflexiveInterface;
         public LazinatorTests.Examples.Hierarchy.IReflexiveExample ReflexiveInterface
         {
@@ -267,7 +267,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 _ReflexiveInterface_Accessed = true;
             }
         }
-        internal bool _ReflexiveInterface_Accessed;
+        protected bool _ReflexiveInterface_Accessed;
         
         /* Conversion */
         

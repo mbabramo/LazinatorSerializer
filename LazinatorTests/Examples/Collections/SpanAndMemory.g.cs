@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,19 +183,19 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyMemoryInt_ByteIndex;
-        internal int _MyNullableMemoryInt_ByteIndex;
-        internal int _MyReadOnlySpanByte_ByteIndex;
-        internal int _MyReadOnlySpanChar_ByteIndex;
-        internal int _MyReadOnlySpanDateTime_ByteIndex;
-        internal int _MyReadOnlySpanLong_ByteIndex;
-        internal virtual int _MyMemoryInt_ByteLength => _MyNullableMemoryInt_ByteIndex - _MyMemoryInt_ByteIndex;
-        internal virtual int _MyNullableMemoryInt_ByteLength => _MyReadOnlySpanByte_ByteIndex - _MyNullableMemoryInt_ByteIndex;
-        internal virtual int _MyReadOnlySpanByte_ByteLength => _MyReadOnlySpanChar_ByteIndex - _MyReadOnlySpanByte_ByteIndex;
-        internal virtual int _MyReadOnlySpanChar_ByteLength => _MyReadOnlySpanDateTime_ByteIndex - _MyReadOnlySpanChar_ByteIndex;
-        internal virtual int _MyReadOnlySpanDateTime_ByteLength => _MyReadOnlySpanLong_ByteIndex - _MyReadOnlySpanDateTime_ByteIndex;
+        protected int _MyMemoryInt_ByteIndex;
+        protected int _MyNullableMemoryInt_ByteIndex;
+        protected int _MyReadOnlySpanByte_ByteIndex;
+        protected int _MyReadOnlySpanChar_ByteIndex;
+        protected int _MyReadOnlySpanDateTime_ByteIndex;
+        protected int _MyReadOnlySpanLong_ByteIndex;
+        protected virtual int _MyMemoryInt_ByteLength => _MyNullableMemoryInt_ByteIndex - _MyMemoryInt_ByteIndex;
+        protected virtual int _MyNullableMemoryInt_ByteLength => _MyReadOnlySpanByte_ByteIndex - _MyNullableMemoryInt_ByteIndex;
+        protected virtual int _MyReadOnlySpanByte_ByteLength => _MyReadOnlySpanChar_ByteIndex - _MyReadOnlySpanByte_ByteIndex;
+        protected virtual int _MyReadOnlySpanChar_ByteLength => _MyReadOnlySpanDateTime_ByteIndex - _MyReadOnlySpanChar_ByteIndex;
+        protected virtual int _MyReadOnlySpanDateTime_ByteLength => _MyReadOnlySpanLong_ByteIndex - _MyReadOnlySpanDateTime_ByteIndex;
         private int _SpanAndMemory_EndByteIndex;
-        internal virtual int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
+        protected virtual int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
         
         private Memory<int> _MyMemoryInt;
         public Memory<int> MyMemoryInt
@@ -227,7 +227,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyMemoryInt_Accessed = true;
             }
         }
-        internal bool _MyMemoryInt_Accessed;
+        protected bool _MyMemoryInt_Accessed;
         private Memory<int>? _MyNullableMemoryInt;
         public Memory<int>? MyNullableMemoryInt
         {
@@ -258,7 +258,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyNullableMemoryInt_Accessed = true;
             }
         }
-        internal bool _MyNullableMemoryInt_Accessed;
+        protected bool _MyNullableMemoryInt_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanByte;
         public ReadOnlySpan<byte> MyReadOnlySpanByte
         {
@@ -282,7 +282,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanByte_Accessed = true;
             }
         }
-        internal bool _MyReadOnlySpanByte_Accessed;
+        protected bool _MyReadOnlySpanByte_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanChar;
         public ReadOnlySpan<char> MyReadOnlySpanChar
         {
@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanChar_Accessed = true;
             }
         }
-        internal bool _MyReadOnlySpanChar_Accessed;
+        protected bool _MyReadOnlySpanChar_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanDateTime;
         public ReadOnlySpan<DateTime> MyReadOnlySpanDateTime
         {
@@ -330,7 +330,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanDateTime_Accessed = true;
             }
         }
-        internal bool _MyReadOnlySpanDateTime_Accessed;
+        protected bool _MyReadOnlySpanDateTime_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanLong;
         public ReadOnlySpan<long> MyReadOnlySpanLong
         {
@@ -354,7 +354,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanLong_Accessed = true;
             }
         }
-        internal bool _MyReadOnlySpanLong_Accessed;
+        protected bool _MyReadOnlySpanLong_Accessed;
         
         /* Conversion */
         

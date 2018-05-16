@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _ByteSpan_ByteIndex;
+        protected int _ByteSpan_ByteIndex;
         private int _ExampleChild_EndByteIndex;
-        internal virtual int _ByteSpan_ByteLength => _ExampleChild_EndByteIndex - _ByteSpan_ByteIndex;
+        protected virtual int _ByteSpan_ByteLength => _ExampleChild_EndByteIndex - _ByteSpan_ByteIndex;
         
         private long _MyLong;
         public long MyLong
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples
                 _ByteSpan_Accessed = true;
             }
         }
-        internal bool _ByteSpan_Accessed;
+        protected bool _ByteSpan_Accessed;
         
         /* Conversion */
         

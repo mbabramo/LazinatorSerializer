@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,13 +184,13 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _MyExampleStruct_ByteIndex;
-        internal int _MyListExampleStruct_ByteIndex;
-        internal int _MyListNullableExampleStruct_ByteIndex;
-        internal virtual int _MyExampleStruct_ByteLength => _MyListExampleStruct_ByteIndex - _MyExampleStruct_ByteIndex;
-        internal virtual int _MyListExampleStruct_ByteLength => _MyListNullableExampleStruct_ByteIndex - _MyListExampleStruct_ByteIndex;
+        protected int _MyExampleStruct_ByteIndex;
+        protected int _MyListExampleStruct_ByteIndex;
+        protected int _MyListNullableExampleStruct_ByteIndex;
+        protected virtual int _MyExampleStruct_ByteLength => _MyListExampleStruct_ByteIndex - _MyExampleStruct_ByteIndex;
+        protected virtual int _MyListExampleStruct_ByteLength => _MyListNullableExampleStruct_ByteIndex - _MyListExampleStruct_ByteIndex;
         private int _ExampleStructContainer_EndByteIndex;
-        internal virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
+        protected virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
         
         private LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
         public LazinatorTests.Examples.ExampleStruct MyExampleStruct
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples
                 _MyExampleStruct_Accessed = true;
             }
         }
-        internal bool _MyExampleStruct_Accessed;
+        protected bool _MyExampleStruct_Accessed;
         public LazinatorTests.Examples.ExampleStruct MyExampleStruct_Copy
         {
             [DebuggerStepThrough]
@@ -281,7 +281,7 @@ namespace LazinatorTests.Examples
                 _MyListExampleStruct_Accessed = true;
             }
         }
-        internal bool _MyListExampleStruct_Accessed;
+        protected bool _MyListExampleStruct_Accessed;
         private System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> _MyListNullableExampleStruct;
         public System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> MyListNullableExampleStruct
         {
@@ -312,7 +312,7 @@ namespace LazinatorTests.Examples
                 _MyListNullableExampleStruct_Accessed = true;
             }
         }
-        internal bool _MyListNullableExampleStruct_Accessed;
+        protected bool _MyListNullableExampleStruct_Accessed;
         
         /* Conversion */
         

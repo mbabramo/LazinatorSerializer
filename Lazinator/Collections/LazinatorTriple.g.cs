@@ -30,7 +30,7 @@ namespace Lazinator.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,13 +183,13 @@ namespace Lazinator.Collections
         
         /* Field boilerplate */
         
-        internal int _Item1_ByteIndex;
-        internal int _Item2_ByteIndex;
-        internal int _Item3_ByteIndex;
-        internal virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
-        internal virtual int _Item2_ByteLength => _Item3_ByteIndex - _Item2_ByteIndex;
+        protected int _Item1_ByteIndex;
+        protected int _Item2_ByteIndex;
+        protected int _Item3_ByteIndex;
+        protected virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
+        protected virtual int _Item2_ByteLength => _Item3_ByteIndex - _Item2_ByteIndex;
         private int _LazinatorTriple_T_U_V_EndByteIndex = 0;
-        internal virtual int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
+        protected virtual int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
         
         private T _Item1;
         public virtual T Item1
@@ -229,7 +229,7 @@ namespace Lazinator.Collections
                 _Item1_Accessed = true;
             }
         }
-        internal bool _Item1_Accessed;
+        protected bool _Item1_Accessed;
         private U _Item2;
         public virtual U Item2
         {
@@ -268,7 +268,7 @@ namespace Lazinator.Collections
                 _Item2_Accessed = true;
             }
         }
-        internal bool _Item2_Accessed;
+        protected bool _Item2_Accessed;
         private V _Item3;
         public virtual V Item3
         {
@@ -307,7 +307,7 @@ namespace Lazinator.Collections
                 _Item3_Accessed = true;
             }
         }
-        internal bool _Item3_Accessed;
+        protected bool _Item3_Accessed;
         
         /* Conversion */
         

@@ -33,7 +33,7 @@ namespace Lazinator.Wrappers
         
         public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
-        protected internal abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        protected abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
         public abstract ILazinator CloneLazinator();
         
@@ -74,10 +74,10 @@ namespace Lazinator.Wrappers
         
         /* Field boilerplate */
         
-        internal int _Value_ByteIndex;
-        internal virtual int _Value_ByteLength { get; }
+        protected int _Value_ByteIndex;
+        protected virtual int _Value_ByteLength { get; }
         
-        internal bool _Value_Accessed = false;
+        protected bool _Value_Accessed = false;
         public virtual T Value
         {
             get;

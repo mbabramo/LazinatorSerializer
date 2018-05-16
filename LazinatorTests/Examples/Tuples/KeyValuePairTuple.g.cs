@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Tuples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Field boilerplate */
         
-        internal int _MyKeyValuePairSerialized_ByteIndex;
+        protected int _MyKeyValuePairSerialized_ByteIndex;
         private int _KeyValuePairTuple_EndByteIndex;
-        internal virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
+        protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
         
         private System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> _MyKeyValuePairSerialized;
         public System.Collections.Generic.KeyValuePair<uint, LazinatorTests.Examples.ExampleChild> MyKeyValuePairSerialized
@@ -217,7 +217,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyKeyValuePairSerialized_Accessed = true;
             }
         }
-        internal bool _MyKeyValuePairSerialized_Accessed;
+        protected bool _MyKeyValuePairSerialized_Accessed;
         
         /* Conversion */
         

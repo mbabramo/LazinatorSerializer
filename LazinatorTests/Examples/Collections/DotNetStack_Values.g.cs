@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyStackInt_ByteIndex;
+        protected int _MyStackInt_ByteIndex;
         private int _DotNetStack_Values_EndByteIndex;
-        internal virtual int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
+        protected virtual int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
         
         private System.Collections.Generic.Stack<int> _MyStackInt;
         public System.Collections.Generic.Stack<int> MyStackInt
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyStackInt_Accessed = true;
             }
         }
-        internal bool _MyStackInt_Accessed;
+        protected bool _MyStackInt_Accessed;
         
         private bool _MyStackInt_Dirty;
         public bool MyStackInt_Dirty

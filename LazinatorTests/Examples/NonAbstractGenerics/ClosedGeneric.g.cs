@@ -48,9 +48,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         
         /* Properties */
-        internal override int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
+        protected override int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
         private int _ClosedGeneric_EndByteIndex = 0;
-        internal override int _MyT_ByteLength => _ClosedGeneric_EndByteIndex - _MyT_ByteIndex;
+        protected override int _MyT_ByteLength => _ClosedGeneric_EndByteIndex - _MyT_ByteIndex;
         
         private int _AnotherPropertyAdded;
         public int AnotherPropertyAdded

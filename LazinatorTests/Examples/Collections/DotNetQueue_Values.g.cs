@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyQueueInt_ByteIndex;
+        protected int _MyQueueInt_ByteIndex;
         private int _DotNetQueue_Values_EndByteIndex;
-        internal virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
+        protected virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
         
         private System.Collections.Generic.Queue<int> _MyQueueInt;
         public System.Collections.Generic.Queue<int> MyQueueInt
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyQueueInt_Accessed = true;
             }
         }
-        internal bool _MyQueueInt_Accessed;
+        protected bool _MyQueueInt_Accessed;
         
         private bool _MyQueueInt_Dirty;
         public bool MyQueueInt_Dirty

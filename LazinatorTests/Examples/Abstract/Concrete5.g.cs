@@ -48,10 +48,10 @@ namespace LazinatorTests.Examples.Abstract
         }
         
         /* Properties */
-        internal int _IntList5_ByteIndex;
-        internal override int _IntList4_ByteLength => _IntList5_ByteIndex - _IntList4_ByteIndex;
+        protected int _IntList5_ByteIndex;
+        protected override int _IntList4_ByteLength => _IntList5_ByteIndex - _IntList4_ByteIndex;
         private int _Concrete5_EndByteIndex;
-        internal virtual int _IntList5_ByteLength => _Concrete5_EndByteIndex - _IntList5_ByteIndex;
+        protected virtual int _IntList5_ByteLength => _Concrete5_EndByteIndex - _IntList5_ByteIndex;
         
         private string _String4;
         public override string String4
@@ -143,7 +143,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList5_Accessed = true;
             }
         }
-        internal bool _IntList5_Accessed;
+        protected bool _IntList5_Accessed;
         
         /* Conversion */
         

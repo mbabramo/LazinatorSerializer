@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Tuples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,15 +183,15 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Field boilerplate */
         
-        internal int _MyTupleSerialized_ByteIndex;
-        internal int _MyTupleSerialized2_ByteIndex;
-        internal int _MyTupleSerialized3_ByteIndex;
-        internal int _MyTupleSerialized4_ByteIndex;
-        internal virtual int _MyTupleSerialized_ByteLength => _MyTupleSerialized2_ByteIndex - _MyTupleSerialized_ByteIndex;
-        internal virtual int _MyTupleSerialized2_ByteLength => _MyTupleSerialized3_ByteIndex - _MyTupleSerialized2_ByteIndex;
-        internal virtual int _MyTupleSerialized3_ByteLength => _MyTupleSerialized4_ByteIndex - _MyTupleSerialized3_ByteIndex;
+        protected int _MyTupleSerialized_ByteIndex;
+        protected int _MyTupleSerialized2_ByteIndex;
+        protected int _MyTupleSerialized3_ByteIndex;
+        protected int _MyTupleSerialized4_ByteIndex;
+        protected virtual int _MyTupleSerialized_ByteLength => _MyTupleSerialized2_ByteIndex - _MyTupleSerialized_ByteIndex;
+        protected virtual int _MyTupleSerialized2_ByteLength => _MyTupleSerialized3_ByteIndex - _MyTupleSerialized2_ByteIndex;
+        protected virtual int _MyTupleSerialized3_ByteLength => _MyTupleSerialized4_ByteIndex - _MyTupleSerialized3_ByteIndex;
         private int _RegularTuple_EndByteIndex;
-        internal virtual int _MyTupleSerialized4_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized4_ByteIndex;
+        protected virtual int _MyTupleSerialized4_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized4_ByteIndex;
         
         private Tuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized;
         public Tuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized
@@ -223,7 +223,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized_Accessed = true;
             }
         }
-        internal bool _MyTupleSerialized_Accessed;
+        protected bool _MyTupleSerialized_Accessed;
         private Tuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized2;
         public Tuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized2
         {
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized2_Accessed = true;
             }
         }
-        internal bool _MyTupleSerialized2_Accessed;
+        protected bool _MyTupleSerialized2_Accessed;
         private Tuple<uint?, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized3;
         public Tuple<uint?, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized3
         {
@@ -285,7 +285,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized3_Accessed = true;
             }
         }
-        internal bool _MyTupleSerialized3_Accessed;
+        protected bool _MyTupleSerialized3_Accessed;
         private Tuple<int, LazinatorTests.Examples.ExampleStruct> _MyTupleSerialized4;
         public Tuple<int, LazinatorTests.Examples.ExampleStruct> MyTupleSerialized4
         {
@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized4_Accessed = true;
             }
         }
-        internal bool _MyTupleSerialized4_Accessed;
+        protected bool _MyTupleSerialized4_Accessed;
         
         /* Conversion */
         

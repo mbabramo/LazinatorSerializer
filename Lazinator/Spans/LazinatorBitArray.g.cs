@@ -30,7 +30,7 @@ namespace Lazinator.Spans
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Spans
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace Lazinator.Spans
         
         /* Field boilerplate */
         
-        internal int _ByteSpan_ByteIndex;
+        int _ByteSpan_ByteIndex;
         private int _LazinatorBitArray_EndByteIndex;
-        internal int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
+        int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
         
         private int __version;
         private int _version
@@ -260,7 +260,7 @@ namespace Lazinator.Spans
                 _ByteSpan_Accessed = true;
             }
         }
-        internal bool _ByteSpan_Accessed;
+        bool _ByteSpan_Accessed;
         
         /* Conversion */
         

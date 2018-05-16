@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public override void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Abstract
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public override ILazinator CloneLazinator()
         {
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Field boilerplate */
         
         private int _ConcreteGenericContainer_EndByteIndex = 0;
-        internal override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
+        protected override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
         
         private LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> _Item;
         public override LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> Item

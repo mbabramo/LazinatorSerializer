@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Tuples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Field boilerplate */
         
-        internal int _MyNestedTuple_ByteIndex;
+        protected int _MyNestedTuple_ByteIndex;
         private int _NestedTuple_EndByteIndex;
-        internal virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
+        protected virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
         
         private Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> _MyNestedTuple;
         public Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> MyNestedTuple
@@ -217,7 +217,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyNestedTuple_Accessed = true;
             }
         }
-        internal bool _MyNestedTuple_Accessed;
+        protected bool _MyNestedTuple_Accessed;
         
         /* Conversion */
         

@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyHashSetSerialized_ByteIndex;
+        protected int _MyHashSetSerialized_ByteIndex;
         private int _DotNetHashSet_SelfSerialized_EndByteIndex;
-        internal virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_SelfSerialized_EndByteIndex - _MyHashSetSerialized_ByteIndex;
+        protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_SelfSerialized_EndByteIndex - _MyHashSetSerialized_ByteIndex;
         
         private System.Collections.Generic.HashSet<LazinatorTests.Examples.ExampleChild> _MyHashSetSerialized;
         public System.Collections.Generic.HashSet<LazinatorTests.Examples.ExampleChild> MyHashSetSerialized
@@ -217,7 +217,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyHashSetSerialized_Accessed = true;
             }
         }
-        internal bool _MyHashSetSerialized_Accessed;
+        protected bool _MyHashSetSerialized_Accessed;
         
         /* Conversion */
         

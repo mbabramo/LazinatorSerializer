@@ -26,16 +26,16 @@ namespace LazinatorTests.Examples.Abstract
     
     public partial class Abstract4 : Concrete3, ILazinator
     {
-        internal int _IntList4_ByteIndex;
-        internal virtual int _IntList4_ByteLength { get; }
+        protected int _IntList4_ByteIndex;
+        protected virtual int _IntList4_ByteLength { get; }
         
-        internal bool _String4_Accessed = false;
+        protected bool _String4_Accessed = false;
         public abstract string String4
         {
             get;
             set;
         }
-        internal bool _IntList4_Accessed = false;
+        protected bool _IntList4_Accessed = false;
         public abstract System.Collections.Generic.List<int> IntList4
         {
             get;

@@ -30,7 +30,7 @@ namespace Lazinator.Wrappers
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Wrappers
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace Lazinator.Wrappers
         
         /* Field boilerplate */
         
-        internal int _NonNullValue_ByteIndex;
+        int _NonNullValue_ByteIndex;
         private int _LazinatorWrapperNullableStruct_T_EndByteIndex;
-        internal int _NonNullValue_ByteLength => _LazinatorWrapperNullableStruct_T_EndByteIndex - _NonNullValue_ByteIndex;
+        int _NonNullValue_ByteLength => _LazinatorWrapperNullableStruct_T_EndByteIndex - _NonNullValue_ByteIndex;
         
         private bool _HasValue;
         public bool HasValue
@@ -239,7 +239,7 @@ namespace Lazinator.Wrappers
                 _NonNullValue_Accessed = true;
             }
         }
-        internal bool _NonNullValue_Accessed;
+        bool _NonNullValue_Accessed;
         
         /* Conversion */
         

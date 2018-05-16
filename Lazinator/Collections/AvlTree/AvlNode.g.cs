@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Avl
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Collections.Avl
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -184,15 +184,15 @@ namespace Lazinator.Collections.Avl
         
         /* Field boilerplate */
         
-        internal int _Key_ByteIndex;
-        internal int _Left_ByteIndex;
-        internal int _Right_ByteIndex;
-        internal int _Value_ByteIndex;
-        internal int _Key_ByteLength => _Left_ByteIndex - _Key_ByteIndex;
-        internal int _Left_ByteLength => _Right_ByteIndex - _Left_ByteIndex;
-        internal int _Right_ByteLength => _Value_ByteIndex - _Right_ByteIndex;
+        int _Key_ByteIndex;
+        int _Left_ByteIndex;
+        int _Right_ByteIndex;
+        int _Value_ByteIndex;
+        int _Key_ByteLength => _Left_ByteIndex - _Key_ByteIndex;
+        int _Left_ByteLength => _Right_ByteIndex - _Left_ByteIndex;
+        int _Right_ByteLength => _Value_ByteIndex - _Right_ByteIndex;
         private int _AvlNode_TKey_TValue_EndByteIndex = 0;
-        internal int _Value_ByteLength => _AvlNode_TKey_TValue_EndByteIndex - _Value_ByteIndex;
+        int _Value_ByteLength => _AvlNode_TKey_TValue_EndByteIndex - _Value_ByteIndex;
         
         private int _Balance;
         public int Balance
@@ -262,7 +262,7 @@ namespace Lazinator.Collections.Avl
                 _Key_Accessed = true;
             }
         }
-        internal bool _Key_Accessed;
+        bool _Key_Accessed;
         private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Left;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Left
         {
@@ -305,7 +305,7 @@ namespace Lazinator.Collections.Avl
                 _Left_Accessed = true;
             }
         }
-        internal bool _Left_Accessed;
+        bool _Left_Accessed;
         private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Right;
         public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Right
         {
@@ -348,7 +348,7 @@ namespace Lazinator.Collections.Avl
                 _Right_Accessed = true;
             }
         }
-        internal bool _Right_Accessed;
+        bool _Right_Accessed;
         private TValue _Value;
         public TValue Value
         {
@@ -387,7 +387,7 @@ namespace Lazinator.Collections.Avl
                 _Value_Accessed = true;
             }
         }
-        internal bool _Value_Accessed;
+        bool _Value_Accessed;
         
         /* Conversion */
         

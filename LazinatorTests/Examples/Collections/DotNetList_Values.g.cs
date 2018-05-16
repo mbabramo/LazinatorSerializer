@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,13 +183,13 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyLinkedListInt_ByteIndex;
-        internal int _MyListInt_ByteIndex;
-        internal int _MySortedSetInt_ByteIndex;
-        internal virtual int _MyLinkedListInt_ByteLength => _MyListInt_ByteIndex - _MyLinkedListInt_ByteIndex;
-        internal virtual int _MyListInt_ByteLength => _MySortedSetInt_ByteIndex - _MyListInt_ByteIndex;
+        protected int _MyLinkedListInt_ByteIndex;
+        protected int _MyListInt_ByteIndex;
+        protected int _MySortedSetInt_ByteIndex;
+        protected virtual int _MyLinkedListInt_ByteLength => _MyListInt_ByteIndex - _MyLinkedListInt_ByteIndex;
+        protected virtual int _MyListInt_ByteLength => _MySortedSetInt_ByteIndex - _MyListInt_ByteIndex;
         private int _DotNetList_Values_EndByteIndex;
-        internal virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
+        protected virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         
         private System.Collections.Generic.LinkedList<int> _MyLinkedListInt;
         public System.Collections.Generic.LinkedList<int> MyLinkedListInt
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyLinkedListInt_Accessed = true;
             }
         }
-        internal bool _MyLinkedListInt_Accessed;
+        protected bool _MyLinkedListInt_Accessed;
         
         private bool _MyLinkedListInt_Dirty;
         public bool MyLinkedListInt_Dirty
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyListInt_Accessed = true;
             }
         }
-        internal bool _MyListInt_Accessed;
+        protected bool _MyListInt_Accessed;
         
         private bool _MyListInt_Dirty;
         public bool MyListInt_Dirty
@@ -320,7 +320,7 @@ namespace LazinatorTests.Examples.Collections
                 _MySortedSetInt_Accessed = true;
             }
         }
-        internal bool _MySortedSetInt_Accessed;
+        protected bool _MySortedSetInt_Accessed;
         
         private bool _MySortedSetInt_Dirty;
         public bool MySortedSetInt_Dirty

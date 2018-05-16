@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -183,13 +183,13 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _NonLazinatorClass_ByteIndex;
-        internal int _NonLazinatorInterchangeableClass_ByteIndex;
-        internal int _NonLazinatorStruct_ByteIndex;
-        internal int _NonLazinatorClass_ByteLength => _NonLazinatorInterchangeableClass_ByteIndex - _NonLazinatorClass_ByteIndex;
-        internal int _NonLazinatorInterchangeableClass_ByteLength => _NonLazinatorStruct_ByteIndex - _NonLazinatorInterchangeableClass_ByteIndex;
+        int _NonLazinatorClass_ByteIndex;
+        int _NonLazinatorInterchangeableClass_ByteIndex;
+        int _NonLazinatorStruct_ByteIndex;
+        int _NonLazinatorClass_ByteLength => _NonLazinatorInterchangeableClass_ByteIndex - _NonLazinatorClass_ByteIndex;
+        int _NonLazinatorInterchangeableClass_ByteLength => _NonLazinatorStruct_ByteIndex - _NonLazinatorInterchangeableClass_ByteIndex;
         private int _NonLazinatorContainer_EndByteIndex;
-        internal int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
+        int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
         
         private LazinatorTests.Examples.NonLazinatorClass _NonLazinatorClass;
         public LazinatorTests.Examples.NonLazinatorClass NonLazinatorClass
@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples
                 _NonLazinatorClass_Accessed = true;
             }
         }
-        internal bool _NonLazinatorClass_Accessed;
+        bool _NonLazinatorClass_Accessed;
         private LazinatorTests.Examples.NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
         public LazinatorTests.Examples.NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
         {
@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples
                 _NonLazinatorInterchangeableClass_Accessed = true;
             }
         }
-        internal bool _NonLazinatorInterchangeableClass_Accessed;
+        bool _NonLazinatorInterchangeableClass_Accessed;
         private LazinatorTests.Examples.NonLazinatorStruct _NonLazinatorStruct;
         public LazinatorTests.Examples.NonLazinatorStruct NonLazinatorStruct
         {
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples
                 _NonLazinatorStruct_Accessed = true;
             }
         }
-        internal bool _NonLazinatorStruct_Accessed;
+        bool _NonLazinatorStruct_Accessed;
         
         /* Conversion */
         

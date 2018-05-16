@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyListSerialized_ByteIndex;
+        protected int _MyListSerialized_ByteIndex;
         private int _DotNetList_SelfSerialized_EndByteIndex;
-        internal virtual int _MyListSerialized_ByteLength => _DotNetList_SelfSerialized_EndByteIndex - _MyListSerialized_ByteIndex;
+        protected virtual int _MyListSerialized_ByteLength => _DotNetList_SelfSerialized_EndByteIndex - _MyListSerialized_ByteIndex;
         
         private System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> _MyListSerialized;
         public System.Collections.Generic.List<LazinatorTests.Examples.ExampleChild> MyListSerialized
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyListSerialized_Accessed = true;
             }
         }
-        internal bool _MyListSerialized_Accessed;
+        protected bool _MyListSerialized_Accessed;
         
         private bool _MyListSerialized_Dirty;
         public bool MyListSerialized_Dirty

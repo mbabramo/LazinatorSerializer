@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Structs
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples.Structs
         
         /* Field boilerplate */
         
-        internal int _WrappedInt_ByteIndex;
+        protected int _WrappedInt_ByteIndex;
         private int _WrapperContainer_EndByteIndex;
-        internal virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
+        protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         
         private Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
         public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Structs
                 _WrappedInt_Accessed = true;
             }
         }
-        internal bool _WrappedInt_Accessed;
+        protected bool _WrappedInt_Accessed;
         public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt_Copy
         {
             [DebuggerStepThrough]

@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _MyExampleStruct_ByteIndex;
+        int _MyExampleStruct_ByteIndex;
         private int _ExampleStructContainingStruct_EndByteIndex;
-        internal int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
+        int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
         
         private LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
         public LazinatorTests.Examples.ExampleStruct MyExampleStruct
@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples
                 _MyExampleStruct_Accessed = true;
             }
         }
-        internal bool _MyExampleStruct_Accessed;
+        bool _MyExampleStruct_Accessed;
         public LazinatorTests.Examples.ExampleStruct MyExampleStruct_Copy
         {
             [DebuggerStepThrough]

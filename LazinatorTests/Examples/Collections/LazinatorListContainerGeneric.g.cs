@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyList_ByteIndex;
+        protected int _MyList_ByteIndex;
         private int _LazinatorListContainerGeneric_T_EndByteIndex;
-        internal virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
+        protected virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
         
         private Lazinator.Collections.LazinatorList<T> _MyList;
         public virtual Lazinator.Collections.LazinatorList<T> MyList
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyList_Accessed = true;
             }
         }
-        internal bool _MyList_Accessed;
+        protected bool _MyList_Accessed;
         
         /* Conversion */
         

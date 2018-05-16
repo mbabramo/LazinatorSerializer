@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,11 +183,11 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyArrayInt_ByteIndex;
-        internal int _MyJaggedArrayInt_ByteIndex;
-        internal virtual int _MyArrayInt_ByteLength => _MyJaggedArrayInt_ByteIndex - _MyArrayInt_ByteIndex;
+        protected int _MyArrayInt_ByteIndex;
+        protected int _MyJaggedArrayInt_ByteIndex;
+        protected virtual int _MyArrayInt_ByteLength => _MyJaggedArrayInt_ByteIndex - _MyArrayInt_ByteIndex;
         private int _Array_Values_EndByteIndex;
-        internal virtual int _MyJaggedArrayInt_ByteLength => _Array_Values_EndByteIndex - _MyJaggedArrayInt_ByteIndex;
+        protected virtual int _MyJaggedArrayInt_ByteLength => _Array_Values_EndByteIndex - _MyJaggedArrayInt_ByteIndex;
         
         private int[] _MyArrayInt;
         public int[] MyArrayInt
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyArrayInt_Accessed = true;
             }
         }
-        internal bool _MyArrayInt_Accessed;
+        protected bool _MyArrayInt_Accessed;
         
         private bool _MyArrayInt_Dirty;
         public bool MyArrayInt_Dirty
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyJaggedArrayInt_Accessed = true;
             }
         }
-        internal bool _MyJaggedArrayInt_Accessed;
+        protected bool _MyJaggedArrayInt_Accessed;
         
         /* Conversion */
         

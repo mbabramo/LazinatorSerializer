@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,13 +183,13 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyDictionary_ByteIndex;
-        internal int _MySortedDictionary_ByteIndex;
-        internal int _MySortedList_ByteIndex;
-        internal virtual int _MyDictionary_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionary_ByteIndex;
-        internal virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
+        protected int _MyDictionary_ByteIndex;
+        protected int _MySortedDictionary_ByteIndex;
+        protected int _MySortedList_ByteIndex;
+        protected virtual int _MyDictionary_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionary_ByteIndex;
+        protected virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
         private int _Dictionary_Values_SelfSerialized_EndByteIndex;
-        internal virtual int _MySortedList_ByteLength => _Dictionary_Values_SelfSerialized_EndByteIndex - _MySortedList_ByteIndex;
+        protected virtual int _MySortedList_ByteLength => _Dictionary_Values_SelfSerialized_EndByteIndex - _MySortedList_ByteIndex;
         
         private System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> _MyDictionary;
         public System.Collections.Generic.Dictionary<int, LazinatorTests.Examples.ExampleChild> MyDictionary
@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyDictionary_Accessed = true;
             }
         }
-        internal bool _MyDictionary_Accessed;
+        protected bool _MyDictionary_Accessed;
         private System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> _MySortedDictionary;
         public System.Collections.Generic.SortedDictionary<int, LazinatorTests.Examples.ExampleChild> MySortedDictionary
         {
@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples.Collections
                 _MySortedDictionary_Accessed = true;
             }
         }
-        internal bool _MySortedDictionary_Accessed;
+        protected bool _MySortedDictionary_Accessed;
         private System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> _MySortedList;
         public System.Collections.Generic.SortedList<int, LazinatorTests.Examples.ExampleChild> MySortedList
         {
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Collections
                 _MySortedList_Accessed = true;
             }
         }
-        internal bool _MySortedList_Accessed;
+        protected bool _MySortedList_Accessed;
         
         /* Conversion */
         

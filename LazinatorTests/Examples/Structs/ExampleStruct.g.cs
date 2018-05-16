@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -184,17 +184,17 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _MyChild1_ByteIndex;
-        internal int _MyChild2_ByteIndex;
-        internal int _MyLazinatorList_ByteIndex;
-        internal int _MyListValues_ByteIndex;
-        internal int _MyTuple_ByteIndex;
-        internal int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
-        internal int _MyChild2_ByteLength => _MyLazinatorList_ByteIndex - _MyChild2_ByteIndex;
-        internal int _MyLazinatorList_ByteLength => _MyListValues_ByteIndex - _MyLazinatorList_ByteIndex;
-        internal int _MyListValues_ByteLength => _MyTuple_ByteIndex - _MyListValues_ByteIndex;
+        int _MyChild1_ByteIndex;
+        int _MyChild2_ByteIndex;
+        int _MyLazinatorList_ByteIndex;
+        int _MyListValues_ByteIndex;
+        int _MyTuple_ByteIndex;
+        int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
+        int _MyChild2_ByteLength => _MyLazinatorList_ByteIndex - _MyChild2_ByteIndex;
+        int _MyLazinatorList_ByteLength => _MyListValues_ByteIndex - _MyLazinatorList_ByteIndex;
+        int _MyListValues_ByteLength => _MyTuple_ByteIndex - _MyListValues_ByteIndex;
         private int _ExampleStruct_EndByteIndex;
-        internal int _MyTuple_ByteLength => _ExampleStruct_EndByteIndex - _MyTuple_ByteIndex;
+        int _MyTuple_ByteLength => _ExampleStruct_EndByteIndex - _MyTuple_ByteIndex;
         
         private bool _MyBool;
         public bool MyBool
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples
                 _MyChild1_Accessed = true;
             }
         }
-        internal bool _MyChild1_Accessed;
+        bool _MyChild1_Accessed;
         private LazinatorTests.Examples.ExampleChild _MyChild2;
         public LazinatorTests.Examples.ExampleChild MyChild2
         {
@@ -303,7 +303,7 @@ namespace LazinatorTests.Examples
                 _MyChild2_Accessed = true;
             }
         }
-        internal bool _MyChild2_Accessed;
+        bool _MyChild2_Accessed;
         private System.Collections.Generic.List<LazinatorTests.Examples.Example> _MyLazinatorList;
         public System.Collections.Generic.List<LazinatorTests.Examples.Example> MyLazinatorList
         {
@@ -335,7 +335,7 @@ namespace LazinatorTests.Examples
                 _MyLazinatorList_Accessed = true;
             }
         }
-        internal bool _MyLazinatorList_Accessed;
+        bool _MyLazinatorList_Accessed;
         
         private bool _MyLazinatorList_Dirty;
         public bool MyLazinatorList_Dirty
@@ -383,7 +383,7 @@ namespace LazinatorTests.Examples
                 _MyListValues_Accessed = true;
             }
         }
-        internal bool _MyListValues_Accessed;
+        bool _MyListValues_Accessed;
         private (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) _MyTuple;
         public (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) MyTuple
         {
@@ -414,7 +414,7 @@ namespace LazinatorTests.Examples
                 _MyTuple_Accessed = true;
             }
         }
-        internal bool _MyTuple_Accessed;
+        bool _MyTuple_Accessed;
         
         /* Conversion */
         

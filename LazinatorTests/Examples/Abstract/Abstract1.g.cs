@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
-        protected internal abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        protected abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
         public abstract ILazinator CloneLazinator();
         
@@ -74,16 +74,16 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        internal int _IntList1_ByteIndex;
-        internal virtual int _IntList1_ByteLength { get; }
+        protected int _IntList1_ByteIndex;
+        protected virtual int _IntList1_ByteLength { get; }
         
-        internal bool _String1_Accessed = false;
+        protected bool _String1_Accessed = false;
         public abstract string String1
         {
             get;
             set;
         }
-        internal bool _IntList1_Accessed = false;
+        protected bool _IntList1_Accessed = false;
         public abstract System.Collections.Generic.List<int> IntList1
         {
             get;

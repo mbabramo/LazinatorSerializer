@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Tuples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,11 +183,11 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Field boilerplate */
         
-        internal int _MyRecordLikeClass_ByteIndex;
-        internal int _MyRecordLikeType_ByteIndex;
-        internal virtual int _MyRecordLikeClass_ByteLength => _MyRecordLikeType_ByteIndex - _MyRecordLikeClass_ByteIndex;
+        protected int _MyRecordLikeClass_ByteIndex;
+        protected int _MyRecordLikeType_ByteIndex;
+        protected virtual int _MyRecordLikeClass_ByteLength => _MyRecordLikeType_ByteIndex - _MyRecordLikeClass_ByteIndex;
         private int _RecordTuple_EndByteIndex;
-        internal virtual int _MyRecordLikeType_ByteLength => _RecordTuple_EndByteIndex - _MyRecordLikeType_ByteIndex;
+        protected virtual int _MyRecordLikeType_ByteLength => _RecordTuple_EndByteIndex - _MyRecordLikeType_ByteIndex;
         
         private LazinatorTests.Examples.RecordLikeClass _MyRecordLikeClass;
         public LazinatorTests.Examples.RecordLikeClass MyRecordLikeClass
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeClass_Accessed = true;
             }
         }
-        internal bool _MyRecordLikeClass_Accessed;
+        protected bool _MyRecordLikeClass_Accessed;
         private LazinatorTests.Examples.RecordLikeType _MyRecordLikeType;
         public LazinatorTests.Examples.RecordLikeType MyRecordLikeType
         {
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeType_Accessed = true;
             }
         }
-        internal bool _MyRecordLikeType_Accessed;
+        protected bool _MyRecordLikeType_Accessed;
         
         /* Conversion */
         

@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Abstract
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        internal int _AbstractProperty_ByteIndex;
+        protected int _AbstractProperty_ByteIndex;
         private int _ContainerWithAbstract1_EndByteIndex;
-        internal virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
+        protected virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
         
         private LazinatorTests.Examples.Abstract.Abstract1 _AbstractProperty;
         public LazinatorTests.Examples.Abstract.Abstract1 AbstractProperty
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Abstract
                 _AbstractProperty_Accessed = true;
             }
         }
-        internal bool _AbstractProperty_Accessed;
+        protected bool _AbstractProperty_Accessed;
         
         /* Conversion */
         

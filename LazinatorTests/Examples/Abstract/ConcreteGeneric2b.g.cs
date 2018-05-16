@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public override void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Abstract
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public override ILazinator CloneLazinator()
         {
@@ -184,10 +184,10 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        internal int _LazinatorExample_ByteIndex;
-        internal override int _MyT_ByteLength => _LazinatorExample_ByteIndex - _MyT_ByteIndex;
+        protected int _LazinatorExample_ByteIndex;
+        protected override int _MyT_ByteLength => _LazinatorExample_ByteIndex - _MyT_ByteIndex;
         private int _ConcreteGeneric2b_EndByteIndex;
-        internal virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
+        protected virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
         
         private string _AnotherProperty;
         public string AnotherProperty
@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples.Abstract
                 _LazinatorExample_Accessed = true;
             }
         }
-        internal bool _LazinatorExample_Accessed;
+        protected bool _LazinatorExample_Accessed;
         
         /* Conversion */
         

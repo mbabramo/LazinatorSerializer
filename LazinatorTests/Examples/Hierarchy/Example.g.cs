@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -188,23 +188,23 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _ExcludableChild_ByteIndex;
-        internal int _IncludableChild_ByteIndex;
-        internal int _MyChild1_ByteIndex;
-        internal int _MyChild2_ByteIndex;
-        internal int _MyChild2Previous_ByteIndex;
-        internal int _MyInterfaceImplementer_ByteIndex;
-        internal int _MyNonLazinatorChild_ByteIndex;
-        internal int _WrappedInt_ByteIndex;
-        internal virtual int _ExcludableChild_ByteLength => _IncludableChild_ByteIndex - _ExcludableChild_ByteIndex;
-        internal virtual int _IncludableChild_ByteLength => _MyChild1_ByteIndex - _IncludableChild_ByteIndex;
-        internal virtual int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
-        internal virtual int _MyChild2_ByteLength => _MyChild2Previous_ByteIndex - _MyChild2_ByteIndex;
-        internal virtual int _MyChild2Previous_ByteLength => _MyInterfaceImplementer_ByteIndex - _MyChild2Previous_ByteIndex;
-        internal virtual int _MyInterfaceImplementer_ByteLength => _MyNonLazinatorChild_ByteIndex - _MyInterfaceImplementer_ByteIndex;
-        internal virtual int _MyNonLazinatorChild_ByteLength => _WrappedInt_ByteIndex - _MyNonLazinatorChild_ByteIndex;
+        protected int _ExcludableChild_ByteIndex;
+        protected int _IncludableChild_ByteIndex;
+        protected int _MyChild1_ByteIndex;
+        protected int _MyChild2_ByteIndex;
+        protected int _MyChild2Previous_ByteIndex;
+        protected int _MyInterfaceImplementer_ByteIndex;
+        protected int _MyNonLazinatorChild_ByteIndex;
+        protected int _WrappedInt_ByteIndex;
+        protected virtual int _ExcludableChild_ByteLength => _IncludableChild_ByteIndex - _ExcludableChild_ByteIndex;
+        protected virtual int _IncludableChild_ByteLength => _MyChild1_ByteIndex - _IncludableChild_ByteIndex;
+        protected virtual int _MyChild1_ByteLength => _MyChild2_ByteIndex - _MyChild1_ByteIndex;
+        protected virtual int _MyChild2_ByteLength => _MyChild2Previous_ByteIndex - _MyChild2_ByteIndex;
+        protected virtual int _MyChild2Previous_ByteLength => _MyInterfaceImplementer_ByteIndex - _MyChild2Previous_ByteIndex;
+        protected virtual int _MyInterfaceImplementer_ByteLength => _MyNonLazinatorChild_ByteIndex - _MyInterfaceImplementer_ByteIndex;
+        protected virtual int _MyNonLazinatorChild_ByteLength => _WrappedInt_ByteIndex - _MyNonLazinatorChild_ByteIndex;
         private int _Example_EndByteIndex;
-        internal virtual int _WrappedInt_ByteLength => _Example_EndByteIndex - _WrappedInt_ByteIndex;
+        protected virtual int _WrappedInt_ByteLength => _Example_EndByteIndex - _WrappedInt_ByteIndex;
         
         private bool _MyBool;
         public bool MyBool
@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples
                 _ExcludableChild_Accessed = true;
             }
         }
-        internal bool _ExcludableChild_Accessed;
+        protected bool _ExcludableChild_Accessed;
         private LazinatorTests.Examples.ExampleChild _IncludableChild;
         public LazinatorTests.Examples.ExampleChild IncludableChild
         {
@@ -463,7 +463,7 @@ namespace LazinatorTests.Examples
                 _IncludableChild_Accessed = true;
             }
         }
-        internal bool _IncludableChild_Accessed;
+        protected bool _IncludableChild_Accessed;
         private LazinatorTests.Examples.ExampleChild _MyChild1;
         public LazinatorTests.Examples.ExampleChild MyChild1
         {
@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples
                 _MyChild1_Accessed = true;
             }
         }
-        internal bool _MyChild1_Accessed;
+        protected bool _MyChild1_Accessed;
         private LazinatorTests.Examples.ExampleChild _MyChild2;
         public LazinatorTests.Examples.ExampleChild MyChild2
         {
@@ -541,7 +541,7 @@ namespace LazinatorTests.Examples
                 _MyChild2_Accessed = true;
             }
         }
-        internal bool _MyChild2_Accessed;
+        protected bool _MyChild2_Accessed;
         private LazinatorTests.Examples.ExampleChild _MyChild2Previous;
         public LazinatorTests.Examples.ExampleChild MyChild2Previous
         {
@@ -580,7 +580,7 @@ namespace LazinatorTests.Examples
                 _MyChild2Previous_Accessed = true;
             }
         }
-        internal bool _MyChild2Previous_Accessed;
+        protected bool _MyChild2Previous_Accessed;
         private LazinatorTests.Examples.IExampleNonexclusiveInterface _MyInterfaceImplementer;
         public LazinatorTests.Examples.IExampleNonexclusiveInterface MyInterfaceImplementer
         {
@@ -619,7 +619,7 @@ namespace LazinatorTests.Examples
                 _MyInterfaceImplementer_Accessed = true;
             }
         }
-        internal bool _MyInterfaceImplementer_Accessed;
+        protected bool _MyInterfaceImplementer_Accessed;
         private LazinatorTests.Examples.NonLazinatorClass _MyNonLazinatorChild;
         public LazinatorTests.Examples.NonLazinatorClass MyNonLazinatorChild
         {
@@ -651,7 +651,7 @@ namespace LazinatorTests.Examples
                 _MyNonLazinatorChild_Accessed = true;
             }
         }
-        internal bool _MyNonLazinatorChild_Accessed;
+        protected bool _MyNonLazinatorChild_Accessed;
         
         private bool _MyNonLazinatorChild_Dirty;
         public bool MyNonLazinatorChild_Dirty
@@ -703,7 +703,7 @@ namespace LazinatorTests.Examples
                 _WrappedInt_Accessed = true;
             }
         }
-        internal bool _WrappedInt_Accessed;
+        protected bool _WrappedInt_Accessed;
         public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt_Copy
         {
             [DebuggerStepThrough]

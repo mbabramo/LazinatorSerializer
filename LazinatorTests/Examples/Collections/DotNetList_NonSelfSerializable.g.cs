@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,11 +183,11 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyListNonLazinatorType_ByteIndex;
-        internal int _MyListNonLazinatorType2_ByteIndex;
-        internal virtual int _MyListNonLazinatorType_ByteLength => _MyListNonLazinatorType2_ByteIndex - _MyListNonLazinatorType_ByteIndex;
+        protected int _MyListNonLazinatorType_ByteIndex;
+        protected int _MyListNonLazinatorType2_ByteIndex;
+        protected virtual int _MyListNonLazinatorType_ByteLength => _MyListNonLazinatorType2_ByteIndex - _MyListNonLazinatorType_ByteIndex;
         private int _DotNetList_NonSelfSerializable_EndByteIndex;
-        internal virtual int _MyListNonLazinatorType2_ByteLength => _DotNetList_NonSelfSerializable_EndByteIndex - _MyListNonLazinatorType2_ByteIndex;
+        protected virtual int _MyListNonLazinatorType2_ByteLength => _DotNetList_NonSelfSerializable_EndByteIndex - _MyListNonLazinatorType2_ByteIndex;
         
         private System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> _MyListNonLazinatorType;
         public System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> MyListNonLazinatorType
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyListNonLazinatorType_Accessed = true;
             }
         }
-        internal bool _MyListNonLazinatorType_Accessed;
+        protected bool _MyListNonLazinatorType_Accessed;
         
         private bool _MyListNonLazinatorType_Dirty;
         public bool MyListNonLazinatorType_Dirty
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyListNonLazinatorType2_Accessed = true;
             }
         }
-        internal bool _MyListNonLazinatorType2_Accessed;
+        protected bool _MyListNonLazinatorType2_Accessed;
         
         /* Conversion */
         

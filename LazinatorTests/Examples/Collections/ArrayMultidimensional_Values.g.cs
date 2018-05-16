@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,13 +183,13 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyArrayInt_ByteIndex;
-        internal int _MyCrazyJaggedArray_ByteIndex;
-        internal int _MyThreeDimArrayInt_ByteIndex;
-        internal virtual int _MyArrayInt_ByteLength => _MyCrazyJaggedArray_ByteIndex - _MyArrayInt_ByteIndex;
-        internal virtual int _MyCrazyJaggedArray_ByteLength => _MyThreeDimArrayInt_ByteIndex - _MyCrazyJaggedArray_ByteIndex;
+        protected int _MyArrayInt_ByteIndex;
+        protected int _MyCrazyJaggedArray_ByteIndex;
+        protected int _MyThreeDimArrayInt_ByteIndex;
+        protected virtual int _MyArrayInt_ByteLength => _MyCrazyJaggedArray_ByteIndex - _MyArrayInt_ByteIndex;
+        protected virtual int _MyCrazyJaggedArray_ByteLength => _MyThreeDimArrayInt_ByteIndex - _MyCrazyJaggedArray_ByteIndex;
         private int _ArrayMultidimensional_Values_EndByteIndex;
-        internal virtual int _MyThreeDimArrayInt_ByteLength => _ArrayMultidimensional_Values_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
+        protected virtual int _MyThreeDimArrayInt_ByteLength => _ArrayMultidimensional_Values_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
         
         private int[,] _MyArrayInt;
         public int[,] MyArrayInt
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyArrayInt_Accessed = true;
             }
         }
-        internal bool _MyArrayInt_Accessed;
+        protected bool _MyArrayInt_Accessed;
         
         private bool _MyArrayInt_Dirty;
         public bool MyArrayInt_Dirty
@@ -270,7 +270,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyCrazyJaggedArray_Accessed = true;
             }
         }
-        internal bool _MyCrazyJaggedArray_Accessed;
+        protected bool _MyCrazyJaggedArray_Accessed;
         private int[,,] _MyThreeDimArrayInt;
         public int[,,] MyThreeDimArrayInt
         {
@@ -301,7 +301,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyThreeDimArrayInt_Accessed = true;
             }
         }
-        internal bool _MyThreeDimArrayInt_Accessed;
+        protected bool _MyThreeDimArrayInt_Accessed;
         
         /* Conversion */
         

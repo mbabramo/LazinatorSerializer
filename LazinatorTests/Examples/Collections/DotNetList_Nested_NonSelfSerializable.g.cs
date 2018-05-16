@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Field boilerplate */
         
-        internal int _MyListNestedNonLazinatorType_ByteIndex;
+        protected int _MyListNestedNonLazinatorType_ByteIndex;
         private int _DotNetList_Nested_NonSelfSerializable_EndByteIndex;
-        internal virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonSelfSerializable_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
+        protected virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonSelfSerializable_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
         
         private System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> _MyListNestedNonLazinatorType;
         public System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> MyListNestedNonLazinatorType
@@ -217,7 +217,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyListNestedNonLazinatorType_Accessed = true;
             }
         }
-        internal bool _MyListNestedNonLazinatorType_Accessed;
+        protected bool _MyListNestedNonLazinatorType_Accessed;
         
         /* Conversion */
         

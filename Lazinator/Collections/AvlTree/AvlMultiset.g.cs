@@ -30,7 +30,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Collections.AvlTree
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace Lazinator.Collections.AvlTree
         
         /* Field boilerplate */
         
-        internal int _UnderlyingSet_ByteIndex;
+        protected int _UnderlyingSet_ByteIndex;
         private int _AvlMultiset_T_EndByteIndex;
-        internal virtual int _UnderlyingSet_ByteLength => _AvlMultiset_T_EndByteIndex - _UnderlyingSet_ByteIndex;
+        protected virtual int _UnderlyingSet_ByteLength => _AvlMultiset_T_EndByteIndex - _UnderlyingSet_ByteIndex;
         
         private int _NumItemsAdded;
         public int NumItemsAdded
@@ -241,7 +241,7 @@ namespace Lazinator.Collections.AvlTree
                 _UnderlyingSet_Accessed = true;
             }
         }
-        internal bool _UnderlyingSet_Accessed;
+        protected bool _UnderlyingSet_Accessed;
         
         /* Conversion */
         

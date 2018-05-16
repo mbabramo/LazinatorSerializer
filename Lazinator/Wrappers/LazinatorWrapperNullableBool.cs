@@ -28,7 +28,7 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
-            if (obj is bool v)
+            if (obj is Nullable<bool>)
                 return Value == v;
             else if (obj is LazinatorWrapperNullableBool w)
                 return Value == w.Value;

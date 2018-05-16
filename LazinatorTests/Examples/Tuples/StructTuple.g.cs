@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Tuples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -183,11 +183,11 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Field boilerplate */
         
-        internal int _MyNullableTuple_ByteIndex;
-        internal int _MyValueTupleSerialized_ByteIndex;
-        internal virtual int _MyNullableTuple_ByteLength => _MyValueTupleSerialized_ByteIndex - _MyNullableTuple_ByteIndex;
+        protected int _MyNullableTuple_ByteIndex;
+        protected int _MyValueTupleSerialized_ByteIndex;
+        protected virtual int _MyNullableTuple_ByteLength => _MyValueTupleSerialized_ByteIndex - _MyNullableTuple_ByteIndex;
         private int _StructTuple_EndByteIndex;
-        internal virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
+        protected virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
         
         private ValueTuple<int, double>? _MyNullableTuple;
         public ValueTuple<int, double>? MyNullableTuple
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyNullableTuple_Accessed = true;
             }
         }
-        internal bool _MyNullableTuple_Accessed;
+        protected bool _MyNullableTuple_Accessed;
         private ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyValueTupleSerialized;
         public ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyValueTupleSerialized
         {
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyValueTupleSerialized_Accessed = true;
             }
         }
-        internal bool _MyValueTupleSerialized_Accessed;
+        protected bool _MyValueTupleSerialized_Accessed;
         
         /* Conversion */
         

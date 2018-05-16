@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Field boilerplate */
         
-        internal int _ExampleByInterface_ByteIndex;
+        protected int _ExampleByInterface_ByteIndex;
         private int _ExampleInterfaceContainer_EndByteIndex;
-        internal virtual int _ExampleByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleByInterface_ByteIndex;
+        protected virtual int _ExampleByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleByInterface_ByteIndex;
         
         private LazinatorTests.Examples.IExample _ExampleByInterface;
         public LazinatorTests.Examples.IExample ExampleByInterface
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 _ExampleByInterface_Accessed = true;
             }
         }
-        internal bool _ExampleByInterface_Accessed;
+        protected bool _ExampleByInterface_Accessed;
         
         /* Conversion */
         

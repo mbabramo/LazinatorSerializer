@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples
         
         /* Field boilerplate */
         
-        internal int _ItemU_ByteIndex;
+        protected int _ItemU_ByteIndex;
         private int _ClosedGenericWithoutBase_EndByteIndex;
-        internal virtual int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
+        protected virtual int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
         
         private int _ItemT;
         public int ItemT
@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples
                 _ItemU_Accessed = true;
             }
         }
-        internal bool _ItemU_Accessed;
+        protected bool _ItemU_Accessed;
         
         /* Conversion */
         

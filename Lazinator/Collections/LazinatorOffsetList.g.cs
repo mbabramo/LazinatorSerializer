@@ -30,7 +30,7 @@ namespace Lazinator.Collections
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -62,7 +62,7 @@ namespace Lazinator.Collections
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -185,11 +185,11 @@ namespace Lazinator.Collections
         
         /* Field boilerplate */
         
-        internal int _FourByteItems_ByteIndex;
-        internal int _TwoByteItems_ByteIndex;
-        internal int _FourByteItems_ByteLength => _TwoByteItems_ByteIndex - _FourByteItems_ByteIndex;
+        int _FourByteItems_ByteIndex;
+        int _TwoByteItems_ByteIndex;
+        int _FourByteItems_ByteLength => _TwoByteItems_ByteIndex - _FourByteItems_ByteIndex;
         private int _LazinatorOffsetList_EndByteIndex;
-        internal int _TwoByteItems_ByteLength => _LazinatorOffsetList_EndByteIndex - _TwoByteItems_ByteIndex;
+        int _TwoByteItems_ByteLength => _LazinatorOffsetList_EndByteIndex - _TwoByteItems_ByteIndex;
         
         private Lazinator.Collections.LazinatorFastReadList<int> _FourByteItems;
         public Lazinator.Collections.LazinatorFastReadList<int> FourByteItems
@@ -233,7 +233,7 @@ namespace Lazinator.Collections
                 _FourByteItems_Accessed = true;
             }
         }
-        internal bool _FourByteItems_Accessed;
+        bool _FourByteItems_Accessed;
         private Lazinator.Collections.LazinatorFastReadList<short> _TwoByteItems;
         public Lazinator.Collections.LazinatorFastReadList<short> TwoByteItems
         {
@@ -276,7 +276,7 @@ namespace Lazinator.Collections
                 _TwoByteItems_Accessed = true;
             }
         }
-        internal bool _TwoByteItems_Accessed;
+        bool _TwoByteItems_Accessed;
         
         /* Conversion */
         

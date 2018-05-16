@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public virtual void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -184,9 +184,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Field boilerplate */
         
-        internal int _ClosedGeneric_ByteIndex;
+        protected int _ClosedGeneric_ByteIndex;
         private int _OpenGenericStayingOpenContainer_EndByteIndex;
-        internal virtual int _ClosedGeneric_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGeneric_ByteIndex;
+        protected virtual int _ClosedGeneric_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGeneric_ByteIndex;
         
         private LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<Lazinator.Wrappers.LazinatorWrapperFloat> _ClosedGeneric;
         public LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<Lazinator.Wrappers.LazinatorWrapperFloat> ClosedGeneric
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 _ClosedGeneric_Accessed = true;
             }
         }
-        internal bool _ClosedGeneric_Accessed;
+        protected bool _ClosedGeneric_Accessed;
         
         /* Conversion */
         

@@ -30,7 +30,7 @@ namespace Lazinator.Wrappers
         
         public ILazinator LazinatorParentClass { get; set; }
         
-        internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace Lazinator.Wrappers
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -183,9 +183,9 @@ namespace Lazinator.Wrappers
         
         /* Field boilerplate */
         
-        internal int _Value_ByteIndex;
+        int _Value_ByteIndex;
         private int _LazinatorWrapperIntArray_EndByteIndex;
-        internal int _Value_ByteLength => _LazinatorWrapperIntArray_EndByteIndex - _Value_ByteIndex;
+        int _Value_ByteLength => _LazinatorWrapperIntArray_EndByteIndex - _Value_ByteIndex;
         
         private int[] _Value;
         public int[] Value
@@ -217,7 +217,7 @@ namespace Lazinator.Wrappers
                 _Value_Accessed = true;
             }
         }
-        internal bool _Value_Accessed;
+        bool _Value_Accessed;
         
         /* Conversion */
         

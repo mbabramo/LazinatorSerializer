@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator LazinatorParentClass { get; set; }
         
-        protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
+        protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
         public override void Deserialize()
         {
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Abstract
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected internal override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public override ILazinator CloneLazinator()
         {
@@ -183,11 +183,11 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Field boilerplate */
         
-        internal int _IntList3_ByteIndex;
-        internal override int _IntList1_ByteLength => _IntList2_ByteIndex - _IntList1_ByteIndex;
-        internal override int _IntList2_ByteLength => _IntList3_ByteIndex - _IntList2_ByteIndex;
+        protected int _IntList3_ByteIndex;
+        protected override int _IntList1_ByteLength => _IntList2_ByteIndex - _IntList1_ByteIndex;
+        protected override int _IntList2_ByteLength => _IntList3_ByteIndex - _IntList2_ByteIndex;
         private int _Concrete3_EndByteIndex;
-        internal virtual int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
+        protected virtual int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
         
         private string _String1;
         public override string String1
@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList3_Accessed = true;
             }
         }
-        internal bool _IntList3_Accessed;
+        protected bool _IntList3_Accessed;
         
         /* Conversion */
         
