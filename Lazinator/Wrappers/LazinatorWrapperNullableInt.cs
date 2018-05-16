@@ -28,10 +28,12 @@ namespace Lazinator.Wrappers
 
         public override bool Equals(object obj)
         {
+            if (obj is LazinatorWrapperNullableInt w)
+                return Value == w.Value;
             if (obj is int v)
                 return Value == v;
-            else if (obj is LazinatorWrapperNullableInt w)
-                return Value == w.Value;
+            if (obj == null)
+                return Value == null;
             return false;
         }
     }
