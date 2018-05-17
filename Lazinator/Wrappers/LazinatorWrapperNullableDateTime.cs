@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => Value != null;
 
+        public LazinatorWrapperNullableDateTime(DateTime? x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperNullableDateTime(DateTime? x)
         {
             return new LazinatorWrapperNullableDateTime() { Value = x };

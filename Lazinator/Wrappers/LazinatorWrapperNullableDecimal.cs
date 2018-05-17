@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => Value != null;
 
+        public LazinatorWrapperNullableDecimal(decimal? x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperNullableDecimal(decimal? x)
         {
             return new LazinatorWrapperNullableDecimal() { Value = x };

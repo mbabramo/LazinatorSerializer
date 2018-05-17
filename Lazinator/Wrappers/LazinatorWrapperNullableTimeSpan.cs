@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => Value != null;
 
+        public LazinatorWrapperNullableTimeSpan(TimeSpan? x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperNullableTimeSpan(TimeSpan? x)
         {
             return new LazinatorWrapperNullableTimeSpan() { Value = x };

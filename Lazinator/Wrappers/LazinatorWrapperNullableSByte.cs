@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => Value != null;
 
+        public LazinatorWrapperNullableSByte(sbyte? x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperNullableSByte(sbyte? x)
         {
             return new LazinatorWrapperNullableSByte() { Value = x };

@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => Value != null;
 
+        public LazinatorWrapperNullableBool(bool? x) : this()
+        {
+            Value = x;
+        }
+
         public override string ToString()
         {
             return Value?.ToString() ?? "";

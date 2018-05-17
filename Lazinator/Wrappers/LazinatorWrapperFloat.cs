@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => true;
 
+        public LazinatorWrapperFloat(float x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperFloat(float x)
         {
             return new LazinatorWrapperFloat() { Value = x };

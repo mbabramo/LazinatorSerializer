@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => true;
 
+        public LazinatorWrapperUshort(ushort x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperUshort(ushort x)
         {
             return new LazinatorWrapperUshort() { Value = x };

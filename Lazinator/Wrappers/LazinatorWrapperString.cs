@@ -6,6 +6,11 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => Value != null;
 
+        public LazinatorWrapperString(string x) : this()
+        {
+            Value = x;
+        }
+
         public static implicit operator LazinatorWrapperString(string x)
         {
             return new LazinatorWrapperString() { Value = x };
