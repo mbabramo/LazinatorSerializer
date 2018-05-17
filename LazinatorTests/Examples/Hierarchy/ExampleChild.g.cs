@@ -87,6 +87,7 @@ namespace LazinatorTests.Examples
         {
             [DebuggerStepThrough]
             get => _IsDirty;
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -200,6 +201,7 @@ namespace LazinatorTests.Examples
             {
                 return _MyLong;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
