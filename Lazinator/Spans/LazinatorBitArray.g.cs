@@ -134,6 +134,16 @@ namespace Lazinator.Spans
             }
         }
         
+        public void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_ByteSpan_Accessed)
+            {
+                ByteSpan.MarkHierarchyClean();
+            }
+        }
+        
         public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

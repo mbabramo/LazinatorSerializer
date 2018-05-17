@@ -134,6 +134,16 @@ namespace Lazinator.Collections.Dictionary
             }
         }
         
+        public virtual void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_Buckets_Accessed)
+            {
+                Buckets.MarkHierarchyClean();
+            }
+        }
+        
         public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

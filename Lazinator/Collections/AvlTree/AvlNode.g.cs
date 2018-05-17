@@ -134,6 +134,20 @@ namespace Lazinator.Collections.Avl
             }
         }
         
+        public void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_Left_Accessed)
+            {
+                Left.MarkHierarchyClean();
+            }
+            if (_Right_Accessed)
+            {
+                Right.MarkHierarchyClean();
+            }
+        }
+        
         public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

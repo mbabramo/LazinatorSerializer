@@ -135,6 +135,20 @@ namespace Lazinator.Collections
             }
         }
         
+        public void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_FourByteItems_Accessed)
+            {
+                FourByteItems.MarkHierarchyClean();
+            }
+            if (_TwoByteItems_Accessed)
+            {
+                TwoByteItems.MarkHierarchyClean();
+            }
+        }
+        
         public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

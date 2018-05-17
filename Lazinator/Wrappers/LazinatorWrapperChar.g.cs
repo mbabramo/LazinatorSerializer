@@ -134,6 +134,12 @@ namespace Lazinator.Wrappers
             }
         }
         
+        public void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+        }
+        
         public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

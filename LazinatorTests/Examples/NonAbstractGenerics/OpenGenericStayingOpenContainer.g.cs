@@ -134,6 +134,16 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
+        public virtual void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_ClosedGeneric_Accessed)
+            {
+                ClosedGeneric.MarkHierarchyClean();
+            }
+        }
+        
         public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

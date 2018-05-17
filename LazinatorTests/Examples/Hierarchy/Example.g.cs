@@ -138,6 +138,44 @@ namespace LazinatorTests.Examples
             }
         }
         
+        public virtual void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_ExcludableChild_Accessed)
+            {
+                ExcludableChild.MarkHierarchyClean();
+            }
+            if (_IncludableChild_Accessed)
+            {
+                IncludableChild.MarkHierarchyClean();
+            }
+            if (_MyChild1_Accessed)
+            {
+                MyChild1.MarkHierarchyClean();
+            }
+            if (_MyChild2_Accessed)
+            {
+                MyChild2.MarkHierarchyClean();
+            }
+            if (_MyChild2Previous_Accessed)
+            {
+                MyChild2Previous.MarkHierarchyClean();
+            }
+            if (_MyInterfaceImplementer_Accessed)
+            {
+                MyInterfaceImplementer.MarkHierarchyClean();
+            }
+            if (_WrappedInt_Accessed)
+            {
+                WrappedInt.MarkHierarchyClean();
+            }
+            if (_MyNonLazinatorChild_Accessed)
+            {
+                _MyNonLazinatorChild_Dirty = false;
+            }
+        }
+        
         public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;

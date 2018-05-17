@@ -134,6 +134,16 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        public virtual void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (_MyStackInt_Accessed)
+            {
+                _MyStackInt_Dirty = false;
+            }
+        }
+        
         public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
