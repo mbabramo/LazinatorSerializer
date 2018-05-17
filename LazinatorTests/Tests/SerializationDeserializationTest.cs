@@ -2019,30 +2019,21 @@ namespace LazinatorTests.Tests
                 {
                     MyChild1 = GetExampleChild(1)
                 }
-            };
-            var clone = container.CloneLazinatorTyped();
-            clone.IsDirty.Should().BeFalse();
-            clone.DescendantIsDirty.Should().BeFalse();
-
-            // the following may be surprising but results from the fact that structs are value types
-            clone.MyExampleStruct.MyChild1.MyLong = 26; // A new struct was created with MyChild1 loaded, with the MyLong property set to 26. BUT this cannot affect clone.MyExampleStruct, which is unchanged.
-            // NOTE: The following would be illegal C# (it's only because MyChild1 is a class that the above is legal): clone.MyExampleStruct.MyChar = 'x';
-            clone.MyExampleStruct.DescendantIsDirty.Should().BeFalse();
-            clone.MyExampleStruct.IsDirty.Should().BeFalse();
+            }; // note that we can't clone this, because it's a class-struct-class hierarchy, but we can still use it to test MarkHierarchyClean
 
             // If we want to change the hierarchy, we must do it like this:
-            var copyOfStruct = clone.MyExampleStruct_Copy;
+            var copyOfStruct = container.MyExampleStruct_Copy;
             copyOfStruct.MyChild1.MyLong = 25;
-            clone.MyExampleStruct = copyOfStruct;
-            clone.MyExampleStruct.MyChild1.IsDirty.Should().BeTrue();
-            clone.MyExampleStruct.DescendantIsDirty.Should().BeTrue();
-            clone.IsDirty.Should().BeTrue();
+            container.MyExampleStruct = copyOfStruct;
+            container.MyExampleStruct.MyChild1.IsDirty.Should().BeTrue();
+            container.MyExampleStruct.DescendantIsDirty.Should().BeTrue();
+            container.IsDirty.Should().BeTrue();
 
-            clone.MarkHierarchyClean();
-            clone.MyExampleStruct.MyChild1.IsDirty.Should().BeFalse();
-            clone.MyExampleStruct.DescendantIsDirty.Should().BeFalse();
-            clone.DescendantIsDirty.Should().BeFalse();
-            clone.IsDirty.Should().BeFalse();
+            container.MarkHierarchyClean();
+            container.MyExampleStruct.MyChild1.IsDirty.Should().BeFalse();
+            container.MyExampleStruct.DescendantIsDirty.Should().BeFalse();
+            container.DescendantIsDirty.Should().BeFalse();
+            container.IsDirty.Should().BeFalse();
         }
 
         private void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)
