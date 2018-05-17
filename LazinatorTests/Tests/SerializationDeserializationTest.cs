@@ -179,13 +179,27 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ClassContainingStructWorks()
         {
-            ExampleStructContainer c = new ExampleStructContainer()
+            ContainerForExampleStructWithoutClass c = new ContainerForExampleStructWithoutClass()
             {
-                MyExampleStruct = new ExampleStruct() {MyChar = 'z', MyLazinatorList = new List<Example>()}
+                DeserializationFactory = GetDeserializationFactory(),
+                ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 }
             };
 
             var c2 = c.CloneLazinatorTyped();
-            c2.MyExampleStruct.MyChar.Should().Be('z');
+            c2.ExampleStructWithoutClass.MyInt.Should().Be(3);
+        }
+
+        [Fact]
+        public void ClassContainingStructContainingClassThrows()
+        {
+            ExampleStructContainer c = new ExampleStructContainer()
+            {
+                MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+            };
+            var c2 = c.CloneLazinatorTyped();
+
+            Action a = () => { var result = c2.MyExampleStruct; };
+            a.Should().Throw<LazinatorDeserializationException>();
         }
 
         [Fact]
