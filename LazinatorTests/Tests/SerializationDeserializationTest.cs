@@ -1894,6 +1894,11 @@ namespace LazinatorTests.Tests
             var clone = nonGenericContainer.CloneLazinatorTyped();
             var listInClone = clone.MyList;
             listInClone.Should().NotBeNull();
+
+            // and again
+            clone = nonGenericContainer.CloneLazinatorTyped();
+            listInClone = clone.MyList;
+            listInClone.Should().NotBeNull();
         }
 
         [Fact]
@@ -1906,6 +1911,11 @@ namespace LazinatorTests.Tests
             nonGenericContainer.MyList = null;
             var clone = nonGenericContainer.CloneLazinatorTyped();
             var listInClone = clone.MyList;
+            listInClone.Should().BeNull();
+
+            // and again
+            clone = nonGenericContainer.CloneLazinatorTyped();
+            listInClone = clone.MyList;
             listInClone.Should().BeNull();
         }
 
@@ -1938,9 +1948,11 @@ namespace LazinatorTests.Tests
             v3.DescendantIsDirty.Should().BeFalse();
             v3.MyList.IsDirty.Should().BeFalse();
             var x = v3.MyList[2];
-            v3.MyList.IsDirty.Should().BeFalse(); 
+            v3.MyList.IsDirty.Should().BeFalse();
+            v3.MyList.DescendantIsDirty.Should().BeFalse();
             x.MyLong = 25;
-            v3.MyList.IsDirty.Should().BeTrue();
+            v3.MyList.IsDirty.Should().BeFalse();
+            v3.MyList.DescendantIsDirty.Should().BeTrue();
             v3.IsDirty.Should().BeFalse();
             v3.DescendantIsDirty.Should().BeTrue();
         }
@@ -1948,7 +1960,26 @@ namespace LazinatorTests.Tests
         [Fact]
         public void MarkHierarchyCleanWorks()
         {
-            throw new NotImplementedException();
+            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
+            hierarchy.IsDirty.Should().BeTrue(); // since it's new
+
+            hierarchy = hierarchy.CloneLazinatorTyped();
+            hierarchy.IsDirty.Should().BeFalse();
+            hierarchy.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyChild1.MyLong = 25;
+            hierarchy.IsDirty.Should().BeFalse();
+            hierarchy.DescendantIsDirty.Should().BeTrue();
+            hierarchy.MyChild1.IsDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyNonLazinatorChild_Dirty = true;
+
+            hierarchy.MarkHierarchyClean();
+            hierarchy.IsDirty.Should().BeFalse();
+            hierarchy.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyChild1.IsDirty.Should().BeFalse();
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyNonLazinatorChild_Dirty.Should().BeFalse();
+
         }
 
         private void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)

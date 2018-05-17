@@ -146,10 +146,7 @@ namespace LazinatorTests.Examples
             {
                 MyChild2.MarkHierarchyClean();
             }
-            if (_MyLazinatorList_Accessed)
-            {
-                _MyLazinatorList_Dirty = false;
-            }
+            _MyLazinatorList_Dirty = false;
         }
         
         public DeserializationFactory DeserializationFactory { get; set; }

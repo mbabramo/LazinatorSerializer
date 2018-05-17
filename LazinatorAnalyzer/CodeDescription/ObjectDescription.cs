@@ -199,10 +199,7 @@ namespace Lazinator.CodeDescription
                 }
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
                     markHierarchyCleanMethod += $@"
-                            if (_{property.PropertyName}_Accessed)
-                            {{
-                                _{property.PropertyName}_Dirty = false;
-                            }}";
+                            _{property.PropertyName}_Dirty = false;";
                 markHierarchyCleanMethod += $@"
                     }}";
             }

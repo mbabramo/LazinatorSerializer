@@ -138,18 +138,9 @@ namespace LazinatorTests.Examples.Collections
         {
             _IsDirty = false;
             _DescendantIsDirty = false;
-            if (_MyLinkedListInt_Accessed)
-            {
-                _MyLinkedListInt_Dirty = false;
-            }
-            if (_MyListInt_Accessed)
-            {
-                _MyListInt_Dirty = false;
-            }
-            if (_MySortedSetInt_Accessed)
-            {
-                _MySortedSetInt_Dirty = false;
-            }
+            _MyLinkedListInt_Dirty = false;
+            _MyListInt_Dirty = false;
+            _MySortedSetInt_Dirty = false;
         }
         
         public virtual DeserializationFactory DeserializationFactory { get; set; }

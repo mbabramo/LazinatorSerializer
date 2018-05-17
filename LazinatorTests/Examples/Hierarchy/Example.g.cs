@@ -170,10 +170,7 @@ namespace LazinatorTests.Examples
             {
                 WrappedInt.MarkHierarchyClean();
             }
-            if (_MyNonLazinatorChild_Accessed)
-            {
-                _MyNonLazinatorChild_Dirty = false;
-            }
+            _MyNonLazinatorChild_Dirty = false;
         }
         
         public virtual DeserializationFactory DeserializationFactory { get; set; }

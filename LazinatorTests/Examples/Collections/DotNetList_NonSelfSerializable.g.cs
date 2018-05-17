@@ -138,10 +138,7 @@ namespace LazinatorTests.Examples.Collections
         {
             _IsDirty = false;
             _DescendantIsDirty = false;
-            if (_MyListNonLazinatorType_Accessed)
-            {
-                _MyListNonLazinatorType_Dirty = false;
-            }
+            _MyListNonLazinatorType_Dirty = false;
         }
         
         public virtual DeserializationFactory DeserializationFactory { get; set; }
