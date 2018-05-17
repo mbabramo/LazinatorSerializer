@@ -21,5 +21,12 @@ namespace LazinatorTests.Examples
                 MyOldString = null;
             }
         }
+
+        public bool _OnDirtyCalled = false;
+
+        public void OnDirty()
+        {
+            _OnDirtyCalled = true;
+        }
     }
 }

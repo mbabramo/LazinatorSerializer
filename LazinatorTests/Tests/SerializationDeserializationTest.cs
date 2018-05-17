@@ -1626,6 +1626,28 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void OnDirtyCalledWhereImplemented()
+        {
+            // The Example.cs method includes an _OnDirtyCalled nonserialized flag that is set to true when its OnDirty() method (not generally required) is called.
+            var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
+            hierarchy._OnDirtyCalled.Should().BeTrue();
+            hierarchy._OnDirtyCalled = false; // reset flag
+            hierarchy = hierarchy.CloneLazinatorTyped();
+            hierarchy.IsDirty.Should().BeFalse();
+            hierarchy.MyDateTime = DateTime.Now - TimeSpan.FromHours(1);
+            hierarchy.IsDirty.Should().BeTrue();
+            hierarchy._OnDirtyCalled.Should().BeTrue();
+            hierarchy._OnDirtyCalled = false; // reset flag
+            hierarchy.MyChild1.IsDirty.Should().BeFalse();
+            hierarchy = hierarchy.CloneLazinatorTyped();
+            hierarchy.IsDirty.Should().BeFalse();
+            hierarchy._OnDirtyCalled.Should().BeFalse();
+            hierarchy.MyChild1 = new ExampleChild() { MyLong = 232344 };
+            hierarchy.IsDirty.Should().BeTrue();
+            hierarchy._OnDirtyCalled.Should().BeTrue();
+        }
+
+        [Fact]
         public void DescendantDirtinessSetsCorrectly()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);

@@ -100,6 +100,7 @@ namespace LazinatorTests.Examples
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        OnDirty();
                     }
                 }
             }
