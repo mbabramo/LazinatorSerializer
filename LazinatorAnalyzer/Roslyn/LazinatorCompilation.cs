@@ -377,28 +377,32 @@ namespace LazinatorCodeGen.Roslyn
             // Consider whether to add this as a record-like type
             if (type.IsAbstract)
                 return; 
-            var constructorWithMostParameters = type.Constructors.OrderByDescending(x => x.Parameters.Count()).FirstOrDefault();
-            if (constructorWithMostParameters == null)
+            var constructorCandidates = type.Constructors.OrderByDescending(x => x.Parameters.Count()).ToList();
+            if (!constructorCandidates.Any())
                 NonRecordLikeTypes.Add(type);
             else
             {
-                var parameters = constructorWithMostParameters.Parameters.ToList();
-                var properties = GetPropertyWithDefinitionInfo(type);
-                if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
+                foreach (var candidate in constructorCandidates)
                 {
-                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();
-                    if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
+                    var parameters = candidate.Parameters.ToList();
+                    if (!parameters.Any())
+                        continue;
+                    var properties = GetPropertyWithDefinitionInfo(type);
+                    if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                     {
-                        NonRecordLikeTypes.Add(type);
+                        List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();
+                        if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
+                            continue;
+                        // we have found the constructor for our record like type
+                        PropertiesForType[type] = properties.ToList();
+                        foreach (var property in properties)
+                            RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
+                        RecordLikeTypes[type] = parametersAndProperties;
                         return;
                     }
-
-                    PropertiesForType[type] = properties.ToList();
-                    foreach (var property in properties)
-                        RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
-                    RecordLikeTypes[type] = parametersAndProperties;
                 }
             }
+            NonRecordLikeTypes.Add(type);
         }
 
         string FirstCharToUpper(string input)
