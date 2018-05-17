@@ -153,9 +153,18 @@ namespace Lazinator.CodeDescription
                     {{";
             sb.AppendLine(theBeginning);
 
+            string classContainingStructContainingClassError = "";
+            if (ObjectType == LazinatorObjectType.Struct)
+            {
+                if (PropertiesToDefineThisLevel.Any(x => !x.IsPrimitive))
+                    classContainingStructContainingClassError = $@"
 
-            string additionalDirtinessChecks = "";
-            if (ObjectType != LazinatorObjectType.Class)
+                        if (LazinatorParentClass != null)
+                            throw new LazinatorDeserializationException(""A Lazinator struct may include a child that is a non-basic type (like int? or string) only when the Lazinator struct has no parent class. Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct."");";
+            }
+
+                string additionalDirtinessChecks = "";
+            if (ObjectType == LazinatorObjectType.Struct)
             {
                 // a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
@@ -284,7 +293,7 @@ namespace Lazinator.CodeDescription
                             if (span.Length == 0)
                             {{
                                 return;
-                            }}
+                            }}{classContainingStructContainingClassError}
 
                             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
