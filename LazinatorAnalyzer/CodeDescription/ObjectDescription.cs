@@ -181,7 +181,7 @@ namespace Lazinator.CodeDescription
                 else
                     markHierarchyCleanMethod += $@"
                             _IsDirty = false;
-                            _DescedantIsDirty = false;";
+                            _DescendantIsDirty = false;";
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
@@ -190,7 +190,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 {property.PropertyName}{property.NullableStructValueAccessor}.MarkHierarchyClean();
                             }}";
-                    else
+                    else 
                         markHierarchyCleanMethod += $@"
                             if (_{property.PropertyName}_Accessed)
                             {{
