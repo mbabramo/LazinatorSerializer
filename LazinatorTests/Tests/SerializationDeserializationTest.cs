@@ -205,17 +205,18 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CopyPropertyForStructWorks()
         {
-            ExampleStructContainer c = new ExampleStructContainer()
+            ContainerForExampleStructWithoutClass c = new ContainerForExampleStructWithoutClass()
             {
-                MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+                DeserializationFactory = GetDeserializationFactory(),
+                ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 }
             };
 
             var c2 = c.CloneLazinatorTyped();
-            var copyOfStruct = c2.MyExampleStruct_Copy;
-            copyOfStruct.MyChar.Should().Be('z');
-            copyOfStruct.MyChar = 'x';
+            var copyOfStruct = c2.ExampleStructWithoutClass;
+            copyOfStruct.MyInt.Should().Be(3);
+            copyOfStruct.MyInt = 4;
             c2.IsDirty.Should().BeFalse(); // no effect of change on copy
-            c2.MyExampleStruct.MyChar.Should().Be('z');
+            c2.ExampleStructWithoutClass.MyInt.Should().Be(3);
 
             // let's confirm that this has been created on the stack (which is the purpose of the property)
             bool IsBoxed<T>(T value)

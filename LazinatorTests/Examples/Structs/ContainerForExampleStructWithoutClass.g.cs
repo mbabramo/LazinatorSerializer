@@ -213,12 +213,12 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength);
-                        
-                        if (DeserializationFactory == null)
+                        _ExampleStructWithoutClass = new LazinatorTests.Examples.Structs.ExampleStructWithoutClass()
                         {
-                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
-                        }
-                        _ExampleStructWithoutClass = DeserializationFactory.Create(253, () => new LazinatorTests.Examples.Structs.ExampleStructWithoutClass(), childData, this); 
+                            DeserializationFactory = DeserializationFactory,
+                            LazinatorParentClass = this,
+                            LazinatorObjectBytes = childData,
+                        };
                     }
                     _ExampleStructWithoutClass_Accessed = true;
                 }
@@ -229,14 +229,34 @@ namespace LazinatorTests.Examples.Structs
             {
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;
-                if (_ExampleStructWithoutClass != null)
-                {
-                    _ExampleStructWithoutClass.IsDirty = true;
-                }
                 _ExampleStructWithoutClass_Accessed = true;
             }
         }
         protected bool _ExampleStructWithoutClass_Accessed;
+        public LazinatorTests.Examples.Structs.ExampleStructWithoutClass ExampleStructWithoutClass_Copy
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_ExampleStructWithoutClass_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        return default(LazinatorTests.Examples.Structs.ExampleStructWithoutClass);
+                    }
+                    else
+                    {
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength);
+                        return new LazinatorTests.Examples.Structs.ExampleStructWithoutClass()
+                        {
+                            DeserializationFactory = DeserializationFactory,
+                            LazinatorObjectBytes = childData,
+                        };
+                    }
+                }
+                return _ExampleStructWithoutClass;
+            }
+        }
         
         /* Conversion */
         

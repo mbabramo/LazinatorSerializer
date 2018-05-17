@@ -24,15 +24,15 @@ namespace LazinatorTests.Examples.Structs
     using Lazinator.Wrappers;
     
     
-    public partial class ExampleStructWithoutClass : ILazinator
+    public partial struct ExampleStructWithoutClass : ILazinator
     {
         /* Boilerplate for every non-abstract ILazinator object */
         
-        public virtual ILazinator LazinatorParentClass { get; set; }
+        public ILazinator LazinatorParentClass { get; set; }
         
-        protected IncludeChildrenMode OriginalIncludeChildrenMode;
+        IncludeChildrenMode OriginalIncludeChildrenMode;
         
-        public virtual void Deserialize()
+        public void Deserialize()
         {
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
@@ -56,19 +56,19 @@ namespace LazinatorTests.Examples.Structs
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
         }
         
-        public virtual MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
-        public virtual ILazinator CloneLazinator()
+        public ILazinator CloneLazinator()
         {
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ExampleStructWithoutClass()
@@ -83,7 +83,7 @@ namespace LazinatorTests.Examples.Structs
         }
         
         private bool _IsDirty;
-        public virtual bool IsDirty
+        public bool IsDirty
         {
             [DebuggerStepThrough]
             get => _IsDirty;
@@ -101,8 +101,8 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public virtual InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
-        public virtual void InformParentOfDirtiness()
+        public InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
+        public void InformParentOfDirtiness()
         {
             if (InformParentOfDirtinessDelegate == null)
             {
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples.Structs
         }
         
         private bool _DescendantIsDirty;
-        public virtual bool DescendantIsDirty
+        public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
             get => _DescendantIsDirty;
@@ -134,16 +134,16 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public virtual void MarkHierarchyClean()
+        public void MarkHierarchyClean()
         {
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
         
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
+        public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
-        public virtual MemoryInBuffer HierarchyBytes
+        public MemoryInBuffer HierarchyBytes
         {
             get => _HierarchyBytes;
             set
@@ -154,7 +154,7 @@ namespace LazinatorTests.Examples.Structs
         }
         
         private ReadOnlyMemory<byte> _LazinatorObjectBytes;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get => _LazinatorObjectBytes;
             set
@@ -164,7 +164,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public virtual void LazinatorConvertToBytes()
+        public void LazinatorConvertToBytes()
         {
             if (!IsDirty && !DescendantIsDirty)
             {
@@ -175,13 +175,13 @@ namespace LazinatorTests.Examples.Structs
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
-        public virtual uint GetBinaryHashCode32()
+        public uint GetBinaryHashCode32()
         {
             LazinatorConvertToBytes();
             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
         }
         
-        public virtual ulong GetBinaryHashCode64()
+        public ulong GetBinaryHashCode64()
         {
             LazinatorConvertToBytes();
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
@@ -208,17 +208,27 @@ namespace LazinatorTests.Examples.Structs
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 253;
+        public int LazinatorUniqueID => 253;
         
-        public virtual int LazinatorObjectVersion { get; set; } = 0;
+        private bool _LazinatorObjectVersionChanged;
+        private int _LazinatorObjectVersionOverride;
+        public int LazinatorObjectVersion
+        {
+            get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : 0;
+            set
+            {
+                _LazinatorObjectVersionOverride = value;
+                _LazinatorObjectVersionChanged = true;
+            }
+        }
         
-        public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
