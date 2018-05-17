@@ -1789,7 +1789,11 @@ namespace LazinatorTests.Tests
 
             LazinatorList<ExampleChild> list = new LazinatorList<ExampleChild>();
             for (int i = 0; i <= 3; i++)
+            {
                 AddItem(i);
+                list.IsDirty.Should().BeTrue();
+
+            }
             void AddItem(int i, int? insertIndex = null)
             {
                 if (insertIndex is int insertIndexInt)
@@ -1821,6 +1825,7 @@ namespace LazinatorTests.Tests
             {
                 GetList().Clear();
                 list.Clear();
+                list.IsDirty.Should().BeTrue();
             }
             void CheckList()
             {
@@ -1876,6 +1881,48 @@ namespace LazinatorTests.Tests
             CheckBeforeAndAfterSerialization();
             Clear();
             CheckBeforeAndAfterSerialization();
+        }
+
+        [Fact]
+        public void LazinatorListDirtinessWorks()
+        {
+            LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory()
+            };
+            nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
+            nonGenericContainer.MyList.IsDirty.Should().BeTrue();
+            nonGenericContainer.IsDirty.Should().BeTrue();
+            nonGenericContainer.DescendantIsDirty.Should().BeTrue();
+
+            var v2 = nonGenericContainer.CloneLazinatorTyped();
+            v2.IsDirty.Should().BeFalse();
+            v2.DescendantIsDirty.Should().BeFalse();
+            v2.MyList.IsDirty.Should().BeFalse();
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.IsDirty.Should().BeTrue();
+            v2.IsDirty.Should().BeFalse();
+            v2.DescendantIsDirty.Should().BeTrue();
+            
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+            var v3 = v2.CloneLazinatorTyped();
+            v3.IsDirty.Should().BeFalse();
+            v3.DescendantIsDirty.Should().BeFalse();
+            v3.MyList.IsDirty.Should().BeFalse();
+            var x = v3.MyList[2];
+            v3.MyList.IsDirty.Should().BeFalse(); 
+            x.MyLong = 25;
+            v3.MyList.IsDirty.Should().BeTrue();
+            v3.IsDirty.Should().BeFalse();
+            v3.DescendantIsDirty.Should().BeTrue();
+        }
+
+        [Fact]
+        public void MarkHierarchyCleanWorks()
+        {
+            throw new NotImplementedException();
         }
 
         private void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)
