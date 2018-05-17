@@ -628,6 +628,18 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void WrapperIntWorks()
+        {
+            ExampleStructContainer w = new ExampleStructContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                IntWrapper = 5
+            };
+            w.IntWrapper = 6;
+            w.IntWrapper.Should().Be(6);
+        }
+
+        [Fact]
         public void WrapperHasDefaultValue()
         {
             WrapperContainer e = new WrapperContainer();
@@ -1996,9 +2008,14 @@ namespace LazinatorTests.Tests
             var clone = container.CloneLazinatorTyped();
             clone.IsDirty.Should().BeFalse();
             clone.DescendantIsDirty.Should().BeFalse();
-            // warning: It's tempting to just do the following:            
-            // clone.MyExampleStruct.MyChild1.MyLong = 25;
-            // but that just returns a copy of the struct, so MyLong is changed only in the copy.
+
+            // the following may be surprising but results from the fact that structs are value types
+            clone.MyExampleStruct.MyChild1.MyLong = 26; // A new struct was created with MyChild1 loaded, with the MyLong property set to 26. BUT this cannot affect clone.MyExampleStruct, which is unchanged.
+            // NOTE: The following would be illegal C# (it's only because MyChild1 is a class that the above is legal): clone.MyExampleStruct.MyChar = 'x';
+            clone.MyExampleStruct.DescendantIsDirty.Should().BeFalse();
+            clone.MyExampleStruct.IsDirty.Should().BeFalse();
+
+            // If we want to change the hierarchy, we must do it like this:
             var copyOfStruct = clone.MyExampleStruct_Copy;
             copyOfStruct.MyChild1.MyLong = 25;
             clone.MyExampleStruct = copyOfStruct;
