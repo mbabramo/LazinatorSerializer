@@ -839,7 +839,9 @@ namespace Lazinator.CodeDescription
                 {{
                     _{PropertyName}_Dirty = value;
                     if (value && !IsDirty)
+                    {{
                         IsDirty = true;
+                    }}
                 }}
             }}
         }}

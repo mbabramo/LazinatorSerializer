@@ -119,7 +119,7 @@ namespace LazinatorTests.Examples
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty);
+            get => _DescendantIsDirty || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {

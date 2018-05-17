@@ -54,6 +54,8 @@ namespace Lazinator.Wrappers
             set;
         }
         
+        //DEBUGpublic abstract void MarkHierarchyClean();
+        
         public abstract DeserializationFactory DeserializationFactory { get; set; }
         
         public abstract MemoryInBuffer HierarchyBytes
