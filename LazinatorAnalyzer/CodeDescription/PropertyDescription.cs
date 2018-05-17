@@ -54,6 +54,7 @@ namespace Lazinator.CodeDescription
         public IPropertySymbol PropertySymbol { get; set; }
         public ITypeSymbol TypeSymbol { get; set; } // if we don't have a property
         public IEnumerable<Attribute> UserAttributes => Container.Compilation.GetAttributes(PropertySymbol);
+        public IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
         public string PropertyAccessibility { get; set; }
         public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         public CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
@@ -153,6 +154,19 @@ namespace Lazinator.CodeDescription
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
             ExcludableWhenIncludingMostChildren = excludable != null;
+        }
+
+        private string GetAttributesToInsert()
+        {
+            if (InsertAttributes.Any())
+            {
+                string textToInsert = "";
+                foreach (var a in InsertAttributes)
+                    textToInsert += $@"[{a.AttributeText}]
+                                        ";
+                return textToInset;
+            }
+            else return "";
         }
 
         private void SetInclusionConditionals()
@@ -607,7 +621,7 @@ namespace Lazinator.CodeDescription
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"{Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed{(Container.ObjectType != LazinatorObjectType.Struct ? " = false" : "")};
-        {PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
+        {GetAttributesToInsert()}{PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             get;
             set;
@@ -635,7 +649,7 @@ namespace Lazinator.CodeDescription
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
             string propertyString = $@"        private {FullyQualifiedTypeName} _{PropertyName};
-        {PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
+        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -699,7 +713,7 @@ namespace Lazinator.CodeDescription
 
 
             sb.Append($@"private {FullyQualifiedTypeName} _{PropertyName};
-        {PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
+        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get
@@ -739,7 +753,7 @@ namespace Lazinator.CodeDescription
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-                sb.Append($@"{PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}_Copy
+                sb.Append($@"{GetAttributesToInsert()}{PropertyAccessibilityString}{FullyQualifiedTypeName} {PropertyName}_Copy
                             {{
                                 [DebuggerStepThrough]
                                 get
@@ -798,7 +812,7 @@ namespace Lazinator.CodeDescription
                 castToSpanOfCorrectType = $"_{PropertyName}.Span";
             else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}.Span)";
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        {PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
+        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{FullyQualifiedTypeName} {PropertyName}
         {{
             [DebuggerStepThrough]
             get

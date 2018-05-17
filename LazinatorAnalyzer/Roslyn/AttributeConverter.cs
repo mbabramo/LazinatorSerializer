@@ -37,6 +37,12 @@ namespace LazinatorCodeGen.Roslyn
                     }
                     else
                         return new CloneLazinatorAttribute((int)uniqueID);
+
+                case "InsertAttributeAttribute":
+                    var attributeText = attributeData.GetAttributeConstructorValueByParameterName("attributeText");
+                    if (!(attributeText is string ))
+                        return null;
+                    return new CloneInsertAttributeAttribute((string)attributeText);
                 case "EliminatedWithVersionAttribute":
                     var version2 = attributeData.GetAttributeConstructorValueByParameterName("version");
                     if (!(version2 is int))

@@ -18,6 +18,17 @@ namespace Lazinator.Collections
         [NonSerialized] private List<bool> ItemsAccessedBeforeFullyDeserialized;
         [NonSerialized] private ReadOnlyMemory<byte> SerializedMainList;
 
+        public LazinatorList()
+        {
+
+        }
+
+        public LazinatorList(IEnumerable<T> items)
+        {
+            foreach (T item in items)
+                Add(item);
+        }
+
         private void CreateUnderlyingListIfNecessary()
         {
             if (UnderlyingList == null)
