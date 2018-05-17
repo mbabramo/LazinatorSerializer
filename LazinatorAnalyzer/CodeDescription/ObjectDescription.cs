@@ -170,19 +170,41 @@ namespace Lazinator.CodeDescription
                 //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
             }
 
-            string markClean = "";
+            string markHierarchyCleanMethod = "";
             if (!IsAbstract)
             {
+                markHierarchyCleanMethod = $@"public {DerivationKeyword}void MarkHierarchyClean()
+                            {{";
+                if (DerivationKeyword == "override ")
+                    markHierarchyCleanMethod += $@"
+                        base.MarkHierarchyClean();";
+                else
+                    markHierarchyCleanMethod += $@"
+                            _IsDirty = false;
+                            _DescedantIsDirty = false;";
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                        markClean += $@"
-                            if (
+                        markHierarchyCleanMethod += $@"
+                            if (_{property.PropertyName}_Accessed)
                             {{
+                                {property.PropertyName}{property.NullableStructValueAccessor}.MarkHierarchyClean();
                             }}";
                     else
-                        markClean += $" || ({property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                        markHierarchyCleanMethod += $@"
+                            if (_{property.PropertyName}_Accessed)
+                            {{
+                                {property.PropertyName}.MarkHierarchyClean();
+                            }}";
                 }
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
+                    markHierarchyCleanMethod += $@"
+                            if (_{property.PropertyName}_Accessed)
+                            {{
+                                _{property.PropertyName}_Dirty = false;
+                            }}";
+                markHierarchyCleanMethod += $@"
+                    }}";
             }
 
             string resetAccessed = "";
@@ -227,7 +249,7 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
-                        //DEBUGpublic abstract void MarkHierarchyClean();
+                        public abstract void MarkHierarchyClean();
                         
                         public abstract DeserializationFactory DeserializationFactory {{ get; set; }}
 		                
@@ -372,6 +394,8 @@ namespace Lazinator.CodeDescription
                                 }}
                             }}
                         }}
+
+                        {markHierarchyCleanMethod}
 
                         public {DerivationKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
         
