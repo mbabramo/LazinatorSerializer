@@ -19,8 +19,7 @@ namespace LazinatorCodeGen.Roslyn
     {
 
         // We must be able to determine whether a type implements various methods, but we want to exclude methods implemented in code behind
-        static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization" };
-        static readonly string _disqualifyingMethodName = "IsDirty"; // this is always in the code behind.
+        static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization", "OnDirty", "OnDescendantDirty" };
 
         public Compilation Compilation;
         public LazinatorConfig Config { get; private set; }
@@ -507,8 +506,7 @@ namespace LazinatorCodeGen.Roslyn
             INamedTypeSymbol typeSymbol, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethod)
         {
             foreach (string methodName in _methodNamesToLookFor)
-                if (RoslynHelpers.TypeImplementsMethodWithoutDisqualification(typeDeclaration, methodName,
-                    _disqualifyingMethodName))
+                if (RoslynHelpers.TypeDeclarationIncludesMethod(typeDeclaration, methodName))
                     typeImplementsMethod.Add((typeSymbol, methodName));
         }
     }

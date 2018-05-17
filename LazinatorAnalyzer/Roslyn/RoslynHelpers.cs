@@ -223,12 +223,7 @@ namespace LazinatorCodeGen.Roslyn
             return index == -1 ? name : name.Substring(0, index);
         }
 
-        public static bool TypeImplementsMethodWithoutDisqualification(TypeDeclarationSyntax typeDeclarationForSymbol, string methodName, string disqualifyingMethodName)
-        {
-            return TypeDeclarationIncludesMethod(typeDeclarationForSymbol, methodName) && !TypeDeclarationIncludesMethod(typeDeclarationForSymbol, disqualifyingMethodName);
-        }
-
-        private static bool TypeDeclarationIncludesMethod(TypeDeclarationSyntax typeDeclaration, string methodName)
+        public static bool TypeDeclarationIncludesMethod(TypeDeclarationSyntax typeDeclaration, string methodName)
         {
             HashSet<MethodDeclarationSyntax> methodDeclarations = GetMethodDeclarations(typeDeclaration);
             return methodDeclarations.Any(x => x.Identifier.Text == methodName);
