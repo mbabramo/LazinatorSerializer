@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableUshort(ushort? x)
         {
-            return new LazinatorWrapperNullableUshort() { Value = x };
+            return new LazinatorWrapperNullableUshort(x);
         }
 
         public static implicit operator ushort? (LazinatorWrapperNullableUshort x)

@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperLongArray(long[] x)
         {
-            return new LazinatorWrapperLongArray() { Value = x };
+            return new LazinatorWrapperLongArray(x);
         }
 
         public static implicit operator long[] (LazinatorWrapperLongArray x)

@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableDecimal(decimal? x)
         {
-            return new LazinatorWrapperNullableDecimal() { Value = x };
+            return new LazinatorWrapperNullableDecimal(x);
         }
 
         public static implicit operator decimal? (LazinatorWrapperNullableDecimal x)

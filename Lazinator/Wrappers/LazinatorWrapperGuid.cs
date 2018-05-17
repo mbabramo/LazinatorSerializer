@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperGuid(Guid x)
         {
-            return new LazinatorWrapperGuid() { Value = x };
+            return new LazinatorWrapperGuid(x);
         }
 
         public static implicit operator Guid(LazinatorWrapperGuid x)

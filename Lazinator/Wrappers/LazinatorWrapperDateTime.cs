@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperDateTime(DateTime x)
         {
-            return new LazinatorWrapperDateTime() { Value = x };
+            return new LazinatorWrapperDateTime(x);
         }
 
         public static implicit operator DateTime(LazinatorWrapperDateTime x)

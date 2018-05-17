@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableDouble(double? x)
         {
-            return new LazinatorWrapperNullableDouble() { Value = x };
+            return new LazinatorWrapperNullableDouble(x);
         }
 
         public static implicit operator double? (LazinatorWrapperNullableDouble x)

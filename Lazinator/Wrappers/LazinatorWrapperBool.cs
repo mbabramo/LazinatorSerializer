@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperBool(bool x)
         {
-            return new LazinatorWrapperBool() {Value = x};
+            return new LazinatorWrapperBool(x);
         }
 
         public static implicit operator bool(LazinatorWrapperBool x)

@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableTimeSpan(TimeSpan? x)
         {
-            return new LazinatorWrapperNullableTimeSpan() { Value = x };
+            return new LazinatorWrapperNullableTimeSpan(x);
         }
 
         public static implicit operator TimeSpan? (LazinatorWrapperNullableTimeSpan x)

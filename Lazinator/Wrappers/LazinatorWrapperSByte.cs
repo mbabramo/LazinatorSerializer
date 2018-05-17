@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperSByte(sbyte x)
         {
-            return new LazinatorWrapperSByte() { Value = x };
+            return new LazinatorWrapperSByte(x);
         }
 
         public static implicit operator sbyte(LazinatorWrapperSByte x)

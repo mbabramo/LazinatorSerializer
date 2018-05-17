@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperString(string x)
         {
-            return new LazinatorWrapperString() { Value = x };
+            return new LazinatorWrapperString(x);
         }
 
         public static implicit operator string(LazinatorWrapperString x)

@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperIntArray(int[] x)
         {
-            return new LazinatorWrapperIntArray() { Value = x };
+            return new LazinatorWrapperIntArray(x);
         }
 
         public static implicit operator int[](LazinatorWrapperIntArray x)

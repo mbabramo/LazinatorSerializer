@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableUint(uint? x)
         {
-            return new LazinatorWrapperNullableUint() { Value = x };
+            return new LazinatorWrapperNullableUint(x);
         }
 
         public static implicit operator uint? (LazinatorWrapperNullableUint x)

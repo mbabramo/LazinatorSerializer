@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperChar(char x)
         {
-            return new LazinatorWrapperChar() { Value = x };
+            return new LazinatorWrapperChar(x);
         }
 
         public static implicit operator char(LazinatorWrapperChar x)

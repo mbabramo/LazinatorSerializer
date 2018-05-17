@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableByte(byte? x)
         {
-            return new LazinatorWrapperNullableByte() { Value = x };
+            return new LazinatorWrapperNullableByte(x);
         }
 
         public static implicit operator byte? (LazinatorWrapperNullableByte x)

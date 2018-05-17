@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperFloat(float x)
         {
-            return new LazinatorWrapperFloat() { Value = x };
+            return new LazinatorWrapperFloat(x);
         }
 
         public static implicit operator float(LazinatorWrapperFloat x)

@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperUlong(ulong x)
         {
-            return new LazinatorWrapperUlong() { Value = x };
+            return new LazinatorWrapperUlong(x);
         }
 
         public static implicit operator ulong(LazinatorWrapperUlong x)

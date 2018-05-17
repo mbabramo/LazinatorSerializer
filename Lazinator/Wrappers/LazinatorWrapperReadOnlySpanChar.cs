@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperReadOnlySpanChar(ReadOnlySpan<char> x)
         {
-            return new LazinatorWrapperReadOnlySpanChar() { Value = x };
+            return new LazinatorWrapperReadOnlySpanChar(x);
         }
 
         public static implicit operator ReadOnlySpan<char>(LazinatorWrapperReadOnlySpanChar x)

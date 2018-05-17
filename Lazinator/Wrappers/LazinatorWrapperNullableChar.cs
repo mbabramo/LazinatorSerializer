@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableChar(char? x)
         {
-            return new LazinatorWrapperNullableChar() { Value = x };
+            return new LazinatorWrapperNullableChar(x);
         }
 
         public static implicit operator char? (LazinatorWrapperNullableChar x)

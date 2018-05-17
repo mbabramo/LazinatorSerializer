@@ -13,7 +13,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperShort(short x)
         {
-            return new LazinatorWrapperShort() { Value = x };
+            return new LazinatorWrapperShort(x);
         }
 
         public static implicit operator short(LazinatorWrapperShort x)

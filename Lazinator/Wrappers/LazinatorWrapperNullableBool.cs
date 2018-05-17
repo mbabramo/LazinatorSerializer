@@ -18,7 +18,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator LazinatorWrapperNullableBool(bool? x)
         {
-            return new LazinatorWrapperNullableBool() { Value = x };
+            return new LazinatorWrapperNullableBool(x);
         }
 
         public static implicit operator bool?(LazinatorWrapperNullableBool x)
