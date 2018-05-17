@@ -56,6 +56,8 @@
         Concrete6,
         ClosedGeneric,
         InheritingClosedGeneric,
-        ContainerWithAbstract1
+        ContainerWithAbstract1,
+        ExampleStructWithoutClass,
+        ContainerForExampleStructWithoutClass
     }
 }

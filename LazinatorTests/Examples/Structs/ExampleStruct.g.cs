@@ -40,7 +40,7 @@ namespace LazinatorTests.Examples
             {
                 return;
             }
-
+            
             if (LazinatorParentClass != null)
             {
                 throw new LazinatorDeserializationException("A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.");
