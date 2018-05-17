@@ -161,9 +161,26 @@ namespace Lazinator.CodeDescription
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                        additionalDirtinessChecks += $" || ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty)";
+                        additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
                     else
-                        additionalDirtinessChecks += $" || ({property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                        additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                }
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
+                    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
+            }
+
+            string markClean = "";
+            if (!IsAbstract)
+            {
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+                {
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                        markClean += $@"
+                            if (
+                            {{
+                            }}";
+                    else
+                        markClean += $" || ({property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
                 }
             }
 
@@ -208,6 +225,8 @@ namespace Lazinator.CodeDescription
 			                get;
 			                set;
                         }}
+
+                        //DEBUGpublic abstract void MarkHierarchyClean();
                         
                         public abstract DeserializationFactory DeserializationFactory {{ get; set; }}
 		                

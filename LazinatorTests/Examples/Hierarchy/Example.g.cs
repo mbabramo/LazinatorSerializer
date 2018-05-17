@@ -118,6 +118,20 @@ namespace LazinatorTests.Examples
             else
             InformParentOfDirtinessDelegate();
         }
+
+        public virtual void MarkHierarchyClean()
+        {
+            IsDirty = false;
+            DescendantIsDirty = false;
+            // Lazinator properties like this
+            if (_ExcludableChild_Accessed)
+            {
+                _ExcludableChild.IsDirty = false;
+                _ExcludableChild.DescendantIsDirty = false;
+            }
+            // Non-Lazinator properties with Dirty flags like this:
+            _MyNonLazinatorChild_Dirty = false;
+        }
         
         private bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
