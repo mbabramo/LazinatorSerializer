@@ -70,7 +70,7 @@ namespace Lazinator.Core
         /// <summary>
         /// Marks a hierarchy as clean, setting all IsDirty and DescendantIsDirty values to false. This may be called manually after a hierarchy is serialized and persisted, for example if further changes may be made to the hierarchy.
         /// </summary>
-        void MarkHierarchyClean();
+        //void MarkHierarchyClean();
 
         /// <summary>
         /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.

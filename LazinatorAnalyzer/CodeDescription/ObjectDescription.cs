@@ -175,7 +175,7 @@ namespace Lazinator.CodeDescription
             {
                 markHierarchyCleanMethod = $@"public {DerivationKeyword}void MarkHierarchyClean()
                             {{";
-                if (DerivationKeyword == "override ")
+                if (IsDerivedFromNonAbstractLazinator)
                     markHierarchyCleanMethod += $@"
                         base.MarkHierarchyClean();";
                 else
