@@ -40,6 +40,8 @@ namespace Lazinator.CodeDescription
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
         public bool ImplementsPreSerialization { get; set; }
         public bool ImplementsPostDeserialization { get; set; }
+        public bool ImplementsOnDirty { get; set; }
+        public bool ImplementsOnDescendantDirty { get; set; }
         public List<string> GenericArgumentNames { get; set; }
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public LazinatorCompilation Compilation;
@@ -108,6 +110,8 @@ namespace Lazinator.CodeDescription
             ImplementsLazinatorObjectVersionUpgrade = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "LazinatorObjectVersionUpgrade"));
             ImplementsPreSerialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PreSerialization"));
             ImplementsPostDeserialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PostDeserialization"));
+            ImplementsOnDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDirty"));
+            ImplementsOnDescendantDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDescendantDirty"));
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
@@ -364,7 +368,8 @@ namespace Lazinator.CodeDescription
                                     _IsDirty = value;
                                     if (_IsDirty)
                                     {{
-                                        InformParentOfDirtiness();
+                                        InformParentOfDirtiness();{(ImplementsOnDirty ? $@"
+                                        OnDirty();" : "")}
                                     }}
                                 }}
                             }}
@@ -381,7 +386,9 @@ namespace Lazinator.CodeDescription
                                 }}
                             }}
                             else
+                            {{
                                 InformParentOfDirtinessDelegate();
+                            }}
                         }}
 
                         private bool _DescendantIsDirty;
@@ -398,7 +405,11 @@ namespace Lazinator.CodeDescription
                                     if (_DescendantIsDirty && LazinatorParentClass != null)
                                     {{
                                         LazinatorParentClass.DescendantIsDirty = true;
-                                    }}
+                                    }}{(ImplementsOnDescendantDirty ? $@"
+                                    else if (_DescendantIsDirty)
+                                    {{
+                                        OnDescendantDirty();
+                                    }}" : "")}
                                 }}
                             }}
                         }}
