@@ -14,7 +14,7 @@ namespace LazinatorTests.Examples
         ExampleChild MyChild1 { get; set; }
         ExampleChild MyChild2 { get; set; }
         [EliminatedWithVersion(3)] ExampleChild MyChild2Previous { get; set; }
-        DateTime MyDateTime { get; set; }
+        [InsertAttribute("Newtonsoft.Json.JsonProperty(\"MyDT\")")] DateTime MyDateTime { get; set; }
         IExampleNonexclusiveInterface MyInterfaceImplementer { get; set; }
         [IntroducedWithVersion(3)] string MyNewString { get; set; }
         NonLazinatorClass MyNonLazinatorChild { get; set; }

@@ -164,7 +164,7 @@ namespace Lazinator.CodeDescription
                 foreach (var a in InsertAttributes)
                     textToInsert += $@"[{a.AttributeText}]
                                         ";
-                return textToInset;
+                return textToInsert;
             }
             else return "";
         }
