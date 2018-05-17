@@ -665,7 +665,9 @@ namespace LazinatorTests.Examples
                 {
                     _MyNonLazinatorChild_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

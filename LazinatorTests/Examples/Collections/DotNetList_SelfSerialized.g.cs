@@ -232,7 +232,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyListSerialized_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

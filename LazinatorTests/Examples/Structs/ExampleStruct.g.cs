@@ -119,7 +119,7 @@ namespace LazinatorTests.Examples
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyLazinatorList_Accessed && MyLazinatorList_Dirty);
+            get => _DescendantIsDirty || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -349,7 +349,9 @@ namespace LazinatorTests.Examples
                 {
                     _MyLazinatorList_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

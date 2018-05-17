@@ -232,7 +232,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyQueueInt_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

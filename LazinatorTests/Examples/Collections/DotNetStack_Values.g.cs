@@ -232,7 +232,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyStackInt_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

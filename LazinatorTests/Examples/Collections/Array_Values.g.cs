@@ -234,7 +234,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyArrayInt_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

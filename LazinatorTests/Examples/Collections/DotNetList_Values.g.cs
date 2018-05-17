@@ -236,7 +236,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyLinkedListInt_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }
@@ -285,7 +287,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyListInt_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }
@@ -334,7 +338,9 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MySortedSetInt_Dirty = value;
                     if (value && !IsDirty)
-                    IsDirty = true;
+                    {
+                        IsDirty = true;
+                    }
                 }
             }
         }

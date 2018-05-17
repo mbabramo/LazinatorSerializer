@@ -165,7 +165,7 @@ namespace Lazinator.CodeDescription
                     else
                         additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
                 }
-                // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true.
+                // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty.
                 //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
                 //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
             }
