@@ -112,7 +112,9 @@ namespace Lazinator.Collections.Dictionary
                 }
             }
             else
-            InformParentOfDirtinessDelegate();
+            {
+                InformParentOfDirtinessDelegate();
+            }
         }
         
         private bool _DescendantIsDirty;

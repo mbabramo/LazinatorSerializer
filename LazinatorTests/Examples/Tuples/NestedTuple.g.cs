@@ -112,7 +112,9 @@ namespace LazinatorTests.Examples.Tuples
                 }
             }
             else
-            InformParentOfDirtinessDelegate();
+            {
+                InformParentOfDirtinessDelegate();
+            }
         }
         
         private bool _DescendantIsDirty;

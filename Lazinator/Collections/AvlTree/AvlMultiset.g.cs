@@ -112,7 +112,9 @@ namespace Lazinator.Collections.AvlTree
                 }
             }
             else
-            InformParentOfDirtinessDelegate();
+            {
+                InformParentOfDirtinessDelegate();
+            }
         }
         
         private bool _DescendantIsDirty;
