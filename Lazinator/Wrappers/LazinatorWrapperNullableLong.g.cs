@@ -199,7 +199,7 @@ namespace Lazinator.Wrappers
                 return _Value;
             }
             [DebuggerStepThrough]
-            set
+            private set
             {
                 IsDirty = true;
                 _Value = value;

@@ -1333,8 +1333,7 @@ namespace LazinatorTests.Tests
         public void LazinatorTuple()
         {
             LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString> item =
-                new LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString>(new LazinatorWrapperInt() {Value = 5},
-                    new LazinatorWrapperString() {Value = "hello"});
+                new LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString>(5, "hello");
             var clone = item.CloneLazinatorTyped();
             clone.Item1.Value.Should().Be(5);
             clone.Item2.Value.Should().Be("hello");
@@ -2096,8 +2095,8 @@ namespace LazinatorTests.Tests
         [Fact]
         void BinaryHashInList()
         {
-            var wrapped = new LazinatorWrapperInt() {Value = 1};
-            var wrapped2 = new LazinatorWrapperInt() { Value = 1 };
+            var wrapped = new LazinatorWrapperInt(1);
+            var wrapped2 = new LazinatorWrapperInt(1);
             LazinatorList<LazinatorWrapperInt> x = new LazinatorList<LazinatorWrapperInt>();
             x.Add(wrapped2);
             x.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
