@@ -125,6 +125,28 @@ namespace Lazinator.Collections
             //    Offsets.IsDirty = true;
         }
 
+        public virtual void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            if (FullyDeserialized)
+                foreach (var item in UnderlyingList)
+                    if (item != null)
+                        item.MarkHierarchyClean();
+            else
+            {
+                for (int i = 0; i < ItemsAccessedBeforeFullyDeserialized.Count; i++)
+                {
+                    if (ItemsAccessedBeforeFullyDeserialized[i])
+                    {
+                        var item2 = ((IList<T>)UnderlyingList)[i];
+                        if (item2 != null)
+                           item2.MarkHierarchyClean();
+                    }
+                }
+            }
+        }
+
         public int Count
         {
             get

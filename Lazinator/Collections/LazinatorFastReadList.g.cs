@@ -119,6 +119,12 @@ namespace Lazinator.Collections
                 }
             }
         }
+
+        public virtual void MarkHierarchyClean()
+        {
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+        }
         
         public DeserializationFactory DeserializationFactory { get; set; }
 
