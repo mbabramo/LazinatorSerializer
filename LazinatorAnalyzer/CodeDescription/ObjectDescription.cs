@@ -156,11 +156,13 @@ namespace Lazinator.CodeDescription
             string classContainingStructContainingClassError = "";
             if (ObjectType == LazinatorObjectType.Struct)
             {
-                if (PropertiesToDefineThisLevel.Any(x => !x.IsPrimitive))
+                if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface))
                     classContainingStructContainingClassError = $@"
 
                         if (LazinatorParentClass != null)
-                            throw new LazinatorDeserializationException(""A Lazinator struct may include a child that is a non-basic type (like int? or string) only when the Lazinator struct has no parent class. Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct."");";
+                        {{
+                            throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.""
+                        }});"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 
             }
 
                 string additionalDirtinessChecks = "";
