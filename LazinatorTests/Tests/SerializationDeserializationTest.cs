@@ -1884,6 +1884,32 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListEmptyWorks()
+        {
+            LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory()
+            };
+            nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
+            var clone = nonGenericContainer.CloneLazinatorTyped();
+            var listInClone = clone.MyList;
+            listInClone.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void LazinatorListNullWorks()
+        {
+            LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory()
+            };
+            nonGenericContainer.MyList = null;
+            var clone = nonGenericContainer.CloneLazinatorTyped();
+            var listInClone = clone.MyList;
+            listInClone.Should().BeNull();
+        }
+
+        [Fact]
         public void LazinatorListDirtinessWorks()
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
@@ -1893,7 +1919,7 @@ namespace LazinatorTests.Tests
             nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
             nonGenericContainer.MyList.IsDirty.Should().BeTrue();
             nonGenericContainer.IsDirty.Should().BeTrue();
-            nonGenericContainer.DescendantIsDirty.Should().BeTrue();
+            nonGenericContainer.DescendantIsDirty.Should().BeFalse(); // MyList counts as a property of the container. Thus, the container is dirty, but we don't count that as a descendant being dirty. 
 
             var v2 = nonGenericContainer.CloneLazinatorTyped();
             v2.IsDirty.Should().BeFalse();
