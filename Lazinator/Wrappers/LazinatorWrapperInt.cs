@@ -6,22 +6,9 @@ namespace Lazinator.Wrappers
     {
         public bool HasValue => true;
 
-        public LazinatorWrapperInt(int x)
-        {
-            _Value = x;
-            _HierarchyBytes = default;
-            _LazinatorObjectBytes = null;
-            _IsDirty = true;
-            OriginalIncludeChildrenMode = Core.IncludeChildrenMode.IncludeAllChildren;
-            _DescendantIsDirty = false;
-            LazinatorParentClass = null;
-            InformParentOfDirtinessDelegate = null;
-            DeserializationFactory = null;
-        }
-
         public static implicit operator LazinatorWrapperInt(int x)
         {
-            return new LazinatorWrapperInt(x);
+            return new LazinatorWrapperInt() { Value = x };
         }
 
         public static implicit operator int(LazinatorWrapperInt x)
