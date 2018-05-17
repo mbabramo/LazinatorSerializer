@@ -42,7 +42,9 @@ namespace LazinatorTests.Examples
             }
 
             if (LazinatorParentClass != null)
-                throw new LazinatorDeserializationException("A Lazinator struct may include a child that is a non-basic type (like int? or string) only when the Lazinator struct has no parent class. Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct.");
+            {
+                throw new LazinatorDeserializationException("A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.");
+            }
             
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
