@@ -1982,6 +1982,37 @@ namespace LazinatorTests.Tests
 
         }
 
+        [Fact]
+        public void MarkHierarchyCleanWithStructsWorks()
+        {
+            ExampleStructContainer container = new ExampleStructContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                MyExampleStruct = new ExampleStruct()
+                {
+                    MyChild1 = GetExampleChild(1)
+                }
+            };
+            var clone = container.CloneLazinatorTyped();
+            clone.IsDirty.Should().BeFalse();
+            clone.DescendantIsDirty.Should().BeFalse();
+            // warning: It's tempting to just do the following:            
+            // clone.MyExampleStruct.MyChild1.MyLong = 25;
+            // but that just returns a copy of the struct, so MyLong is changed only in the copy.
+            var copyOfStruct = clone.MyExampleStruct_Copy;
+            copyOfStruct.MyChild1.MyLong = 25;
+            clone.MyExampleStruct = copyOfStruct;
+            clone.MyExampleStruct.MyChild1.IsDirty.Should().BeTrue();
+            clone.MyExampleStruct.DescendantIsDirty.Should().BeTrue();
+            clone.IsDirty.Should().BeTrue();
+
+            clone.MarkHierarchyClean();
+            clone.MyExampleStruct.MyChild1.IsDirty.Should().BeFalse();
+            clone.MyExampleStruct.DescendantIsDirty.Should().BeFalse();
+            clone.DescendantIsDirty.Should().BeFalse();
+            clone.IsDirty.Should().BeFalse();
+        }
+
         private void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)
         {
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
