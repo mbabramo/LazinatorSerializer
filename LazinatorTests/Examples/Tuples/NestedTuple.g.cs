@@ -195,8 +195,8 @@ namespace LazinatorTests.Examples.Tuples
         private int _NestedTuple_EndByteIndex;
         protected virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
         
-        private Tuple<uint?, ValueTuple<>, LazinatorTests.Examples.NonLazinatorClass> _MyNestedTuple;
-        public Tuple<uint?, ValueTuple<>, LazinatorTests.Examples.NonLazinatorClass> MyNestedTuple
+        private Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> _MyNestedTuple;
+        public Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> MyNestedTuple
         {
             [DebuggerStepThrough]
             get
@@ -205,7 +205,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyNestedTuple = default(Tuple<uint?, ValueTuple<>, LazinatorTests.Examples.NonLazinatorClass>);
+                        _MyNestedTuple = default(Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass>);
                     }
                     else
                     {
@@ -261,7 +261,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion of supported collections and tuples */
         
-        private static Tuple<uint?, ValueTuple<>, LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -273,12 +273,12 @@ namespace LazinatorTests.Examples.Tuples
             
             uint? item1 = span.ToDecompressedNullableUint(ref bytesSoFar);
             
-            ValueTuple<> item2 = default;
+            ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>> item2 = default;
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = ConvertFromBytes_ValueTuple(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item2 = ConvertFromBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -291,12 +291,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<uint?, ValueTuple<>, LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(BinaryBufferWriter writer, Tuple<uint?, ValueTuple<>, LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(BinaryBufferWriter writer, Tuple<uint?, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>>, LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedNullableUint(writer, itemToConvert.Item1);
             
-            void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
+            void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
             WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             
             if (itemToConvert.Item3 == null)
@@ -319,7 +319,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static ValueTuple<> ConvertFromBytes_ValueTuple(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>> ConvertFromBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -329,13 +329,171 @@ namespace LazinatorTests.Examples.Tuples
             
             int bytesSoFar = 0;
             
-            var tupleType = ();
+            LazinatorTests.Examples.ExampleChild item1 = default;
+            int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item1 != 0)
+            {
+                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
+                if (deserializationFactory == null)
+                {
+                    throw new MissingDeserializationFactoryException();
+                }
+                item1 = (LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+            }
+            bytesSoFar += lengthCollectionMember_item1;
+            
+            ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>> item2 = default;
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item2 != 0)
+            {
+                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                item2 = ConvertFromBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(childData, deserializationFactory, informParentOfDirtinessDelegate);
+            }
+            bytesSoFar += lengthCollectionMember_item2;
+            
+            var tupleType = (item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple(BinaryBufferWriter writer, ValueTuple<> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(BinaryBufferWriter writer, ValueTuple<LazinatorTests.Examples.ExampleChild, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            
+            if (itemToConvert.Item1 == null)
+            {
+                writer.Write((int) 0);
+            }
+            else
+            {
+                void actionItem1(BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem1);
+            };
+            
+            void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
+            WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
+        }
+        
+        private static ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>> ConvertFromBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.Span;
+            
+            int bytesSoFar = 0;
+            
+            uint item1 = span.ToDecompressedUint(ref bytesSoFar);
+            
+            ValueTuple<int, string>? item2 = default;
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item2 != 0)
+            {
+                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                item2 = ConvertFromBytes_Nullable_ValueTuple_int_string(childData, deserializationFactory, informParentOfDirtinessDelegate);
+            }
+            bytesSoFar += lengthCollectionMember_item2;
+            
+            Tuple<short, long> item3 = default;
+            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item3 != 0)
+            {
+                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
+                item3 = ConvertFromBytes_Tuple_short_long(childData, deserializationFactory, informParentOfDirtinessDelegate);
+            }
+            bytesSoFar += lengthCollectionMember_item3;
+            
+            var tupleType = (item1, item2, item3);
+            
+            return tupleType;
+        }
+        
+        private static void ConvertToBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(BinaryBufferWriter writer, ValueTuple<uint, ValueTuple<int, string>?, Tuple<short, long>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
+            
+            CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Item1);
+            
+            if (itemToConvert.Item2 == null)
+            {
+                writer.Write((uint) 0);
+            }
+            else
+            {
+                void actionItem2(BinaryBufferWriter w) => ConvertToBytes_Nullable_ValueTuple_int_string(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
+            }
+            
+            if (itemToConvert.Item3 == null)
+            {
+                writer.Write((uint) 0);
+            }
+            else
+            {
+                void actionItem3(BinaryBufferWriter w) => ConvertToBytes_Tuple_short_long(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
+            }
+        }
+        
+        private static ValueTuple<int, string>? ConvertFromBytes_Nullable_ValueTuple_int_string(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt(ref bytesSoFar);
+            
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            
+            var tupleType = (item1, item2);
+            
+            return tupleType;
+        }
+        
+        private static void ConvertToBytes_Nullable_ValueTuple_int_string(BinaryBufferWriter writer, ValueTuple<int, string>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Value.Item1);
+            
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Value.Item2);
+        }
+        
+        private static Tuple<short, long> ConvertFromBytes_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.Span;
+            
+            int bytesSoFar = 0;
+            
+            short item1 = span.ToDecompressedShort(ref bytesSoFar);
+            
+            long item2 = span.ToDecompressedLong(ref bytesSoFar);
+            
+            var tupleType = new Tuple<short, long>(item1, item2);
+            
+            return tupleType;
+        }
+        
+        private static void ConvertToBytes_Tuple_short_long(BinaryBufferWriter writer, Tuple<short, long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            CompressedIntegralTypes.WriteCompressedShort(writer, itemToConvert.Item1);
+            
+            CompressedIntegralTypes.WriteCompressedLong(writer, itemToConvert.Item2);
         }
         
     }

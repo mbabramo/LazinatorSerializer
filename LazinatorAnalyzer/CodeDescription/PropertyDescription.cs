@@ -84,10 +84,6 @@ namespace Lazinator.CodeDescription
             Container = container;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
-            if (PropertyName == "MyTuple")
-            {
-                var DEBUG = 0;
-            }
             
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
@@ -239,11 +235,7 @@ namespace Lazinator.CodeDescription
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
                 if (namedTypeSymbol != null)
-                {
                     TypeName = TypeNameEncodable = EncodableTypeName(namedTypeSymbol);
-                    if (namedTypeSymbol.TupleElements != null)
-                        SetTypeNameForValueTuple(namedTypeSymbol);
-                }
                 if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeName))
                 {
                     PropertyType = LazinatorPropertyType.PrimitiveType;
@@ -302,7 +294,6 @@ namespace Lazinator.CodeDescription
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
         {
-            INamedTypeSymbol originalType = t;
             if (t.TupleUnderlyingType != null)
                 t = t.TupleUnderlyingType;
             if (t.IsGenericType)
@@ -311,10 +302,7 @@ namespace Lazinator.CodeDescription
                 CheckSupportedTuples(name);
                 if (PropertyType == LazinatorPropertyType.SupportedTuple)
                 {
-                    if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple && originalType.TupleElements.Any(x => x.Name != null))
-                        SetSupportedTupleTypeNameAndPropertyType(originalType, name);
-                    else
-                        SetSupportedTupleTypeNameAndPropertyType(t, name);
+                    SetSupportedTupleTypeNameAndPropertyType(t, name);
                     return true;
                 }
 
@@ -522,26 +510,15 @@ namespace Lazinator.CodeDescription
             if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple)
             {
                 var namedTypeSymbol = (PropertySymbol?.Type ?? TypeSymbol) as INamedTypeSymbol;
-                SetTypeNameForValueTuple(namedTypeSymbol);
-            }
-            if (TypeName == null)
-                TypeName = name + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
-            TypeNameEncodable = EncodableTypeName(name, typeArguments);
-        }
-
-        private void SetTypeNameForValueTuple(INamedTypeSymbol namedTypeSymbol)
-        {
-            if (namedTypeSymbol != null && namedTypeSymbol.TupleElements != null && namedTypeSymbol.TupleElements.First().Name != "Item1")
-            {
-                if (InnerProperties == null || !InnerProperties.Any())
-                    InnerProperties = namedTypeSymbol.TupleElements
-                                    .Select(x => new PropertyDescription(x.Type, Container)).ToList();
-                if (InnerProperties != null && InnerProperties.Any())
+                if (namedTypeSymbol != null && namedTypeSymbol.TupleElements != null && namedTypeSymbol.TupleElements.Count() == InnerProperties.Count() && namedTypeSymbol.TupleElements.First().Name != "Item1")
                 {
                     var zipped = namedTypeSymbol.TupleElements.Zip(InnerProperties, (x, y) => new { TupleElement = x, InnerProperty = y });
                     TypeName = "(" + string.Join(", ", zipped.Select(x => x.InnerProperty.FullyQualifiedTypeName + " " + x.TupleElement.Name)) + ")";
                 }
             }
+            if (TypeName == null)
+                TypeName = name + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
+            TypeNameEncodable = EncodableTypeName(name, typeArguments);
         }
 
         private void CheckSupportedCollections(string nameWithoutArity)

@@ -7,6 +7,6 @@ namespace LazinatorTests.Examples.Tuples
     public interface IStructTuple
     {
         (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized { get; set; }
-        (int first, double second)? MyNullableTuple { get; set; }
+        (int, double)? MyNullableTuple { get; set; }
     }
 }
