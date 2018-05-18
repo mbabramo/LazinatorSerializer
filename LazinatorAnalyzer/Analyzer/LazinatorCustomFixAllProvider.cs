@@ -285,6 +285,8 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     Document document1 = changedSolution.GetDocument(documentId);
                     var documentText = await document1.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                    if (!currentSolution.ContainsDocument(documentId))
+                        currentSolution = currentSolution.AddDocument(DocumentInfo.Create(documentId, document1.Name, document1.Folders));
                     currentSolution = currentSolution.WithDocumentText(documentId, documentText);
                 }
 

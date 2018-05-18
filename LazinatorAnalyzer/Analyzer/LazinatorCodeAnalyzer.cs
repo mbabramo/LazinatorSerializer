@@ -143,7 +143,8 @@ namespace LazinatorAnalyzer.Analyzer
                                 namedInterfaceType = namedType;
                                 // Note: A more comprehensive, but slower approach would be to use context.Compilation.GlobalNamespace...
                             }
-                            return;
+                            else
+                                return;
                         }
                         else
                         {

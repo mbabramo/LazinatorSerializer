@@ -29,6 +29,7 @@ namespace LazinatorAnalyzer.Settings
             InterchangeConverters = new Dictionary<string, string>(); // default
             DirectConverters = new Dictionary<string, string>();
             IgnoreRecordLikeTypes = new List<string>();
+            IncludeMismatchedRecordLikeTypes = new List<string>();
             if (configString != null)
             {
                 try

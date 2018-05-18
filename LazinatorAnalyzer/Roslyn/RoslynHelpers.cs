@@ -91,6 +91,9 @@ namespace LazinatorCodeGen.Roslyn
         )
         {
 
+            if (attributeData.AttributeConstructor == null)
+                return null; // attribute is not fully formed yet
+
             // Get the parameter
             IParameterSymbol parameterSymbol = attributeData.AttributeConstructor
                 .Parameters
@@ -232,6 +235,17 @@ namespace LazinatorCodeGen.Roslyn
         private static HashSet<MethodDeclarationSyntax> GetMethodDeclarations(TypeDeclarationSyntax typeDeclaration)
         {
             return new HashSet<MethodDeclarationSyntax>(typeDeclaration.DescendantNodes().Where(x => x is MethodDeclarationSyntax).Cast<MethodDeclarationSyntax>());
+        }
+
+        public static bool IsReadOnlyStruct(this ITypeSymbol type)
+        {
+            if (type == null || type.TypeKind != TypeKind.Struct)
+                return false;
+            // It does not appear to be possible to determine this only through the semantic model, as DeclarationModifiers is not in the public API of Roslyn. Thus, we look at the Syntax tree.
+            bool isReadOnly = (type.DeclaringSyntaxReferences
+                    .Any(x => ((StructDeclarationSyntax)x.SyntaxTree.GetRoot().FindNode(x.Span))
+                        .Modifiers.Any(y => y.Text == "readonly")));
+            return isReadOnly;
         }
     }
 }

@@ -289,7 +289,7 @@ namespace Lazinator.CodeDescription
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
                 throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} has both an interchange converter and a direct converter type listed. Only one should be used.");
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
-                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it.");
+                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically.");
         }
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
@@ -730,7 +730,7 @@ namespace Lazinator.CodeDescription
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{(IsGuaranteedSmall ? ", true" : "")});
                         {creation}
                     }}
-                    _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized ? $@"
+                    _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbol) ? $@"
                     IsDirty = true;" : "")}
                 }}
                 return _{PropertyName};
