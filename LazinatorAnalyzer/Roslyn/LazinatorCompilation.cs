@@ -382,21 +382,23 @@ namespace LazinatorCodeGen.Roslyn
                 NonRecordLikeTypes.Add(type);
             else
             {
+                if (type.GetFullyQualifiedName().Contains("NonLazinatorClass"))
+                {
+                    var DEBUG = 0;
+                }
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
-                    if (!parameters.Any())
-                        continue;
                     var properties = GetPropertyWithDefinitionInfo(type);
-                    if (parameters.Count() < properties.Count())
+                    if (parameters.Count() < properties.Count() || !parameters.Any())
                     {
                         bool isPermissible = Config != null && Config.IncludeMismatchedRecordLikeTypes != null && Config.IncludeMismatchedRecordLikeTypes.Contains(type.GetFullyQualifiedName());
                         if (!isPermissible)
                             break; 
                     }
-                    if (parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
+                    if (parameters.All(x => properties.Any(y => y.Property.Name.ToUpper() == x.Name.ToUpper())))
                     {
-                        List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();
+                        List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name.ToUpper() == x.Name.ToUpper()).Property)).ToList();
                         if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
                             continue;
                         // we have found the constructor for our record like type
