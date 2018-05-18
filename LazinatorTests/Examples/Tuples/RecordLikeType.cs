@@ -35,36 +35,4 @@ namespace LazinatorTests.Examples
             this = other;
         }
     }
-
-    public struct DEBUG
-    {
-        public int Age { get; }
-        public string Name { get; }
-
-        public DEBUG(int age, string name)
-        {
-            this.Age = age;
-            this.Name = name;
-        }
-
-        public DEBUG(int age, string name, string address)
-        {
-            throw new NotImplementedException(); // this constructor should not be called
-        }
-
-        public DEBUG(string age, string name)
-        {
-            throw new NotImplementedException(); // this constructor should not be called
-        }
-
-        public DEBUG(int age) : this(age, "NoName")
-        {
-
-        }
-
-        public DEBUG(DEBUG other)
-        {
-            this = other;
-        }
-    }
 }

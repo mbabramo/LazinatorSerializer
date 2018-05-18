@@ -454,6 +454,7 @@ namespace Lazinator.CodeDescription
             if (!recordLikeTypes.ContainsKey(t) || (Container.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == t.GetFullyQualifiedName().ToUpper()) ?? false))
                 return false;
 
+            TypeSymbol = t;
             PropertyType = LazinatorPropertyType.SupportedTuple;
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
             Nullable = false;

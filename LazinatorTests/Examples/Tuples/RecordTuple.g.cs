@@ -217,7 +217,6 @@ namespace LazinatorTests.Examples.Tuples
                         _MyMismatchedRecordLikeType = ConvertFromBytes_LazinatorTests_Examples_MismatchedRecordLikeType(childData, DeserializationFactory, null);
                     }
                     _MyMismatchedRecordLikeType_Accessed = true;
-                    IsDirty = true;
                 }
                 return _MyMismatchedRecordLikeType;
             }
@@ -279,7 +278,6 @@ namespace LazinatorTests.Examples.Tuples
                         _MyRecordLikeType = ConvertFromBytes_LazinatorTests_Examples_RecordLikeType(childData, DeserializationFactory, null);
                     }
                     _MyRecordLikeType_Accessed = true;
-                    IsDirty = true;
                 }
                 return _MyRecordLikeType;
             }
