@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTuple_ByteIndex, _MyTuple_ByteLength);
-                        _MyTuple = ConvertFromBytes_ValueTuple_NonLazinatorClass_Nullable_int(childData, DeserializationFactory, null);
+                        _MyTuple = ConvertFromBytes_ValueTuple(childData, DeserializationFactory, null);
                     }
                     _MyTuple_Accessed = true;
                     IsDirty = true;
@@ -536,7 +536,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ValueTuple_NonLazinatorClass_Nullable_int(w, copy_MyTuple, includeChildrenMode, v));
+            ConvertToBytes_ValueTuple(w, copy_MyTuple, includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
@@ -635,7 +635,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes_ValueTuple_NonLazinatorClass_Nullable_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes_ValueTuple(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -661,7 +661,7 @@ namespace LazinatorTests.Examples
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_NonLazinatorClass_Nullable_int(BinaryBufferWriter writer, (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple(BinaryBufferWriter writer, (LazinatorTests.Examples.NonLazinatorClass myitem1, int? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             if (itemToConvert.Item1 == null)
