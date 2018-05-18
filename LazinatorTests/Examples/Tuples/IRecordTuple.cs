@@ -10,5 +10,6 @@ namespace LazinatorTests.Examples.Tuples
     {
         RecordLikeType MyRecordLikeType { get; set; }
         RecordLikeClass MyRecordLikeClass { get; set; }
+        MismatchedRecordLikeType MyMismatchedRecordLikeType { get; set; }
     }
 }

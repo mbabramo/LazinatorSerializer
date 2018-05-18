@@ -8,5 +8,8 @@
   },
   "IgnoreRecordLikeTypes": [
     "LazinatorTests.Examples.NonLazinatorStruct"
+  ],
+  "IncludeMismatchedRecordLikeTypes": [
+    "LazinatorTests.Examples.MismatchedRecordLikeType"
   ]
 }

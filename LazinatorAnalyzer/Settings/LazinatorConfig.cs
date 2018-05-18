@@ -14,6 +14,7 @@ namespace LazinatorAnalyzer.Settings
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
         public List<string> IgnoreRecordLikeTypes;
+        public List<string> IncludeMismatchedRecordLikeTypes;
         public string ConfigFilePath;
         public string ConversionCodePath;
         public bool DefineConversionCodeOutsideClass => ConversionCodePath != null;
@@ -38,6 +39,7 @@ namespace LazinatorAnalyzer.Settings
                     const string DirectConvertersString = "DirectConverters";
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);
+                    LoadIncludeMismatchedRecordLikeTypes(json);
                     ConfigFilePath = configPath;
                     if (ConfigFilePath != null)
                         ConversionCodePath = ConfigFilePath + "\\" + (json["ConversionCodePath"]);
@@ -55,6 +57,14 @@ namespace LazinatorAnalyzer.Settings
             if (typeList != null)
                 foreach (var item in typeList)
                     IgnoreRecordLikeTypes.Add(item.AsString);
+        }
+
+        private void LoadIncludeMismatchedRecordLikeTypes(JsonObject json)
+        {
+            JsonArray typeList = json["IncludeMismatchedRecordLikeTypes"];
+            if (typeList != null)
+                foreach (var item in typeList)
+                    IncludeMismatchedRecordLikeTypes.Add(item.AsString);
         }
 
         private void LoadDictionary(JsonObject json, string mappingPropertyName, Dictionary<string, string> dictionary)

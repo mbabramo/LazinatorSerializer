@@ -388,7 +388,13 @@ namespace LazinatorCodeGen.Roslyn
                     if (!parameters.Any())
                         continue;
                     var properties = GetPropertyWithDefinitionInfo(type);
-                    if (parameters.Any() && parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
+                    if (parameters.Count() < properties.Count())
+                    {
+                        bool isPermissible = Config != null && Config.IncludeMismatchedRecordLikeTypes != null && Config.IncludeMismatchedRecordLikeTypes.Contains(type.GetFullyQualifiedName());
+                        if (!isPermissible)
+                            break; 
+                    }
+                    if (parameters.All(x => properties.Any(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name))))
                     {
                         List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name == x.Name || y.Property.Name == FirstCharToUpper(x.Name)).Property)).ToList();
                         if (parametersAndProperties.Any(x => x.parameterSymbol.Type != x.property.Type))
