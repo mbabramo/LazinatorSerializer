@@ -1595,7 +1595,7 @@ namespace Lazinator.CodeDescription
                 $"itemToConvert{((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable ? ".Value" : "")}.{itemName}";
             if (IsPrimitive)
                 return ($@"
-                        {WriteMethodName}(writer, {itemToConvertItemName});");
+                        {WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
             else if (IsNonSerializedType)
             {
                 if (Nullable)
