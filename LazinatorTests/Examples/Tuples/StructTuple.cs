@@ -12,6 +12,5 @@ namespace LazinatorTests.Examples.Tuples
         public StructTuple()
         {
         }
-
     }
 }

@@ -860,8 +860,8 @@ namespace LazinatorTests.Examples
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyOldString);
             }
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
-            CompressedIntegralTypes.WriteCompressedInt(writer, (int)_MyTestEnum);
-            CompressedIntegralTypes.WriteCompressedNullableByte(writer, (byte?)_MyTestEnumByteNullable);
+            CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyTestEnum);
+            CompressedIntegralTypes.WriteCompressedNullableByte(writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {

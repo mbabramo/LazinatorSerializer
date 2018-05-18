@@ -8,5 +8,7 @@ namespace LazinatorTests.Examples.Tuples
     {
         (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized { get; set; }
         (int, double)? MyNullableTuple { get; set; }
+        (int MyFirstItem, double MySecondItem) MyNamedTuple { get; set; }
+        (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple { get; set; }
     }
 }

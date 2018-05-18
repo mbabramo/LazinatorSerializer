@@ -21,6 +21,8 @@ namespace Lazinator.CodeDescription
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
         public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
         public string EnumEquivalentType { get; set; }
+        public string EnumEquivalentCastToEquivalentType => EnumEquivalentType != null ? $"({EnumEquivalentType}) " : $"";
+        public string EnumEquivalentCastToEnum => EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"";
         public string DerivationKeyword { get; set; }
         public bool IsAbstract { get; set; }
         public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
@@ -905,7 +907,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {(EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"")}span.{ReadMethodName}(ref bytesSoFar);"));
+                        CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
             else
             {
                 if (IsGuaranteedSmall)
@@ -935,7 +937,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {(EnumEquivalentType != null ? $"({EnumEquivalentType})" : $"")}_{PropertyName});"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
             else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
                 if (Container.ObjectType == LazinatorObjectType.Class)
@@ -1349,7 +1351,7 @@ namespace Lazinator.CodeDescription
             }
             if (IsPrimitive)
                 return ($@"
-                        {FullyQualifiedTypeName} item = span.{ReadMethodName}(ref bytesSoFar);
+                        {FullyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);
                         {collectionAddItem}");
             else if (IsNonSerializedType)
             {
@@ -1543,7 +1545,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 return ($@"
-                        {FullyQualifiedTypeName} {itemName} = span.{ReadMethodName}(ref bytesSoFar);");
+                        {FullyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);");
             else if (IsNonSerializedType)
                 return ($@"
                         {FullyQualifiedTypeName} {itemName} = default;

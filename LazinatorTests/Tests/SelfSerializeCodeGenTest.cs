@@ -254,7 +254,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(RegularTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
             await CompleteGenerateCode(typeof(KeyValuePairTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
             await CompleteGenerateCode(typeof(NestedTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
-            await CompleteGenerateCode(typeof(RecordTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
+            await CompleteGenerateCode(typeof(RecordLikeContainer), "LazinatorTests", "/Examples/", "Tuples/", ws);
         }
 
         private static List<string> GetDirectories()

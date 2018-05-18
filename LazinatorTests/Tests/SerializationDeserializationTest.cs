@@ -124,13 +124,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SelfSerializationRecordLikeTypes()
         {
-            RecordTuple original = new RecordTuple()
+            RecordLikeContainer original = new RecordLikeContainer()
             {
                 MyRecordLikeClass = new RecordLikeClass(23, new Example() { MyChar = 'q'}),
                 MyRecordLikeType = new RecordLikeType(12, "Sam")
             };
             MemoryInBuffer serialized = original.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
-            RecordTuple s2 = new RecordTuple()
+            RecordLikeContainer s2 = new RecordLikeContainer()
             {
                 DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = serialized
