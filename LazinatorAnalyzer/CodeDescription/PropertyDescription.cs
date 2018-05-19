@@ -28,19 +28,10 @@ namespace Lazinator.CodeDescription
         public bool IsAbstract { get; set; }
         public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         public string TypeNameShort => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+        public string TypeNameShortWithoutNullable => WithoutNullableIndicator(TypeNameShort);
         public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
-        public string FullyQualifiedNameWithoutNullableIndicator
-        {
-            get
-            {
-                string fn = FullyQualifiedTypeName;
-                if (fn.EndsWith("?"))
-                    return fn.Substring(0, fn.Length - 1);
-                else
-                    return fn;
-            }
-        }
+        public string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         public string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();
         public string WriteMethodName { get; set; }
         public string ReadMethodName { get; set; }
@@ -214,6 +205,11 @@ namespace Lazinator.CodeDescription
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
+            if (TypeNameShort == "decimal?")
+            {
+                var DEBUG = 0;
+            }
+
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
                 Nullable = true;
@@ -238,7 +234,7 @@ namespace Lazinator.CodeDescription
                     Nullable = true;
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
-                if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeNameShort))
+                if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeNameShortWithoutNullable))
                 {
                     PropertyType = LazinatorPropertyType.PrimitiveType;
                     return;

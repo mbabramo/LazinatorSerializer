@@ -275,7 +275,18 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (TypeRegularization.ContainsKey(typeName))
                 return TypeRegularization[typeName];
+            var withoutNullableIndicator = WithoutNullableIndicator(typeName);
+            if (TypeRegularization.ContainsKey(withoutNullableIndicator))
+                return TypeRegularization[withoutNullableIndicator] + "?";
             return typeName;
+        }
+
+        public static string WithoutNullableIndicator(string typeName)
+        {
+            if (typeName.EndsWith("?"))
+                return typeName.Substring(0, typeName.Length - 1);
+            else
+                return typeName;
         }
 
         public static string GetFullyQualifiedName(this ISymbol symbol)
