@@ -538,6 +538,10 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
+                if (property.ToString().Contains("ReflexiveRecord"))
+                {
+                    var DEBUG = 0;
+                }
                 property.AppendPropertyDefinitionString(sb);
             }
 

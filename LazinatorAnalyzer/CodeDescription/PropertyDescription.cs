@@ -16,7 +16,8 @@ namespace Lazinator.CodeDescription
     {
         #region Properties
 
-        public ObjectDescription Container { get; set; }
+        public ObjectDescription ContainingObjectDescription { get; set; }
+        public PropertyDescription ContainingPropertyDescription { get; set; }
         public string Namespace { get; set; }
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
         public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
@@ -55,7 +56,7 @@ namespace Lazinator.CodeDescription
         public bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         public IPropertySymbol PropertySymbol { get; set; }
         public ITypeSymbol TypeSymbol { get; set; } // if we don't have a property
-        public IEnumerable<Attribute> UserAttributes => Container.Compilation.GetAttributes(PropertySymbol);
+        public IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
         public IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
         public string PropertyAccessibility { get; set; }
         public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
@@ -83,17 +84,17 @@ namespace Lazinator.CodeDescription
         {
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
-            Container = container;
+            ContainingObjectDescription = container;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
             
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a get method.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.ObjectName} must include a get method.");
             if (propertySymbol.SetMethod == null && SetterAccessibility == null)
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {Container?.ObjectName} must include a set method or a SetterAccessibilityAttribute.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.ObjectName} must include a set method or a SetterAccessibilityAttribute.");
             if (propertySymbol.SetMethod != null && SetterAccessibility != null && SetterAccessibility.Choice != "public")
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {Container?.ObjectName} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.ObjectName} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
 
             ParseVersionAttributes();
 
@@ -106,11 +107,12 @@ namespace Lazinator.CodeDescription
             SetInclusionConditionals();
         }
 
-        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription container, string propertyName = null)
+        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             TypeSymbol = typeSymbol;
-            Container = container;
+            ContainingObjectDescription = containingObjectDescription;
+            ContainingPropertyDescription = containingPropertyDescription;
             PropertyName = propertyName;
             IsAbstract = typeSymbol.IsAbstract;
             SetTypeNameAndPropertyType(typeSymbol);
@@ -119,7 +121,7 @@ namespace Lazinator.CodeDescription
 
         public PropertyDescription(string @namespace, string name, ImmutableArray<ITypeSymbol> typeArguments, ObjectDescription container)
         {
-            Container = container;
+            ContainingObjectDescription = container;
             Namespace = @namespace;
             // IsAbstract = typeArguments.Any(x => x.IsAbstract);
             SetTypeNameWithInnerProperties(name, typeArguments);
@@ -249,7 +251,7 @@ namespace Lazinator.CodeDescription
             bool isReflexiveDefinition = false;
             if (namedTypeSymbol != null)
             {
-                if (namedTypeSymbol.Equals(Container?.InterfaceTypeSymbol))
+                if (namedTypeSymbol.Equals(ContainingObjectDescription?.InterfaceTypeSymbol))
                 {
                     if (!isILazinator)
                         throw new LazinatorCodeGenException(
@@ -257,7 +259,7 @@ namespace Lazinator.CodeDescription
                     isReflexiveDefinition = true;
                 }
 
-                if (namedTypeSymbol.Equals(Container?.ILazinatorTypeSymbol))
+                if (namedTypeSymbol.Equals(ContainingObjectDescription?.ILazinatorTypeSymbol))
                     isReflexiveDefinition = true;
             }
 
@@ -286,8 +288,8 @@ namespace Lazinator.CodeDescription
             TypeName = PrettyTypeName(t);
             TypeNameEncodable = EncodableTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
-            InterchangeTypeName = Container.Compilation.Config?.GetInterchangeConverterTypeName(t);
-            DirectConverterTypeName = Container.Compilation.Config?.GetDirectConverterTypeName(t);
+            InterchangeTypeName = ContainingObjectDescription.Compilation.Config?.GetInterchangeConverterTypeName(t);
+            DirectConverterTypeName = ContainingObjectDescription.Compilation.Config?.GetDirectConverterTypeName(t);
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
                 throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} has both an interchange converter and a direct converter type listed. Only one should be used.");
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
@@ -349,14 +351,14 @@ namespace Lazinator.CodeDescription
             IsInterface = t.TypeKind == TypeKind.Interface;
             if (!IsInterface)
             {
-                var exclusiveInterface = Container.Compilation.TypeToExclusiveInterface[t.OriginalDefinition];
-                CloneLazinatorAttribute attribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
+                var exclusiveInterface = ContainingObjectDescription.Compilation.TypeToExclusiveInterface[t.OriginalDefinition];
+                CloneLazinatorAttribute attribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                 if (attribute == null)
                     throw new LazinatorCodeGenException(
                         "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
                 UniqueIDForLazinatorType = attribute.UniqueID;
                 CloneSmallLazinatorAttribute smallAttribute =
-                    Container.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
+                    ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
                 if (smallAttribute != null)
                     IsGuaranteedSmall = true;
             }
@@ -378,7 +380,7 @@ namespace Lazinator.CodeDescription
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
-                new PropertyDescription(t.ElementType, Container)
+                new PropertyDescription(t.ElementType, ContainingObjectDescription, this)
             };
             string arrayIndicator, arrayTypeName;
             if (ArrayRank == 1)
@@ -452,9 +454,11 @@ namespace Lazinator.CodeDescription
         private bool HandleRecordLikeType(INamedTypeSymbol t)
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
-            var recordLikeTypes = Container.Compilation.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(t) || (Container.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == t.GetFullyQualifiedName().ToUpper()) ?? false))
+            var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
+            if (!recordLikeTypes.ContainsKey(t) || (ContainingObjectDescription.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == t.GetFullyQualifiedName().ToUpper()) ?? false))
+            {
                 return false;
+            }
 
             TypeSymbol = t;
             PropertyType = LazinatorPropertyType.SupportedTuple;
@@ -462,10 +466,29 @@ namespace Lazinator.CodeDescription
             Nullable = false;
 
             InnerProperties = recordLikeTypes[t]
-                .Select(x => new PropertyDescription(x.property.Type, Container, x.property.Name)).ToList();
+                .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
             TypeName = t.Name; // we're assuming there's no other struct / class with same name in a different namespace. Could use FullName as an antidote to that.
             TypeNameEncodable = EncodableTypeName(t);
             return true;
+        }
+
+        public IEnumerable<PropertyDescription> ContainingPropertyHierarchy()
+        {
+            if (ContainingPropertyDescription != null)
+            {
+                yield return ContainingPropertyDescription;
+                foreach (var cpd in ContainingPropertyDescription.ContainingPropertyHierarchy())
+                    yield return cpd;
+            }
+        }
+
+        public PropertyDescription GetNewPropertyDescriptionAvoidingRecursion(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName)
+        {
+            // see if the property has already been defined (in case this is a recursive hierarchy)
+            foreach (PropertyDescription pd in ContainingPropertyHierarchy())
+                if (pd.TypeSymbol == typeSymbol)
+                    throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
+            return new PropertyDescription(typeSymbol, containingObjectDescription, containingPropertyDescription, propertyName);
         }
 
         private void CheckSupportedTuples(string nameWithoutArity)
@@ -507,7 +530,7 @@ namespace Lazinator.CodeDescription
         private void SetTypeNameWithInnerProperties(string name, ImmutableArray<ITypeSymbol> typeArguments)
         {
             InnerProperties = typeArguments
-                            .Select(x => new PropertyDescription(x, Container)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
             TypeName = null;
             if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple)
             {
@@ -582,7 +605,7 @@ namespace Lazinator.CodeDescription
                 Nullable = true;
 
             InnerProperties = t.TypeArguments
-                .Select(x => new PropertyDescription(x, Container)).ToList();
+                .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
             TypeName = nameWithoutArity + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
             TypeNameEncodable = EncodableTypeName(t);
 
@@ -593,7 +616,7 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
                 // We process a Dictionary by treating it as a collection with KeyValuePairs. Thus, we must change to a single inner property of type KeyValuePair, which in turn has two inner properties equal to the properties of the type in our actual dictionary.
-                var replacementInnerProperty = new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, Container);
+                var replacementInnerProperty = new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
             }
         }
@@ -612,7 +635,7 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyDefinitionString(CodeStringBuilder sb)
         {
-            if (Container.IsAbstract)
+            if (ContainingObjectDescription.IsAbstract)
                 AppendAbstractPropertyDefinitionString(sb);
             else if (PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
                 AppendPrimitivePropertyDefinitionString(sb);
@@ -623,7 +646,7 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
-            string propertyString = $@"{Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed{(Container.ObjectType != LazinatorObjectType.Struct ? " = false" : "")};
+            string propertyString = $@"{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct ? " = false" : "")};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{abstractDerivationKeyword}{FullyQualifiedTypeName} {PropertyName}
         {{
             get;
@@ -635,14 +658,14 @@ namespace Lazinator.CodeDescription
 
         private string GetModifiedDerivationKeyword()
         {
-            if (Container.ObjectType == LazinatorObjectType.Struct || Container.IsSealed)
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.IsSealed)
                 return "";
             string modifiedDerivationKeyword = DerivationKeyword;
             if (modifiedDerivationKeyword == null)
             {
                 if (ContainsOpenGenericInnerProperty)
                     modifiedDerivationKeyword = "virtual "; // whether the container is or isn't abstract, this could be closed later on, so "virtual" is appropriate.
-                else if (Container.IsAbstract)
+                else if (ContainingObjectDescription.IsAbstract)
                     modifiedDerivationKeyword = "abstract ";
             }
 
@@ -681,7 +704,7 @@ namespace Lazinator.CodeDescription
             string assignment;
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
-                string selfReference = Container.ObjectType == LazinatorObjectType.Class ? ", this" : "";
+                string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : "";
                 if (IsInterface || IsAbstract)
                     assignment =
                     $@"
@@ -701,12 +724,12 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && Container.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
+                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{FullyQualifiedTypeNameEncodable}(childData, DeserializationFactory, {(automaticallyMarkDirtyWhenContainedObjectIsCreated ? $"() => {{ {PropertyName}_Dirty = true; }}" : "null")});";
             }
 
             string creation;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && Container.IsSealed) || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && ContainingObjectDescription.IsSealed) || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
                 // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
                 creation = GetManualObjectCreation();
@@ -751,7 +774,7 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
-        {Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
+        {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
 ");
 
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
@@ -797,7 +820,7 @@ namespace Lazinator.CodeDescription
                             _{PropertyName} = default;
                         }}
                         else ";
-            string lazinatorParentClassSet = Container.ObjectType == LazinatorObjectType.Struct ? "" : $@"
+            string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
                             LazinatorParentClass = this,";
             string creation = $@"{nullItemCheck}_{PropertyName} = new {FullyQualifiedTypeName}()
                     {{
@@ -837,7 +860,7 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;
             }}
         }}
-        {Container.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
+        {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
 ");
         }
 
@@ -940,7 +963,7 @@ namespace Lazinator.CodeDescription
                         CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
             else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                if (Container.ObjectType == LazinatorObjectType.Class)
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 {
                     sb.AppendLine(
                         CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")});"));
@@ -960,7 +983,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                if (Container.ObjectType == LazinatorObjectType.Class)
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                     sb.AppendLine(
                         $@"WriteNonLazinatorObject(
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
@@ -1022,7 +1045,7 @@ namespace Lazinator.CodeDescription
         private void AppendReadOnlySpan_SerializeExistingBuffer(CodeStringBuilder sb)
         {
             // this method is used within classes, but not within structs
-            if (Container.ObjectType != LazinatorObjectType.Class)
+            if (ContainingObjectDescription.ObjectType != LazinatorObjectType.Class)
                 return;
 
             string innerFullType = InnerProperties[0].FullyQualifiedTypeName;
