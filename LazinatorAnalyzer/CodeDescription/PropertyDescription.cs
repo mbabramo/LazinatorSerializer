@@ -230,6 +230,7 @@ namespace Lazinator.CodeDescription
 
             Namespace = typeSymbol.GetFullNamespace();
             TypeSubclassHierarchy = typeSymbol.GetSubclassHierarchy();
+            TypeSubclassHierarchyEncodable = typeSymbol.GetSubclassHierarchyEncodable();
             Nullable = IsNullableType(namedTypeSymbol);
             if (Nullable)
             {
@@ -330,11 +331,12 @@ namespace Lazinator.CodeDescription
             return (HandleRecordLikeType(t));
         }
 
-        private void SetNullableTypeNameAndPropertyType(INamedTypeSymbol t)
+        private void SetNullableTypeNameAndPropertyType(INamedTypeSymbol namedTypeSymbol)
         {
-            SetTypeNameAndPropertyType(t.TypeArguments[0] as INamedTypeSymbol);
-            Namespace = t.GetFullNamespace(); // reset since it might have changed
-            TypeSubclassHierarchy = t.GetSubclassHierarchy();
+            SetTypeNameAndPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
+            Namespace = namedTypeSymbol.GetFullNamespace(); // reset since it might have changed
+            TypeSubclassHierarchy = namedTypeSymbol.GetSubclassHierarchy();
+            TypeSubclassHierarchyEncodable = namedTypeSymbol.GetSubclassHierarchyEncodable();
             Nullable = true;
             TypeName += "?";
             if (EnumEquivalentType != null)
