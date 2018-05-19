@@ -15,6 +15,7 @@ namespace LazinatorCodeGen.Roslyn
 {
     public static class RoslynHelpers
     {
+
         public static ImmutableList<RoslynProperty> GetPropertiesWithAccessors(this INamedTypeSymbol namedTypeSymbol)
         {
             var properties = namedTypeSymbol.GetMembers().Where(x => x.Kind == SymbolKind.Property).ToList();
@@ -124,6 +125,31 @@ namespace LazinatorCodeGen.Roslyn
             }
 
             return RegularizeTypeName(t.Name);
+        }
+
+
+        public static string GetSubclassHierarchy(this ITypeSymbol typeSymbol)
+        {
+            string hierarchy = "";
+            ITypeSymbol current = typeSymbol;
+            while (current.ContainingType != null)
+            {
+                hierarchy += current.ContainingType + ".";
+                current = current.ContainingType;
+            }
+            return hierarchy;
+        }
+
+        public static string GetSubclassHierarchyEncodable(this ITypeSymbol typeSymbol)
+        {
+            string hierarchy = "";
+            ITypeSymbol current = typeSymbol;
+            while (current.ContainingType != null)
+            {
+                hierarchy += EncodableTypeName(current.ContainingType) + "_";
+                current = current.ContainingType;
+            }
+            return hierarchy;
         }
 
         public static string EncodableTypeName(ITypeSymbol typeSymbol)

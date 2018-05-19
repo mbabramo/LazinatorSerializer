@@ -28,11 +28,13 @@ namespace Lazinator.CodeDescription
         public bool IsAbstract { get; set; }
         public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         public string TypeName { get; set; }
-        public string FullyQualifiedTypeName => NamespacePrefixToUse + TypeName;
+        public string TypeSubclassHierarchy { get; set; }
+        public string TypeSubclassHierarchyEncodable { get; set; }
+        public string FullyQualifiedTypeName => NamespacePrefixToUse + TypeSubclassHierarchy + TypeName;
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
-        public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeNameWithoutNullableIndicator;
+        public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeSubclassHierarchy + TypeNameWithoutNullableIndicator;
         public string TypeNameEncodable { get; set; }
-        public string FullyQualifiedTypeNameEncodable => NamespacePrefixToUseEncodable + TypeNameEncodable;
+        public string FullyQualifiedTypeNameEncodable => NamespacePrefixToUseEncodable + TypeSubclassHierarchyEncodable + TypeNameEncodable;
         public string WriteMethodName { get; set; }
         public string ReadMethodName { get; set; }
         public bool Nullable { get; set; }
@@ -82,6 +84,11 @@ namespace Lazinator.CodeDescription
 
         public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, string derivationKeyword)
         {
+            if (propertySymbol.ToString().Contains("EnumWithinClass"))
+            {
+                var DEBUG = 0;
+            }
+
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
@@ -222,6 +229,7 @@ namespace Lazinator.CodeDescription
             }
 
             Namespace = typeSymbol.GetFullNamespace();
+            TypeSubclassHierarchy = typeSymbol.GetSubclassHierarchy();
             Nullable = IsNullableType(namedTypeSymbol);
             if (Nullable)
             {
@@ -326,6 +334,7 @@ namespace Lazinator.CodeDescription
         {
             SetTypeNameAndPropertyType(t.TypeArguments[0] as INamedTypeSymbol);
             Namespace = t.GetFullNamespace(); // reset since it might have changed
+            TypeSubclassHierarchy = t.GetSubclassHierarchy();
             Nullable = true;
             TypeName += "?";
             if (EnumEquivalentType != null)
