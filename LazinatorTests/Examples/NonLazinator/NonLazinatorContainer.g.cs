@@ -199,8 +199,8 @@ namespace LazinatorTests.Examples
         private int _NonLazinatorContainer_EndByteIndex;
         int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
         
-        private LazinatorTests.Examples.NonLazinatorClass _NonLazinatorClass;
-        public LazinatorTests.Examples.NonLazinatorClass NonLazinatorClass
+        private global::LazinatorTests.Examples.NonLazinatorClass _NonLazinatorClass;
+        public global::LazinatorTests.Examples.NonLazinatorClass NonLazinatorClass
         {
             [DebuggerStepThrough]
             get
@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _NonLazinatorClass = default(LazinatorTests.Examples.NonLazinatorClass);
+                        _NonLazinatorClass = default(global::LazinatorTests.Examples.NonLazinatorClass);
                     }
                     else
                     {
@@ -230,8 +230,8 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorClass_Accessed;
-        private LazinatorTests.Examples.NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
-        public LazinatorTests.Examples.NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
+        private global::LazinatorTests.Examples.NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
+        public global::LazinatorTests.Examples.NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
         {
             [DebuggerStepThrough]
             get
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _NonLazinatorInterchangeableClass = default(LazinatorTests.Examples.NonLazinatorInterchangeableClass);
+                        _NonLazinatorInterchangeableClass = default(global::LazinatorTests.Examples.NonLazinatorInterchangeableClass);
                     }
                     else
                     {
@@ -261,8 +261,8 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorInterchangeableClass_Accessed;
-        private LazinatorTests.Examples.NonLazinatorStruct _NonLazinatorStruct;
-        public LazinatorTests.Examples.NonLazinatorStruct NonLazinatorStruct
+        private global::LazinatorTests.Examples.NonLazinatorStruct _NonLazinatorStruct;
+        public global::LazinatorTests.Examples.NonLazinatorStruct NonLazinatorStruct
         {
             [DebuggerStepThrough]
             get
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _NonLazinatorStruct = default(LazinatorTests.Examples.NonLazinatorStruct);
+                        _NonLazinatorStruct = default(global::LazinatorTests.Examples.NonLazinatorStruct);
                     }
                     else
                     {
@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples
             LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests_Examples_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
         }
         
-        private static LazinatorTests.Examples.NonLazinatorInterchangeableClass ConvertFromBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::LazinatorTests.Examples.NonLazinatorInterchangeableClass ConvertFromBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass()
             {
@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples
         }
         
         private static void ConvertToBytes_LazinatorTests_Examples_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
-        LazinatorTests.Examples.NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
+        global::LazinatorTests.Examples.NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
         bool verifyCleanness)
         {
             LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass(itemToConvert);

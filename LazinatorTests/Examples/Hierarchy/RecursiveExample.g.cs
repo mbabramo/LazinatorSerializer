@@ -206,8 +206,8 @@ namespace LazinatorTests.Examples.Hierarchy
         private int _RecursiveExample_EndByteIndex;
         protected virtual int _RecursiveInterface_ByteLength => _RecursiveExample_EndByteIndex - _RecursiveInterface_ByteIndex;
         
-        private LazinatorTests.Examples.Hierarchy.RecursiveExample _RecursiveClass;
-        public LazinatorTests.Examples.Hierarchy.RecursiveExample RecursiveClass
+        private global::LazinatorTests.Examples.Hierarchy.RecursiveExample _RecursiveClass;
+        public global::LazinatorTests.Examples.Hierarchy.RecursiveExample RecursiveClass
         {
             [DebuggerStepThrough]
             get
@@ -216,7 +216,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _RecursiveClass = default(LazinatorTests.Examples.Hierarchy.RecursiveExample);
+                        _RecursiveClass = default(global::LazinatorTests.Examples.Hierarchy.RecursiveExample);
                     }
                     else
                     {
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _RecursiveClass = DeserializationFactory.Create(247, () => new LazinatorTests.Examples.Hierarchy.RecursiveExample(), childData, this); 
+                        _RecursiveClass = DeserializationFactory.Create(247, () => new global::LazinatorTests.Examples.Hierarchy.RecursiveExample(), childData, this); 
                     }
                     _RecursiveClass_Accessed = true;
                 }
@@ -245,8 +245,8 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveClass_Accessed;
-        private LazinatorTests.Examples.Hierarchy.IRecursiveExample _RecursiveInterface;
-        public LazinatorTests.Examples.Hierarchy.IRecursiveExample RecursiveInterface
+        private global::LazinatorTests.Examples.Hierarchy.IRecursiveExample _RecursiveInterface;
+        public global::LazinatorTests.Examples.Hierarchy.IRecursiveExample RecursiveInterface
         {
             [DebuggerStepThrough]
             get
@@ -255,7 +255,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _RecursiveInterface = default(LazinatorTests.Examples.Hierarchy.IRecursiveExample);
+                        _RecursiveInterface = default(global::LazinatorTests.Examples.Hierarchy.IRecursiveExample);
                     }
                     else
                     {
@@ -265,7 +265,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _RecursiveInterface = (LazinatorTests.Examples.Hierarchy.IRecursiveExample)DeserializationFactory.FactoryCreate(childData, this); 
+                        _RecursiveInterface = (global::LazinatorTests.Examples.Hierarchy.IRecursiveExample)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _RecursiveInterface_Accessed = true;
                 }

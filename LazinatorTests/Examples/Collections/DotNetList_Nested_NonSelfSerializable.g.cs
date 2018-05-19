@@ -195,8 +195,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Nested_NonSelfSerializable_EndByteIndex;
         protected virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonSelfSerializable_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
         
-        private System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> _MyListNestedNonLazinatorType;
-        public System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> MyListNestedNonLazinatorType
+        private global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>> _MyListNestedNonLazinatorType;
+        public global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>> MyListNestedNonLazinatorType
         {
             [DebuggerStepThrough]
             get
@@ -205,7 +205,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListNestedNonLazinatorType = default(System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>>);
+                        _MyListNestedNonLazinatorType = default(global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>>);
                     }
                     else
                     {
@@ -261,24 +261,24 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> ConvertFromBytes_System_Collections_Generic_List_List_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>> ConvertFromBytes_System_Collections_Generic_List_List_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>>);
+                return default(global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> collection = new System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>>(collectionLength);
+            global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>> collection = new global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>));
+                    collection.Add(default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>));
                 }
                 else
                 {
@@ -292,9 +292,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_List_NonLazinatorClass(BinaryBufferWriter writer, System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_List_NonLazinatorClass(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>>))
+            if (itemToConvert == default(global::System.Collections.Generic.List<global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>>))
             {
                 return;
             }
@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>))
+                if (itemToConvert[itemIndex] == default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>))
                 {
                     writer.Write((uint)0);
                 }
@@ -316,24 +316,24 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_System_Collections_Generic_List_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_System_Collections_Generic_List_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>);
+                return default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> collection = new System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>(collectionLength);
+            global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass> collection = new global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(LazinatorTests.Examples.NonLazinatorClass));
+                    collection.Add(default(global::LazinatorTests.Examples.NonLazinatorClass));
                 }
                 else
                 {
@@ -347,9 +347,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_NonLazinatorClass(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_NonLazinatorClass(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.NonLazinatorClass>))
+            if (itemToConvert == default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.NonLazinatorClass>))
             {
                 return;
             }
@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == default(LazinatorTests.Examples.NonLazinatorClass))
+                if (itemToConvert[itemIndex] == default(global::LazinatorTests.Examples.NonLazinatorClass))
                 {
                     writer.Write((uint)0);
                 }

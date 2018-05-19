@@ -192,8 +192,8 @@ namespace Lazinator.Wrappers
         /* Field boilerplate */
         
         
-        private Guid? _Value;
-        public Guid? Value
+        private global::System.Guid? _Value;
+        public global::System.Guid? Value
         {
             [DebuggerStepThrough]
             get

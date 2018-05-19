@@ -200,8 +200,8 @@ namespace LazinatorTests.Examples.Structs
         private int _ContainerForExampleStructWithoutClass_EndByteIndex;
         protected virtual int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
         
-        private LazinatorTests.Examples.Structs.ExampleStructWithoutClass _ExampleStructWithoutClass;
-        public LazinatorTests.Examples.Structs.ExampleStructWithoutClass ExampleStructWithoutClass
+        private global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass _ExampleStructWithoutClass;
+        public global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass ExampleStructWithoutClass
         {
             [DebuggerStepThrough]
             get
@@ -210,12 +210,12 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ExampleStructWithoutClass = default(LazinatorTests.Examples.Structs.ExampleStructWithoutClass);
+                        _ExampleStructWithoutClass = default(global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength);
-                        _ExampleStructWithoutClass = new LazinatorTests.Examples.Structs.ExampleStructWithoutClass()
+                        _ExampleStructWithoutClass = new global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _ExampleStructWithoutClass_Accessed;
-        public LazinatorTests.Examples.Structs.ExampleStructWithoutClass ExampleStructWithoutClass_Copy
+        public global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass ExampleStructWithoutClass_Copy
         {
             [DebuggerStepThrough]
             get
@@ -244,12 +244,12 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(LazinatorTests.Examples.Structs.ExampleStructWithoutClass);
+                        return default(global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength);
-                        return new LazinatorTests.Examples.Structs.ExampleStructWithoutClass()
+                        return new global::LazinatorTests.Examples.Structs.ExampleStructWithoutClass()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,

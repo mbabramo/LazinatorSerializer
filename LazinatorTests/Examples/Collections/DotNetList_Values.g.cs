@@ -202,8 +202,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Values_EndByteIndex;
         protected virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         
-        private System.Collections.Generic.LinkedList<int> _MyLinkedListInt;
-        public System.Collections.Generic.LinkedList<int> MyLinkedListInt
+        private global::System.Collections.Generic.LinkedList<int> _MyLinkedListInt;
+        public global::System.Collections.Generic.LinkedList<int> MyLinkedListInt
         {
             [DebuggerStepThrough]
             get
@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyLinkedListInt = default(System.Collections.Generic.LinkedList<int>);
+                        _MyLinkedListInt = default(global::System.Collections.Generic.LinkedList<int>);
                         _MyLinkedListInt_Dirty = true;
                     }
                     else
@@ -253,8 +253,8 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private System.Collections.Generic.List<int> _MyListInt;
-        public System.Collections.Generic.List<int> MyListInt
+        private global::System.Collections.Generic.List<int> _MyListInt;
+        public global::System.Collections.Generic.List<int> MyListInt
         {
             [DebuggerStepThrough]
             get
@@ -263,7 +263,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListInt = default(System.Collections.Generic.List<int>);
+                        _MyListInt = default(global::System.Collections.Generic.List<int>);
                         _MyListInt_Dirty = true;
                     }
                     else
@@ -304,8 +304,8 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private System.Collections.Generic.SortedSet<int> _MySortedSetInt;
-        public System.Collections.Generic.SortedSet<int> MySortedSetInt
+        private global::System.Collections.Generic.SortedSet<int> _MySortedSetInt;
+        public global::System.Collections.Generic.SortedSet<int> MySortedSetInt
         {
             [DebuggerStepThrough]
             get
@@ -314,7 +314,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MySortedSetInt = default(System.Collections.Generic.SortedSet<int>);
+                        _MySortedSetInt = default(global::System.Collections.Generic.SortedSet<int>);
                         _MySortedSetInt_Dirty = true;
                     }
                     else
@@ -410,18 +410,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.LinkedList<int> ConvertFromBytes_System_Collections_Generic_LinkedList_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.LinkedList<int> ConvertFromBytes_System_Collections_Generic_LinkedList_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.LinkedList<int>);
+                return default(global::System.Collections.Generic.LinkedList<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.LinkedList<int> collection = new System.Collections.Generic.LinkedList<int>();
+            global::System.Collections.Generic.LinkedList<int> collection = new global::System.Collections.Generic.LinkedList<int>();
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -431,9 +431,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_LinkedList_int(BinaryBufferWriter writer, System.Collections.Generic.LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_LinkedList_int(BinaryBufferWriter writer, global::System.Collections.Generic.LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.LinkedList<int>))
+            if (itemToConvert == default(global::System.Collections.Generic.LinkedList<int>))
             {
                 return;
             }
@@ -445,18 +445,18 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static System.Collections.Generic.List<int> ConvertFromBytes_System_Collections_Generic_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<int> ConvertFromBytes_System_Collections_Generic_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<int>);
+                return default(global::System.Collections.Generic.List<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<int> collection = new System.Collections.Generic.List<int>(collectionLength);
+            global::System.Collections.Generic.List<int> collection = new global::System.Collections.Generic.List<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -466,9 +466,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_int(BinaryBufferWriter writer, System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_int(BinaryBufferWriter writer, global::System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<int>))
+            if (itemToConvert == default(global::System.Collections.Generic.List<int>))
             {
                 return;
             }
@@ -480,18 +480,18 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static System.Collections.Generic.SortedSet<int> ConvertFromBytes_System_Collections_Generic_SortedSet_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.SortedSet<int> ConvertFromBytes_System_Collections_Generic_SortedSet_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.SortedSet<int>);
+                return default(global::System.Collections.Generic.SortedSet<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.SortedSet<int> collection = new System.Collections.Generic.SortedSet<int>();
+            global::System.Collections.Generic.SortedSet<int> collection = new global::System.Collections.Generic.SortedSet<int>();
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -501,9 +501,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_SortedSet_int(BinaryBufferWriter writer, System.Collections.Generic.SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_SortedSet_int(BinaryBufferWriter writer, global::System.Collections.Generic.SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.SortedSet<int>))
+            if (itemToConvert == default(global::System.Collections.Generic.SortedSet<int>))
             {
                 return;
             }

@@ -200,8 +200,8 @@ namespace LazinatorTests.Examples.Abstract
         private int _ContainerWithAbstract1_EndByteIndex;
         protected virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
         
-        private LazinatorTests.Examples.Abstract.Abstract1 _AbstractProperty;
-        public LazinatorTests.Examples.Abstract.Abstract1 AbstractProperty
+        private global::LazinatorTests.Examples.Abstract.Abstract1 _AbstractProperty;
+        public global::LazinatorTests.Examples.Abstract.Abstract1 AbstractProperty
         {
             [DebuggerStepThrough]
             get
@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _AbstractProperty = default(LazinatorTests.Examples.Abstract.Abstract1);
+                        _AbstractProperty = default(global::LazinatorTests.Examples.Abstract.Abstract1);
                     }
                     else
                     {
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _AbstractProperty = (LazinatorTests.Examples.Abstract.Abstract1)DeserializationFactory.FactoryCreate(childData, this); 
+                        _AbstractProperty = (global::LazinatorTests.Examples.Abstract.Abstract1)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _AbstractProperty_Accessed = true;
                 }

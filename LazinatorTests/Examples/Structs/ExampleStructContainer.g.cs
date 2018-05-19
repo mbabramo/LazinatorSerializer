@@ -210,8 +210,8 @@ namespace LazinatorTests.Examples
         private int _ExampleStructContainer_EndByteIndex;
         protected virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
         
-        private Lazinator.Wrappers.LazinatorWrapperInt _IntWrapper;
-        public Lazinator.Wrappers.LazinatorWrapperInt IntWrapper
+        private global::Lazinator.Wrappers.LazinatorWrapperInt _IntWrapper;
+        public global::Lazinator.Wrappers.LazinatorWrapperInt IntWrapper
         {
             [DebuggerStepThrough]
             get
@@ -220,12 +220,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _IntWrapper = default(Lazinator.Wrappers.LazinatorWrapperInt);
+                        _IntWrapper = default(global::Lazinator.Wrappers.LazinatorWrapperInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, true);
-                        _IntWrapper = new Lazinator.Wrappers.LazinatorWrapperInt()
+                        _IntWrapper = new global::Lazinator.Wrappers.LazinatorWrapperInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -245,7 +245,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _IntWrapper_Accessed;
-        public Lazinator.Wrappers.LazinatorWrapperInt IntWrapper_Copy
+        public global::Lazinator.Wrappers.LazinatorWrapperInt IntWrapper_Copy
         {
             [DebuggerStepThrough]
             get
@@ -254,12 +254,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(Lazinator.Wrappers.LazinatorWrapperInt);
+                        return default(global::Lazinator.Wrappers.LazinatorWrapperInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntWrapper_ByteIndex, _IntWrapper_ByteLength);
-                        return new Lazinator.Wrappers.LazinatorWrapperInt()
+                        return new global::Lazinator.Wrappers.LazinatorWrapperInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
@@ -269,8 +269,8 @@ namespace LazinatorTests.Examples
                 return _IntWrapper;
             }
         }
-        private LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
-        public LazinatorTests.Examples.ExampleStruct MyExampleStruct
+        private global::LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
+        public global::LazinatorTests.Examples.ExampleStruct MyExampleStruct
         {
             [DebuggerStepThrough]
             get
@@ -279,12 +279,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyExampleStruct = default(LazinatorTests.Examples.ExampleStruct);
+                        _MyExampleStruct = default(global::LazinatorTests.Examples.ExampleStruct);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength);
-                        _MyExampleStruct = new LazinatorTests.Examples.ExampleStruct()
+                        _MyExampleStruct = new global::LazinatorTests.Examples.ExampleStruct()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyExampleStruct_Accessed;
-        public LazinatorTests.Examples.ExampleStruct MyExampleStruct_Copy
+        public global::LazinatorTests.Examples.ExampleStruct MyExampleStruct_Copy
         {
             [DebuggerStepThrough]
             get
@@ -313,12 +313,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(LazinatorTests.Examples.ExampleStruct);
+                        return default(global::LazinatorTests.Examples.ExampleStruct);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength);
-                        return new LazinatorTests.Examples.ExampleStruct()
+                        return new global::LazinatorTests.Examples.ExampleStruct()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
@@ -328,8 +328,8 @@ namespace LazinatorTests.Examples
                 return _MyExampleStruct;
             }
         }
-        private System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct> _MyListExampleStruct;
-        public System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct> MyListExampleStruct
+        private global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> _MyListExampleStruct;
+        public global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> MyListExampleStruct
         {
             [DebuggerStepThrough]
             get
@@ -338,7 +338,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListExampleStruct = default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct>);
+                        _MyListExampleStruct = default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct>);
                     }
                     else
                     {
@@ -359,8 +359,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListExampleStruct_Accessed;
-        private System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> _MyListNullableExampleStruct;
-        public System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> MyListNullableExampleStruct
+        private global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> _MyListNullableExampleStruct;
+        public global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> MyListNullableExampleStruct
         {
             [DebuggerStepThrough]
             get
@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListNullableExampleStruct = default(System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>>);
+                        _MyListNullableExampleStruct = default(global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>>);
                     }
                     else
                     {
@@ -453,23 +453,23 @@ namespace LazinatorTests.Examples
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct> ConvertFromBytes_System_Collections_Generic_List_ExampleStruct(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> ConvertFromBytes_System_Collections_Generic_List_ExampleStruct(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct>);
+                return default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct> collection = new System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct>(collectionLength);
+            global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> collection = new global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new LazinatorTests.Examples.ExampleStruct()
+                var item = new global::LazinatorTests.Examples.ExampleStruct()
                 {
                     DeserializationFactory = deserializationFactory,
                     InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
@@ -482,9 +482,9 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_ExampleStruct(BinaryBufferWriter writer, System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_ExampleStruct(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<LazinatorTests.Examples.ExampleStruct>))
+            if (itemToConvert == default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct>))
             {
                 return;
             }
@@ -497,23 +497,23 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> ConvertFromBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> ConvertFromBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>>);
+                return default(global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> collection = new System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>>(collectionLength);
+            global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> collection = new global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>()
+                var item = new global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>()
                 {
                     DeserializationFactory = deserializationFactory,
                     InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
@@ -526,9 +526,9 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(BinaryBufferWriter writer, System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.List<Lazinator.Wrappers.LazinatorWrapperNullableStruct<LazinatorTests.Examples.ExampleStruct>>))
+            if (itemToConvert == default(global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>>))
             {
                 return;
             }

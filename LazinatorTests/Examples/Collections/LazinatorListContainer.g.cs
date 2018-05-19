@@ -200,8 +200,8 @@ namespace LazinatorTests.Examples.Collections
         private int _LazinatorListContainer_EndByteIndex;
         protected virtual int _MyList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyList_ByteIndex;
         
-        private Lazinator.Collections.LazinatorList<LazinatorTests.Examples.ExampleChild> _MyList;
-        public Lazinator.Collections.LazinatorList<LazinatorTests.Examples.ExampleChild> MyList
+        private global::Lazinator.Collections.LazinatorList<global::LazinatorTests.Examples.ExampleChild> _MyList;
+        public global::Lazinator.Collections.LazinatorList<global::LazinatorTests.Examples.ExampleChild> MyList
         {
             [DebuggerStepThrough]
             get
@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyList = default(Lazinator.Collections.LazinatorList<LazinatorTests.Examples.ExampleChild>);
+                        _MyList = default(global::Lazinator.Collections.LazinatorList<global::LazinatorTests.Examples.ExampleChild>);
                     }
                     else
                     {
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Collections
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyList = DeserializationFactory.Create(51, () => new Lazinator.Collections.LazinatorList<LazinatorTests.Examples.ExampleChild>(), childData, this); 
+                        _MyList = DeserializationFactory.Create(51, () => new global::Lazinator.Collections.LazinatorList<global::LazinatorTests.Examples.ExampleChild>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }

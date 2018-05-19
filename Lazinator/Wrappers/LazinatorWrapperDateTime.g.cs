@@ -192,8 +192,8 @@ namespace Lazinator.Wrappers
         /* Field boilerplate */
         
         
-        private DateTime _Value;
-        public DateTime Value
+        private global::System.DateTime _Value;
+        public global::System.DateTime Value
         {
             [DebuggerStepThrough]
             get

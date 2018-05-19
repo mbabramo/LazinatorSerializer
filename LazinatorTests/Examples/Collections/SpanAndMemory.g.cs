@@ -205,8 +205,8 @@ namespace LazinatorTests.Examples.Collections
         private int _SpanAndMemory_EndByteIndex;
         protected virtual int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
         
-        private Memory<int> _MyMemoryInt;
-        public Memory<int> MyMemoryInt
+        private global::System.Memory<int> _MyMemoryInt;
+        public global::System.Memory<int> MyMemoryInt
         {
             [DebuggerStepThrough]
             get
@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyMemoryInt = default(Memory<int>);
+                        _MyMemoryInt = default(global::System.Memory<int>);
                     }
                     else
                     {
@@ -236,8 +236,8 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyMemoryInt_Accessed;
-        private Memory<int>? _MyNullableMemoryInt;
-        public Memory<int>? MyNullableMemoryInt
+        private global::System.Memory<int>? _MyNullableMemoryInt;
+        public global::System.Memory<int>? MyNullableMemoryInt
         {
             [DebuggerStepThrough]
             get
@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyNullableMemoryInt = default(Memory<int>?);
+                        _MyNullableMemoryInt = default(global::System.Memory<int>?);
                     }
                     else
                     {
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
         }
         protected bool _MyNullableMemoryInt_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanByte;
-        public ReadOnlySpan<byte> MyReadOnlySpanByte
+        public global::System.ReadOnlySpan<byte> MyReadOnlySpanByte
         {
             [DebuggerStepThrough]
             get
@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.Collections
         }
         protected bool _MyReadOnlySpanByte_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanChar;
-        public ReadOnlySpan<char> MyReadOnlySpanChar
+        public global::System.ReadOnlySpan<char> MyReadOnlySpanChar
         {
             [DebuggerStepThrough]
             get
@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples.Collections
         }
         protected bool _MyReadOnlySpanChar_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanDateTime;
-        public ReadOnlySpan<DateTime> MyReadOnlySpanDateTime
+        public global::System.ReadOnlySpan<global::System.DateTime> MyReadOnlySpanDateTime
         {
             [DebuggerStepThrough]
             get
@@ -327,20 +327,20 @@ namespace LazinatorTests.Examples.Collections
                     _MyReadOnlySpanDateTime = childData;
                     _MyReadOnlySpanDateTime_Accessed = true;
                 }
-                return MemoryMarshal.Cast<byte, DateTime>(_MyReadOnlySpanDateTime.Span);
+                return MemoryMarshal.Cast<byte, global::System.DateTime>(_MyReadOnlySpanDateTime.Span);
             }
             [DebuggerStepThrough]
             set
             {
                 
                 IsDirty = true;
-                _MyReadOnlySpanDateTime = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<DateTime, byte>(value).ToArray());
+                _MyReadOnlySpanDateTime = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<global::System.DateTime, byte>(value).ToArray());
                 _MyReadOnlySpanDateTime_Accessed = true;
             }
         }
         protected bool _MyReadOnlySpanDateTime_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanLong;
-        public ReadOnlySpan<long> MyReadOnlySpanLong
+        public global::System.ReadOnlySpan<long> MyReadOnlySpanLong
         {
             [DebuggerStepThrough]
             get
@@ -448,11 +448,11 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Memory<int> ConvertFromBytes_Memory_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Memory<int> ConvertFromBytes_Memory_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(Memory<int>);
+                return default(global::System.Memory<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
@@ -470,7 +470,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Memory_int(BinaryBufferWriter writer, Memory<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Memory_int(BinaryBufferWriter writer, global::System.Memory<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Length);
             var itemToConvertSpan = itemToConvert.Span;
@@ -481,11 +481,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Memory<int>? ConvertFromBytes_Nullable_Memory_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Memory<int>? ConvertFromBytes_Nullable_Memory_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(Memory<int>?);
+                return default(global::System.Memory<int>?);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
@@ -503,7 +503,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Nullable_Memory_int(BinaryBufferWriter writer, Memory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Nullable_Memory_int(BinaryBufferWriter writer, global::System.Memory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -515,7 +515,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_byte(BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_byte(BinaryBufferWriter writer, global::System.ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -524,7 +524,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_char(BinaryBufferWriter writer, ReadOnlySpan<char> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_char(BinaryBufferWriter writer, global::System.ReadOnlySpan<char> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<char, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -533,16 +533,16 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_DateTime(BinaryBufferWriter writer, ReadOnlySpan<DateTime> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_DateTime(BinaryBufferWriter writer, global::System.ReadOnlySpan<global::System.DateTime> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<DateTime, byte>(itemToConvert);
+            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<global::System.DateTime, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
             {
                 writer.Write(toConvert[i]);
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_long(BinaryBufferWriter writer, ReadOnlySpan<long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_long(BinaryBufferWriter writer, global::System.ReadOnlySpan<long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<long, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)

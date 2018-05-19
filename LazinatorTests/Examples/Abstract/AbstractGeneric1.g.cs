@@ -80,13 +80,13 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual int _MyT_ByteLength { get; }
         
         protected bool _MyEnumWithinAbstractGeneric_Accessed = false;
-        public abstract LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
+        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
             get;
             set;
         }
         protected bool _MyEnumWithinAbstractGeneric2_Accessed = false;
-        public abstract LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
+        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
             get;
             set;

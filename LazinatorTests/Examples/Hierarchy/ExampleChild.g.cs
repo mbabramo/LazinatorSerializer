@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples
             }
         }
         private ReadOnlyMemory<byte> _ByteSpan;
-        public ReadOnlySpan<byte> ByteSpan
+        public global::System.ReadOnlySpan<byte> ByteSpan
         {
             [DebuggerStepThrough]
             get
@@ -288,7 +288,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion of supported collections and tuples */
         
-        private static void ConvertToBytes_ReadOnlySpan_byte(BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_byte(BinaryBufferWriter writer, global::System.ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)

@@ -274,9 +274,9 @@ namespace LazinatorTests.Examples
                 _MyChar = value;
             }
         }
-        private DateTime _MyDateTime;
+        private global::System.DateTime _MyDateTime;
         [Newtonsoft.Json.JsonProperty("MyDT")]
-        public DateTime MyDateTime
+        public global::System.DateTime MyDateTime
         {
             [DebuggerStepThrough]
             get
@@ -290,8 +290,8 @@ namespace LazinatorTests.Examples
                 _MyDateTime = value;
             }
         }
-        private LazinatorTests.Examples.Example.EnumWithinClass _MyEnumWithinClass;
-        public LazinatorTests.Examples.Example.EnumWithinClass MyEnumWithinClass
+        private global::LazinatorTests.Examples.Example.EnumWithinClass _MyEnumWithinClass;
+        public global::LazinatorTests.Examples.Example.EnumWithinClass MyEnumWithinClass
         {
             [DebuggerStepThrough]
             get
@@ -350,8 +350,8 @@ namespace LazinatorTests.Examples
                 _MyNullableDouble = value;
             }
         }
-        private TimeSpan? _MyNullableTimeSpan;
-        public TimeSpan? MyNullableTimeSpan
+        private global::System.TimeSpan? _MyNullableTimeSpan;
+        public global::System.TimeSpan? MyNullableTimeSpan
         {
             [DebuggerStepThrough]
             get
@@ -395,8 +395,8 @@ namespace LazinatorTests.Examples
                 _MyString = value;
             }
         }
-        private LazinatorTests.Examples.TestEnum _MyTestEnum;
-        public LazinatorTests.Examples.TestEnum MyTestEnum
+        private global::LazinatorTests.Examples.TestEnum _MyTestEnum;
+        public global::LazinatorTests.Examples.TestEnum MyTestEnum
         {
             [DebuggerStepThrough]
             get
@@ -410,8 +410,8 @@ namespace LazinatorTests.Examples
                 _MyTestEnum = value;
             }
         }
-        private TestEnumByte? _MyTestEnumByteNullable;
-        public TestEnumByte? MyTestEnumByteNullable
+        private global::LazinatorTests.Examples.TestEnumByte? _MyTestEnumByteNullable;
+        public global::LazinatorTests.Examples.TestEnumByte? MyTestEnumByteNullable
         {
             [DebuggerStepThrough]
             get
@@ -440,8 +440,8 @@ namespace LazinatorTests.Examples
                 _MyUint = value;
             }
         }
-        private LazinatorTests.Examples.ExampleChild _ExcludableChild;
-        public LazinatorTests.Examples.ExampleChild ExcludableChild
+        private global::LazinatorTests.Examples.ExampleChild _ExcludableChild;
+        public global::LazinatorTests.Examples.ExampleChild ExcludableChild
         {
             [DebuggerStepThrough]
             get
@@ -450,7 +450,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ExcludableChild = default(LazinatorTests.Examples.ExampleChild);
+                        _ExcludableChild = default(global::LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _ExcludableChild = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
+                        _ExcludableChild = DeserializationFactory.Create(213, () => new global::LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _ExcludableChild_Accessed = true;
                 }
@@ -479,8 +479,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ExcludableChild_Accessed;
-        private LazinatorTests.Examples.ExampleChild _IncludableChild;
-        public LazinatorTests.Examples.ExampleChild IncludableChild
+        private global::LazinatorTests.Examples.ExampleChild _IncludableChild;
+        public global::LazinatorTests.Examples.ExampleChild IncludableChild
         {
             [DebuggerStepThrough]
             get
@@ -489,7 +489,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _IncludableChild = default(LazinatorTests.Examples.ExampleChild);
+                        _IncludableChild = default(global::LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
@@ -499,7 +499,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _IncludableChild = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
+                        _IncludableChild = DeserializationFactory.Create(213, () => new global::LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _IncludableChild_Accessed = true;
                 }
@@ -518,8 +518,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _IncludableChild_Accessed;
-        private LazinatorTests.Examples.ExampleChild _MyChild1;
-        public LazinatorTests.Examples.ExampleChild MyChild1
+        private global::LazinatorTests.Examples.ExampleChild _MyChild1;
+        public global::LazinatorTests.Examples.ExampleChild MyChild1
         {
             [DebuggerStepThrough]
             get
@@ -528,7 +528,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyChild1 = default(LazinatorTests.Examples.ExampleChild);
+                        _MyChild1 = default(global::LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
@@ -538,7 +538,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyChild1 = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
+                        _MyChild1 = DeserializationFactory.Create(213, () => new global::LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _MyChild1_Accessed = true;
                 }
@@ -557,8 +557,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild1_Accessed;
-        private LazinatorTests.Examples.ExampleChild _MyChild2;
-        public LazinatorTests.Examples.ExampleChild MyChild2
+        private global::LazinatorTests.Examples.ExampleChild _MyChild2;
+        public global::LazinatorTests.Examples.ExampleChild MyChild2
         {
             [DebuggerStepThrough]
             get
@@ -567,7 +567,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyChild2 = default(LazinatorTests.Examples.ExampleChild);
+                        _MyChild2 = default(global::LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
@@ -577,7 +577,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyChild2 = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
+                        _MyChild2 = DeserializationFactory.Create(213, () => new global::LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _MyChild2_Accessed = true;
                 }
@@ -596,8 +596,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2_Accessed;
-        private LazinatorTests.Examples.ExampleChild _MyChild2Previous;
-        public LazinatorTests.Examples.ExampleChild MyChild2Previous
+        private global::LazinatorTests.Examples.ExampleChild _MyChild2Previous;
+        public global::LazinatorTests.Examples.ExampleChild MyChild2Previous
         {
             [DebuggerStepThrough]
             get
@@ -606,7 +606,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyChild2Previous = default(LazinatorTests.Examples.ExampleChild);
+                        _MyChild2Previous = default(global::LazinatorTests.Examples.ExampleChild);
                     }
                     else
                     {
@@ -616,7 +616,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyChild2Previous = DeserializationFactory.Create(213, () => new LazinatorTests.Examples.ExampleChild(), childData, this); 
+                        _MyChild2Previous = DeserializationFactory.Create(213, () => new global::LazinatorTests.Examples.ExampleChild(), childData, this); 
                     }
                     _MyChild2Previous_Accessed = true;
                 }
@@ -635,8 +635,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2Previous_Accessed;
-        private LazinatorTests.Examples.IExampleNonexclusiveInterface _MyInterfaceImplementer;
-        public LazinatorTests.Examples.IExampleNonexclusiveInterface MyInterfaceImplementer
+        private global::LazinatorTests.Examples.IExampleNonexclusiveInterface _MyInterfaceImplementer;
+        public global::LazinatorTests.Examples.IExampleNonexclusiveInterface MyInterfaceImplementer
         {
             [DebuggerStepThrough]
             get
@@ -645,7 +645,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyInterfaceImplementer = default(LazinatorTests.Examples.IExampleNonexclusiveInterface);
+                        _MyInterfaceImplementer = default(global::LazinatorTests.Examples.IExampleNonexclusiveInterface);
                     }
                     else
                     {
@@ -655,7 +655,7 @@ namespace LazinatorTests.Examples
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyInterfaceImplementer = (LazinatorTests.Examples.IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
+                        _MyInterfaceImplementer = (global::LazinatorTests.Examples.IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _MyInterfaceImplementer_Accessed = true;
                 }
@@ -674,8 +674,8 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyInterfaceImplementer_Accessed;
-        private LazinatorTests.Examples.NonLazinatorClass _MyNonLazinatorChild;
-        public LazinatorTests.Examples.NonLazinatorClass MyNonLazinatorChild
+        private global::LazinatorTests.Examples.NonLazinatorClass _MyNonLazinatorChild;
+        public global::LazinatorTests.Examples.NonLazinatorClass MyNonLazinatorChild
         {
             [DebuggerStepThrough]
             get
@@ -684,7 +684,7 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyNonLazinatorChild = default(LazinatorTests.Examples.NonLazinatorClass);
+                        _MyNonLazinatorChild = default(global::LazinatorTests.Examples.NonLazinatorClass);
                         _MyNonLazinatorChild_Dirty = true;
                     }
                     else
@@ -725,8 +725,8 @@ namespace LazinatorTests.Examples
                 }
             }
         }
-        private Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
-        public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
+        private global::Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
+        public global::Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
         {
             [DebuggerStepThrough]
             get
@@ -735,12 +735,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _WrappedInt = default(Lazinator.Wrappers.LazinatorWrapperInt);
+                        _WrappedInt = default(global::Lazinator.Wrappers.LazinatorWrapperInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true);
-                        _WrappedInt = new Lazinator.Wrappers.LazinatorWrapperInt()
+                        _WrappedInt = new global::Lazinator.Wrappers.LazinatorWrapperInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -760,7 +760,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _WrappedInt_Accessed;
-        public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt_Copy
+        public global::Lazinator.Wrappers.LazinatorWrapperInt WrappedInt_Copy
         {
             [DebuggerStepThrough]
             get
@@ -769,12 +769,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(Lazinator.Wrappers.LazinatorWrapperInt);
+                        return default(global::Lazinator.Wrappers.LazinatorWrapperInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength);
-                        return new Lazinator.Wrappers.LazinatorWrapperInt()
+                        return new global::Lazinator.Wrappers.LazinatorWrapperInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
@@ -797,7 +797,7 @@ namespace LazinatorTests.Examples
             _MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
-            _MyEnumWithinClass = (LazinatorTests.Examples.Example.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnumWithinClass = (global::LazinatorTests.Examples.Example.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
             if (serializedVersionNumber >= 3) 
             {
                 _MyNewString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
@@ -810,8 +810,8 @@ namespace LazinatorTests.Examples
                 _MyOldString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-            _MyTestEnum = (LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
-            _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
+            _MyTestEnum = (global::LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
+            _MyTestEnumByteNullable = (global::LazinatorTests.Examples.TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
             _ExcludableChild_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 

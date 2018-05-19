@@ -200,8 +200,8 @@ namespace LazinatorTests.Examples.Structs
         private int _WrapperContainer_EndByteIndex;
         protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         
-        private Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
-        public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
+        private global::Lazinator.Wrappers.LazinatorWrapperInt _WrappedInt;
+        public global::Lazinator.Wrappers.LazinatorWrapperInt WrappedInt
         {
             [DebuggerStepThrough]
             get
@@ -210,12 +210,12 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _WrappedInt = default(Lazinator.Wrappers.LazinatorWrapperInt);
+                        _WrappedInt = default(global::Lazinator.Wrappers.LazinatorWrapperInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true);
-                        _WrappedInt = new Lazinator.Wrappers.LazinatorWrapperInt()
+                        _WrappedInt = new global::Lazinator.Wrappers.LazinatorWrapperInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedInt_Accessed;
-        public Lazinator.Wrappers.LazinatorWrapperInt WrappedInt_Copy
+        public global::Lazinator.Wrappers.LazinatorWrapperInt WrappedInt_Copy
         {
             [DebuggerStepThrough]
             get
@@ -244,12 +244,12 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(Lazinator.Wrappers.LazinatorWrapperInt);
+                        return default(global::Lazinator.Wrappers.LazinatorWrapperInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength);
-                        return new Lazinator.Wrappers.LazinatorWrapperInt()
+                        return new global::Lazinator.Wrappers.LazinatorWrapperInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,

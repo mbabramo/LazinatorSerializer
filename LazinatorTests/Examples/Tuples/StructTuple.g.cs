@@ -201,8 +201,8 @@ namespace LazinatorTests.Examples.Tuples
         private int _StructTuple_EndByteIndex;
         protected virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
         
-        private (LazinatorTests.Examples.TestEnum firstEnum, LazinatorTests.Examples.TestEnum anotherEnum) _EnumTuple;
-        public (LazinatorTests.Examples.TestEnum firstEnum, LazinatorTests.Examples.TestEnum anotherEnum) EnumTuple
+        private (global::LazinatorTests.Examples.TestEnum firstEnum, global::LazinatorTests.Examples.TestEnum anotherEnum) _EnumTuple;
+        public (global::LazinatorTests.Examples.TestEnum firstEnum, global::LazinatorTests.Examples.TestEnum anotherEnum) EnumTuple
         {
             [DebuggerStepThrough]
             get
@@ -211,7 +211,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _EnumTuple = default((LazinatorTests.Examples.TestEnum firstEnum, LazinatorTests.Examples.TestEnum anotherEnum));
+                        _EnumTuple = default((global::LazinatorTests.Examples.TestEnum firstEnum, global::LazinatorTests.Examples.TestEnum anotherEnum));
                     }
                     else
                     {
@@ -263,8 +263,8 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNamedTuple_Accessed;
-        private ValueTuple<int, double>? _MyNullableTuple;
-        public ValueTuple<int, double>? MyNullableTuple
+        private (int, double)? _MyNullableTuple;
+        public (int, double)? MyNullableTuple
         {
             [DebuggerStepThrough]
             get
@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyNullableTuple = default(ValueTuple<int, double>?);
+                        _MyNullableTuple = default((int, double)?);
                     }
                     else
                     {
@@ -294,8 +294,8 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNullableTuple_Accessed;
-        private ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> _MyValueTupleSerialized;
-        public ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> MyValueTupleSerialized
+        private (uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass) _MyValueTupleSerialized;
+        public (uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass) MyValueTupleSerialized
         {
             [DebuggerStepThrough]
             get
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyValueTupleSerialized = default(ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass>);
+                        _MyValueTupleSerialized = default((uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass));
                     }
                     else
                     {
@@ -390,7 +390,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion of supported collections and tuples */
         
-        private static (LazinatorTests.Examples.TestEnum firstEnum, LazinatorTests.Examples.TestEnum anotherEnum) ConvertFromBytes_ValueTuple_TestEnum_TestEnum(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (global::LazinatorTests.Examples.TestEnum firstEnum, global::LazinatorTests.Examples.TestEnum anotherEnum) ConvertFromBytes_ValueTuple_TestEnum_TestEnum(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -400,16 +400,16 @@ namespace LazinatorTests.Examples.Tuples
             
             int bytesSoFar = 0;
             
-            LazinatorTests.Examples.TestEnum item1 = (LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
+            global::LazinatorTests.Examples.TestEnum item1 = (global::LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             
-            LazinatorTests.Examples.TestEnum item2 = (LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
+            global::LazinatorTests.Examples.TestEnum item2 = (global::LazinatorTests.Examples.TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             
             var tupleType = (item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_TestEnum_TestEnum(BinaryBufferWriter writer, (LazinatorTests.Examples.TestEnum firstEnum, LazinatorTests.Examples.TestEnum anotherEnum) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple_TestEnum_TestEnum(BinaryBufferWriter writer, (global::LazinatorTests.Examples.TestEnum firstEnum, global::LazinatorTests.Examples.TestEnum anotherEnum) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) itemToConvert.Item1);
@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteUncompressedPrimitives.WriteDouble(writer, itemToConvert.Item2);
         }
         
-        private static ValueTuple<int, double>? ConvertFromBytes_Nullable_ValueTuple_int_double(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (int, double)? ConvertFromBytes_Nullable_ValueTuple_int_double(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -463,7 +463,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_Nullable_ValueTuple_int_double(BinaryBufferWriter writer, ValueTuple<int, double>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Nullable_ValueTuple_int_double(BinaryBufferWriter writer, (int, double)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -475,7 +475,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteUncompressedPrimitives.WriteDouble(writer, itemToConvert.Value.Item2);
         }
         
-        private static ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass) ConvertFromBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -487,7 +487,7 @@ namespace LazinatorTests.Examples.Tuples
             
             uint item1 = span.ToDecompressedUint(ref bytesSoFar);
             
-            LazinatorTests.Examples.ExampleChild item2 = default;
+            global::LazinatorTests.Examples.ExampleChild item2 = default;
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
@@ -496,11 +496,11 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     throw new MissingDeserializationFactoryException();
                 }
-                item2 = (LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                item2 = (global::LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            LazinatorTests.Examples.NonLazinatorClass item3 = default;
+            global::LazinatorTests.Examples.NonLazinatorClass item3 = default;
             int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
@@ -514,7 +514,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(BinaryBufferWriter writer, ValueTuple<uint, LazinatorTests.Examples.ExampleChild, LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ValueTuple_uint_ExampleChild_NonLazinatorClass(BinaryBufferWriter writer, (uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Item1);

@@ -199,8 +199,8 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGenericContainer_EndByteIndex = 0;
         protected override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
         
-        private LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> _Item;
-        public override LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> Item
+        private global::LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> _Item;
+        public override global::LazinatorTests.Examples.Abstract.IAbstractGeneric1<int> Item
         {
             [DebuggerStepThrough]
             get
@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Item = default(LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>);
+                        _Item = default(global::LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>);
                     }
                     else
                     {
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _Item = (LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
+                        _Item = (global::LazinatorTests.Examples.Abstract.IAbstractGeneric1<int>)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _Item_Accessed = true;
                 }

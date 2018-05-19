@@ -200,8 +200,8 @@ namespace LazinatorTests.Examples
         private int _ExampleStructContainingStruct_EndByteIndex;
         int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
         
-        private LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
-        public LazinatorTests.Examples.ExampleStruct MyExampleStruct
+        private global::LazinatorTests.Examples.ExampleStruct _MyExampleStruct;
+        public global::LazinatorTests.Examples.ExampleStruct MyExampleStruct
         {
             [DebuggerStepThrough]
             get
@@ -210,12 +210,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyExampleStruct = default(LazinatorTests.Examples.ExampleStruct);
+                        _MyExampleStruct = default(global::LazinatorTests.Examples.ExampleStruct);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength);
-                        _MyExampleStruct = new LazinatorTests.Examples.ExampleStruct()
+                        _MyExampleStruct = new global::LazinatorTests.Examples.ExampleStruct()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyExampleStruct_Accessed;
-        public LazinatorTests.Examples.ExampleStruct MyExampleStruct_Copy
+        public global::LazinatorTests.Examples.ExampleStruct MyExampleStruct_Copy
         {
             [DebuggerStepThrough]
             get
@@ -243,12 +243,12 @@ namespace LazinatorTests.Examples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(LazinatorTests.Examples.ExampleStruct);
+                        return default(global::LazinatorTests.Examples.ExampleStruct);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength);
-                        return new LazinatorTests.Examples.ExampleStruct()
+                        return new global::LazinatorTests.Examples.ExampleStruct()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,

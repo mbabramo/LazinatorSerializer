@@ -127,16 +127,6 @@ namespace Lazinator.CodeDescription
             SetReadAndWriteMethodNames();
         }
 
-        public PropertyDescription(string @namespace, string name, ImmutableArray<ITypeSymbol> typeArguments, ObjectDescription container)
-        {
-            ContainingObjectDescription = container;
-            Namespace = @namespace;
-            // IsAbstract = typeArguments.Any(x => x.IsAbstract);
-            SetTypeNameWithInnerProperties(name, typeArguments);
-            CheckSupportedCollections(name);
-            CheckSupportedTuples(name);
-        }
-
         public override string ToString()
         {
             return $"{TypeNameEncodable} {PropertyName}";
@@ -628,7 +618,9 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
                 // We process a Dictionary by treating it as a collection with KeyValuePairs. Thus, we must change to a single inner property of type KeyValuePair, which in turn has two inner properties equal to the properties of the type in our actual dictionary.
-                var replacementInnerProperty = new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
+                INamedTypeSymbol keyValuePairType = ContainingObjectDescription.Compilation.Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
+                INamedTypeSymbol constructed = keyValuePairType.Construct(t.TypeArguments.ToArray());
+                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
             }
         }

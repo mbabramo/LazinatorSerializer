@@ -196,8 +196,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetQueue_Values_EndByteIndex;
         protected virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
         
-        private System.Collections.Generic.Queue<int> _MyQueueInt;
-        public System.Collections.Generic.Queue<int> MyQueueInt
+        private global::System.Collections.Generic.Queue<int> _MyQueueInt;
+        public global::System.Collections.Generic.Queue<int> MyQueueInt
         {
             [DebuggerStepThrough]
             get
@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyQueueInt = default(System.Collections.Generic.Queue<int>);
+                        _MyQueueInt = default(global::System.Collections.Generic.Queue<int>);
                         _MyQueueInt_Dirty = true;
                     }
                     else
@@ -282,18 +282,18 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static System.Collections.Generic.Queue<int> ConvertFromBytes_System_Collections_Generic_Queue_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.Queue<int> ConvertFromBytes_System_Collections_Generic_Queue_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(System.Collections.Generic.Queue<int>);
+                return default(global::System.Collections.Generic.Queue<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            System.Collections.Generic.Queue<int> collection = new System.Collections.Generic.Queue<int>(collectionLength);
+            global::System.Collections.Generic.Queue<int> collection = new global::System.Collections.Generic.Queue<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -303,9 +303,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_Queue_int(BinaryBufferWriter writer, System.Collections.Generic.Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System_Collections_Generic_Queue_int(BinaryBufferWriter writer, global::System.Collections.Generic.Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(System.Collections.Generic.Queue<int>))
+            if (itemToConvert == default(global::System.Collections.Generic.Queue<int>))
             {
                 return;
             }

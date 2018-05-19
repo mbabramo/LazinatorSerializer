@@ -279,8 +279,8 @@ namespace Lazinator.Collections.Avl
             }
         }
         bool _Key_Accessed;
-        private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Left;
-        public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Left
+        private global::Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Left;
+        public global::Lazinator.Collections.Avl.AvlNode<TKey, TValue> Left
         {
             [DebuggerStepThrough]
             get
@@ -289,7 +289,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Left = default(Lazinator.Collections.Avl.AvlNode<TKey, TValue>);
+                        _Left = default(global::Lazinator.Collections.Avl.AvlNode<TKey, TValue>);
                     }
                     else
                     {
@@ -298,7 +298,7 @@ namespace Lazinator.Collections.Avl
                         {
                             _Left = default;
                         }
-                        else _Left = new Lazinator.Collections.Avl.AvlNode<TKey, TValue>()
+                        else _Left = new global::Lazinator.Collections.Avl.AvlNode<TKey, TValue>()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -322,8 +322,8 @@ namespace Lazinator.Collections.Avl
             }
         }
         bool _Left_Accessed;
-        private Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Right;
-        public Lazinator.Collections.Avl.AvlNode<TKey, TValue> Right
+        private global::Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Right;
+        public global::Lazinator.Collections.Avl.AvlNode<TKey, TValue> Right
         {
             [DebuggerStepThrough]
             get
@@ -332,7 +332,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Right = default(Lazinator.Collections.Avl.AvlNode<TKey, TValue>);
+                        _Right = default(global::Lazinator.Collections.Avl.AvlNode<TKey, TValue>);
                     }
                     else
                     {
@@ -341,7 +341,7 @@ namespace Lazinator.Collections.Avl
                         {
                             _Right = default;
                         }
-                        else _Right = new Lazinator.Collections.Avl.AvlNode<TKey, TValue>()
+                        else _Right = new global::Lazinator.Collections.Avl.AvlNode<TKey, TValue>()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
