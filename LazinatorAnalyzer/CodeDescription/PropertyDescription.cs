@@ -27,7 +27,7 @@ namespace Lazinator.CodeDescription
         public string DerivationKeyword { get; set; }
         public bool IsAbstract { get; set; }
         public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
-        public string TypeName { get; set; }
+        public string TypeNameShort => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
         public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
         public string FullyQualifiedNameWithoutNullableIndicator
@@ -217,7 +217,6 @@ namespace Lazinator.CodeDescription
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
                 Nullable = true;
-                TypeName = typeSymbol.Name;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
                 DerivationKeyword = "virtual ";
                 return;
@@ -239,9 +238,7 @@ namespace Lazinator.CodeDescription
                     Nullable = true;
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
-                if (namedTypeSymbol != null)
-                    TypeName = EncodableTypeName(namedTypeSymbol);
-                if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeName))
+                if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeNameShort))
                 {
                     PropertyType = LazinatorPropertyType.PrimitiveType;
                     return;
@@ -286,7 +283,6 @@ namespace Lazinator.CodeDescription
         private void SetNonserializedTypeNameAndPropertyType(INamedTypeSymbol t)
         {
             Nullable = t.TypeKind == TypeKind.Class;
-            TypeName = PrettyTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
             InterchangeTypeName = ContainingObjectDescription.Compilation.Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = ContainingObjectDescription.Compilation.Config?.GetDirectConverterTypeName(t);
@@ -326,7 +322,6 @@ namespace Lazinator.CodeDescription
         {
             SetTypeNameAndPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
             Nullable = true;
-            TypeName += "?";
             if (EnumEquivalentType != null)
                 EnumEquivalentType += "?";
             if (PropertyType == LazinatorPropertyType.PrimitiveType)
@@ -364,7 +359,7 @@ namespace Lazinator.CodeDescription
             if (t.IsGenericType)
             {
                 // This is a generic self-serialized type, e.g., MySelfSerializingDictionary<int, long> or MyType<T,U> where T,U : ILazinator
-                SetTypeNameWithInnerProperties(t);
+                SetInnerProperties(t);
                 return;
             }
         }
@@ -390,7 +385,6 @@ namespace Lazinator.CodeDescription
                 arrayIndicator = "[" + new string(',', (int)ArrayRank - 1) + "]";
                 arrayTypeName = "Array" + ((int)ArrayRank).ToString();
             }
-            TypeName = ReverseBracketOrder(InnerProperties[0].TypeName + arrayIndicator);
         }
 
         private string ReverseBracketOrder(string arrayCode)
@@ -461,7 +455,6 @@ namespace Lazinator.CodeDescription
 
             InnerProperties = recordLikeTypes[t]
                 .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
-            TypeName = t.Name; // we're assuming there's no other struct / class with same name in a different namespace. Could use FullName as an antidote to that.
             return true;
         }
 
@@ -508,34 +501,20 @@ namespace Lazinator.CodeDescription
 
         private void SetSupportedTupleTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
-            SetTypeNameWithInnerProperties(t, nameWithoutArity);
+            SetInnerProperties(t, nameWithoutArity);
         }
 
-        private void SetTypeNameWithInnerProperties(INamedTypeSymbol t, string name = null)
+        private void SetInnerProperties(INamedTypeSymbol t, string name = null)
         {
-            if (name == null)
-                name = t.Name;
             var typeArguments = t.TypeArguments;
             bool isGenericType = t.IsGenericType;
-            SetTypeNameWithInnerProperties(name, typeArguments);
+            SetInnerProperties(typeArguments);
         }
 
-        private void SetTypeNameWithInnerProperties(string name, ImmutableArray<ITypeSymbol> typeArguments)
+        private void SetInnerProperties(ImmutableArray<ITypeSymbol> typeArguments)
         {
             InnerProperties = typeArguments
                             .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
-            TypeName = null;
-            if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple)
-            {
-                var namedTypeSymbol = (PropertySymbol?.Type ?? TypeSymbolIfNoProperty) as INamedTypeSymbol;
-                if (namedTypeSymbol != null && namedTypeSymbol.TupleElements != null && namedTypeSymbol.TupleElements.Count() == InnerProperties.Count() && namedTypeSymbol.TupleElements.First().Name != "Item1")
-                {
-                    var zipped = namedTypeSymbol.TupleElements.Zip(InnerProperties, (x, y) => new { TupleElement = x, InnerProperty = y });
-                    TypeName = "(" + string.Join(", ", zipped.Select(x => x.InnerProperty.FullyQualifiedTypeName + " " + x.TupleElement.Name)) + ")";
-                }
-            }
-            if (TypeName == null)
-                TypeName = name + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
         }
 
         private void CheckSupportedCollections(string nameWithoutArity)
@@ -598,7 +577,6 @@ namespace Lazinator.CodeDescription
 
             InnerProperties = t.TypeArguments
                 .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
-            TypeName = nameWithoutArity + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                 if (InnerProperties[0].Nullable)
@@ -895,8 +873,8 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.PrimitiveType ||
                 PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
             {
-                ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[EnumEquivalentType ?? TypeName];
-                WriteMethodName = PrimitiveReadWriteMethodNames.WriteNames[EnumEquivalentType ?? TypeName];
+                ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[EnumEquivalentType ?? TypeNameShort];
+                WriteMethodName = PrimitiveReadWriteMethodNames.WriteNames[EnumEquivalentType ?? TypeNameShort];
             }
         }
 
