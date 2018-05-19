@@ -34,7 +34,7 @@ namespace Lazinator.CodeDescription
         public string TypeSubclassHierarchy { get; set; }
         public string TypeSubclassHierarchyEncodable { get; set; }
         public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
         public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeSubclassHierarchy + TypeNameWithoutNullableIndicator;
         public string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();

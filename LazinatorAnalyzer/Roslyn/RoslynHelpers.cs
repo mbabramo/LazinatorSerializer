@@ -46,6 +46,12 @@ namespace LazinatorCodeGen.Roslyn
                         case ')':
                             b.Append("_p");
                             break;
+                        case '<':
+                            b.Append("_G");
+                            break;
+                        case '>':
+                            b.Append("_g");
+                            break;
                         case '.':
                             b.Append("__");
                             break;
@@ -54,6 +60,9 @@ namespace LazinatorCodeGen.Roslyn
                             break;
                         case ',':
                             b.Append("_c");
+                            break;
+                        case '`':
+                            b.Append("_q");
                             break;
                         default:
                             b.Append("_C" + ((short)c).ToString());
