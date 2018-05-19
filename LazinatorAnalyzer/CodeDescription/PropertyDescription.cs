@@ -34,10 +34,10 @@ namespace Lazinator.CodeDescription
         public string TypeSubclassHierarchy { get; set; }
         public string TypeSubclassHierarchyEncodable { get; set; }
         public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
         public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeSubclassHierarchy + TypeNameWithoutNullableIndicator;
-        public string TypeNameEncodable { get; set; }
-        public string FullyQualifiedTypeNameEncodable => NamespacePrefixToUseEncodable + TypeSubclassHierarchyEncodable + TypeNameEncodable;
+        public string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();
         public string WriteMethodName { get; set; }
         public string ReadMethodName { get; set; }
         public bool Nullable { get; set; }
@@ -129,7 +129,7 @@ namespace Lazinator.CodeDescription
 
         public override string ToString()
         {
-            return $"{TypeNameEncodable} {PropertyName}";
+            return $"{FullyQualifiedTypeNameEncodable} {PropertyName}";
         }
 
         #endregion
@@ -213,7 +213,7 @@ namespace Lazinator.CodeDescription
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
                 Nullable = true;
-                TypeName = TypeNameEncodable = typeSymbol.Name;
+                TypeName = typeSymbol.Name;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
                 DerivationKeyword = "virtual ";
                 return;
@@ -239,7 +239,7 @@ namespace Lazinator.CodeDescription
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
                 if (namedTypeSymbol != null)
-                    TypeName = TypeNameEncodable = EncodableTypeName(namedTypeSymbol);
+                    TypeName = EncodableTypeName(namedTypeSymbol);
                 if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeName))
                 {
                     PropertyType = LazinatorPropertyType.PrimitiveType;
@@ -286,7 +286,6 @@ namespace Lazinator.CodeDescription
         {
             Nullable = t.TypeKind == TypeKind.Class;
             TypeName = PrettyTypeName(t);
-            TypeNameEncodable = EncodableTypeName(t);
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
             InterchangeTypeName = ContainingObjectDescription.Compilation.Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = ContainingObjectDescription.Compilation.Config?.GetDirectConverterTypeName(t);
@@ -332,7 +331,6 @@ namespace Lazinator.CodeDescription
             TypeName += "?";
             if (EnumEquivalentType != null)
                 EnumEquivalentType += "?";
-            TypeNameEncodable = "Nullable_" + TypeNameEncodable;
             if (PropertyType == LazinatorPropertyType.PrimitiveType)
                 PropertyType = LazinatorPropertyType.PrimitiveTypeNullable;
             //if (PropertyType == LazinatorPropertyType.SupportedCollection)
@@ -371,7 +369,6 @@ namespace Lazinator.CodeDescription
                 SetTypeNameWithInnerProperties(t);
                 return;
             }
-            TypeName = TypeNameEncodable = t.Name;
         }
 
         private void SetArrayTypeNameAndPropertyType(IArrayTypeSymbol t)
@@ -396,9 +393,6 @@ namespace Lazinator.CodeDescription
                 arrayTypeName = "Array" + ((int)ArrayRank).ToString();
             }
             TypeName = ReverseBracketOrder(InnerProperties[0].TypeName + arrayIndicator);
-
-
-            TypeNameEncodable = arrayTypeName + "_" + InnerProperties[0].TypeNameEncodable;
         }
 
         private string ReverseBracketOrder(string arrayCode)
@@ -470,7 +464,6 @@ namespace Lazinator.CodeDescription
             InnerProperties = recordLikeTypes[t]
                 .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
             TypeName = t.Name; // we're assuming there's no other struct / class with same name in a different namespace. Could use FullName as an antidote to that.
-            TypeNameEncodable = EncodableTypeName(t);
             return true;
         }
 
@@ -545,7 +538,6 @@ namespace Lazinator.CodeDescription
             }
             if (TypeName == null)
                 TypeName = name + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
-            TypeNameEncodable = EncodableTypeName(name, typeArguments);
         }
 
         private void CheckSupportedCollections(string nameWithoutArity)
@@ -609,7 +601,6 @@ namespace Lazinator.CodeDescription
             InnerProperties = t.TypeArguments
                 .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
             TypeName = nameWithoutArity + "<" + string.Join(", ", InnerProperties.Select(x => x.FullyQualifiedTypeName)) + ">";
-            TypeNameEncodable = EncodableTypeName(t);
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                 if (InnerProperties[0].Nullable)
@@ -1184,7 +1175,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            {DirectConverterTypeNamePrefix}ConvertToBytes_{TypeNameEncodable.Substring("Nullable_".Length)}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
+                            {DirectConverterTypeNamePrefix}ConvertToBytes_{TypeNameEncodableWithoutNullable}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
                         }}
                     }}
 ");
