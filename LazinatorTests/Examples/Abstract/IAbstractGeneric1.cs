@@ -11,5 +11,7 @@ namespace LazinatorTests.Examples.Abstract
     public interface IAbstractGeneric1<T> : ILazinator
     {
         T MyT { get; set; }
+        AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric { get; set; }
+        AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2 { get; set; }
     }
 }

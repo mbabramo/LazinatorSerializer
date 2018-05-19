@@ -205,6 +205,36 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGeneric2b_EndByteIndex;
         protected virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
         
+        private LazinatorTests.Examples.Abstract.AbstractGeneric1<Example>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
+        public override LazinatorTests.Examples.Abstract.AbstractGeneric1<Example>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _MyEnumWithinAbstractGeneric;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyEnumWithinAbstractGeneric = value;
+            }
+        }
+        private LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
+        public override LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _MyEnumWithinAbstractGeneric2;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _MyEnumWithinAbstractGeneric2 = value;
+            }
+        }
         private string _AnotherProperty;
         public string AnotherProperty
         {
@@ -307,6 +337,8 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyEnumWithinAbstractGeneric = (LazinatorTests.Examples.Abstract.AbstractGeneric1<Example>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnumWithinAbstractGeneric2 = (LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _AnotherProperty = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
@@ -329,6 +361,8 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinAbstractGeneric);
+            CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinAbstractGeneric2);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _AnotherProperty);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

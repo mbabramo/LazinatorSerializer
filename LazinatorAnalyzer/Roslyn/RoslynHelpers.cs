@@ -134,7 +134,7 @@ namespace LazinatorCodeGen.Roslyn
             ITypeSymbol current = typeSymbol;
             while (current.ContainingType != null)
             {
-                hierarchy += current.ContainingType.Name + ".";
+                hierarchy += current.ContainingType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) + ".";
                 current = current.ContainingType;
             }
             return hierarchy;
