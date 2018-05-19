@@ -23,6 +23,8 @@ namespace LazinatorCodeGen.Roslyn
 
         public static string GetEncodableVersionOfIdentifier(string identifier)
         {
+            if (identifier.StartsWith("global::"))
+                identifier = identifier.Substring(8);
             StringBuilder b = new StringBuilder();
             foreach (var c in identifier)
             {
@@ -33,31 +35,28 @@ namespace LazinatorCodeGen.Roslyn
                     switch (c)
                     {
                         case '[':
-                            b.Append("@B");
+                            b.Append("_B");
                             break;
                         case ']':
-                            b.Append("@B");
+                            b.Append("_b");
                             break;
                         case '(':
-                            b.Append("@B");
+                            b.Append("_P");
                             break;
                         case ')':
-                            b.Append("@B");
-                            break;
-                        case '@':
-                            b.Append("@@");
+                            b.Append("_p");
                             break;
                         case '.':
-                            b.Append("_");
+                            b.Append("__");
                             break;
                         case '_':
-                            b.Append("@_");
+                            b.Append("_u");
                             break;
                         case ',':
-                            b.Append("@A");
+                            b.Append("_c");
                             break;
                         default:
-                            b.Append("@u" + ((short)c).ToString());
+                            b.Append("_C" + ((short)c).ToString());
                             break;
                     }
                 }
