@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples.Collections
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new System.Collections.Generic.KeyValuePair<int, global::LazinatorTests.Examples.ExampleChild>(item1, item2);
+            var tupleType = new global::System.Collections.Generic.KeyValuePair<int, global::LazinatorTests.Examples.ExampleChild>(item1, item2);
             
             return tupleType;
         }

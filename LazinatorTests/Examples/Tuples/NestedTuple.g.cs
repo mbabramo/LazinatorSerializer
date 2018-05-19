@@ -291,7 +291,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<uint?, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)), global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new global::System.Tuple<uint?, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)), global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
@@ -479,7 +479,7 @@ namespace LazinatorTests.Examples.Tuples
             
             long item2 = span.ToDecompressedLong(ref bytesSoFar);
             
-            var tupleType = new Tuple<short, long>(item1, item2);
+            var tupleType = new global::System.Tuple<short, long>(item1, item2);
             
             return tupleType;
         }

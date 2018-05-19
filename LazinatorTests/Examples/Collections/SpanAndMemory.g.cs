@@ -459,7 +459,7 @@ namespace LazinatorTests.Examples.Collections
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            Memory<int> collection = new Memory<int>(new int[collectionLength]);
+            global::System.Memory<int> collection = new global::System.Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int i = 0; i < collectionLength; i++)
             {
@@ -492,7 +492,7 @@ namespace LazinatorTests.Examples.Collections
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            Memory<int> collection = new Memory<int>(new int[collectionLength]);
+            global::System.Memory<int> collection = new global::System.Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int i = 0; i < collectionLength; i++)
             {

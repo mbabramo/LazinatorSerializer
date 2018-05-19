@@ -21,9 +21,6 @@ namespace Lazinator.CodeDescription
         public IPropertySymbol PropertySymbol { get; set; }
         public ITypeSymbol TypeSymbolIfNoProperty { get; set; }
         public ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
-        public string Namespace { get; set; }
-        public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
-        public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
         public string EnumEquivalentType { get; set; }
         public string EnumEquivalentCastToEquivalentType => EnumEquivalentType != null ? $"({EnumEquivalentType}) " : $"";
         public string EnumEquivalentCastToEnum => EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"";
@@ -31,8 +28,6 @@ namespace Lazinator.CodeDescription
         public bool IsAbstract { get; set; }
         public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         public string TypeName { get; set; }
-        public string TypeSubclassHierarchy { get; set; }
-        public string TypeSubclassHierarchyEncodable { get; set; }
         public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
         public string FullyQualifiedNameWithoutNullableIndicator
@@ -227,10 +222,7 @@ namespace Lazinator.CodeDescription
                 DerivationKeyword = "virtual ";
                 return;
             }
-
-            Namespace = typeSymbol.GetFullNamespace();
-            TypeSubclassHierarchy = typeSymbol.GetSubclassHierarchy();
-            TypeSubclassHierarchyEncodable = typeSymbol.GetSubclassHierarchyEncodable();
+            
             Nullable = IsNullableType(namedTypeSymbol);
             if (Nullable)
             {
@@ -333,9 +325,6 @@ namespace Lazinator.CodeDescription
         private void SetNullableTypeNameAndPropertyType(INamedTypeSymbol namedTypeSymbol)
         {
             SetTypeNameAndPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
-            Namespace = namedTypeSymbol.GetFullNamespace(); // reset since it might have changed
-            TypeSubclassHierarchy = namedTypeSymbol.GetSubclassHierarchy();
-            TypeSubclassHierarchyEncodable = namedTypeSymbol.GetSubclassHierarchyEncodable();
             Nullable = true;
             TypeName += "?";
             if (EnumEquivalentType != null)

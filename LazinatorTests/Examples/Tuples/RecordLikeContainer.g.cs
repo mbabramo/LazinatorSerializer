@@ -359,7 +359,7 @@ namespace LazinatorTests.Examples.Tuples
             
             string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
-            var tupleType = new LazinatorTests.Examples.MismatchedRecordLikeType(item1, item2);
+            var tupleType = new global::LazinatorTests.Examples.MismatchedRecordLikeType(item1, item2);
             
             return tupleType;
         }
@@ -397,7 +397,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new LazinatorTests.Examples.RecordLikeClass(item1, item2);
+            var tupleType = new global::LazinatorTests.Examples.RecordLikeClass(item1, item2);
             
             return tupleType;
         }
@@ -432,7 +432,7 @@ namespace LazinatorTests.Examples.Tuples
             
             string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
-            var tupleType = new LazinatorTests.Examples.RecordLikeType(item1, item2);
+            var tupleType = new global::LazinatorTests.Examples.RecordLikeType(item1, item2);
             
             return tupleType;
         }

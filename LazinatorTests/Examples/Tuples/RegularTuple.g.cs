@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
@@ -493,7 +493,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
@@ -554,7 +554,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new Tuple<int, global::LazinatorTests.Examples.ExampleStruct>(item1, item2);
+            var tupleType = new global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct>(item1, item2);
             
             return tupleType;
         }

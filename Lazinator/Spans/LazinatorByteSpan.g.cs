@@ -319,7 +319,7 @@ namespace Lazinator.Spans
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+            global::System.Memory<byte> collection = new global::System.Memory<byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int i = 0; i < collectionLength; i++)
             {
