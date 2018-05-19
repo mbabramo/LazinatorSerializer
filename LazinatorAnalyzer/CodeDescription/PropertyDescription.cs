@@ -35,8 +35,17 @@ namespace Lazinator.CodeDescription
         public string TypeSubclassHierarchyEncodable { get; set; }
         public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
-        public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
-        public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeSubclassHierarchy + TypeNameWithoutNullableIndicator;
+        public string FullyQualifiedNameWithoutNullableIndicator
+        {
+            get
+            {
+                string fn = FullyQualifiedTypeName;
+                if (fn.EndsWith("?"))
+                    return fn.Substring(0, fn.Length - 1);
+                else
+                    return fn;
+            }
+        }
         public string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();
         public string WriteMethodName { get; set; }
         public string ReadMethodName { get; set; }
@@ -1237,7 +1246,7 @@ namespace Lazinator.CodeDescription
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory)
             {
                 creationText =
-                    $@"{FullyQualifiedNameWithoutNullableIndicator} collection = new {FullyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].TypeName}[collectionLength]);
+                    $@"{FullyQualifiedNameWithoutNullableIndicator} collection = new {FullyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].FullyQualifiedTypeName}[collectionLength]);
                             var collectionAsSpan = collection.Span;"; // for now, create array on the heap
             }
             else if (isArray)
@@ -1250,7 +1259,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"collectionLength{j}")));
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].TypeName}[{innerArrayText}]");
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].FullyQualifiedTypeName}[{innerArrayText}]");
                     creationText = $"{FullyQualifiedTypeName} collection = new {newExpression};";
                 }
             }
