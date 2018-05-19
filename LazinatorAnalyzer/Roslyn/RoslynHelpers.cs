@@ -15,6 +15,7 @@ namespace LazinatorCodeGen.Roslyn
 {
     public static class RoslynHelpers
     {
+        #region Names
 
         public static string GetEncodableVersionOfIdentifier(this ISymbol symbol)
         {
@@ -73,6 +74,119 @@ namespace LazinatorCodeGen.Roslyn
             return b.ToString();
         }
 
+        public static string PrettyTypeName(INamedTypeSymbol t)
+        {
+            if (t.IsGenericType)
+            {
+                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx) : x.Name);
+                return string.Format(
+                    "{0}<{1}>",
+                    t.Name,
+                    string.Join(", ", innerTypeNames));
+            }
+
+            return RegularizeTypeName(t.Name);
+        }
+        
+        public static string EncodableTypeName(ITypeSymbol typeSymbol)
+        {
+            string name = typeSymbol.Name;
+            if (typeSymbol is INamedTypeSymbol namedTypeSymbol)
+            {
+                if (namedTypeSymbol.TupleUnderlyingType != null)
+                    name = namedTypeSymbol.TupleUnderlyingType.Name;
+                var typeArguments = namedTypeSymbol.TupleUnderlyingType?.TypeArguments ?? namedTypeSymbol.TypeArguments;
+                bool isGeneric = namedTypeSymbol.IsGenericType;
+                return EncodableTypeName(name, typeArguments);
+            }
+            return name;
+        }
+
+        public static string EncodableTypeName(string name, ImmutableArray<ITypeSymbol> typeArguments)
+        {
+            if (typeArguments != null && typeArguments.Any())
+            { // Note: This will cover Nullable<T> as well as other generics.
+                return string.Format(
+                    "{0}_{1}",
+                    name,
+                    string.Join("_", typeArguments.Select(x => EncodableTypeName(x))));
+            }
+
+            string regularized = RegularizeTypeName(name);
+
+            return regularized;
+        }
+        
+        private static readonly Dictionary<string, string> TypeRegularization = new Dictionary<string, string>()
+        {
+            { "Boolean", "bool" },
+            { "Byte", "byte" },
+            { "SByte", "sbyte" },
+            { "Char", "char" },
+            { "Decimal", "decimal" },
+            { "Single", "float" },
+            { "Double", "double" },
+            { "Int16", "short" },
+            { "UInt16", "ushort" },
+            { "Int32", "int" },
+            { "UInt32", "uint" },
+            { "Int64", "long" },
+            { "UInt64", "ulong" },
+            { "String", "string" },
+        };
+
+        public static string RegularizeTypeName(string typeName)
+        {
+            if (TypeRegularization.ContainsKey(typeName))
+                return TypeRegularization[typeName];
+            var withoutNullableIndicator = WithoutNullableIndicator(typeName);
+            if (TypeRegularization.ContainsKey(withoutNullableIndicator))
+                return TypeRegularization[withoutNullableIndicator] + "?";
+            return typeName;
+        }
+
+        public static string WithoutNullableIndicator(string typeName)
+        {
+            if (typeName.EndsWith("?"))
+                return typeName.Substring(0, typeName.Length - 1);
+            else
+                return typeName;
+        }
+        
+        public static string GetFullyQualifiedName(this ISymbol symbol)
+        {
+            if (symbol == null)
+                return "";
+            return GetFullNamespace(symbol) + "." + symbol.Name;
+        }
+
+        public static string GetFullNamespace(this ISymbol symbol)
+        {
+            if (symbol?.ContainingNamespace == null)
+                return "";
+            string higherNamespace = GetFullNamespace(symbol.ContainingNamespace);
+            if (higherNamespace != "")
+                return higherNamespace + "." + symbol.ContainingNamespace.Name;
+            else
+                return symbol.ContainingNamespace.Name;
+        }
+
+        public static string GetNameWithoutGenericArity(Type t)
+        {
+            string name = t.Name;
+            return GetNameWithoutGenericArity(name);
+        }
+
+        public static string GetNameWithoutGenericArity(string name)
+        {
+            int index = name.IndexOf('`');
+            return index == -1 ? name : name.Substring(0, index);
+        }
+
+        #endregion
+
+        #region Properties
+
         public static ImmutableList<RoslynProperty> GetPropertiesWithAccessors(this INamedTypeSymbol namedTypeSymbol)
         {
             var properties = namedTypeSymbol.GetMembers().Where(x => x.Kind == SymbolKind.Property).ToList();
@@ -97,6 +211,10 @@ namespace LazinatorCodeGen.Roslyn
             propertiesLowerLevels = namedSymbolType.GetPropertySymbolsBaseLevels();
         }
 
+        #endregion
+
+        #region Attributes
+
         public static IEnumerable<Attribute> GetKnownAttributes(ISymbol symbol)
         {
             return symbol.GetAttributes().Select(x => AttributeConverter.ConvertAttribute(x)).Where(x => x != null);
@@ -111,8 +229,7 @@ namespace LazinatorCodeGen.Roslyn
         {
             return GetKnownAttributes<T>(symbol).SingleOrDefault();
         }
-
-
+        
         public static bool HasAttributeOfType<T>(this ISymbol symbol) where T : Attribute
         {
             return GetKnownAttributes<T>(symbol).Any();
@@ -169,75 +286,9 @@ namespace LazinatorCodeGen.Roslyn
             return constructorArg.Value;
         }
 
+        #endregion
 
-        public static string PrettyTypeName(INamedTypeSymbol t)
-        {
-            if (t.IsGenericType)
-            {
-                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx) : x.Name);
-                return string.Format(
-                    "{0}<{1}>",
-                    t.Name,
-                    string.Join(", ", innerTypeNames));
-            }
-
-            return RegularizeTypeName(t.Name);
-        }
-
-
-        public static string GetSubclassHierarchy(this ITypeSymbol typeSymbol)
-        {
-            string hierarchy = "";
-            ITypeSymbol current = typeSymbol;
-            while (current.ContainingType != null)
-            {
-                hierarchy += current.ContainingType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) + ".";
-                current = current.ContainingType;
-            }
-            return hierarchy;
-        }
-
-        public static string GetSubclassHierarchyEncodable(this ITypeSymbol typeSymbol)
-        {
-            string hierarchy = "";
-            ITypeSymbol current = typeSymbol;
-            while (current.ContainingType != null)
-            {
-                hierarchy += EncodableTypeName(current.ContainingType) + "_";
-                current = current.ContainingType;
-            }
-            return hierarchy;
-        }
-
-        public static string EncodableTypeName(ITypeSymbol typeSymbol)
-        {
-            string name = typeSymbol.Name;
-            if (typeSymbol is INamedTypeSymbol namedTypeSymbol)
-            {
-                if (namedTypeSymbol.TupleUnderlyingType != null)
-                    name = namedTypeSymbol.TupleUnderlyingType.Name;
-                var typeArguments = namedTypeSymbol.TupleUnderlyingType?.TypeArguments ?? namedTypeSymbol.TypeArguments;
-                bool isGeneric = namedTypeSymbol.IsGenericType;
-                return EncodableTypeName(name, typeArguments);
-            }
-            return name;
-        }
-
-        public static string EncodableTypeName(string name, ImmutableArray<ITypeSymbol> typeArguments)
-        {
-            if (typeArguments != null && typeArguments.Any())
-            { // Note: This will cover Nullable<T> as well as other generics.
-                return string.Format(
-                    "{0}_{1}",
-                    name,
-                    string.Join("_", typeArguments.Select(x => EncodableTypeName(x))));
-            }
-
-            string regularized = RegularizeTypeName(name);
-
-            return regularized;
-        }
-
+        #region Types and interfaces
 
         public static INamedTypeSymbol GetCorrespondingExclusiveInterface(INamedTypeSymbol type)
         {
@@ -252,74 +303,7 @@ namespace LazinatorCodeGen.Roslyn
             var correspondingInterface = allInterfaces.Single();
             return correspondingInterface;
         }
-
-        private static readonly Dictionary<string, string> TypeRegularization = new Dictionary<string, string>()
-        {
-            { "Boolean", "bool" },
-            { "Byte", "byte" },
-            { "SByte", "sbyte" },
-            { "Char", "char" },
-            { "Decimal", "decimal" },
-            { "Single", "float" },
-            { "Double", "double" },
-            { "Int16", "short" },
-            { "UInt16", "ushort" },
-            { "Int32", "int" },
-            { "UInt32", "uint" },
-            { "Int64", "long" },
-            { "UInt64", "ulong" },
-            { "String", "string" },
-        };
-
-        public static string RegularizeTypeName(string typeName)
-        {
-            if (TypeRegularization.ContainsKey(typeName))
-                return TypeRegularization[typeName];
-            var withoutNullableIndicator = WithoutNullableIndicator(typeName);
-            if (TypeRegularization.ContainsKey(withoutNullableIndicator))
-                return TypeRegularization[withoutNullableIndicator] + "?";
-            return typeName;
-        }
-
-        public static string WithoutNullableIndicator(string typeName)
-        {
-            if (typeName.EndsWith("?"))
-                return typeName.Substring(0, typeName.Length - 1);
-            else
-                return typeName;
-        }
-
-        public static string GetFullyQualifiedName(this ISymbol symbol)
-        {
-            if (symbol == null)
-                return "";
-            return GetFullNamespace(symbol) + "." + symbol.Name;
-        }
-
-        public static string GetFullNamespace(this ISymbol symbol)
-        {
-            if (symbol?.ContainingNamespace == null)
-                return "";
-            string higherNamespace = GetFullNamespace(symbol.ContainingNamespace);
-            if (higherNamespace != "")
-                return higherNamespace + "." + symbol.ContainingNamespace.Name;
-            else
-                return symbol.ContainingNamespace.Name;
-        }
-
-
-        public static string GetNameWithoutGenericArity(Type t)
-        {
-            string name = t.Name;
-            return GetNameWithoutGenericArity(name);
-        }
-
-        public static string GetNameWithoutGenericArity(string name)
-        {
-            int index = name.IndexOf('`');
-            return index == -1 ? name : name.Substring(0, index);
-        }
-
+        
         public static bool TypeDeclarationIncludesMethod(TypeDeclarationSyntax typeDeclaration, string methodName)
         {
             HashSet<MethodDeclarationSyntax> methodDeclarations = GetMethodDeclarations(typeDeclaration);
@@ -341,5 +325,7 @@ namespace LazinatorCodeGen.Roslyn
                         .Modifiers.Any(y => y.Text == "readonly")));
             return isReadOnly;
         }
+
+        #endregion
     }
 }
