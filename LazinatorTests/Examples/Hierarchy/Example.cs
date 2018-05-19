@@ -10,7 +10,7 @@ namespace LazinatorTests.Examples
     {
         public Example()
         {
-            
+
         }
 
         public void LazinatorObjectVersionUpgrade(int oldFormatVersion)
@@ -27,6 +27,12 @@ namespace LazinatorTests.Examples
         public void OnDirty()
         {
             _OnDirtyCalled = true;
+        }
+
+        public enum EnumWithinClass
+        {
+            Something,
+            SomethingElse
         }
     }
 }

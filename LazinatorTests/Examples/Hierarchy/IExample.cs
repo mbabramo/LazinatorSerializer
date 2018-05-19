@@ -27,6 +27,7 @@ namespace LazinatorTests.Examples
         uint MyUint { get; set; }
         TestEnum MyTestEnum { get; set; }
         TestEnumByte? MyTestEnumByteNullable { get; set; }
+        Example.EnumWithinClass MyEnumWithinClass { get; set; }
         LazinatorWrapperInt WrappedInt { get; set; }
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }
