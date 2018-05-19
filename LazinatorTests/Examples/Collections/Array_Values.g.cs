@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength);
-                        _MyArrayInt = ConvertFromBytes_Array_int(childData, DeserializationFactory, () => { MyArrayInt_Dirty = true; });
+                        _MyArrayInt = ConvertFromBytes_int_B_b(childData, DeserializationFactory, () => { MyArrayInt_Dirty = true; });
                     }
                     _MyArrayInt_Accessed = true;
                 }
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength);
-                        _MyJaggedArrayInt = ConvertFromBytes_Array_Array_int(childData, DeserializationFactory, null);
+                        _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData, DeserializationFactory, null);
                     }
                     _MyJaggedArrayInt_Accessed = true;
                     IsDirty = true;
@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Array_int(w, MyArrayInt,
+            ConvertToBytes_int_B_b(w, MyArrayInt,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyJaggedArrayInt, isBelievedDirty: _MyJaggedArrayInt_Accessed,
@@ -319,13 +319,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Array_Array_int(w, MyJaggedArrayInt,
+            ConvertToBytes_int_B_b_B_b(w, MyJaggedArrayInt,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static int[] ConvertFromBytes_Array_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[] ConvertFromBytes_int_B_b(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -346,7 +346,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Array_int(BinaryBufferWriter writer, int[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_b(BinaryBufferWriter writer, int[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(int[]))
             {
@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][] ConvertFromBytes_Array_Array_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[][] ConvertFromBytes_int_B_b_B_b(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -382,7 +382,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = ConvertFromBytes_Array_int(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                    var item = ConvertFromBytes_int_B_b(childData, deserializationFactory, informParentOfDirtinessDelegate);
                     collection[i] = item;
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Array_Array_int(BinaryBufferWriter writer, int[][] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_b_B_b(BinaryBufferWriter writer, int[][] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(int[][]))
             {
@@ -408,7 +408,7 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(BinaryBufferWriter w) => ConvertToBytes_Array_int(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness);
+                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_b(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness);
                     WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 

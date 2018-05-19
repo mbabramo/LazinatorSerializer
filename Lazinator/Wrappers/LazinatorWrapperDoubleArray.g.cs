@@ -210,7 +210,7 @@ namespace Lazinator.Wrappers
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength);
-                        _Value = ConvertFromBytes_Array_double(childData, DeserializationFactory, null);
+                        _Value = ConvertFromBytes_double_B_b(childData, DeserializationFactory, null);
                     }
                     _Value_Accessed = true;
                     IsDirty = true;
@@ -262,12 +262,12 @@ namespace Lazinator.Wrappers
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Array_double(w, copy_Value, includeChildrenMode, v));
+            ConvertToBytes_double_B_b(w, copy_Value, includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static double[] ConvertFromBytes_Array_double(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static double[] ConvertFromBytes_double_B_b(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -288,7 +288,7 @@ namespace Lazinator.Wrappers
             return collection;
         }
         
-        private static void ConvertToBytes_Array_double(BinaryBufferWriter writer, double[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_double_B_b(BinaryBufferWriter writer, double[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(double[]))
             {

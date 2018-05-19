@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength);
-                        _MyLinkedListInt = ConvertFromBytes_System_Collections_Generic_LinkedList_int(childData, DeserializationFactory, () => { MyLinkedListInt_Dirty = true; });
+                        _MyLinkedListInt = ConvertFromBytes_System__Collections__Generic__LinkedList_Gint_g(childData, DeserializationFactory, () => { MyLinkedListInt_Dirty = true; });
                     }
                     _MyLinkedListInt_Accessed = true;
                 }
@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength);
-                        _MyListInt = ConvertFromBytes_System_Collections_Generic_List_int(childData, DeserializationFactory, () => { MyListInt_Dirty = true; });
+                        _MyListInt = ConvertFromBytes_System__Collections__Generic__List_Gint_g(childData, DeserializationFactory, () => { MyListInt_Dirty = true; });
                     }
                     _MyListInt_Accessed = true;
                 }
@@ -320,7 +320,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength);
-                        _MySortedSetInt = ConvertFromBytes_System_Collections_Generic_SortedSet_int(childData, DeserializationFactory, () => { MySortedSetInt_Dirty = true; });
+                        _MySortedSetInt = ConvertFromBytes_System__Collections__Generic__SortedSet_Gint_g(childData, DeserializationFactory, () => { MySortedSetInt_Dirty = true; });
                     }
                     _MySortedSetInt_Accessed = true;
                 }
@@ -388,7 +388,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_LinkedList_int(w, MyLinkedListInt,
+            ConvertToBytes_System__Collections__Generic__LinkedList_Gint_g(w, MyLinkedListInt,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_List_int(w, MyListInt,
+            ConvertToBytes_System__Collections__Generic__List_Gint_g(w, MyListInt,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty,
@@ -404,13 +404,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_SortedSet_int(w, MySortedSetInt,
+            ConvertToBytes_System__Collections__Generic__SortedSet_Gint_g(w, MySortedSetInt,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.LinkedList<int> ConvertFromBytes_System_Collections_Generic_LinkedList_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.LinkedList<int> ConvertFromBytes_System__Collections__Generic__LinkedList_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -431,7 +431,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_LinkedList_int(BinaryBufferWriter writer, global::System.Collections.Generic.LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__LinkedList_Gint_g(BinaryBufferWriter writer, global::System.Collections.Generic.LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.LinkedList<int>))
             {
@@ -445,7 +445,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static global::System.Collections.Generic.List<int> ConvertFromBytes_System_Collections_Generic_List_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<int> ConvertFromBytes_System__Collections__Generic__List_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -466,7 +466,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_int(BinaryBufferWriter writer, global::System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__List_Gint_g(BinaryBufferWriter writer, global::System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.List<int>))
             {
@@ -480,7 +480,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static global::System.Collections.Generic.SortedSet<int> ConvertFromBytes_System_Collections_Generic_SortedSet_int(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.SortedSet<int> ConvertFromBytes_System__Collections__Generic__SortedSet_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -501,7 +501,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_SortedSet_int(BinaryBufferWriter writer, global::System.Collections.Generic.SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__SortedSet_Gint_g(BinaryBufferWriter writer, global::System.Collections.Generic.SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.SortedSet<int>))
             {

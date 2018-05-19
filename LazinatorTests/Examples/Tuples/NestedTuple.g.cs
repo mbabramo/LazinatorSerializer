@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength);
-                        _MyNestedTuple = ConvertFromBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(childData, DeserializationFactory, null);
+                        _MyNestedTuple = ConvertFromBytes_System__Tuple_Guint_C63_c_C32_Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyNestedTuple_Accessed = true;
                     IsDirty = true;
@@ -255,13 +255,13 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(w, MyNestedTuple,
+            ConvertToBytes_System__Tuple_Guint_C63_c_C32_Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(w, MyNestedTuple,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Tuple<uint?, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)), global::LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Tuple<uint?, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)), global::LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_System__Tuple_Guint_C63_c_C32_Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -278,7 +278,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = ConvertFromBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item2 = ConvertFromBytes__Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_Tuple_Nullable_uint_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long_NonLazinatorClass(BinaryBufferWriter writer, global::System.Tuple<uint?, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)), global::LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Tuple_Guint_C63_c_C32_Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(BinaryBufferWriter writer, global::System.Tuple<uint?, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)), global::LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedNullableUint(writer, itemToConvert.Item1);
             
-            void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
+            void actionItem2(BinaryBufferWriter w) => ConvertToBytes__Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
             WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             
             if (itemToConvert.Item3 == null)
@@ -319,7 +319,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)) ConvertFromBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)) ConvertFromBytes__Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -347,7 +347,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = ConvertFromBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item2 = ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -356,7 +356,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_ExampleChild_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(BinaryBufferWriter writer, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__Pglobal_C58_C58LazinatorTests__Examples__ExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p_p(BinaryBufferWriter writer, (global::LazinatorTests.Examples.ExampleChild, (uint, (int a, string b)?, global::System.Tuple<short, long>)) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             if (itemToConvert.Item1 == null)
@@ -369,11 +369,11 @@ namespace LazinatorTests.Examples.Tuples
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem1);
             };
             
-            void actionItem2(BinaryBufferWriter w) => ConvertToBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
+            void actionItem2(BinaryBufferWriter w) => ConvertToBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
             WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
         }
         
-        private static (uint, (int a, string b)?, global::System.Tuple<short, long>) ConvertFromBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (uint, (int a, string b)?, global::System.Tuple<short, long>) ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -390,7 +390,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = ConvertFromBytes_Nullable_ValueTuple_int_string(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item2 = ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -399,7 +399,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item3 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                item3 = ConvertFromBytes_Tuple_short_long(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item3 = ConvertFromBytes_System__Tuple_Gshort_c_C32long_g(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item3;
             
@@ -408,7 +408,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_ValueTuple_uint_Nullable_ValueTuple_int_string_Tuple_short_long(BinaryBufferWriter writer, (uint, (int a, string b)?, global::System.Tuple<short, long>) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32global_C58_C58System__Tuple_Gshort_c_C32long_g_p(BinaryBufferWriter writer, (uint, (int a, string b)?, global::System.Tuple<short, long>) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Item1);
@@ -419,7 +419,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem2(BinaryBufferWriter w) => ConvertToBytes_Nullable_ValueTuple_int_string(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
+                void actionItem2(BinaryBufferWriter w) => ConvertToBytes__Pint_C32a_c_C32string_C32b_p_C63(writer, itemToConvert.Item2, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             }
             
@@ -429,12 +429,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(BinaryBufferWriter w) => ConvertToBytes_Tuple_short_long(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                void actionItem3(BinaryBufferWriter w) => ConvertToBytes_System__Tuple_Gshort_c_C32long_g(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
         
-        private static (int a, string b)? ConvertFromBytes_Nullable_ValueTuple_int_string(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static (int a, string b)? ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_Nullable_ValueTuple_int_string(BinaryBufferWriter writer, (int a, string b)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__Pint_C32a_c_C32string_C32b_p_C63(BinaryBufferWriter writer, (int a, string b)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -465,7 +465,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Value.Item2);
         }
         
-        private static global::System.Tuple<short, long> ConvertFromBytes_Tuple_short_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Tuple<short, long> ConvertFromBytes_System__Tuple_Gshort_c_C32long_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -484,7 +484,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_Tuple_short_long(BinaryBufferWriter writer, global::System.Tuple<short, long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Tuple_Gshort_c_C32long_g(BinaryBufferWriter writer, global::System.Tuple<short, long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {

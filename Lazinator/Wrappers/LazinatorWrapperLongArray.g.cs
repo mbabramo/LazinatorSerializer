@@ -210,7 +210,7 @@ namespace Lazinator.Wrappers
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength);
-                        _Value = ConvertFromBytes_Array_long(childData, DeserializationFactory, null);
+                        _Value = ConvertFromBytes_long_B_b(childData, DeserializationFactory, null);
                     }
                     _Value_Accessed = true;
                     IsDirty = true;
@@ -262,12 +262,12 @@ namespace Lazinator.Wrappers
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Array_long(w, copy_Value, includeChildrenMode, v));
+            ConvertToBytes_long_B_b(w, copy_Value, includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static long[] ConvertFromBytes_Array_long(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static long[] ConvertFromBytes_long_B_b(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -288,7 +288,7 @@ namespace Lazinator.Wrappers
             return collection;
         }
         
-        private static void ConvertToBytes_Array_long(BinaryBufferWriter writer, long[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_long_B_b(BinaryBufferWriter writer, long[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(long[]))
             {

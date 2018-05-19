@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength);
-                        _MyListExampleStruct = ConvertFromBytes_System_Collections_Generic_List_ExampleStruct(childData, DeserializationFactory, null);
+                        _MyListExampleStruct = ConvertFromBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g(childData, DeserializationFactory, null);
                     }
                     _MyListExampleStruct_Accessed = true;
                     IsDirty = true;
@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength);
-                        _MyListNullableExampleStruct = ConvertFromBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(childData, DeserializationFactory, null);
+                        _MyListNullableExampleStruct = ConvertFromBytes_System__Collections__Generic__List_Gglobal_C58_C58Lazinator__Wrappers__LazinatorWrapperNullableStruct_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g_g(childData, DeserializationFactory, null);
                     }
                     _MyListNullableExampleStruct_Accessed = true;
                     IsDirty = true;
@@ -439,7 +439,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_List_ExampleStruct(w, MyListExampleStruct,
+            ConvertToBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g(w, MyListExampleStruct,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableExampleStruct, isBelievedDirty: _MyListNullableExampleStruct_Accessed,
@@ -447,13 +447,13 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(w, MyListNullableExampleStruct,
+            ConvertToBytes_System__Collections__Generic__List_Gglobal_C58_C58Lazinator__Wrappers__LazinatorWrapperNullableStruct_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g_g(w, MyListNullableExampleStruct,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> ConvertFromBytes_System_Collections_Generic_List_ExampleStruct(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> ConvertFromBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -482,7 +482,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_ExampleStruct(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleStruct>))
             {
@@ -497,7 +497,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> ConvertFromBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> ConvertFromBytes_System__Collections__Generic__List_Gglobal_C58_C58Lazinator__Wrappers__LazinatorWrapperNullableStruct_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -526,7 +526,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_List_LazinatorWrapperNullableStruct_ExampleStruct(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__List_Gglobal_C58_C58Lazinator__Wrappers__LazinatorWrapperNullableStruct_Gglobal_C58_C58LazinatorTests__Examples__ExampleStruct_g_g(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.List<global::Lazinator.Wrappers.LazinatorWrapperNullableStruct<global::LazinatorTests.Examples.ExampleStruct>>))
             {

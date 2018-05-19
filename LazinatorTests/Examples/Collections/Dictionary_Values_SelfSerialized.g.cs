@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyDictionary_ByteIndex, _MyDictionary_ByteLength);
-                        _MyDictionary = ConvertFromBytes_System_Collections_Generic_Dictionary_int_ExampleChild(childData, DeserializationFactory, null);
+                        _MyDictionary = ConvertFromBytes_System__Collections__Generic__Dictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MyDictionary_Accessed = true;
                     IsDirty = true;
@@ -245,7 +245,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength);
-                        _MySortedDictionary = ConvertFromBytes_System_Collections_Generic_SortedDictionary_int_ExampleChild(childData, DeserializationFactory, null);
+                        _MySortedDictionary = ConvertFromBytes_System__Collections__Generic__SortedDictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MySortedDictionary_Accessed = true;
                     IsDirty = true;
@@ -276,7 +276,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedList_ByteIndex, _MySortedList_ByteLength);
-                        _MySortedList = ConvertFromBytes_System_Collections_Generic_SortedList_int_ExampleChild(childData, DeserializationFactory, null);
+                        _MySortedList = ConvertFromBytes_System__Collections__Generic__SortedList_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MySortedList_Accessed = true;
                     IsDirty = true;
@@ -325,7 +325,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyDictionary_ByteIndex, _MyDictionary_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_Dictionary_int_ExampleChild(w, MyDictionary,
+            ConvertToBytes_System__Collections__Generic__Dictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MyDictionary,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed,
@@ -333,7 +333,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_SortedDictionary_int_ExampleChild(w, MySortedDictionary,
+            ConvertToBytes_System__Collections__Generic__SortedDictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MySortedDictionary,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed,
@@ -341,13 +341,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MySortedList_ByteIndex, _MySortedList_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_SortedList_int_ExampleChild(w, MySortedList,
+            ConvertToBytes_System__Collections__Generic__SortedList_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MySortedList,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.Dictionary<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System_Collections_Generic_Dictionary_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.Dictionary<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__Dictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -363,7 +363,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                var item = ConvertFromBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, deserializationFactory, informParentOfDirtinessDelegate);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_Dictionary_int_ExampleChild(BinaryBufferWriter writer, global::System.Collections.Generic.Dictionary<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__Dictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.Dictionary<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.Dictionary<int, global::LazinatorTests.Examples.ExampleChild>))
             {
@@ -380,12 +380,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                void action(BinaryBufferWriter w) => ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(writer, item, includeChildrenMode, verifyCleanness);
+                void action(BinaryBufferWriter w) => ConvertToBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(writer, item, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         
-        private static global::System.Collections.Generic.KeyValuePair<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.KeyValuePair<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -415,7 +415,7 @@ namespace LazinatorTests.Examples.Collections
             return tupleType;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(BinaryBufferWriter writer, global::System.Collections.Generic.KeyValuePair<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.KeyValuePair<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Key);
@@ -431,7 +431,7 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
-        private static global::System.Collections.Generic.SortedDictionary<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System_Collections_Generic_SortedDictionary_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.SortedDictionary<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__SortedDictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -447,7 +447,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                var item = ConvertFromBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, deserializationFactory, informParentOfDirtinessDelegate);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -455,7 +455,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_SortedDictionary_int_ExampleChild(BinaryBufferWriter writer, global::System.Collections.Generic.SortedDictionary<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__SortedDictionary_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.SortedDictionary<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.SortedDictionary<int, global::LazinatorTests.Examples.ExampleChild>))
             {
@@ -464,12 +464,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                void action(BinaryBufferWriter w) => ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(writer, item, includeChildrenMode, verifyCleanness);
+                void action(BinaryBufferWriter w) => ConvertToBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(writer, item, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
         
-        private static global::System.Collections.Generic.SortedList<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System_Collections_Generic_SortedList_int_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.SortedList<int, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__SortedList_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -485,7 +485,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                var item = ConvertFromBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, deserializationFactory, informParentOfDirtinessDelegate);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -493,7 +493,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_SortedList_int_ExampleChild(BinaryBufferWriter writer, global::System.Collections.Generic.SortedList<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__SortedList_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.SortedList<int, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.SortedList<int, global::LazinatorTests.Examples.ExampleChild>))
             {
@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                void action(BinaryBufferWriter w) => ConvertToBytes_System_Collections_Generic_KeyValuePair_int_ExampleChild(writer, item, includeChildrenMode, verifyCleanness);
+                void action(BinaryBufferWriter w) => ConvertToBytes_System__Collections__Generic__KeyValuePair_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(writer, item, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }

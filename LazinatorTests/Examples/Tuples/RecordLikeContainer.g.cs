@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength);
-                        _MyMismatchedRecordLikeType = ConvertFromBytes_LazinatorTests_Examples_MismatchedRecordLikeType(childData, DeserializationFactory, null);
+                        _MyMismatchedRecordLikeType = ConvertFromBytes_LazinatorTests__Examples__MismatchedRecordLikeType(childData, DeserializationFactory, null);
                     }
                     _MyMismatchedRecordLikeType_Accessed = true;
                 }
@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength);
-                        _MyRecordLikeClass = ConvertFromBytes_LazinatorTests_Examples_RecordLikeClass(childData, DeserializationFactory, null);
+                        _MyRecordLikeClass = ConvertFromBytes_LazinatorTests__Examples__RecordLikeClass(childData, DeserializationFactory, null);
                     }
                     _MyRecordLikeClass_Accessed = true;
                     IsDirty = true;
@@ -275,7 +275,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength);
-                        _MyRecordLikeType = ConvertFromBytes_LazinatorTests_Examples_RecordLikeType(childData, DeserializationFactory, null);
+                        _MyRecordLikeType = ConvertFromBytes_LazinatorTests__Examples__RecordLikeType(childData, DeserializationFactory, null);
                     }
                     _MyRecordLikeType_Accessed = true;
                 }
@@ -323,7 +323,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_LazinatorTests_Examples_MismatchedRecordLikeType(w, MyMismatchedRecordLikeType,
+            ConvertToBytes_LazinatorTests__Examples__MismatchedRecordLikeType(w, MyMismatchedRecordLikeType,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed,
@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_LazinatorTests_Examples_RecordLikeClass(w, MyRecordLikeClass,
+            ConvertToBytes_LazinatorTests__Examples__RecordLikeClass(w, MyRecordLikeClass,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed,
@@ -339,13 +339,13 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_LazinatorTests_Examples_RecordLikeType(w, MyRecordLikeType,
+            ConvertToBytes_LazinatorTests__Examples__RecordLikeType(w, MyRecordLikeType,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::LazinatorTests.Examples.MismatchedRecordLikeType ConvertFromBytes_LazinatorTests_Examples_MismatchedRecordLikeType(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::LazinatorTests.Examples.MismatchedRecordLikeType ConvertFromBytes_LazinatorTests__Examples__MismatchedRecordLikeType(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_LazinatorTests_Examples_MismatchedRecordLikeType(BinaryBufferWriter writer, global::LazinatorTests.Examples.MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_LazinatorTests__Examples__MismatchedRecordLikeType(BinaryBufferWriter writer, global::LazinatorTests.Examples.MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Name);
         }
         
-        private static global::LazinatorTests.Examples.RecordLikeClass ConvertFromBytes_LazinatorTests_Examples_RecordLikeClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::LazinatorTests.Examples.RecordLikeClass ConvertFromBytes_LazinatorTests__Examples__RecordLikeClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -402,7 +402,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_LazinatorTests_Examples_RecordLikeClass(BinaryBufferWriter writer, global::LazinatorTests.Examples.RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_LazinatorTests__Examples__RecordLikeClass(BinaryBufferWriter writer, global::LazinatorTests.Examples.RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
@@ -418,7 +418,7 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static global::LazinatorTests.Examples.RecordLikeType ConvertFromBytes_LazinatorTests_Examples_RecordLikeType(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::LazinatorTests.Examples.RecordLikeType ConvertFromBytes_LazinatorTests__Examples__RecordLikeType(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -437,7 +437,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_LazinatorTests_Examples_RecordLikeType(BinaryBufferWriter writer, global::LazinatorTests.Examples.RecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_LazinatorTests__Examples__RecordLikeType(BinaryBufferWriter writer, global::LazinatorTests.Examples.RecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);

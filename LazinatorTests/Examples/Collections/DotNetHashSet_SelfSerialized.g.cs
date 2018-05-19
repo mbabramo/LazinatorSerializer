@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength);
-                        _MyHashSetSerialized = ConvertFromBytes_System_Collections_Generic_HashSet_ExampleChild(childData, DeserializationFactory, null);
+                        _MyHashSetSerialized = ConvertFromBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MyHashSetSerialized_Accessed = true;
                     IsDirty = true;
@@ -255,13 +255,13 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System_Collections_Generic_HashSet_ExampleChild(w, MyHashSetSerialized,
+            ConvertToBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MyHashSetSerialized,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System_Collections_Generic_HashSet_ExampleChild(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System_Collections_Generic_HashSet_ExampleChild(BinaryBufferWriter writer, global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == default(global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild>))
             {
