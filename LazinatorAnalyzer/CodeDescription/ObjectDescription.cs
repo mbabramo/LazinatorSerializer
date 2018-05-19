@@ -538,7 +538,7 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
-                if (property.ToString().Contains("ReflexiveRecord"))
+                if (property.ToString().Contains("RecursiveRecord"))
                 {
                     var DEBUG = 0;
                 }

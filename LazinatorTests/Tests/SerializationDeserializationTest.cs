@@ -158,22 +158,22 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void ReflexiveExampleWorks()
+        public void RecursiveExampleWorks()
         {
-            // the reflexive example allows us to build a tree
-            ReflexiveExample r = new ReflexiveExample()
+            // the Recursive example allows us to build a tree
+            RecursiveExample r = new RecursiveExample()
             {
-                ReflexiveClass = new ReflexiveExample(),
-                ReflexiveInterface = new ReflexiveExample()
+                RecursiveClass = new RecursiveExample(),
+                RecursiveInterface = new RecursiveExample()
                 {
-                    ReflexiveClass = new ReflexiveExample()
+                    RecursiveClass = new RecursiveExample()
                 },
                 DeserializationFactory = GetDeserializationFactory()
             };
             var r2 = r.CloneLazinatorTyped();
-            r2.ReflexiveClass.Should().NotBeNull();
-            r2.ReflexiveInterface.Should().NotBeNull();
-            r2.ReflexiveInterface.ReflexiveClass.Should().NotBeNull();
+            r2.RecursiveClass.Should().NotBeNull();
+            r2.RecursiveInterface.Should().NotBeNull();
+            r2.RecursiveInterface.RecursiveClass.Should().NotBeNull();
         }
 
         [Fact]

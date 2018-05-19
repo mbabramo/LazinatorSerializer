@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LazinatorTests.Examples.Hierarchy
 {
-    public partial class ReflexiveExample : IReflexiveExample
+    public partial class RecursiveExample : IRecursiveExample
     {
     }
 }
