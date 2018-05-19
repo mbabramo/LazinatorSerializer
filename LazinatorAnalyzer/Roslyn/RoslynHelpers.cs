@@ -16,6 +16,55 @@ namespace LazinatorCodeGen.Roslyn
     public static class RoslynHelpers
     {
 
+        public static string GetEncodableVersionOfIdentifier(this ITypeSymbol symbol)
+        {
+            return GetEncodableVersionOfIdentifier(symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+        }
+
+        public static string GetEncodableVersionOfIdentifier(string identifier)
+        {
+            StringBuilder b = new StringBuilder();
+            foreach (var c in identifier)
+            {
+                if (Char.IsLetterOrDigit(c))
+                    b.Append(c);
+                else
+                {
+                    switch (c)
+                    {
+                        case '[':
+                            b.Append("@B");
+                            break;
+                        case ']':
+                            b.Append("@B");
+                            break;
+                        case '(':
+                            b.Append("@B");
+                            break;
+                        case ')':
+                            b.Append("@B");
+                            break;
+                        case '@':
+                            b.Append("@@");
+                            break;
+                        case '.':
+                            b.Append("_");
+                            break;
+                        case '_':
+                            b.Append("@_");
+                            break;
+                        case ',':
+                            b.Append("@A");
+                            break;
+                        default:
+                            b.Append("@u" + ((short)c).ToString());
+                            break;
+                    }
+                }
+            }
+            return b.ToString();
+        }
+
         public static ImmutableList<RoslynProperty> GetPropertiesWithAccessors(this INamedTypeSymbol namedTypeSymbol)
         {
             var properties = namedTypeSymbol.GetMembers().Where(x => x.Kind == SymbolKind.Property).ToList();

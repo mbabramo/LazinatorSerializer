@@ -15,7 +15,7 @@ namespace Lazinator.CodeDescription
     public class PropertyDescription
     {
         #region Properties
-
+        
         public ObjectDescription ContainingObjectDescription { get; set; }
         public PropertyDescription ContainingPropertyDescription { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
