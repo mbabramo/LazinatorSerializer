@@ -20,6 +20,7 @@ namespace Lazinator.CodeDescription
         public PropertyDescription ContainingPropertyDescription { get; set; }
         public IPropertySymbol PropertySymbol { get; set; }
         public ITypeSymbol TypeSymbolIfNoProperty { get; set; }
+        public ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
         public string Namespace { get; set; }
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
         public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
@@ -32,7 +33,7 @@ namespace Lazinator.CodeDescription
         public string TypeName { get; set; }
         public string TypeSubclassHierarchy { get; set; }
         public string TypeSubclassHierarchyEncodable { get; set; }
-        public string FullyQualifiedTypeName => NamespacePrefixToUse + TypeSubclassHierarchy + TypeName;
+        public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         public string TypeNameWithoutNullableIndicator => TypeName.EndsWith("?") ? TypeName.Substring(0, TypeName.Length - 1) : TypeName;
         public string FullyQualifiedNameWithoutNullableIndicator => NamespacePrefixToUse + TypeSubclassHierarchy + TypeNameWithoutNullableIndicator;
         public string TypeNameEncodable { get; set; }

@@ -16,7 +16,7 @@ namespace LazinatorCodeGen.Roslyn
     public static class RoslynHelpers
     {
 
-        public static string GetEncodableVersionOfIdentifier(this ITypeSymbol symbol)
+        public static string GetEncodableVersionOfIdentifier(this ISymbol symbol)
         {
             return GetEncodableVersionOfIdentifier(symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
         }
