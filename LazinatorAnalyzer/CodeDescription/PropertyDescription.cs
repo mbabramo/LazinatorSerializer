@@ -18,6 +18,8 @@ namespace Lazinator.CodeDescription
 
         public ObjectDescription ContainingObjectDescription { get; set; }
         public PropertyDescription ContainingPropertyDescription { get; set; }
+        public IPropertySymbol PropertySymbol { get; set; }
+        public ITypeSymbol TypeSymbolIfNoProperty { get; set; }
         public string Namespace { get; set; }
         public string NamespacePrefixToUse => Namespace == "System" || Namespace == "" || Namespace == null ? "" : Namespace + ".";
         public string NamespacePrefixToUseEncodable => NamespacePrefixToUse.Replace(".", "_");
@@ -56,8 +58,6 @@ namespace Lazinator.CodeDescription
         public bool HasInterchangeType => InterchangeTypeName != null;
         public List<PropertyDescription> InnerProperties { get; set; }
         public bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
-        public IPropertySymbol PropertySymbol { get; set; }
-        public ITypeSymbol TypeSymbol { get; set; } // if we don't have a property
         public IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
         public IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
         public string PropertyAccessibility { get; set; }
@@ -117,7 +117,7 @@ namespace Lazinator.CodeDescription
         public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
-            TypeSymbol = typeSymbol;
+            TypeSymbolIfNoProperty = typeSymbol;
             ContainingObjectDescription = containingObjectDescription;
             ContainingPropertyDescription = containingPropertyDescription;
             PropertyName = propertyName;
@@ -471,7 +471,7 @@ namespace Lazinator.CodeDescription
                 return false;
             }
 
-            TypeSymbol = t;
+            TypeSymbolIfNoProperty = t;
             PropertyType = LazinatorPropertyType.SupportedTuple;
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
             Nullable = false;
@@ -497,7 +497,7 @@ namespace Lazinator.CodeDescription
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
-                if (pd.TypeSymbol == typeSymbol)
+                if (pd.TypeSymbolIfNoProperty == typeSymbol)
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
             return new PropertyDescription(typeSymbol, containingObjectDescription, containingPropertyDescription, propertyName);
         }
@@ -545,7 +545,7 @@ namespace Lazinator.CodeDescription
             TypeName = null;
             if (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple)
             {
-                var namedTypeSymbol = (PropertySymbol?.Type ?? TypeSymbol) as INamedTypeSymbol;
+                var namedTypeSymbol = (PropertySymbol?.Type ?? TypeSymbolIfNoProperty) as INamedTypeSymbol;
                 if (namedTypeSymbol != null && namedTypeSymbol.TupleElements != null && namedTypeSymbol.TupleElements.Count() == InnerProperties.Count() && namedTypeSymbol.TupleElements.First().Name != "Item1")
                 {
                     var zipped = namedTypeSymbol.TupleElements.Zip(InnerProperties, (x, y) => new { TupleElement = x, InnerProperty = y });
@@ -767,7 +767,7 @@ namespace Lazinator.CodeDescription
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{(IsGuaranteedSmall ? ", true" : "")});
                         {creation}
                     }}
-                    _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbol) ? $@"
+                    _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
                     IsDirty = true;" : "")}
                 }}
                 return _{PropertyName};
