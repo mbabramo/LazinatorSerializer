@@ -153,7 +153,7 @@ namespace LazinatorCodeGen.Roslyn
                 return typeName;
         }
         
-        public static string GetFullyQualifiedName(this ISymbol symbol)
+        public static string GetFullyQualifiedNameWithoutGlobal(this ISymbol symbol)
         {
             if (symbol == null)
                 return "";
@@ -237,7 +237,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static bool HasAttribute(this ISymbol symbol, INamedTypeSymbol attributeSymbol)
         {
-            return symbol.GetAttributes().Any(x => x.AttributeClass.GetFullyQualifiedName().Equals(attributeSymbol.GetFullyQualifiedName()));
+            return symbol.GetAttributes().Any(x => x.AttributeClass.GetFullyQualifiedNameWithoutGlobal().Equals(attributeSymbol.GetFullyQualifiedNameWithoutGlobal()));
         }
 
         public static INamedTypeSymbol GetTopLevelInterfaceImplementingAttribute(this INamedTypeSymbol lazinatorObject, INamedTypeSymbol attributeType)

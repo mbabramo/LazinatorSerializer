@@ -377,6 +377,12 @@ namespace LazinatorCodeGen.Roslyn
             // Consider whether to add this as a record-like type
             if (type.IsAbstract)
                 return; 
+            if (!IsAllowedAsRecordLikeTypeIfProperlyFormed(type))
+            {
+                NonRecordLikeTypes.Add(type);
+                return;
+            }
+
             var constructorCandidates = type.Constructors.OrderByDescending(x => x.Parameters.Count()).ToList();
             if (!constructorCandidates.Any())
                 NonRecordLikeTypes.Add(type);
@@ -387,10 +393,12 @@ namespace LazinatorCodeGen.Roslyn
                     var parameters = candidate.Parameters.ToList();
                     var properties = GetPropertyWithDefinitionInfo(type);
                     if (parameters.Count() < properties.Count() || !parameters.Any())
-                    {
-                        bool isPermissible = Config != null && Config.IncludeMismatchedRecordLikeTypes != null && Config.IncludeMismatchedRecordLikeTypes.Contains(type.GetFullyQualifiedName());
-                        if (!isPermissible)
-                            break; 
+                    { // better constructor candidates have already been rejected, so reject this too.
+                        if (!IsAllowedAsRecordLikeTypeIfMismatched(type))
+                        {
+                            NonRecordLikeTypes.Add(type);
+                            return;
+                        }
                     }
                     if (parameters.All(x => properties.Any(y => y.Property.Name.ToUpper() == x.Name.ToUpper())))
                     {
@@ -407,6 +415,38 @@ namespace LazinatorCodeGen.Roslyn
                 }
             }
             NonRecordLikeTypes.Add(type);
+        }
+
+        private bool IsAllowedAsRecordLikeTypeIfProperlyFormed(INamedTypeSymbol type)
+        {
+            bool defaultAllowRecordLikeClasses = false, defaultAllowRecordLikeRegularStructs = false, defaultAllowRecordLikeReadOnlyStructs = true;
+            if (Config != null)
+            {
+                string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
+                if (Config.IncludeRecordLikeTypes.Contains(fullyQualifiedName))
+                    return true;
+                if (Config.IgnoreRecordLikeTypes.Contains(fullyQualifiedName))
+                    return false;
+                defaultAllowRecordLikeClasses = Config.DefaultAllowRecordLikeClasses;
+                defaultAllowRecordLikeRegularStructs = Config.DefaultAllowRecordLikeRegularStructs;
+                defaultAllowRecordLikeReadOnlyStructs = Config.DefaultAllowRecordLikeReadOnlyStructs;
+            }
+            if (type.TypeKind == TypeKind.Class)
+                return defaultAllowRecordLikeClasses;
+            if (type.IsReadOnlyStruct())
+                return defaultAllowRecordLikeReadOnlyStructs;
+            return defaultAllowRecordLikeRegularStructs;
+        }
+
+        private bool IsAllowedAsRecordLikeTypeIfMismatched(INamedTypeSymbol type)
+        {
+            if (Config != null)
+            {
+                string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
+                if (Config.IncludeRecordLikeTypes.Contains(fullyQualifiedName))
+                    return true;
+            }
+            return false;
         }
 
         string FirstCharToUpper(string input)
@@ -484,7 +524,7 @@ namespace LazinatorCodeGen.Roslyn
             {
                 if (symbol is INamedTypeSymbol namedSymbol)
                 {
-                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedName(namedSymbol);
+                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol);
                     if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name))
                         return namedSymbol;
                 }

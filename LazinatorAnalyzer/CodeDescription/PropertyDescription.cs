@@ -287,9 +287,9 @@ namespace Lazinator.CodeDescription
             InterchangeTypeName = ContainingObjectDescription.Compilation.Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = ContainingObjectDescription.Compilation.Config?.GetDirectConverterTypeName(t);
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
-                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} has both an interchange converter and a direct converter type listed. Only one should be used.");
+                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedNameWithoutGlobal()} has both an interchange converter and a direct converter type listed. Only one should be used.");
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
-                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedName()} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically.");
+                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedNameWithoutGlobal()} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically.");
         }
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
@@ -443,7 +443,7 @@ namespace Lazinator.CodeDescription
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(t) || (ContainingObjectDescription.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == t.GetFullyQualifiedName().ToUpper()) ?? false))
+            if (!recordLikeTypes.ContainsKey(t) || (ContainingObjectDescription.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == t.GetFullyQualifiedNameWithoutGlobal().ToUpper()) ?? false))
             {
                 return false;
             }

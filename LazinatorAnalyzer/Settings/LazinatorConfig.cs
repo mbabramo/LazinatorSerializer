@@ -10,10 +10,19 @@ namespace LazinatorAnalyzer.Settings
 {
     public class LazinatorConfig
     {
+        private const string GeneratedCodePathString = "GeneratedCodePath";
+        private const string InterchangeConvertersString = "InterchangeConverters";
+        private const string DirectConvertersString = "DirectConverters";
+        private const string IgnoreRecordLikeTypesString = "IgnoreRecordLikeTypes";
+        private const string IncludeRecordLikeTypesString = "IncludeRecordLikeTypes";
+        private const string DefaultAllowRecordLikeClassesString = "DefaultAllowRecordLikeClasses";
+        private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
+        private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
+        public bool DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
         public List<string> IgnoreRecordLikeTypes;
-        public List<string> IncludeMismatchedRecordLikeTypes;
+        public List<string> IncludeRecordLikeTypes;
         public string ConfigFilePath;
         public string GeneratedCodePath;
         public bool DefineConversionCodeOutsideClass => GeneratedCodePath != null;
@@ -28,21 +37,22 @@ namespace LazinatorAnalyzer.Settings
             InterchangeConverters = new Dictionary<string, string>(); // default
             DirectConverters = new Dictionary<string, string>();
             IgnoreRecordLikeTypes = new List<string>();
-            IncludeMismatchedRecordLikeTypes = new List<string>();
+            IncludeRecordLikeTypes = new List<string>();
             if (configString != null)
             {
                 try
                 {
                     JsonObject json = JsonValue.Parse(configString).AsJsonObject;
-                    const string InterchangeConvertersString = "InterchangeConverters";
                     LoadDictionary(json, InterchangeConvertersString, InterchangeConverters);
-                    const string DirectConvertersString = "DirectConverters";
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);
-                    LoadIncludeMismatchedRecordLikeTypes(json);
+                    LoadIncludeRecordLikeTypes(json);
+                    DefaultAllowRecordLikeClasses = json.ContainsKey(DefaultAllowRecordLikeClassesString) ? json[DefaultAllowRecordLikeClassesString].AsBoolean : false;
+                    DefaultAllowRecordLikeRegularStructs = json.ContainsKey(DefaultAllowRecordLikeRegularStructsString) ? json[DefaultAllowRecordLikeRegularStructsString].AsBoolean : false;
+                    DefaultAllowRecordLikeReadOnlyStructs = json.ContainsKey(DefaultAllowRecordLikeReadOnlyStructsString) ? json[DefaultAllowRecordLikeReadOnlyStructsString].AsBoolean : true;
                     ConfigFilePath = configPath;
                     if (ConfigFilePath != null)
-                        GeneratedCodePath = ConfigFilePath + "\\" + (json["GeneratedCodePath"]);
+                        GeneratedCodePath = ConfigFilePath + "\\" + (json[GeneratedCodePathString]);
                 }
                 catch
                 {
@@ -53,18 +63,18 @@ namespace LazinatorAnalyzer.Settings
 
         private void LoadIgnoreRecordLikeTypes(JsonObject json)
         {
-            JsonArray typeList = json["IgnoreRecordLikeTypes"];
+            JsonArray typeList = json[IgnoreRecordLikeTypesString];
             if (typeList != null)
                 foreach (var item in typeList)
                     IgnoreRecordLikeTypes.Add(item.AsString);
         }
 
-        private void LoadIncludeMismatchedRecordLikeTypes(JsonObject json)
+        private void LoadIncludeRecordLikeTypes(JsonObject json)
         {
-            JsonArray typeList = json["IncludeMismatchedRecordLikeTypes"];
+            JsonArray typeList = json[IncludeRecordLikeTypesString];
             if (typeList != null)
                 foreach (var item in typeList)
-                    IncludeMismatchedRecordLikeTypes.Add(item.AsString);
+                    IncludeRecordLikeTypes.Add(item.AsString);
         }
 
         private void LoadDictionary(JsonObject json, string mappingPropertyName, Dictionary<string, string> dictionary)
@@ -77,7 +87,7 @@ namespace LazinatorAnalyzer.Settings
 
         public string GetInterchangeConverterTypeName(INamedTypeSymbol type)
         {
-            string fullyQualifiedName = type.GetFullyQualifiedName();
+            string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
             if (InterchangeConverters.ContainsKey(fullyQualifiedName))
                 return InterchangeConverters[fullyQualifiedName];
             return null;
@@ -85,7 +95,7 @@ namespace LazinatorAnalyzer.Settings
 
         public string GetDirectConverterTypeName(INamedTypeSymbol type)
         {
-            string fullyQualifiedName = type.GetFullyQualifiedName();
+            string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
             if (DirectConverters.ContainsKey(fullyQualifiedName))
                 return DirectConverters[fullyQualifiedName];
             return null;

@@ -60,7 +60,7 @@ namespace Lazinator.CodeDescription
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
-            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedName();
+            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal();
             ObjectName = iLazinatorTypeSymbol.Name;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
             {
