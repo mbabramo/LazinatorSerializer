@@ -277,10 +277,7 @@ public class MyOtherClass
             string projectPath = ReadCodeFile.GetCodeBasePath(project);
             string name = ReadCodeFile.GetNameOfType(existingType);
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, name, ".g.cs", out string codeBehindPath, out string codeBehind);
-            ReadCodeFile.GetCodeInFile(projectPath, "/", "", "LazinatorConfig", ".json", out string configPath, out string configText);
-            LazinatorConfig config = null;
-            if (configText != null)
-                config = JsonConvert.DeserializeObject<LazinatorConfig>(configText);
+            LazinatorConfig config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
@@ -294,6 +291,19 @@ public class MyOtherClass
                 File.WriteAllText(codeBehindPath, result);
             else
                 match.Should().BeTrue();
+        }
+
+        private static LazinatorConfig FindConfigFileStartingFromSubfolder(string mainFolder, string subfolder, string projectPath)
+        {
+            ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, "LazinatorConfig", ".json", out string configPath, out string configText);
+            if (configText == null)
+                ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "/", "LazinatorConfig", ".json", out configPath, out configText);
+            if (configText == null)
+                ReadCodeFile.GetCodeInFile(projectPath, "/", "", "LazinatorConfig", ".json", out configPath, out configText);
+            LazinatorConfig config = null;
+            if (configText != null)
+                config = JsonConvert.DeserializeObject<LazinatorConfig>(configText);
+            return config;
         }
 
         private AdhocWorkspace GetAdhocWorkspace()

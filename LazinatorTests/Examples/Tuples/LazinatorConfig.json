@@ -10,8 +10,9 @@
     "LazinatorTests.Examples.NonLazinatorStruct"
   ],
   "IncludeRecordLikeTypes": [
+    "LazinatorTests.Examples.MismatchedRecordLikeType"
   ],
-  "DefaultAllowRecordLikeClasses": false,
-  "DefaultAllowRecordLikeRegularStructs": false,
+  "DefaultAllowRecordLikeClasses": true,
+  "DefaultAllowRecordLikeRegularStructs": true,
   "DefaultAllowRecordLikeReadOnlyStructs": true
 }

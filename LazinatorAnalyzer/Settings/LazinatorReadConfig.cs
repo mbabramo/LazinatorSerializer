@@ -13,6 +13,7 @@ namespace LazinatorAnalyzer.Settings
     public static class ConfigLoader
     {
         private const string ConfigFileName = "LazinatorConfig.json";
+        private const string AltConfigFileName = "Lazinatorconfig.json";
 
         public static (string path, string text) GetConfigPathAndText(ImmutableArray<AdditionalText> additionalFiles,
             CancellationToken cancellationToken)
@@ -21,7 +22,10 @@ namespace LazinatorAnalyzer.Settings
                 string.Compare(Path.GetFileName(f.Path), ConfigFileName, StringComparison.OrdinalIgnoreCase) == 0);
             if (file == null)
             {
-                return (null, null);
+                file = additionalFiles.SingleOrDefault(f =>
+                   string.Compare(Path.GetFileName(f.Path), AltConfigFileName, StringComparison.OrdinalIgnoreCase) == 0);
+                if (file == null)
+                    return (null, null);
             }
 
             var fileText = file.GetText();
