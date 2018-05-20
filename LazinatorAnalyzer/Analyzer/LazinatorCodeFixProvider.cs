@@ -44,9 +44,7 @@ namespace LazinatorAnalyzer.Analyzer
             var diagnostic = context.Diagnostics.First();
             SourceFileInformation sourceFileInfo = new SourceFileInformation(
                 await context.Document.GetSemanticModelAsync(), diagnostic.Properties, diagnostic.AdditionalLocations);
-
-            System.Diagnostics.Debug.WriteLine($"document {context.Document.Name} span {diagnostic.Location.SourceSpan}"); // DEBUG
-
+            
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             // Find the type declaration identified by the diagnostic.
@@ -95,8 +93,21 @@ namespace LazinatorAnalyzer.Analyzer
                 if (sourceFileInformation.CodeBehindLocation == null)
                 {
                     var project = originalDocument.Project;
-                    string codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + ".g.cs";
-                    string codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + ".g.cs"; // replace .cs with .g.cs
+                    string codeBehindFilePath = null;
+                    string codeBehindName = null;
+                    if (config.GeneratedCodePath == null)
+                    { // use short form of name in same location as original code
+                        codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + ".g.cs";
+                        codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + ".g.cs"; 
+                    }
+                    else
+                    { // use long form of name in a common directory
+                        codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol) + ".g.cs";
+                        codeBehindFilePath = config.GeneratedCodePath;
+                        while (codeBehindFilePath.EndsWith("\\"))
+                            codeBehindFilePath = codeBehindFilePath.Substring(0, codeBehindFilePath.Length - 1);
+                        codeBehindFilePath += codeBehindName;
+                    }
                     Document documentToAdd = project.AddDocument(codeBehindName, codeBehind, null, codeBehindFilePath).WithFolders(originalDocument.Folders);
                     var revisedSolution = documentToAdd.Project.Solution;
                     return revisedSolution;

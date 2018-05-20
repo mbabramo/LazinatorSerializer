@@ -8,7 +8,6 @@ using LightJson;
 
 namespace LazinatorAnalyzer.Settings
 {
-
     public class LazinatorConfig
     {
         public Dictionary<string, string> InterchangeConverters;
@@ -16,8 +15,8 @@ namespace LazinatorAnalyzer.Settings
         public List<string> IgnoreRecordLikeTypes;
         public List<string> IncludeMismatchedRecordLikeTypes;
         public string ConfigFilePath;
-        public string ConversionCodePath;
-        public bool DefineConversionCodeOutsideClass => ConversionCodePath != null;
+        public string GeneratedCodePath;
+        public bool DefineConversionCodeOutsideClass => GeneratedCodePath != null;
 
         public LazinatorConfig()
         {
@@ -43,7 +42,7 @@ namespace LazinatorAnalyzer.Settings
                     LoadIncludeMismatchedRecordLikeTypes(json);
                     ConfigFilePath = configPath;
                     if (ConfigFilePath != null)
-                        ConversionCodePath = ConfigFilePath + "\\" + (json["ConversionCodePath"]);
+                        GeneratedCodePath = ConfigFilePath + "\\" + (json["GeneratedCodePath"]);
                 }
                 catch
                 {
