@@ -90,35 +90,44 @@ namespace LazinatorAnalyzer.Analyzer
                 var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
                 var codeBehind = d.GetCodeBehind();
 
-                if (sourceFileInformation.CodeBehindLocation == null)
-                {
-                    var project = originalDocument.Project;
-                    string codeBehindFilePath = null;
-                    string codeBehindName = null;
-                    if (config.GeneratedCodePath == null)
-                    { // use short form of name in same location as original code
-                        codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + ".g.cs";
-                        codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + ".g.cs"; 
-                    }
-                    else
-                    { // use long form of name in a common directory
-                        codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol) + ".g.cs";
-                        codeBehindFilePath = config.GeneratedCodePath;
-                        while (codeBehindFilePath.EndsWith("\\"))
-                            codeBehindFilePath = codeBehindFilePath.Substring(0, codeBehindFilePath.Length - 1);
-                        codeBehindFilePath += codeBehindName;
-                    }
-                    Document documentToAdd = project.AddDocument(codeBehindName, codeBehind, null, codeBehindFilePath).WithFolders(originalDocument.Folders);
-                    var revisedSolution = documentToAdd.Project.Solution;
-                    return revisedSolution;
+
+                var project = originalDocument.Project;
+                string codeBehindFilePath = null;
+                string codeBehindName = null;
+                string[] codeBehindFolders = null;
+                if (config.GeneratedCodePath == null)
+                { // use short form of name in same location as original code
+                    codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + ".g.cs";
+                    codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + ".g.cs";
                 }
                 else
-                {
+                { // use long form of name in a common directory
+                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol) + ".g.cs";
+                    codeBehindFilePath = null;
+                    codeBehindFilePath = config.GeneratedCodePath;
+                    while (codeBehindFilePath.EndsWith("\\"))
+                        codeBehindFilePath = codeBehindFilePath.Substring(0, codeBehindFilePath.Length - 1);
+                    codeBehindFilePath += "\\" + codeBehindName;
+                    codeBehindFolders = config.RelativeGeneratedCodePath.Split('\\', '/');
+                }
+
+                Solution revisedSolution;
+                if (sourceFileInformation.CodeBehindLocation == null)
+                { // the file does not already exist 
+                    // codeBehindFilePath = System.IO.Path.GetDirectoryName(codeBehindFilePath); // omit file name
+                    Document documentToAdd = project.AddDocument(codeBehindName, codeBehind, codeBehindFolders, codeBehindFilePath);
+                    //if (config.GeneratedCodePath != null)
+                    //    documentToAdd = documentToAdd.WithFolders(codeBehindFolders);
+                    revisedSolution = documentToAdd.Project.Solution;
+                }
+                else
+                { // the file does already exist
                     var currentDocumentWithCode = originalSolution.GetDocument(sourceFileInformation.CodeBehindLocation.SourceTree);
                     var replacementDocument = currentDocumentWithCode.WithText(SourceText.From(codeBehind));
-                    var revisedSolution = originalSolution.WithDocumentText(currentDocumentWithCode.Id, SourceText.From(codeBehind));
-                    return revisedSolution;
+                    revisedSolution = originalSolution.WithDocumentText(currentDocumentWithCode.Id, SourceText.From(codeBehind));
                 }
+                revisedSolution = await AddAnnotationToIndicateSuccess(revisedSolution, true);
+                return revisedSolution;
             }
             catch (LazinatorCodeGenException e)
             {
@@ -137,9 +146,28 @@ namespace LazinatorAnalyzer.Analyzer
                 var replacementRoot = originalRoot.ReplaceNode(enclosingType, enclosingTypeWithComment);
                 var replacementDocument = originalDocument.WithSyntaxRoot(replacementRoot);
 
-                return replacementDocument.Project.Solution;
+                var revisedSolution = replacementDocument.Project.Solution;
+                revisedSolution = await AddAnnotationToIndicateSuccess(revisedSolution, false);
+                return revisedSolution;
             }
+        }
 
+        public static async Task<Solution> AddAnnotationToIndicateSuccess(Solution revisedSolution, bool successStatus)
+        {
+            var documentInSolution = revisedSolution.Projects.FirstOrDefault()?.Documents?.FirstOrDefault();
+            var syntaxRoot = await documentInSolution.GetSyntaxRootAsync();
+            var revisedRoot = syntaxRoot
+                .WithoutAnnotations(new SyntaxAnnotation("Lazinator"))
+                .WithAdditionalAnnotations(new SyntaxAnnotation("Lazinator", successStatus ? "Success" : "Failure"));
+            revisedSolution = revisedSolution.WithDocumentSyntaxRoot(documentInSolution.Id, revisedRoot);
+            return revisedSolution;
+        }
+
+        public static async Task<bool> WhetherCodeFixFailed(Solution revisedSolution)
+        {
+            var documentInSolution = revisedSolution.Projects.FirstOrDefault()?.Documents?.FirstOrDefault();
+            var syntaxRoot = await documentInSolution.GetSyntaxRootAsync();
+            return syntaxRoot.HasAnnotations("Lazinator") && syntaxRoot.GetAnnotations("Lazinator").First().Data == "Failure";
         }
     }
 }

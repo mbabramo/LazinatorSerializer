@@ -28,16 +28,8 @@ namespace LazinatorAnalyzer.Analyzer
 
         public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
         {
-            if (fixAllContext.Document != null)
-            {
-                var documentsAndDiagnosticsToFixMap = await this.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
-                return await this.GetFixAsync(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
-            }
-            else
-            {
-                var projectsAndDiagnosticsToFixMap = await this.GetProjectDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
-                return await this.GetFixAsync(projectsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
-            }
+            var documentsAndDiagnosticsToFixMap = await this.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+            return await this.GetFixAsync(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
         }
 
         public virtual async Task<CodeAction> GetFixAsync(
@@ -94,7 +86,6 @@ namespace LazinatorAnalyzer.Analyzer
                         diagnostic,
                         (a, d) =>
                         {
-                            // TODO: Can we share code between similar lambdas that we pass to this API in BatchFixAllProvider.cs, CodeFixService.cs and CodeRefactoringService.cs?
                             // Serialize access for thread safety - we don't know what thread the fix provider will call this delegate from.
                             lock (localFixes)
                             {
@@ -229,102 +220,146 @@ namespace LazinatorAnalyzer.Analyzer
             return FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext);
         }
 
-        public virtual Task<ImmutableDictionary<Project, ImmutableArray<Diagnostic>>> GetProjectDiagnosticsToFixAsync(FixAllContext fixAllContext)
+        public class RevisionsTracker
         {
-            return FixAllContextHelper.GetProjectDiagnosticsToFixAsync(fixAllContext);
+            public Dictionary<DocumentId, Document> newDocumentsMap = new Dictionary<DocumentId, Document>();
+            public Dictionary<DocumentId, Document> changedDocumentsMap = new Dictionary<DocumentId, Document>();
+            public Dictionary<DocumentId, List<Document>> documentsToMergeMap = null;
         }
 
         public virtual async Task<Solution> TryMergeFixesAsync(Solution oldSolution, IEnumerable<CodeAction> codeActions, CancellationToken cancellationToken)
         {
-            var changedDocumentsMap = new Dictionary<DocumentId, Document>();
-            Dictionary<DocumentId, List<Document>> documentsToMergeMap = null;
-
-            var currentSolution = oldSolution;
-
-            foreach (var codeAction in codeActions)
+            RevisionsTracker revisionsTracker = new RevisionsTracker();
+            List<CodeAction> codeActionsToProcess = codeActions.ToList();
+            bool keepGoing = true;
+            do
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                // TODO: Parallelize GetChangedSolutionInternalAsync for codeActions
-                ImmutableArray<CodeActionOperation> operations = await codeAction.GetPreviewOperationsAsync(cancellationToken).ConfigureAwait(false);
-                ApplyChangesOperation singleApplyChangesOperation = null;
-                foreach (var operation in operations)
+                List<CodeAction> failedCodeActions = new List<CodeAction>();
+                bool atLeastOneSucceeded = false;
+                foreach (var codeAction in codeActionsToProcess)
                 {
-                    if (!(operation is ApplyChangesOperation applyChangesOperation))
-                    {
-                        continue;
-                    }
-
-                    if (singleApplyChangesOperation != null)
-                    {
-                        // Already had an ApplyChangesOperation; only one is supported.
-                        singleApplyChangesOperation = null;
-                        break;
-                    }
-
-                    singleApplyChangesOperation = applyChangesOperation;
+                    bool success = await IncludeCodeActionInRevisionsAsync(oldSolution, codeAction, revisionsTracker, cancellationToken);
+                    if (!success)
+                        failedCodeActions.Add(codeAction);
+                    atLeastOneSucceeded = atLeastOneSucceeded || success;
                 }
+                if (!failedCodeActions.Any())
+                    keepGoing = false;
+                else if (atLeastOneSucceeded)
+                {
+                    // Try again on a subset.
+                    codeActionsToProcess = failedCodeActions;
+                    failedCodeActions = new List<CodeAction>();
+                    keepGoing = true;
+                }
+                else // We can't make any more progress
+                    keepGoing = false;
+            } while (keepGoing);
 
-                if (singleApplyChangesOperation == null)
+            Solution currentSolution = await UpdateSolutionFromRevisionsAsync(oldSolution, revisionsTracker, cancellationToken);
+
+            return currentSolution;
+        }
+
+        public async Task<bool> IncludeCodeActionInRevisionsAsync(Solution oldSolution, CodeAction codeAction, RevisionsTracker revisionsTracker, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // TODO: Parallelize GetChangedSolutionInternalAsync for codeActions
+            ImmutableArray<CodeActionOperation> operations = await codeAction.GetPreviewOperationsAsync(cancellationToken).ConfigureAwait(false);
+            ApplyChangesOperation singleApplyChangesOperation = null;
+            foreach (var operation in operations)
+            {
+                if (!(operation is ApplyChangesOperation applyChangesOperation))
                 {
                     continue;
                 }
 
-                var changedSolution = singleApplyChangesOperation.ChangedSolution;
-                var solutionChanges = changedSolution.GetChanges(oldSolution);
-
-                // TODO: Handle removed documents
-                // TODO: Handle changed/added/removed additional documents
-
-
-                var documentIdsForNew = solutionChanges
-                    .GetProjectChanges()
-                    .SelectMany(p => p.GetAddedDocuments());
-
-                foreach (var documentId in documentIdsForNew)
+                if (singleApplyChangesOperation != null)
                 {
-                    Document document1 = changedSolution.GetDocument(documentId);
-                    var documentText = await document1.GetTextAsync(cancellationToken).ConfigureAwait(false);
-                    if (!currentSolution.ContainsDocument(documentId))
-                        currentSolution = currentSolution.AddDocument(DocumentInfo.Create(documentId, document1.Name, document1.Folders));
-                    currentSolution = currentSolution.WithDocumentText(documentId, documentText);
+                    // Already had an ApplyChangesOperation; only one is supported.
+                    singleApplyChangesOperation = null;
+                    break;
                 }
 
-                var documentIdsWithChanges = solutionChanges
-                    .GetProjectChanges()
-                    .SelectMany(p => p.GetChangedDocuments());
+                singleApplyChangesOperation = applyChangesOperation;
+            }
 
+            if (singleApplyChangesOperation == null)
+            {
+                return false;
+            }
 
-                foreach (var documentId in documentIdsWithChanges)
+            var changedSolution = singleApplyChangesOperation.ChangedSolution;
+
+            if (await LazinatorCodeFixProvider.WhetherCodeFixFailed(changedSolution))
+                return false;
+
+            var solutionChanges = changedSolution.GetChanges(oldSolution);
+
+            // TODO: Handle removed documents
+            // Probably not needed: handle "additionaldocuments," i.e. non-code documents, since we're not producing any
+
+            var documentIdsForNew = solutionChanges
+                .GetProjectChanges()
+                .SelectMany(p => p.GetAddedDocuments());
+
+            foreach (var documentId in documentIdsForNew)
+            {
+                if (revisionsTracker.newDocumentsMap.ContainsKey(documentId))
+                    throw new Exception("Internal exception. Did not expect multiple code fixes to produce same new document.");
+            revisionsTracker.newDocumentsMap[documentId] = changedSolution.GetDocument(documentId);
+            }
+
+            var documentIdsWithChanges = solutionChanges
+                .GetProjectChanges()
+                .SelectMany(p => p.GetChangedDocuments());
+
+            foreach (var documentId in documentIdsWithChanges)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var document = changedSolution.GetDocument(documentId);
+
+                Document existingDocument;
+                if (revisionsTracker.changedDocumentsMap.TryGetValue(documentId, out existingDocument))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var document = changedSolution.GetDocument(documentId);
-
-                    Document existingDocument;
-                    if (changedDocumentsMap.TryGetValue(documentId, out existingDocument))
+                    if (existingDocument != null)
                     {
-                        if (existingDocument != null)
-                        {
-                            changedDocumentsMap[documentId] = null;
-                            var documentsToMerge = new List<Document>();
-                            documentsToMerge.Add(existingDocument);
-                            documentsToMerge.Add(document);
-                            documentsToMergeMap = documentsToMergeMap ?? new Dictionary<DocumentId, List<Document>>();
-                            documentsToMergeMap[documentId] = documentsToMerge;
-                        }
-                        else
-                        {
-                            documentsToMergeMap[documentId].Add(document);
-                        }
+                        revisionsTracker.changedDocumentsMap[documentId] = null;
+                        var documentsToMerge = new List<Document>();
+                        documentsToMerge.Add(existingDocument);
+                        documentsToMerge.Add(document);
+                        revisionsTracker.documentsToMergeMap = revisionsTracker.documentsToMergeMap ?? new Dictionary<DocumentId, List<Document>>();
+                        revisionsTracker.documentsToMergeMap[documentId] = documentsToMerge;
                     }
                     else
                     {
-                        changedDocumentsMap[documentId] = document;
+                        revisionsTracker.documentsToMergeMap[documentId].Add(document);
                     }
+                }
+                else
+                {
+                    revisionsTracker.changedDocumentsMap[documentId] = document;
                 }
             }
 
-            foreach (var kvp in changedDocumentsMap)
+            return true;
+
+        }
+
+        private static async Task<Solution> UpdateSolutionFromRevisionsAsync(Solution oldSolution, RevisionsTracker revisionsTracker, CancellationToken cancellationToken)
+        {
+            var currentSolution = oldSolution;
+
+            foreach (KeyValuePair<DocumentId, Document> doc in revisionsTracker.newDocumentsMap)
+            {
+                var documentText = await doc.Value.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                if (!currentSolution.ContainsDocument(doc.Key))
+                    currentSolution = currentSolution.AddDocument(DocumentInfo.Create(doc.Key, doc.Value.Name, doc.Value.Folders));
+                currentSolution = currentSolution.WithDocumentText(doc.Key, documentText);
+            }
+
+            foreach (var kvp in revisionsTracker.changedDocumentsMap)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var document = kvp.Value;
@@ -335,10 +370,10 @@ namespace LazinatorAnalyzer.Analyzer
                 }
             }
 
-            if (documentsToMergeMap != null)
+            if (revisionsTracker.documentsToMergeMap != null)
             {
                 var mergedDocuments = new ConcurrentDictionary<DocumentId, SourceText>();
-                var documentsToMergeArray = documentsToMergeMap.ToImmutableArray();
+                var documentsToMergeArray = revisionsTracker.documentsToMergeMap.ToImmutableArray();
                 var mergeTasks = new Task[documentsToMergeArray.Length];
                 for (int i = 0; i < documentsToMergeArray.Length; i++)
                 {
@@ -487,7 +522,7 @@ namespace LazinatorAnalyzer.Analyzer
                         .Where(p => p.Language == project.Language)
                         .ToImmutableArray();
 
-                    var diagnostics = new ConcurrentDictionary<ProjectId, ImmutableArray<Diagnostic>>();
+                    var diagnosticsByProject = new ConcurrentDictionary<ProjectId, ImmutableArray<Diagnostic>>();
                     var tasks = new Task[projectsToFix.Length];
                     for (int i = 0; i < projectsToFix.Length; i++)
                     {
@@ -497,12 +532,12 @@ namespace LazinatorAnalyzer.Analyzer
                             async () =>
                             {
                                 var projectDiagnostics = await GetAllDiagnosticsAsync(fixAllContext, projectToFix).ConfigureAwait(false);
-                                diagnostics.TryAdd(projectToFix.Id, projectDiagnostics);
+                                diagnosticsByProject.TryAdd(projectToFix.Id, projectDiagnostics);
                             }, fixAllContext.CancellationToken);
                     }
 
                     await Task.WhenAll(tasks).ConfigureAwait(false);
-                    allDiagnostics = allDiagnostics.AddRange(diagnostics.SelectMany(i => i.Value.Where(x => fixAllContext.DiagnosticIds.Contains(x.Id))));
+                    allDiagnostics = allDiagnostics.AddRange(diagnosticsByProject.SelectMany(i => i.Value.Where(x => fixAllContext.DiagnosticIds.Contains(x.Id))));
                     break;
             }
 
@@ -513,54 +548,7 @@ namespace LazinatorAnalyzer.Analyzer
 
             return await GetDocumentDiagnosticsToFixAsync(allDiagnostics, projectsToFix, fixAllContext.CancellationToken).ConfigureAwait(false);
         }
-
-        public static async Task<ImmutableDictionary<Project, ImmutableArray<Diagnostic>>> GetProjectDiagnosticsToFixAsync(FixAllContext fixAllContext)
-        {
-            var project = fixAllContext.Project;
-            if (project != null)
-            {
-                switch (fixAllContext.Scope)
-                {
-                    case FixAllScope.Project:
-                        var diagnostics = await fixAllContext.GetProjectDiagnosticsAsync(project).ConfigureAwait(false);
-                        return ImmutableDictionary<Project, ImmutableArray<Diagnostic>>.Empty.SetItem(project, diagnostics);
-
-                    case FixAllScope.Solution:
-                        var projectsAndDiagnostics = new ConcurrentDictionary<Project, ImmutableArray<Diagnostic>>();
-                        var tasks = new List<Task>(project.Solution.ProjectIds.Count);
-                        Func<Project, Task> projectAction =
-                            async proj =>
-                            {
-                                if (fixAllContext.CancellationToken.IsCancellationRequested)
-                                {
-                                    return;
-                                }
-
-                                var projectDiagnostics = await fixAllContext.GetProjectDiagnosticsAsync(proj).ConfigureAwait(false);
-                                if (projectDiagnostics.Any())
-                                {
-                                    projectsAndDiagnostics.TryAdd(proj, projectDiagnostics);
-                                }
-                            };
-
-                        foreach (var proj in project.Solution.Projects)
-                        {
-                            if (fixAllContext.CancellationToken.IsCancellationRequested)
-                            {
-                                break;
-                            }
-
-                            tasks.Add(projectAction(proj));
-                        }
-
-                        await Task.WhenAll(tasks).ConfigureAwait(false);
-                        return projectsAndDiagnostics.ToImmutableDictionary();
-                }
-            }
-
-            return ImmutableDictionary<Project, ImmutableArray<Diagnostic>>.Empty;
-        }
-
+        
         /// <summary>
         /// Gets all <see cref="Diagnostic"/> instances within a specific <see cref="Project"/> which are relevant to a
         /// <see cref="FixAllContext"/>.

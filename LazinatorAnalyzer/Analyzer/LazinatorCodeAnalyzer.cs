@@ -42,6 +42,9 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly DiagnosticDescriptor LazinatorOptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle, LazinatorOptionalRegenerationMessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
         internal static DiagnosticDescriptor OptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle.ToString(), LazinatorOptionalRegenerationMessageFormat.ToString(), Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
 
+        internal DateTime configLastLoaded = new DateTime(1900, 1, 1);
+        internal string configPath, configString;
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule, LazinatorOptionalRegenerationRule); } }
 
         public override void Initialize(AnalysisContext context)
@@ -64,8 +67,14 @@ namespace LazinatorAnalyzer.Analyzer
                     return;
                 }
 
+                if (DateTime.Now - configLastLoaded > TimeSpan.FromSeconds(5))
+                { // we don't want to reload this too often, although it shouldn't involve a disk operation
+                    (configPath, configString) = ConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
+                    configLastLoaded = DateTime.Now;
+                }
+
                 // Initialize state in the start action.
-                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles);
+                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles, configPath, configString);
 
                 // Register intermediate non-end actions that access and modify the state.
                 compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
@@ -87,6 +96,7 @@ namespace LazinatorAnalyzer.Analyzer
             private readonly INamedTypeSymbol _lazinatorAttributeType;
             private readonly INamedTypeSymbol _lazinatorInterfaceType;
             private readonly ImmutableArray<AdditionalText> _additionalFiles;
+            private readonly string _configPath, _configString;
 
             #endregion
 
@@ -98,11 +108,13 @@ namespace LazinatorAnalyzer.Analyzer
 
             #region State intialization
 
-            public CompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, ImmutableArray<AdditionalText> additionalFiles)
+            public CompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, ImmutableArray<AdditionalText> additionalFiles, string configPath, string configString)
             {
                 _lazinatorAttributeType = lazinatorAttributeType;
                 _lazinatorInterfaceType = lazinatorInterfaceType;
                 _additionalFiles = additionalFiles;
+                _configPath = configPath;
+                _configString = configString;
             }
 
             #endregion
@@ -254,8 +266,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 if (sourceFileInfo.CodeBehindLocation != null)
                                     additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
                                 additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
-                                (string configPath, string configString) = ConfigLoader.GetConfigPathAndText(_additionalFiles, context.CancellationToken);
-                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(configPath, configString));
+                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(_configPath, _configString));
                                 context.ReportDiagnostic(diagnostic);
                             }
                         }

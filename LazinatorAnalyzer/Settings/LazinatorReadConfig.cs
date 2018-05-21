@@ -41,7 +41,7 @@ namespace LazinatorAnalyzer.Settings
 
                 using (var reader = new StreamReader(stream))
                 {
-                    return (file.Path, reader.ReadToEnd());
+                    return (Path.GetDirectoryName(file.Path), reader.ReadToEnd());
                 }
             }
         }

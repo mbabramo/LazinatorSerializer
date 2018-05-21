@@ -10,7 +10,7 @@ namespace LazinatorAnalyzer.Settings
 {
     public class LazinatorConfig
     {
-        private const string GeneratedCodePathString = "GeneratedCodePath";
+        private const string RelativeGeneratedCodePathString = "RelativeGeneratedCodePath";
         private const string InterchangeConvertersString = "InterchangeConverters";
         private const string DirectConvertersString = "DirectConverters";
         private const string IgnoreRecordLikeTypesString = "IgnoreRecordLikeTypes";
@@ -24,8 +24,7 @@ namespace LazinatorAnalyzer.Settings
         public List<string> IgnoreRecordLikeTypes;
         public List<string> IncludeRecordLikeTypes;
         public string ConfigFilePath;
-        public string GeneratedCodePath;
-        public bool DefineConversionCodeOutsideClass => GeneratedCodePath != null;
+        public string RelativeGeneratedCodePath, GeneratedCodePath;
 
         public LazinatorConfig()
         {
@@ -52,7 +51,13 @@ namespace LazinatorAnalyzer.Settings
                     DefaultAllowRecordLikeReadOnlyStructs = json.ContainsKey(DefaultAllowRecordLikeReadOnlyStructsString) ? json[DefaultAllowRecordLikeReadOnlyStructsString].AsBoolean : true;
                     ConfigFilePath = configPath;
                     if (ConfigFilePath != null)
-                        GeneratedCodePath = ConfigFilePath + "\\" + (json[GeneratedCodePathString]);
+                    {
+                        RelativeGeneratedCodePath = json[RelativeGeneratedCodePathString];
+                        if (RelativeGeneratedCodePath == null)
+                            GeneratedCodePath = null;
+                        else
+                            GeneratedCodePath = ConfigFilePath + "\\" + RelativeGeneratedCodePath;
+                    }
                 }
                 catch
                 {
