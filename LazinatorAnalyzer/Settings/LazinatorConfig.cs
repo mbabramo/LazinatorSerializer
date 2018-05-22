@@ -11,6 +11,7 @@ namespace LazinatorAnalyzer.Settings
     public class LazinatorConfig
     {
         private const string RelativeGeneratedCodePathString = "RelativeGeneratedCodePath";
+        private const string UseFullyQualifiedNamesString = "UseFullyQualifiedNames";
         private const string InterchangeConvertersString = "InterchangeConverters";
         private const string DirectConvertersString = "DirectConverters";
         private const string IgnoreRecordLikeTypesString = "IgnoreRecordLikeTypes";
@@ -18,6 +19,7 @@ namespace LazinatorAnalyzer.Settings
         private const string DefaultAllowRecordLikeClassesString = "DefaultAllowRecordLikeClasses";
         private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
+        public bool UseFullyQualifiedNames;
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
         public bool DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
@@ -46,6 +48,7 @@ namespace LazinatorAnalyzer.Settings
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);
                     LoadIncludeRecordLikeTypes(json);
+                    UseFullyQualifiedNames = json.ContainsKey(UseFullyQualifiedNamesString) ? json[UseFullyQualifiedNamesString].AsBoolean : false;
                     DefaultAllowRecordLikeClasses = json.ContainsKey(DefaultAllowRecordLikeClassesString) ? json[DefaultAllowRecordLikeClassesString].AsBoolean : false;
                     DefaultAllowRecordLikeRegularStructs = json.ContainsKey(DefaultAllowRecordLikeRegularStructsString) ? json[DefaultAllowRecordLikeRegularStructsString].AsBoolean : false;
                     DefaultAllowRecordLikeReadOnlyStructs = json.ContainsKey(DefaultAllowRecordLikeReadOnlyStructsString) ? json[DefaultAllowRecordLikeReadOnlyStructsString].AsBoolean : true;

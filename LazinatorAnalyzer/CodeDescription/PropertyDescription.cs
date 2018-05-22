@@ -17,71 +17,70 @@ namespace Lazinator.CodeDescription
         #region Properties
         
         /* Type and object information */
-        public ObjectDescription ContainingObjectDescription { get; set; }
-        public PropertyDescription ContainingPropertyDescription { get; set; }
-        public int UniqueIDForLazinatorType { get; set; }
-        public IPropertySymbol PropertySymbol { get; set; }
-        public ITypeSymbol TypeSymbolIfNoProperty { get; set; }
-        public ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
-        public string DerivationKeyword { get; set; }
-        public bool IsAbstract { get; set; }
-        public bool Nullable { get; set; }
-        public bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
-        public bool IsInterface { get; set; }
-        public int? ArrayRank { get; set; }
-        public bool IsDefinedInLowerLevelInterface { get; set; }
+        private ObjectDescription ContainingObjectDescription { get; set; }
+        private PropertyDescription ContainingPropertyDescription { get; set; }
+        private int UniqueIDForLazinatorType { get; set; }
+        private IPropertySymbol PropertySymbol { get; set; }
+        private ITypeSymbol TypeSymbolIfNoProperty { get; set; }
+        private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
+        internal string DerivationKeyword { get; set; }
+        private bool IsAbstract { get; set; }
+        private bool Nullable { get; set; }
+        private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
+        private bool IsInterface { get; set; }
+        private int? ArrayRank { get; set; }
+        internal bool IsDefinedInLowerLevelInterface { get; set; }
 
         /* Property type */
-        public LazinatorPropertyType PropertyType { get; set; }
-        public LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
-        public LazinatorSupportedTupleType? SupportedTupleType { get; set; }
-        public bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
-        public bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
-        public bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
+        internal LazinatorPropertyType PropertyType { get; set; }
+        private LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
+        private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
+        private bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
+        private bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
+        internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
-        public string TypeNameShort => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
-        public string TypeNameShortWithoutNullable => WithoutNullableIndicator(TypeNameShort);
-        public string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        public string TypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
-        public string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
-        public string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();
-        public string WriteMethodName { get; set; }
-        public string ReadMethodName { get; set; }
-        public string PropertyName { get; set; }
+        private string TypeNameShort => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+        private string TypeNameShortWithoutNullable => WithoutNullableIndicator(TypeNameShort);
+        private string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
+        internal string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();
+        private string FullyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
+        private string WriteMethodName { get; set; }
+        private string ReadMethodName { get; set; }
+        internal string PropertyName { get; set; }
 
         /* Enums */
-        public string EnumEquivalentType { get; set; }
-        public string EnumEquivalentCastToEquivalentType => EnumEquivalentType != null ? $"({EnumEquivalentType}) " : $"";
-        public string EnumEquivalentCastToEnum => EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"";
+        private string EnumEquivalentType { get; set; }
+        private string EnumEquivalentCastToEquivalentType => EnumEquivalentType != null ? $"({EnumEquivalentType}) " : $"";
+        private string EnumEquivalentCastToEnum => EnumEquivalentType != null ? $"({FullyQualifiedTypeName})" : $"";
 
         /* Inner properties */
-        public List<PropertyDescription> InnerProperties { get; set; }
-        public bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
+        private List<PropertyDescription> InnerProperties { get; set; }
+        private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
+        internal string NullableStructValueAccessor => PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable ? ".Value" : "";
 
-        public string NullableStructValueAccessor => PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable ? ".Value" : "";
-        
         /* Conversion */
-        public string InterchangeTypeName { get; set; }
-        public string DirectConverterTypeName { get; set; }
-        public string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" || DirectConverterTypeName == null ? "" : DirectConverterTypeName + ".";
-        public bool HasInterchangeType => InterchangeTypeName != null;
+        private string InterchangeTypeName { get; set; }
+        private string DirectConverterTypeName { get; set; }
+        private string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" || DirectConverterTypeName == null ? "" : DirectConverterTypeName + ".";
+        private bool HasInterchangeType => InterchangeTypeName != null;
 
         /* Attributes */
-        public IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
-        public IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
-        public string PropertyAccessibility { get; set; }
-        public string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
-        public CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
-        public string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
-        public int? IntroducedWithVersion { get; set; }
-        public int? EliminatedWithVersion { get; set; }
-        public bool TrackDirtinessNonSerialized { get; set; }
-        public string ReadInclusionConditional { get; set; }
-        public string WriteInclusionConditional { get; set; }
-        public bool IsGuaranteedSmall { get; set; }
-        public bool IncludableWhenExcludingMostChildren { get; private set; }
-        public bool ExcludableWhenIncludingMostChildren { get; private set; }
+        private IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
+        private IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
+        internal string PropertyAccessibility { get; set; }
+        private string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
+        private CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
+        private string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
+        private int? IntroducedWithVersion { get; set; }
+        private int? EliminatedWithVersion { get; set; }
+        internal bool TrackDirtinessNonSerialized { get; set; }
+        private string ReadInclusionConditional { get; set; }
+        private string WriteInclusionConditional { get; set; }
+        private bool IsGuaranteedSmall { get; set; }
+        private bool IncludableWhenExcludingMostChildren { get; set; }
+        private bool ExcludableWhenIncludingMostChildren { get; set; }
 
         #endregion
 
@@ -112,7 +111,7 @@ namespace Lazinator.CodeDescription
 
             ParseOtherPropertyAttributes();
 
-            SetTypeNameAndPropertyType(propertySymbol.Type as ITypeSymbol);
+            SetPropertyType(propertySymbol.Type as ITypeSymbol);
 
             SetReadAndWriteMethodNames();
 
@@ -127,7 +126,7 @@ namespace Lazinator.CodeDescription
             ContainingPropertyDescription = containingPropertyDescription;
             PropertyName = propertyName;
             IsAbstract = typeSymbol.IsAbstract;
-            SetTypeNameAndPropertyType(typeSymbol);
+            SetPropertyType(typeSymbol);
             SetReadAndWriteMethodNames();
         }
 
@@ -204,13 +203,12 @@ namespace Lazinator.CodeDescription
 
         #endregion
 
-        #region Type names
-
-
+        #region Property type
+        
         private static readonly string[] SupportedAsPrimitives = new string[]
             {"bool", "byte", "sbyte", "char", "short", "ushort", "int", "uint", "long", "ulong", "string", "DateTime", "TimeSpan", "Guid", "float", "double", "decimal"};
 
-        private void SetTypeNameAndPropertyType(ITypeSymbol typeSymbol)
+        private void SetPropertyType(ITypeSymbol typeSymbol)
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
             
@@ -226,7 +224,7 @@ namespace Lazinator.CodeDescription
             if (Nullable)
             {
                 // handle a nullable type (which might be a nullable primitive type or a nullable struct / valuetuple
-                SetNullableTypeNameAndPropertyType(namedTypeSymbol);
+                SetNullablePropertyType(namedTypeSymbol);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                     throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use LazinatorWrapperNullableStruct instead.");
                 return;
@@ -260,16 +258,21 @@ namespace Lazinator.CodeDescription
                 if (namedTypeSymbol.Equals(ContainingObjectDescription?.ILazinatorTypeSymbol))
                     isRecursiveDefinition = true;
             }
+            if (!isILazinator && !isRecursiveDefinition && namedTypeSymbol != null)
+            {
+                if (namedTypeSymbol.AllInterfaces.Any(x => x.HasAttributeOfType<CloneLazinatorAttribute>()))
+                    isILazinator = true; // code behind isn't implemented yet but it will be
+            }
 
             bool isSelfSerializable = isRecursiveDefinition || isILazinator;
             if (isSelfSerializable)
-                SetSelfSerializableTypeNameAndPropertyType(namedTypeSymbol);
+                SetSelfSerializablePropertyType(namedTypeSymbol);
             else
             {
                 // look for supported collections and tuples
                 if (typeSymbol.TypeKind == TypeKind.Array)
                 { // array is not a generic type, so we handle it specially
-                    SetArrayTypeNameAndPropertyType(typeSymbol as IArrayTypeSymbol);
+                    SetArrayPropertyType(typeSymbol as IArrayTypeSymbol);
                     return;
                 }
 
@@ -302,7 +305,7 @@ namespace Lazinator.CodeDescription
                 CheckSupportedTuples(name);
                 if (PropertyType == LazinatorPropertyType.SupportedTuple)
                 {
-                    SetSupportedTupleTypeNameAndPropertyType(t, name);
+                    SetSupportedTuplePropertyType(t, name);
                     return true;
                 }
 
@@ -318,20 +321,17 @@ namespace Lazinator.CodeDescription
             return (HandleRecordLikeType(t));
         }
 
-        private void SetNullableTypeNameAndPropertyType(INamedTypeSymbol namedTypeSymbol)
+        private void SetNullablePropertyType(INamedTypeSymbol namedTypeSymbol)
         {
-            SetTypeNameAndPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
+            SetPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
             Nullable = true;
             if (EnumEquivalentType != null)
                 EnumEquivalentType += "?";
             if (PropertyType == LazinatorPropertyType.PrimitiveType)
                 PropertyType = LazinatorPropertyType.PrimitiveTypeNullable;
-            //if (PropertyType == LazinatorPropertyType.SupportedCollection)
-            //    throw new LazinatorCodeGenException(
-            //        $"Self serialization does not support type {t}. Nullable<Memory<T>> is not supported.");
         }
 
-        private void SetSelfSerializableTypeNameAndPropertyType(INamedTypeSymbol t)
+        private void SetSelfSerializablePropertyType(INamedTypeSymbol t)
         {
             if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
             {
@@ -364,7 +364,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private void SetArrayTypeNameAndPropertyType(IArrayTypeSymbol t)
+        private void SetArrayPropertyType(IArrayTypeSymbol t)
         {
             ArrayRank = t.Rank;
             SupportedCollectionType = LazinatorSupportedCollectionType.Array;
@@ -374,17 +374,6 @@ namespace Lazinator.CodeDescription
             {
                 new PropertyDescription(t.ElementType, ContainingObjectDescription, this)
             };
-            string arrayIndicator, arrayTypeName;
-            if (ArrayRank == 1)
-            {
-                arrayIndicator = "[]";
-                arrayTypeName = "Array";
-            }
-            else
-            {
-                arrayIndicator = "[" + new string(',', (int)ArrayRank - 1) + "]";
-                arrayTypeName = "Array" + ((int)ArrayRank).ToString();
-            }
         }
 
         private string ReverseBracketOrder(string arrayCode)
@@ -499,7 +488,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private void SetSupportedTupleTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
+        private void SetSupportedTuplePropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
             SetInnerProperties(t, nameWithoutArity);
         }
@@ -570,6 +559,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        static INamedTypeSymbol keyValuePairType = null;
         private void SetSupportedCollectionTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
             if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan)
@@ -585,7 +575,8 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
                 // We process a Dictionary by treating it as a collection with KeyValuePairs. Thus, we must change to a single inner property of type KeyValuePair, which in turn has two inner properties equal to the properties of the type in our actual dictionary.
-                INamedTypeSymbol keyValuePairType = ContainingObjectDescription.Compilation.Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
+                if (keyValuePairType == null)
+                    keyValuePairType = ContainingObjectDescription.Compilation.Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
                 INamedTypeSymbol constructed = keyValuePairType.Construct(t.TypeArguments.ToArray());
                 var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
@@ -1151,7 +1142,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            {DirectConverterTypeNamePrefix}ConvertToBytes_{TypeNameEncodableWithoutNullable}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
+                            {DirectConverterTypeNamePrefix}ConvertToBytes_{FullyQualifiedTypeNameEncodableWithoutNullable}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
                         }}
                     }}
 ");

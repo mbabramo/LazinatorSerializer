@@ -29,7 +29,8 @@ namespace LazinatorAnalyzer.Analyzer
         public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
         {
             var documentsAndDiagnosticsToFixMap = await this.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
-            return await this.GetFixAsync(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
+            CodeAction result = await this.GetFixAsync(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
+            return result;
         }
 
         public virtual async Task<CodeAction> GetFixAsync(
@@ -229,16 +230,19 @@ namespace LazinatorAnalyzer.Analyzer
 
         public virtual async Task<Solution> TryMergeFixesAsync(Solution oldSolution, IEnumerable<CodeAction> codeActions, CancellationToken cancellationToken)
         {
-            RevisionsTracker revisionsTracker = new RevisionsTracker();
+            Solution currentSolution = oldSolution;
+            RevisionsTracker revisionsTracker;
             List<CodeAction> codeActionsToProcess = codeActions.ToList();
+            // TODO: Unfortunately, this isn't working properly. Only the first layer of changes is being processed. So, the user still has to go to generate multiple times to get it to work completely. 
             bool keepGoing = true;
             do
             {
+                revisionsTracker = new RevisionsTracker();
                 List<CodeAction> failedCodeActions = new List<CodeAction>();
                 bool atLeastOneSucceeded = false;
                 foreach (var codeAction in codeActionsToProcess)
                 {
-                    bool success = await IncludeCodeActionInRevisionsAsync(oldSolution, codeAction, revisionsTracker, cancellationToken);
+                    bool success = await IncludeCodeActionInRevisionsAsync(currentSolution, codeAction, revisionsTracker, cancellationToken);
                     if (!success)
                         failedCodeActions.Add(codeAction);
                     atLeastOneSucceeded = atLeastOneSucceeded || success;
@@ -254,9 +258,9 @@ namespace LazinatorAnalyzer.Analyzer
                 }
                 else // We can't make any more progress
                     keepGoing = false;
+                currentSolution = await UpdateSolutionFromRevisionsAsync(currentSolution, revisionsTracker, cancellationToken);
             } while (keepGoing);
 
-            Solution currentSolution = await UpdateSolutionFromRevisionsAsync(oldSolution, revisionsTracker, cancellationToken);
 
             return currentSolution;
         }
