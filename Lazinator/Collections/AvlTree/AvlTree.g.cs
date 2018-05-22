@@ -197,8 +197,8 @@ namespace Lazinator.Collections.Avl
         private int _AvlTree_TKey_TValue_EndByteIndex;
         protected virtual int _Root_ByteLength => _AvlTree_TKey_TValue_EndByteIndex - _Root_ByteIndex;
         
-        private global::Lazinator.Collections.Avl.AvlNode<TKey, TValue> _Root;
-        public virtual global::Lazinator.Collections.Avl.AvlNode<TKey, TValue> Root
+        private AvlNode<TKey, TValue> _Root;
+        public virtual AvlNode<TKey, TValue> Root
         {
             [DebuggerStepThrough]
             get
@@ -207,7 +207,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Root = default(global::Lazinator.Collections.Avl.AvlNode<TKey, TValue>);
+                        _Root = default(AvlNode<TKey, TValue>);
                     }
                     else
                     {
@@ -217,7 +217,7 @@ namespace Lazinator.Collections.Avl
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _Root = DeserializationFactory.Create(93, () => new global::Lazinator.Collections.Avl.AvlNode<TKey, TValue>(), childData, this); 
+                        _Root = DeserializationFactory.Create(93, () => new AvlNode<TKey, TValue>(), childData, this); 
                     }
                     _Root_Accessed = true;
                 }

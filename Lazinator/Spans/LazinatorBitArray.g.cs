@@ -227,8 +227,8 @@ namespace Lazinator.Spans
                 _m_length = value;
             }
         }
-        private global::Lazinator.Spans.LazinatorByteSpan _ByteSpan;
-        private global::Lazinator.Spans.LazinatorByteSpan ByteSpan
+        private LazinatorByteSpan _ByteSpan;
+        private LazinatorByteSpan ByteSpan
         {
             [DebuggerStepThrough]
             get
@@ -237,7 +237,7 @@ namespace Lazinator.Spans
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ByteSpan = default(global::Lazinator.Spans.LazinatorByteSpan);
+                        _ByteSpan = default(LazinatorByteSpan);
                     }
                     else
                     {
@@ -246,7 +246,7 @@ namespace Lazinator.Spans
                         {
                             _ByteSpan = default;
                         }
-                        else _ByteSpan = new global::Lazinator.Spans.LazinatorByteSpan()
+                        else _ByteSpan = new LazinatorByteSpan()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,

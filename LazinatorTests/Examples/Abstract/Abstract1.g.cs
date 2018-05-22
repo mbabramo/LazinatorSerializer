@@ -84,7 +84,7 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         protected bool _IntList1_Accessed = false;
-        public abstract global::System.Collections.Generic.List<int> IntList1
+        public abstract List<int> IntList1
         {
             get;
             set;

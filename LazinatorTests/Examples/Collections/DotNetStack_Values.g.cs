@@ -194,8 +194,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetStack_Values_EndByteIndex;
         protected virtual int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
         
-        private global::System.Collections.Generic.Stack<int> _MyStackInt;
-        public global::System.Collections.Generic.Stack<int> MyStackInt
+        private Stack<int> _MyStackInt;
+        public Stack<int> MyStackInt
         {
             [DebuggerStepThrough]
             get
@@ -204,13 +204,13 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyStackInt = default(global::System.Collections.Generic.Stack<int>);
+                        _MyStackInt = default(Stack<int>);
                         _MyStackInt_Dirty = true;
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength);
-                        _MyStackInt = ConvertFromBytes_System__Collections__Generic__Stack_Gint_g(childData, DeserializationFactory, () => { MyStackInt_Dirty = true; });
+                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData, DeserializationFactory, () => { MyStackInt_Dirty = true; });
                     }
                     _MyStackInt_Accessed = true;
                 }
@@ -274,24 +274,24 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__Stack_Gint_g(w, MyStackInt,
+            ConvertToBytes_Stack_Gint_g(w, MyStackInt,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.Stack<int> ConvertFromBytes_System__Collections__Generic__Stack_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Stack<int> ConvertFromBytes_Stack_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Collections.Generic.Stack<int>);
+                return default(Stack<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Collections.Generic.Stack<int> collection = new global::System.Collections.Generic.Stack<int>(collectionLength);
+            Stack<int> collection = new Stack<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -301,9 +301,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__Stack_Gint_g(BinaryBufferWriter writer, global::System.Collections.Generic.Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Stack_Gint_g(BinaryBufferWriter writer, Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(global::System.Collections.Generic.Stack<int>))
+            if (itemToConvert == default(Stack<int>))
             {
                 return;
             }

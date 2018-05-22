@@ -198,8 +198,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _OpenGenericStayingOpenContainer_EndByteIndex;
         protected virtual int _ClosedGeneric_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGeneric_ByteIndex;
         
-        private global::LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<global::Lazinator.Wrappers.LazinatorWrapperFloat> _ClosedGeneric;
-        public global::LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<global::Lazinator.Wrappers.LazinatorWrapperFloat> ClosedGeneric
+        private OpenGeneric<LazinatorWrapperFloat> _ClosedGeneric;
+        public OpenGeneric<LazinatorWrapperFloat> ClosedGeneric
         {
             [DebuggerStepThrough]
             get
@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ClosedGeneric = default(global::LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<global::Lazinator.Wrappers.LazinatorWrapperFloat>);
+                        _ClosedGeneric = default(OpenGeneric<LazinatorWrapperFloat>);
                     }
                     else
                     {
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _ClosedGeneric = DeserializationFactory.Create(233, () => new global::LazinatorTests.Examples.NonAbstractGenerics.OpenGeneric<global::Lazinator.Wrappers.LazinatorWrapperFloat>(), childData, this); 
+                        _ClosedGeneric = DeserializationFactory.Create(233, () => new OpenGeneric<LazinatorWrapperFloat>(), childData, this); 
                     }
                     _ClosedGeneric_Accessed = true;
                 }

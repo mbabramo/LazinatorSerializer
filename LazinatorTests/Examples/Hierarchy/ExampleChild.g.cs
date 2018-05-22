@@ -223,7 +223,7 @@ namespace LazinatorTests.Examples
             }
         }
         private ReadOnlyMemory<byte> _ByteSpan;
-        public global::System.ReadOnlySpan<byte> ByteSpan
+        public ReadOnlySpan<byte> ByteSpan
         {
             [DebuggerStepThrough]
             get
@@ -279,13 +279,13 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__ReadOnlySpan_Gbyte_g(w, ByteSpan,
+            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ByteSpan,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static void ConvertToBytes_System__ReadOnlySpan_Gbyte_g(BinaryBufferWriter writer, global::System.ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)

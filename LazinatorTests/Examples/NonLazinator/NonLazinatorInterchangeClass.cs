@@ -22,7 +22,7 @@ namespace LazinatorTests.Examples
             }
         }
 
-        public NonLazinatorInterchangeableClass Interchange_LazinatorTests__Examples__NonLazinatorInterchangeableClass()
+        public NonLazinatorInterchangeableClass Interchange_NonLazinatorInterchangeableClass()
         {
             if (IsNull)
                 return null;

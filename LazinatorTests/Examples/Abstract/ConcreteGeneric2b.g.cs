@@ -203,8 +203,8 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGeneric2b_EndByteIndex;
         protected virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
         
-        private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
-        public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
+        private EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
+        public override EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
             [DebuggerStepThrough]
             get
@@ -248,8 +248,8 @@ namespace LazinatorTests.Examples.Abstract
                 _AnotherProperty = value;
             }
         }
-        private global::LazinatorTests.Examples.Example _MyT;
-        public override global::LazinatorTests.Examples.Example MyT
+        private Example _MyT;
+        public override Example MyT
         {
             [DebuggerStepThrough]
             get
@@ -258,7 +258,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyT = default(global::LazinatorTests.Examples.Example);
+                        _MyT = default(Example);
                     }
                     else
                     {
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyT = DeserializationFactory.Create(212, () => new global::LazinatorTests.Examples.Example(), childData, this); 
+                        _MyT = DeserializationFactory.Create(212, () => new Example(), childData, this); 
                     }
                     _MyT_Accessed = true;
                 }
@@ -286,8 +286,8 @@ namespace LazinatorTests.Examples.Abstract
                 _MyT_Accessed = true;
             }
         }
-        private global::LazinatorTests.Examples.Example _LazinatorExample;
-        public global::LazinatorTests.Examples.Example LazinatorExample
+        private Example _LazinatorExample;
+        public Example LazinatorExample
         {
             [DebuggerStepThrough]
             get
@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _LazinatorExample = default(global::LazinatorTests.Examples.Example);
+                        _LazinatorExample = default(Example);
                     }
                     else
                     {
@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _LazinatorExample = DeserializationFactory.Create(212, () => new global::LazinatorTests.Examples.Example(), childData, this); 
+                        _LazinatorExample = DeserializationFactory.Create(212, () => new Example(), childData, this); 
                     }
                     _LazinatorExample_Accessed = true;
                 }
@@ -335,7 +335,7 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyEnumWithinAbstractGeneric = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnumWithinAbstractGeneric = (EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _AnotherProperty = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyT_ByteIndex = bytesSoFar;

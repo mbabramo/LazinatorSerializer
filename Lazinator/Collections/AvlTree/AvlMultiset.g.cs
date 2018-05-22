@@ -214,8 +214,8 @@ namespace Lazinator.Collections.AvlTree
                 _NumItemsAdded = value;
             }
         }
-        private global::Lazinator.Collections.AvlTree.AvlSet<global::Lazinator.Collections.LazinatorTuple<T, global::Lazinator.Wrappers.LazinatorWrapperInt>> _UnderlyingSet;
-        public virtual global::Lazinator.Collections.AvlTree.AvlSet<global::Lazinator.Collections.LazinatorTuple<T, global::Lazinator.Wrappers.LazinatorWrapperInt>> UnderlyingSet
+        private AvlSet<LazinatorTuple<T, LazinatorWrapperInt>> _UnderlyingSet;
+        public virtual AvlSet<LazinatorTuple<T, LazinatorWrapperInt>> UnderlyingSet
         {
             [DebuggerStepThrough]
             get
@@ -224,7 +224,7 @@ namespace Lazinator.Collections.AvlTree
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _UnderlyingSet = default(global::Lazinator.Collections.AvlTree.AvlSet<global::Lazinator.Collections.LazinatorTuple<T, global::Lazinator.Wrappers.LazinatorWrapperInt>>);
+                        _UnderlyingSet = default(AvlSet<LazinatorTuple<T, LazinatorWrapperInt>>);
                     }
                     else
                     {
@@ -234,7 +234,7 @@ namespace Lazinator.Collections.AvlTree
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _UnderlyingSet = DeserializationFactory.Create(97, () => new global::Lazinator.Collections.AvlTree.AvlSet<global::Lazinator.Collections.LazinatorTuple<T, global::Lazinator.Wrappers.LazinatorWrapperInt>>(), childData, this); 
+                        _UnderlyingSet = DeserializationFactory.Create(97, () => new AvlSet<LazinatorTuple<T, LazinatorWrapperInt>>(), childData, this); 
                     }
                     _UnderlyingSet_Accessed = true;
                 }

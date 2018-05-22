@@ -198,8 +198,8 @@ namespace LazinatorTests.Examples.Collections
         private int _LazinatorListContainerGeneric_T_EndByteIndex;
         protected virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
         
-        private global::Lazinator.Collections.LazinatorList<T> _MyList;
-        public virtual global::Lazinator.Collections.LazinatorList<T> MyList
+        private LazinatorList<T> _MyList;
+        public virtual LazinatorList<T> MyList
         {
             [DebuggerStepThrough]
             get
@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyList = default(global::Lazinator.Collections.LazinatorList<T>);
+                        _MyList = default(LazinatorList<T>);
                     }
                     else
                     {
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _MyList = DeserializationFactory.Create(51, () => new global::Lazinator.Collections.LazinatorList<T>(), childData, this); 
+                        _MyList = DeserializationFactory.Create(51, () => new LazinatorList<T>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }

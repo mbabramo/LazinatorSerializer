@@ -194,8 +194,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetHashSet_SelfSerialized_EndByteIndex;
         protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_SelfSerialized_EndByteIndex - _MyHashSetSerialized_ByteIndex;
         
-        private global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> _MyHashSetSerialized;
-        public global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> MyHashSetSerialized
+        private HashSet<ExampleChild> _MyHashSetSerialized;
+        public HashSet<ExampleChild> MyHashSetSerialized
         {
             [DebuggerStepThrough]
             get
@@ -204,12 +204,12 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyHashSetSerialized = default(global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild>);
+                        _MyHashSetSerialized = default(HashSet<ExampleChild>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength);
-                        _MyHashSetSerialized = ConvertFromBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, null);
+                        _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MyHashSetSerialized_Accessed = true;
                     IsDirty = true;
@@ -254,30 +254,30 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MyHashSetSerialized,
+            ConvertToBytes_HashSet_GExampleChild_g(w, MyHashSetSerialized,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static HashSet<ExampleChild> ConvertFromBytes_HashSet_GExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild>);
+                return default(HashSet<ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> collection = new global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild>(collectionLength);
+            HashSet<ExampleChild> collection = new HashSet<ExampleChild>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(global::LazinatorTests.Examples.ExampleChild));
+                    collection.Add(default(ExampleChild));
                 }
                 else
                 {
@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         throw new MissingDeserializationFactoryException();
                     }
-                    var item = (global::LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                    var item = (ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -295,16 +295,16 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__HashSet_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_HashSet_GExampleChild_g(BinaryBufferWriter writer, HashSet<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(global::System.Collections.Generic.HashSet<global::LazinatorTests.Examples.ExampleChild>))
+            if (itemToConvert == default(HashSet<ExampleChild>))
             {
                 return;
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                if (item == default(global::LazinatorTests.Examples.ExampleChild))
+                if (item == default(ExampleChild))
                 {
                     writer.Write((uint)0);
                 }

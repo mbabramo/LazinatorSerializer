@@ -195,8 +195,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _OpenGeneric_T_EndByteIndex = 0;
         protected virtual int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
         
-        private global::System.Collections.Generic.List<T> _MyListT;
-        public virtual global::System.Collections.Generic.List<T> MyListT
+        private List<T> _MyListT;
+        public virtual List<T> MyListT
         {
             [DebuggerStepThrough]
             get
@@ -205,12 +205,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListT = default(global::System.Collections.Generic.List<T>);
+                        _MyListT = default(List<T>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListT_ByteIndex, _MyListT_ByteLength);
-                        _MyListT = ConvertFromBytes_System__Collections__Generic__List_GT_g(childData, DeserializationFactory, null);
+                        _MyListT = ConvertFromBytes_List_GT_g(childData, DeserializationFactory, null);
                     }
                     _MyListT_Accessed = true;
                     IsDirty = true;
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListT_ByteIndex, _MyListT_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__List_GT_g(w, MyListT,
+            ConvertToBytes_List_GT_g(w, MyListT,
             includeChildrenMode, v));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -309,18 +309,18 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.List<T> ConvertFromBytes_System__Collections__Generic__List_GT_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<T> ConvertFromBytes_List_GT_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Collections.Generic.List<T>);
+                return default(List<T>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Collections.Generic.List<T> collection = new global::System.Collections.Generic.List<T>(collectionLength);
+            List<T> collection = new List<T>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -344,9 +344,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return collection;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__List_GT_g(BinaryBufferWriter writer, global::System.Collections.Generic.List<T> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_GT_g(BinaryBufferWriter writer, List<T> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(global::System.Collections.Generic.List<T>))
+            if (itemToConvert == default(List<T>))
             {
                 return;
             }

@@ -213,8 +213,8 @@ namespace Lazinator.Collections.Dictionary
                 _Count = value;
             }
         }
-        private global::Lazinator.Collections.LazinatorList<global::Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>> _Buckets;
-        internal virtual global::Lazinator.Collections.LazinatorList<global::Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>> Buckets
+        private LazinatorList<DictionaryBucket<TKey, TValue>> _Buckets;
+        internal virtual LazinatorList<DictionaryBucket<TKey, TValue>> Buckets
         {
             [DebuggerStepThrough]
             get
@@ -223,7 +223,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Buckets = default(global::Lazinator.Collections.LazinatorList<global::Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>>);
+                        _Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
                     }
                     else
                     {
@@ -233,7 +233,7 @@ namespace Lazinator.Collections.Dictionary
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _Buckets = DeserializationFactory.Create(51, () => new global::Lazinator.Collections.LazinatorList<global::Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue>>(), childData, this); 
+                        _Buckets = DeserializationFactory.Create(51, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
                     }
                     _Buckets_Accessed = true;
                 }

@@ -199,8 +199,8 @@ namespace LazinatorTests.Examples.Tuples
         private int _RegularTuple_EndByteIndex;
         protected virtual int _MyTupleSerialized4_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized4_ByteIndex;
         
-        private global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized;
-        public global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized
+        private Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized;
+        public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized
         {
             [DebuggerStepThrough]
             get
@@ -209,12 +209,12 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyTupleSerialized = default(global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>);
+                        _MyTupleSerialized = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength);
-                        _MyTupleSerialized = ConvertFromBytes_System__Tuple_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(childData, DeserializationFactory, null);
+                        _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized_Accessed = true;
                     IsDirty = true;
@@ -230,8 +230,8 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized_Accessed;
-        private global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized2;
-        public global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized2
+        private Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized2;
+        public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2
         {
             [DebuggerStepThrough]
             get
@@ -240,12 +240,12 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyTupleSerialized2 = default(global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>);
+                        _MyTupleSerialized2 = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength);
-                        _MyTupleSerialized2 = ConvertFromBytes_System__Tuple_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(childData, DeserializationFactory, null);
+                        _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized2_Accessed = true;
                     IsDirty = true;
@@ -261,8 +261,8 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
-        private global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> _MyTupleSerialized3;
-        public global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> MyTupleSerialized3
+        private Tuple<uint?, ExampleChild, NonLazinatorClass> _MyTupleSerialized3;
+        public Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3
         {
             [DebuggerStepThrough]
             get
@@ -271,12 +271,12 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyTupleSerialized3 = default(global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>);
+                        _MyTupleSerialized3 = default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength);
-                        _MyTupleSerialized3 = ConvertFromBytes_System__Tuple_Guint_C63_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(childData, DeserializationFactory, null);
+                        _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized3_Accessed = true;
                     IsDirty = true;
@@ -292,8 +292,8 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
-        private global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct> _MyTupleSerialized4;
-        public global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct> MyTupleSerialized4
+        private Tuple<int, ExampleStruct> _MyTupleSerialized4;
+        public Tuple<int, ExampleStruct> MyTupleSerialized4
         {
             [DebuggerStepThrough]
             get
@@ -302,12 +302,12 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyTupleSerialized4 = default(global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct>);
+                        _MyTupleSerialized4 = default(Tuple<int, ExampleStruct>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength);
-                        _MyTupleSerialized4 = ConvertFromBytes_System__Tuple_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleStruct_g(childData, DeserializationFactory, null);
+                        _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized4_Accessed = true;
                     IsDirty = true;
@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Tuple_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(w, MyTupleSerialized,
+            ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized2, isBelievedDirty: _MyTupleSerialized2_Accessed,
@@ -366,7 +366,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Tuple_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(w, MyTupleSerialized2,
+            ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized2,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized3, isBelievedDirty: _MyTupleSerialized3_Accessed,
@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Tuple_Guint_C63_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(w, MyTupleSerialized3,
+            ConvertToBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized3,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized4, isBelievedDirty: _MyTupleSerialized4_Accessed,
@@ -382,13 +382,13 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Tuple_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleStruct_g(w, MyTupleSerialized4,
+            ConvertToBytes_Tuple_Gint_c_C32ExampleStruct_g(w, MyTupleSerialized4,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_System__Tuple_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Tuple<uint, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -400,7 +400,7 @@ namespace LazinatorTests.Examples.Tuples
             
             uint item1 = span.ToDecompressedUint(ref bytesSoFar);
             
-            global::LazinatorTests.Examples.ExampleChild item2 = default;
+            ExampleChild item2 = default;
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
@@ -409,25 +409,25 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     throw new MissingDeserializationFactoryException();
                 }
-                item2 = (global::LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                item2 = (ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            global::LazinatorTests.Examples.NonLazinatorClass item3 = default;
+            NonLazinatorClass item3 = default;
             int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                item3 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_LazinatorTests__Examples__NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item3 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new Tuple<uint, ExampleChild, NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_System__Tuple_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(BinaryBufferWriter writer, global::System.Tuple<uint, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(BinaryBufferWriter writer, Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -452,12 +452,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests__Examples__NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                void actionItem3(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
         
-        private static global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> ConvertFromBytes_System__Tuple_Guint_C63_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Tuple<uint?, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -469,7 +469,7 @@ namespace LazinatorTests.Examples.Tuples
             
             uint? item1 = span.ToDecompressedNullableUint(ref bytesSoFar);
             
-            global::LazinatorTests.Examples.ExampleChild item2 = default;
+            ExampleChild item2 = default;
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
@@ -478,25 +478,25 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     throw new MissingDeserializationFactoryException();
                 }
-                item2 = (global::LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                item2 = (ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            global::LazinatorTests.Examples.NonLazinatorClass item3 = default;
+            NonLazinatorClass item3 = default;
             int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                item3 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_LazinatorTests__Examples__NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item3 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new Tuple<uint?, ExampleChild, NonLazinatorClass>(item1, item2, item3);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_System__Tuple_Guint_C63_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_c_C32global_C58_C58LazinatorTests__Examples__NonLazinatorClass_g(BinaryBufferWriter writer, global::System.Tuple<uint?, global::LazinatorTests.Examples.ExampleChild, global::LazinatorTests.Examples.NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(BinaryBufferWriter writer, Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {
@@ -521,12 +521,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_LazinatorTests__Examples__NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                void actionItem3(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
         
-        private static global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct> ConvertFromBytes_System__Tuple_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleStruct_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Tuple<int, ExampleStruct> ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -538,12 +538,12 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::LazinatorTests.Examples.ExampleStruct item2 = default;
+            ExampleStruct item2 = default;
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = new global::LazinatorTests.Examples.ExampleStruct()
+                item2 = new ExampleStruct()
                 {
                     DeserializationFactory = deserializationFactory,
                     InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
@@ -552,12 +552,12 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct>(item1, item2);
+            var tupleType = new Tuple<int, ExampleStruct>(item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_System__Tuple_Gint_c_C32global_C58_C58LazinatorTests__Examples__ExampleStruct_g(BinaryBufferWriter writer, global::System.Tuple<int, global::LazinatorTests.Examples.ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Tuple_Gint_c_C32ExampleStruct_g(BinaryBufferWriter writer, Tuple<int, ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             if (itemToConvert == null)
             {

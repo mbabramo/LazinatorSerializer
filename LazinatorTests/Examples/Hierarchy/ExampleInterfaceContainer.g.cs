@@ -198,8 +198,8 @@ namespace LazinatorTests.Examples.Hierarchy
         private int _ExampleInterfaceContainer_EndByteIndex;
         protected virtual int _ExampleByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleByInterface_ByteIndex;
         
-        private global::LazinatorTests.Examples.IExample _ExampleByInterface;
-        public global::LazinatorTests.Examples.IExample ExampleByInterface
+        private IExample _ExampleByInterface;
+        public IExample ExampleByInterface
         {
             [DebuggerStepThrough]
             get
@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ExampleByInterface = default(global::LazinatorTests.Examples.IExample);
+                        _ExampleByInterface = default(IExample);
                     }
                     else
                     {
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _ExampleByInterface = (global::LazinatorTests.Examples.IExample)DeserializationFactory.FactoryCreate(childData, this); 
+                        _ExampleByInterface = (IExample)DeserializationFactory.FactoryCreate(childData, this); 
                     }
                     _ExampleByInterface_Accessed = true;
                 }

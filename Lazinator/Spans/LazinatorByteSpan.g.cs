@@ -196,7 +196,7 @@ namespace Lazinator.Spans
         protected virtual int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
         
         private ReadOnlyMemory<byte> _ReadOnly;
-        internal global::System.ReadOnlySpan<byte> ReadOnly
+        internal ReadOnlySpan<byte> ReadOnly
         {
             [DebuggerStepThrough]
             get
@@ -219,8 +219,8 @@ namespace Lazinator.Spans
             }
         }
         protected bool _ReadOnly_Accessed;
-        private global::System.Memory<byte> _ReadOrWrite;
-        internal global::System.Memory<byte> ReadOrWrite
+        private Memory<byte> _ReadOrWrite;
+        internal Memory<byte> ReadOrWrite
         {
             [DebuggerStepThrough]
             get
@@ -229,12 +229,12 @@ namespace Lazinator.Spans
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _ReadOrWrite = default(global::System.Memory<byte>);
+                        _ReadOrWrite = default(Memory<byte>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength);
-                        _ReadOrWrite = ConvertFromBytes_System__Memory_Gbyte_g(childData, DeserializationFactory, null);
+                        _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData, DeserializationFactory, null);
                     }
                     _ReadOrWrite_Accessed = true;
                     IsDirty = true;
@@ -282,7 +282,7 @@ namespace Lazinator.Spans
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnly_ByteIndex, _ReadOnly_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__ReadOnlySpan_Gbyte_g(w, ReadOnly,
+            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnly,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed,
@@ -290,13 +290,13 @@ namespace Lazinator.Spans
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Memory_Gbyte_g(w, ReadOrWrite,
+            ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static void ConvertToBytes_System__ReadOnlySpan_Gbyte_g(BinaryBufferWriter writer, global::System.ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -305,18 +305,18 @@ namespace Lazinator.Spans
             }
         }
         
-        private static global::System.Memory<byte> ConvertFromBytes_System__Memory_Gbyte_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Memory<byte>);
+                return default(Memory<byte>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Memory<byte> collection = new global::System.Memory<byte>(new byte[collectionLength]);
+            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int i = 0; i < collectionLength; i++)
             {
@@ -327,7 +327,7 @@ namespace Lazinator.Spans
             return collection;
         }
         
-        private static void ConvertToBytes_System__Memory_Gbyte_g(BinaryBufferWriter writer, global::System.Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Memory_Gbyte_g(BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Length);
             var itemToConvertSpan = itemToConvert.Span;

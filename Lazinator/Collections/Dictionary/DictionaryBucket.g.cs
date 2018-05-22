@@ -204,8 +204,8 @@ namespace Lazinator.Collections.Dictionary
         private int _DictionaryBucket_TKey_TValue_EndByteIndex;
         protected virtual int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
         
-        private global::Lazinator.Collections.LazinatorList<TKey> _Keys;
-        public virtual global::Lazinator.Collections.LazinatorList<TKey> Keys
+        private LazinatorList<TKey> _Keys;
+        public virtual LazinatorList<TKey> Keys
         {
             [DebuggerStepThrough]
             get
@@ -214,7 +214,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Keys = default(global::Lazinator.Collections.LazinatorList<TKey>);
+                        _Keys = default(LazinatorList<TKey>);
                     }
                     else
                     {
@@ -224,7 +224,7 @@ namespace Lazinator.Collections.Dictionary
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _Keys = DeserializationFactory.Create(51, () => new global::Lazinator.Collections.LazinatorList<TKey>(), childData, this); 
+                        _Keys = DeserializationFactory.Create(51, () => new LazinatorList<TKey>(), childData, this); 
                     }
                     _Keys_Accessed = true;
                 }
@@ -243,8 +243,8 @@ namespace Lazinator.Collections.Dictionary
             }
         }
         protected bool _Keys_Accessed;
-        private global::Lazinator.Collections.LazinatorList<TValue> _Values;
-        public virtual global::Lazinator.Collections.LazinatorList<TValue> Values
+        private LazinatorList<TValue> _Values;
+        public virtual LazinatorList<TValue> Values
         {
             [DebuggerStepThrough]
             get
@@ -253,7 +253,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _Values = default(global::Lazinator.Collections.LazinatorList<TValue>);
+                        _Values = default(LazinatorList<TValue>);
                     }
                     else
                     {
@@ -263,7 +263,7 @@ namespace Lazinator.Collections.Dictionary
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _Values = DeserializationFactory.Create(51, () => new global::Lazinator.Collections.LazinatorList<TValue>(), childData, this); 
+                        _Values = DeserializationFactory.Create(51, () => new LazinatorList<TValue>(), childData, this); 
                     }
                     _Values_Accessed = true;
                 }

@@ -193,7 +193,7 @@ namespace Lazinator.Wrappers
         int _Value_ByteLength => _LazinatorWrapperReadOnlySpanChar_EndByteIndex - _Value_ByteIndex;
         
         private ReadOnlyMemory<byte> _Value;
-        public global::System.ReadOnlySpan<char> Value
+        public ReadOnlySpan<char> Value
         {
             [DebuggerStepThrough]
             get

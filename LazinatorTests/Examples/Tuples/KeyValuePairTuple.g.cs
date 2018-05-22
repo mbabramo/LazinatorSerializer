@@ -194,8 +194,8 @@ namespace LazinatorTests.Examples.Tuples
         private int _KeyValuePairTuple_EndByteIndex;
         protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
         
-        private global::System.Collections.Generic.KeyValuePair<uint, global::LazinatorTests.Examples.ExampleChild> _MyKeyValuePairSerialized;
-        public global::System.Collections.Generic.KeyValuePair<uint, global::LazinatorTests.Examples.ExampleChild> MyKeyValuePairSerialized
+        private KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
+        public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
         {
             [DebuggerStepThrough]
             get
@@ -204,12 +204,12 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyKeyValuePairSerialized = default(global::System.Collections.Generic.KeyValuePair<uint, global::LazinatorTests.Examples.ExampleChild>);
+                        _MyKeyValuePairSerialized = default(KeyValuePair<uint, ExampleChild>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength);
-                        _MyKeyValuePairSerialized = ConvertFromBytes_System__Collections__Generic__KeyValuePair_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, null);
+                        _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MyKeyValuePairSerialized_Accessed = true;
                     IsDirty = true;
@@ -254,13 +254,13 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__KeyValuePair_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MyKeyValuePairSerialized,
+            ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(w, MyKeyValuePairSerialized,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.KeyValuePair<uint, global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__KeyValuePair_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -272,7 +272,7 @@ namespace LazinatorTests.Examples.Tuples
             
             uint item1 = span.ToDecompressedUint(ref bytesSoFar);
             
-            global::LazinatorTests.Examples.ExampleChild item2 = default;
+            ExampleChild item2 = default;
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
@@ -281,16 +281,16 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     throw new MissingDeserializationFactoryException();
                 }
-                item2 = (global::LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                item2 = (ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new global::System.Collections.Generic.KeyValuePair<uint, global::LazinatorTests.Examples.ExampleChild>(item1, item2);
+            var tupleType = new KeyValuePair<uint, ExampleChild>(item1, item2);
             
             return tupleType;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__KeyValuePair_Guint_c_C32global_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.KeyValuePair<uint, global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(BinaryBufferWriter writer, KeyValuePair<uint, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             
             CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Key);

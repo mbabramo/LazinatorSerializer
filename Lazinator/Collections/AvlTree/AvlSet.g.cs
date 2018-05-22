@@ -214,8 +214,8 @@ namespace Lazinator.Collections.AvlTree
                 _Count = value;
             }
         }
-        private global::Lazinator.Collections.Avl.AvlTree<TKey, global::Lazinator.Wrappers.LazinatorWrapperByte> _UnderlyingTree;
-        public virtual global::Lazinator.Collections.Avl.AvlTree<TKey, global::Lazinator.Wrappers.LazinatorWrapperByte> UnderlyingTree
+        private AvlTree<TKey, LazinatorWrapperByte> _UnderlyingTree;
+        public virtual AvlTree<TKey, LazinatorWrapperByte> UnderlyingTree
         {
             [DebuggerStepThrough]
             get
@@ -224,7 +224,7 @@ namespace Lazinator.Collections.AvlTree
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _UnderlyingTree = default(global::Lazinator.Collections.Avl.AvlTree<TKey, global::Lazinator.Wrappers.LazinatorWrapperByte>);
+                        _UnderlyingTree = default(AvlTree<TKey, LazinatorWrapperByte>);
                     }
                     else
                     {
@@ -234,7 +234,7 @@ namespace Lazinator.Collections.AvlTree
                         {
                             LazinatorDeserializationException.ThrowNoDeserializationFactory();
                         }
-                        _UnderlyingTree = DeserializationFactory.Create(94, () => new global::Lazinator.Collections.Avl.AvlTree<TKey, global::Lazinator.Wrappers.LazinatorWrapperByte>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Create(94, () => new AvlTree<TKey, LazinatorWrapperByte>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 }

@@ -195,8 +195,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_SelfSerialized_EndByteIndex;
         protected virtual int _MyListSerialized_ByteLength => _DotNetList_SelfSerialized_EndByteIndex - _MyListSerialized_ByteIndex;
         
-        private global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild> _MyListSerialized;
-        public global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild> MyListSerialized
+        private List<ExampleChild> _MyListSerialized;
+        public List<ExampleChild> MyListSerialized
         {
             [DebuggerStepThrough]
             get
@@ -205,13 +205,13 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyListSerialized = default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild>);
+                        _MyListSerialized = default(List<ExampleChild>);
                         _MyListSerialized_Dirty = true;
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength);
-                        _MyListSerialized = ConvertFromBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(childData, DeserializationFactory, () => { MyListSerialized_Dirty = true; });
+                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData, DeserializationFactory, () => { MyListSerialized_Dirty = true; });
                     }
                     _MyListSerialized_Accessed = true;
                 }
@@ -275,30 +275,30 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(w, MyListSerialized,
+            ConvertToBytes_List_GExampleChild_g(w, MyListSerialized,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild> ConvertFromBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<ExampleChild> ConvertFromBytes_List_GExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild>);
+                return default(List<ExampleChild>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild> collection = new global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild>(collectionLength);
+            List<ExampleChild> collection = new List<ExampleChild>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(global::LazinatorTests.Examples.ExampleChild));
+                    collection.Add(default(ExampleChild));
                 }
                 else
                 {
@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         throw new MissingDeserializationFactoryException();
                     }
-                    var item = (global::LazinatorTests.Examples.ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                    var item = (ExampleChild)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -316,9 +316,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__List_Gglobal_C58_C58LazinatorTests__Examples__ExampleChild_g(BinaryBufferWriter writer, global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_GExampleChild_g(BinaryBufferWriter writer, List<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(global::System.Collections.Generic.List<global::LazinatorTests.Examples.ExampleChild>))
+            if (itemToConvert == default(List<ExampleChild>))
             {
                 return;
             }
@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == default(global::LazinatorTests.Examples.ExampleChild))
+                if (itemToConvert[itemIndex] == default(ExampleChild))
                 {
                     writer.Write((uint)0);
                 }

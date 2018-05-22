@@ -77,7 +77,7 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual int _Item_ByteLength { get; }
         
         protected bool _Item_Accessed = false;
-        public virtual global::LazinatorTests.Examples.Abstract.IAbstractGeneric1<T> Item
+        public virtual IAbstractGeneric1<T> Item
         {
             get;
             set;

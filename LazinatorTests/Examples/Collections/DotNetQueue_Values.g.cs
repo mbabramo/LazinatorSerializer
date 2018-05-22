@@ -194,8 +194,8 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetQueue_Values_EndByteIndex;
         protected virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
         
-        private global::System.Collections.Generic.Queue<int> _MyQueueInt;
-        public global::System.Collections.Generic.Queue<int> MyQueueInt
+        private Queue<int> _MyQueueInt;
+        public Queue<int> MyQueueInt
         {
             [DebuggerStepThrough]
             get
@@ -204,13 +204,13 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _MyQueueInt = default(global::System.Collections.Generic.Queue<int>);
+                        _MyQueueInt = default(Queue<int>);
                         _MyQueueInt_Dirty = true;
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength);
-                        _MyQueueInt = ConvertFromBytes_System__Collections__Generic__Queue_Gint_g(childData, DeserializationFactory, () => { MyQueueInt_Dirty = true; });
+                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData, DeserializationFactory, () => { MyQueueInt_Dirty = true; });
                     }
                     _MyQueueInt_Accessed = true;
                 }
@@ -274,24 +274,24 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__Queue_Gint_g(w, MyQueueInt,
+            ConvertToBytes_Queue_Gint_g(w, MyQueueInt,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.Queue<int> ConvertFromBytes_System__Collections__Generic__Queue_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Queue<int> ConvertFromBytes_Queue_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Collections.Generic.Queue<int>);
+                return default(Queue<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Collections.Generic.Queue<int> collection = new global::System.Collections.Generic.Queue<int>(collectionLength);
+            Queue<int> collection = new Queue<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -301,9 +301,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__Queue_Gint_g(BinaryBufferWriter writer, global::System.Collections.Generic.Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Queue_Gint_g(BinaryBufferWriter writer, Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(global::System.Collections.Generic.Queue<int>))
+            if (itemToConvert == default(Queue<int>))
             {
                 return;
             }

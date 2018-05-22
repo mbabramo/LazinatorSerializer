@@ -204,8 +204,8 @@ namespace Lazinator.Collections
         private int _LazinatorOffsetList_EndByteIndex;
         int _TwoByteItems_ByteLength => _LazinatorOffsetList_EndByteIndex - _TwoByteItems_ByteIndex;
         
-        private global::Lazinator.Collections.LazinatorFastReadList<int> _FourByteItems;
-        public global::Lazinator.Collections.LazinatorFastReadList<int> FourByteItems
+        private LazinatorFastReadList<int> _FourByteItems;
+        public LazinatorFastReadList<int> FourByteItems
         {
             [DebuggerStepThrough]
             get
@@ -214,7 +214,7 @@ namespace Lazinator.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _FourByteItems = default(global::Lazinator.Collections.LazinatorFastReadList<int>);
+                        _FourByteItems = default(LazinatorFastReadList<int>);
                     }
                     else
                     {
@@ -223,7 +223,7 @@ namespace Lazinator.Collections
                         {
                             _FourByteItems = default;
                         }
-                        else _FourByteItems = new global::Lazinator.Collections.LazinatorFastReadList<int>()
+                        else _FourByteItems = new LazinatorFastReadList<int>()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -247,8 +247,8 @@ namespace Lazinator.Collections
             }
         }
         bool _FourByteItems_Accessed;
-        private global::Lazinator.Collections.LazinatorFastReadList<short> _TwoByteItems;
-        public global::Lazinator.Collections.LazinatorFastReadList<short> TwoByteItems
+        private LazinatorFastReadList<short> _TwoByteItems;
+        public LazinatorFastReadList<short> TwoByteItems
         {
             [DebuggerStepThrough]
             get
@@ -257,7 +257,7 @@ namespace Lazinator.Collections
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _TwoByteItems = default(global::Lazinator.Collections.LazinatorFastReadList<short>);
+                        _TwoByteItems = default(LazinatorFastReadList<short>);
                     }
                     else
                     {
@@ -266,7 +266,7 @@ namespace Lazinator.Collections
                         {
                             _TwoByteItems = default;
                         }
-                        else _TwoByteItems = new global::Lazinator.Collections.LazinatorFastReadList<short>()
+                        else _TwoByteItems = new LazinatorFastReadList<short>()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,

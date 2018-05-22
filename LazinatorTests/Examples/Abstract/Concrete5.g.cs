@@ -81,8 +81,8 @@ namespace LazinatorTests.Examples.Abstract
                 _String5 = value;
             }
         }
-        private global::System.Collections.Generic.List<int> _IntList4;
-        public override global::System.Collections.Generic.List<int> IntList4
+        private List<int> _IntList4;
+        public override List<int> IntList4
         {
             [DebuggerStepThrough]
             get
@@ -91,12 +91,12 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _IntList4 = default(global::System.Collections.Generic.List<int>);
+                        _IntList4 = default(List<int>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList4_ByteIndex, _IntList4_ByteLength);
-                        _IntList4 = ConvertFromBytes_System__Collections__Generic__List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList4 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
                     }
                     _IntList4_Accessed = true;
                     IsDirty = true;
@@ -111,8 +111,8 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList4_Accessed = true;
             }
         }
-        private global::System.Collections.Generic.List<int> _IntList5;
-        public global::System.Collections.Generic.List<int> IntList5
+        private List<int> _IntList5;
+        public List<int> IntList5
         {
             [DebuggerStepThrough]
             get
@@ -121,12 +121,12 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _IntList5 = default(global::System.Collections.Generic.List<int>);
+                        _IntList5 = default(List<int>);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList5_ByteIndex, _IntList5_ByteLength);
-                        _IntList5 = ConvertFromBytes_System__Collections__Generic__List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList5 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
                     }
                     _IntList5_Accessed = true;
                     IsDirty = true;
@@ -174,7 +174,7 @@ namespace LazinatorTests.Examples.Abstract
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _IntList4_ByteIndex, _IntList4_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__List_Gint_g(w, IntList4,
+            ConvertToBytes_List_Gint_g(w, IntList4,
             includeChildrenMode, v));
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
@@ -182,24 +182,24 @@ namespace LazinatorTests.Examples.Abstract
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _IntList5_ByteIndex, _IntList5_ByteLength),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_System__Collections__Generic__List_Gint_g(w, IntList5,
+            ConvertToBytes_List_Gint_g(w, IntList5,
             includeChildrenMode, v));
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static global::System.Collections.Generic.List<int> ConvertFromBytes_System__Collections__Generic__List_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
-                return default(global::System.Collections.Generic.List<int>);
+                return default(List<int>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            global::System.Collections.Generic.List<int> collection = new global::System.Collections.Generic.List<int>(collectionLength);
+            List<int> collection = new List<int>(collectionLength);
             for (int i = 0; i < collectionLength; i++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
@@ -209,9 +209,9 @@ namespace LazinatorTests.Examples.Abstract
             return collection;
         }
         
-        private static void ConvertToBytes_System__Collections__Generic__List_Gint_g(BinaryBufferWriter writer, global::System.Collections.Generic.List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_Gint_g(BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
-            if (itemToConvert == default(global::System.Collections.Generic.List<int>))
+            if (itemToConvert == default(List<int>))
             {
                 return;
             }

@@ -189,8 +189,8 @@ namespace Lazinator.Wrappers
         /* Field boilerplate */
         
         
-        private global::System.TimeSpan? _Value;
-        public global::System.TimeSpan? Value
+        private TimeSpan? _Value;
+        public TimeSpan? Value
         {
             [DebuggerStepThrough]
             get
