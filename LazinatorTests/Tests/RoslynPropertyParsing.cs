@@ -144,7 +144,7 @@ namespace LazinatorTests.Tests
                 ("LazinatorTests", "/Examples/", "Hierarchy/", "ExampleChildInherited"),
                 ("LazinatorTests", "/Examples/", "Hierarchy/", "IExampleChildInherited"),
             };
-            var ws = AdhocWorkspaceManager.CreateAdHocWorkspaceWithFiles(fileinfos);
+            var ws = AdhocWorkspaceManager.CreateAdHocWorkspaceWithFiles(fileinfos, ".g.cs");
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             var roslynFiles = new LazinatorCompilation(compilation, implementingType, null);
             return roslynFiles;

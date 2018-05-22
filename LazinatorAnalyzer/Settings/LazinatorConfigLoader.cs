@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace LazinatorAnalyzer.Settings
 {
-    public static class ConfigLoader
+    public static class LazinatorConfigLoader
     {
         private const string ConfigFileName = "LazinatorConfig.json";
         private const string AltConfigFileName = "Lazinatorconfig.json";

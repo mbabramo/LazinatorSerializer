@@ -38,7 +38,7 @@ namespace LazinatorTests.Support
             return CreateAdHocWorkspaceWithFiles(filesWithCode.Where(x => x.code != null).ToList());
         }
 
-        public static AdhocWorkspace CreateAdHocWorkspaceWithFiles(List<(string project, string mainFolder, string subfolder, string filename)> fileinfos)
+        public static AdhocWorkspace CreateAdHocWorkspaceWithFiles(List<(string project, string mainFolder, string subfolder, string filename)> fileinfos, string generatedExtension)
         {
             List<(string filename, string code)> files = new List<(string filename, string code)>();
             foreach (var (project, mainFolder, subfolder, filename) in fileinfos)
@@ -48,10 +48,10 @@ namespace LazinatorTests.Support
                 if (mainCode == null)
                     ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "", filename, ".cs", out mainCodePath, out mainCode);
                 files.Add((filename + ".cs", mainCode));
-                ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, filename, ".g.cs", out string codeBehindPath, out string codeBehind);
+                ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, filename, generatedExtension, out string codeBehindPath, out string codeBehind);
                 if (codeBehind == null)
-                    ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "", filename, ".g.cs", out codeBehindPath, out codeBehind);
-                files.Add((filename + ".g.cs", codeBehind));
+                    ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "", filename, generatedExtension, out codeBehindPath, out codeBehind);
+                files.Add((filename + generatedExtension, codeBehind));
             }
             return CreateAdHocWorkspaceWithFiles(files.Where(x => x.code != null).ToList());
         }

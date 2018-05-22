@@ -1,4 +1,5 @@
 ﻿{
+  "GeneratedCodeFileExtension": ".g.cs",
   "DirectConverters": {
     "NonLazinatorClass": "NonLazinatorDirectConverter",
     "NonLazinatorStruct": "NonLazinatorDirectConverter"

@@ -11,6 +11,7 @@ namespace LazinatorAnalyzer.Settings
     public class LazinatorConfig
     {
         private const string RelativeGeneratedCodePathString = "RelativeGeneratedCodePath";
+        private const string GeneratedCodeFileExtensionString = "GeneratedCodeFileExtension";
         private const string UseFullyQualifiedNamesString = "UseFullyQualifiedNames";
         private const string InterchangeConvertersString = "InterchangeConverters";
         private const string DirectConvertersString = "DirectConverters";
@@ -19,6 +20,7 @@ namespace LazinatorAnalyzer.Settings
         private const string DefaultAllowRecordLikeClassesString = "DefaultAllowRecordLikeClasses";
         private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
+        public string GeneratedCodeFileExtension;
         public bool UseFullyQualifiedNames;
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
@@ -45,6 +47,7 @@ namespace LazinatorAnalyzer.Settings
                 {
                     JsonObject json = JsonValue.Parse(configString).AsJsonObject;
                     UseFullyQualifiedNames = json.ContainsKey(UseFullyQualifiedNamesString) ? json[UseFullyQualifiedNamesString].AsBoolean : false;
+                    GeneratedCodeFileExtension = json.ContainsKey(GeneratedCodeFileExtensionString) ? json[GeneratedCodeFileExtensionString].AsString : ".laz.cs";
                     LoadDictionary(json, InterchangeConvertersString, InterchangeConverters);
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);

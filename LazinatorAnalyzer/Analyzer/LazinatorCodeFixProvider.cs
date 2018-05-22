@@ -89,20 +89,20 @@ namespace LazinatorAnalyzer.Analyzer
                 LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullNamespace() + "." + sourceFileInformation.LazinatorObject.MetadataName, config);
                 var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
                 var codeBehind = d.GetCodeBehind();
-
-
+                
+                string fileExtension = config?.GeneratedCodeFileExtension ?? ".laz.cs";
                 var project = originalDocument.Project;
                 string codeBehindFilePath = null;
                 string codeBehindName = null;
                 string[] codeBehindFolders = null;
                 if (config?.GeneratedCodePath == null)
                 { // use short form of name in same location as original code
-                    codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + ".g.cs";
-                    codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + ".g.cs";
+                    codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + fileExtension;
+                    codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + fileExtension;
                 }
                 else
                 { // we have a config file specifying a common directory
-                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, config.UseFullyQualifiedNames) + ".g.cs";
+                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, config.UseFullyQualifiedNames) + fileExtension;
                     codeBehindFilePath = null;
                     codeBehindFilePath = config.GeneratedCodePath;
                     while (codeBehindFilePath.EndsWith("\\"))

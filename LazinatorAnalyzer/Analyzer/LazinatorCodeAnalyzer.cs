@@ -44,6 +44,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         internal DateTime configLastLoaded = new DateTime(1900, 1, 1);
         internal string configPath, configString;
+        internal LazinatorConfig config;
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule, LazinatorOptionalRegenerationRule); } }
 
@@ -69,12 +70,13 @@ namespace LazinatorAnalyzer.Analyzer
 
                 if (DateTime.Now - configLastLoaded > TimeSpan.FromSeconds(5))
                 { // we don't want to reload this too often, although it shouldn't involve a disk operation
-                    (configPath, configString) = ConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
+                    (configPath, configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
+                    config = new LazinatorConfig(configPath, configString);
                     configLastLoaded = DateTime.Now;
                 }
 
                 // Initialize state in the start action.
-                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles, configPath, configString);
+                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles, configPath, configString, config);
 
                 // Register intermediate non-end actions that access and modify the state.
                 compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
@@ -97,6 +99,7 @@ namespace LazinatorAnalyzer.Analyzer
             private readonly INamedTypeSymbol _lazinatorInterfaceType;
             private readonly ImmutableArray<AdditionalText> _additionalFiles;
             private readonly string _configPath, _configString;
+            private LazinatorConfig _config;
 
             #endregion
 
@@ -108,13 +111,21 @@ namespace LazinatorAnalyzer.Analyzer
 
             #region State intialization
 
-            public CompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, ImmutableArray<AdditionalText> additionalFiles, string configPath, string configString)
+            public CompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, ImmutableArray<AdditionalText> additionalFiles, string configPath, string configString, LazinatorConfig config)
             {
                 _lazinatorAttributeType = lazinatorAttributeType;
                 _lazinatorInterfaceType = lazinatorInterfaceType;
                 _additionalFiles = additionalFiles;
+                // we pass information about the config as well as the config itself, since we need to use the config, but also need to pass information about it to the code fix provider
                 _configPath = configPath;
                 _configString = configString;
+                _config = config;
+            }
+
+            private string GetGeneratedCodeFileExtension()
+            {
+                string fileExtension = _config?.GeneratedCodeFileExtension ?? ".laz.cs";
+                return fileExtension;
             }
 
             #endregion
@@ -126,7 +137,7 @@ namespace LazinatorAnalyzer.Analyzer
             public void SyntaxTreeStartAction(SyntaxTreeAnalysisContext context)
             {
                 string filePath = context.Tree.FilePath;
-                if (!filePath.EndsWith(".g.cs"))
+                if (!filePath.EndsWith(GetGeneratedCodeFileExtension()))
                 {
                     CompilationInformation[filePath] = new SourceFileInformation();
                 }
@@ -171,7 +182,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 return;
                             if (lazinatorAttribute.Autogenerate == false)
                                 return;
-                            var locationsExcludingCodeBehind = lazinatorObjectType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(".g.cs")).ToList();
+                            var locationsExcludingCodeBehind = lazinatorObjectType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension())).ToList();
                             string locationToIndexBy = locationsExcludingCodeBehind
                                 .Select(x => x.SourceTree.FilePath)
                                 .OrderBy(x => x)
@@ -187,7 +198,7 @@ namespace LazinatorAnalyzer.Analyzer
                                         .ToList(); // place indexed location first
                                 sourceFileInfo.CodeBehindLocation =
                                     lazinatorObjectType.Locations
-                                        .FirstOrDefault(x => x.SourceTree.FilePath.EndsWith(".g.cs"));
+                                        .FirstOrDefault(x => x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()));
                             }
                         }
 
