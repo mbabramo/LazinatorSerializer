@@ -40,14 +40,19 @@ namespace Lazinator.CodeDescription
         internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
+        private bool UseFullyQualifiedNames => ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false;
         private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
         private string ShortTypeNameWithoutNullable => WithoutNullableIndicator(ShortTypeName);
         private string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
+        private string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
+        private string AppropriatelyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(AppropriatelyQualifiedTypeName);
         internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);
         private string ShortTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
         internal string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(true);
         private string FullyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(true);
+        internal string AppropriatelyTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
+        private string AppropriatelyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
         public string Namespace => Symbol.GetFullNamespace();
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
@@ -60,14 +65,6 @@ namespace Lazinator.CodeDescription
 
         /* Inner properties */
         private List<PropertyDescription> InnerProperties { get; set; }
-        public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
-        {
-            yield return this;
-            if (InnerProperties != null)
-                foreach (var inner in InnerProperties)
-                    foreach (var innerEnumerated in inner.PropertyAndInnerProperties())
-                        yield return innerEnumerated;
-        }
         private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         internal string NullableStructValueAccessor => PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable ? ".Value" : "";
 
@@ -515,6 +512,15 @@ namespace Lazinator.CodeDescription
         {
             InnerProperties = typeArguments
                             .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
+        }
+
+        public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
+        {
+            yield return this;
+            if (InnerProperties != null)
+                foreach (var inner in InnerProperties)
+                    foreach (var innerEnumerated in inner.PropertyAndInnerProperties())
+                        yield return innerEnumerated;
         }
 
         private void CheckSupportedCollections(string nameWithoutArity)
