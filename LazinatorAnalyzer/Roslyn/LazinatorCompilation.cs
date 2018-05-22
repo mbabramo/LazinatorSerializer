@@ -442,8 +442,8 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (Config != null)
             {
-                string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
-                if (Config.IncludeRecordLikeTypes.Contains(fullyQualifiedName))
+                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                if (Config.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
             }
             return false;
