@@ -10,7 +10,7 @@ using static Lazinator.Core.LazinatorUtilities;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorList<T> : IList<T>, ILazinatorList<T> where T : ILazinator, new()
+    public partial class LazinatorList<T> : IList<T>, ILazinatorList<T> where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;
         [NonSerialized] private int CountWhenDeserialized;
