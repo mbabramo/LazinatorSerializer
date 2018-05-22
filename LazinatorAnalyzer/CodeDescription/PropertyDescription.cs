@@ -48,6 +48,7 @@ namespace Lazinator.CodeDescription
         private string ShortTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
         internal string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(true);
         private string FullyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(true);
+        public string Namespace => Symbol.GetFullNamespace();
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
@@ -59,6 +60,14 @@ namespace Lazinator.CodeDescription
 
         /* Inner properties */
         private List<PropertyDescription> InnerProperties { get; set; }
+        public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
+        {
+            yield return this;
+            if (InnerProperties != null)
+                foreach (var inner in InnerProperties)
+                    foreach (var innerEnumerated in inner.PropertyAndInnerProperties())
+                        yield return innerEnumerated;
+        }
         private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         internal string NullableStructValueAccessor => PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable ? ".Value" : "";
 

@@ -102,8 +102,7 @@ namespace LazinatorAnalyzer.Analyzer
                 }
                 else
                 { // we have a config file specifying a common directory
-                    bool fullyQualifiedNames = config.UseFullyQualifiedNames;
-                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, fullyQualifiedNames) + ".g.cs";
+                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, config.UseFullyQualifiedNames) + ".g.cs";
                     codeBehindFilePath = null;
                     codeBehindFilePath = config.GeneratedCodePath;
                     while (codeBehindFilePath.EndsWith("\\"))
