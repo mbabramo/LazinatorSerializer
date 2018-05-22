@@ -10,19 +10,17 @@
 
 namespace LazinatorTests.Examples.NonAbstractGenerics
 {
+    using Lazinator.Buffers;
+    using Lazinator.Core;
+    using Lazinator.Exceptions;
+    using Lazinator.Support;
+    using Lazinator.Wrappers;
     using System;
     using System.Buffers;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
-    using Lazinator.Buffers; 
-    using Lazinator.Collections;
-    using Lazinator.Core; 
     using static Lazinator.Core.LazinatorUtilities;
-    using Lazinator.Exceptions;
-    using Lazinator.Support;
-    using Lazinator.Wrappers;
-    
     
     public partial class OpenGenericStayingOpenContainer : ILazinator
     {
