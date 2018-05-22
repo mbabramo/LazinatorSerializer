@@ -418,7 +418,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item3 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                item3 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item3 = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item3;
             
@@ -452,7 +452,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                void actionItem3(BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }
@@ -487,7 +487,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item3 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                item3 = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
+                item3 = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, deserializationFactory, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item3;
             
@@ -521,7 +521,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(BinaryBufferWriter w) => LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                void actionItem3(BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }

@@ -211,7 +211,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength);
-                        _NonLazinatorClass = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, DeserializationFactory, null);
+                        _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, DeserializationFactory, null);
                     }
                     _NonLazinatorClass_Accessed = true;
                     IsDirty = true;
@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength);
-                        _NonLazinatorStruct = LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData, DeserializationFactory, null);
+                        _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData, DeserializationFactory, null);
                     }
                     _NonLazinatorStruct_Accessed = true;
                     IsDirty = true;
@@ -336,7 +336,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorClass, byteIndexCopy_NonLazinatorClass, byteLengthCopy_NonLazinatorClass),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v));
+            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v));
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
@@ -358,12 +358,12 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorStruct, byteIndexCopy_NonLazinatorStruct, byteLengthCopy_NonLazinatorStruct),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            LazinatorTests.Examples.NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
+            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
-            LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass()
+            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass()
             {
                 DeserializationFactory = deserializationFactory,
                 LazinatorObjectBytes = storage
@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples
         NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
         bool verifyCleanness)
         {
-            LazinatorTests.Examples.NonLazinatorInterchangeClass interchange = new LazinatorTests.Examples.NonLazinatorInterchangeClass(itemToConvert);
+            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
             interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
         }
         
