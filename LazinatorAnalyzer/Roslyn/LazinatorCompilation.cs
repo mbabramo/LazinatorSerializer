@@ -478,7 +478,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public IEnumerable<Attribute> GetAttributes(ISymbol symbol)
         {
-            if (!KnownAttributes.ContainsKey(symbol))
+            if (symbol == null || !KnownAttributes.ContainsKey(symbol))
                 yield break;
             foreach (var attribute in KnownAttributes[symbol])
                 yield return attribute;

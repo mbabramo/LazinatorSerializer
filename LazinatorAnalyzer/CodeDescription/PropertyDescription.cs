@@ -40,7 +40,7 @@ namespace Lazinator.CodeDescription
         internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
-        private bool UseFullyQualifiedNames => ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false;
+        private bool UseFullyQualifiedNames => (ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute;
         private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
         private string ShortTypeNameWithoutNullable => WithoutNullableIndicator(ShortTypeName);
         private string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -76,6 +76,7 @@ namespace Lazinator.CodeDescription
 
         /* Attributes */
         private IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
+        private bool HasFullyQualifyAttribute => UserAttributes.OfType<CloneFullyQualifyAttribute>().Any();
         private IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
         internal string PropertyAccessibility { get; set; }
         private string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";

@@ -12,6 +12,7 @@ namespace LazinatorTests.Examples.Abstract
     {
         T MyT { get; set; }
         AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric { get; set; }
+        [FullyQualify]
         AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2 { get; set; }
     }
 }

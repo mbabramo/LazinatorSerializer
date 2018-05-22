@@ -71,6 +71,8 @@ namespace LazinatorCodeGen.Roslyn
                     if (!(accessibility2 is string))
                         return null;
                     return new CloneUnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (string)accessibility2);
+                case "FullyQualifyAttribute":
+                    return new CloneFullyQualifyAttribute();
                 case "ExcludableChildAttribute":
                     return new CloneExcludableChildAttribute();
                 case "DoNotAutogenerateAttribute":
