@@ -40,12 +40,14 @@ namespace Lazinator.CodeDescription
         internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
-        private string TypeNameShort => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
-        private string TypeNameShortWithoutNullable => WithoutNullableIndicator(TypeNameShort);
+        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+        private string ShortTypeNameWithoutNullable => WithoutNullableIndicator(ShortTypeName);
         private string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
-        internal string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier();
-        private string FullyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier();
+        internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);
+        private string ShortTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
+        internal string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(true);
+        private string FullyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(true);
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
@@ -236,7 +238,7 @@ namespace Lazinator.CodeDescription
                     Nullable = true;
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
-                if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? TypeNameShortWithoutNullable))
+                if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? ShortTypeNameWithoutNullable))
                 {
                     PropertyType = LazinatorPropertyType.PrimitiveType;
                     return;
@@ -864,8 +866,8 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.PrimitiveType ||
                 PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
             {
-                ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[EnumEquivalentType ?? TypeNameShort];
-                WriteMethodName = PrimitiveReadWriteMethodNames.WriteNames[EnumEquivalentType ?? TypeNameShort];
+                ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[EnumEquivalentType ?? ShortTypeName];
+                WriteMethodName = PrimitiveReadWriteMethodNames.WriteNames[EnumEquivalentType ?? ShortTypeName];
             }
         }
 

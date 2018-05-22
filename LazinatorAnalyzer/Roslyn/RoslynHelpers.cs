@@ -17,9 +17,9 @@ namespace LazinatorCodeGen.Roslyn
     {
         #region Names
 
-        public static string GetEncodableVersionOfIdentifier(this ISymbol symbol)
+        public static string GetEncodableVersionOfIdentifier(this ISymbol symbol, bool fullyQualified)
         {
-            return GetEncodableVersionOfIdentifier(symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+            return GetEncodableVersionOfIdentifier(symbol.ToDisplayString(fullyQualified ? SymbolDisplayFormat.FullyQualifiedFormat : SymbolDisplayFormat.MinimallyQualifiedFormat));
         }
 
         public static string GetEncodableVersionOfIdentifier(string identifier)

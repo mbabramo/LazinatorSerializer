@@ -73,7 +73,7 @@ namespace LazinatorAnalyzer.Analyzer
             try
             {
                 LazinatorConfig config = null;
-                if (sourceFileInformation.Config != null)
+                if (sourceFileInformation.Config != null && sourceFileInformation.Config != "")
                 {
                     try
                     {
@@ -95,14 +95,15 @@ namespace LazinatorAnalyzer.Analyzer
                 string codeBehindFilePath = null;
                 string codeBehindName = null;
                 string[] codeBehindFolders = null;
-                if (config.GeneratedCodePath == null)
+                if (config?.GeneratedCodePath == null)
                 { // use short form of name in same location as original code
                     codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + ".g.cs";
                     codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + ".g.cs";
                 }
                 else
-                { // use long form of name in a common directory
-                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol) + ".g.cs";
+                { // we have a config file specifying a common directory
+                    bool fullyQualifiedNames = config.UseFullyQualifiedNames;
+                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, fullyQualifiedNames) + ".g.cs";
                     codeBehindFilePath = null;
                     codeBehindFilePath = config.GeneratedCodePath;
                     while (codeBehindFilePath.EndsWith("\\"))
