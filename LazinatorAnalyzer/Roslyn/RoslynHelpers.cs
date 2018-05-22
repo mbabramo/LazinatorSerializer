@@ -153,6 +153,11 @@ namespace LazinatorCodeGen.Roslyn
                 return typeName;
         }
         
+        public static string GetMinimallyQualifiedName(this ISymbol symbol)
+        {
+            return symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+        }
+
         public static string GetFullyQualifiedNameWithoutGlobal(this ISymbol symbol)
         {
             if (symbol == null)

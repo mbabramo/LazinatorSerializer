@@ -1,13 +1,13 @@
 ﻿{
   "DirectConverters": {
-    "LazinatorTests.Examples.NonLazinatorClass": "LazinatorTests.Examples.NonLazinatorDirectConverter",
-    "LazinatorTests.Examples.NonLazinatorStruct": "LazinatorTests.Examples.NonLazinatorDirectConverter"
+    "NonLazinatorClass": "NonLazinatorDirectConverter",
+    "NonLazinatorStruct": "NonLazinatorDirectConverter"
   },
   "InterchangeConverters": {
-    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "LazinatorTests.Examples.NonLazinatorInterchangeClass"
+    "NonLazinatorInterchangeableClass": "NonLazinatorInterchangeClass"
   },
   "IgnoreRecordLikeTypes": [
-    "LazinatorTests.Examples.NonLazinatorStruct"
+    "NonLazinatorStruct"
   ],
   "IncludeRecordLikeTypes": [
   ],

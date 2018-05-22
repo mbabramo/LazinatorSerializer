@@ -422,10 +422,10 @@ namespace LazinatorCodeGen.Roslyn
             bool defaultAllowRecordLikeClasses = false, defaultAllowRecordLikeRegularStructs = false, defaultAllowRecordLikeReadOnlyStructs = true;
             if (Config != null)
             {
-                string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
-                if (Config.IncludeRecordLikeTypes.Contains(fullyQualifiedName))
+                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                if (Config.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
-                if (Config.IgnoreRecordLikeTypes.Contains(fullyQualifiedName))
+                if (Config.IgnoreRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return false;
                 defaultAllowRecordLikeClasses = Config.DefaultAllowRecordLikeClasses;
                 defaultAllowRecordLikeRegularStructs = Config.DefaultAllowRecordLikeRegularStructs;

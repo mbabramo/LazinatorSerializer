@@ -44,11 +44,11 @@ namespace LazinatorAnalyzer.Settings
                 try
                 {
                     JsonObject json = JsonValue.Parse(configString).AsJsonObject;
+                    UseFullyQualifiedNames = json.ContainsKey(UseFullyQualifiedNamesString) ? json[UseFullyQualifiedNamesString].AsBoolean : false;
                     LoadDictionary(json, InterchangeConvertersString, InterchangeConverters);
                     LoadDictionary(json, DirectConvertersString, DirectConverters);
                     LoadIgnoreRecordLikeTypes(json);
                     LoadIncludeRecordLikeTypes(json);
-                    UseFullyQualifiedNames = json.ContainsKey(UseFullyQualifiedNamesString) ? json[UseFullyQualifiedNamesString].AsBoolean : false;
                     DefaultAllowRecordLikeClasses = json.ContainsKey(DefaultAllowRecordLikeClassesString) ? json[DefaultAllowRecordLikeClassesString].AsBoolean : false;
                     DefaultAllowRecordLikeRegularStructs = json.ContainsKey(DefaultAllowRecordLikeRegularStructsString) ? json[DefaultAllowRecordLikeRegularStructsString].AsBoolean : false;
                     DefaultAllowRecordLikeReadOnlyStructs = json.ContainsKey(DefaultAllowRecordLikeReadOnlyStructsString) ? json[DefaultAllowRecordLikeReadOnlyStructsString].AsBoolean : true;
@@ -95,17 +95,17 @@ namespace LazinatorAnalyzer.Settings
 
         public string GetInterchangeConverterTypeName(INamedTypeSymbol type)
         {
-            string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
-            if (InterchangeConverters.ContainsKey(fullyQualifiedName))
-                return InterchangeConverters[fullyQualifiedName];
+            string name = UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+            if (InterchangeConverters.ContainsKey(name))
+                return InterchangeConverters[name];
             return null;
         }
 
         public string GetDirectConverterTypeName(INamedTypeSymbol type)
         {
-            string fullyQualifiedName = type.GetFullyQualifiedNameWithoutGlobal();
-            if (DirectConverters.ContainsKey(fullyQualifiedName))
-                return DirectConverters[fullyQualifiedName];
+            string name = UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+            if (DirectConverters.ContainsKey(name))
+                return DirectConverters[name];
             return null;
         }
     }
