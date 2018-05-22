@@ -723,18 +723,19 @@ namespace Lazinator.CodeDescription
                             ||
                             (((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false))
                         )
-                            &&
-                        ( // if the generic argument is a type parameter, as opposed to a bound type, then it must be constrained to have a new() constructor or to be a struct (which can always be instantiated with new())
-                            ((x as ITypeParameterSymbol)?.HasConstructorConstraint ?? true)
-                            ||
-                            ((x as ITypeParameterSymbol)?.HasValueTypeConstraint ?? true)
-                        )
+                        // NOTE: For now, the following restriction is being removed. The reason is that we would like to be able to close a generic with a parameter that is a nonexclusive lazinator interface type (implementing ILazinator). We enforce separately that all Lazinator types have a public parameterless constructor (otherwise, we won't generate the code).
+                        //    &&
+                        //( // if the generic argument is a type parameter, as opposed to a bound type, then it must be constrained to have a new() constructor or to be a struct (which can always be instantiated with new())
+                        //    ((x as ITypeParameterSymbol)?.HasConstructorConstraint ?? true)
+                        //    ||
+                        //    ((x as ITypeParameterSymbol)?.HasValueTypeConstraint ?? true)
+                        //)
                     )
                     && // but if this is a Lazinator interface type, that's fine too.
                     !Compilation.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
                     )
                 )
-                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator and also implement new() or struct. Add a clause like 'where T : ILazinator, new()'");
+                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator and should generally implement new() if not a struct. Add a clause like 'where T : ILazinator, new()'");
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
             if (GenericArgumentNames.Any())
                 ObjectName = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";
