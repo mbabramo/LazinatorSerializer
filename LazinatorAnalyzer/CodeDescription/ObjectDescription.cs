@@ -144,11 +144,10 @@ namespace Lazinator.CodeDescription
             return result;
         }
 
-
-
         private void AppendCodeBehindFile(CodeStringBuilder sb)
         {
             List<string> namespaces = PropertiesToDefineThisLevel.SelectMany(x => x.PropertyAndInnerProperties().Select(y => y.Namespace)).ToList();
+            namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfTypesAndContainedTypes());
             string theBeginning =
                 $@"{GetFileHeader(Hash.ToString(), Namespace, namespaces)}
 
@@ -539,10 +538,6 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
-                if (property.ToString().Contains("RecursiveRecord"))
-                {
-                    var DEBUG = 0;
-                }
                 property.AppendPropertyDefinitionString(sb);
             }
 

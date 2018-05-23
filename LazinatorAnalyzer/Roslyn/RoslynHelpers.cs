@@ -188,6 +188,26 @@ namespace LazinatorCodeGen.Roslyn
             return index == -1 ? name : name.Substring(0, index);
         }
 
+        public static IEnumerable<ITypeSymbol> GetTypeAndContainedTypes(this ITypeSymbol typeSymbol)
+        {
+            if (typeSymbol is INamedTypeSymbol namedTypeSymbol)
+            {
+                yield return namedTypeSymbol;
+                foreach (var innerType in namedTypeSymbol.TypeArguments)
+                    if (innerType is INamedTypeSymbol namedInnerType)
+                        foreach (ITypeSymbol innerTypeOrWithin in GetTypeAndContainedTypes(namedInnerType))
+                            yield return innerTypeOrWithin;
+                if (namedTypeSymbol.BaseType != null)
+                    foreach (var baseType in GetTypeAndContainedTypes(namedTypeSymbol.BaseType))
+                        yield return baseType;
+            }
+        }
+
+        public static IEnumerable<string> GetNamespacesOfTypesAndContainedTypes(this ITypeSymbol typeSymbol)
+        {
+            return GetTypeAndContainedTypes(typeSymbol).Select(x => x.GetFullNamespace());
+        }
+
         #endregion
 
         #region Properties
