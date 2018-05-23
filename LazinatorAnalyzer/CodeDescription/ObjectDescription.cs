@@ -170,6 +170,14 @@ namespace Lazinator.CodeDescription
                         }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 
             }
 
+            string constructor = "";
+            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor =
+                    $@"public {SimpleName}(){(ILazinatorTypeSymbol.BaseType != null ? " : base()" : "")}
+                        {{
+                        }}
+                        
+                        ";
+
                 string additionalDirtinessChecks = "";
             if (ObjectType == LazinatorObjectType.Struct)
             {
@@ -287,17 +295,9 @@ namespace Lazinator.CodeDescription
                 ";
                 else
                 {
-                    if (SimpleName.Contains("AvlMultiset"))
-                    {
-                        var DEBUG = 0;
-                    }
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {(Compilation.ImplementingTypeRequiresParameterlessConstructor ? $@"public {SimpleName}()
-                        {{
-                        }}
-                        
-                        " : "")}public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
+                        {constructor}public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
@@ -481,7 +481,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.Append($@"        /* Clone overrides */
 
-                        public override ILazinator CloneLazinator()
+                        {constructor}public override ILazinator CloneLazinator()
                         {{
                             return CloneLazinator(OriginalIncludeChildrenMode);
                         }}
