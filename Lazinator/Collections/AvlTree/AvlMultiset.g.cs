@@ -25,7 +25,7 @@ namespace Lazinator.Collections.AvlTree
     
     public partial class AvlMultiset<T> : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -193,7 +193,7 @@ namespace Lazinator.Collections.AvlTree
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _UnderlyingSet_ByteIndex;
         private int _AvlMultiset_T_EndByteIndex;

@@ -23,7 +23,7 @@ namespace Lazinator.Wrappers
     
     public partial struct LazinatorWrapperNullableStruct<T> : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -186,7 +186,7 @@ namespace Lazinator.Wrappers
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         int _NonNullValue_ByteIndex;
         private int _LazinatorWrapperNullableStruct_T_EndByteIndex;

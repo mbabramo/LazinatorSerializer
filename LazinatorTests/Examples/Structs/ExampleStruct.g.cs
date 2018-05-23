@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples
     
     public partial struct ExampleStruct : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         int _MyChild1_ByteIndex;
         int _MyChild2_ByteIndex;

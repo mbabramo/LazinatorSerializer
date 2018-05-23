@@ -23,7 +23,7 @@ namespace Lazinator.Spans
     
     public partial class LazinatorByteSpan : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -187,7 +187,7 @@ namespace Lazinator.Spans
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _ReadOnly_ByteIndex;
         protected int _ReadOrWrite_ByteIndex;

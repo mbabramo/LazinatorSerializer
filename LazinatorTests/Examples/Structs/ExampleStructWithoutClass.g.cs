@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples.Structs
     
     public partial struct ExampleStructWithoutClass : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -186,7 +186,7 @@ namespace LazinatorTests.Examples.Structs
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         
         private int _MyInt;

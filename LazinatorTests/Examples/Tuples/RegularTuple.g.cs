@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples.Tuples
     
     public partial class RegularTuple : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -187,7 +187,7 @@ namespace LazinatorTests.Examples.Tuples
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _MyTupleSerialized_ByteIndex;
         protected int _MyTupleSerialized2_ByteIndex;

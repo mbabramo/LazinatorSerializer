@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples.Abstract
     
     public partial class Abstract1 : ILazinator
     {
-        /* Boilerplate for abstract ILazinator object */
+        /* Abstract declarations */
         public abstract ILazinator LazinatorParentClass { get; set; }
         
         public abstract void Deserialize();

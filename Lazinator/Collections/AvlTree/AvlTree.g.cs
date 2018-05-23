@@ -23,7 +23,7 @@ namespace Lazinator.Collections.Avl
     
     public partial class AvlTree<TKey, TValue> : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -191,7 +191,7 @@ namespace Lazinator.Collections.Avl
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _Root_ByteIndex;
         private int _AvlTree_TKey_TValue_EndByteIndex;

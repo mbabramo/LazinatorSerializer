@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples.Collections
     
     public partial class Array_Values : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -187,7 +187,7 @@ namespace LazinatorTests.Examples.Collections
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _MyArrayInt_ByteIndex;
         protected int _MyJaggedArrayInt_ByteIndex;

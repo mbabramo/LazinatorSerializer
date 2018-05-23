@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples.Structs
     
     public partial class WrapperContainer : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -192,7 +192,7 @@ namespace LazinatorTests.Examples.Structs
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _WrappedInt_ByteIndex;
         private int _WrapperContainer_EndByteIndex;

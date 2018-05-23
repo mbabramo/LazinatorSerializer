@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples.Collections
     
     public partial class DotNetQueue_Values : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples.Collections
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _MyQueueInt_ByteIndex;
         private int _DotNetQueue_Values_EndByteIndex;

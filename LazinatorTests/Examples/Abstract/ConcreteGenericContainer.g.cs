@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples.Abstract
     
     public partial class ConcreteGenericContainer : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public override ILazinator LazinatorParentClass { get; set; }
         
@@ -191,7 +191,7 @@ namespace LazinatorTests.Examples.Abstract
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         private int _ConcreteGenericContainer_EndByteIndex = 0;
         protected override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;

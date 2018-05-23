@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples
     
     public partial class ExampleChild : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -186,7 +186,7 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _ByteSpan_ByteIndex;
         private int _ExampleChild_EndByteIndex;

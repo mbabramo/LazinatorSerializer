@@ -23,7 +23,7 @@ namespace Lazinator.Collections
     
     public partial class LazinatorTuple<T, U> : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -186,7 +186,7 @@ namespace Lazinator.Collections
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _Item1_ByteIndex;
         protected int _Item2_ByteIndex;

@@ -23,7 +23,7 @@ namespace Lazinator.Wrappers
     
     public partial struct LazinatorWrapperDecimalArray : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -186,7 +186,7 @@ namespace Lazinator.Wrappers
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         int _Value_ByteIndex;
         private int _LazinatorWrapperDecimalArray_EndByteIndex;

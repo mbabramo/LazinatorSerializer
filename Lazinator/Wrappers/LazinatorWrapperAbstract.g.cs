@@ -23,7 +23,7 @@ namespace Lazinator.Wrappers
     
     public partial class LazinatorWrapperAbstract<T> : ILazinator
     {
-        /* Boilerplate for abstract ILazinator object */
+        /* Abstract declarations */
         public abstract ILazinator LazinatorParentClass { get; set; }
         
         public abstract void Deserialize();

@@ -23,7 +23,7 @@ namespace Lazinator.Collections
     
     public sealed partial class LazinatorOffsetList : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -196,7 +196,7 @@ namespace Lazinator.Collections
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         int _FourByteItems_ByteIndex;
         int _TwoByteItems_ByteIndex;

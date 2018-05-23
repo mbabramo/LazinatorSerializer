@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples
     
     public partial struct ExampleStructContainingStruct : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -191,7 +191,7 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         int _MyExampleStruct_ByteIndex;
         private int _ExampleStructContainingStruct_EndByteIndex;

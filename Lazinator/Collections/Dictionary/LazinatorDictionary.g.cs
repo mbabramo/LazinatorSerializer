@@ -24,7 +24,7 @@ namespace Lazinator.Collections.Dictionary
     
     public partial class LazinatorDictionary<TKey, TValue> : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -192,7 +192,7 @@ namespace Lazinator.Collections.Dictionary
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _Buckets_ByteIndex;
         private int _LazinatorDictionary_TKey_TValue_EndByteIndex;

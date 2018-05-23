@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples.Hierarchy
     
     public partial class RecursiveExample : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -195,7 +195,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _RecursiveClass_ByteIndex;
         protected int _RecursiveInterface_ByteIndex;

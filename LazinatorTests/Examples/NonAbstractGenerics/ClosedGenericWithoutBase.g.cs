@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples
     
     public partial class ClosedGenericWithoutBase : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -191,7 +191,7 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _ItemU_ByteIndex;
         private int _ClosedGenericWithoutBase_EndByteIndex;

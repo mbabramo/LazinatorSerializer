@@ -24,7 +24,7 @@ namespace LazinatorTests.Examples.Abstract
     
     public partial class Concrete3 : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public override ILazinator LazinatorParentClass { get; set; }
         
@@ -187,7 +187,7 @@ namespace LazinatorTests.Examples.Abstract
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _IntList3_ByteIndex;
         protected override int _IntList1_ByteLength => _IntList2_ByteIndex - _IntList1_ByteIndex;

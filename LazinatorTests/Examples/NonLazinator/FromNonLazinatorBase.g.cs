@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples.NonLazinator
     
     public partial class FromNonLazinatorBase : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -186,7 +186,7 @@ namespace LazinatorTests.Examples.NonLazinator
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         
         private int _MyInt;

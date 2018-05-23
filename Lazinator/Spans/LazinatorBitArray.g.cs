@@ -23,7 +23,7 @@ namespace Lazinator.Spans
     
     public sealed partial class LazinatorBitArray : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public ILazinator LazinatorParentClass { get; set; }
         
@@ -191,7 +191,7 @@ namespace Lazinator.Spans
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         int _ByteSpan_ByteIndex;
         private int _LazinatorBitArray_EndByteIndex;

@@ -25,7 +25,7 @@ namespace LazinatorTests.Examples.Collections
     
     public partial class DotNetList_Nested_NonSelfSerializable : ILazinator
     {
-        /* Boilerplate for every non-abstract ILazinator object */
+        /* Serialization, deserialization, and object relationships */
         
         public virtual ILazinator LazinatorParentClass { get; set; }
         
@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples.Collections
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _MyListNestedNonLazinatorType_ByteIndex;
         private int _DotNetList_Nested_NonSelfSerializable_EndByteIndex;
