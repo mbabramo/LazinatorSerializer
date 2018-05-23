@@ -88,7 +88,7 @@ namespace LazinatorCodeGen.Roslyn
 
             // Then deal with any implementing classes -- in particular, checking whether each implements methods.
             TypeImplementsMethod = GetMethodImplementations(implementingTypeDeclaration, implementingTypeSymbol);
-            if (implementingTypeSymbol.ToString().Contains("AvlSet"))
+            if (implementingTypeSymbol.ToString().Contains("Concrete6"))
             {
                 var DEBUG = 0;
             }
