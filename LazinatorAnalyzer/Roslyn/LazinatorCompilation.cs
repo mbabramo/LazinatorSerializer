@@ -320,9 +320,20 @@ namespace LazinatorCodeGen.Roslyn
 
         private static List<SyntaxNode> GetSyntaxNodesForNamedType(INamedTypeSymbol namedType)
         {
+            // Sometimes Roslyn returns the same syntax reference twice, with the only difference being that slashes in the path are represented differently (e.g., / vs. \\). So we want to get distinct syntax nodes.
+
+            string OmitSlashes(string x)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (char c in x)
+                    if (c != '/' && c != '\\')
+                        sb.Append(c);
+                return sb.ToString();
+            }
+
             var syntaxReferences = namedType.DeclaringSyntaxReferences;
             var syntaxNodes = syntaxReferences.Select(x => x.GetSyntax());
-            var syntaxNodesInDistinctLocations = DistinctBy(syntaxNodes, x => x.GetLocation().GetLineSpan()).ToList();
+            var syntaxNodesInDistinctLocations = DistinctBy(syntaxNodes, x => x.GetLocation().GetLineSpan().Span.ToString() + OmitSlashes(x.GetLocation().GetLineSpan().Path)).ToList();
             return syntaxNodesInDistinctLocations;
         }
 
