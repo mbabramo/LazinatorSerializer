@@ -329,10 +329,20 @@ namespace LazinatorCodeGen.Roslyn
             return correspondingInterface;
         }
         
-        public static bool TypeDeclarationIncludesMethod(TypeDeclarationSyntax typeDeclaration, string methodName)
+        public static bool TypeDeclarationIncludesMethod(this TypeDeclarationSyntax typeDeclaration, string methodName)
         {
             HashSet<MethodDeclarationSyntax> methodDeclarations = GetMethodDeclarations(typeDeclaration);
             return methodDeclarations.Any(x => x.Identifier.Text == methodName);
+        }
+
+        public static bool TypeDeclarationIncludesParameterlessConstructor(this TypeDeclarationSyntax typeDeclaration)
+        {
+            return typeDeclaration.ChildNodes().OfType<ConstructorDeclarationSyntax>().Cast<ConstructorDeclarationSyntax>().Any(x => !x.ParameterList.Parameters.Any());
+        }
+
+        public static bool TypeDeclarationIncludesAttribute(this TypeDeclarationSyntax typeDeclaration, string attributeName)
+        {
+            return !typeDeclaration.AttributeLists.Any(y => y.Attributes.Any(z => ((string) (z.Name as IdentifierNameSyntax)?.Identifier.Value) == attributeName));
         }
 
         private static HashSet<MethodDeclarationSyntax> GetMethodDeclarations(TypeDeclarationSyntax typeDeclaration)

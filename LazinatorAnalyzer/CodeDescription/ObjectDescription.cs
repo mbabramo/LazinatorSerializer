@@ -16,6 +16,7 @@ namespace Lazinator.CodeDescription
         public Accessibility Accessibility { get; set; }
         public string Namespace { get; set; }
         public string ObjectName { get; set; }
+        public string MetadataName { get; set; }
         public string FullyQualifiedObjectName { get; set; }
         public string ObjectNameEncodable => RoslynHelpers.EncodableTypeName(ILazinatorTypeSymbol);
         public LazinatorObjectType ObjectType { get; set; }
@@ -62,6 +63,7 @@ namespace Lazinator.CodeDescription
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
             FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal();
             ObjectName = iLazinatorTypeSymbol.Name;
+            MetadataName = iLazinatorTypeSymbol.MetadataName;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
             {
                 ObjectType = LazinatorObjectType.Class;
@@ -286,7 +288,7 @@ namespace Lazinator.CodeDescription
                 {
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {(Compilation.ImplementingTypeRequiresParameterlessConstructor ? $@"public {ObjectName}()
+                        {(Compilation.ImplementingTypeRequiresParameterlessConstructor ? $@"public {MetadataName}()
                         {{
                         }}
                         
