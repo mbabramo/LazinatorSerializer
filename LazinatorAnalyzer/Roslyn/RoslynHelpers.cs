@@ -209,7 +209,7 @@ namespace LazinatorCodeGen.Roslyn
             while (current != null)
             {
                 yield return current;
-                current = typeSymbol.ContainingType;
+                current = current.ContainingType;
             }
         }
 

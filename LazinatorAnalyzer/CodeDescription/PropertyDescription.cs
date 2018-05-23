@@ -40,23 +40,20 @@ namespace Lazinator.CodeDescription
         internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
-        private bool UseFullyQualifiedNames => (ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute;
-        private string Superclasses => ContainingTypesPrefix(Symbol);
-        private string ShortTypeNameWithoutSuperclasses => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
-        private string ShortTypeName => Superclasses + ShortTypeNameWithoutSuperclasses;
-        private string ShortTypeNameWithoutNullableIndicator => Superclasses + WithoutNullableIndicator(ShortTypeNameWithoutSuperclasses);
-        private string FullyQualifiedTypeNameWithoutSuperclasses => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        private string FullyQualifiedTypeName => Superclasses + FullyQualifiedTypeNameWithoutSuperclasses;
-        private string FullyQualifiedNameWithoutNullableIndicator => Superclasses + WithoutNullableIndicator(FullyQualifiedTypeNameWithoutSuperclasses);
+        private bool UseFullyQualifiedNames => (ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
+        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+        private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
+        private string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         private string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
         private string AppropriatelyQualifiedNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
-        internal string ShortTypeNameEncodable => Superclasses + Symbol.GetEncodableVersionOfIdentifier(false);
-        private string ShortTypeNameEncodableWithoutNullable => Superclasses + (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
-        internal string FullyQualifiedTypeNameEncodable => Superclasses + Symbol.GetEncodableVersionOfIdentifier(true);
-        private string FullyQualifiedTypeNameEncodableWithoutNullable => Superclasses + (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(true);
-        internal string AppropriatelyQualifiedTypeNameEncodable => Superclasses + Symbol.GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
-        private string AppropriatelyQualifiedTypeNameEncodableWithoutNullable => Superclasses + (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
+        internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);
+        private string ShortTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
+        internal string FullyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(true);
+        private string FullyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(true);
+        internal string AppropriatelyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
+        private string AppropriatelyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
 
         public string Namespace => Symbol.GetFullNamespace();
         private string WriteMethodName { get; set; }
