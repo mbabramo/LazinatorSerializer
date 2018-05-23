@@ -21,6 +21,7 @@ using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
+using LazinatorTests.Examples.Subclasses;
 
 namespace LazinatorTests.Tests
 {
@@ -2125,6 +2126,28 @@ namespace LazinatorTests.Tests
             x.DeserializationFactory = GetDeserializationFactory();
             var clone = x.CloneLazinatorTyped();
             clone.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
+        }
+
+        [Fact]
+        public void SubclassesWork()
+        {
+            ClassWithSubclass outer = new ClassWithSubclass()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                IntWithinSuperclass = 5,
+                SubclassInstance1 = new ClassWithSubclass.SubclassWithinClass()
+                {
+                    StringWithinSubclass = "within1"
+                },
+                SubclassInstance2 = new ClassWithSubclass.SubclassWithinClass()
+                {
+                    StringWithinSubclass = "within2"
+                }
+            };
+            var clone = outer.CloneLazinatorTyped();
+            clone.IntWithinSuperclass.Should().Be(5);
+            clone.SubclassInstance1.StringWithinSubclass.Should().Be("within1");
+            clone.SubclassInstance2.StringWithinSubclass.Should().Be("within2");
         }
 
         [Fact]
