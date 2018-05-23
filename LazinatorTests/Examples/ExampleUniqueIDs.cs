@@ -60,6 +60,7 @@
         ExampleStructWithoutClass,
         ContainerForExampleStructWithoutClass,
         ClassWithLocalEnum,
-        ClassWithForeignEnum
+        ClassWithForeignEnum,
+        ClassWithSubclass
     }
 }

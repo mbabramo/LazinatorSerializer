@@ -79,7 +79,7 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual int _MyT_ByteLength { get; }
         
         protected bool _MyEnumWithinAbstractGeneric_Accessed = false;
-        public abstract EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
+        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
             get;
             set;

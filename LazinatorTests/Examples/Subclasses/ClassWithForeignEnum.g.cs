@@ -195,8 +195,8 @@ namespace LazinatorTests.Examples.Subclasses
         /* Field definitions */
         
         
-        private ClassWithLocalEnum.EnumWithinClass _MyEnum;
-        public ClassWithLocalEnum.EnumWithinClass MyEnum
+        private global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
+        public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
         {
             [DebuggerStepThrough]
             get
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Subclasses
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyEnum = (ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
