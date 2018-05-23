@@ -206,11 +206,14 @@ namespace LazinatorCodeGen.Roslyn
         public static IEnumerable<ITypeSymbol> GetContainingTypes(this ITypeSymbol typeSymbol)
         {
             ITypeSymbol current = typeSymbol.ContainingType;
+            Stack<ITypeSymbol> stack = new Stack<ITypeSymbol>();
             while (current != null)
             {
-                yield return current;
+                stack.Push(current);
                 current = current.ContainingType;
             }
+            while (stack.Any())
+                yield return stack.Pop();
         }
 
         public static IEnumerable<string> GetNamespacesOfTypesAndContainedTypes(this ITypeSymbol typeSymbol)
