@@ -58,6 +58,8 @@
         InheritingClosedGeneric,
         ContainerWithAbstract1,
         ExampleStructWithoutClass,
-        ContainerForExampleStructWithoutClass
+        ContainerForExampleStructWithoutClass,
+        ClassWithLocalEnum,
+        ClassWithForeignEnum
     }
 }

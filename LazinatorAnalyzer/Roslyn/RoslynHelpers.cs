@@ -203,9 +203,24 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
+        public static IEnumerable<ITypeSymbol> GetContainingTypes(this ITypeSymbol typeSymbol)
+        {
+            ITypeSymbol current = typeSymbol.ContainingType;
+            while (current != null)
+            {
+                yield return current;
+                current = typeSymbol.ContainingType;
+            }
+        }
+
         public static IEnumerable<string> GetNamespacesOfTypesAndContainedTypes(this ITypeSymbol typeSymbol)
         {
             return GetTypeAndContainedTypes(typeSymbol).Select(x => x.GetFullNamespace());
+        }
+
+        public static IEnumerable<string> GetNamespacesOfContainingTypes(this ITypeSymbol typeSymbol)
+        {
+            return GetContainingTypes(typeSymbol).Select(x => x.GetFullNamespace());
         }
 
         #endregion

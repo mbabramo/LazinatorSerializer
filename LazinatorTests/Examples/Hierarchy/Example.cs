@@ -28,11 +28,5 @@ namespace LazinatorTests.Examples
         {
             _OnDirtyCalled = true;
         }
-
-        public enum EnumWithinClass
-        {
-            Something,
-            SomethingElse
-        }
     }
 }

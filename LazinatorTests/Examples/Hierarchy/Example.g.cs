@@ -290,21 +290,7 @@ namespace LazinatorTests.Examples
                 _MyDateTime = value;
             }
         }
-        private EnumWithinClass _MyEnumWithinClass;
-        public EnumWithinClass MyEnumWithinClass
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _MyEnumWithinClass;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _MyEnumWithinClass = value;
-            }
-        }
+        
         private string _MyNewString;
         public string MyNewString
         {
@@ -797,7 +783,6 @@ namespace LazinatorTests.Examples
             _MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
-            _MyEnumWithinClass = (EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
             if (serializedVersionNumber >= 3) 
             {
                 _MyNewString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
@@ -864,7 +849,6 @@ namespace LazinatorTests.Examples
             WriteUncompressedPrimitives.WriteBool(writer, _MyBool);
             EncodeCharAndString.WriteCharInTwoBytes(writer, _MyChar);
             CompressedIntegralTypes.WriteCompressedDateTime(writer, _MyDateTime);
-            CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinClass);
             if (LazinatorObjectVersion >= 3) 
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyNewString);

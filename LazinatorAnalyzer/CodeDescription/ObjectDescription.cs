@@ -150,6 +150,7 @@ namespace Lazinator.CodeDescription
         {
             List<string> namespaces = PropertiesToDefineThisLevel.SelectMany(x => x.PropertyAndInnerProperties().Select(y => y.Namespace)).ToList();
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfTypesAndContainedTypes());
+            namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfContainingTypes());
             string theBeginning =
                 $@"{GetFileHeader(Hash.ToString(), Namespace, namespaces)}
 
