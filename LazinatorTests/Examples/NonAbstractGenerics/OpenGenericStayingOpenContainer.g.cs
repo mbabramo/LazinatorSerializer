@@ -28,7 +28,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     {
         /* Serialization, deserialization, and object relationships */
         
-        public OpenGenericStayingOpenContainer()
+        public OpenGenericStayingOpenContainer() : base()
         {
         }
         

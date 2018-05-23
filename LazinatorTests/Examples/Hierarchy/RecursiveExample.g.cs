@@ -27,7 +27,7 @@ namespace LazinatorTests.Examples.Hierarchy
     {
         /* Serialization, deserialization, and object relationships */
         
-        public RecursiveExample()
+        public RecursiveExample() : base()
         {
         }
         

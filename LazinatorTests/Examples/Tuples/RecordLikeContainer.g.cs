@@ -28,7 +28,7 @@ namespace LazinatorTests.Examples.Tuples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public RecordLikeContainer()
+        public RecordLikeContainer() : base()
         {
         }
         

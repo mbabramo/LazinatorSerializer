@@ -28,7 +28,7 @@ namespace LazinatorTests.Examples.Hierarchy
     {
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleInterfaceContainer()
+        public ExampleInterfaceContainer() : base()
         {
         }
         

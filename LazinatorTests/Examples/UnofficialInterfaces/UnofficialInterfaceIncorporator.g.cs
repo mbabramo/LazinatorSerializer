@@ -27,7 +27,7 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public UnofficialInterfaceIncorporator()
+        public UnofficialInterfaceIncorporator() : base()
         {
         }
         

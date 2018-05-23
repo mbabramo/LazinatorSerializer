@@ -27,7 +27,7 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public ClosedGenericWithoutBase()
+        public ClosedGenericWithoutBase() : base()
         {
         }
         

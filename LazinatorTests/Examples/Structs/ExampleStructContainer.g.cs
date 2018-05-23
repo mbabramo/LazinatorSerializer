@@ -29,7 +29,7 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleStructContainer()
+        public ExampleStructContainer() : base()
         {
         }
         

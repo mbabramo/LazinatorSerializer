@@ -28,7 +28,7 @@ namespace LazinatorTests.Examples.Abstract
     {
         /* Serialization, deserialization, and object relationships */
         
-        public Concrete3()
+        public Concrete3() : base()
         {
         }
         

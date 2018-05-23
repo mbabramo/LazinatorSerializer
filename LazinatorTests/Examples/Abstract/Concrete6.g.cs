@@ -27,7 +27,11 @@ namespace LazinatorTests.Examples.Abstract
     public partial class Concrete6 : Concrete5, ILazinator
     {
         /* Clone overrides */
-        public Concrete6() { }
+        
+        public Concrete6() : base()
+        {
+        }
+        
         public override ILazinator CloneLazinator()
         {
             return CloneLazinator(OriginalIncludeChildrenMode);

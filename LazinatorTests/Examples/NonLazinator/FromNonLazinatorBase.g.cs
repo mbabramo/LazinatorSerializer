@@ -27,7 +27,7 @@ namespace LazinatorTests.Examples.NonLazinator
     {
         /* Serialization, deserialization, and object relationships */
         
-        public FromNonLazinatorBase()
+        public FromNonLazinatorBase() : base()
         {
         }
         

@@ -27,7 +27,7 @@ namespace LazinatorTests.Examples.Abstract
     {
         /* Serialization, deserialization, and object relationships */
         
-        public ContainerWithAbstract1()
+        public ContainerWithAbstract1() : base()
         {
         }
         

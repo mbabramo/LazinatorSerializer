@@ -28,6 +28,10 @@ namespace LazinatorTests.Examples.Abstract
     {
         /* Clone overrides */
         
+        public Concrete5() : base()
+        {
+        }
+        
         public override ILazinator CloneLazinator()
         {
             return CloneLazinator(OriginalIncludeChildrenMode);
