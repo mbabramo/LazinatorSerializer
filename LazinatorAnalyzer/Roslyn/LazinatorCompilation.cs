@@ -23,19 +23,20 @@ namespace LazinatorCodeGen.Roslyn
 
         public Compilation Compilation;
         public LazinatorConfig Config { get; private set; }
+        public INamedTypeSymbol ImplementingTypeSymbol { get; private set; }
         public Accessibility ImplementingTypeAccessibility { get; private set; }
-        public HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
-        public HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
-        public HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
-        public Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
-        public Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>> PropertiesForType = new Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>>();
-        public Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
-        public HashSet<(INamedTypeSymbol type, string methodName)> TypeImplementsMethod = new HashSet<(INamedTypeSymbol type, string methodName)>();
-        private Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
-        public Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
-        public HashSet<INamedTypeSymbol> NonRecordLikeTypes = new HashSet<INamedTypeSymbol>();
-        public Dictionary<INamedTypeSymbol, Guid> InterfaceTextHash = new Dictionary<INamedTypeSymbol, Guid>();
-        public INamedTypeSymbol ImplementingTypeSymbol;
+        internal HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
+        internal HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
+        internal HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
+        internal Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
+        public Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>> PropertiesForType { get; internal set; } = new Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>>();
+        internal Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
+        internal HashSet<(INamedTypeSymbol type, string methodName)> TypeImplementsMethod = new HashSet<(INamedTypeSymbol type, string methodName)>();
+        internal bool ImplementingTypeRequiresParameterlessConstructor { get; set; }
+        internal Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
+        internal Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
+        internal HashSet<INamedTypeSymbol> NonRecordLikeTypes = new HashSet<INamedTypeSymbol>();
+        internal Dictionary<INamedTypeSymbol, Guid> InterfaceTextHash = new Dictionary<INamedTypeSymbol, Guid>();
 
         public LazinatorCompilation(Compilation compilation, Type type, LazinatorConfig config) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, config)
         {
@@ -50,8 +51,6 @@ namespace LazinatorCodeGen.Roslyn
                 throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {implementingTypeName} not found.");
             ImplementingTypeAccessibility = implementingTypeDeclaration.GetAccessibility();
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
-            if (ImplementingTypeSymbol.Constructors.Any() && !ImplementingTypeSymbol.Constructors.Any(x => x.Parameters.Length == 0 && x.DeclaredAccessibility == Accessibility.Public) && ImplementingTypeSymbol.TypeKind == TypeKind.Class && !ImplementingTypeSymbol.IsAbstract)
-                throw new LazinatorCodeGenException($"If a Lazinator class such as {ImplementingTypeSymbol} has a constructor, it must have a public parameterless constructor as well.");
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
             if (exclusiveInterfaceTypeSymbol == null)
@@ -313,7 +312,8 @@ namespace LazinatorCodeGen.Roslyn
 
         private void RecordInterfaceTextHash(INamedTypeSymbol @interface, INamedTypeSymbol implementingType)
         {
-            var hash = GetHashForInterface(@interface, implementingType, TypeImplementsMethod);
+            ImplementingTypeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingType);
+            var hash = GetHashForInterface(@interface, implementingType, TypeImplementsMethod, ImplementingTypeRequiresParameterlessConstructor);
             InterfaceTextHash[@interface] = hash;
         }
 
@@ -331,17 +331,23 @@ namespace LazinatorCodeGen.Roslyn
             IEnumerable<TypeDeclarationSyntax> typeDeclarations = syntaxNode.DescendantNodesAndSelf().OfType<TypeDeclarationSyntax>();
             HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet =
                 GetMethodImplementations(typeDeclarations, implementingType);
-            return GetHashForInterface(@interface, implementingType, typeImplementsMethodHashSet);
+            bool typeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingType);
+            return GetHashForInterface(@interface, implementingType, typeImplementsMethodHashSet, typeRequiresParameterlessConstructor);
         }
 
-        public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet)
+        private static bool RequiresParameterlessConstructor(INamedTypeSymbol implementingType)
+        {
+            return implementingType.Constructors.Any() && !implementingType.Constructors.Any(x => x.Parameters.Length == 0 && x.DeclaredAccessibility == Accessibility.Public) && implementingType.TypeKind == TypeKind.Class && !implementingType.IsAbstract;
+        }
+
+        public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
         {
             var syntaxNode = GetSyntaxNodeForNamedType(@interface);
-            Guid hash = GetHashForInterface(syntaxNode, implementingType, typeImplementsMethodHashSet);
+            Guid hash = GetHashForInterface(syntaxNode, implementingType, typeImplementsMethodHashSet, implementingTypeRequiresParameterlessConstructor);
             return hash;
         }
 
-        public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet)
+        public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
         {
             // The advantage of the approach here is that we can determine whether we need an update extremely quickly, thus
             // avoiding delaying compilation. The disadvantage is that it might miss an unusual scenario: where the interface has not

@@ -231,7 +231,7 @@ namespace Lazinator.CodeDescription
                 if (IsAbstract && BaseLazinatorObject?.IsAbstract == true) // abstract class inheriting from abstract class
                     boilerplate = $@""; // everything is inherited from parent abstract class
                 else if (IsAbstract)
-                    boilerplate = $@"        /* Boilerplate for abstract ILazinator object */
+                    boilerplate = $@"        /* Abstract declarations */
 			            public abstract ILazinator LazinatorParentClass {{ get; set; }}
                     
                         public abstract void Deserialize();
@@ -284,9 +284,13 @@ namespace Lazinator.CodeDescription
                 ";
                 else
                 {
-                    boilerplate = $@"        /* Boilerplate for every non-abstract ILazinator object */
+                    boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
+                        {(Compilation.ImplementingTypeRequiresParameterlessConstructor ? $@"public {ObjectName}()
+                        {{
+                        }}
+                        
+                        " : "")}public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
@@ -458,7 +462,7 @@ namespace Lazinator.CodeDescription
                             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
                         }}
 
-                        /* Field boilerplate */
+                        /* Field definitions */
         
                 ";
                 }
@@ -718,13 +722,6 @@ namespace Lazinator.CodeDescription
                             ||
                             (((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false))
                         )
-                        // NOTE: For now, the following restriction is being removed. The reason is that we would like to be able to close a generic with a parameter that is a nonexclusive lazinator interface type (implementing ILazinator). We enforce separately that all Lazinator types have a public parameterless constructor (otherwise, we won't generate the code).
-                        //    &&
-                        //( // if the generic argument is a type parameter, as opposed to a bound type, then it must be constrained to have a new() constructor or to be a struct (which can always be instantiated with new())
-                        //    ((x as ITypeParameterSymbol)?.HasConstructorConstraint ?? true)
-                        //    ||
-                        //    ((x as ITypeParameterSymbol)?.HasValueTypeConstraint ?? true)
-                        //)
                     )
                     && // but if this is a Lazinator interface type, that's fine too.
                     !Compilation.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
