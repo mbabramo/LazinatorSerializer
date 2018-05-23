@@ -110,11 +110,11 @@ namespace Lazinator.CodeDescription
             
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.ObjectName} must include a get method.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} must include a get method.");
             if (propertySymbol.SetMethod == null && SetterAccessibility == null)
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.ObjectName} must include a set method or a SetterAccessibilityAttribute.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} must include a set method or a SetterAccessibilityAttribute.");
             if (propertySymbol.SetMethod != null && SetterAccessibility != null && SetterAccessibility.Choice != "public")
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.ObjectName} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
 
             ParseVersionAttributes();
 
