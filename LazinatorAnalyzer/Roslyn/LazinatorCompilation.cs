@@ -68,6 +68,10 @@ namespace LazinatorCodeGen.Roslyn
 
             // Then deal with any implementing classes -- in particular, checking whether each implements methods.
             TypeImplementsMethod = GetMethodImplementations(implementingTypeDeclarations, implementingTypeSymbol);
+            if (implementingTypeSymbol.ToString().Contains("AvlSet"))
+            {
+                var DEBUG = 0;
+            }
             ImplementingTypeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingTypeSymbol, implementingTypeDeclarations);
 
             // Now, record the interface text hash
