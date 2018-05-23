@@ -285,9 +285,7 @@ public class MyOtherClass
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, true);
             var result = d.GetCodeBehind();
             bool match = codeBehind == result;
-
-            return; // DEBUG
-
+            
             bool automaticallyFix = true; // Set to true to automatically update all test classes on the local development machine to a new format. This will trivially result in the test passing. Before doing this, submit all changes. After doing this, if code compiles, run all tests. Then set this back to false. 
             if (automaticallyFix && !match)
                 File.WriteAllText(codeBehindPath, result);

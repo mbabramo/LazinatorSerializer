@@ -92,7 +92,7 @@ namespace LazinatorCodeGen.Roslyn
             {
                 var DEBUG = 0;
             }
-            ImplementingTypeRequiresParameterlessConstructor = !RoslynHelpers.TypeDeclarationIncludesParameterlessConstructor(implementingTypeDeclaration);
+            ImplementingTypeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingTypeSymbol, new TypeDeclarationSyntax[] { implementingTypeDeclaration });
 
             // Now, record the interface text hash
             RecordInterfaceTextHash(exclusiveInterfaceTypeSymbol, implementingTypeSymbol);
