@@ -183,10 +183,17 @@ namespace LazinatorAnalyzer.Analyzer
                             if (lazinatorAttribute.Autogenerate == false)
                                 return;
                             var locationsExcludingCodeBehind = lazinatorObjectType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension())).ToList();
-                            string locationToIndexBy = locationsExcludingCodeBehind
+                            var orderedLocations = locationsExcludingCodeBehind
                                 .Select(x => x.SourceTree.FilePath)
                                 .OrderBy(x => x)
+                                .ToList();
+                            string locationToIndexBy = orderedLocations 
                                 .FirstOrDefault(x => CompilationInformation.ContainsKey(x));
+                            if (locationToIndexBy == null && orderedLocations.Any())
+                            {
+                                locationToIndexBy = orderedLocations.First();
+                                CompilationInformation[locationToIndexBy] = new SourceFileInformation();
+                            }
                             if (locationToIndexBy != null)
                             {
                                 SourceFileInformation sourceFileInfo = CompilationInformation[locationToIndexBy];
