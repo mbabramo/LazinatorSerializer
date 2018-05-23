@@ -151,6 +151,7 @@ namespace Lazinator.CodeDescription
             List<string> namespaces = PropertiesToDefineThisLevel.SelectMany(x => x.PropertyAndInnerProperties().Select(y => y.Namespace)).ToList();
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfTypesAndContainedTypes());
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfContainingTypes());
+
             // we may have nested lazinator classes, in which class we need to nest the partial class definitions. We assume that the 
             string partialsuperclasses = "";
             IEnumerable<ITypeSymbol> supertypes = null;
@@ -159,11 +160,12 @@ namespace Lazinator.CodeDescription
                 supertypes = ILazinatorTypeSymbol.GetContainingTypes();
                 foreach (var supertype in supertypes)
                 {
-                    partialsuperclasses = partialsuperclasses + $@"{AccessibilityConverter.Convert(Accessibility)} {(supertype.IsSealed ? " sealed " : " ")}partial class {supertype.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}
+                    partialsuperclasses = partialsuperclasses + $@"{AccessibilityConverter.Convert(Accessibility)} {(supertype.IsSealed ? "sealed " : "")}partial class {supertype.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)}
                         {{
                         ";
                 }
             }
+
             string theBeginning =
                 $@"{GetFileHeader(Hash.ToString(), Namespace, namespaces)}
 
