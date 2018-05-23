@@ -27,6 +27,10 @@ namespace LazinatorTests.Examples.Abstract
     {
         /* Serialization, deserialization, and object relationships */
         
+        public ConcreteGenericContainer() : base()
+        {
+        }
+        
         public override ILazinator LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;

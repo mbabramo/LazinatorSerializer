@@ -27,6 +27,10 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
+        public ClosedGenericWithoutBase() : base()
+        {
+        }
+        
         public virtual ILazinator LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;

@@ -28,6 +28,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     {
         /* Serialization, deserialization, and object relationships */
         
+        public OpenGeneric() : base()
+        {
+        }
+        
         public virtual ILazinator LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;

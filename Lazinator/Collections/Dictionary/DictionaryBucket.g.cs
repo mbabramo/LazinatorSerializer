@@ -28,6 +28,10 @@ namespace Lazinator.Collections.Dictionary
     {
         /* Serialization, deserialization, and object relationships */
         
+        public DictionaryBucket() : base()
+        {
+        }
+        
         public virtual ILazinator LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;

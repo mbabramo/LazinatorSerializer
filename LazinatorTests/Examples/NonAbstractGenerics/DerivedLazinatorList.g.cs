@@ -28,6 +28,10 @@ namespace LazinatorTests.Examples
     {
         /* Clone overrides */
         
+        public DerivedLazinatorList() : base()
+        {
+        }
+        
         public override ILazinator CloneLazinator()
         {
             return CloneLazinator(OriginalIncludeChildrenMode);
