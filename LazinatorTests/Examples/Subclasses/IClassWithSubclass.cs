@@ -4,5 +4,7 @@
     interface IClassWithSubclass
     {
         int IntWithinSuperclass { get; set; }
+        ClassWithSubclass.SubclassWithinClass SubclassInstance1 { get; set; }
+        ClassWithSubclass.SubclassWithinClass SubclassInstance2 { get; set; }
     }
 }
