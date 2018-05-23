@@ -27,10 +27,6 @@ namespace LazinatorTests.Examples.NonLazinator
     {
         /* Serialization, deserialization, and object relationships */
         
-        public FromNonLazinatorBase() : base()
-        {
-        }
-        
         public virtual ILazinator LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;

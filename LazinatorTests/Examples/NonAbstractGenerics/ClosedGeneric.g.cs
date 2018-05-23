@@ -29,10 +29,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     {
         /* Clone overrides */
         
-        public ClosedGeneric() : base()
-        {
-        }
-        
         public override ILazinator CloneLazinator()
         {
             return CloneLazinator(OriginalIncludeChildrenMode);

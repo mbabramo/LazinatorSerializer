@@ -27,10 +27,6 @@ namespace Lazinator.Collections
     {
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorOffsetList() : base()
-        {
-        }
-        
         public ILazinator LazinatorParentClass { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;

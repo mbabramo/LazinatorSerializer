@@ -27,10 +27,6 @@ namespace Lazinator.Collections.Avl
     {
         /* Serialization, deserialization, and object relationships */
         
-        public AvlNode() : base()
-        {
-        }
-        
         public ILazinator LazinatorParentClass { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
