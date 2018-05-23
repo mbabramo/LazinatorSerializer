@@ -342,7 +342,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static bool TypeDeclarationIncludesAttribute(this TypeDeclarationSyntax typeDeclaration, string attributeName)
         {
-            return !typeDeclaration.AttributeLists.Any(y => y.Attributes.Any(z => ((string) (z.Name as IdentifierNameSyntax)?.Identifier.Value) == attributeName));
+            return typeDeclaration.AttributeLists.Any(y => y.Attributes.Any(z => ((string) (z.Name as IdentifierNameSyntax)?.Identifier.Value) == attributeName));
         }
 
         private static HashSet<MethodDeclarationSyntax> GetMethodDeclarations(TypeDeclarationSyntax typeDeclaration)
