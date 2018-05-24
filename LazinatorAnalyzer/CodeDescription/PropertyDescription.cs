@@ -271,7 +271,11 @@ namespace Lazinator.CodeDescription
             }
             if (!isILazinator && !isRecursiveDefinition && namedTypeSymbol != null)
             {
-                if (namedTypeSymbol.AllInterfaces.Any(x => x.HasAttributeOfType<CloneLazinatorAttribute>()))
+                if (
+                    (namedTypeSymbol.AllInterfaces.Any(x => x.HasAttributeOfType<CloneLazinatorAttribute>()))
+                    ||
+                    (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
+                    )
                     isILazinator = true; // code behind isn't implemented yet but it will be
             }
 
@@ -1450,7 +1454,7 @@ namespace Lazinator.CodeDescription
                 if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     fullWriteCommands =
                         $@"
-                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals({itemString}, default({AppropriatelyQualifiedTypeName})))
+                    if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({itemString}, default({AppropriatelyQualifiedTypeName})))
                     {{
                         writer.Write((uint)0);
                     }}
