@@ -41,6 +41,7 @@ namespace Lazinator.Spans
             }
             Contract.EndContractBlock();
 
+            ByteSpan = new LazinatorByteSpan();
             ByteSpan.SetMemory(new byte[GetByteArrayLength(length, BitsPerInt32)]);
             m_length = length;
 

@@ -277,9 +277,20 @@ namespace LazinatorAnalyzer.Analyzer
                                 var locationOfImplementingType = sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
                                 var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
                                 TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax) implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
+                                Microsoft.CodeAnalysis.Text.TextSpan? textSpan = 
+                                    implementingTypeSyntaxNode.BaseList.Types
+                                        .FirstOrDefault(x => 
+                                            (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) 
+                                            ?? 
+                                            (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) 
+                                            ?? 
+                                            false
+                                            )?.Span;
+                                if (textSpan == null)
+                                    return;
                                 Location interfaceSpecificationLocation = Location.Create(
                                     locationOfImplementingType.SourceTree,
-                                    implementingTypeSyntaxNode.BaseList.Types.First(x => (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) ?? false).Span);
+                                    textSpan.Value);
                                 var additionalLocations = new List<Location>();
                                 if (sourceFileInfo.CodeBehindLocation != null)
                                     additionalLocations.Add(sourceFileInfo.CodeBehindLocation);

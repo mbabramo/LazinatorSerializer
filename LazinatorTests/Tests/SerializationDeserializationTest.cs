@@ -980,6 +980,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorBitArrayWorks()
         {
+            LazinatorBitArray reservedArray = new LazinatorBitArray(100);
+            reservedArray.Length.Should().Be(100);
+
             bool[] values1 = new bool[]
                 {true, false, true, false, true, false, true, false, true};
             bool[] values2 = new bool[]

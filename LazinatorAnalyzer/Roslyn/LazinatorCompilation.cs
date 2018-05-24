@@ -390,6 +390,10 @@ namespace LazinatorCodeGen.Roslyn
 
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
+            if (type.ToString().Contains("TableColumnGroupID"))
+            {
+                var DEBUG = 0;
+            }
             if (RecordLikeTypes.ContainsKey(type) || NonRecordLikeTypes.Contains(type))
                 return;
             // Consider whether to add this as a record-like type
@@ -409,7 +413,11 @@ namespace LazinatorCodeGen.Roslyn
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
-                    var properties = GetPropertyWithDefinitionInfo(type);
+                    var properties = GetPropertyWithDefinitionInfo(type)
+                        .Where(x => (x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as PropertyDeclarationSyntax)?.AccessorList?.Accessors
+                            .Any(y => y.Body == null)
+                            ?? false)
+                        .ToList();
                     if (parameters.Count() < properties.Count() || !parameters.Any())
                     { // better constructor candidates have already been rejected, so reject this too.
                         if (!IsAllowedAsRecordLikeTypeIfMismatched(type))
