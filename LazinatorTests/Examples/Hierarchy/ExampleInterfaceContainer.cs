@@ -6,6 +6,5 @@ namespace LazinatorTests.Examples.Hierarchy
 {
     public partial class ExampleInterfaceContainer : IExampleInterfaceContainer
     {
-        public List<IExample> ExampleListByInterface { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
