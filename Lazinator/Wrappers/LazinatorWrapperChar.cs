@@ -40,9 +40,17 @@ namespace Lazinator.Wrappers
             return false;
         }
 
+
+
         public int CompareTo(object obj)
         {
-            return Value.CompareTo(obj);
+            if (obj == null)
+                return 1;
+            if (obj is LazinatorWrapperChar other)
+                return CompareTo(other);
+            if (obj is char b)
+                return CompareTo(b);
+            throw new NotImplementedException();
         }
 
         public int CompareTo(char other)

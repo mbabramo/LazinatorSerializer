@@ -42,7 +42,13 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(object obj)
         {
-            return ((IComparable)Value).CompareTo(obj);
+            if (obj == null)
+                return 1;
+            if (obj is LazinatorWrapperTimeSpan other)
+                return CompareTo(other);
+            if (obj is TimeSpan b)
+                return CompareTo(b);
+            throw new NotImplementedException();
         }
 
         public int CompareTo(TimeSpan other)

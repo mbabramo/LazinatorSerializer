@@ -42,7 +42,13 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(object obj)
         {
-            return Value.CompareTo(obj);
+            if (obj == null)
+                return 1;
+            if (obj is LazinatorWrapperString other)
+                return CompareTo(other);
+            if (obj is string b)
+                return CompareTo(b);
+            throw new NotImplementedException();
         }
 
         public int CompareTo(string other)
