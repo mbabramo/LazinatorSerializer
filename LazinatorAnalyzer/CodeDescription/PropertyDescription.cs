@@ -1444,7 +1444,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IsPrimitive)
                     return ($@"
-                    {WriteMethodName}(writer, {itemString});");
+                    {WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}{itemString});");
                 else if (IsNonSerializedType)
                     return ($@"
                     void action(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness);
