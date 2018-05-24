@@ -9,5 +9,6 @@ namespace LazinatorTests.Examples.Hierarchy
     interface IExampleInterfaceContainer
     {
         IExample ExampleByInterface { get; set; }
+        List<IExample> ExampleListByInterface { get; set; }
     }
 }
