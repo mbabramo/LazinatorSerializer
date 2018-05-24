@@ -49,10 +49,6 @@ namespace LazinatorCodeGen.Roslyn
             Config = config;
             ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
 
-            if (ImplementingTypeSymbol.ToString().Contains("Concrete6"))
-            {
-                var DEBUG = 0;
-            }
             TypeDeclarations = GetTypeDeclarationsForNamedType(ImplementingTypeSymbol).ToList();
             if (TypeDeclarations == null || !TypeDeclarations.Any())
                 throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {implementingTypeName} not found.");
@@ -61,7 +57,7 @@ namespace LazinatorCodeGen.Roslyn
             INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCodeAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
             if (exclusiveInterfaceTypeSymbol == null)
-                throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} does not implement an exclusive interface.");
+                throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} should implement exactly one Lazinator interface (plus any Lazinator interfaces implemented by that interface, plus any number of nonexclusive interfaces).");
             Initialize(TypeDeclarations, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
         }
 

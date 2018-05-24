@@ -285,10 +285,16 @@ namespace LazinatorCodeGen.Roslyn
 
         public static INamedTypeSymbol GetTopLevelInterfaceImplementingAttribute(this INamedTypeSymbol lazinatorObject, INamedTypeSymbol attributeType)
         {
-            return lazinatorObject.Interfaces
+            var allInterfaces = lazinatorObject.Interfaces
                         .Where(x => x.HasAttribute(attributeType))
-                        .OrderByDescending(x => x.GetMembers().Count())
+                        .OrderByDescending(x => x.GetMembers().Count());
+            var result = allInterfaces
                         .FirstOrDefault();
+            var remaining = allInterfaces.Skip(1);
+            if (result == null)
+                return null;
+            return result;
+
         }
 
         public static List<INamedTypeSymbol> GetInterfacesWithAttributeOfType<T>(this INamedTypeSymbol namedTypeSymbol)
