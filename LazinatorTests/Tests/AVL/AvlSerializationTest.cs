@@ -20,9 +20,9 @@ namespace LazinatorTests.Tests.AVL
         {
             GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree, out Dictionary<int, int> items, out int firstKey);
 
-            var enumerated = tree.Select(x => x.Value.Value).ToList();
+            var enumerated = tree.Select(x => x.Value.WrappedValue).ToList();
             AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> clone = tree.CloneLazinatorTyped();
-            var enumerated2 = clone.Select(x => x.Value.Value).ToList();
+            var enumerated2 = clone.Select(x => x.Value.WrappedValue).ToList();
             var correctOrder = items.OrderBy(x => x.Key).Select(x => x.Value).ToList();
             enumerated.SequenceEqual(correctOrder).Should().BeTrue();
             enumerated2.SequenceEqual(correctOrder).Should().BeTrue();

@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private float _Value;
-        public float Value
+        public float WrappedValue
         {
             [DebuggerStepThrough]
             get

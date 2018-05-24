@@ -4,11 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperIntArray : ILazinatorWrapperIntArray
     {
-        public bool HasValue => Value != null;
+        public bool HasValue => WrappedValue != null;
 
         public LazinatorWrapperIntArray(int[] x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperIntArray(int[] x)
@@ -18,7 +18,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator int[](LazinatorWrapperIntArray x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
     }
 }

@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private long? _Value;
-        public long? Value
+        public long? WrappedValue
         {
             [DebuggerStepThrough]
             get

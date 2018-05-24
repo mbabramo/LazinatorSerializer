@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperSByte(sbyte x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperSByte(sbyte x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator sbyte(LazinatorWrapperSByte x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is sbyte v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperSByte w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
 
@@ -53,22 +53,22 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(sbyte other)
         {
-            return Value.CompareTo(other);
+            return WrappedValue.CompareTo(other);
         }
 
         public bool Equals(sbyte other)
         {
-            return Value.Equals(other);
+            return WrappedValue.Equals(other);
         }
 
         public int CompareTo(LazinatorWrapperSByte other)
         {
-            return Value.CompareTo(other.Value);
+            return WrappedValue.CompareTo(other.WrappedValue);
         }
 
         public bool Equals(LazinatorWrapperSByte other)
         {
-            return Value.Equals(other.Value);
+            return WrappedValue.Equals(other.WrappedValue);
         }
     }
 }

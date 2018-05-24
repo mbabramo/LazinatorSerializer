@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperDateTime(DateTime x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperDateTime(DateTime x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator DateTime(LazinatorWrapperDateTime x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is DateTime v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperDateTime w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
 
@@ -53,22 +53,22 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(DateTime other)
         {
-            return Value.CompareTo(other);
+            return WrappedValue.CompareTo(other);
         }
 
         public bool Equals(DateTime other)
         {
-            return Value.Equals(other);
+            return WrappedValue.Equals(other);
         }
 
         public int CompareTo(LazinatorWrapperDateTime other)
         {
-            return Value.CompareTo(other.Value);
+            return WrappedValue.CompareTo(other.WrappedValue);
         }
 
         public bool Equals(LazinatorWrapperDateTime other)
         {
-            return Value.Equals(other.Value);
+            return WrappedValue.Equals(other.WrappedValue);
         }
     }
 }

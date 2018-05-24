@@ -4,11 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableUlong : ILazinatorWrapperNullableUlong
     {
-        public bool HasValue => Value != null;
+        public bool HasValue => WrappedValue != null;
 
         public LazinatorWrapperNullableUlong(ulong? x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperNullableUlong(ulong? x)
@@ -18,27 +18,27 @@ namespace Lazinator.Wrappers
 
         public static implicit operator ulong? (LazinatorWrapperNullableUlong x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value?.ToString() ?? "";
+            return WrappedValue?.ToString() ?? "";
         }
 
         public override int GetHashCode()
         {
-            return Value?.GetHashCode() ?? 0;
+            return WrappedValue?.GetHashCode() ?? 0;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is LazinatorWrapperNullableUlong w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             if (obj is ulong v)
-                return Value == v;
+                return WrappedValue == v;
             if (obj == null)
-                return Value == null;
+                return WrappedValue == null;
             return false;
         }
     }

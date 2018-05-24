@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperChar(char x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperChar(char x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator char(LazinatorWrapperChar x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is char v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperChar w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
 
@@ -55,22 +55,22 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(char other)
         {
-            return Value.CompareTo(other);
+            return WrappedValue.CompareTo(other);
         }
 
         public bool Equals(char other)
         {
-            return Value.Equals(other);
+            return WrappedValue.Equals(other);
         }
 
         public int CompareTo(LazinatorWrapperChar other)
         {
-            return Value.CompareTo(other.Value);
+            return WrappedValue.CompareTo(other.WrappedValue);
         }
 
         public bool Equals(LazinatorWrapperChar other)
         {
-            return Value.Equals(other.Value);
+            return WrappedValue.Equals(other.WrappedValue);
         }
     }
 }

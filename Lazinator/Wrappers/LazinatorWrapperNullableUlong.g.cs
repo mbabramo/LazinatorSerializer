@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private ulong? _Value;
-        public ulong? Value
+        public ulong? WrappedValue
         {
             [DebuggerStepThrough]
             get

@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperFloat(float x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperFloat(float x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator float(LazinatorWrapperFloat x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is float v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperFloat w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
 
@@ -53,22 +53,22 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(float other)
         {
-            return Value.CompareTo(other);
+            return WrappedValue.CompareTo(other);
         }
 
         public bool Equals(float other)
         {
-            return Value.Equals(other);
+            return WrappedValue.Equals(other);
         }
 
         public int CompareTo(LazinatorWrapperFloat other)
         {
-            return Value.CompareTo(other.Value);
+            return WrappedValue.CompareTo(other.WrappedValue);
         }
 
         public bool Equals(LazinatorWrapperFloat other)
         {
-            return Value.Equals(other.Value);
+            return WrappedValue.Equals(other.WrappedValue);
         }
     }
 }

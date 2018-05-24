@@ -42,7 +42,7 @@ namespace LazinatorTests.AVL
         public void AvlSetSkipWorks()
         {
             GetAvlSet(out var set, out var ints);
-            set.Skip(2).Skip(2).First().Value.Should().Be(6);
+            set.Skip(2).Skip(2).First().WrappedValue.Should().Be(6);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace LazinatorTests.AVL
             s.Contains(5).Should().BeTrue();
             s.Contains(6).Should().BeFalse();
             s.NumItemsAdded.Should().Be(3);
-            s.ToList().Select(x => x.Value).SequenceEqual(new int[] {3, 5, 5}).Should().BeTrue();
+            s.ToList().Select(x => x.WrappedValue).SequenceEqual(new int[] {3, 5, 5}).Should().BeTrue();
             s.RemoveFirstMatchIfExists(5);
             s.Count.Should().Be(2);
             s.Contains(5).Should().BeTrue();
@@ -77,7 +77,7 @@ namespace LazinatorTests.AVL
             s.Insert(3);
             s.Insert(5);
             s.Insert(5);
-            s.Skip(2).First().Value.Should().Be(5);
+            s.Skip(2).First().WrappedValue.Should().Be(5);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace LazinatorTests.AVL
             s.Insert(5);
             s.Insert(5);
             List<LazinatorWrapperInt> list = s.ToList();
-            list.Select(x => x.Value).SequenceEqual(new int[] {5, 5, 3}).Should().BeTrue();
+            list.Select(x => x.WrappedValue).SequenceEqual(new int[] {5, 5, 3}).Should().BeTrue();
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace LazinatorTests.AVL
             {
                 (bool valueFound, LazinatorWrapperInt valueIfFound) = set.GetMatchOrNext(x);
                 valueFound.Should().BeTrue();
-                valueIfFound.Value.Should().Be(x);
+                valueIfFound.WrappedValue.Should().Be(x);
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
@@ -112,7 +112,7 @@ namespace LazinatorTests.AVL
                         valueFound.Should().BeFalse();
                     else
                     {
-                        valueIfFound.Value.Should().Be(ints.First(y => y > x));
+                        valueIfFound.WrappedValue.Should().Be(ints.First(y => y > x));
                     }
                 }
         }
@@ -122,7 +122,7 @@ namespace LazinatorTests.AVL
         {
             GetAvlSet(out var set, out var ints);
             var list = set.ToList();
-            list.Select(x => x.Value).SequenceEqual(ints).Should().BeTrue();
+            list.Select(x => x.WrappedValue).SequenceEqual(ints).Should().BeTrue();
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace LazinatorTests.AVL
             {
                 bool found = tree.Search(x, out LazinatorWrapperString value);
                 found.Should().BeTrue();
-                value.Value.Should().Be(x.ToString());
+                value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
@@ -156,7 +156,7 @@ namespace LazinatorTests.AVL
             foreach (int x in ints)
             {
                 var node = tree.SearchMatchOrNext(x);
-                node.Value.Value.Should().Be(x.ToString());
+                node.Value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))

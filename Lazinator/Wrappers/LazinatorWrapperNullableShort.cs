@@ -4,11 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableShort : ILazinatorWrapperNullableShort
     {
-        public bool HasValue => Value != null;
+        public bool HasValue => WrappedValue != null;
 
         public LazinatorWrapperNullableShort(short? x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperNullableShort(short? x)
@@ -18,27 +18,27 @@ namespace Lazinator.Wrappers
 
         public static implicit operator short? (LazinatorWrapperNullableShort x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value?.ToString() ?? "";
+            return WrappedValue?.ToString() ?? "";
         }
 
         public override int GetHashCode()
         {
-            return Value?.GetHashCode() ?? 0;
+            return WrappedValue?.GetHashCode() ?? 0;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is LazinatorWrapperNullableShort w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             if (obj is short v)
-                return Value == v;
+                return WrappedValue == v;
             if (obj == null)
-                return Value == null;
+                return WrappedValue == null;
             return false;
         }
     }

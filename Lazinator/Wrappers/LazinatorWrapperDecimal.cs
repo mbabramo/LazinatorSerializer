@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperDecimal(decimal x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperDecimal(decimal x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator decimal(LazinatorWrapperDecimal x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is decimal v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperDecimal w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
 
@@ -53,22 +53,22 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(decimal other)
         {
-            return Value.CompareTo(other);
+            return WrappedValue.CompareTo(other);
         }
 
         public bool Equals(decimal other)
         {
-            return Value.Equals(other);
+            return WrappedValue.Equals(other);
         }
 
         public int CompareTo(LazinatorWrapperDecimal other)
         {
-            return Value.CompareTo(other.Value);
+            return WrappedValue.CompareTo(other.WrappedValue);
         }
 
         public bool Equals(LazinatorWrapperDecimal other)
         {
-            return Value.Equals(other.Value);
+            return WrappedValue.Equals(other.WrappedValue);
         }
     }
 }

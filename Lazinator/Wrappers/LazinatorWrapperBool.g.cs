@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private bool _Value;
-        public bool Value
+        public bool WrappedValue
         {
             [DebuggerStepThrough]
             get

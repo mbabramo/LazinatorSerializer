@@ -79,7 +79,7 @@ namespace Lazinator.Wrappers
         protected virtual int _Value_ByteLength { get; }
         
         protected bool _Value_Accessed = false;
-        public virtual T Value
+        public virtual T Wrapped
         {
             get;
             set;

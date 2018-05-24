@@ -4,11 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperFloatArray : ILazinatorWrapperFloatArray
     {
-        public bool HasValue => Value != null;
+        public bool HasValue => WrappedValue != null;
 
         public LazinatorWrapperFloatArray(float[] x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperFloatArray(float[] x)
@@ -18,7 +18,7 @@ namespace Lazinator.Wrappers
 
         public static implicit operator float[] (LazinatorWrapperFloatArray x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
     }
 }

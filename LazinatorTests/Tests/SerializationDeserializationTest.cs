@@ -660,9 +660,9 @@ namespace LazinatorTests.Tests
         {
             WrapperContainer e = new WrapperContainer();
             var wrappedInt = e.WrappedInt;
-            wrappedInt.Value.Should().Be(0);
+            wrappedInt.WrappedValue.Should().Be(0);
             var clone = e.CloneLazinatorTyped();
-            clone.WrappedInt.Value.Should().Be(0);
+            clone.WrappedInt.WrappedValue.Should().Be(0);
         }
 
         [Fact]
@@ -1339,8 +1339,8 @@ namespace LazinatorTests.Tests
             LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString> item =
                 new LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString>(5, "hello");
             var clone = item.CloneLazinatorTyped();
-            clone.Item1.Value.Should().Be(5);
-            clone.Item2.Value.Should().Be("hello");
+            clone.Item1.WrappedValue.Should().Be(5);
+            clone.Item2.WrappedValue.Should().Be("hello");
         }
 
         [Fact]

@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private decimal _Value;
-        public decimal Value
+        public decimal WrappedValue
         {
             [DebuggerStepThrough]
             get

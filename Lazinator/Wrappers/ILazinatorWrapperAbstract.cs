@@ -6,6 +6,6 @@ namespace Lazinator.Wrappers
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorWrapperAbstract)]
     interface ILazinatorWrapperAbstract<T>
     {
-        T Value { get; set; }
+        T Wrapped { get; set; }
     }
 }

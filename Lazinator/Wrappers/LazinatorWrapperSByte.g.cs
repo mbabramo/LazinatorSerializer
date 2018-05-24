@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private sbyte _Value;
-        public sbyte Value
+        public sbyte WrappedValue
         {
             [DebuggerStepThrough]
             get

@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private DateTime _Value;
-        public DateTime Value
+        public DateTime WrappedValue
         {
             [DebuggerStepThrough]
             get

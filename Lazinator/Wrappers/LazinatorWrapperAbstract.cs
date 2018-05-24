@@ -8,34 +8,34 @@ namespace Lazinator.Wrappers
     {
         public override string ToString()
         {
-            return Value?.ToString() ?? "";
+            return Wrapped?.ToString() ?? "";
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return Wrapped.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             var other = (LazinatorWrapperAbstract<T>)obj;
-            if (Value == null)
-                return other.Value == null;
-            return Value.Equals(other.Value);
+            if (Wrapped == null)
+                return other.Wrapped == null;
+            return Wrapped.Equals(other.Wrapped);
         }
 
         public bool Equals(T other)
         {
-            if (Value == null)
+            if (Wrapped == null)
                 return other == null;
-            return Value.Equals(other);
+            return Wrapped.Equals(other);
         }
 
         public bool Equals(LazinatorWrapperAbstract<T> other)
         {
-            if (Value == null)
-                return other.Value == null;
-            return Value.Equals(other.Value);
+            if (Wrapped == null)
+                return other.Wrapped == null;
+            return Wrapped.Equals(other.Wrapped);
         }
 
     }

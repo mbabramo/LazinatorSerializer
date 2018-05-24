@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private Guid? _Value;
-        public Guid? Value
+        public Guid? WrappedValue
         {
             [DebuggerStepThrough]
             get

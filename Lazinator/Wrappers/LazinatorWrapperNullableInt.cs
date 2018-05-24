@@ -4,11 +4,11 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableInt : ILazinatorWrapperNullableInt
     {
-        public bool HasValue => Value != null;
+        public bool HasValue => WrappedValue != null;
 
         public LazinatorWrapperNullableInt(int? x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperNullableInt(int? x)
@@ -18,27 +18,27 @@ namespace Lazinator.Wrappers
 
         public static implicit operator int? (LazinatorWrapperNullableInt x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value?.ToString() ?? "";
+            return WrappedValue?.ToString() ?? "";
         }
 
         public override int GetHashCode()
         {
-            return Value?.GetHashCode() ?? 0;
+            return WrappedValue?.GetHashCode() ?? 0;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is LazinatorWrapperNullableInt w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             if (obj is int v)
-                return Value == v;
+                return WrappedValue == v;
             if (obj == null)
-                return Value == null;
+                return WrappedValue == null;
             return false;
         }
     }

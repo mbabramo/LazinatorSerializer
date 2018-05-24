@@ -22,7 +22,7 @@ namespace LazinatorTests.AVL
 			{
 				Assert.True(enumerator.MoveNext());
 
-				Assert.Equal(i, enumerator.Current.Key.Value);
+				Assert.Equal(i, enumerator.Current.Key.WrappedValue);
 			}
 
 			Assert.False(enumerator.MoveNext());
@@ -67,7 +67,7 @@ namespace LazinatorTests.AVL
 			{
 				count++;
 
-				Assert.Equal(count, node.Key.Value);
+				Assert.Equal(count, node.Key.WrappedValue);
 			}
 
 			Assert.Equal(5, count);
@@ -88,7 +88,7 @@ namespace LazinatorTests.AVL
 			{
 				count++;
 
-				Assert.Equal(count, ((AvlNode<LazinatorWrapperInt, LazinatorWrapperByte>)enumerator.Current).Key.Value);
+				Assert.Equal(count, ((AvlNode<LazinatorWrapperInt, LazinatorWrapperByte>)enumerator.Current).Key.WrappedValue);
 			}
 
 			Assert.Equal(5, count);

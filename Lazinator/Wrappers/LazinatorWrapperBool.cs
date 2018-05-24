@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperBool(bool x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperBool(bool x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator bool(LazinatorWrapperBool x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is bool v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperBool w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
     }

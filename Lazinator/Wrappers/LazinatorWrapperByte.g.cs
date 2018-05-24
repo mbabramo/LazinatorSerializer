@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private byte _Value;
-        public byte Value
+        public byte WrappedValue
         {
             [DebuggerStepThrough]
             get

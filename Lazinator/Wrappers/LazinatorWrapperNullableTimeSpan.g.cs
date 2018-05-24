@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
         
         
         private TimeSpan? _Value;
-        public TimeSpan? Value
+        public TimeSpan? WrappedValue
         {
             [DebuggerStepThrough]
             get

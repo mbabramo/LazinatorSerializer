@@ -195,7 +195,7 @@ namespace Lazinator.Wrappers
         int _Value_ByteLength => _LazinatorWrapperLongArray_EndByteIndex - _Value_ByteIndex;
         
         private long[] _Value;
-        public long[] Value
+        public long[] WrappedValue
         {
             [DebuggerStepThrough]
             get
@@ -254,7 +254,7 @@ namespace Lazinator.Wrappers
             var serializedBytesCopy_Value = LazinatorObjectBytes;
             var byteIndexCopy_Value = _Value_ByteIndex;
             var byteLengthCopy_Value = _Value_ByteLength;
-            var copy_Value = Value;
+            var copy_Value = WrappedValue;
             WriteNonLazinatorObject(
             nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed,
             isAccessed: _Value_Accessed, writer: writer,

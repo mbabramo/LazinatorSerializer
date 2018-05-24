@@ -4,16 +4,16 @@ namespace Lazinator.Wrappers
 {
     public partial struct LazinatorWrapperNullableBool : ILazinatorWrapperNullableBool
     {
-        public bool HasValue => Value != null;
+        public bool HasValue => WrappedValue != null;
 
         public LazinatorWrapperNullableBool(bool? x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public override string ToString()
         {
-            return Value?.ToString() ?? "";
+            return WrappedValue?.ToString() ?? "";
         }
 
         public static implicit operator LazinatorWrapperNullableBool(bool? x)
@@ -23,22 +23,22 @@ namespace Lazinator.Wrappers
 
         public static implicit operator bool?(LazinatorWrapperNullableBool x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override int GetHashCode()
         {
-            return Value?.GetHashCode() ?? 0;
+            return WrappedValue?.GetHashCode() ?? 0;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is LazinatorWrapperNullableBool w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             if (obj is bool v)
-                return Value == v;
+                return WrappedValue == v;
             if (obj == null)
-                return Value == null;
+                return WrappedValue == null;
             return false;
         }
     }

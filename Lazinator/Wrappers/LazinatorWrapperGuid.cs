@@ -8,7 +8,7 @@ namespace Lazinator.Wrappers
 
         public LazinatorWrapperGuid(Guid x) : this()
         {
-            Value = x;
+            WrappedValue = x;
         }
 
         public static implicit operator LazinatorWrapperGuid(Guid x)
@@ -18,25 +18,25 @@ namespace Lazinator.Wrappers
 
         public static implicit operator Guid(LazinatorWrapperGuid x)
         {
-            return x.Value;
+            return x.WrappedValue;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return WrappedValue.ToString();
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return WrappedValue.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is Guid v)
-                return Value == v;
+                return WrappedValue == v;
             else if (obj is LazinatorWrapperGuid w)
-                return Value == w.Value;
+                return WrappedValue == w.WrappedValue;
             return false;
         }
     }
