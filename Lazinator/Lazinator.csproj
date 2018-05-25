@@ -6,6 +6,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <IncludeSymbols>true</IncludeSymbols>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -38,5 +41,9 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0-rc1-final" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62909-01" PrivateAssets="All"/>
+  </ItemGroup>
+  
 </Project>

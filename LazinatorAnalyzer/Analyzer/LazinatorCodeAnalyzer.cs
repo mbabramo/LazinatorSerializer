@@ -105,7 +105,7 @@ namespace LazinatorAnalyzer.Analyzer
 
             #region Per-Compilation mutable state
             
-            private Dictionary<string, SourceFileInformation> CompilationInformation = new Dictionary<string, SourceFileInformation>();
+            private Dictionary<Location, SourceFileInformation> CompilationInformation = new Dictionary<Location, SourceFileInformation>();
 
             #endregion
 
@@ -136,11 +136,12 @@ namespace LazinatorAnalyzer.Analyzer
 
             public void SyntaxTreeStartAction(SyntaxTreeAnalysisContext context)
             {
-                string filePath = context.Tree.FilePath;
-                if (!filePath.EndsWith(GetGeneratedCodeFileExtension()))
-                {
-                    CompilationInformation[filePath] = new SourceFileInformation();
-                }
+                // DEBUG
+                //string filePath = context.Tree.FilePath;
+                //if (!filePath.EndsWith(GetGeneratedCodeFileExtension()))
+                //{
+                //    CompilationInformation[filePath] = new SourceFileInformation();
+                //}
             }
 
             public void AnalyzeSymbol(SymbolAnalysisContext context)
@@ -173,6 +174,11 @@ namespace LazinatorAnalyzer.Analyzer
                         {
                             // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
                             lazinatorObjectType = namedType;
+                            if (namedType.ToString().Contains("TestSub"))
+                            {
+
+                                var DEBUG = 0;
+                            }
                             namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
                         }
                         if (namedInterfaceType != null)
@@ -183,29 +189,18 @@ namespace LazinatorAnalyzer.Analyzer
                             if (lazinatorAttribute.Autogenerate == false)
                                 return;
                             var locationsExcludingCodeBehind = lazinatorObjectType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension())).ToList();
-                            var orderedLocations = locationsExcludingCodeBehind
-                                .Select(x => x.SourceTree.FilePath)
-                                .OrderBy(x => x)
-                                .ToList();
-                            string locationToIndexBy = orderedLocations 
-                                .FirstOrDefault(x => CompilationInformation.ContainsKey(x));
-                            if (locationToIndexBy == null && orderedLocations.Any())
+                            var primaryLocation = locationsExcludingCodeBehind
+                                .FirstOrDefault();
+                            if (primaryLocation != null)
                             {
-                                locationToIndexBy = orderedLocations.First();
-                                CompilationInformation[locationToIndexBy] = new SourceFileInformation();
-                            }
-                            if (locationToIndexBy != null)
-                            {
-                                SourceFileInformation sourceFileInfo = CompilationInformation[locationToIndexBy];
+                                SourceFileInformation sourceFileInfo = new SourceFileInformation();
+                                CompilationInformation[primaryLocation] = sourceFileInfo;
                                 sourceFileInfo.LazinatorObject = lazinatorObjectType;
                                 sourceFileInfo.LazinatorInterface = namedInterfaceType;
                                 sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind =
-                                    locationsExcludingCodeBehind
-                                        .OrderByDescending(x => x.SourceTree.FilePath == locationToIndexBy)
-                                        .ToList(); // place indexed location first
+                                    locationsExcludingCodeBehind;
                                 sourceFileInfo.CodeBehindLocation =
-                                    lazinatorObjectType.Locations
-                                        .FirstOrDefault(x => x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()));
+                                    primaryLocation;
                             }
                         }
 
