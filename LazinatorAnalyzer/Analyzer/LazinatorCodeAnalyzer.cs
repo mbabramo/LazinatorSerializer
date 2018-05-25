@@ -174,11 +174,6 @@ namespace LazinatorAnalyzer.Analyzer
                         {
                             // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
                             lazinatorObjectType = namedType;
-                            if (namedType.ToString().Contains("TestSub"))
-                            {
-
-                                var DEBUG = 0;
-                            }
                             namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
                         }
                         if (namedInterfaceType != null)
@@ -188,8 +183,15 @@ namespace LazinatorAnalyzer.Analyzer
                                 return;
                             if (lazinatorAttribute.Autogenerate == false)
                                 return;
-                            var locationsExcludingCodeBehind = lazinatorObjectType.Locations.Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension())).ToList();
+                            var locationsExcludingCodeBehind = 
+                                lazinatorObjectType.Locations
+                                .Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
+                                .ToList();
                             var primaryLocation = locationsExcludingCodeBehind
+                                .FirstOrDefault();
+                            var codeBehindLocation =
+                                lazinatorObjectType.Locations
+                                .Where(x => x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
                                 .FirstOrDefault();
                             if (primaryLocation != null)
                             {
@@ -200,7 +202,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind =
                                     locationsExcludingCodeBehind;
                                 sourceFileInfo.CodeBehindLocation =
-                                    primaryLocation;
+                                    codeBehindLocation;
                             }
                         }
 
