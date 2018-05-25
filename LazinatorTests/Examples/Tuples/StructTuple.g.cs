@@ -188,9 +188,9 @@ namespace LazinatorTests.Examples.Tuples
             LazinatorConvertToBytes();
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
-        
+
         /* Field definitions */
-        
+
         protected int _EnumTuple_ByteIndex;
         protected int _MyNamedTuple_ByteIndex;
         protected int _MyNullableTuple_ByteIndex;

@@ -498,6 +498,52 @@ namespace Lazinator.Support
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Hash64(ReadOnlySpan<byte> s) => Hash64(s, (uint) s.Length);
 
+        public static Guid Hash128(ReadOnlySpan<byte> s)
+        {
+            int halfBytes = s.Length / 2;
+            ReadOnlySpan<byte> s1 = s.Slice(0, halfBytes);
+            ReadOnlySpan<byte> s2 = s.Slice(halfBytes);
+            ulong h1 = Hash64(s1);
+            ulong h2 = Hash64(s2);
+            Guid r = ConvertUlongsToGuid(h1, h2);
+            return r;
+        }
+
+        private static Guid ConvertUlongsToGuid(ulong a, ulong b)
+        {
+            ConvertUlongToInts(a, out int a_1, out int a_2);
+            ConvertIntToShorts(a_2, out short a_2_1, out short a_2_2);
+            ConvertUlongToInts(b, out int b_1, out int b_2);
+            ConvertIntToShorts(b_1, out short b_1_1, out short b_1_2);
+            ConvertShortToBytes(b_1_1, out byte b_1_1_1, out byte b_1_1_2);
+            ConvertShortToBytes(b_1_2, out byte b_1_2_1, out byte b_1_2_2);
+            ConvertIntToShorts(b_2, out short b_2_1, out short b_2_2);
+            ConvertShortToBytes(b_2_1, out byte b_2_1_1, out byte b_2_1_2);
+            ConvertShortToBytes(b_2_2, out byte b_2_2_1, out byte b_2_2_2);
+            Guid g = new Guid(a_1, a_2_1, a_2_2, b_1_1_1, b_1_1_2, b_1_2_1, b_1_2_2, b_2_1_1, b_2_1_2, b_2_2_1, b_2_2_2);
+            return g;
+        }
+
+        private static void ConvertUlongToInts(ulong value, out int valueHigh, out int valueLow)
+        {
+            const long LOW_MASK = ((1L << 32) - 1);
+            valueHigh = (int)((long)value >> 32);
+            valueLow = (int)((long)value & LOW_MASK);
+        }
+
+        private static void ConvertIntToShorts(int value, out short valueHigh, out short valueLow)
+        {
+            const int LOW_MASK = ((1 << 16) - 1);
+            valueHigh = (short)((int)value >> 16);
+            valueLow = (short)((int)value & LOW_MASK);
+        }
+
+        static void ConvertShortToBytes(short number, out byte byte1, out byte byte2)
+        {
+            byte2 = (byte)(number >> 8);
+            byte1 = (byte)(number & 255);
+        }
+
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L732-L748
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Hash64(ReadOnlySpan<byte> s, uint len)
