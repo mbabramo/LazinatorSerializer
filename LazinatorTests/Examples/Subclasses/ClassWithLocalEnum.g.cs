@@ -193,6 +193,12 @@ namespace LazinatorTests.Examples.Subclasses
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
+        public virtual Guid GetBinaryHashCode128()
+        {
+            LazinatorConvertToBytes();
+            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+        }
+        
         /* Field definitions */
         
         protected int _MyEnumList_ByteIndex;

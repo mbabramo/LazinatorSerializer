@@ -197,6 +197,12 @@ namespace LazinatorTests.Examples.Abstract
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
+        public override Guid GetBinaryHashCode128()
+        {
+            LazinatorConvertToBytes();
+            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+        }
+        
         /* Field definitions */
         
         private int _ConcreteGenericContainer_EndByteIndex = 0;

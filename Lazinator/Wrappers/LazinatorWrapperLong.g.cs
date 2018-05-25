@@ -188,6 +188,12 @@ namespace Lazinator.Wrappers
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
+        public Guid GetBinaryHashCode128()
+        {
+            LazinatorConvertToBytes();
+            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+        }
+        
         /* Field definitions */
         
         

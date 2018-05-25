@@ -188,9 +188,15 @@ namespace LazinatorTests.Examples.Tuples
             LazinatorConvertToBytes();
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
-
+        
+        public virtual Guid GetBinaryHashCode128()
+        {
+            LazinatorConvertToBytes();
+            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+        }
+        
         /* Field definitions */
-
+        
         protected int _EnumTuple_ByteIndex;
         protected int _MyNamedTuple_ByteIndex;
         protected int _MyNullableTuple_ByteIndex;

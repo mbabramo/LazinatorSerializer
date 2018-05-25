@@ -193,6 +193,12 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
+        public Guid GetBinaryHashCode128()
+        {
+            LazinatorConvertToBytes();
+            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+        }
+        
         /* Field definitions */
         
         int _MyExampleStruct_ByteIndex;
