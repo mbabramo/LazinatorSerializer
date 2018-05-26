@@ -89,7 +89,7 @@ namespace LazinatorAnalyzer.Analyzer
                 }
 
                 var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
-                LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullNamespace() + "." + sourceFileInformation.LazinatorObject.MetadataName, config);
+                LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullMetadataName(), config);
                 var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
                 var codeBehind = d.GetCodeBehind();
                 
@@ -98,21 +98,28 @@ namespace LazinatorAnalyzer.Analyzer
                 string codeBehindFilePath = null;
                 string codeBehindName = null;
                 string[] codeBehindFolders = null;
+                bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || generator.ImplementingTypeSymbol.ContainingType != null || generator.ImplementingTypeSymbol.IsGenericType;
+                codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, useFullyQualifiedNames) + fileExtension;
                 if (config?.GeneratedCodePath == null)
                 { // use short form of name in same location as original code
-                    codeBehindName = originalDocument.Name.Substring(0, originalDocument.Name.Length - 3) + fileExtension;
-                    codeBehindFilePath = originalDocument.FilePath.Substring(0, originalDocument.FilePath.Length - 3) + fileExtension;
+                    
+                    codeBehindFilePath = originalDocument.FilePath;
                 }
                 else
                 { // we have a config file specifying a common directory
-                    codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, config.UseFullyQualifiedNames) + fileExtension;
-                    codeBehindFilePath = null;
                     codeBehindFilePath = config.GeneratedCodePath;
-                    while (codeBehindFilePath.EndsWith("\\"))
-                        codeBehindFilePath = codeBehindFilePath.Substring(0, codeBehindFilePath.Length - 1);
-                    codeBehindFilePath += "\\" + codeBehindName;
                     codeBehindFolders = config.RelativeGeneratedCodePath.Split('\\', '/');
                 }
+                codeBehindFilePath = System.IO.Path.GetDirectoryName(codeBehindFilePath);
+                while (codeBehindFilePath.EndsWith(".cs"))
+                {
+                    var lastSlash = codeBehindFilePath.IndexOfAny(new char[] { '\\', '/' });
+                    if (lastSlash >= 0)
+                        codeBehindFilePath = codeBehindFilePath.Substring(0, lastSlash);
+                }
+                while (codeBehindFilePath.EndsWith("\\"))
+                    codeBehindFilePath = codeBehindFilePath.Substring(0, codeBehindFilePath.Length - 1);
+                codeBehindFilePath += "\\" + codeBehindName;
 
                 Solution revisedSolution;
                 if (sourceFileInformation.CodeBehindLocation == null)

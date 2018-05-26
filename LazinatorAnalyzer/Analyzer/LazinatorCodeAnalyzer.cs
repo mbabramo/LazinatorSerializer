@@ -189,9 +189,11 @@ namespace LazinatorAnalyzer.Analyzer
                                 .ToList();
                             var primaryLocation = locationsExcludingCodeBehind
                                 .FirstOrDefault();
+                            var possibleName1 = RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, true) + (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
+                            var possibleName2 = RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, false) + (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
                             var codeBehindLocation =
                                 lazinatorObjectType.Locations
-                                .Where(x => x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
+                                .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) || x.SourceTree.FilePath.EndsWith(possibleName2))
                                 .FirstOrDefault();
                             if (primaryLocation != null)
                             {

@@ -14,6 +14,7 @@ namespace LazinatorAnalyzer.Analyzer
         public Location CodeBehindLocation;
         public string Config;
         public string ConfigPath;
+        public ImmutableDictionary<string, string> SymbolsDictionary;
 
         public SourceFileInformation()
         {
@@ -23,6 +24,7 @@ namespace LazinatorAnalyzer.Analyzer
         public SourceFileInformation(SemanticModel semanticModel, ImmutableDictionary<string, string> symbolsDictionary,
             IReadOnlyList<Location> additionalLocations)
         {
+            SymbolsDictionary = symbolsDictionary;
             LazinatorObject = semanticModel.Compilation.GetTypeByMetadataName(symbolsDictionary["object"]);
             LazinatorInterface = semanticModel.Compilation.GetTypeByMetadataName(symbolsDictionary["interface"]);
             bool codeBehindExists = symbolsDictionary["codeBehindExists"] == "true";
@@ -43,12 +45,19 @@ namespace LazinatorAnalyzer.Analyzer
         public ImmutableDictionary<string, string> GetSourceFileDictionary(string configPath, string configJsonString)
         {
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
-            builder.Add("object", LazinatorObject.GetFullNamespace() + "." + LazinatorObject.MetadataName);
-            builder.Add("interface", LazinatorInterface.GetFullNamespace() + "." + LazinatorInterface.MetadataName);
+            if (LazinatorObject.GetFullMetadataName() == "ConsoleApp4.TestSub")
+            {
+                var DEBUG = 0;
+            }
+            builder.Add("object", LazinatorObject.GetFullMetadataName());
+            builder.Add("interface", LazinatorInterface.GetFullMetadataName());
             builder.Add("codeBehindExists", CodeBehindLocation == null ? "false" : "true");
             builder.Add("configJsonString", configJsonString);
             builder.Add("configPath", configPath);
+            builder.Add("DEBUG", (DEBUG2++).ToString());
             return builder.ToImmutable();
         }
+
+        static int DEBUG2 = 0;
     }
 }
