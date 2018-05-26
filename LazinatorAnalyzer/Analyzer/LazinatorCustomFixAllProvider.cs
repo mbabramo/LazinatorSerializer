@@ -42,6 +42,14 @@ namespace LazinatorAnalyzer.Analyzer
                 fixAllContext.CancellationToken.ThrowIfCancellationRequested();
 
                 var documents = documentsAndDiagnosticsToFixMap.Keys.ToImmutableArray();
+                // remove duplicates
+                var builder = ImmutableDictionary.CreateBuilder<Document, ImmutableArray<Diagnostic>>();
+                foreach (var document in documents)
+                {
+                    builder.Add(document, documentsAndDiagnosticsToFixMap[document].Distinct().ToImmutableArray());
+                }
+                documentsAndDiagnosticsToFixMap = builder.ToImmutable();
+                // calculate fixes
                 var fixesBag = new List<CodeAction>[documents.Length];
                 var fixOperations = new List<Task>(documents.Length);
                 for (int index = 0; index < documents.Length; index++)
@@ -312,7 +320,7 @@ namespace LazinatorAnalyzer.Analyzer
             {
                 if (revisionsTracker.newDocumentsMap.ContainsKey(documentId))
                     throw new Exception("Internal exception. Did not expect multiple code fixes to produce same new document.");
-            revisionsTracker.newDocumentsMap[documentId] = changedSolution.GetDocument(documentId);
+                revisionsTracker.newDocumentsMap[documentId] = changedSolution.GetDocument(documentId);
             }
 
             var documentIdsWithChanges = solutionChanges
