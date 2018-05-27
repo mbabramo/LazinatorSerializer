@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using LazinatorAnalyzer.Settings;
@@ -152,6 +153,7 @@ namespace LazinatorAnalyzer.Analyzer
                         var namedType = (INamedTypeSymbol)context.Symbol;
                         INamedTypeSymbol lazinatorObjectType;
                         INamedTypeSymbol namedInterfaceType;
+                        Debug.WriteLine($"Considering {namedType}"); // DEBUG
                         // We want to be able to present a diagnostic starting either with the Lazinator class or vice-versa.
                         if (namedType.TypeKind == TypeKind.Interface)
                         {
@@ -162,6 +164,8 @@ namespace LazinatorAnalyzer.Analyzer
                                 // maybe another approach would be to use SymbolFinder, but we can't load the Solution in the code analyzer. var implementations = SymbolFinder.FindImplementationsAsync(namedType, ... See https://stackoverflow.com/questions/23203206/roslyn-current-workspace-in-diagnostic-with-code-fix-project for a possible workaround
                                 IEnumerable<ISymbol> candidates = context.Compilation.GetSymbolsWithName(name => RoslynHelpers.GetNameWithoutGenericArity(name) == RoslynHelpers.GetNameWithoutGenericArity(namedType.MetadataName).Substring(1), SymbolFilter.Type);
                                 lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => namedType.GetFullyQualifiedNameWithoutGlobal() == x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType).GetFullyQualifiedNameWithoutGlobal());
+
+                                Debug.WriteLine($"Lazinator object {lazinatorObjectType}"); // DEBUG
                                 if (lazinatorObjectType == null)
                                     return;
                                 namedInterfaceType = namedType;
@@ -175,6 +179,7 @@ namespace LazinatorAnalyzer.Analyzer
                             // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
                             lazinatorObjectType = namedType;
                             namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
+                            Debug.WriteLine($"Corresponding interface {namedInterfaceType}"); // DEBUG
                         }
                         if (namedInterfaceType != null)
                         {
@@ -195,6 +200,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 lazinatorObjectType.Locations
                                 .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) || x.SourceTree.FilePath.EndsWith(possibleName2))
                                 .FirstOrDefault();
+                            Debug.WriteLine($"Primary location {primaryLocation}"); // DEBUG
                             if (primaryLocation != null)
                             {
                                 SourceFileInformation sourceFileInfo = new SourceFileInformation();
@@ -241,6 +247,7 @@ namespace LazinatorAnalyzer.Analyzer
                             && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
                             && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                         {
+                            Debug.WriteLine($"end action {sourceFileInfo.LazinatorObject} {sourceFileInfo.LazinatorInterface}"); // DEBUG
                             couldBeGenerated = true;
                             bool needsGeneration = sourceFileInfo.CodeBehindLocation == null;
                             if (!needsGeneration)
@@ -259,6 +266,8 @@ namespace LazinatorAnalyzer.Analyzer
                                             if (interfaceLocations.Count() != 1)
                                                 return;
                                             var hash = LazinatorCompilation.GetHashForInterface(sourceFileInfo.LazinatorInterface, sourceFileInfo.LazinatorObject);
+
+                                            Debug.WriteLine($"hash {hash} code-behind guid {codeBehindGuid}"); // DEBUG
                                             if (hash != codeBehindGuid)
                                                 needsGeneration = true;
                                         }
@@ -286,7 +295,11 @@ namespace LazinatorAnalyzer.Analyzer
                                             false
                                             )?.Span;
                                 if (textSpan == null)
+                                {
+                                    Debug.WriteLine($"aborting -- textSpan is null"); // DEBUG
                                     return;
+                                }
+
                                 Location interfaceSpecificationLocation = Location.Create(
                                     locationOfImplementingType.SourceTree,
                                     textSpan.Value);
@@ -295,6 +308,7 @@ namespace LazinatorAnalyzer.Analyzer
                                     additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
                                 additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
                                 var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(_configPath, _configString));
+                                Debug.WriteLine($"reporting diagnostic {(needsGeneration ? "out of date" : "regenerate")} for {sourceFileInfo.LazinatorObject}"); // DEBUG
                                 context.ReportDiagnostic(diagnostic);
                             }
                         }

@@ -170,6 +170,12 @@ namespace Lazinator.Collections
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
 
+        public Guid GetBinaryHashCode128()
+        {
+            LazinatorConvertToBytes();
+            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+        }
+
         /* Field boilerplate */
         internal int _Offsets_ByteIndex;
         internal int _Offsets_ByteLength => LazinatorObjectBytes.Length - _Offsets_ByteIndex;

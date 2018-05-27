@@ -84,6 +84,10 @@ namespace Lazinator.Core
         /// Calculates a 64-bit noncryptographic hash code based on the bytes of the object.
         /// </summary>
         ulong GetBinaryHashCode64();
+        /// <summary>
+        /// Calculates a 64-bit noncryptographic hash code based on the bytes of the object.
+        /// </summary>
+        Guid GetBinaryHashCode128();
 
         /// <summary>
         /// The version number for this object.
