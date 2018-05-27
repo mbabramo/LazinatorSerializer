@@ -45,19 +45,12 @@ namespace LazinatorAnalyzer.Analyzer
         public ImmutableDictionary<string, string> GetSourceFileDictionary(string configPath, string configJsonString)
         {
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
-            if (LazinatorObject.GetFullMetadataName() == "ConsoleApp4.TestSub")
-            {
-                var DEBUG = 0;
-            }
             builder.Add("object", LazinatorObject.GetFullMetadataName());
             builder.Add("interface", LazinatorInterface.GetFullMetadataName());
             builder.Add("codeBehindExists", CodeBehindLocation == null ? "false" : "true");
             builder.Add("configJsonString", configJsonString);
             builder.Add("configPath", configPath);
-            builder.Add("DEBUG", (DEBUG2++).ToString());
             return builder.ToImmutable();
         }
-
-        static int DEBUG2 = 0;
     }
 }
