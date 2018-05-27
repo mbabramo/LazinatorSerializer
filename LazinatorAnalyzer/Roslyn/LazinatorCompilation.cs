@@ -386,10 +386,6 @@ namespace LazinatorCodeGen.Roslyn
 
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
-            if (type.ToString().Contains("TableColumnGroupID"))
-            {
-                var DEBUG = 0;
-            }
             if (RecordLikeTypes.ContainsKey(type) || NonRecordLikeTypes.Contains(type))
                 return;
             // Consider whether to add this as a record-like type

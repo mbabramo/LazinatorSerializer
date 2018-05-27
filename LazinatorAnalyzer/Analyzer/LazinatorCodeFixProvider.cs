@@ -185,7 +185,7 @@ namespace LazinatorAnalyzer.Analyzer
             return revisedSolution;
         }
 
-        private static async Task<bool> WhetherCodeFixFailed(Solution revisedSolution)
+        public static async Task<bool> WhetherCodeFixFailed(Solution revisedSolution)
         {
             var documentInSolution = revisedSolution.Projects.FirstOrDefault()?.Documents?.FirstOrDefault();
             var syntaxRoot = await documentInSolution.GetSyntaxRootAsync();
