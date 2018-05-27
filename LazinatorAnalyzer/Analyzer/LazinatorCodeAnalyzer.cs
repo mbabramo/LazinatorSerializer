@@ -106,7 +106,7 @@ namespace LazinatorAnalyzer.Analyzer
 
             #region Per-Compilation mutable state
             
-            private Dictionary<Location, SourceFileInformation> CompilationInformation = new Dictionary<Location, SourceFileInformation>();
+            private Dictionary<Location, LazinatorPairInformation> CompilationInformation = new Dictionary<Location, LazinatorPairInformation>();
 
             #endregion
 
@@ -141,7 +141,7 @@ namespace LazinatorAnalyzer.Analyzer
                 //string filePath = context.Tree.FilePath;
                 //if (!filePath.EndsWith(GetGeneratedCodeFileExtension()))
                 //{
-                //    CompilationInformation[filePath] = new SourceFileInformation();
+                //    CompilationInformation[filePath] = new lazinatorPairInformation();
                 //}
             }
 
@@ -151,70 +151,105 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     case SymbolKind.NamedType:
                         var namedType = (INamedTypeSymbol)context.Symbol;
-                        INamedTypeSymbol lazinatorObjectType;
-                        INamedTypeSymbol namedInterfaceType;
-                        Debug.WriteLine($"Considering {namedType}"); // DEBUG
-                        // We want to be able to present a diagnostic starting either with the Lazinator class or vice-versa.
-                        if (namedType.TypeKind == TypeKind.Interface)
-                        {
-                            // If this is a Lazinator interface and we can find the Lazinator class, we'll consider doing an analysis.
-                            if (namedType.HasAttributeOfType<CloneLazinatorAttribute>())
-                            {
-                                // find candidate matching classes
-                                // maybe another approach would be to use SymbolFinder, but we can't load the Solution in the code analyzer. var implementations = SymbolFinder.FindImplementationsAsync(namedType, ... See https://stackoverflow.com/questions/23203206/roslyn-current-workspace-in-diagnostic-with-code-fix-project for a possible workaround
-                                IEnumerable<ISymbol> candidates = context.Compilation.GetSymbolsWithName(name => RoslynHelpers.GetNameWithoutGenericArity(name) == RoslynHelpers.GetNameWithoutGenericArity(namedType.MetadataName).Substring(1), SymbolFilter.Type);
-                                lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => namedType.GetFullyQualifiedNameWithoutGlobal() == x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType).GetFullyQualifiedNameWithoutGlobal());
-
-                                Debug.WriteLine($"Lazinator object {lazinatorObjectType}"); // DEBUG
-                                if (lazinatorObjectType == null)
-                                    return;
-                                namedInterfaceType = namedType;
-                                // Note: A more comprehensive, but slower approach would be to use context.Compilation.GlobalNamespace...
-                            }
-                            else
-                                return;
-                        }
-                        else
-                        {
-                            // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
-                            lazinatorObjectType = namedType;
-                            namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
-                            Debug.WriteLine($"Corresponding interface {namedInterfaceType}"); // DEBUG
-                        }
-                        if (namedInterfaceType != null)
-                        {
-                            var lazinatorAttribute = RoslynHelpers.GetKnownAttributes<CloneLazinatorAttribute>(namedInterfaceType).FirstOrDefault();
-                            if (lazinatorAttribute == null)
-                                return;
-                            if (lazinatorAttribute.Autogenerate == false)
-                                return;
-                            var locationsExcludingCodeBehind = 
-                                lazinatorObjectType.Locations
-                                .Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
-                                .ToList();
-                            var primaryLocation = locationsExcludingCodeBehind
-                                .FirstOrDefault();
-                            var possibleName1 = RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, true) + (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
-                            var possibleName2 = RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, false) + (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
-                            var codeBehindLocation =
-                                lazinatorObjectType.Locations
-                                .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) || x.SourceTree.FilePath.EndsWith(possibleName2))
-                                .FirstOrDefault();
-                            Debug.WriteLine($"Primary location {primaryLocation}"); // DEBUG
-                            if (primaryLocation != null)
-                            {
-                                SourceFileInformation sourceFileInfo = new SourceFileInformation();
-                                CompilationInformation[primaryLocation] = sourceFileInfo;
-                                sourceFileInfo.LazinatorObject = lazinatorObjectType;
-                                sourceFileInfo.LazinatorInterface = namedInterfaceType;
-                                sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind =
-                                    locationsExcludingCodeBehind;
-                                sourceFileInfo.CodeBehindLocation =
-                                    codeBehindLocation;
-                            }
-                        }
-
+                        var lazinatorPairInfo = GetLazinatorPairInfo(context.Compilation, namedType);
+                        if (lazinatorPairInfo != null)
+                            CompilationInformation[lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.First()] = lazinatorPairInfo;
                         break;
+                }
+            }
+
+            private LazinatorPairInformation GetLazinatorPairInfo(Compilation compilation, INamedTypeSymbol namedType)
+            {
+                INamedTypeSymbol lazinatorObjectType;
+                INamedTypeSymbol namedInterfaceType;
+                Debug.WriteLine($"Considering {namedType}"); // DEBUG
+
+                SearchForLazinatorObjectAndNamedInterface(compilation, namedType, out lazinatorObjectType, out namedInterfaceType);
+                if (namedInterfaceType != null && lazinatorObjectType != null)
+                {
+                    var lazinatorAttribute = RoslynHelpers.GetKnownAttributes<CloneLazinatorAttribute>(namedInterfaceType).FirstOrDefault();
+                    if (lazinatorAttribute != null && lazinatorAttribute.Autogenerate)
+                    {
+                        var lazinatorPairInfo = GetLazinatorPairInfo(lazinatorObjectType, namedInterfaceType);
+                        return lazinatorPairInfo;
+                    }
+                }
+
+                return null;
+            }
+
+            private LazinatorPairInformation GetLazinatorPairInfo(INamedTypeSymbol lazinatorObjectType, INamedTypeSymbol namedInterfaceType)
+            {
+                var locationsExcludingCodeBehind =
+                                            lazinatorObjectType.Locations
+                                                .Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
+                                                .ToList();
+                var primaryLocation = locationsExcludingCodeBehind
+                    .FirstOrDefault();
+                var possibleName1 =
+                    RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, true) +
+                    (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
+                var possibleName2 =
+                    RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, false) +
+                    (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
+                var codeBehindLocation =
+                    lazinatorObjectType.Locations
+                        .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) ||
+                                    x.SourceTree.FilePath.EndsWith(possibleName2))
+                        .FirstOrDefault();
+                Debug.WriteLine($"Primary location {primaryLocation}"); // DEBUG
+                if (primaryLocation != null)
+                {
+                    LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation();
+                    lazinatorPairInfo.LazinatorObject = lazinatorObjectType;
+                    lazinatorPairInfo.LazinatorInterface = namedInterfaceType;
+                    lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind =
+                        locationsExcludingCodeBehind;
+                    lazinatorPairInfo.CodeBehindLocation =
+                        codeBehindLocation;
+                    return lazinatorPairInfo;
+                }
+
+                return null;
+            }
+
+            private void SearchForLazinatorObjectAndNamedInterface(Compilation compilation, INamedTypeSymbol namedType, out INamedTypeSymbol lazinatorObjectType, out INamedTypeSymbol namedInterfaceType)
+            {
+                // We want to be able to present a diagnostic starting either with the Lazinator class or vice-versa.
+                if (namedType.TypeKind == TypeKind.Interface)
+                {
+                    SearchStartingFromInterface(compilation, namedType, out lazinatorObjectType, out namedInterfaceType);
+                }
+                else
+                {
+                    SearchStartingFromMainType(namedType, out lazinatorObjectType, out namedInterfaceType);
+                }
+            }
+
+            private void SearchStartingFromMainType(INamedTypeSymbol namedType, out INamedTypeSymbol lazinatorObjectType, out INamedTypeSymbol namedInterfaceType)
+            {
+                // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
+                lazinatorObjectType = namedType;
+                namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
+                Debug.WriteLine($"Corresponding interface {namedInterfaceType}"); // DEBUG
+            }
+
+            private void SearchStartingFromInterface(Compilation compilation, INamedTypeSymbol namedType, out INamedTypeSymbol lazinatorObjectType, out INamedTypeSymbol namedInterfaceType)
+            {
+                lazinatorObjectType = null;
+                namedInterfaceType = null;
+                // If this is a Lazinator interface and we can find the Lazinator class, we'll consider doing an analysis.
+                if (namedType.HasAttributeOfType<CloneLazinatorAttribute>())
+                {
+                    // find candidate matching classes
+                    // maybe another approach would be to use SymbolFinder, but we can't load the Solution in the code analyzer. var implementations = SymbolFinder.FindImplementationsAsync(namedType, ... See https://stackoverflow.com/questions/23203206/roslyn-current-workspace-in-diagnostic-with-code-fix-project for a possible workaround
+                    IEnumerable<ISymbol> candidates = compilation.GetSymbolsWithName(name => RoslynHelpers.GetNameWithoutGenericArity(name) == RoslynHelpers.GetNameWithoutGenericArity(namedType.MetadataName).Substring(1), SymbolFilter.Type);
+                    lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => namedType.GetFullyQualifiedNameWithoutGlobal() == x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType).GetFullyQualifiedNameWithoutGlobal());
+
+                    Debug.WriteLine($"Lazinator object {lazinatorObjectType}"); // DEBUG
+                    if (lazinatorObjectType != null)
+                        namedInterfaceType = namedType;
+                    // Note: A more comprehensive, but slower approach would be to use context.Compilation.GlobalNamespace...
                 }
             }
 
@@ -241,76 +276,16 @@ namespace LazinatorAnalyzer.Analyzer
                     foreach (var compilationInfoEntry in CompilationInformation)
                     {
                         bool couldBeGenerated = false;
-                        var sourceFileInfo = compilationInfoEntry.Value;
-                        if (sourceFileInfo.LazinatorInterface != null 
-                            && sourceFileInfo.LazinatorObject != null 
-                            && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
-                            && sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
+                        var lazinatorPairInfo = compilationInfoEntry.Value;
+                        if (lazinatorPairInfo.LazinatorInterface != null 
+                            && lazinatorPairInfo.LazinatorObject != null 
+                            && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
+                            && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                         {
-                            Debug.WriteLine($"end action {sourceFileInfo.LazinatorObject} {sourceFileInfo.LazinatorInterface}"); // DEBUG
-                            couldBeGenerated = true;
-                            bool needsGeneration = sourceFileInfo.CodeBehindLocation == null;
-                            if (!needsGeneration)
-                            {
-                                var success = sourceFileInfo.CodeBehindLocation.SourceTree.TryGetRoot(out SyntaxNode root);
-                                if (success)
-                                {
-                                    SyntaxTrivia possibleComment = root.DescendantTrivia().FirstOrDefault();
-                                    if (possibleComment.IsKind(SyntaxKind.SingleLineCommentTrivia))
-                                    {
-                                        string commentContent = possibleComment.ToString().Substring(2);
-                                        bool parse = Guid.TryParse(commentContent, out Guid codeBehindGuid);
-                                        if (parse)
-                                        {
-                                            var interfaceLocations = sourceFileInfo.LazinatorInterface.Locations;
-                                            if (interfaceLocations.Count() != 1)
-                                                return;
-                                            var hash = LazinatorCompilation.GetHashForInterface(sourceFileInfo.LazinatorInterface, sourceFileInfo.LazinatorObject);
-
-                                            Debug.WriteLine($"hash {hash} code-behind guid {codeBehindGuid}"); // DEBUG
-                                            if (hash != codeBehindGuid)
-                                                needsGeneration = true;
-                                        }
-                                        else
-                                            needsGeneration = true;
-                                    }
-                                    else
-                                        needsGeneration = true;
-                                }
-                                else
-                                    needsGeneration = true;
-                            }
-                            if (needsGeneration || couldBeGenerated)
-                            {
-                                var locationOfImplementingType = sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
-                                var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
-                                TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax) implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
-                                Microsoft.CodeAnalysis.Text.TextSpan? textSpan = 
-                                    implementingTypeSyntaxNode.BaseList.Types
-                                        .FirstOrDefault(x => 
-                                            (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) 
-                                            ?? 
-                                            (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(sourceFileInfo.LazinatorInterface.Name) 
-                                            ?? 
-                                            false
-                                            )?.Span;
-                                if (textSpan == null)
-                                {
-                                    Debug.WriteLine($"aborting -- textSpan is null"); // DEBUG
-                                    return;
-                                }
-
-                                Location interfaceSpecificationLocation = Location.Create(
-                                    locationOfImplementingType.SourceTree,
-                                    textSpan.Value);
-                                var additionalLocations = new List<Location>();
-                                if (sourceFileInfo.CodeBehindLocation != null)
-                                    additionalLocations.Add(sourceFileInfo.CodeBehindLocation);
-                                additionalLocations.AddRange(sourceFileInfo.LazinatorObjectLocationsExcludingCodeBehind);
-                                var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, sourceFileInfo.GetSourceFileDictionary(_configPath, _configString));
-                                Debug.WriteLine($"reporting diagnostic {(needsGeneration ? "out of date" : "regenerate")} for {sourceFileInfo.LazinatorObject}"); // DEBUG
+                            Debug.WriteLine($"end action {lazinatorPairInfo.LazinatorObject} {lazinatorPairInfo.LazinatorInterface}"); // DEBUG
+                            var diagnostic = GetDiagnosticToReport(lazinatorPairInfo);
+                            if (diagnostic != null)
                                 context.ReportDiagnostic(diagnostic);
-                            }
                         }
                     }
                 }
@@ -321,8 +296,92 @@ namespace LazinatorAnalyzer.Analyzer
                 }
             }
 
-        #endregion
-    }
+            public Diagnostic GetDiagnosticToReport(LazinatorPairInformation lazinatorPairInfo)
+            {
+                bool couldBeGenerated, needsGeneration;
+                AssessGenerationFeasibility(lazinatorPairInfo, out couldBeGenerated, out needsGeneration);
+                if (needsGeneration || couldBeGenerated)
+                {
+                    var locationOfImplementingType = lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
+                    var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
+                    TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax)implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
+                    Microsoft.CodeAnalysis.Text.TextSpan? textSpan =
+                        implementingTypeSyntaxNode.BaseList.Types
+                            .FirstOrDefault(x =>
+                                (x.Type as IdentifierNameSyntax)?.Identifier.Text.Contains(lazinatorPairInfo.LazinatorInterface.Name)
+                                ??
+                                (x.Type as GenericNameSyntax)?.Identifier.Text.Contains(lazinatorPairInfo.LazinatorInterface.Name)
+                                ??
+                                false
+                                )?.Span;
+                    if (textSpan == null)
+                    {
+                        Debug.WriteLine($"aborting -- textSpan is null"); // DEBUG
+                        return null;
+                    }
+                    else
+                    {
+                        Location interfaceSpecificationLocation = Location.Create(
+                            locationOfImplementingType.SourceTree,
+                            textSpan.Value);
+                        var additionalLocations = new List<Location>();
+                        if (lazinatorPairInfo.CodeBehindLocation != null)
+                            additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
+                        additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
+                        var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
+                        Debug.WriteLine($"reporting diagnostic {(needsGeneration ? "out of date" : "regenerate")} for {lazinatorPairInfo.LazinatorObject}"); // DEBUG
+                        return diagnostic;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            private static void AssessGenerationFeasibility(LazinatorPairInformation lazinatorPairInfo, out bool couldBeGenerated, out bool needsGeneration)
+            {
+                couldBeGenerated = true;
+                needsGeneration = lazinatorPairInfo.CodeBehindLocation == null;
+                if (!needsGeneration)
+                {
+                    var success = lazinatorPairInfo.CodeBehindLocation.SourceTree.TryGetRoot(out SyntaxNode root);
+                    if (success)
+                    {
+                        SyntaxTrivia possibleComment = root.DescendantTrivia().FirstOrDefault();
+                        if (possibleComment.IsKind(SyntaxKind.SingleLineCommentTrivia))
+                        {
+                            string commentContent = possibleComment.ToString().Substring(2);
+                            bool parse = Guid.TryParse(commentContent, out Guid codeBehindGuid);
+                            if (parse)
+                            {
+                                var interfaceLocations = lazinatorPairInfo.LazinatorInterface.Locations;
+                                if (interfaceLocations.Count() != 1)
+                                {
+                                    couldBeGenerated = false;
+                                }
+                                else
+                                {
+                                    var hash = LazinatorCompilation.GetHashForInterface(lazinatorPairInfo.LazinatorInterface, lazinatorPairInfo.LazinatorObject);
+
+                                    Debug.WriteLine($"hash {hash} code-behind guid {codeBehindGuid}"); // DEBUG
+                                    if (hash != codeBehindGuid)
+                                        needsGeneration = true;
+                                }
+                            }
+                            else
+                                needsGeneration = true;
+                        }
+                        else
+                            needsGeneration = true;
+                    }
+                    else
+                        needsGeneration = true;
+                }
+            }
+
+            #endregion
+        }
 
         private static TypeDeclarationSyntax GetTypeDeclarationContainingAttribute(SyntaxNode syntaxNode)
         {

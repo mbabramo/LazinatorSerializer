@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace LazinatorAnalyzer.Analyzer
 {
-    public class SourceFileInformation
+    public class LazinatorPairInformation
     {
         public INamedTypeSymbol LazinatorObject;
         public INamedTypeSymbol LazinatorInterface;
@@ -16,12 +16,12 @@ namespace LazinatorAnalyzer.Analyzer
         public string ConfigPath;
         public ImmutableDictionary<string, string> SymbolsDictionary;
 
-        public SourceFileInformation()
+        public LazinatorPairInformation()
         {
 
         }
 
-        public SourceFileInformation(SemanticModel semanticModel, ImmutableDictionary<string, string> symbolsDictionary,
+        public LazinatorPairInformation(SemanticModel semanticModel, ImmutableDictionary<string, string> symbolsDictionary,
             IReadOnlyList<Location> additionalLocations)
         {
             SymbolsDictionary = symbolsDictionary;

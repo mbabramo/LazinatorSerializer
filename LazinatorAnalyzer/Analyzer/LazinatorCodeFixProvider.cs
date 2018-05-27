@@ -42,7 +42,7 @@ namespace LazinatorAnalyzer.Analyzer
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
             var diagnostic = context.Diagnostics.First();
-            SourceFileInformation sourceFileInfo = new SourceFileInformation(
+            LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation(
                 await context.Document.GetSemanticModelAsync(), diagnostic.Properties, diagnostic.AdditionalLocations);
             
             var diagnosticSpan = diagnostic.Location.SourceSpan;
@@ -58,13 +58,13 @@ namespace LazinatorAnalyzer.Analyzer
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         title: title,
-                        createChangedSolution: c => FixGenerateLazinatorCodeBehind(context.Document, declaration, sourceFileInfo, c),
+                        createChangedSolution: c => FixGenerateLazinatorCodeBehind(context.Document, declaration, lazinatorPairInfo, c),
                         equivalenceKey: title),
                     diagnostic);
             }
         }
         
-        private async Task<Solution> FixGenerateLazinatorCodeBehind(Document originalDocument, TypeDeclarationSyntax enclosingType, SourceFileInformation sourceFileInformation, CancellationToken cancellationToken)
+        private async Task<Solution> FixGenerateLazinatorCodeBehind(Document originalDocument, TypeDeclarationSyntax enclosingType, LazinatorPairInformation lazinatorPairInformation, CancellationToken cancellationToken)
         {
             if (originalDocument == null)
                 return null;
@@ -76,11 +76,11 @@ namespace LazinatorAnalyzer.Analyzer
             try
             {
                 LazinatorConfig config = null;
-                if (sourceFileInformation.Config != null && sourceFileInformation.Config != "")
+                if (lazinatorPairInformation.Config != null && lazinatorPairInformation.Config != "")
                 {
                     try
                     {
-                        config = new LazinatorConfig(sourceFileInformation.ConfigPath, sourceFileInformation.Config);
+                        config = new LazinatorConfig(lazinatorPairInformation.ConfigPath, lazinatorPairInformation.Config);
                     }
                     catch
                     {
@@ -89,7 +89,7 @@ namespace LazinatorAnalyzer.Analyzer
                 }
 
                 var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
-                LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, sourceFileInformation.LazinatorObject.Name, sourceFileInformation.LazinatorObject.GetFullMetadataName(), config);
+                LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, lazinatorPairInformation.LazinatorObject.Name, lazinatorPairInformation.LazinatorObject.GetFullMetadataName(), config);
                 var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
                 var codeBehind = d.GetCodeBehind();
                 
@@ -122,7 +122,7 @@ namespace LazinatorAnalyzer.Analyzer
                 codeBehindFilePath += "\\" + codeBehindName;
 
                 Solution revisedSolution;
-                if (sourceFileInformation.CodeBehindLocation == null)
+                if (lazinatorPairInformation.CodeBehindLocation == null)
                 { // the file does not already exist 
                     // codeBehindFilePath = System.IO.Path.GetDirectoryName(codeBehindFilePath); // omit file name
                     Document documentToAdd = project.AddDocument(codeBehindName, codeBehind, codeBehindFolders, codeBehindFilePath);
@@ -132,7 +132,7 @@ namespace LazinatorAnalyzer.Analyzer
                 }
                 else
                 { // the file does already exist
-                    var currentDocumentWithCode = originalSolution.GetDocument(sourceFileInformation.CodeBehindLocation.SourceTree);
+                    var currentDocumentWithCode = originalSolution.GetDocument(lazinatorPairInformation.CodeBehindLocation.SourceTree);
                     var replacementDocument = currentDocumentWithCode.WithText(SourceText.From(codeBehind));
                     revisedSolution = originalSolution.WithDocumentText(currentDocumentWithCode.Id, SourceText.From(codeBehind));
                 }
