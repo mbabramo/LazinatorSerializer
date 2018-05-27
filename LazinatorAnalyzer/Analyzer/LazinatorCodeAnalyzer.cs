@@ -51,45 +51,48 @@ namespace LazinatorAnalyzer.Analyzer
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterCompilationStartAction(compilationContext =>
-            {
-                var additionalFiles = compilationContext.Options.AdditionalFiles;
+            context.EnableConcurrentExecution();
+            Debug; // make sure this works, uncomment everything else
+            //context.RegisterCompilationStartAction(compilationContext =>
+            //{
+            //    var additionalFiles = compilationContext.Options.AdditionalFiles;
 
-                // Check if the attribute type LazinatorAttribute is defined.
-                INamedTypeSymbol lazinatorAttributeType = compilationContext.Compilation.GetTypeByMetadataName(LazinatorAttributeName);
-                if (lazinatorAttributeType == null)
-                {
-                    return;
-                }
+            //    // Check if the attribute type LazinatorAttribute is defined.
+            //    INamedTypeSymbol lazinatorAttributeType = compilationContext.Compilation.GetTypeByMetadataName(LazinatorAttributeName);
+            //    if (lazinatorAttributeType == null)
+            //    {
+            //        return;
+            //    }
 
-                // Check if the interface type ILazinator is defined.
-                INamedTypeSymbol lazinatorInterfaceType = compilationContext.Compilation.GetTypeByMetadataName(LazinatorInterfaceName);
-                if (lazinatorInterfaceType == null)
-                {
-                    return;
-                }
+            //    // Check if the interface type ILazinator is defined.
+            //    INamedTypeSymbol lazinatorInterfaceType = compilationContext.Compilation.GetTypeByMetadataName(LazinatorInterfaceName);
+            //    if (lazinatorInterfaceType == null)
+            //    {
+            //        return;
+            //    }
 
-                if (DateTime.Now - configLastLoaded > TimeSpan.FromSeconds(5))
-                { // we don't want to reload this too often, although it shouldn't involve a disk operation
-                    (configPath, configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
-                    config = new LazinatorConfig(configPath, configString);
-                    configLastLoaded = DateTime.Now;
-                }
+            //    //if (DateTime.Now - configLastLoaded > TimeSpan.FromSeconds(5))
+            //    //{ // we don't want to reload this too often, although it shouldn't involve a disk operation
+            //    //    (configPath, configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
+            //    //    config = new LazinatorConfig(configPath, configString);
+            //    //    configLastLoaded = DateTime.Now;
+            //    //}
 
-                // Initialize state in the start action.
-                var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles, configPath, configString, config);
+            //    //// Initialize state in the start action.
+            //    //var analyzer = new CompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles, configPath, configString, config);
 
-                // Register intermediate non-end actions that access and modify the state.
-                compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
-                compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType, SymbolKind.Method);
+            //    // Register intermediate non-end actions that access and modify the state.
+            //    //DEBUG
+            //    //compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
+            //    //compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType, SymbolKind.Method);
 
-                // Register an end action to report diagnostics based on the final state.
-                // 
-                compilationContext.RegisterSyntaxTreeAction(analyzer.SyntaxTreeStartAction);
-                compilationContext.RegisterSemanticModelAction(analyzer.SemanticModelEndAction);
+            //    // Register an end action to report diagnostics based on the final state.
+            //    // DEBUG
+            //    //compilationContext.RegisterSyntaxTreeAction(analyzer.SyntaxTreeStartAction);
+            //    //compilationContext.RegisterSemanticModelAction(analyzer.SemanticModelEndAction);
 
-                // NOTE: We could register a compilation end action, but this will not execute at all if full solution analysis is disabled. 
-            });
+            //    // NOTE: We could register a compilation end action, but this will not execute at all if full solution analysis is disabled. 
+            //});
         }
 
         private class CompilationAnalyzer
@@ -137,12 +140,6 @@ namespace LazinatorAnalyzer.Analyzer
 
             public void SyntaxTreeStartAction(SyntaxTreeAnalysisContext context)
             {
-                // DEBUG
-                //string filePath = context.Tree.FilePath;
-                //if (!filePath.EndsWith(GetGeneratedCodeFileExtension()))
-                //{
-                //    CompilationInformation[filePath] = new lazinatorPairInformation();
-                //}
             }
 
             public void AnalyzeSymbol(SymbolAnalysisContext context)
@@ -151,9 +148,10 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     case SymbolKind.NamedType:
                         var namedType = (INamedTypeSymbol)context.Symbol;
-                        var lazinatorPairInfo = GetLazinatorPairInfo(context.Compilation, namedType);
-                        if (lazinatorPairInfo != null)
-                            CompilationInformation[lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.First()] = lazinatorPairInfo;
+                        // var lazinatorPairInfo = GetLazinatorPairInfo(context.Compilation, namedType);
+                        //if (lazinatorPairInfo != null)
+                        //    CompilationInformation[lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.First()] = lazinatorPairInfo;
+                        // DEBUG
                         break;
                 }
             }
@@ -162,7 +160,7 @@ namespace LazinatorAnalyzer.Analyzer
             {
                 INamedTypeSymbol lazinatorObjectType;
                 INamedTypeSymbol namedInterfaceType;
-                Debug.WriteLine($"Considering {namedType}"); // DEBUG
+                //Debug.WriteLine($"Considering {namedType}"); // DEBUG
 
                 SearchForLazinatorObjectAndNamedInterface(compilation, namedType, out lazinatorObjectType, out namedInterfaceType);
                 if (namedInterfaceType != null && lazinatorObjectType != null)
@@ -197,7 +195,7 @@ namespace LazinatorAnalyzer.Analyzer
                         .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) ||
                                     x.SourceTree.FilePath.EndsWith(possibleName2))
                         .FirstOrDefault();
-                Debug.WriteLine($"Primary location {primaryLocation}"); // DEBUG
+                //Debug.WriteLine($"Primary location {primaryLocation}"); // DEBUG
                 if (primaryLocation != null)
                 {
                     LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation();
@@ -231,7 +229,7 @@ namespace LazinatorAnalyzer.Analyzer
                 // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
                 lazinatorObjectType = namedType;
                 namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
-                Debug.WriteLine($"Corresponding interface {namedInterfaceType}"); // DEBUG
+                //Debug.WriteLine($"Corresponding interface {namedInterfaceType}"); // DEBUG
             }
 
             private void SearchStartingFromInterface(Compilation compilation, INamedTypeSymbol namedType, out INamedTypeSymbol lazinatorObjectType, out INamedTypeSymbol namedInterfaceType)
@@ -246,7 +244,7 @@ namespace LazinatorAnalyzer.Analyzer
                     IEnumerable<ISymbol> candidates = compilation.GetSymbolsWithName(name => RoslynHelpers.GetNameWithoutGenericArity(name) == RoslynHelpers.GetNameWithoutGenericArity(namedType.MetadataName).Substring(1), SymbolFilter.Type);
                     lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => namedType.GetFullyQualifiedNameWithoutGlobal() == x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType).GetFullyQualifiedNameWithoutGlobal());
 
-                    Debug.WriteLine($"Lazinator object {lazinatorObjectType}"); // DEBUG
+                    //Debug.WriteLine($"Lazinator object {lazinatorObjectType}"); // DEBUG
                     if (lazinatorObjectType != null)
                         namedInterfaceType = namedType;
                     // Note: A more comprehensive, but slower approach would be to use context.Compilation.GlobalNamespace...
@@ -282,7 +280,7 @@ namespace LazinatorAnalyzer.Analyzer
                             && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind != null 
                             && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                         {
-                            Debug.WriteLine($"end action {lazinatorPairInfo.LazinatorObject} {lazinatorPairInfo.LazinatorInterface}"); // DEBUG
+                            //Debug.WriteLine($"end action {lazinatorPairInfo.LazinatorObject} {lazinatorPairInfo.LazinatorInterface}"); // DEBUG
                             var diagnostic = GetDiagnosticToReport(lazinatorPairInfo);
                             if (diagnostic != null)
                                 context.ReportDiagnostic(diagnostic);
@@ -316,7 +314,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 )?.Span;
                     if (textSpan == null)
                     {
-                        Debug.WriteLine($"aborting -- textSpan is null"); // DEBUG
+                        //Debug.WriteLine($"aborting -- textSpan is null"); // DEBUG
                         return null;
                     }
                     else
@@ -329,7 +327,7 @@ namespace LazinatorAnalyzer.Analyzer
                             additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
                         additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
                         var diagnostic = Diagnostic.Create(needsGeneration ? OutOfDateRule : OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
-                        Debug.WriteLine($"reporting diagnostic {(needsGeneration ? "out of date" : "regenerate")} for {lazinatorPairInfo.LazinatorObject}"); // DEBUG
+                        //Debug.WriteLine($"reporting diagnostic {(needsGeneration ? "out of date" : "regenerate")} for {lazinatorPairInfo.LazinatorObject}"); // DEBUG
                         return diagnostic;
                     }
                 }
@@ -364,7 +362,7 @@ namespace LazinatorAnalyzer.Analyzer
                                 {
                                     var hash = LazinatorCompilation.GetHashForInterface(lazinatorPairInfo.LazinatorInterface, lazinatorPairInfo.LazinatorObject);
 
-                                    Debug.WriteLine($"hash {hash} code-behind guid {codeBehindGuid}"); // DEBUG
+                                    //Debug.WriteLine($"hash {hash} code-behind guid {codeBehindGuid}"); // DEBUG
                                     if (hash != codeBehindGuid)
                                         needsGeneration = true;
                                 }
