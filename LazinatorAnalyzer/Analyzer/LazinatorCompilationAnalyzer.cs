@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.AttributeClones;
 using LazinatorCodeGen.Roslyn;
@@ -18,11 +20,69 @@ namespace LazinatorAnalyzer.Analyzer
 
     public class LazinatorCompilationAnalyzer
     {
+        #region Creation
+
+        public const string LazinatorAttributeName = "Lazinator.Attributes.LazinatorAttribute";
+        public const string LazinatorInterfaceName = "Lazinator.Core.ILazinator";
+
+        public static LazinatorCompilationAnalyzer CreateCompilationAnalyzer(Compilation compilation,
+            CancellationToken cancellationToken, ImmutableArray<AdditionalText> additionalFiles)
+        {
+            // Check if the attribute type LazinatorAttribute is defined.
+            INamedTypeSymbol lazinatorAttributeType = compilation.GetTypeByMetadataName(LazinatorAttributeName);
+            if (lazinatorAttributeType == null)
+            {
+                return null;
+            }
+
+            // Check if the interface type ILazinator is defined.
+            INamedTypeSymbol lazinatorInterfaceType = compilation.GetTypeByMetadataName(LazinatorInterfaceName);
+            if (lazinatorInterfaceType == null)
+            {
+                return null;
+            }
+
+            (string configPath, string configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, cancellationToken);
+            LazinatorConfig config = new LazinatorConfig(configPath, configString);
+
+            // Initialize state in the start action.
+            var analyzer = new LazinatorCompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, configPath, configString, config);
+
+            return analyzer;
+        }
+
+        public static async Task<LazinatorCompilationAnalyzer> CreateCompilationAnalyzer(Compilation compilation,
+            CancellationToken cancellationToken, ImmutableArray<TextDocument> additionalFiles)
+        {
+            // Check if the attribute type LazinatorAttribute is defined.
+            INamedTypeSymbol lazinatorAttributeType = compilation.GetTypeByMetadataName(LazinatorAttributeName);
+            if (lazinatorAttributeType == null)
+            {
+                return null;
+            }
+
+            // Check if the interface type ILazinator is defined.
+            INamedTypeSymbol lazinatorInterfaceType = compilation.GetTypeByMetadataName(LazinatorInterfaceName);
+            if (lazinatorInterfaceType == null)
+            {
+                return null;
+            }
+
+            (string configPath, string configString) = await LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, cancellationToken);
+            LazinatorConfig config = new LazinatorConfig(configPath, configString);
+
+            // Initialize state in the start action.
+            var analyzer = new LazinatorCompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, configPath, configString, config);
+
+            return analyzer;
+        }
+
+        #endregion
+
         #region Per-Compilation immutable state
 
         private readonly INamedTypeSymbol _lazinatorAttributeType;
         private readonly INamedTypeSymbol _lazinatorInterfaceType;
-        private readonly ImmutableArray<AdditionalText> _additionalFiles;
         private readonly string _configPath, _configString;
         private LazinatorConfig _config;
 
@@ -36,11 +96,10 @@ namespace LazinatorAnalyzer.Analyzer
 
         #region State intialization
 
-        public LazinatorCompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, ImmutableArray<AdditionalText> additionalFiles, string configPath, string configString, LazinatorConfig config)
+        public LazinatorCompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, string configPath, string configString, LazinatorConfig config)
         {
             _lazinatorAttributeType = lazinatorAttributeType;
             _lazinatorInterfaceType = lazinatorInterfaceType;
-            _additionalFiles = additionalFiles;
             // we pass information about the config as well as the config itself, since we need to use the config, but also need to pass information about it to the code fix provider
             _configPath = configPath;
             _configString = configString;
@@ -236,6 +295,12 @@ namespace LazinatorAnalyzer.Analyzer
 
             return diagnostics;
         }
+
+        public void ClearDiagnostics()
+        {
+            CompilationInformation = new ConcurrentDictionary<Location, LazinatorPairInformation>();
+        }
+
 
 
         public Diagnostic GetDiagnosticToReport(LazinatorPairInformation lazinatorPairInfo)

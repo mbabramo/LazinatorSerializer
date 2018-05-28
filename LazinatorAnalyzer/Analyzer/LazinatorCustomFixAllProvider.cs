@@ -11,7 +11,10 @@ using LazinatorAnalyzer.Settings;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.VisualBasic;
 
 
 namespace LazinatorAnalyzer.Analyzer
@@ -29,26 +32,93 @@ namespace LazinatorAnalyzer.Analyzer
 
         public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
         {
-            var documentsAndDiagnosticsToFixMap = await FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+            //var documentsAndDiagnosticsToFixMap = await FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false); // use the built-in capability of the IDE to return all diagnostics that have been surfaced.
+            var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false); // manually identify all diagnostics
             CodeAction result = await this.GetCodeActionToFixAll(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
             return result;
         }
 
-        //public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> DEBUGRevisedGetDocumentDiagnosticsAsync(Project p, CancellationToken cancellationToken)
-        //{
-        //    Compilation c = await p.GetCompilationAsync();
-        //    var additionalDocuments = p.AdditionalDocuments;
-        //    (string path, string text) =
-        //        await LazinatorConfigLoader.GetConfigPathAndText(p.AdditionalDocuments.ToImmutableArray(), cancellationToken);
+        public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(
+            FixAllContext fixAllContext)
+        {
+            var document = fixAllContext.Document;
+            var project = fixAllContext.Project;
+            var builder = ImmutableDictionary.CreateBuilder<Document, ImmutableArray<Diagnostic>>();
 
-        //}
+            switch (fixAllContext.Scope)
+            {
+                case FixAllScope.Document:
+                    await AddDiagnosticsToBuilder(document, builder, fixAllContext.CancellationToken);
+                    break;
+
+                case FixAllScope.Project:
+                    await AddDiagnosticsToBuilder(project, builder, fixAllContext.CancellationToken);
+                    break;
+
+                case FixAllScope.Solution:
+                    await AddDiagnosticsToBuilder(project.Solution, builder, fixAllContext.CancellationToken);
+                    break;
+
+                default:
+                    throw new NotSupportedException();
+            }
+
+            return builder.ToImmutable();
+        }
+
+        public async Task AddDiagnosticsToBuilder(Solution s, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
+        {
+            foreach (var project in s.Projects)
+                await AddDiagnosticsToBuilder(project, builder, cancellationToken);
+        }
+
+        public async Task AddDiagnosticsToBuilder(Project p, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
+        {
+            Compilation compilation = await p.GetCompilationAsync();
+            var additionalDocuments = p.AdditionalDocuments;
+            LazinatorCompilationAnalyzer analyzer = await
+                LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
+            foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular))
+            {
+                await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, doc, cancellationToken);
+            }
+        }
+
+        public async Task AddDiagnosticsToBuilder(Document d, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
+        {
+            Project p = d.Project;
+            Compilation compilation = await p.GetCompilationAsync();
+            var additionalDocuments = p.AdditionalDocuments;
+            LazinatorCompilationAnalyzer analyzer = await
+                LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
+            await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, d, cancellationToken);
+        }
+
+        private static async Task AddDiagnosticsForDocument(ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, Compilation compilation, IEnumerable<TextDocument> additionalDocuments, LazinatorCompilationAnalyzer analyzer, Document doc, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (analyzer == null)
+                analyzer = await
+                    LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
+            SyntaxNode root = await doc.GetSyntaxRootAsync(cancellationToken);
+            var model = compilation.GetSemanticModel(root.SyntaxTree);
+            var namedTypes = root.DescendantNodesAndSelf()
+                .OfType<TypeDeclarationSyntax>()
+                .Select(x => model.GetDeclaredSymbol(x))
+                .OfType<INamedTypeSymbol>()
+                .ToList();
+            foreach (var symbol in namedTypes)
+                analyzer.AnalyzeNamedType(symbol, compilation);
+            builder.Add(doc, analyzer.GetDiagnosticsToReport().ToImmutableArray());
+            analyzer.ClearDiagnostics();
+        }
 
         public virtual async Task<CodeAction> GetCodeActionToFixAll(
             ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
             if (documentsAndDiagnosticsToFixMap != null && documentsAndDiagnosticsToFixMap.Any())
-            {
+            { 
                 fixAllContext.CancellationToken.ThrowIfCancellationRequested();
 
                 var documents = documentsAndDiagnosticsToFixMap.Keys.ToImmutableArray();
