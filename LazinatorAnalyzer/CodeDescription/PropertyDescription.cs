@@ -1412,7 +1412,7 @@ namespace Lazinator.CodeDescription
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                             if (deserializationFactory == null)
                             {{
-                                throw new MissingDeserializationFactoryException();
+                                deserializationFactory = DeserializationFactory.GetInstance();
                             }}
                             var item = ({AppropriatelyQualifiedTypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                             {collectionAddItem}
@@ -1602,7 +1602,7 @@ namespace Lazinator.CodeDescription
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             if (deserializationFactory == null)
                             {{
-                                throw new MissingDeserializationFactoryException();
+                                deserializationFactory = DeserializationFactory.GetInstance();
                             }}
                             {itemName} = ({AppropriatelyQualifiedTypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
                         }}

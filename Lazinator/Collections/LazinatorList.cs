@@ -66,7 +66,7 @@ namespace Lazinator.Collections
             if (byteSpan.Length == 0)
                 return default;
             if (DeserializationFactory == null)
-                throw new MissingDeserializationFactoryException();
+                DeserializationFactory = DeserializationFactory.GetInstance();
             T n2 = (T) DeserializationFactory.FactoryCreate(byteSpan, this);
             return n2;
         }
