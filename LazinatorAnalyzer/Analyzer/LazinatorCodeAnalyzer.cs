@@ -43,8 +43,7 @@ namespace LazinatorAnalyzer.Analyzer
             "This object implements an interface with the Lazinator attribute.";
         private static readonly DiagnosticDescriptor LazinatorOptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle, LazinatorOptionalRegenerationMessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
         internal static DiagnosticDescriptor OptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle.ToString(), LazinatorOptionalRegenerationMessageFormat.ToString(), Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
-
-        internal DateTime configLastLoaded = new DateTime(1900, 1, 1);
+        
         internal string configPath, configString;
         internal LazinatorConfig config;
 
@@ -70,13 +69,9 @@ namespace LazinatorAnalyzer.Analyzer
                 {
                     return;
                 }
-
-                if (DateTime.Now - configLastLoaded > TimeSpan.FromSeconds(5))
-                { // we don't want to reload this too often, although it shouldn't involve a disk operation
-                    (configPath, configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
-                    config = new LazinatorConfig(configPath, configString);
-                    configLastLoaded = DateTime.Now;
-                }
+                
+                (configPath, configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, compilationContext.CancellationToken);
+                config = new LazinatorConfig(configPath, configString);
 
                 // Initialize state in the start action.
                 var analyzer = new LazinatorCompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, additionalFiles, configPath, configString, config);

@@ -87,18 +87,7 @@ namespace LazinatorAnalyzer.Analyzer
         public static async Task<Solution> AttemptFixGenerateLazinatorCodeBehind(Document originalDocument, LazinatorPairInformation lazinatorPairInformation, CancellationToken cancellationToken)
         {
             var originalSolution = originalDocument.Project.Solution;
-            LazinatorConfig config = null;
-            if (lazinatorPairInformation.Config != null && lazinatorPairInformation.Config != "")
-            {
-                try
-                {
-                    config = new LazinatorConfig(lazinatorPairInformation.ConfigPath, lazinatorPairInformation.Config);
-                }
-                catch
-                {
-                    throw new LazinatorCodeGenException("Lazinator.config is not a valid JSON file.");
-                }
-            }
+            LazinatorConfig config = LoadLazinatorConfig(lazinatorPairInformation);
 
             var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
             LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, lazinatorPairInformation.LazinatorObject.Name, lazinatorPairInformation.LazinatorObject.GetFullMetadataName(), config);
@@ -150,6 +139,24 @@ namespace LazinatorAnalyzer.Analyzer
             }
             revisedSolution = await AddAnnotationToIndicateSuccess(revisedSolution, true);
             return revisedSolution;
+        }
+
+        private static LazinatorConfig LoadLazinatorConfig(LazinatorPairInformation lazinatorPairInformation)
+        {
+            LazinatorConfig config = null;
+            if (lazinatorPairInformation.Config != null && lazinatorPairInformation.Config != "")
+            {
+                try
+                {
+                    config = new LazinatorConfig(lazinatorPairInformation.ConfigPath, lazinatorPairInformation.Config);
+                }
+                catch
+                {
+                    throw new LazinatorCodeGenException("Lazinator.config is not a valid JSON file.");
+                }
+            }
+
+            return config;
         }
 
         private static async Task<Solution> InsertLazinatorCodeGenerationError(Document originalDocument, TypeDeclarationSyntax enclosingType, LazinatorCodeGenException e, CancellationToken cancellationToken)

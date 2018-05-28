@@ -270,6 +270,21 @@ namespace LazinatorAnalyzer.Analyzer
                     if (lazinatorPairInfo.CodeBehindLocation != null)
                         additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
                     additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
+                    if (_configPath == "" || _configPath == null)
+                    {
+                        throw new Exception("DEBUG no config");
+                    }
+                    tryagain:
+                    try
+                    {
+                        System.IO.StreamWriter sw = System.IO.File.AppendText("C:\\Temp\\mylog.log");
+                        sw.WriteLine($"{lazinatorPairInfo.LazinatorObject} {_configPath} {_configString}");
+                        sw.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        goto tryagain;
+                    }
                     var diagnostic = Diagnostic.Create(needsGeneration ? LazinatorCodeAnalyzer.OutOfDateRule : LazinatorCodeAnalyzer.OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
                     //Debug.WriteLine($"reporting diagnostic {(needsGeneration ? "out of date" : "regenerate")} for {lazinatorPairInfo.LazinatorObject}"); // DEBUG
                     return diagnostic;

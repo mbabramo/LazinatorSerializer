@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LazinatorAnalyzer.Settings;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -28,12 +29,21 @@ namespace LazinatorAnalyzer.Analyzer
 
         public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
         {
-            var documentsAndDiagnosticsToFixMap = await this.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
-            CodeAction result = await this.GetFixAsync(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
+            var documentsAndDiagnosticsToFixMap = await FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+            CodeAction result = await this.GetCodeActionToFixAll(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
             return result;
         }
 
-        public virtual async Task<CodeAction> GetFixAsync(
+        //public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> DEBUGRevisedGetDocumentDiagnosticsAsync(Project p, CancellationToken cancellationToken)
+        //{
+        //    Compilation c = await p.GetCompilationAsync();
+        //    var additionalDocuments = p.AdditionalDocuments;
+        //    (string path, string text) =
+        //        await LazinatorConfigLoader.GetConfigPathAndText(p.AdditionalDocuments.ToImmutableArray(), cancellationToken);
+
+        //}
+
+        public virtual async Task<CodeAction> GetCodeActionToFixAll(
             ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
@@ -42,16 +52,10 @@ namespace LazinatorAnalyzer.Analyzer
                 fixAllContext.CancellationToken.ThrowIfCancellationRequested();
 
                 var documents = documentsAndDiagnosticsToFixMap.Keys.ToImmutableArray();
-                // remove duplicates
-                var builder = ImmutableDictionary.CreateBuilder<Document, ImmutableArray<Diagnostic>>();
-                foreach (var document in documents)
-                {
-                    builder.Add(document, documentsAndDiagnosticsToFixMap[document].Distinct().ToImmutableArray());
-                }
-                documentsAndDiagnosticsToFixMap = builder.ToImmutable();
+
                 // calculate fixes
-                var fixesBag = new List<CodeAction>[documents.Length];
-                var fixOperations = new List<Task>(documents.Length);
+                var codeActionsForEachDocument = new List<CodeAction>[documents.Length];
+                var tasksToGenerateCodeActionsForEachDocument = new List<Task>(documents.Length);
                 for (int index = 0; index < documents.Length; index++)
                 {
                     if (fixAllContext.CancellationToken.IsCancellationRequested)
@@ -60,15 +64,21 @@ namespace LazinatorAnalyzer.Analyzer
                     }
 
                     var document = documents[index];
-                    fixesBag[index] = new List<CodeAction>();
-                    fixOperations.Add(this.AddDocumentFixesAsync(document, documentsAndDiagnosticsToFixMap[document], fixesBag[index].Add, fixAllContext));
+                    codeActionsForEachDocument[index] = new List<CodeAction>();
+                    tasksToGenerateCodeActionsForEachDocument.Add(this.AddDocumentFixesAsync(document, documentsAndDiagnosticsToFixMap[document], codeActionsForEachDocument[index].Add, fixAllContext));
                 }
 
-                await Task.WhenAll(fixOperations).ConfigureAwait(false);
+                await Task.WhenAll(tasksToGenerateCodeActionsForEachDocument).ConfigureAwait(false);
 
-                if (fixesBag.Any(fixes => fixes.Count > 0))
+                if (codeActionsForEachDocument.Any(fixes => fixes.Count > 0))
                 {
-                    return await this.TryGetMergedFixAsync(fixesBag.SelectMany(i => i), fixAllContext).ConfigureAwait(false);
+                    Solution newSolution = await this.TryGetMergedFixAsync(codeActionsForEachDocument.SelectMany(i => i), fixAllContext).ConfigureAwait(false);
+                    if (newSolution != null)
+                    {
+                        var title = this.GetFixAllTitle(fixAllContext);
+                        CodeAction result = CodeAction.Create(title, cancellationToken => Task.FromResult(newSolution));
+                        return result;
+                    }
                 }
             }
 
@@ -129,45 +139,7 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        public virtual async Task<CodeAction> GetFixAsync(
-            ImmutableDictionary<Project, ImmutableArray<Diagnostic>> projectsAndDiagnosticsToFixMap,
-            FixAllContext fixAllContext)
-        {
-            if (projectsAndDiagnosticsToFixMap != null && projectsAndDiagnosticsToFixMap.Any())
-            {
-                var fixesBag = new List<CodeAction>[projectsAndDiagnosticsToFixMap.Count];
-                var fixOperations = new List<Task>(projectsAndDiagnosticsToFixMap.Count);
-                int index = -1;
-                foreach (var project in projectsAndDiagnosticsToFixMap.Keys)
-                {
-                    if (fixAllContext.CancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
-
-                    index++;
-                    var diagnostics = projectsAndDiagnosticsToFixMap[project];
-                    fixesBag[index] = new List<CodeAction>();
-                    fixOperations.Add(this.AddProjectFixesAsync(project, diagnostics, fixesBag[index].Add, fixAllContext));
-                }
-
-                await Task.WhenAll(fixOperations).ConfigureAwait(false);
-
-                if (fixesBag.Any(fixes => fixes.Count > 0))
-                {
-                    return await this.TryGetMergedFixAsync(fixesBag.SelectMany(i => i), fixAllContext).ConfigureAwait(false);
-                }
-            }
-
-            return null;
-        }
-
-        public virtual Task AddProjectFixesAsync(Project project, IEnumerable<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual async Task<CodeAction> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
+        public virtual async Task<Solution> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
         {
             if (batchOfFixes == null)
             {
@@ -182,10 +154,7 @@ namespace LazinatorAnalyzer.Analyzer
             var solution = fixAllContext.Solution;
             var newSolution = await this.TryMergeFixesAsync(solution, batchOfFixes, fixAllContext.CancellationToken).ConfigureAwait(false);
             if (newSolution != null && newSolution != solution)
-            {
-                var title = this.GetFixAllTitle(fixAllContext);
-                return CodeAction.Create(title, cancellationToken => Task.FromResult(newSolution));
-            }
+                return newSolution; 
 
             return null;
         }
@@ -224,11 +193,6 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        public virtual Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(FixAllContext fixAllContext)
-        {
-            return FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext);
-        }
-
         public class RevisionsTracker
         {
             public Dictionary<DocumentId, Document> newDocumentsMap = new Dictionary<DocumentId, Document>();
@@ -241,7 +205,7 @@ namespace LazinatorAnalyzer.Analyzer
             Solution currentSolution = oldSolution;
             RevisionsTracker revisionsTracker;
             List<CodeAction> codeActionsToProcess = codeActions.ToList();
-            // TODO: Unfortunately, this isn't working properly. Only the first layer of changes is being processed. So, the user still has to go to generate multiple times to get it to work completely. 
+            // DEBUG -- remove outer do loop: Unfortunately, this isn't working properly. Only the first layer of changes is being processed. So, the user still has to go to generate multiple times to get it to work completely. 
             bool keepGoing = true;
             do
             {
@@ -304,8 +268,9 @@ namespace LazinatorAnalyzer.Analyzer
 
             var changedSolution = singleApplyChangesOperation.ChangedSolution;
 
-            if (await LazinatorCodeFixProvider.WhetherCodeFixFailed(changedSolution))
-                return false;
+            //DEBUG
+            //if (await LazinatorCodeFixProvider.WhetherCodeFixFailed(changedSolution))
+            //    return false;
 
             var solutionChanges = changedSolution.GetChanges(oldSolution);
 
@@ -500,131 +465,6 @@ namespace LazinatorAnalyzer.Analyzer
             }
 
             return successfullyMergedChanges;
-        }
-    }
-
-    internal static class FixAllContextHelper
-    {
-        public static async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(FixAllContext fixAllContext)
-        {
-            var allDiagnostics = ImmutableArray<Diagnostic>.Empty;
-            var projectsToFix = ImmutableArray<Project>.Empty;
-
-            var document = fixAllContext.Document;
-            var project = fixAllContext.Project;
-
-            switch (fixAllContext.Scope)
-            {
-                case FixAllScope.Document:
-                    if (document != null)
-                    {
-                        var documentDiagnostics = await fixAllContext.GetDocumentDiagnosticsAsync(document).ConfigureAwait(false);
-                        return ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Empty.SetItem(document, documentDiagnostics);
-                    }
-
-                    break;
-
-                case FixAllScope.Project:
-                    projectsToFix = ImmutableArray.Create(project);
-                    allDiagnostics = await GetAllDiagnosticsAsync(fixAllContext, project).ConfigureAwait(false);
-                    break;
-
-                case FixAllScope.Solution:
-                    projectsToFix = project.Solution.Projects
-                        .Where(p => p.Language == project.Language)
-                        .ToImmutableArray();
-
-                    var diagnosticsByProject = new ConcurrentDictionary<ProjectId, ImmutableArray<Diagnostic>>();
-                    var tasks = new Task[projectsToFix.Length];
-                    for (int i = 0; i < projectsToFix.Length; i++)
-                    {
-                        fixAllContext.CancellationToken.ThrowIfCancellationRequested();
-                        var projectToFix = projectsToFix[i];
-                        tasks[i] = Task.Run(
-                            async () =>
-                            {
-                                var projectDiagnostics = await GetAllDiagnosticsAsync(fixAllContext, projectToFix).ConfigureAwait(false);
-                                diagnosticsByProject.TryAdd(projectToFix.Id, projectDiagnostics);
-                            }, fixAllContext.CancellationToken);
-                    }
-
-                    await Task.WhenAll(tasks).ConfigureAwait(false);
-                    allDiagnostics = allDiagnostics.AddRange(diagnosticsByProject.SelectMany(i => i.Value.Where(x => fixAllContext.DiagnosticIds.Contains(x.Id))));
-                    break;
-            }
-
-            if (allDiagnostics.IsEmpty)
-            {
-                return ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Empty;
-            }
-
-            return await GetDocumentDiagnosticsToFixAsync(allDiagnostics, projectsToFix, fixAllContext.CancellationToken).ConfigureAwait(false);
-        }
-        
-        /// <summary>
-        /// Gets all <see cref="Diagnostic"/> instances within a specific <see cref="Project"/> which are relevant to a
-        /// <see cref="FixAllContext"/>.
-        /// </summary>
-        /// <param name="fixAllContext">The context for the Fix All operation.</param>
-        /// <param name="project">The project.</param>
-        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation. When the task completes
-        /// successfully, the <see cref="Task{TResult}.Result"/> will contain the requested diagnostics.</returns>
-        private static async Task<ImmutableArray<Diagnostic>> GetAllDiagnosticsAsync(FixAllContext fixAllContext, Project project)
-        {
-            var result = await fixAllContext.GetAllDiagnosticsAsync(project).ConfigureAwait(false);
-            // This may return hundreds of redundant diagnostics. Perhaps that indicates that there is something wrong either with GetAllDiagnosticsAsync or with code in our project. This is likely slowing down compilation. But in the meantime, we can at least save time by eliminating redundancies.
-            return result.Distinct().ToImmutableArray();
-        }
-
-        private static async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(
-            ImmutableArray<Diagnostic> diagnostics,
-            ImmutableArray<Project> projects,
-            CancellationToken cancellationToken)
-        {
-            var treeToDocumentMap = await GetTreeToDocumentMapAsync(projects, cancellationToken).ConfigureAwait(false);
-
-            var builder = ImmutableDictionary.CreateBuilder<Document, ImmutableArray<Diagnostic>>();
-            foreach (var documentAndDiagnostics in diagnostics.GroupBy(d => GetReportedDocument(d, treeToDocumentMap)))
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                var document = documentAndDiagnostics.Key;
-                var diagnosticsForDocument = documentAndDiagnostics.ToImmutableArray();
-                builder.Add(document, diagnosticsForDocument);
-            }
-
-            return builder.ToImmutable();
-        }
-
-        private static async Task<ImmutableDictionary<SyntaxTree, Document>> GetTreeToDocumentMapAsync(ImmutableArray<Project> projects, CancellationToken cancellationToken)
-        {
-            var builder = ImmutableDictionary.CreateBuilder<SyntaxTree, Document>();
-            foreach (var project in projects)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                foreach (var document in project.Documents)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var tree = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
-                    builder.Add(tree, document);
-                }
-            }
-
-            return builder.ToImmutable();
-        }
-
-        private static Document GetReportedDocument(Diagnostic diagnostic, ImmutableDictionary<SyntaxTree, Document> treeToDocumentsMap)
-        {
-            var tree = diagnostic.Location.SourceTree;
-            if (tree != null)
-            {
-                Document document;
-                if (treeToDocumentsMap.TryGetValue(tree, out document))
-                {
-                    return document;
-                }
-            }
-
-            return null;
         }
     }
 }
