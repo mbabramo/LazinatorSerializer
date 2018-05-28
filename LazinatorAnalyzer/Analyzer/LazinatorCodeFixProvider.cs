@@ -26,6 +26,9 @@ namespace LazinatorAnalyzer.Analyzer
         private const string Lazin001Title = "Generate Lazinator code behind";
         private const string Lazin002Title = "Regenerate Lazinator code behind";
 
+        public static bool RecycleLazinatorCompilation { get; set; }
+        public static LazinatorCompilation _LastLazinatorCompilation { get; set; }
+
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
             get { return ImmutableArray.Create(LazinatorCodeAnalyzer.Lazin001, LazinatorCodeAnalyzer.Lazin002); }
@@ -90,7 +93,18 @@ namespace LazinatorAnalyzer.Analyzer
             LazinatorConfig config = LoadLazinatorConfig(lazinatorPairInformation);
 
             var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
-            LazinatorCompilation generator = new LazinatorCompilation(semanticModel.Compilation, lazinatorPairInformation.LazinatorObject.Name, lazinatorPairInformation.LazinatorObject.GetFullMetadataName(), config);
+            LazinatorCompilation generator = null;
+            if (!RecycleLazinatorCompilation || _LastLazinatorCompilation == null)
+            {
+                generator = new LazinatorCompilation(semanticModel.Compilation, lazinatorPairInformation.LazinatorObject.Name, lazinatorPairInformation.LazinatorObject.GetFullMetadataName(), config);
+                if (RecycleLazinatorCompilation)
+                    _LastLazinatorCompilation = generator;
+            }
+            else
+            {
+                generator = _LastLazinatorCompilation;
+                generator.Initialize(semanticModel.Compilation, lazinatorPairInformation.LazinatorObject.Name, lazinatorPairInformation.LazinatorObject.GetFullMetadataName());
+            }
             var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
             var codeBehind = d.GetCodeBehind();
 

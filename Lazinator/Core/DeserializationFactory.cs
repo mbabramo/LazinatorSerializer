@@ -14,8 +14,29 @@ namespace Lazinator.Core
     [Serializable]
     public class DeserializationFactory
     {
+
+        static object LockObj = new object();
+        static DeserializationFactory _DeserializationFactory;
+        public static DeserializationFactory GetInstance()
+        {
+            if (_DeserializationFactory != null)
+                return _DeserializationFactory;
+            lock (LockObj)
+            {
+                if (_DeserializationFactory == null)
+                    // identify a type in each assembly where we want to load all types
+                    _DeserializationFactory = new DeserializationFactory();
+            }
+            return _DeserializationFactory;
+        }
+
         private Dictionary<int, Func<ILazinator>> FactoriesByID =
             new Dictionary<int, Func<ILazinator>>();
+
+        public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
+        {
+
+        }
 
         public DeserializationFactory(Type type) : this(new Type[] {type}, true)
         {

@@ -175,7 +175,6 @@ namespace LazinatorAnalyzer.Analyzer
         {
             INamedTypeSymbol lazinatorObjectType;
             INamedTypeSymbol namedInterfaceType;
-            //Debug.WriteLine($"Considering {namedType}"); // DEBUG
 
             SearchForLazinatorObjectAndNamedInterface(compilation, namedType, out lazinatorObjectType, out namedInterfaceType);
             if (namedInterfaceType != null && lazinatorObjectType != null)
@@ -210,7 +209,6 @@ namespace LazinatorAnalyzer.Analyzer
                     .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) ||
                                 x.SourceTree.FilePath.EndsWith(possibleName2))
                     .FirstOrDefault();
-            //Debug.WriteLine($"Primary location {primaryLocation}"); // DEBUG
             if (primaryLocation != null)
             {
                 LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation();
@@ -252,7 +250,6 @@ namespace LazinatorAnalyzer.Analyzer
             // This is not an interface. It may be a Lazinator object with a corresponding Lazinator interface.
             lazinatorObjectType = namedType;
             namedInterfaceType = namedType.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType);
-            //Debug.WriteLine($"Corresponding interface {namedInterfaceType}"); // DEBUG
         }
 
         private void SearchStartingFromInterface(Compilation compilation, INamedTypeSymbol namedType, out INamedTypeSymbol lazinatorObjectType, out INamedTypeSymbol namedInterfaceType)
@@ -266,8 +263,7 @@ namespace LazinatorAnalyzer.Analyzer
                 // maybe another approach would be to use SymbolFinder, but we can't load the Solution in the code analyzer. var implementations = SymbolFinder.FindImplementationsAsync(namedType, ... See https://stackoverflow.com/questions/23203206/roslyn-current-workspace-in-diagnostic-with-code-fix-project for a possible workaround
                 IEnumerable<ISymbol> candidates = compilation.GetSymbolsWithName(name => RoslynHelpers.GetNameWithoutGenericArity(name) == RoslynHelpers.GetNameWithoutGenericArity(namedType.MetadataName).Substring(1), SymbolFilter.Type);
                 lazinatorObjectType = candidates.OfType<INamedTypeSymbol>().FirstOrDefault(x => namedType.GetFullyQualifiedNameWithoutGlobal() == x.GetTopLevelInterfaceImplementingAttribute(_lazinatorAttributeType).GetFullyQualifiedNameWithoutGlobal());
-
-                //Debug.WriteLine($"Lazinator object {lazinatorObjectType}"); // DEBUG
+                
                 if (lazinatorObjectType != null)
                     namedInterfaceType = namedType;
                 // Note: A more comprehensive, but slower approach would be to use context.Compilation.GlobalNamespace...
@@ -295,7 +291,6 @@ namespace LazinatorAnalyzer.Analyzer
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind != null
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                 {
-                    //Debug.WriteLine($"end action {lazinatorPairInfo.LazinatorObject} {lazinatorPairInfo.LazinatorInterface}"); // DEBUG
                     var diagnostic = GetDiagnosticToReport(lazinatorPairInfo);
                     if (diagnostic != null)
                         diagnostics.Add(diagnostic);
@@ -332,7 +327,6 @@ namespace LazinatorAnalyzer.Analyzer
                             )?.Span;
                 if (textSpan == null)
                 {
-                    //Debug.WriteLine($"aborting -- textSpan is null"); // DEBUG
                     return null;
                 }
                 else
@@ -379,8 +373,7 @@ namespace LazinatorAnalyzer.Analyzer
                             else
                             {
                                 var hash = LazinatorCompilation.GetHashForInterface(lazinatorPairInfo.LazinatorInterface, lazinatorPairInfo.LazinatorObject);
-
-                                //Debug.WriteLine($"hash {hash} code-behind guid {codeBehindGuid}"); // DEBUG
+                                
                                 if (hash != codeBehindGuid)
                                     needsGeneration = true;
                             }

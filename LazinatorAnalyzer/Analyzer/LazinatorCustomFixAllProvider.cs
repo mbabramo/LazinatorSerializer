@@ -32,10 +32,18 @@ namespace LazinatorAnalyzer.Analyzer
 
         public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
         {
-            //var documentsAndDiagnosticsToFixMap = await FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false); // use the built-in capability of the IDE to return all diagnostics that have been surfaced.
-            var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false); // manually identify all diagnostics
-            CodeAction result = await this.GetCodeActionToFixAll(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
-            return result;
+            try
+            {
+                LazinatorCodeFixProvider.RecycleLazinatorCompilation = true;
+                LazinatorCodeFixProvider._LastLazinatorCompilation = null;
+                var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+                CodeAction result = await this.GetCodeActionToFixAll(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
+                return result;
+            }
+            finally
+            {
+                LazinatorCodeFixProvider.RecycleLazinatorCompilation = false;
+            }
         }
 
         public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(

@@ -45,20 +45,31 @@ namespace LazinatorCodeGen.Roslyn
 
         public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName, LazinatorConfig config)
         {
-            Compilation = compilation;
             Config = config;
-            ImplementingTypeSymbol = compilation.GetTypeByMetadataName(fullImplementingTypeName);
+            Initialize(compilation, implementingTypeName, fullImplementingTypeName);
+        }
+
+        public void Initialize(Compilation compilation, string implementingTypeName, string fullImplementingTypeName)
+        {
+            Compilation = compilation;
+
+            ImplementingTypeSymbol = Compilation.GetTypeByMetadataName(fullImplementingTypeName);
 
             TypeDeclarations = GetTypeDeclarationsForNamedType(ImplementingTypeSymbol).ToList();
             if (TypeDeclarations == null || !TypeDeclarations.Any())
                 throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {implementingTypeName} not found.");
 
             ImplementingTypeAccessibility = TypeDeclarations.First().GetAccessibility();
-            INamedTypeSymbol lazinatorTypeAttribute = compilation.GetTypeByMetadataName(LazinatorCompilationAnalyzer.LazinatorAttributeName);
+            INamedTypeSymbol lazinatorTypeAttribute = Compilation.GetTypeByMetadataName(LazinatorCompilationAnalyzer.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
             if (exclusiveInterfaceTypeSymbol == null)
                 throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} should implement exactly one Lazinator interface (plus any Lazinator interfaces implemented by that interface, plus any number of nonexclusive interfaces).");
             Initialize(TypeDeclarations, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
+        }
+
+        public void AnalyzeAnotherType(string implementingTypeName, string fullImplementingTypeName)
+        {
+
         }
 
         private void Initialize(List<TypeDeclarationSyntax> implementingTypeDeclarations, INamedTypeSymbol implementingTypeSymbol, INamedTypeSymbol exclusiveInterfaceTypeSymbol)
