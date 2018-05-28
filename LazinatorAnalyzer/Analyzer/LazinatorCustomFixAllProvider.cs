@@ -78,7 +78,9 @@ namespace LazinatorAnalyzer.Analyzer
             var additionalDocuments = p.AdditionalDocuments;
             LazinatorCompilationAnalyzer analyzer = await
                 LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
-            foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular))
+            analyzer.DisableStartingFromInterface = true;
+            var config = analyzer.Config;
+            foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular && !x.FilePath.EndsWith(config?.GeneratedCodeFileExtension ?? ".laz.cs")))
             {
                 await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, doc, cancellationToken);
             }
@@ -98,8 +100,11 @@ namespace LazinatorAnalyzer.Analyzer
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (analyzer == null)
+            {
                 analyzer = await
                     LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
+                analyzer.DisableStartingFromInterface = true;
+            }
             SyntaxNode root = await doc.GetSyntaxRootAsync(cancellationToken);
             var model = compilation.GetSemanticModel(root.SyntaxTree);
             var namedTypes = root.DescendantNodesAndSelf()
@@ -109,7 +114,9 @@ namespace LazinatorAnalyzer.Analyzer
                 .ToList();
             foreach (var symbol in namedTypes)
                 analyzer.AnalyzeNamedType(symbol, compilation);
-            builder.Add(doc, analyzer.GetDiagnosticsToReport().ToImmutableArray());
+            ImmutableArray<Diagnostic> diagnostics = analyzer.GetDiagnosticsToReport().ToImmutableArray();
+            if (diagnostics.Any())
+                builder.Add(doc, diagnostics);
             analyzer.ClearDiagnostics();
         }
 
@@ -275,34 +282,12 @@ namespace LazinatorAnalyzer.Analyzer
             Solution currentSolution = oldSolution;
             RevisionsTracker revisionsTracker;
             List<CodeAction> codeActionsToProcess = codeActions.ToList();
-            // DEBUG -- remove outer do loop: Unfortunately, this isn't working properly. Only the first layer of changes is being processed. So, the user still has to go to generate multiple times to get it to work completely. 
-            bool keepGoing = true;
-            do
+            revisionsTracker = new RevisionsTracker();
+            foreach (var codeAction in codeActionsToProcess)
             {
-                revisionsTracker = new RevisionsTracker();
-                List<CodeAction> failedCodeActions = new List<CodeAction>();
-                bool atLeastOneSucceeded = false;
-                foreach (var codeAction in codeActionsToProcess)
-                {
-                    bool success = await IncludeCodeActionInRevisionsAsync(currentSolution, codeAction, revisionsTracker, cancellationToken);
-                    if (!success)
-                        failedCodeActions.Add(codeAction);
-                    atLeastOneSucceeded = atLeastOneSucceeded || success;
-                }
-                if (!failedCodeActions.Any())
-                    keepGoing = false;
-                else if (atLeastOneSucceeded)
-                {
-                    // Try again on a subset.
-                    codeActionsToProcess = failedCodeActions;
-                    failedCodeActions = new List<CodeAction>();
-                    keepGoing = true;
-                }
-                else // We can't make any more progress
-                    keepGoing = false;
-                currentSolution = await UpdateSolutionFromRevisionsAsync(currentSolution, revisionsTracker, cancellationToken);
-            } while (keepGoing);
-
+                bool success = await IncludeCodeActionInRevisionsAsync(currentSolution, codeAction, revisionsTracker, cancellationToken);
+            }
+            currentSolution = await UpdateSolutionFromRevisionsAsync(currentSolution, revisionsTracker, cancellationToken);
 
             return currentSolution;
         }
@@ -337,10 +322,9 @@ namespace LazinatorAnalyzer.Analyzer
             }
 
             var changedSolution = singleApplyChangesOperation.ChangedSolution;
-
-            //DEBUG
-            //if (await LazinatorCodeFixProvider.WhetherCodeFixFailed(changedSolution))
-            //    return false;
+            
+            if (await LazinatorCodeFixProvider.WhetherCodeFixFailed(changedSolution))
+                return false;
 
             var solutionChanges = changedSolution.GetChanges(oldSolution);
 

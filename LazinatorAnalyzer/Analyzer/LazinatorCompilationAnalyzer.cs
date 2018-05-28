@@ -85,6 +85,7 @@ namespace LazinatorAnalyzer.Analyzer
         private readonly INamedTypeSymbol _lazinatorInterfaceType;
         private readonly string _configPath, _configString;
         private LazinatorConfig _config;
+        public LazinatorConfig Config => _config;
 
         #endregion
 
@@ -225,12 +226,20 @@ namespace LazinatorAnalyzer.Analyzer
             return null;
         }
 
+        public bool DisableStartingFromInterface { get; set; }
+
         private void SearchForLazinatorObjectAndNamedInterface(Compilation compilation, INamedTypeSymbol namedType, out INamedTypeSymbol lazinatorObjectType, out INamedTypeSymbol namedInterfaceType)
         {
             // We want to be able to present a diagnostic starting either with the Lazinator class or vice-versa.
             if (namedType.TypeKind == TypeKind.Interface)
             {
-                SearchStartingFromInterface(compilation, namedType, out lazinatorObjectType, out namedInterfaceType);
+                if (DisableStartingFromInterface)
+                {
+                    lazinatorObjectType = null;
+                    namedInterfaceType = null;
+                }
+                else
+                    SearchStartingFromInterface(compilation, namedType, out lazinatorObjectType, out namedInterfaceType);
             }
             else
             {
