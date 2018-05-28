@@ -89,32 +89,6 @@ namespace Lazinator.Support
                 currentType = currentType.BaseType;
             }
         }
-
-        public static List<Type> GetCorrespondingNonexclusiveInterfaces(Type type)
-        {
-            var matchingInterfaces = type.GetInterfaces()
-                .Select(x => (x, x.GetCustomAttributes(typeof(NonexclusiveLazinatorAttribute), false)))
-                .Where(x => x.Item2.Any())
-                .Select(x => x.Item1)
-                .ToList();
-            return matchingInterfaces;
-        }
-
-        public static bool ImplementsLazinatorObjectVersionUpgrade(Type type)
-        {
-            MethodInfo mi = type.GetMethod("LazinatorObjectVersionUpgrade");
-            return mi != null;
-        }
-
-        public static bool ImplementsPreSerialization(Type type)
-        {
-            MethodInfo mi = type.GetMethod("PreSerialization");
-            return mi != null;
-        }
-        public static bool ImplementsPostDeserialization(Type type)
-        {
-            MethodInfo mi = type.GetMethod("PostDeserialization");
-            return mi != null;
-        }
+        
     }
 }
