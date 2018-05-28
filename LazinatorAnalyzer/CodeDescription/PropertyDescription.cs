@@ -708,7 +708,7 @@ namespace Lazinator.CodeDescription
                     $@"
                         if (DeserializationFactory == null)
                         {{
-                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                            DeserializationFactory = DeserializationFactory.GetInstance();
                         }}
                         _{PropertyName} = ({AppropriatelyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
                 else
@@ -716,7 +716,7 @@ namespace Lazinator.CodeDescription
                         $@"
                         if (DeserializationFactory == null)
                         {{
-                            LazinatorDeserializationException.ThrowNoDeserializationFactory();
+                            DeserializationFactory = DeserializationFactory.GetInstance();
                         }}
                         _{PropertyName} = DeserializationFactory.Create({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(), childData{selfReference}); ";
             }
