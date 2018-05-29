@@ -6,8 +6,6 @@ namespace LazinatorTests.Examples
 {
     public partial class ExampleChild : IExampleChild
     {
-        public LazinatorWrapperShort MyLazinatorWrapperShort { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public ExampleChild()
         {
         }
