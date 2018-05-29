@@ -1661,11 +1661,14 @@ namespace LazinatorTests.Tests
             hierarchy.DescendantIsDirty.Should().BeFalse(); // not affected by change to new child -- but the parent is dirty, so it shouldn't matter
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
+            hierarchy.MyChild1.MyShort.Should().Be(5234);
             hierarchy.MyChild1.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyLong = 987654;
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.DescendantIsDirty.Should().BeTrue();
+            hierarchy = hierarchy.CloneLazinatorTyped();
+            hierarchy.MyChild1.MyLong.Should().Be(987654);
         }
 
         [Fact]
