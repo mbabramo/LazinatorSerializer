@@ -15,7 +15,7 @@ namespace Lazinator.Buffers
         
         public MemoryInBuffer MemoryInBuffer { get; set; }
         Span<byte> _buffer => MemoryInBuffer.OwnedMemory.Memory.Span;
-        public ReadOnlyMemory<byte> Slice(int position) => MemoryInBuffer.OwnedMemory.Memory.Slice(position);
+        public ReadOnlyMemory<byte> Slice(int position) => MemoryInBuffer.OwnedMemory.Memory.Slice(position, Position - position);
         public ReadOnlyMemory<byte> Slice(int position, int length) => MemoryInBuffer.OwnedMemory.Memory.Slice(position, length);
 
         public BinaryBufferWriter() : this(MinMinBufferSize)

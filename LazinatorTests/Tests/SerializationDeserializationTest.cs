@@ -2099,6 +2099,8 @@ namespace LazinatorTests.Tests
             var clone = example.CloneLazinatorTyped();
             clone.GetBinaryHashCode32().Should().Be(hash32);
             clone.GetBinaryHashCode64().Should().Be(hash64);
+            var anotherExample = GetHierarchy(1, 1, 1, 1, 0);
+            anotherExample.GetBinaryHashCode64().Should().Be(hash64);
 
             example.MyBool = !example.MyBool;
             var hash32b = example.GetBinaryHashCode32();
