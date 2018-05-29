@@ -59,7 +59,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract MemoryInBuffer HierarchyBytes
         {
-            get;
             set;
         }
         

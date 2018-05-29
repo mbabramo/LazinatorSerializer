@@ -84,7 +84,9 @@ namespace LazinatorTests.Examples
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
+            [DebuggerStepThrough]
             get => _IsDirty;
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -144,7 +146,6 @@ namespace LazinatorTests.Examples
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
         {
-            get => _HierarchyBytes;
             set
             {
                 _HierarchyBytes = value;
@@ -200,10 +201,12 @@ namespace LazinatorTests.Examples
         private long _MyLong;
         public long MyLong
         {
+            [DebuggerStepThrough]
             get
             {
                 return _MyLong;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -213,10 +216,12 @@ namespace LazinatorTests.Examples
         private short _MyShort;
         public short MyShort
         {
+            [DebuggerStepThrough]
             get
             {
                 return _MyShort;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

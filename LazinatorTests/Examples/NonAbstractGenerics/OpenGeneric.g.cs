@@ -151,7 +151,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
         {
-            get => _HierarchyBytes;
             set
             {
                 _HierarchyBytes = value;

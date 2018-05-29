@@ -161,7 +161,6 @@ namespace LazinatorTests.Examples
         private MemoryInBuffer _HierarchyBytes;
         public MemoryInBuffer HierarchyBytes
         {
-            get => _HierarchyBytes;
             set
             {
                 _HierarchyBytes = value;

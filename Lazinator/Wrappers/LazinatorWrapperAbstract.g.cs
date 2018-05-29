@@ -59,7 +59,6 @@ namespace Lazinator.Wrappers
         
         public abstract MemoryInBuffer HierarchyBytes
         {
-            get;
             set;
         }
         
