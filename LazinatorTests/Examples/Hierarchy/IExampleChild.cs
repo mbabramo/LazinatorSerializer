@@ -1,5 +1,6 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Wrappers;
+using LazinatorTests.Examples.Structs;
 using System;
 
 namespace LazinatorTests.Examples
@@ -9,7 +10,7 @@ namespace LazinatorTests.Examples
     {
         long MyLong { get; set; }
         short MyShort { get; set; }
-        LazinatorWrapperShort MyLazinatorWrapperShort { get; set; }
+        WrapperContainer MyWrapperContainer { get; set; }
         ReadOnlySpan<byte> ByteSpan { get; set; }
     }
 }
