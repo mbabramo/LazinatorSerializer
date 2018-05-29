@@ -2106,7 +2106,7 @@ namespace LazinatorTests.Tests
             clone2.GetBinaryHashCode32().Should().Be(hash32b);
             clone2.GetBinaryHashCode64().Should().Be(hash64b);
 
-            example.MyChild1.MyShort = (short) (example.MyChild1.MyShort + 1);
+            example.MyChild1.MyShort = (short) 999;
             var hash32c = example.GetBinaryHashCode32();
             var hash64c = example.GetBinaryHashCode64();
             hash32c.Should().NotBe(hash32);
