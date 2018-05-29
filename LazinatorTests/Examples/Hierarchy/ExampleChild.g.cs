@@ -81,12 +81,12 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public virtual bool IsDirty
         {
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get => _IsDirty;
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -218,12 +218,12 @@ namespace LazinatorTests.Examples
         private short _MyShort;
         public short MyShort
         {
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 return _MyShort;
             }
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -289,6 +289,9 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ByteSpan,
             includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         /* Conversion of supported collections and tuples */

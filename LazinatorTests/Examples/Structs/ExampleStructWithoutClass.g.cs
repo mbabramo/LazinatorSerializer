@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -244,6 +244,9 @@ namespace LazinatorTests.Examples.Structs
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

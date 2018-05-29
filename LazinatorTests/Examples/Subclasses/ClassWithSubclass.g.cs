@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples.Subclasses
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
@@ -120,7 +120,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -348,6 +348,9 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 WriteChildWithLength(writer, _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength), verifyCleanness, false);
             }
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_SubclassInstance1_Accessed && SubclassInstance1 != null && (SubclassInstance1.IsDirty || SubclassInstance1.DescendantIsDirty)) || (_SubclassInstance2_Accessed && SubclassInstance2 != null && (SubclassInstance2.IsDirty || SubclassInstance2.DescendantIsDirty)));
         }
         
     }

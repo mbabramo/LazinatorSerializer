@@ -87,6 +87,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _YetAnotherInt);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

@@ -86,7 +86,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
@@ -122,7 +122,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -511,7 +511,7 @@ namespace LazinatorTests.Examples
         private ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild1_Accessed)
@@ -534,7 +534,7 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild1;
             }
-            //DEBUG[DebuggerStepThrough]
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -892,7 +892,6 @@ namespace LazinatorTests.Examples
             {
                 WriteChildWithLength(writer, _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength), verifyCleanness, false);
             }
-            bool descendantIsDirty = false;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty,
             isAccessed: _MyNonLazinatorChild_Accessed, writer: writer,
@@ -905,6 +904,9 @@ namespace LazinatorTests.Examples
             {
                 WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength), verifyCleanness, true);
             }
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
         }
         
     }

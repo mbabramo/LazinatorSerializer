@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -367,6 +367,9 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)

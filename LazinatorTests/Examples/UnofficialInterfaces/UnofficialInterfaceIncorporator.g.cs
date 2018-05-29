@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
@@ -120,7 +120,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -255,6 +255,9 @@ namespace LazinatorTests.Examples
             // write properties
             CompressedIntegralTypes.WriteCompressedLong(writer, _MyLong);
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

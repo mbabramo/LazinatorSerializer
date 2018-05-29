@@ -86,7 +86,7 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -121,7 +121,7 @@ namespace Lazinator.Collections
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -340,6 +340,9 @@ namespace Lazinator.Collections
             {
                 WriteChildWithLength(writer, _TwoByteItems, includeChildrenMode, _TwoByteItems_Accessed, () => GetChildSlice(LazinatorObjectBytes, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength), verifyCleanness, false);
             }
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_FourByteItems_Accessed && FourByteItems != null && (FourByteItems.IsDirty || FourByteItems.DescendantIsDirty)) || (_TwoByteItems_Accessed && TwoByteItems != null && (TwoByteItems.IsDirty || TwoByteItems.DescendantIsDirty)));
         }
         
     }

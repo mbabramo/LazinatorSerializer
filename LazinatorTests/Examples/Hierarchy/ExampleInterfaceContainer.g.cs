@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
@@ -122,7 +122,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -322,6 +322,9 @@ namespace LazinatorTests.Examples.Hierarchy
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GIExample_g(w, ExampleListByInterface,
             includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExampleByInterface_Accessed && ExampleByInterface != null && (ExampleByInterface.IsDirty || ExampleByInterface.DescendantIsDirty)));
         }
         
         /* Conversion of supported collections and tuples */

@@ -190,6 +190,9 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList5,
             includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         /* Conversion of supported collections and tuples */

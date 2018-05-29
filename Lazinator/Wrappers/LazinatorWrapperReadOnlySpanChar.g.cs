@@ -81,7 +81,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -261,6 +261,9 @@ namespace Lazinator.Wrappers
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             copy_Value.Write(w));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         /* Conversion of supported collections and tuples */

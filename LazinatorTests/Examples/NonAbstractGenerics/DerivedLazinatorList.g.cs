@@ -87,6 +87,9 @@ namespace LazinatorTests.Examples
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyListName);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

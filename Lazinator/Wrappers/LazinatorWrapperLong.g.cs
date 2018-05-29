@@ -81,7 +81,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -237,6 +237,9 @@ namespace Lazinator.Wrappers
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedLong(writer, _WrappedValue);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

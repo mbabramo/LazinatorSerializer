@@ -81,7 +81,7 @@ namespace Lazinator.Spans
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace Lazinator.Spans
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -311,6 +311,9 @@ namespace Lazinator.Spans
             {
                 WriteChildWithLength(writer, _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength), verifyCleanness, false);
             }
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ByteSpan_Accessed && ByteSpan != null && (ByteSpan.IsDirty || ByteSpan.DescendantIsDirty)));
         }
         
     }

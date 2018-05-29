@@ -82,7 +82,7 @@ namespace Lazinator.Spans
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
@@ -117,7 +117,7 @@ namespace Lazinator.Spans
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -300,6 +300,9 @@ namespace Lazinator.Spans
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,
             includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         /* Conversion of supported collections and tuples */

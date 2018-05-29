@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -278,6 +278,9 @@ namespace LazinatorTests.Examples
             WriteUncompressedPrimitives.WriteBool(writer, _IsNull);
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

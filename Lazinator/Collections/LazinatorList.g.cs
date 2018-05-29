@@ -72,7 +72,7 @@ namespace Lazinator.Collections
 
         protected internal MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
 
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -105,7 +105,7 @@ namespace Lazinator.Collections
                 InformParentOfDirtinessDelegate();
         }
 
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]

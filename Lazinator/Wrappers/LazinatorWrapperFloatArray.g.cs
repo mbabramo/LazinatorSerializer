@@ -81,7 +81,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -268,6 +268,9 @@ namespace Lazinator.Wrappers
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_float_B_b(w, copy_WrappedValue, includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         /* Conversion of supported collections and tuples */

@@ -81,7 +81,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        private bool _IsDirty;
+        bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -116,7 +116,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private bool _DescendantIsDirty;
+        bool _DescendantIsDirty;
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -291,6 +291,9 @@ namespace Lazinator.Wrappers
                 var byteLengthCopy = _NonNullValue_ByteLength;
                 WriteChildWithLength(writer, _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false);
             }
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
     }

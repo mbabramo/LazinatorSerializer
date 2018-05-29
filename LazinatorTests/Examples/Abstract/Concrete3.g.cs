@@ -86,7 +86,7 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
-        private bool _IsDirty;
+        protected bool _IsDirty;
         public override bool IsDirty
         {
             [DebuggerStepThrough]
@@ -121,7 +121,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private bool _DescendantIsDirty;
+        protected bool _DescendantIsDirty;
         public override bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -400,6 +400,9 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList3,
             includeChildrenMode, v));
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
         }
         
         /* Conversion of supported collections and tuples */
