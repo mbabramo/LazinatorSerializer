@@ -892,6 +892,7 @@ namespace LazinatorTests.Examples
             {
                 WriteChildWithLength(writer, _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength), verifyCleanness, false);
             }
+            bool descendantIsDirty = false;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty,
             isAccessed: _MyNonLazinatorChild_Accessed, writer: writer,

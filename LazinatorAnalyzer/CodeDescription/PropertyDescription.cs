@@ -944,14 +944,21 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private string CreateConditionalForSingleLine(string conditional, string innerCondition)
+        private string CreateConditionalForSingleLine(string conditional, string consequent, string elseConsequent = null)
         {
             if (conditional.Trim() == "")
-                return innerCondition;
-            return $@"{conditional}
+                return consequent;
+            var conditionalString = $@"{conditional}
                         {{
-                            {innerCondition}
+                            {consequent}
                         }}";
+            if (elseConsequent != null && elseConsequent != "")
+                conditionalString += $@"
+                        else
+                        {{
+                            {elseConsequent}
+                        }}";
+            return conditionalString;
         }
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)

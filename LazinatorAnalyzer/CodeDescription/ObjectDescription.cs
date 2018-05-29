@@ -194,21 +194,40 @@ namespace Lazinator.CodeDescription
                         
                         ";
 
-                string additionalDirtinessChecks = "";
+            // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
+            string manualDescendantDirtinessChecks = "";
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            {
+                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
+                else
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+            }
+            // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
+            //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
+            //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
+
+            // For a class, we don't need to use the manual checks routinely, since DescendantIsDirty will automatically be sent.
+            // But a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
+            string additionalDescendantDirtinessChecks = "";
             if (ObjectType == LazinatorObjectType.Struct)
             {
-                // a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
-                {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                        additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
-                    else
-                        additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
-                }
-                // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty.
-                //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
-                //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
+                additionalDescendantDirtinessChecks = manualDescendantDirtinessChecks;
             }
+
+            // After encoding in a mode in which we don't encode all children, we will need to do a check.
+            string postEncodingDirtinessCheck;
+            if (manualDescendantDirtinessChecks == "")
+                postEncodingDirtinessCheck = 
+                    $@"
+                        _IsDirty = false;
+                        _DescendantIsDirty = false;";
+            else
+                postEncodingDirtinessCheck = 
+                    $@"
+                        _IsDirty = false;
+                        _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
+                 
 
             string markHierarchyCleanMethod = "";
             if (!IsAbstract)
@@ -381,7 +400,7 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}
 
-                        private bool _IsDirty;
+                        {ProtectedIfApplicable}bool _IsDirty;
                         public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
@@ -417,11 +436,11 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        private bool _DescendantIsDirty;
+                        {ProtectedIfApplicable}bool _DescendantIsDirty;
                         public {DerivationKeyword}bool DescendantIsDirty
                         {{
                             [DebuggerStepThrough]
-                            get => _DescendantIsDirty{additionalDirtinessChecks};
+                            get => _DescendantIsDirty{additionalDescendantDirtinessChecks};
                             [DebuggerStepThrough]
                             set
                             {{
@@ -669,6 +688,7 @@ namespace Lazinator.CodeDescription
             {
                 property.AppendPropertyWriteString(sb);
             }
+            sb.AppendLine(postEncodingDirtinessCheck);
 
             sb.Append($@"}}
 ");
