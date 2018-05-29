@@ -1656,6 +1656,9 @@ namespace LazinatorTests.Tests
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.IsDirty.Should().BeTrue();
+            hierarchy.MyChild1.LazinatorParentClass.Should().Be(null); // parent class isn't set until after deserialization
+            hierarchy.MyChild1.MyShort = 5234; 
+            hierarchy.DescendantIsDirty.Should().BeFalse(); // not affected by change to new child -- but the parent is dirty, so it shouldn't matter
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.IsDirty.Should().BeFalse();

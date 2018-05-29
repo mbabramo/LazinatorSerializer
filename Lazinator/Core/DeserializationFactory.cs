@@ -105,7 +105,7 @@ namespace Lazinator.Core
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 
-        // The following overloads are identical without the parent and in some cases with an action to set dirtiness on the parent . Having separately overloads saves us the performance penalty of passing a null for parent.
+        // The following overloads are identical without the parent and in some cases with an action to set dirtiness on the parent. Having separately overloads saves us the performance penalty of passing a null for parent.
 
 
         public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate) where T : ILazinator, new()

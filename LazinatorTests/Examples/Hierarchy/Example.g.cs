@@ -125,9 +125,7 @@ namespace LazinatorTests.Examples
         protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
-            [DebuggerStepThrough]
             get => _DescendantIsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -510,7 +508,6 @@ namespace LazinatorTests.Examples
         private ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild1_Accessed)
@@ -533,7 +530,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild1;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

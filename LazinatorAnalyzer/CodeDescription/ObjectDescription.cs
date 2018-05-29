@@ -462,7 +462,6 @@ namespace Lazinator.CodeDescription
                         private MemoryInBuffer _HierarchyBytes;
                         public {DerivationKeyword}MemoryInBuffer HierarchyBytes
                         {{
-                            get => _HierarchyBytes;
                             set
                             {{
                                 _HierarchyBytes = value;
