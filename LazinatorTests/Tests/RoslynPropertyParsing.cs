@@ -86,7 +86,7 @@ namespace LazinatorTests.Tests
             var propertiesThisLevel = properties.Where(x => x.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
             var propertiesLowerLevels = properties.Where(x => x.LevelInfo != PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
             propertiesThisLevel.Count().Should().Be(1);
-            propertiesLowerLevels.Count().Should().Be(3);
+            propertiesLowerLevels.Count().Should().Be(4);
             propertiesThisLevel[0].Name.Should().Be("MyInt");
             propertiesThisLevel[0].GetMethod.Name.Should().Be("get_MyInt");
             propertiesThisLevel[0].SetMethod.Name.Should().Be("set_MyInt");
@@ -103,6 +103,10 @@ namespace LazinatorTests.Tests
             propertiesLowerLevels[2].GetMethod.Name.Should().Be("get_MyShort");
             propertiesLowerLevels[2].SetMethod.Name.Should().Be("set_MyShort");
             propertiesLowerLevels[2].Type.Name.Should().Be("Int16");
+            propertiesLowerLevels[3].Name.Should().Be("MyWrapperContainer");
+            propertiesLowerLevels[3].GetMethod.Name.Should().Be("get_MyWrapperContainer");
+            propertiesLowerLevels[3].SetMethod.Name.Should().Be("set_MyWrapperContainer");
+            propertiesLowerLevels[3].Type.Name.Should().Be("WrapperContainer");
         }
 
         [Fact]
