@@ -599,7 +599,7 @@ namespace Lazinator.CodeDescription
                 selfSerializationVersionString = $@"public int LazinatorObjectVersion
                 {{
                     get => -1;
-                    set => throw new Exception(""Lazinator versioning disabled for {NameIncludingGenerics}."");
+                    set => throw new LazinatorSerializationException(""Lazinator versioning disabled for {NameIncludingGenerics}."");
                 }}";
             else if (ObjectType == LazinatorObjectType.Class)
                 selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface

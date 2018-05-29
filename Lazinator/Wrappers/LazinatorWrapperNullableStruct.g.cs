@@ -261,7 +261,7 @@ namespace Lazinator.Wrappers
         public int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new Exception("Lazinator versioning disabled for LazinatorWrapperNullableStruct<T>.");
+            set => throw new LazinatorSerializationException("Lazinator versioning disabled for LazinatorWrapperNullableStruct<T>.");
         }
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Lazinator.Core;
+using Lazinator.Exceptions;
 
 namespace Lazinator.Buffers
 {
@@ -76,7 +77,7 @@ namespace Lazinator.Buffers
                 {
                     tryNum++;
                     if (tryNum > maxTries)
-                        throw new Exception("BadBrotliString");
+                        throw new LazinatorSerializationException("BadBrotliString");
                     writer.Resize();
                 }
             }
@@ -114,7 +115,7 @@ namespace Lazinator.Buffers
                 {
                     tryNum++;
                     if (tryNum > maxTries)
-                        throw new Exception("BadBrotliString");
+                        throw new LazinatorSerializationException("BadBrotliString");
                     decompressionBuffer.Resize();
                 }
             }

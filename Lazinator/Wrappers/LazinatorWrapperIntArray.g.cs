@@ -239,7 +239,7 @@ namespace Lazinator.Wrappers
         public int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new Exception("Lazinator versioning disabled for LazinatorWrapperIntArray.");
+            set => throw new LazinatorSerializationException("Lazinator versioning disabled for LazinatorWrapperIntArray.");
         }
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

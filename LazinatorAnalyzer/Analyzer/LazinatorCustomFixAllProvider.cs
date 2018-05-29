@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Lazinator.CodeDescription;
 using LazinatorAnalyzer.Settings;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -346,7 +347,7 @@ namespace LazinatorAnalyzer.Analyzer
             foreach (var documentId in documentIdsForNew)
             {
                 if (revisionsTracker.newDocumentsMap.ContainsKey(documentId))
-                    throw new Exception("Internal exception. Did not expect multiple code fixes to produce same new document.");
+                    throw new LazinatorCodeGenException("Internal exception. Did not expect multiple code fixes to produce same new document.");
                 revisionsTracker.newDocumentsMap[documentId] = changedSolution.GetDocument(documentId);
             }
 

@@ -228,7 +228,7 @@ namespace Lazinator.Core
                 var attribute = LazinatorReflection.GetLazinatorAttributeForILazinator(type);
                 int uniqueID = attribute.UniqueID;
                 if (FactoriesByID.ContainsKey(uniqueID))
-                    throw new Exception($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
+                    throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
                 FactoriesByID[uniqueID] = GetFactoryForType(type);
             }
         }

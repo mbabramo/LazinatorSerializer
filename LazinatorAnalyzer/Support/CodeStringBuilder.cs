@@ -57,7 +57,7 @@ namespace Lazinator.CodeDescription
                     {
                         IndentLevel--;
                         if (IndentLevel < 0)
-                            throw new Exception("Internal error. Unmatched closing brace.");
+                            throw new LazinatorCodeGenException("Internal error. Unmatched closing brace.");
                         IndentToCurrentLevel();
                     }
                     else
