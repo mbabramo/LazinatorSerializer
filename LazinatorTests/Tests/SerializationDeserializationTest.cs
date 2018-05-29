@@ -1675,7 +1675,7 @@ namespace LazinatorTests.Tests
         public void DistantPropertiesSerialized()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
-            hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 17;
+            hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(17);
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 19;
