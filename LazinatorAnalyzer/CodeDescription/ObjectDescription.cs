@@ -470,7 +470,7 @@ namespace Lazinator.CodeDescription
                             }}
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             _IsDirty = false;
-                            LazinatorObjectBytes = bytes.FilledMemory;{(resetAccessed != "" ? $@"
+                            LazinatorObjectBytes = bytes.FilledMemory;{(false /* DEBUG */ && resetAccessed != "" ? $@"
                             {resetAccessed}" : "")}
                         }}
 
