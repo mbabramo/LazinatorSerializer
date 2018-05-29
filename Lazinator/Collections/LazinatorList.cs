@@ -312,7 +312,7 @@ namespace Lazinator.Collections
                 }
             });
             // Write the offsets (including size information). Do this regardless of whether there is anything in the list.
-            LazinatorUtilities.WriteChildWithLength(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(_Offsets_ByteIndex, _Offsets_ByteLength), verifyCleanness, false);
+            LazinatorUtilities.WriteChildWithLength(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(_Offsets_ByteIndex, _Offsets_ByteLength), verifyCleanness, false, this);
         }
 
     }
