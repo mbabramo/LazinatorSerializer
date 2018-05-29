@@ -15,7 +15,7 @@ namespace Lazinator.Core
         /// <summary>
         /// The memory (generally rented from a memory pool) used to initialize a self-serialized class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
         /// </summary>
-        MemoryInBuffer HierarchyBytes { get; set; }
+        MemoryInBuffer HierarchyBytes { set; }
         /// <summary>
         /// The bytes used to initialize a self-serialized class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyBytes or from the parent's LazinatorObjectBytes.
         /// </summary>

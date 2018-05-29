@@ -311,7 +311,6 @@ namespace Lazinator.CodeDescription
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
-			                get;
 			                set;
                         }}
                         
