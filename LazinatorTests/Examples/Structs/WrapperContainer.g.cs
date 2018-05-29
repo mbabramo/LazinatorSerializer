@@ -181,7 +181,6 @@ namespace LazinatorTests.Examples.Structs
                 return;
             }
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            _IsDirty = false;
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
