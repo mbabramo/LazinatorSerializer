@@ -163,7 +163,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        private ReadOnlyMemory<byte> _LazinatorObjectBytes;
+        protected ReadOnlyMemory<byte> _LazinatorObjectBytes;
         public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get => _LazinatorObjectBytes;
@@ -302,6 +302,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            int startPosition = writer.Position;
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -310,7 +311,7 @@ namespace LazinatorTests.Examples.Hierarchy
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength), verifyCleanness, false);
+                WriteChildWithLength(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength), verifyCleanness, false, this);
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
@@ -323,6 +324,8 @@ namespace LazinatorTests.Examples.Hierarchy
             
             _IsDirty = false;
             _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExampleByInterface_Accessed && ExampleByInterface != null && (ExampleByInterface.IsDirty || ExampleByInterface.DescendantIsDirty)));
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
         /* Conversion of supported collections and tuples */

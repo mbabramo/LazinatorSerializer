@@ -153,7 +153,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private ReadOnlyMemory<byte> _LazinatorObjectBytes;
+        ReadOnlyMemory<byte> _LazinatorObjectBytes;
         public ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get => _LazinatorObjectBytes;
@@ -250,6 +250,7 @@ namespace Lazinator.Wrappers
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            int startPosition = writer.Position;
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -269,6 +270,8 @@ namespace Lazinator.Wrappers
             
             _IsDirty = false;
             _DescendantIsDirty = false;
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
         /* Conversion of supported collections and tuples */

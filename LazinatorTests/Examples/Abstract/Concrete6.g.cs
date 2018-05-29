@@ -105,6 +105,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            int startPosition = writer.Position;
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
             WriteNonLazinatorObject(
@@ -118,6 +119,8 @@ namespace LazinatorTests.Examples.Abstract
             
             _IsDirty = false;
             _DescendantIsDirty = false;
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
         /* Conversion of supported collections and tuples */

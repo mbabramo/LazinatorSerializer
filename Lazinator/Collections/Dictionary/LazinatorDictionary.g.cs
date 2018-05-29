@@ -158,7 +158,7 @@ namespace Lazinator.Collections.Dictionary
             }
         }
         
-        private ReadOnlyMemory<byte> _LazinatorObjectBytes;
+        protected ReadOnlyMemory<byte> _LazinatorObjectBytes;
         public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get => _LazinatorObjectBytes;
@@ -278,6 +278,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            int startPosition = writer.Position;
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -287,11 +288,13 @@ namespace Lazinator.Collections.Dictionary
             CompressedIntegralTypes.WriteCompressedInt(writer, _Count);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength), verifyCleanness, false);
+                WriteChildWithLength(writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength), verifyCleanness, false, this);
             }
             
             _IsDirty = false;
             _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Buckets_Accessed && Buckets != null && (Buckets.IsDirty || Buckets.DescendantIsDirty)));
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

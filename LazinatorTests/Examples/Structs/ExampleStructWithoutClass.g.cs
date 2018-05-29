@@ -153,7 +153,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        private ReadOnlyMemory<byte> _LazinatorObjectBytes;
+        ReadOnlyMemory<byte> _LazinatorObjectBytes;
         public ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get => _LazinatorObjectBytes;
@@ -235,6 +235,7 @@ namespace LazinatorTests.Examples.Structs
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            int startPosition = writer.Position;
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -245,6 +246,8 @@ namespace LazinatorTests.Examples.Structs
             
             _IsDirty = false;
             _DescendantIsDirty = false;
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

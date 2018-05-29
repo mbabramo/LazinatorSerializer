@@ -182,10 +182,12 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes"></param>
         public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
-            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes) where T : ILazinator
+            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, ILazinator parent = null) where T : ILazinator
         {
             if (!childHasBeenAccessed && child != null)
+            {
                 childHasBeenAccessed = true; // child is an uninitialized struct
+            }
             if (!childHasBeenAccessed && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
@@ -219,6 +221,8 @@ namespace Lazinator.Core
                         LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
             }
+            if (child != null && child.LazinatorParentClass == null)
+                child.LazinatorParentClass = parent; // set the parent so that this object can be used like a deserialized object
         }
 
         /// <summary>

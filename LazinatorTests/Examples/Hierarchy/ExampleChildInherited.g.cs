@@ -83,12 +83,15 @@ namespace LazinatorTests.Examples
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            int startPosition = writer.Position;
             base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
             
             _IsDirty = false;
             _DescendantIsDirty = false;
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

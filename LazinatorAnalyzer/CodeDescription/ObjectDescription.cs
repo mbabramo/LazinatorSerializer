@@ -468,7 +468,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        private ReadOnlyMemory<byte> _LazinatorObjectBytes;
+                        {ProtectedIfApplicable}ReadOnlyMemory<byte> _LazinatorObjectBytes;
                         public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
                             get => _LazinatorObjectBytes;
@@ -667,13 +667,15 @@ namespace Lazinator.CodeDescription
                         $@"public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             {(ImplementsPreSerialization ? $@"PreSerialization();
-                            " : "")}base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);");
+                            " : "")}int startPosition = writer.Position;
+                            base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);");
             else
                 sb.AppendLine(
                         $@"public {DerivationKeyword}void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             {(ImplementsPreSerialization ? $@"PreSerialization();
-                            " : "")}// header information
+                            " : "")}int startPosition = writer.Position;
+                            // header information
                             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
                             {(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
@@ -686,6 +688,8 @@ namespace Lazinator.CodeDescription
                 property.AppendPropertyWriteString(sb);
             }
             sb.AppendLine(postEncodingDirtinessCheck);
+            sb.AppendLine($@"
+                _LazinatorObjectBytes = writer.Slice(startPosition);");
 
             sb.Append($@"}}
 ");
