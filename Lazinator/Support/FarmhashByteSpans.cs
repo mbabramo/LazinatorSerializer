@@ -2,12 +2,13 @@
 // ReSharper disable SuggestVarOrType_Elsewhere
 // ReSharper disable SuggestVarOrType_BuiltInTypes
 
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
 namespace Lazinator.Support
 {
+
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Class that can calculate 32bit and 64bit hashes for byte spans using Google's farmhash algorithm
     /// </summary>
