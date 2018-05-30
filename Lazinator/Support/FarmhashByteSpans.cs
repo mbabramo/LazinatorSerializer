@@ -60,7 +60,7 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L1042-L1051
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint Hash32Len0to4(byte[] s, uint len, uint seed = 0)
+        private static uint Hash32Len0to4(ReadOnlySpan<byte> s, uint len, uint seed = 0)
         {
             uint b = seed;
             uint c = 9;
@@ -117,11 +117,11 @@ namespace Lazinator.Support
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Hash32(ReadOnlySpan<byte> s) => Hash32(s, (uint)s.Length);
+        public static uint Hash32(ReadOnlySpan<byte> s) => s.Length <= 4 ? Hash32Len0to4(s, (uint)s.Length) : Hash32Len5Plus(s, (uint)s.Length);
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L1061-L1117
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Hash32(ReadOnlySpan<byte> s, uint len)
+        private static uint Hash32Len5Plus(ReadOnlySpan<byte> s, uint len)
         {
             if (len <= 24)
             {
