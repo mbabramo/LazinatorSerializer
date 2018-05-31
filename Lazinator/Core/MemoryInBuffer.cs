@@ -18,6 +18,24 @@ namespace Lazinator.Core
             BytesFilled = bytesFilled;
         }
 
+        public MemoryInBuffer(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)
+        {
+        }
+
+        public MemoryInBuffer(byte[] array) : this(new SimpleMemoryOwner<byte>(new Memory<byte>(array)), array.Length)
+        {
+        }
+
+        public static implicit operator MemoryInBuffer(Memory<byte> memory)
+        {
+            return new MemoryInBuffer(memory);
+        }
+
+        public static implicit operator MemoryInBuffer(byte[] array)
+        {
+            return new MemoryInBuffer(new Memory<byte>(array));
+        }
+
         public MemoryInBuffer WithBytesFilled(int bytesFilled)
         {
             return new MemoryInBuffer(OwnedMemory, bytesFilled);
