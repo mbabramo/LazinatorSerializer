@@ -280,7 +280,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@"        /* Abstract declarations */
 			            public abstract ILazinator LazinatorParentClass {{ get; set; }}
                     
-                        public abstract void Deserialize();
+                        public abstract int Deserialize();
                         
                         public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         
@@ -336,13 +336,13 @@ namespace Lazinator.CodeDescription
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
-                        public {DerivationKeyword}void Deserialize()
+                        public {DerivationKeyword}int Deserialize()
                         {{
                             int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
                             if (span.Length == 0)
                             {{
-                                return;
+                                return 0;
                             }}{classContainingStructContainingClassError}
 
                             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
@@ -371,6 +371,7 @@ namespace Lazinator.CodeDescription
                             PostDeserialization();"
                                 : "")
                         }
+                            return bytesSoFar;
                         }}
 
                         public {DerivationKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
