@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int Deserialize()
         {
-            _Example2_Accessed = _Example3_Accessed = _IntList1_Accessed = _IntList2_Accessed = _IntList3_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -433,6 +433,11 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _IntList3_Accessed;
+        
+        protected override void ResetAccessedProperties()
+        {
+            _Example2_Accessed = _Example3_Accessed = _IntList1_Accessed = _IntList2_Accessed = _IntList3_Accessed = false;
+        }
         
         /* Conversion */
         

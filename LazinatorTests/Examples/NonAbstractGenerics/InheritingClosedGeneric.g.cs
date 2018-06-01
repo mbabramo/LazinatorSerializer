@@ -69,6 +69,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
+        protected override void ResetAccessedProperties()
+        {
+            base.ResetAccessedProperties();
+            
+        }
+        
         /* Conversion */
         
         public override int LazinatorUniqueID => 251;

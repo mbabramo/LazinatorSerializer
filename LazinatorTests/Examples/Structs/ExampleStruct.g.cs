@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples
         
         public int Deserialize()
         {
-            _MyChild1_Accessed = _MyChild2_Accessed = _MyLazinatorList_Accessed = _MyListValues_Accessed = _MyTuple_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -451,6 +451,11 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyTuple_Accessed;
+        
+        void ResetAccessedProperties()
+        {
+            _MyChild1_Accessed = _MyChild2_Accessed = _MyLazinatorList_Accessed = _MyListValues_Accessed = _MyTuple_Accessed = false;
+        }
         
         /* Conversion */
         

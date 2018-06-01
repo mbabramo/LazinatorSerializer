@@ -33,7 +33,7 @@ namespace Lazinator.Spans
         
         public virtual int Deserialize()
         {
-            _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -265,6 +265,11 @@ namespace Lazinator.Spans
             }
         }
         protected bool _ReadOrWrite_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;
+        }
         
         /* Conversion */
         

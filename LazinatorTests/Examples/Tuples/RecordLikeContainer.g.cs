@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
-            _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -307,6 +307,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeType_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;
+        }
         
         /* Conversion */
         

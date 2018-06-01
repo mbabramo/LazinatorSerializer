@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual int Deserialize()
         {
-            _WrappedInt_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -274,6 +274,11 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedInt;
             }
+        }
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _WrappedInt_Accessed = false;
         }
         
         /* Conversion */

@@ -37,7 +37,7 @@ namespace Lazinator.Collections.Avl
         
         public int Deserialize()
         {
-            _Left_Accessed = _Right_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -419,6 +419,11 @@ namespace Lazinator.Collections.Avl
             }
         }
         bool _Value_Accessed;
+        
+        void ResetAccessedProperties()
+        {
+            _Left_Accessed = _Right_Accessed = false;
+        }
         
         /* Conversion */
         

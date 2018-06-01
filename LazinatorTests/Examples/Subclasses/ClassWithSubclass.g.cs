@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual int Deserialize()
         {
-            _SubclassInstance1_Accessed = _SubclassInstance2_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -314,6 +314,11 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance2_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _SubclassInstance1_Accessed = _SubclassInstance2_Accessed = false;
+        }
         
         /* Conversion */
         

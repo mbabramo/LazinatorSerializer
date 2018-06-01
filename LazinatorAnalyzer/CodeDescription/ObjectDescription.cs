@@ -524,7 +524,7 @@ namespace Lazinator.CodeDescription
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
-                        public abstract void ResetAccessedProperties();
+                        {ProtectedIfApplicable}abstract void ResetAccessedProperties();
                 }}
             }}
 ");

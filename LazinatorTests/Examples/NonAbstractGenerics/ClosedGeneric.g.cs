@@ -141,6 +141,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
+        protected override void ResetAccessedProperties()
+        {
+            base.ResetAccessedProperties();
+            _MyListT_Accessed = _MyT_Accessed = false;
+        }
+        
         /* Conversion */
         
         public override int LazinatorUniqueID => 250;

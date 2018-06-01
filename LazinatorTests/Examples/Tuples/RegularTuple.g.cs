@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
-            _MyTupleSerialized_Accessed = _MyTupleSerialized2_Accessed = _MyTupleSerialized3_Accessed = _MyTupleSerialized4_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -338,6 +338,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized4_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyTupleSerialized_Accessed = _MyTupleSerialized2_Accessed = _MyTupleSerialized3_Accessed = _MyTupleSerialized4_Accessed = false;
+        }
         
         /* Conversion */
         

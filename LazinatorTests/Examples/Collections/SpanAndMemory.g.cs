@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            _MyMemoryInt_Accessed = _MyNullableMemoryInt_Accessed = _MyReadOnlySpanByte_Accessed = _MyReadOnlySpanChar_Accessed = _MyReadOnlySpanDateTime_Accessed = _MyReadOnlySpanLong_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -379,6 +379,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyReadOnlySpanLong_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyMemoryInt_Accessed = _MyNullableMemoryInt_Accessed = _MyReadOnlySpanByte_Accessed = _MyReadOnlySpanChar_Accessed = _MyReadOnlySpanDateTime_Accessed = _MyReadOnlySpanLong_Accessed = false;
+        }
         
         /* Conversion */
         

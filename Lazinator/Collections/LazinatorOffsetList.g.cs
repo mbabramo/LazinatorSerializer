@@ -37,7 +37,7 @@ namespace Lazinator.Collections
         
         public int Deserialize()
         {
-            _FourByteItems_Accessed = _TwoByteItems_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -308,6 +308,11 @@ namespace Lazinator.Collections
             }
         }
         bool _TwoByteItems_Accessed;
+        
+        void ResetAccessedProperties()
+        {
+            _FourByteItems_Accessed = _TwoByteItems_Accessed = false;
+        }
         
         /* Conversion */
         

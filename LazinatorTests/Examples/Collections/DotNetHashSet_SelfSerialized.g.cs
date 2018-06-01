@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            _MyHashSetSerialized_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -240,6 +240,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyHashSetSerialized_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyHashSetSerialized_Accessed = false;
+        }
         
         /* Conversion */
         

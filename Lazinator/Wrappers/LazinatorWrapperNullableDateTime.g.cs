@@ -33,6 +33,7 @@ namespace Lazinator.Wrappers
         
         public int Deserialize()
         {
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -217,6 +218,11 @@ namespace Lazinator.Wrappers
                 IsDirty = true;
                 _WrappedValue = value;
             }
+        }
+        
+        void ResetAccessedProperties()
+        {
+            
         }
         
         /* Conversion */

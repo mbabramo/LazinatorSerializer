@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            _MyQueueInt_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -259,6 +259,11 @@ namespace LazinatorTests.Examples.Collections
                     }
                 }
             }
+        }
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyQueueInt_Accessed = false;
         }
         
         /* Conversion */

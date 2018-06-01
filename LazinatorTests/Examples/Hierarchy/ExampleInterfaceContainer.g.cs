@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual int Deserialize()
         {
-            _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -289,6 +289,11 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _ExampleListByInterface_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
+        }
         
         /* Conversion */
         

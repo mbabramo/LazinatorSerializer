@@ -35,7 +35,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual int Deserialize()
         {
-            _UnderlyingTree_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -267,6 +267,11 @@ namespace Lazinator.Collections.AvlTree
             }
         }
         protected bool _UnderlyingTree_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _UnderlyingTree_Accessed = false;
+        }
         
         /* Conversion */
         

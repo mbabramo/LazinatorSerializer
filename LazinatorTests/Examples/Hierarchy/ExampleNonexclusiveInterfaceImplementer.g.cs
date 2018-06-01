@@ -37,6 +37,7 @@ namespace LazinatorTests.Examples
         
         public virtual int Deserialize()
         {
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -221,6 +222,11 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyInt = value;
             }
+        }
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            
         }
         
         /* Conversion */

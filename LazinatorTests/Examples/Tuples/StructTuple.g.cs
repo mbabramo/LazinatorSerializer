@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
-            _EnumTuple_Accessed = _MyNamedTuple_Accessed = _MyNullableTuple_Accessed = _MyValueTupleSerialized_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -338,6 +338,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyValueTupleSerialized_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _EnumTuple_Accessed = _MyNamedTuple_Accessed = _MyNullableTuple_Accessed = _MyValueTupleSerialized_Accessed = false;
+        }
         
         /* Conversion */
         

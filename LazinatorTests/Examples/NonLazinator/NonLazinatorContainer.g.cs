@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples
         
         public int Deserialize()
         {
-            _NonLazinatorClass_Accessed = _NonLazinatorInterchangeableClass_Accessed = _NonLazinatorStruct_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -304,6 +304,11 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorStruct_Accessed;
+        
+        void ResetAccessedProperties()
+        {
+            _NonLazinatorClass_Accessed = _NonLazinatorInterchangeableClass_Accessed = _NonLazinatorStruct_Accessed = false;
+        }
         
         /* Conversion */
         

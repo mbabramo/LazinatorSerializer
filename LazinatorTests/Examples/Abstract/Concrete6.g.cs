@@ -88,6 +88,12 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected bool _IntList6_Accessed;
         
+        protected override void ResetAccessedProperties()
+        {
+            base.ResetAccessedProperties();
+            _IntList6_Accessed = false;
+        }
+        
         /* Conversion */
         
         public override int LazinatorUniqueID => 249;

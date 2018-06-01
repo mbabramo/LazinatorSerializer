@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            _MyDictionary_Accessed = _MySortedDictionary_Accessed = _MySortedList_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -306,6 +306,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedList_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyDictionary_Accessed = _MySortedDictionary_Accessed = _MySortedList_Accessed = false;
+        }
         
         /* Conversion */
         

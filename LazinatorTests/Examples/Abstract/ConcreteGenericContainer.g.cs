@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int Deserialize()
         {
-            _Item_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -251,6 +251,11 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 _Item_Accessed = true;
             }
+        }
+        
+        protected override void ResetAccessedProperties()
+        {
+            _Item_Accessed = false;
         }
         
         /* Conversion */

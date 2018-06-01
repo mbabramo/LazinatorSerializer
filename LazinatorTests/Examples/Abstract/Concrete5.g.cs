@@ -149,6 +149,12 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected bool _IntList5_Accessed;
         
+        protected override void ResetAccessedProperties()
+        {
+            base.ResetAccessedProperties();
+            _IntList4_Accessed = _IntList5_Accessed = false;
+        }
+        
         /* Conversion */
         
         public override int LazinatorUniqueID => 239;

@@ -38,7 +38,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual int Deserialize()
         {
-            _Keys_Accessed = _Values_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -300,6 +300,11 @@ namespace Lazinator.Collections.Dictionary
             }
         }
         protected bool _Values_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _Keys_Accessed = _Values_Accessed = false;
+        }
         
         /* Conversion */
         

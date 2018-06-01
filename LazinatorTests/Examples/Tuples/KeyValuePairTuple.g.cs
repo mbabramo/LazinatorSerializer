@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
-            _MyKeyValuePairSerialized_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -240,6 +240,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyKeyValuePairSerialized_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyKeyValuePairSerialized_Accessed = false;
+        }
         
         /* Conversion */
         

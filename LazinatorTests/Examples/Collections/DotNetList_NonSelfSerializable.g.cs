@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            _MyListNonLazinatorType_Accessed = _MyListNonLazinatorType2_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -294,6 +294,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNonLazinatorType2_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyListNonLazinatorType_Accessed = _MyListNonLazinatorType2_Accessed = false;
+        }
         
         /* Conversion */
         

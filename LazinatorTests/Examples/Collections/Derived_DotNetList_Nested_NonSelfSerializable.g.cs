@@ -104,6 +104,12 @@ namespace LazinatorTests.Examples.Collections
         }
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;
         
+        protected override void ResetAccessedProperties()
+        {
+            base.ResetAccessedProperties();
+            _MyLevel2ListNestedNonLazinatorType_Accessed = false;
+        }
+        
         /* Conversion */
         
         public override int LazinatorUniqueID => 260;

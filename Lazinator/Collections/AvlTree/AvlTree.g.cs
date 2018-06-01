@@ -33,7 +33,7 @@ namespace Lazinator.Collections.Avl
         
         public virtual int Deserialize()
         {
-            _Root_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -250,6 +250,11 @@ namespace Lazinator.Collections.Avl
             }
         }
         protected bool _Root_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _Root_Accessed = false;
+        }
         
         /* Conversion */
         

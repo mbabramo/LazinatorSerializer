@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples
         
         public virtual int Deserialize()
         {
-            _IntWrapper_Accessed = _MyExampleStruct_Accessed = _MyListExampleStruct_Accessed = _MyListNullableExampleStruct_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -407,6 +407,11 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListNullableExampleStruct_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _IntWrapper_Accessed = _MyExampleStruct_Accessed = _MyListExampleStruct_Accessed = _MyListNullableExampleStruct_Accessed = false;
+        }
         
         /* Conversion */
         

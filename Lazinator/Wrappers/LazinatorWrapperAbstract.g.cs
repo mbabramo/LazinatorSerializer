@@ -74,7 +74,7 @@ namespace Lazinator.Wrappers
         public abstract ulong GetBinaryHashCode64();
         public abstract Guid GetBinaryHashCode128();
         
-        /* Field boilerplate */
+        /* Field definitions */
         
         protected int _Wrapped_ByteIndex;
         protected virtual int _Wrapped_ByteLength { get; }
@@ -89,5 +89,6 @@ namespace Lazinator.Wrappers
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        protected abstract void ResetAccessedProperties();
     }
 }

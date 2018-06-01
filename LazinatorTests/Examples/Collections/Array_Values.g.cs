@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            _MyArrayInt_Accessed = _MyJaggedArrayInt_Accessed = false;
+            ResetAccessedProperties();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -292,6 +292,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyJaggedArrayInt_Accessed;
+        
+        protected virtual void ResetAccessedProperties()
+        {
+            _MyArrayInt_Accessed = _MyJaggedArrayInt_Accessed = false;
+        }
         
         /* Conversion */
         
