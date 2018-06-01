@@ -37,6 +37,7 @@ namespace Lazinator.Collections.Avl
         
         public int Deserialize()
         {
+            _Left_Accessed = _Right_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

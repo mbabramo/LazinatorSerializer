@@ -34,6 +34,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual int Deserialize()
         {
+            _Buckets_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

@@ -35,6 +35,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual int Deserialize()
         {
+            _UnderlyingTree_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
