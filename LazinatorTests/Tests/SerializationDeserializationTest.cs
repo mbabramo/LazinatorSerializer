@@ -846,6 +846,68 @@ namespace LazinatorTests.Tests
             attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
         }
 
+        [Fact]
+        public void LazinatorDerivedArrayInt_UsingDerivedProperty()
+        {
+            Array_Values GetObject(int thirdItem)
+            {
+                return new Array_Values()
+                {
+                    MyArrayInt = new int[] { 3, 4, thirdItem }
+                };
+            }
+
+            var original = GetObject(5);
+            var copy = GetObject(5);
+            var copyWithGoal = GetObject(5);
+            copyWithGoal.MyArrayInt[2] = 6;
+            var result = original.CloneLazinatorTyped();
+            copy.MyArrayInt.SequenceEqual(result.MyArrayInt).Should().BeTrue();
+            // make sure that updates are registered when dirty flag is set
+            result.MyArrayInt[2] = 6;
+            result.MyArrayInt_Dirty = true;
+            var result2 = result.CloneLazinatorTyped();
+            copyWithGoal.MyArrayInt.SequenceEqual(result2.MyArrayInt).Should().BeTrue();
+            // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
+            result2.MyArrayInt[2] = 7;
+            var result3 = result2.CloneLazinatorTyped();
+            result3.MyArrayInt[2].Should().Be(6); // the change is ignored, since dirtiness flag wasn't set
+            // make sure that error is thrown if we do verify cleanliness
+            Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
+            attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
+        }
+
+        [Fact]
+        public void LazinatorDerivedArrayInt_UsingNewProperty()
+        {
+            DerivedArray_Values GetObject(int thirdItem)
+            {
+                return new DerivedArray_Values()
+                {
+                    MyArrayInt_DerivedLevel = new int[] { 3, 4, thirdItem }
+                };
+            }
+
+            var original = GetObject(5);
+            var copy = GetObject(5);
+            var copyWithGoal = GetObject(5);
+            copyWithGoal.MyArrayInt[2] = 6;
+            var result = original.CloneLazinatorTyped();
+            copy.MyArrayInt_DerivedLevel.SequenceEqual(result.MyArrayInt).Should().BeTrue();
+            // make sure that updates are registered when dirty flag is set
+            result.MyArrayInt_DerivedLevel[2] = 6;
+            result.MyArrayInt_DerivedLevel_Dirty = true;
+            var result2 = result.CloneLazinatorTyped();
+            copyWithGoal.MyArrayInt_DerivedLevel.SequenceEqual(result2.MyArrayInt).Should().BeTrue();
+            // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
+            result2.MyArrayInt_DerivedLevel[2] = 7;
+            var result3 = result2.CloneLazinatorTyped();
+            result3.MyArrayInt_DerivedLevel[2].Should().Be(6); // the change is ignored, since dirtiness flag wasn't set
+            // make sure that error is thrown if we do verify cleanliness
+            Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
+            attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
+        }
+
 
         [Fact]
         public void LazinatorMultidimensionalArray()

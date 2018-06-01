@@ -249,6 +249,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(DotNetStack_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(SpanAndMemory), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(Array_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
+            await CompleteGenerateCode(typeof(DerivedArray_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(ArrayMultidimensional_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(LazinatorListContainer), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(LazinatorListContainerGeneric<>), "LazinatorTests", "/Examples/", "Collections/", ws);
