@@ -32,6 +32,7 @@ namespace Lazinator.Core
         /// <summary>
         /// Deserializes the class/struct and any serialized descendants from the object's serialized bytes. This is automatically called the first time there is an attempt to read a field or child, or when LazinatorObjectBytes is set. This reads data in the header and then calls ConvertFromBytesAfterHeader.
         /// </summary>
+        /// <returns>The number of bytes processed during deserialization</returns>
         int Deserialize();
         /// <summary>
         /// Initiates serialization starting from here (and optionally including descendants), using the original bytes if the object is clean and manually writing bytes if necessary.
@@ -76,6 +77,11 @@ namespace Lazinator.Core
         /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.
         /// </summary>
         void LazinatorConvertToBytes();
+        /// <summary>
+        /// Returns the serialized length of an object, performing the serialization needed to make the computation if necessary.
+        /// </summary>
+        /// <returns></returns>
+        int GetByteLength();
         /// <summary>
         /// Calculates a 32-bit noncryptographic hash code based on the bytes of the object.
         /// </summary>
