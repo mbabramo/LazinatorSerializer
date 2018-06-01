@@ -56,7 +56,7 @@ namespace Lazinator.Core
             SetupAllTypesInAssemblies(assemblies);
         }
 
-        public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator, new()
+        public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator, new()
         {
             // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.Length <= 1)
@@ -106,25 +106,7 @@ namespace Lazinator.Core
         }
 
         // The following overloads are identical without the parent and in some cases with an action to set dirtiness on the parent. Having separately overloads saves us the performance penalty of passing a null for parent.
-
-
-        public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate) where T : ILazinator, new()
-        {
-            // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
-            if (storage.Length <= 1)
-                return default;
-            int bytesSoFar = 0;
-            int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            T itemToReturn;
-            if (uniqueID == mostLikelyUniqueID)
-            {
-                itemToReturn = funcToCreateMostLikely();
-                InitializeDeserialized(itemToReturn, storage, informParentOfDirtinessDelegate);
-            }
-            else
-                itemToReturn = (T)FactoryCreate(uniqueID, storage, informParentOfDirtinessDelegate); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
-            return itemToReturn;
-        }
+        
 
         public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
@@ -154,24 +136,6 @@ namespace Lazinator.Core
             if (informParentOfDirtinessDelegate != null)
                 lazinatorType.InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate;
             lazinatorType.LazinatorObjectBytes = serializedBytes;
-        }
-
-        public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage) where T : ILazinator, new()
-        {
-            // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
-            if (storage.Length <= 1)
-                return default;
-            int bytesSoFar = 0;
-            int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            T itemToReturn;
-            if (uniqueID == mostLikelyUniqueID)
-            {
-                itemToReturn = funcToCreateMostLikely();
-                InitializeDeserialized(itemToReturn, storage);
-            }
-            else
-                itemToReturn = (T)FactoryCreate(uniqueID, storage); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
-            return itemToReturn;
         }
 
         public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage)
