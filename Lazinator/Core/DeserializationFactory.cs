@@ -38,11 +38,20 @@ namespace Lazinator.Core
 
         }
 
+        /// <summary>
+        /// Construct a deserialization factory that is aware of all Lazinator types in the same assembly as a specified type.
+        /// </summary>
+        /// <param name="type">A type used to identify an assembly</param>
         public DeserializationFactory(Type type) : this(new Type[] {type}, true)
         {
 
         }
 
+        /// <summary>
+        /// Construct a deserialization factory
+        /// </summary>
+        /// <param name="types">Types the deserialization factory should be aware of</param>
+        /// <param name="loadAllEligibleTypesInCorrespondingAssemblies">Whether the deserialization factory should also consider all other types in the same assemblies as the specified types</param>
         public DeserializationFactory(Type[] types, bool loadAllEligibleTypesInCorrespondingAssemblies)
         {
             if (!loadAllEligibleTypesInCorrespondingAssemblies)
@@ -51,11 +60,24 @@ namespace Lazinator.Core
                 SetupAllTypesInAssemblies(types.Select(x => x.Assembly).Distinct().ToArray());
         }
 
+        /// <summary>
+        /// Construct a deserialization factory, considering all types in the specified assemblies
+        /// </summary>
+        /// <param name="assemblies">The assemblies in which to search for Lazinator types</param>
         public DeserializationFactory(Assembly[] assemblies)
         {
             SetupAllTypesInAssemblies(assemblies);
         }
 
+        /// <summary>
+        /// Create a typed Lazinator object of a certain concrete type. If the object if of that exact type rather than of a subtype, performance will be better than if the factory creation methods are used.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to be created</typeparam>
+        /// <param name="mostLikelyUniqueID">The expected Lazinator ID of the object. </param>
+        /// <param name="funcToCreateMostLikely">A function to create an uninitialized object of the expected type, typically a function that simply calls the parameterless constructor and returns the result. Use of this function can help avoid the need for the factory creation methods and boxing of structs.</param>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
+        /// <returns></returns>
         public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator, new()
         {
             // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
@@ -74,8 +96,19 @@ namespace Lazinator.Core
             return itemToReturn;
         }
 
+        /// <summary>
+        /// Create a typed Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// </summary>
+        /// <typeparam name="T">Type of the item to create.</typeparam>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator, new() => (T)FactoryCreate(storage, parent);
 
+        /// <summary>
+        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// </summary>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage, ILazinator parent)
         {
             if (storage.Length <= 1)
@@ -85,29 +118,39 @@ namespace Lazinator.Core
             ILazinator itemToReturn = FactoryCreate(uniqueID, storage, parent);
             return itemToReturn;
         }
-
-        public ILazinator FactoryCreate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
+        
+        /// <summary>
+        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// </summary>
+        /// <param name="uniqueID">The type of the item to create</param>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
+        /// <returns>The deserialized Lazinator object</returns>
+        public ILazinator FactoryCreate(int uniqueID, ReadOnlyMemory<byte> storage, ILazinator parent)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
             {
                 ILazinator selfSerialized = FactoriesByID[uniqueID]();
-                InitializeDeserialized(selfSerialized, serializedBytes, parent);
+                InitializeDeserialized(selfSerialized, storage, parent);
                 return selfSerialized;
             }
             else
                 throw new UnknownSerializedTypeException(uniqueID);
         }
 
-        public void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
+        private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
         {
             lazinatorType.DeserializationFactory = this;
             lazinatorType.LazinatorParentClass = parent;
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 
-        // The following overloads are identical without the parent and in some cases with an action to set dirtiness on the parent. Having separately overloads saves us the performance penalty of passing a null for parent.
-        
-
+        /// <summary>
+        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// </summary>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
+        /// <returns>The deserialized Lazinator object</returns>
         public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length <= 1)
@@ -118,6 +161,14 @@ namespace Lazinator.Core
             return itemToReturn;
         }
 
+
+        /// <summary>
+        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// </summary>
+        /// <param name="uniqueID">The type of the item to create</param>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
+        /// <returns>The deserialized Lazinator object</returns>
         public ILazinator FactoryCreate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
@@ -130,7 +181,7 @@ namespace Lazinator.Core
                 throw new UnknownSerializedTypeException(uniqueID);
         }
 
-        public void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             lazinatorType.DeserializationFactory = this;
             if (informParentOfDirtinessDelegate != null)
@@ -138,6 +189,11 @@ namespace Lazinator.Core
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 
+        /// <summary>
+        /// Create from bytes a Lazinator object that does not need to inform a parent object if it has changed.
+        /// </summary>
+        /// <param name="storage">The serialized bytes</param>
+        /// <returns>The deserialized Lazinator object</returns>
         public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length <= 1)
@@ -148,7 +204,27 @@ namespace Lazinator.Core
             return itemToReturn;
         }
 
-        public ILazinator FactoryCreate(int uniqueID, ReadOnlyMemory<byte> serializedBytes)
+        /// <summary>
+        /// Enumerate multiple objects stored successively in a single range of bytes and not in a Lazinator or .Net collection. Storing objects this way is useful when each is appended to the end of the storage.
+        /// </summary>
+        /// <param name="storage"></param>
+        /// <returns></returns>
+        public IEnumerable<ILazinator> FactoryCreateMultiple(ReadOnlyMemory<byte> storage)
+        {
+            while (true) // until "yield break"
+            {
+                if (storage.Length <= 1)
+                    yield break;
+                int bytesSoFar = 0;
+                int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
+                ILazinator itemToReturn = FactoryCreate(uniqueID, storage);
+                int bytes = itemToReturn.LazinatorObjectBytes.Length;
+                storage = storage.Slice(bytes);
+                yield return itemToReturn;
+            }
+        }
+
+        private ILazinator FactoryCreate(int uniqueID, ReadOnlyMemory<byte> serializedBytes)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
             {
@@ -160,7 +236,7 @@ namespace Lazinator.Core
                 throw new UnknownSerializedTypeException(uniqueID);
         }
 
-        public void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes)
+        private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes)
         {
             lazinatorType.DeserializationFactory = this;
             lazinatorType.LazinatorObjectBytes = serializedBytes;

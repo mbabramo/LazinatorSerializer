@@ -2174,6 +2174,18 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void DeserializeMultipleWorks()
+        {
+            Example e = GetHierarchy(1, 1, 1, 1, 0);
+            int length = e.CloneLazinator().LazinatorObjectBytes.Length;
+            Memory<byte> memory = new Memory<byte>(new byte[length * 10]);
+            for (int i = 0; i < 10; i++)
+                e.LazinatorObjectBytes.CopyTo(memory.Slice(length * i));
+            var results = DeserializationFactory.GetInstance().FactoryCreateMultiple(memory).Select(x => (Example) x).Where(x => x != null).ToList();
+            results.Count().Should().Be(10);
+        }
+
+        [Fact]
         public void ConfirmSerialization()
         {
             for (int i = 0; i <= 2; i++)
