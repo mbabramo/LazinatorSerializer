@@ -2286,6 +2286,27 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        void BinaryHashCanBeAssignedToPropertyOfItem()
+        {
+            // the challenge here is that the call to GetBinaryHashCode results in a ConvertToBytes. Meanwhile, the object may have been accessed already on the left side of the assignment. We want to make sure this doesn't cause any problems.
+            Example e = GetHierarchy(1, 1, 1, 1, 0);
+            e.MyChild1.MyLong = (long) e.MyChild1.GetBinaryHashCode64();
+            e.MyChild1.Should().NotBeNull();
+            e.MyChild1.MyLong.Should().NotBe(0);
+            var c = e.CloneLazinatorTyped();
+            c.MyChild1.MyLong = 0;
+            c.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
+            c.MyChild1.Should().NotBeNull();
+            c.MyChild1.MyLong.Should().NotBe(0);
+            Example e2 = GetHierarchy(1, 1, 1, 1, 0);
+            e2.MyChild1 = new ExampleChild();
+            e2.MyChild1.MyLong = 0;
+            e2.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
+            e2.MyChild1.Should().NotBeNull();
+            e2.MyChild1.MyLong.Should().NotBe(0);
+        }
+
+        [Fact]
         public void SubclassesWork()
         {
             ClassWithSubclass outer = new ClassWithSubclass()
