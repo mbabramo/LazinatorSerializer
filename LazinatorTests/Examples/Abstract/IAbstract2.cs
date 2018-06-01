@@ -11,5 +11,6 @@ namespace LazinatorTests.Examples.Abstract
     {
         string String2 { get; set; }
         List<int> IntList2 { get; set; }
+        Example Example2 { get; set; }
     }
 }
