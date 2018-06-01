@@ -168,7 +168,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 _LazinatorObjectBytes = value;
                 int length = Deserialize();
-                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(0, length);
             }
         }
         
@@ -182,7 +182,7 @@ namespace Lazinator.Collections.AvlTree
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
-        public int GetByteLength()
+        public virtual int GetByteLength()
         {
             LazinatorConvertToBytes();
             return _LazinatorObjectBytes.Length;

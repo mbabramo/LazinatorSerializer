@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _LazinatorObjectBytes = value;
                 int length = Deserialize();
-                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(0, length);
             }
         }
         
@@ -184,7 +184,7 @@ namespace LazinatorTests.Examples.Abstract
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
-        public int GetByteLength()
+        public virtual int GetByteLength()
         {
             LazinatorConvertToBytes();
             return _LazinatorObjectBytes.Length;

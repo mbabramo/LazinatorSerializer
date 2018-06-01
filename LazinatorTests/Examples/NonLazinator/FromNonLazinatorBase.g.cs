@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.NonLazinator
             {
                 _LazinatorObjectBytes = value;
                 int length = Deserialize();
-                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(0, length);
             }
         }
         
@@ -180,7 +180,7 @@ namespace LazinatorTests.Examples.NonLazinator
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
-        public int GetByteLength()
+        public virtual int GetByteLength()
         {
             LazinatorConvertToBytes();
             return _LazinatorObjectBytes.Length;

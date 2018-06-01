@@ -163,7 +163,7 @@ namespace Lazinator.Spans
             {
                 _LazinatorObjectBytes = value;
                 int length = Deserialize();
-                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(0, length);
             }
         }
         
@@ -177,7 +177,7 @@ namespace Lazinator.Spans
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
-        public int GetByteLength()
+        public virtual int GetByteLength()
         {
             LazinatorConvertToBytes();
             return _LazinatorObjectBytes.Length;
