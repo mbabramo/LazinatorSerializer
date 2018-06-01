@@ -174,103 +174,12 @@ namespace Lazinator.CodeDescription
                     {{";
             sb.AppendLine(theBeginning);
 
-            string classContainingStructContainingClassError = "";
-            if (ObjectType == LazinatorObjectType.Struct)
-            {
-                if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface))
-                    classContainingStructContainingClassError = $@"
+            string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
+            string constructor = GetConstructor();
+            string manualDescendantDirtinessChecks, additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
 
-                        if (LazinatorParentClass != null)
-                        {{
-                            throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class."");
-                        }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 
-            }
-
-            string constructor = "";
-            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor =
-                    $@"public {SimpleName}(){(ILazinatorTypeSymbol.BaseType != null ? " : base()" : "")}
-                        {{
-                        }}
-                        
-                        ";
-
-            // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
-            string manualDescendantDirtinessChecks = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
-            {
-                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
-                else
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
-            }
-            // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
-            //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
-            //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
-
-            // For a class, we don't need to use the manual checks routinely, since DescendantIsDirty will automatically be sent.
-            // But a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
-            string additionalDescendantDirtinessChecks = "";
-            if (ObjectType == LazinatorObjectType.Struct)
-            {
-                additionalDescendantDirtinessChecks = manualDescendantDirtinessChecks;
-            }
-
-            // After encoding in a mode in which we don't encode all children, we will need to do a check.
-            string postEncodingDirtinessCheck;
-            if (manualDescendantDirtinessChecks == "")
-                postEncodingDirtinessCheck = 
-                    $@"
-                        _IsDirty = false;
-                        _DescendantIsDirty = false;";
-            else
-                postEncodingDirtinessCheck = 
-                    $@"
-                        _IsDirty = false;
-                        _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
-                 
-
-            string markHierarchyCleanMethod = "";
-            if (!IsAbstract)
-            {
-                markHierarchyCleanMethod = $@"public {DerivationKeyword}void MarkHierarchyClean()
-                            {{";
-                if (IsDerivedFromNonAbstractLazinator)
-                    markHierarchyCleanMethod += $@"
-                        base.MarkHierarchyClean();";
-                else
-                    markHierarchyCleanMethod += $@"
-                            _IsDirty = false;
-                            _DescendantIsDirty = false;";
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
-                {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                        markHierarchyCleanMethod += $@"
-                            if (_{property.PropertyName}_Accessed)
-                            {{
-                                {property.PropertyName}{property.NullableStructValueAccessor}.MarkHierarchyClean();
-                            }}";
-                    else 
-                        markHierarchyCleanMethod += $@"
-                            if (_{property.PropertyName}_Accessed)
-                            {{
-                                {property.PropertyName}.MarkHierarchyClean();
-                            }}";
-                }
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
-                    markHierarchyCleanMethod += $@"
-                            _{property.PropertyName}_Dirty = false;";
-                markHierarchyCleanMethod += $@"
-                    }}";
-            }
-            
-            string resetAccessed = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType != LazinatorPropertyType.OpenGenericParameter && x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable))
-            {
-                resetAccessed += $"_{property.PropertyName}_Accessed = ";
-            }
-            if (resetAccessed != "")
-                resetAccessed += $@"false;
-                                ";
+            GetDescendantDirtinessChecks(out manualDescendantDirtinessChecks, out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
+            string markHierarchyCleanMethod = GetMarkHierarchyCleanMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
             {
@@ -327,7 +236,7 @@ namespace Lazinator.CodeDescription
                         public abstract ulong GetBinaryHashCode64();
                         public abstract Guid GetBinaryHashCode128();
 
-                        /* Field boilerplate */
+                        /* Field definitions */
         
                 ";
                 else
@@ -340,7 +249,8 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}int Deserialize()
                         {{
-                            {resetAccessed}int bytesSoFar = 0;
+                            ResetAccessedProperties();
+                            int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
                             if (span.Length == 0)
                             {{
@@ -552,6 +462,7 @@ namespace Lazinator.CodeDescription
 ");
             }
 
+
             var thisLevel = PropertiesToDefineThisLevel;
             var withRecordedIndices = thisLevel
                 .Where(property =>
@@ -613,6 +524,7 @@ namespace Lazinator.CodeDescription
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        public abstract void ResetAccessedProperties();
                 }}
             }}
 ");
@@ -643,6 +555,21 @@ namespace Lazinator.CodeDescription
                             }}
                         }}";
             }
+
+            string resetAccessed = "";
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType != LazinatorPropertyType.OpenGenericParameter && x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable))
+            {
+                resetAccessed += $"_{property.PropertyName}_Accessed = ";
+            }
+            if (resetAccessed != "")
+                resetAccessed += $@"false;";
+
+            sb.AppendLine($@"
+                {ProtectedIfApplicable}{DerivationKeyword}void ResetAccessedProperties()
+                {{
+                    {(IsDerivedFromNonAbstractLazinator ? $@"base.ResetAccessedProperties();
+                    " : "")}{resetAccessed}
+                }}");
 
             sb.AppendLine($@"
                 /* Conversion */
@@ -718,6 +645,111 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
                         ");
+        }
+
+        private string GetConstructor()
+        {
+            string constructor = "";
+            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor =
+                    $@"public {SimpleName}(){(ILazinatorTypeSymbol.BaseType != null ? " : base()" : "")}
+                        {{
+                        }}
+                        
+                        ";
+            return constructor;
+        }
+
+        private string GetClassContainingStructContainingClassError()
+        {
+            string classContainingStructContainingClassError = "";
+            if (ObjectType == LazinatorObjectType.Struct)
+            {
+                if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface))
+                    classContainingStructContainingClassError = $@"
+
+                        if (LazinatorParentClass != null)
+                        {{
+                            throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class."");
+                        }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 
+            }
+
+            return classContainingStructContainingClassError;
+        }
+
+        private string GetMarkHierarchyCleanMethod()
+        {
+            string markHierarchyCleanMethod = "";
+            if (!IsAbstract)
+            {
+                markHierarchyCleanMethod = $@"public {DerivationKeyword}void MarkHierarchyClean()
+                            {{";
+                if (IsDerivedFromNonAbstractLazinator)
+                    markHierarchyCleanMethod += $@"
+                        base.MarkHierarchyClean();";
+                else
+                    markHierarchyCleanMethod += $@"
+                            _IsDirty = false;
+                            _DescendantIsDirty = false;";
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+                {
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                        markHierarchyCleanMethod += $@"
+                            if (_{property.PropertyName}_Accessed)
+                            {{
+                                {property.PropertyName}{property.NullableStructValueAccessor}.MarkHierarchyClean();
+                            }}";
+                    else
+                        markHierarchyCleanMethod += $@"
+                            if (_{property.PropertyName}_Accessed)
+                            {{
+                                {property.PropertyName}.MarkHierarchyClean();
+                            }}";
+                }
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
+                    markHierarchyCleanMethod += $@"
+                            _{property.PropertyName}_Dirty = false;";
+                markHierarchyCleanMethod += $@"
+                    }}";
+            }
+
+            return markHierarchyCleanMethod;
+        }
+
+        private void GetDescendantDirtinessChecks(out string manualDescendantDirtinessChecks, out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessCheck)
+        {
+            // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
+            manualDescendantDirtinessChecks = "";
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            {
+                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
+                else
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+            }
+            // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
+            //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
+            //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
+
+            // For a class, we don't need to use the manual descendant dirtiness checks routinely, since DescendantIsDirty will automatically be sent.
+            // But a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
+            additionalDescendantDirtinessChecks = "";
+            if (ObjectType == LazinatorObjectType.Struct)
+            {
+                additionalDescendantDirtinessChecks = manualDescendantDirtinessChecks;
+            }
+
+            // After encoding in a mode in which we don't encode all children, we will need to do a check.
+            
+            if (manualDescendantDirtinessChecks == "")
+                postEncodingDirtinessCheck =
+                    $@"
+                        _IsDirty = false;
+                        _DescendantIsDirty = false;";
+            else
+                postEncodingDirtinessCheck =
+                    $@"
+                        _IsDirty = false;
+                        _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
         }
 
         private static void GetSupportedConversions(CodeStringBuilder sb, List<PropertyDescription> propertiesSupportedCollections, List<PropertyDescription> propertiesSupportedTuples, List<PropertyDescription> propertiesNonSerialized)

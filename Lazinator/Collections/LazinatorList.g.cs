@@ -217,6 +217,11 @@ namespace Lazinator.Collections
         }
         internal bool _Offsets_Accessed;
 
+        protected virtual void ResetAccessedProperties()
+        {
+            _Offsets_Accessed = false;
+        }
+
         /* Conversion */
 
         public virtual int LazinatorUniqueID => (int)LazinatorCollectionUniqueIDs.LazinatorList;

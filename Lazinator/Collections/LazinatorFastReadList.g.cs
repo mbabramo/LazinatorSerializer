@@ -248,9 +248,14 @@ namespace Lazinator.Collections
             ConvertToBytes_ReadOnlySpan_T(w, ReadOnly,
             includeChildrenMode, v));
         }
-        
+
+        protected virtual void ResetAccessedProperties()
+        {
+            _ReadOnly_Accessed = false;
+        }
+
         /* Conversion of supported collections and tuples */
-        
+
         private static void ConvertToBytes_ReadOnlySpan_T(BinaryBufferWriter writer, ReadOnlySpan<T> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<T, byte>(itemToConvert);
