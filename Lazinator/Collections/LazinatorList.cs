@@ -273,7 +273,7 @@ namespace Lazinator.Collections
             // deserialize the length offsets (ignoring includeChildren)
             _Offsets_ByteIndex = bytesSoFar;
             if (byteLengthOfMainList != 0)
-                bytesSoFar += span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
         }
 
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
