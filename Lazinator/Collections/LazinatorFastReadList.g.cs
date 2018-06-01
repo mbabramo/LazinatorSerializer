@@ -160,7 +160,7 @@ namespace Lazinator.Collections
             }
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             _IsDirty = false;
-            LazinatorObjectBytes = bytes.FilledMemory;
+            _LazinatorObjectBytes = bytes.FilledMemory;
             _ReadOnly_Accessed = false;
         }
 

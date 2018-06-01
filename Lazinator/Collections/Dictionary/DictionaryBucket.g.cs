@@ -187,7 +187,7 @@ namespace Lazinator.Collections.Dictionary
                 return;
             }
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            LazinatorObjectBytes = bytes.FilledMemory;
+            _LazinatorObjectBytes = bytes.FilledMemory;
         }
         
         public virtual int GetByteLength()
