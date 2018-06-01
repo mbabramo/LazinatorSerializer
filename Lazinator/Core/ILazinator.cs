@@ -32,7 +32,7 @@ namespace Lazinator.Core
         /// <summary>
         /// Deserializes the class/struct and any serialized descendants from the object's serialized bytes. This is automatically called the first time there is an attempt to read a field or child, or when LazinatorObjectBytes is set. This reads data in the header and then calls ConvertFromBytesAfterHeader.
         /// </summary>
-        void Deserialize();
+        int Deserialize();
         /// <summary>
         /// Initiates serialization starting from here (and optionally including descendants), using the original bytes if the object is clean and manually writing bytes if necessary.
         /// </summary>

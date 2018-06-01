@@ -27,13 +27,13 @@ namespace Lazinator.Collections
 
         protected internal IncludeChildrenMode OriginalIncludeChildrenMode;
 
-        public void Deserialize()
+        public int Deserialize()
         {
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
             {
-                return;
+                return 0;
             }
 
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
@@ -47,6 +47,7 @@ namespace Lazinator.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+            return bytesSoFar;
         }
 
         public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (IncludeChildrenMode a, bool b) => EncodeToNewBuffer(a, b));
