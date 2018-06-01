@@ -147,13 +147,14 @@ namespace Lazinator.Collections
             set
             {
                 _LazinatorObjectBytes = value;
-                Deserialize();
+                int length = Deserialize();
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
             }
         }
 
         public virtual void LazinatorConvertToBytes()
         {
-            if (!IsDirty)
+            if (!IsDirty && !DescendantIsDirty)
             {
                 return;
             }
@@ -161,6 +162,12 @@ namespace Lazinator.Collections
             _IsDirty = false;
             LazinatorObjectBytes = bytes.FilledMemory;
             _ReadOnly_Accessed = false;
+        }
+
+        public int GetByteLength()
+        {
+            LazinatorConvertToBytes();
+            return _LazinatorObjectBytes.Length;
         }
 
         public virtual uint GetBinaryHashCode32()

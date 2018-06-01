@@ -476,7 +476,8 @@ namespace Lazinator.CodeDescription
                             set
                             {{
                                 _LazinatorObjectBytes = value;
-                                Deserialize();
+                                int length = Deserialize();
+                                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
                             }}
                         }}
 
@@ -489,6 +490,12 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             LazinatorObjectBytes = bytes.FilledMemory;{(false /* DEBUG */ && resetAccessed != "" ? $@"
                             {resetAccessed}" : "")}
+                        }}
+
+                        public int GetByteLength()
+                        {{
+                            LazinatorConvertToBytes();
+                            return _LazinatorObjectBytes.Length;
                         }}
 
                         public {DerivationKeyword}uint GetBinaryHashCode32()

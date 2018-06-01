@@ -196,7 +196,8 @@ namespace LazinatorTests.Examples
             set
             {
                 _LazinatorObjectBytes = value;
-                Deserialize();
+                int length = Deserialize();
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
             }
         }
         
