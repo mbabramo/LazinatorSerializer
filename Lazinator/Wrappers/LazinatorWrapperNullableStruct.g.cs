@@ -291,6 +291,15 @@ namespace Lazinator.Wrappers
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -304,11 +313,6 @@ namespace Lazinator.Wrappers
                 var byteLengthCopy = _NonNullValue_ByteLength;
                 WriteChildWithLength(writer, _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, null);
             }
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

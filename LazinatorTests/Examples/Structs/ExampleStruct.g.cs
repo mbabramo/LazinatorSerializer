@@ -500,6 +500,15 @@ namespace LazinatorTests.Examples
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)));
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -555,11 +564,6 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(w, copy_MyTuple, includeChildrenMode, v));
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
         /* Conversion of supported collections and tuples */

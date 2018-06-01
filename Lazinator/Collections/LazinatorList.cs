@@ -280,22 +280,33 @@ namespace Lazinator.Collections
         {
             includeChildrenMode = IncludeChildrenMode.IncludeAllChildren; // always include offset list (and its children)
 
+            int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
 
             if (UnderlyingList == null)
-            { 
+            {
                 if (SerializedMainList.Length == 0)
-                    writer.Write((uint) 0); // indicates empty list
+                    writer.Write((uint)0); // indicates empty list
                 else
                 { // Not necessarily null -- nothing has changed, so just write back the bytes (including the byte length, the number of items, the serialized main list, and the offset list, if they exist)
                     LazinatorObjectBytes.Span.Write(writer);
                 }
                 return;
             }
-            
+
             // we need to start with the byte length of the entire list
             _Offsets_Accessed = true;
             _Offsets = new LazinatorOffsetList();
@@ -307,13 +318,12 @@ namespace Lazinator.Collections
                 {
                     var item = i; // avoid closure problem
                     LazinatorUtilities.WriteChildWithoutLength(w, UnderlyingList[item], includeChildrenMode, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness);
-                    var offset = (int) (w.Position - startingPosition);
+                    var offset = (int)(w.Position - startingPosition);
                     _Offsets.AddOffset(offset);
                 }
             });
             // Write the offsets (including size information). Do this regardless of whether there is anything in the list.
             LazinatorUtilities.WriteChildWithLength(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(_Offsets_ByteIndex, _Offsets_ByteLength), verifyCleanness, false, this);
         }
-
     }
 }

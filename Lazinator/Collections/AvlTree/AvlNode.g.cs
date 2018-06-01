@@ -462,6 +462,15 @@ namespace Lazinator.Collections.Avl
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Left_Accessed && Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && Right != null && (Right.IsDirty || Right.DescendantIsDirty)));
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -486,11 +495,6 @@ namespace Lazinator.Collections.Avl
             {
                 WriteChildWithLength(writer, _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength), verifyCleanness, false, this);
             }
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Left_Accessed && Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && Right != null && (Right.IsDirty || Right.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

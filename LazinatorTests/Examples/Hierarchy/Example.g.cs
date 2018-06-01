@@ -857,6 +857,15 @@ namespace LazinatorTests.Examples
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -917,11 +926,6 @@ namespace LazinatorTests.Examples
             {
                 WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength), verifyCleanness, true, this);
             }
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

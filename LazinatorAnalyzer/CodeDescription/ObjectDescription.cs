@@ -524,6 +524,7 @@ namespace Lazinator.CodeDescription
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        {ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         {ProtectedIfApplicable}abstract void ResetAccessedProperties();
                 }}
             }}
@@ -620,7 +621,8 @@ namespace Lazinator.CodeDescription
 
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
-                        $@"{ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        $@"
+                        {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);");
             else

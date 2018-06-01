@@ -330,6 +330,15 @@ namespace LazinatorTests.Examples.Hierarchy
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_RecursiveClass_Accessed && RecursiveClass != null && (RecursiveClass.IsDirty || RecursiveClass.DescendantIsDirty)) || (_RecursiveInterface_Accessed && RecursiveInterface != null && (RecursiveInterface.IsDirty || RecursiveInterface.DescendantIsDirty)));
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
             // header information
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
@@ -344,11 +353,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 WriteChildWithLength(writer, _RecursiveInterface, includeChildrenMode, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength), verifyCleanness, false, this);
             }
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_RecursiveClass_Accessed && RecursiveClass != null && (RecursiveClass.IsDirty || RecursiveClass.DescendantIsDirty)) || (_RecursiveInterface_Accessed && RecursiveInterface != null && (RecursiveInterface.IsDirty || RecursiveInterface.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
     }

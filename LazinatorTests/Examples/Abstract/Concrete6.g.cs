@@ -112,7 +112,17 @@ namespace LazinatorTests.Examples.Abstract
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
-            base.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            
+            _IsDirty = false;
+            _DescendantIsDirty = false;
+            
+            _LazinatorObjectBytes = writer.Slice(startPosition);
+        }
+        
+        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
+            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
             // write properties
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed,
@@ -122,11 +132,6 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList6,
             includeChildrenMode, v));
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
         }
         
         /* Conversion of supported collections and tuples */
