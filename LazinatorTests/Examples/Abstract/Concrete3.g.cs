@@ -15,6 +15,7 @@ namespace LazinatorTests.Examples.Abstract
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
+    using LazinatorTests.Examples;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
@@ -27,10 +28,6 @@ namespace LazinatorTests.Examples.Abstract
     public partial class Concrete3 : ILazinator
     {
         /* Serialization, deserialization, and object relationships */
-        
-        public Concrete3() : base()
-        {
-        }
         
         public override ILazinator LazinatorParentClass { get; set; }
         
@@ -145,6 +142,10 @@ namespace LazinatorTests.Examples.Abstract
         {
             _IsDirty = false;
             _DescendantIsDirty = false;
+            if (_Example_Accessed)
+            {
+                Example.MarkHierarchyClean();
+            }
         }
         
         public override DeserializationFactory DeserializationFactory { get; set; }
@@ -208,6 +209,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Field definitions */
         
         protected int _IntList3_ByteIndex;
+        protected override int _Example_ByteLength => _IntList1_ByteIndex - _Example_ByteIndex;
         protected override int _IntList1_ByteLength => _IntList2_ByteIndex - _IntList1_ByteIndex;
         protected override int _IntList2_ByteLength => _IntList3_ByteIndex - _IntList2_ByteIndex;
         private int _Concrete3_EndByteIndex;
@@ -256,6 +258,44 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String3 = value;
+            }
+        }
+        private Example _Example;
+        public override Example Example
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Example_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Example = default(Example);
+                    }
+                    else
+                    {
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Example_ByteIndex, _Example_ByteLength);
+                        
+                        if (DeserializationFactory == null)
+                        {
+                            DeserializationFactory = DeserializationFactory.GetInstance();
+                        }
+                        _Example = DeserializationFactory.Create(212, () => new Example(), childData, this); 
+                    }
+                    _Example_Accessed = true;
+                }
+                return _Example;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _Example = value;
+                if (_Example != null)
+                {
+                    _Example.IsDirty = true;
+                }
+                _Example_Accessed = true;
             }
         }
         private List<int> _IntList1;
@@ -362,6 +402,11 @@ namespace LazinatorTests.Examples.Abstract
             _String1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String3 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _Example_ByteIndex = bytesSoFar;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            }
             _IntList1_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _IntList2_ByteIndex = bytesSoFar;
@@ -383,6 +428,10 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String1);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String2);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String3);
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                WriteChildWithLength(writer, _Example, includeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example_ByteIndex, _Example_ByteLength), verifyCleanness, false, this);
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList1, isBelievedDirty: _IntList1_Accessed,
             isAccessed: _IntList1_Accessed, writer: writer,
@@ -409,7 +458,7 @@ namespace LazinatorTests.Examples.Abstract
             includeChildrenMode, v));
             
             _IsDirty = false;
-            _DescendantIsDirty = false;
+            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Example_Accessed && Example != null && (Example.IsDirty || Example.DescendantIsDirty)));
             
             _LazinatorObjectBytes = writer.Slice(startPosition);
         }

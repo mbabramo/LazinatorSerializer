@@ -269,7 +269,8 @@ namespace Lazinator.CodeDescription
                 resetAccessed += $"_{property.PropertyName}_Accessed = ";
             }
             if (resetAccessed != "")
-                resetAccessed += "false;";
+                resetAccessed += $@"false;
+                                ";
 
             if (!IsDerivedFromNonAbstractLazinator)
             {
@@ -339,7 +340,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}int Deserialize()
                         {{
-                            int bytesSoFar = 0;
+                            {resetAccessed}int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
                             if (span.Length == 0)
                             {{

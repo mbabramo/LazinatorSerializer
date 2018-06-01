@@ -644,6 +644,15 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void WrapperNullableGuidWorks()
+        {
+            Guid g = Guid.NewGuid();
+            LazinatorWrapperNullableGuid w = new LazinatorWrapperNullableGuid(g);
+            var w2 = CloneWithOptionalVerification(w, true, false);
+            w2.WrappedValue.Should().Be(g);
+        }
+
+        [Fact]
         public void WrapperIntWorks()
         {
             ExampleStructContainer w = new ExampleStructContainer()
@@ -1558,13 +1567,14 @@ namespace LazinatorTests.Tests
             ContainerWithAbstract1 c = new ContainerWithAbstract1()
             {
                 DeserializationFactory = GetDeserializationFactory(),
-                AbstractProperty = new Concrete3() { String1 = "1", String2 = "2", String3 = "3" }
+                AbstractProperty = new Concrete3() { String1 = "1", String2 = "2", String3 = "3", Example = GetHierarchy(1, 1, 1, 1, 0) }
             };
             var c2 = c.CloneLazinatorTyped();
             var c2_abstractProperty = (c2.AbstractProperty as Concrete3);
             c2_abstractProperty.String1.Should().Be("1");
             c2_abstractProperty.String2.Should().Be("2");
             c2_abstractProperty.String3.Should().Be("3");
+            c2_abstractProperty.Example.Should().NotBeNull();
         }
 
         [Fact]
