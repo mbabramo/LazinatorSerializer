@@ -262,9 +262,9 @@ namespace Lazinator.CodeDescription
                 markHierarchyCleanMethod += $@"
                     }}";
             }
-
+            
             string resetAccessed = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType != LazinatorPropertyType.OpenGenericParameter && x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable))
             {
                 resetAccessed += $"_{property.PropertyName}_Accessed = ";
             }
