@@ -35,6 +35,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
+            _MyKeyValuePairSerialized_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

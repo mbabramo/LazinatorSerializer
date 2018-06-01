@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples
         
         public virtual int Deserialize()
         {
-            _ExcludableChild_Accessed = _IncludableChild_Accessed = _MyChild1_Accessed = _MyChild2_Accessed = _MyChild2Previous_Accessed = _MyInterfaceImplementer_Accessed = _WrappedInt_Accessed = false;
+            _ExcludableChild_Accessed = _IncludableChild_Accessed = _MyChild1_Accessed = _MyChild2_Accessed = _MyChild2Previous_Accessed = _MyInterfaceImplementer_Accessed = _MyNonLazinatorChild_Accessed = _WrappedInt_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples
         
         public virtual int Deserialize()
         {
-            _MyWrapperContainer_Accessed = false;
+            _ByteSpan_Accessed = _MyWrapperContainer_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

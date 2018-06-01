@@ -34,6 +34,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
+            _MyLinkedListInt_Accessed = _MyListInt_Accessed = _MySortedSetInt_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

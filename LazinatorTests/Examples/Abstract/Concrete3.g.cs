@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int Deserialize()
         {
-            _Example_Accessed = false;
+            _Example_Accessed = _IntList1_Accessed = _IntList2_Accessed = _IntList3_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

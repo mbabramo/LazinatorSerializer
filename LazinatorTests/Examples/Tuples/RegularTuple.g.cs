@@ -34,6 +34,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
+            _MyTupleSerialized_Accessed = _MyTupleSerialized2_Accessed = _MyTupleSerialized3_Accessed = _MyTupleSerialized4_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

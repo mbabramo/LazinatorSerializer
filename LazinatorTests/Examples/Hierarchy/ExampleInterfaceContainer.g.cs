@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual int Deserialize()
         {
-            _ExampleByInterface_Accessed = false;
+            _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

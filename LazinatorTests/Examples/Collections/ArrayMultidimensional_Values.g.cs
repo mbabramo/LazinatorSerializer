@@ -33,6 +33,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
+            _MyArrayInt_Accessed = _MyCrazyJaggedArray_Accessed = _MyThreeDimArrayInt_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

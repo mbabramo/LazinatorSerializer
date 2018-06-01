@@ -38,6 +38,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual int Deserialize()
         {
+            _MyListT_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

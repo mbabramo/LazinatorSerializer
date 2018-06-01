@@ -38,6 +38,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
+            _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)

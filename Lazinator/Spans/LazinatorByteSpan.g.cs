@@ -33,6 +33,7 @@ namespace Lazinator.Spans
         
         public virtual int Deserialize()
         {
+            _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
