@@ -169,7 +169,8 @@ namespace LazinatorTests.Examples.Abstract
             set
             {
                 _LazinatorObjectBytes = value;
-                Deserialize();
+                int length = Deserialize();
+                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(length);
             }
         }
         
@@ -181,6 +182,12 @@ namespace LazinatorTests.Examples.Abstract
             }
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             LazinatorObjectBytes = bytes.FilledMemory;
+        }
+        
+        public int GetByteLength()
+        {
+            LazinatorConvertToBytes();
+            return _LazinatorObjectBytes.Length;
         }
         
         public override uint GetBinaryHashCode32()

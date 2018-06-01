@@ -211,6 +211,12 @@ namespace LazinatorTests.Examples
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
+        public int GetByteLength()
+        {
+            LazinatorConvertToBytes();
+            return _LazinatorObjectBytes.Length;
+        }
+        
         public virtual uint GetBinaryHashCode32()
         {
             LazinatorConvertToBytes();
