@@ -22,6 +22,7 @@ using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.Subclasses;
+using LazinatorTests.Examples.NonAbstractGenerics;
 
 namespace LazinatorTests.Tests
 {
@@ -1699,6 +1700,20 @@ namespace LazinatorTests.Tests
             var c2_abstractProperty = (c2.AbstractProperty as Concrete3);
             c2_abstractProperty.Example2.Should().NotBeNull();
             c2_abstractProperty.Example3.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void OpenGenericContainerSerializes()
+        {
+            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGeneric = new OpenGeneric<LazinatorWrapperFloat>()
+                {
+                    MyT = new LazinatorWrapperFloat(3.4F)
+                }
+            };
+            var c = x.CloneLazinatorTyped();
+            c.ClosedGeneric.MyT.WrappedValue.Should().Be(3.4F);
         }
 
         [Fact]
