@@ -891,14 +891,14 @@ namespace LazinatorTests.Tests
             var original = GetObject(5);
             var copy = GetObject(5);
             var copyWithGoal = GetObject(5);
-            copyWithGoal.MyArrayInt[2] = 6;
+            copyWithGoal.MyArrayInt_DerivedLevel[2] = 6;
             var result = original.CloneLazinatorTyped();
-            copy.MyArrayInt_DerivedLevel.SequenceEqual(result.MyArrayInt).Should().BeTrue();
+            copy.MyArrayInt_DerivedLevel.SequenceEqual(result.MyArrayInt_DerivedLevel).Should().BeTrue();
             // make sure that updates are registered when dirty flag is set
             result.MyArrayInt_DerivedLevel[2] = 6;
             result.MyArrayInt_DerivedLevel_Dirty = true;
             var result2 = result.CloneLazinatorTyped();
-            copyWithGoal.MyArrayInt_DerivedLevel.SequenceEqual(result2.MyArrayInt).Should().BeTrue();
+            copyWithGoal.MyArrayInt_DerivedLevel.SequenceEqual(result2.MyArrayInt_DerivedLevel).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyArrayInt_DerivedLevel[2] = 7;
             var result3 = result2.CloneLazinatorTyped();
