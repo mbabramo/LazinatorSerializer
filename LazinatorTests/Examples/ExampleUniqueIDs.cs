@@ -62,6 +62,8 @@
         ClassWithLocalEnum,
         ClassWithForeignEnum,
         ClassWithSubclass,
-        SubclassWithinClass
+        SubclassWithinClass,
+        NonLazinatorDerivedContainer,
+        Derived_DotNetList_Nested_NonSelfSerializable
     }
 }

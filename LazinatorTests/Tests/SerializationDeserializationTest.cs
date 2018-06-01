@@ -1504,6 +1504,55 @@ namespace LazinatorTests.Tests
             var result2 = result.CloneLazinatorTyped();
             ListsEqual(result2.MyListNestedNonLazinatorType, copyWithGoal.MyListNestedNonLazinatorType).Should().BeTrue();
         }
+        
+        [Fact]
+        public void LazinatorDerivedDotNetNestedListOfNonSerializedItems()
+        {
+            Derived_DotNetList_Nested_NonSelfSerializable GetNestedList(int index)
+            {
+                return new Derived_DotNetList_Nested_NonSelfSerializable()
+                {
+                    MyListNestedNonLazinatorType = new List<List<NonLazinatorClass>>()
+                    {
+                        new List<NonLazinatorClass>()
+                        {
+                            GetNonLazinatorType(1),
+                            null,
+                            GetNonLazinatorType(3),
+                        },
+                        new List<NonLazinatorClass>()
+                        {
+                            GetNonLazinatorType(2),
+                            GetNonLazinatorType(index),
+                        },
+                        new List<NonLazinatorClass>()
+                        {
+                        },
+                        null // null item
+                    }
+                };
+            }
+
+            bool ListsEqual(List<List<NonLazinatorClass>> one, List<List<NonLazinatorClass>> two)
+            {
+                for (int i = 0; i < Math.Max(one.Count, two.Count); i++)
+                    if (one[i] != null || two[i] != null)
+                        for (int j = 0; j < Math.Max(one[i].Count, two[i].Count); j++)
+                            if (!NonLazinatorTypeEqual(one[i][j], two[i][j]))
+                                return false;
+                return true;
+            }
+
+            var original = GetNestedList(2);
+            var copy = GetNestedList(2);
+            var copyWithGoal = GetNestedList(1);
+            var result = original.CloneLazinatorTyped();
+            ListsEqual(result.MyListNestedNonLazinatorType, copy.MyListNestedNonLazinatorType).Should().BeTrue();
+            // make sure that updates serialize; because we're not tracking dirtiness, the reserialization should occur simply because this was deserialized
+            result.MyListNestedNonLazinatorType[1][1] = GetNonLazinatorType(1);
+            var result2 = result.CloneLazinatorTyped();
+            ListsEqual(result2.MyListNestedNonLazinatorType, copyWithGoal.MyListNestedNonLazinatorType).Should().BeTrue();
+        }
 
         [Fact]
         public void LazinatorInheritanceWorks()
