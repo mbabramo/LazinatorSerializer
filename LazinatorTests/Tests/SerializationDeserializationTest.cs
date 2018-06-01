@@ -1512,7 +1512,7 @@ namespace LazinatorTests.Tests
             {
                 return new Derived_DotNetList_Nested_NonSelfSerializable()
                 {
-                    MyListNestedNonLazinatorType = new List<List<NonLazinatorClass>>()
+                    MyLevel2ListNestedNonLazinatorType = new List<List<NonLazinatorClass>>()
                     {
                         new List<NonLazinatorClass>()
                         {
@@ -1547,11 +1547,11 @@ namespace LazinatorTests.Tests
             var copy = GetNestedList(2);
             var copyWithGoal = GetNestedList(1);
             var result = original.CloneLazinatorTyped();
-            ListsEqual(result.MyListNestedNonLazinatorType, copy.MyListNestedNonLazinatorType).Should().BeTrue();
+            ListsEqual(result.MyLevel2ListNestedNonLazinatorType, copy.MyLevel2ListNestedNonLazinatorType).Should().BeTrue();
             // make sure that updates serialize; because we're not tracking dirtiness, the reserialization should occur simply because this was deserialized
-            result.MyListNestedNonLazinatorType[1][1] = GetNonLazinatorType(1);
+            result.MyLevel2ListNestedNonLazinatorType[1][1] = GetNonLazinatorType(1);
             var result2 = result.CloneLazinatorTyped();
-            ListsEqual(result2.MyListNestedNonLazinatorType, copyWithGoal.MyListNestedNonLazinatorType).Should().BeTrue();
+            ListsEqual(result2.MyLevel2ListNestedNonLazinatorType, copyWithGoal.MyLevel2ListNestedNonLazinatorType).Should().BeTrue();
         }
 
         [Fact]
