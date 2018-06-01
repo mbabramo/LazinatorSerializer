@@ -489,11 +489,10 @@ namespace Lazinator.CodeDescription
                                 return;
                             }}
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-                            LazinatorObjectBytes = bytes.FilledMemory;{(false /* DEBUG */ && resetAccessed != "" ? $@"
-                            {resetAccessed}" : "")}
+                            LazinatorObjectBytes = bytes.FilledMemory;
                         }}
 
-                        public int GetByteLength()
+                        public {DerivationKeyword}int GetByteLength()
                         {{
                             LazinatorConvertToBytes();
                             return _LazinatorObjectBytes.Length;

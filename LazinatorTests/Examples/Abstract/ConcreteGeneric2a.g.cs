@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Abstract
             LazinatorObjectBytes = bytes.FilledMemory;
         }
         
-        public int GetByteLength()
+        public override int GetByteLength()
         {
             LazinatorConvertToBytes();
             return _LazinatorObjectBytes.Length;
