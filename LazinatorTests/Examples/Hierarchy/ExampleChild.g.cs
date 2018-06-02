@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples
             includeChildrenMode, v));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _MyWrapperContainer, includeChildrenMode, _MyWrapperContainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _MyWrapperContainer, includeChildrenMode, _MyWrapperContainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength), verifyCleanness, false, false, this);
             }
         }
         

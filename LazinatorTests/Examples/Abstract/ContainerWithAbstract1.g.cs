@@ -300,7 +300,7 @@ namespace LazinatorTests.Examples.Abstract
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _AbstractProperty, includeChildrenMode, _AbstractProperty_Accessed, () => GetChildSlice(LazinatorObjectBytes, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _AbstractProperty, includeChildrenMode, _AbstractProperty_Accessed, () => GetChildSlice(LazinatorObjectBytes, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength), verifyCleanness, false, false, this);
             }
         }
         

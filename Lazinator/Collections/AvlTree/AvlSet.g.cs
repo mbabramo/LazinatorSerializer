@@ -315,7 +315,7 @@ namespace Lazinator.Collections.AvlTree
             CompressedIntegralTypes.WriteCompressedInt(writer, _Count);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _UnderlyingTree, includeChildrenMode, _UnderlyingTree_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _UnderlyingTree, includeChildrenMode, _UnderlyingTree_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength), verifyCleanness, false, false, this);
             }
         }
         

@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (itemToConvert.Item2 == null)
             {
-                writer.Write((int) 0);
+                writer.Write((uint)0);
             }
             else
             {
@@ -562,7 +562,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (itemToConvert.Item3 == null)
             {
-                writer.Write((uint) 0);
+                writer.Write((uint)0);
             }
             else
             {

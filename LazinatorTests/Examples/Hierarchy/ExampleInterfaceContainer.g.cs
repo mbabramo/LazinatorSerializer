@@ -337,7 +337,7 @@ namespace LazinatorTests.Examples.Hierarchy
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength), verifyCleanness, false, false, this);
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,

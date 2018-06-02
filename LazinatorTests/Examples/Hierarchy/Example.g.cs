@@ -895,27 +895,27 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
-                WriteChildWithLength(writer, _ExcludableChild, includeChildrenMode, _ExcludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _ExcludableChild, includeChildrenMode, _ExcludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                WriteChildWithLength(writer, _IncludableChild, includeChildrenMode, _IncludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _IncludableChild_ByteIndex, _IncludableChild_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _IncludableChild, includeChildrenMode, _IncludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _IncludableChild_ByteIndex, _IncludableChild_ByteLength), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
             {
-                WriteChildWithLength(writer, _MyChild2Previous, includeChildrenMode, _MyChild2Previous_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _MyChild2Previous, includeChildrenMode, _MyChild2Previous_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength), verifyCleanness, false, false, this);
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty,
@@ -927,7 +927,7 @@ namespace LazinatorTests.Examples
             includeChildrenMode, v));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength), verifyCleanness, true, this);
+                WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength), verifyCleanness, true, false, this);
             }
         }
         

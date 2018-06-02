@@ -296,7 +296,7 @@ namespace Lazinator.Collections.Avl
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength), verifyCleanness, false, false, this);
             }
         }
         

@@ -192,7 +192,7 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes"></param>
         public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
-            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, ILazinator parent, bool skipLength = false /* DEBUG -- make this a regular parameter earlier */) where T : ILazinator
+            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
             if (!childHasBeenAccessed && child != null)
             {

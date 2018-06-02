@@ -519,14 +519,14 @@ namespace LazinatorTests.Examples
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyChild1_ByteIndex;
                 var byteLengthCopy = _MyChild1_ByteLength;
-                WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, null);
+                WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, false, null);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyChild2_ByteIndex;
                 var byteLengthCopy = _MyChild2_ByteLength;
-                WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, null);
+                WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, false, null);
             }
             var serializedBytesCopy_MyLazinatorList = LazinatorObjectBytes;
             var byteIndexCopy_MyLazinatorList = _MyLazinatorList_ByteIndex;
@@ -690,7 +690,7 @@ namespace LazinatorTests.Examples
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint) 0);
+                writer.Write((uint)0);
             }
             else
             {

@@ -308,7 +308,7 @@ namespace Lazinator.Wrappers
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _NonNullValue_ByteIndex;
                 var byteLengthCopy = _NonNullValue_ByteLength;
-                WriteChildWithLength(writer, _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, null);
+                WriteChildWithLength(writer, _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, false, false, null);
             }
         }
         

@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _AnotherProperty);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _LazinatorExample, includeChildrenMode, _LazinatorExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _LazinatorExample, includeChildrenMode, _LazinatorExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength), verifyCleanness, false, false, this);
             }
         }
         

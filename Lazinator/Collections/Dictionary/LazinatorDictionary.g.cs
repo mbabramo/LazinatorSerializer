@@ -314,7 +314,7 @@ namespace Lazinator.Collections.Dictionary
             CompressedIntegralTypes.WriteCompressedInt(writer, _Count);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength), verifyCleanness, false, this);
+                WriteChildWithLength(writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength), verifyCleanness, false, false, this);
             }
         }
         

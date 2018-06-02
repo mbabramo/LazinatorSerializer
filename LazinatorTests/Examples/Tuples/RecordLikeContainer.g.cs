@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (itemToConvert.Example == null)
             {
-                writer.Write((int) 0);
+                writer.Write((uint)0);
             }
             else
             {
