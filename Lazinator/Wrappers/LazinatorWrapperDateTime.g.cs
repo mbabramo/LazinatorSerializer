@@ -43,7 +43,7 @@ namespace Lazinator.Wrappers
             
             int serializedVersionNumber = -1; /* versioning disabled */
             
-            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren; /* cannot have children */
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             return bytesSoFar;
@@ -250,7 +250,7 @@ namespace Lazinator.Wrappers
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             }
-            writer.Write((byte)includeChildrenMode);
+            
             // write properties
             CompressedIntegralTypes.WriteCompressedDateTime(writer, _WrappedValue);
         }

@@ -45,7 +45,7 @@ namespace Lazinator.Wrappers
             
             int serializedVersionNumber = -1; /* versioning disabled */
             
-            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren; /* cannot have children */
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             return bytesSoFar;
@@ -253,7 +253,7 @@ namespace Lazinator.Wrappers
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            writer.Write((byte)includeChildrenMode);
+            
             // write properties
             CompressedDecimal.WriteCompressedNullableDecimal(writer, _WrappedValue);
         }
