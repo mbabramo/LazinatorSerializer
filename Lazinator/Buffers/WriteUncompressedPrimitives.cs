@@ -76,10 +76,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte) 1);
+                writer.Write((byte) 0);
                 return 1;
             }
-            writer.Write((byte) 0);
+            writer.Write((byte) 1);
             writer.Write(value.Value);
             return (byte)(sizeof(byte) + 1);
         }

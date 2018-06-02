@@ -668,17 +668,37 @@ namespace LazinatorTests.Tests
         [Fact]
         public void WrappersWithFixedLengthWork()
         {
+            // some of these small wrappers have fixed length. The nullable wrappers (other than nullable bool) don't, because if it's null, then we don't include the rest. This means that we need a length byte. 
             SmallWrappersContainer w = new SmallWrappersContainer()
             {
                 DeserializationFactory = GetDeserializationFactory(),
+                WrappedBool = true,
                 WrappedByte = 1,
                 WrappedSByte = -2,
-                WrappedChar = 'x'
+                WrappedChar = 'x',
+                WrappedNullableBool = false,
+                WrappedNullableByte = 3,
+                WrappedNullableSByte = 4,
+                WrappedNullableChar = 'Y'
             };
             var c = w.CloneLazinatorTyped();
+            c.WrappedBool.Should().Be(true);
             c.WrappedByte.Should().Be((byte) 1);
             c.WrappedSByte.Should().Be((sbyte) -2);
             c.WrappedChar.Should().Be('x');
+            c.WrappedNullableBool.Should().Be(false);
+            c.WrappedNullableByte.Should().Be((byte)3);
+            c.WrappedNullableSByte.Should().Be((sbyte)4);
+            c.WrappedNullableChar.Should().Be('Y');
+            c.WrappedNullableBool = null;
+            c.WrappedNullableByte = null;
+            c.WrappedNullableSByte = null;
+            c.WrappedNullableChar = null;
+            var c2 = c.CloneLazinatorTyped();
+            c.WrappedNullableBool.HasValue.Should().BeFalse();
+            c.WrappedNullableByte.HasValue.Should().BeFalse();
+            c.WrappedNullableSByte.HasValue.Should().BeFalse();
+            c.WrappedNullableChar.HasValue.Should().BeFalse();
         }
 
         [Fact]

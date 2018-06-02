@@ -19,10 +19,10 @@ namespace Lazinator.Buffers
         {
             if (c == null)
             {
-                writer.Write((byte) 1);
+                writer.Write((byte) 0);
                 return;
             }
-            writer.Write((byte) 0); 
+            writer.Write((byte) 1); 
             // save method call by repeating code from above
             writer.Write((byte)((int)c)); // write low byte
             writer.Write((byte)(((int)c) >> 8)); // write high byte
