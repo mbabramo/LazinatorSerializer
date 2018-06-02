@@ -47,6 +47,12 @@ namespace LazinatorTests.Examples
                 throw new LazinatorDeserializationException("A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.");
             }
             
+            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            if (uniqueID != LazinatorUniqueID)
+            {
+                throw new FormatException("Wrong self-serialized type initialized.");
+            }
+            
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
             int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);

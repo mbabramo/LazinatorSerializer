@@ -41,6 +41,12 @@ namespace LazinatorTests.Examples.Structs
                 return 0;
             }
             
+            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            if (uniqueID != LazinatorUniqueID)
+            {
+                throw new FormatException("Wrong self-serialized type initialized.");
+            }
+            
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
             int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);

@@ -261,7 +261,7 @@ namespace Lazinator.CodeDescription
                                 return 0;
                             }}{classContainingStructContainingClassError}
 
-                            {(IsSealedOrStruct ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+                            {(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
                                 throw new FormatException(""Wrong self-serialized type initialized."");

@@ -5,7 +5,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorOffsetList, 0, false)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorOffsetList)]
     interface ILazinatorOffsetList
     {
         LazinatorFastReadList<short> TwoByteItems { get; set; }
