@@ -35,7 +35,8 @@ namespace Lazinator.CodeDescription
         public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
                                                          (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
                                                           BaseLazinatorObject.IsAbstract);
-        public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealed || ObjectType != LazinatorObjectType.Class ? "" : "virtual ");
+        public bool IsSealedOrStruct => IsSealed || ObjectType != LazinatorObjectType.Class;
+        public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.NameIncludingGenerics : BaseLazinatorObject.FullyQualifiedObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
@@ -257,13 +258,13 @@ namespace Lazinator.CodeDescription
                                 return 0;
                             }}{classContainingStructContainingClassError}
 
-                            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+                            {(IsSealedOrStruct ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
                                 throw new FormatException(""Wrong self-serialized type initialized."");
                             }}
 
-                            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+                            ")}int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
                             
                             int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
 
@@ -524,7 +525,7 @@ namespace Lazinator.CodeDescription
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
-                        {ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        {ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID);
                         {ProtectedIfApplicable}abstract void ResetAccessedProperties();
                 }}
             }}
@@ -610,7 +611,7 @@ namespace Lazinator.CodeDescription
 
             sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization();
                             " : "")}int startPosition = writer.Position;
-                            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);");
+                            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(IsSealedOrStruct ? "false" : "true")});");
 
             sb.AppendLine(postEncodingDirtinessCheck);
             sb.AppendLine($@"
@@ -622,15 +623,18 @@ namespace Lazinator.CodeDescription
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"
-                        {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
                         {{
-                            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);");
+                            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);");
             else
                 sb.AppendLine(
-                        $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
                         {{
                             // header information
-                            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                            if (includeUniqueID)
+                            {{
+                                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                            }}
                             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
                             {(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
                         ")}writer.Write((byte)includeChildrenMode);");
