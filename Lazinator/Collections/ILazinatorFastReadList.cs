@@ -5,7 +5,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorFastReadList, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorFastReadList, -1, false)]
     interface ILazinatorFastReadList 
     {
         ReadOnlySpan<byte> ReadOnlyBytes { get; set; }
