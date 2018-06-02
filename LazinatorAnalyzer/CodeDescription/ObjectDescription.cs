@@ -45,6 +45,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsOnDirty { get; set; }
         public List<string> GenericArgumentNames { get; set; }
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
+        public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && (GenericArgumentNames == null || !GenericArgumentNames.Any());
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }
@@ -269,7 +270,7 @@ namespace Lazinator.CodeDescription
                             
                         ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
 
-                            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+                            OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}
 
                             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
                             (ImplementsLazinatorObjectVersionUpgrade && Version != -1
@@ -638,7 +639,7 @@ namespace Lazinator.CodeDescription
                             }}
                             {(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
                         ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
-                        ")}writer.Write((byte)includeChildrenMode);");
+                        ")}{(CanNeverHaveChildren ? "" : $@"writer.Write((byte)includeChildrenMode);")}");
 
             sb.AppendLine("// write properties");
 
