@@ -48,6 +48,7 @@ namespace Lazinator.CodeDescription
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }
+        public bool SuppressLazinatorVersionByte => ILazinatorTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed) ? "" : "protected ";
 
         public ObjectDescription()
@@ -264,9 +265,9 @@ namespace Lazinator.CodeDescription
                                 throw new FormatException(""Wrong self-serialized type initialized."");
                             }}
 
-                            ")}int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+                            ")}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
                             
-                            int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
+                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
 
                             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
 
@@ -635,8 +636,8 @@ namespace Lazinator.CodeDescription
                             {{
                                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                             }}
-                            CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                            {(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
+                            {(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                        ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
                         ")}writer.Write((byte)includeChildrenMode);");
 
             sb.AppendLine("// write properties");
