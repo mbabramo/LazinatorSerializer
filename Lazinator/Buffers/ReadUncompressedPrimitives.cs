@@ -12,7 +12,7 @@ namespace Lazinator.Buffers
         
         public static bool? ToNullableBoolean(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToBoolean(ref index);
@@ -20,7 +20,7 @@ namespace Lazinator.Buffers
 
         public static byte? ToNullableByte(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToByte(ref index);
@@ -28,7 +28,7 @@ namespace Lazinator.Buffers
 
         public static sbyte? ToNullableSByte(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToSByte(ref index);
@@ -37,7 +37,7 @@ namespace Lazinator.Buffers
 
         public static char? ToNullableChar(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToChar(ref index);
@@ -45,7 +45,7 @@ namespace Lazinator.Buffers
 
         public static float? ToNullableSingle(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToSingle(ref index);
@@ -53,7 +53,7 @@ namespace Lazinator.Buffers
 
         public static double? ToNullableDouble(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToDouble(ref index);
@@ -61,7 +61,7 @@ namespace Lazinator.Buffers
 
         public static short? ToNullableInt16(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToInt16(ref index);
@@ -69,7 +69,7 @@ namespace Lazinator.Buffers
 
         public static int? ToNullableInt32(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToInt32(ref index);
@@ -77,14 +77,14 @@ namespace Lazinator.Buffers
 
         public static long? ToNullableInt64(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToInt64(ref index);
         }
         public static ushort? ToNullableUint16(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToUInt16(ref index);
@@ -92,7 +92,7 @@ namespace Lazinator.Buffers
 
         public static uint? ToNullableUint32(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToUInt32(ref index);
@@ -100,35 +100,35 @@ namespace Lazinator.Buffers
 
         public static ulong? ToNullableUint64(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToUInt64(ref index);
         }
         public static DateTime? ToNullableDateTime(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToDateTime(ref index);
         }
         public static TimeSpan? ToNullableTimeSpan(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToTimeSpan(ref index);
         }
         public static Guid? ToNullableGuid(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToGuid(ref index);
         }
         public static decimal? ToNullableDecimal(this ReadOnlySpan<byte> b, ref int index)
         {
-            bool isNull = b.ToBoolean(ref index);
+            bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
             return b.ToDecimal(ref index);

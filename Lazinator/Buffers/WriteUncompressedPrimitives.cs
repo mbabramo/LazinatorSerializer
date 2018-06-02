@@ -88,10 +88,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)(sizeof(byte) + 1);
         }
@@ -100,10 +100,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(sbyte) + 1;
         }
@@ -112,10 +112,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(short) + 1;
         }
@@ -123,10 +123,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(ushort) + 1;
         }
@@ -134,10 +134,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(int) + 1;
         }
@@ -145,10 +145,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(uint) + 1;
         }
@@ -156,10 +156,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(long) + 1;
         }
@@ -167,10 +167,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(ulong) + 1;
         }
@@ -178,10 +178,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(float) + 1;
         }
@@ -189,10 +189,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             writer.Write(value.Value);
             return (byte)sizeof(double) + 1;
         }
@@ -201,10 +201,10 @@ namespace Lazinator.Buffers
         {
             if (value == null)
             {
-                writer.Write((byte)1);
+                writer.Write((byte)0);
                 return 1;
             }
-            writer.Write((byte)0);
+            writer.Write((byte)1);
             var bytes = value.Value.ToByteArray();
             writer.Write(bytes); // TODO: when not using BinaryBufferWriter, we should be able to write directly to a destination span, using available extension methods
             return (byte)(bytes.Length + 1);

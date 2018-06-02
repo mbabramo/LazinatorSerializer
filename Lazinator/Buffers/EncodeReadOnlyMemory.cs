@@ -18,10 +18,10 @@ namespace Lazinator.Buffers
         public static void WriteNullableReadOnlyMemoryWithVarIntPrefix<T>(this BinaryBufferWriter writer, ReadOnlyMemory<T>? readOnlyMemory) where T : struct
         {
             if (readOnlyMemory == null)
-                writer.Write((byte)1);
+                writer.Write((byte)0);
             else
             {
-                writer.Write((byte)0);
+                writer.Write((byte)1);
                 WriteReadOnlyMemoryWithVarIntPrefix(writer, readOnlyMemory.Value);
             }
         }
