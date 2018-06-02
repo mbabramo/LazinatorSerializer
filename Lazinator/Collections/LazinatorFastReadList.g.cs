@@ -121,7 +121,7 @@ namespace Lazinator.Collections
             }
         }
 
-        public virtual void MarkHierarchyClean()
+        public void MarkHierarchyClean()
         {
             _IsDirty = false;
             _DescendantIsDirty = false;
@@ -152,7 +152,7 @@ namespace Lazinator.Collections
             }
         }
 
-        public virtual void LazinatorConvertToBytes()
+        public void LazinatorConvertToBytes()
         {
             if (!IsDirty && !DescendantIsDirty)
             {
@@ -170,13 +170,13 @@ namespace Lazinator.Collections
             return _LazinatorObjectBytes.Length;
         }
 
-        public virtual uint GetBinaryHashCode32()
+        public uint GetBinaryHashCode32()
         {
             LazinatorConvertToBytes();
             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
         }
 
-        public virtual ulong GetBinaryHashCode64()
+        public ulong GetBinaryHashCode64()
         {
             LazinatorConvertToBytes();
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
@@ -220,18 +220,18 @@ namespace Lazinator.Collections
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 52;
+        public int LazinatorUniqueID => 52;
         
-        public virtual int LazinatorObjectVersion { get; set; } = 0;
+        public int LazinatorObjectVersion { get; set; } = 0;
         
-        public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _ReadOnly_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)  bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             PreSerialization();
             // header information
@@ -249,7 +249,7 @@ namespace Lazinator.Collections
             includeChildrenMode, v));
         }
 
-        protected virtual void ResetAccessedProperties()
+        void ResetAccessedProperties()
         {
             _ReadOnly_Accessed = false;
         }

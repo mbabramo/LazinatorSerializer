@@ -5,9 +5,9 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorFastReadList, 0, false)]
-    interface ILazinatorFastReadList<T> where T : struct
+    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorFastReadList, -1)]
+    interface ILazinatorFastReadList 
     {
-        ReadOnlySpan<T> ReadOnly { get; set; }
+        ReadOnlySpan<byte> ReadOnlyBytes { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Lazinator.Collections
     /// A list of primitive values that can be indexed without deserialization if the list is not changed. The AsList property provides an underlying List, which can be mutated. 
     /// </summary>
     /// <typeparam name="T">A primitive type (such as int, float, etc.)</typeparam>
-    public partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
+    public sealed partial class LazinatorFastReadList<T> : ILazinatorFastReadList, ILazinator where T : struct 
     {
         // The key feature of this list is that if no changes are made to it, we can read directly from the span.
         public T this[int index]
@@ -42,6 +42,8 @@ namespace Lazinator.Collections
                 IsDirty = true;
             }
         }
+
+        public ReadOnlySpan<byte> ReadOnlyBytes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private void ConvertToList()
         {
