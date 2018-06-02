@@ -219,6 +219,7 @@ namespace LazinatorTests.Examples.Structs
         private LazinatorWrapperInt _WrappedInt;
         public LazinatorWrapperInt WrappedInt
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)
@@ -241,6 +242,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedInt;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
