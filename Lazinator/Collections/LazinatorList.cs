@@ -281,7 +281,7 @@ namespace Lazinator.Collections
             includeChildrenMode = IncludeChildrenMode.IncludeAllChildren; // always include offset list (and its children)
 
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
 
             _IsDirty = false;
             _DescendantIsDirty = false;
@@ -289,10 +289,13 @@ namespace Lazinator.Collections
             _LazinatorObjectBytes = writer.Slice(startPosition);
         }
 
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            if (includeUniqueID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            }
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
 

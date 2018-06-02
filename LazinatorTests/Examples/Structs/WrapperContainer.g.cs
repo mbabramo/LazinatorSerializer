@@ -219,7 +219,6 @@ namespace LazinatorTests.Examples.Structs
         private LazinatorWrapperInt _WrappedInt;
         public LazinatorWrapperInt WrappedInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)
@@ -242,7 +241,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -301,17 +299,20 @@ namespace LazinatorTests.Examples.Structs
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
             _IsDirty = false;
             _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
             
             _LazinatorObjectBytes = writer.Slice(startPosition);
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            if (includeUniqueID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);

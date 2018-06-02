@@ -473,17 +473,20 @@ namespace LazinatorTests.Examples.Abstract
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
             _IsDirty = false;
             _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Example2_Accessed && Example2 != null && (Example2.IsDirty || Example2.DescendantIsDirty)) || (_Example3_Accessed && Example3 != null && (Example3.IsDirty || Example3.DescendantIsDirty)));
             
             _LazinatorObjectBytes = writer.Slice(startPosition);
         }
-        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            if (includeUniqueID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);

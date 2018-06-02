@@ -41,12 +41,6 @@ namespace LazinatorTests.Examples.Structs
                 return 0;
             }
             
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-            if (uniqueID != LazinatorUniqueID)
-            {
-                throw new FormatException("Wrong self-serialized type initialized.");
-            }
-            
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
             int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
@@ -250,17 +244,20 @@ namespace LazinatorTests.Examples.Structs
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, false);
             
             _IsDirty = false;
             _DescendantIsDirty = false;
             
             _LazinatorObjectBytes = writer.Slice(startPosition);
         }
-        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            if (includeUniqueID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
