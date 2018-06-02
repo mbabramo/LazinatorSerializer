@@ -48,7 +48,7 @@ namespace Lazinator.CodeDescription
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }
-        public bool SuppressLazinatorVersionByte => ILazinatorTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
+        public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed) ? "" : "protected ";
 
         public ObjectDescription()
