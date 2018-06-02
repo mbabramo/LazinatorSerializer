@@ -15,7 +15,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DictionaryLongStringWorks()
         {
-            LazinatorDictionary<LazinatorWrapperLong, LazinatorWrapperString> d = new LazinatorDictionary<LazinatorWrapperLong, LazinatorWrapperString>();
+            LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
             d.Count.Should().Be(0);
             d.Add(17, "seventeen");
             d.Count.Should().Be(1);
@@ -29,12 +29,12 @@ namespace LazinatorTests.Tests
             d.Count.Should().Be(0);
             d.ContainsKey(17).Should().BeFalse();
             d[17] = "seventeen";
-            bool result = d.Remove(new KeyValuePair<LazinatorWrapperLong, LazinatorWrapperString>(17, "seventeen"));
+            bool result = d.Remove(new KeyValuePair<WLong, WString>(17, "seventeen"));
             result.Should().Be(true);
             d.Count.Should().Be(0);
             d.ContainsKey(17).Should().BeFalse();
             d[17] = "seventeen";
-            result = d.Remove(new KeyValuePair<LazinatorWrapperLong, LazinatorWrapperString>(17, "not a match"));
+            result = d.Remove(new KeyValuePair<WLong, WString>(17, "not a match"));
             result.Should().BeFalse();
             d.Add(15, "fifteen");
             d.Count.Should().Be(2);
@@ -48,12 +48,12 @@ namespace LazinatorTests.Tests
             d[23] = "twenty-three";
             d[18] = "eighteen";
             d[-1] = "negative one";
-            d.Keys.OrderBy(x => x).ToList().SequenceEqual(new LazinatorWrapperLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
-            d.Values.OrderBy(x => x).ToList().SequenceEqual((new LazinatorWrapperString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
-            d.Select(x => x.Key).OrderBy(x => x).ToArray().SequenceEqual(new LazinatorWrapperLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
-            d.Select(x => x.Value).OrderBy(x => x).ToArray().SequenceEqual((new LazinatorWrapperString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
+            d.Keys.OrderBy(x => x).ToList().SequenceEqual(new WLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
+            d.Values.OrderBy(x => x).ToList().SequenceEqual((new WString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
+            d.Select(x => x.Key).OrderBy(x => x).ToArray().SequenceEqual(new WLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
+            d.Select(x => x.Value).OrderBy(x => x).ToArray().SequenceEqual((new WString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
             d.Count.Should().Be(5);
-            result = d.TryGetValue(17, out LazinatorWrapperString s);
+            result = d.TryGetValue(17, out WString s);
             result.Should().BeTrue();
             s.WrappedValue.Should().Be("seventeen");
             result = d.TryGetValue(12354, out s);
@@ -65,17 +65,17 @@ namespace LazinatorTests.Tests
             result.Should().BeFalse();
             s.WrappedValue.Should().Be(null);
             d.Count.Should().Be(0);
-            d.Keys.ToList().OrderBy(x => x).SequenceEqual(new LazinatorWrapperLong[] { }).Should().BeTrue();
-            d.Values.ToList().OrderBy(x => x).SequenceEqual(new LazinatorWrapperString[] { }).Should().BeTrue();
-            d.ToList().OrderBy(x => x).Select(x => x.Key).ToArray().SequenceEqual(new LazinatorWrapperLong[] { }).Should().BeTrue();
-            d.ToList().OrderBy(x => x).Select(x => x.Value).ToArray().SequenceEqual(new LazinatorWrapperString[] { }).Should().BeTrue();
+            d.Keys.ToList().OrderBy(x => x).SequenceEqual(new WLong[] { }).Should().BeTrue();
+            d.Values.ToList().OrderBy(x => x).SequenceEqual(new WString[] { }).Should().BeTrue();
+            d.ToList().OrderBy(x => x).Select(x => x.Key).ToArray().SequenceEqual(new WLong[] { }).Should().BeTrue();
+            d.ToList().OrderBy(x => x).Select(x => x.Value).ToArray().SequenceEqual(new WString[] { }).Should().BeTrue();
         }
 
 
         [Fact]
         public void DictionaryCanGrowAndShrink()
         {
-            LazinatorDictionary<LazinatorWrapperLong, LazinatorWrapperString> d = new LazinatorDictionary<LazinatorWrapperLong, LazinatorWrapperString>();
+            LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
             d.Count.Should().Be(0);
             for (long i = 0; i < 25; i++)
                 d[i] = i.ToString();

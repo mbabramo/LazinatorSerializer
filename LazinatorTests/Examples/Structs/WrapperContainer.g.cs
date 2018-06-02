@@ -216,8 +216,8 @@ namespace LazinatorTests.Examples.Structs
         private int _WrapperContainer_EndByteIndex;
         protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         
-        private LazinatorWrapperInt _WrappedInt;
-        public LazinatorWrapperInt WrappedInt
+        private WInt _WrappedInt;
+        public WInt WrappedInt
         {
             [DebuggerStepThrough]
             get
@@ -226,12 +226,12 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _WrappedInt = default(LazinatorWrapperInt);
+                        _WrappedInt = default(WInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true);
-                        _WrappedInt = new LazinatorWrapperInt()
+                        _WrappedInt = new WInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedInt_Accessed;
-        public LazinatorWrapperInt WrappedInt_Copy
+        public WInt WrappedInt_Copy
         {
             [DebuggerStepThrough]
             get
@@ -260,12 +260,12 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(LazinatorWrapperInt);
+                        return default(WInt);
                     }
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength);
-                        return new LazinatorWrapperInt()
+                        return new WInt()
                         {
                             DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,

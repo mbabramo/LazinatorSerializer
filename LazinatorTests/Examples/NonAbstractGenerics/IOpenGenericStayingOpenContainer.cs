@@ -9,6 +9,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     [Lazinator((int) ExampleUniqueIDs.OpenGenericStayingOpenContainer)]
     interface IOpenGenericStayingOpenContainer
     {
-        OpenGeneric<LazinatorWrapperFloat> ClosedGeneric { get; set; }
+        OpenGeneric<WFloat> ClosedGeneric { get; set; }
     }
 }

@@ -228,8 +228,8 @@ namespace Lazinator.Collections.AvlTree
                 _Count = value;
             }
         }
-        private AvlTree<TKey, LazinatorWrapperByte> _UnderlyingTree;
-        public virtual AvlTree<TKey, LazinatorWrapperByte> UnderlyingTree
+        private AvlTree<TKey, WByte> _UnderlyingTree;
+        public virtual AvlTree<TKey, WByte> UnderlyingTree
         {
             [DebuggerStepThrough]
             get
@@ -238,7 +238,7 @@ namespace Lazinator.Collections.AvlTree
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _UnderlyingTree = default(AvlTree<TKey, LazinatorWrapperByte>);
+                        _UnderlyingTree = default(AvlTree<TKey, WByte>);
                     }
                     else
                     {
@@ -248,7 +248,7 @@ namespace Lazinator.Collections.AvlTree
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _UnderlyingTree = DeserializationFactory.Create(94, () => new AvlTree<TKey, LazinatorWrapperByte>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Create(94, () => new AvlTree<TKey, WByte>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 }

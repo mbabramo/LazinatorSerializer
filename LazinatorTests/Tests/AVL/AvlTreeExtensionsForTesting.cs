@@ -10,7 +10,7 @@ namespace LazinatorTests.AVL
 {
     public static class AvlTreeExtensionsForTesting
     {
-        public static string Description<TKey>(this AvlTree<TKey, LazinatorWrapperByte> tree) where TKey : ILazinator, new()
+        public static string Description<TKey>(this AvlTree<TKey, WByte> tree) where TKey : ILazinator, new()
         {
             StringBuilder builder = new StringBuilder();
 
@@ -19,14 +19,14 @@ namespace LazinatorTests.AVL
             return builder.ToString();
         }
 
-        public static bool Insert<TKey>(this AvlTree<TKey, LazinatorWrapperByte> source, TKey key) where TKey : ILazinator, new()
+        public static bool Insert<TKey>(this AvlTree<TKey, WByte> source, TKey key) where TKey : ILazinator, new()
         {
             return source.Insert(key, 0);
         }
 
-        public static int CountByEnumerating<TKey>(this AvlTree<TKey, LazinatorWrapperByte> source) where TKey : ILazinator, new()
+        public static int CountByEnumerating<TKey>(this AvlTree<TKey, WByte> source) where TKey : ILazinator, new()
         {
-            AvlNode<TKey, LazinatorWrapperByte> node = source.Root;
+            AvlNode<TKey, WByte> node = source.Root;
 
             if (node == null)
             {
@@ -38,7 +38,7 @@ namespace LazinatorTests.AVL
             }
         }
 
-        private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, LazinatorWrapperByte> node) where TKey : ILazinator, new()
+        private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, WByte> node) where TKey : ILazinator, new()
         {
             if (node != null)
             {

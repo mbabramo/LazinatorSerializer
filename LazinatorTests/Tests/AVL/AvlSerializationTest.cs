@@ -18,10 +18,10 @@ namespace LazinatorTests.Tests.AVL
         [Fact]
         public void DeserializedAvlTreeOrdersItemsCorrectly()
         {
-            GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             var enumerated = tree.Select(x => x.Value.WrappedValue).ToList();
-            AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> clone = tree.CloneLazinatorTyped();
+            AvlTree<WInt, WInt> clone = tree.CloneLazinatorTyped();
             var enumerated2 = clone.Select(x => x.Value.WrappedValue).ToList();
             var correctOrder = items.OrderBy(x => x.Key).Select(x => x.Value).ToList();
             enumerated.SequenceEqual(correctOrder).Should().BeTrue();
@@ -31,32 +31,32 @@ namespace LazinatorTests.Tests.AVL
         [Fact]
         public void AvlTreeAllowsSearchAfterDeserialization()
         {
-            GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             MemoryInBuffer b = tree.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
             //const int repetitions = 10000;
             //for (int i = 0; i < repetitions; i++)
             //{
-                var tree2 = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>()
+                var tree2 = new AvlTree<WInt, WInt>()
                 {
                     DeserializationFactory = deserializationFactory,
                     HierarchyBytes = b
                 };
-                bool found = tree2.Search(firstKey, out LazinatorWrapperInt value);
+                bool found = tree2.Search(firstKey, out WInt value);
                 found.Should().BeTrue();
             //}
         }
 
-        private AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> GetTree()
+        private AvlTree<WInt, WInt> GetTree()
         {
-            GetTreeAndItems(out _, out AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> t, out _, out _ );
+            GetTreeAndItems(out _, out AvlTree<WInt, WInt> t, out _, out _ );
             return t;
         }
 
-        private void GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<LazinatorWrapperInt, LazinatorWrapperInt> tree, out Dictionary<int, int> items, out int firstKey)
+        private void GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
         {
             deserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
-            tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperInt>();
+            tree = new AvlTree<WInt, WInt>();
             tree.DeserializationFactory = deserializationFactory;
             items = new Dictionary<int, int>();
             firstKey = 0;

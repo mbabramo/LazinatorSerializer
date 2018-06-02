@@ -11,7 +11,7 @@ namespace LazinatorTests.Examples
     {
         ExampleStruct MyExampleStruct { get; set; }
         List<ExampleStruct> MyListExampleStruct { get; set; }
-        List<LazinatorWrapperNullableStruct<ExampleStruct>> MyListNullableExampleStruct { get; set; }
-        LazinatorWrapperInt IntWrapper { get; set; }
+        List<WNullableStruct<ExampleStruct>> MyListNullableExampleStruct { get; set; }
+        WInt IntWrapper { get; set; }
     }
 }

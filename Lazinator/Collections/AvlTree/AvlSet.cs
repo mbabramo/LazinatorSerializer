@@ -12,12 +12,12 @@ namespace Lazinator.Collections.AvlTree
     {
         public AvlSet(IComparer<TKey> comparer)
         {
-            UnderlyingTree = new AvlTree<TKey, LazinatorWrapperByte>(comparer);
+            UnderlyingTree = new AvlTree<TKey, WByte>(comparer);
         }
 
         public AvlSet() : base()
         {
-            UnderlyingTree = new AvlTree<TKey, LazinatorWrapperByte>();
+            UnderlyingTree = new AvlTree<TKey, WByte>();
         }
 
         public void SetComparer(IComparer<TKey> comparer)
@@ -64,7 +64,7 @@ namespace Lazinator.Collections.AvlTree
 
         public AvlNodeKeyEnumerator<TKey> AsKeyEnumerator()
         {
-            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<TKey, LazinatorWrapperByte>;
+            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<TKey, WByte>;
             return new AvlNodeKeyEnumerator<TKey>(underlyingEnumerator);
         }
 

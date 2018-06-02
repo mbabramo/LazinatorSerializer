@@ -30,9 +30,9 @@ namespace LazinatorTests.AVL
                 }
         }
 
-        private static void GetAvlSet(out AvlSet<LazinatorWrapperInt> set, out int[] ints)
+        private static void GetAvlSet(out AvlSet<WInt> set, out int[] ints)
         {
-            set = new AvlSet<LazinatorWrapperInt>();
+            set = new AvlSet<WInt>();
             ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
                 set.Insert(x);
@@ -48,7 +48,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlMultisetWorks()
         {
-            AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>();
+            AvlMultiset<WInt> s = new AvlMultiset<WInt>();
             s.Insert(3);
             s.Insert(5);
             s.Insert(5);
@@ -73,7 +73,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlMultisetSkipWorks()
         {
-            AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>();
+            AvlMultiset<WInt> s = new AvlMultiset<WInt>();
             s.Insert(3);
             s.Insert(5);
             s.Insert(5);
@@ -84,13 +84,13 @@ namespace LazinatorTests.AVL
         public void AvlMultisetComparerWorks()
         {
             // The AvlMultiset comparer sets the comparer of the underlying set, which sets the comparer of the underlying tree, so this serves to check all their functionality. 
-            CustomComparer<LazinatorWrapperInt> reverseComparer =
-                new CustomComparer<LazinatorWrapperInt>((x, y) => 0 - x.CompareTo(y));
-            AvlMultiset<LazinatorWrapperInt> s = new AvlMultiset<LazinatorWrapperInt>(reverseComparer);
+            CustomComparer<WInt> reverseComparer =
+                new CustomComparer<WInt>((x, y) => 0 - x.CompareTo(y));
+            AvlMultiset<WInt> s = new AvlMultiset<WInt>(reverseComparer);
             s.Insert(3);
             s.Insert(5);
             s.Insert(5);
-            List<LazinatorWrapperInt> list = s.ToList();
+            List<WInt> list = s.ToList();
             list.Select(x => x.WrappedValue).SequenceEqual(new int[] {5, 5, 3}).Should().BeTrue();
         }
 
@@ -100,14 +100,14 @@ namespace LazinatorTests.AVL
             GetAvlSet(out var set, out var ints);
             foreach (int x in ints)
             {
-                (bool valueFound, LazinatorWrapperInt valueIfFound) = set.GetMatchOrNext(x);
+                (bool valueFound, WInt valueIfFound) = set.GetMatchOrNext(x);
                 valueFound.Should().BeTrue();
                 valueIfFound.WrappedValue.Should().Be(x);
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
                 {
-                    (bool valueFound, LazinatorWrapperInt valueIfFound) = set.GetMatchOrNext(x);
+                    (bool valueFound, WInt valueIfFound) = set.GetMatchOrNext(x);
                     if (x > ints.Max())
                         valueFound.Should().BeFalse();
                     else
@@ -128,20 +128,20 @@ namespace LazinatorTests.AVL
         [Fact]
         public void SearchWorks()
         {
-            var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperString>();
+            var tree = new AvlTree<WInt, WString>();
             int[] ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
                 tree.Insert(x, x.ToString());
             foreach (int x in ints)
             {
-                bool found = tree.Search(x, out LazinatorWrapperString value);
+                bool found = tree.Search(x, out WString value);
                 found.Should().BeTrue();
                 value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
                 {
-                    bool found = tree.Search(x, out LazinatorWrapperString value);
+                    bool found = tree.Search(x, out WString value);
                     found.Should().BeFalse();
                 }
         }
@@ -149,7 +149,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void SearchMatchOrNextWorks()
         {
-            var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperString>();
+            var tree = new AvlTree<WInt, WString>();
             int[] ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
                 tree.Insert(x, x.ToString());

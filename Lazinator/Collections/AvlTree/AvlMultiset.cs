@@ -16,7 +16,7 @@ namespace Lazinator.Collections.AvlTree
             // Given comparer, we must define a custom comparer for tuples containing T and an int that indicates the item number added.
             var customComparer = GetComparerForWrapper(comparer);
 
-            UnderlyingSet = new AvlSet<LazinatorTuple<T, LazinatorWrapperInt>>(customComparer);
+            UnderlyingSet = new AvlSet<LazinatorTuple<T, WInt>>(customComparer);
         }
 
         public void SetComparer(IComparer<T> comparer)
@@ -24,9 +24,9 @@ namespace Lazinator.Collections.AvlTree
             UnderlyingSet.UnderlyingTree.SetComparer(GetComparerForWrapper(comparer));
         }
 
-        private static CustomComparer<LazinatorTuple<T, LazinatorWrapperInt>> GetComparerForWrapper(IComparer<T> comparer)
+        private static CustomComparer<LazinatorTuple<T, WInt>> GetComparerForWrapper(IComparer<T> comparer)
         {
-            var c2 = new CustomComparer<LazinatorTuple<T, LazinatorWrapperInt>>((p0, p1) =>
+            var c2 = new CustomComparer<LazinatorTuple<T, WInt>>((p0, p1) =>
             {
                 var r = comparer.Compare(p0.Item1, p1.Item1);
                 if (r == 0)
@@ -40,14 +40,14 @@ namespace Lazinator.Collections.AvlTree
 
         public AvlMultiset()
         {
-            UnderlyingSet = new AvlSet<LazinatorTuple<T, LazinatorWrapperInt>>();
+            UnderlyingSet = new AvlSet<LazinatorTuple<T, WInt>>();
         }
 
         public int Count => UnderlyingSet.Count;
 
         public bool Contains(T key)
         {
-            var result = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, LazinatorWrapperInt>(key, 0));
+            var result = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
             if (!result.valueFound)
                 return false;
             return result.valueIfFound.Item1.Equals(key);
@@ -55,18 +55,18 @@ namespace Lazinator.Collections.AvlTree
 
         public (bool valueFound, T valueIfFound) GetMatchOrNext(T key)
         {
-            var matchOrNext = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, LazinatorWrapperInt>(key, 0));
+            var matchOrNext = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
             return (matchOrNext.valueFound, matchOrNext.valueFound ? matchOrNext.valueIfFound.Item1 : default(T));
         }
 
         public bool Insert(T key)
         {
-            return UnderlyingSet.Insert(new LazinatorTuple<T, LazinatorWrapperInt>(key, NumItemsAdded++));
+            return UnderlyingSet.Insert(new LazinatorTuple<T, WInt>(key, NumItemsAdded++));
         }
 
         public void RemoveFirstMatchIfExists(T key)
         {
-            var matchOrNext = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, LazinatorWrapperInt>(key, 0));
+            var matchOrNext = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
             if (matchOrNext.valueFound)
                 UnderlyingSet.Delete(matchOrNext.valueIfFound);
         }
@@ -83,7 +83,7 @@ namespace Lazinator.Collections.AvlTree
 
         private AvlMultisetEnumerator<T> AsKeyEnumerator()
         {
-            AvlNodeKeyEnumerator<LazinatorTuple<T,LazinatorWrapperInt>> underlyingEnumerator = UnderlyingSet.AsKeyEnumerator();
+            AvlNodeKeyEnumerator<LazinatorTuple<T,WInt>> underlyingEnumerator = UnderlyingSet.AsKeyEnumerator();
             return new AvlMultisetEnumerator<T>(underlyingEnumerator);
         }
 

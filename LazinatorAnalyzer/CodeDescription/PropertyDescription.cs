@@ -237,7 +237,7 @@ namespace Lazinator.CodeDescription
                 // handle a nullable type (which might be a nullable primitive type or a nullable struct / valuetuple
                 SetNullablePropertyType(namedTypeSymbol);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use LazinatorWrapperNullableStruct instead.");
+                    throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use WNullableStruct instead.");
                 return;
             }
             else

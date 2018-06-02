@@ -9,6 +9,6 @@ namespace LazinatorTests.Examples.Structs
     [Lazinator((int)ExampleUniqueIDs.WrapperContainer)]
     interface IWrapperContainer
     {
-        LazinatorWrapperInt WrappedInt { get; set; }
+        WInt WrappedInt { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace LazinatorTests.AVL
 		[Fact]
 		public void Empty()
 		{
-			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperByte>();
+			var tree = new AvlTree<WInt, WByte>();
 
 			Assert.Equal(0, tree.CountByEnumerating());
 			AssertTreeValid("", tree);
@@ -31,7 +31,7 @@ namespace LazinatorTests.AVL
                 int itemsToInsert = 100;
                 int itemsToInsertThenDelete = 20;
                 int insertions = itemsToInsert + itemsToInsertThenDelete;
-                AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> tree = BuildTreeInRandomOrder(insertions);
+                AvlTree<WInt, WByte> tree = BuildTreeInRandomOrder(insertions);
                 tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
                 tree.Root.Count.Should().Be(insertions);
 
@@ -82,7 +82,7 @@ namespace LazinatorTests.AVL
 	        }
 	    }
 
-        private AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> BuildTreeInRandomOrder(int insertions)
+        private AvlTree<WInt, WByte> BuildTreeInRandomOrder(int insertions)
         {
             var insertItems = Enumerable.Range(1, insertions).ToList();
             Shuffle(insertItems);
@@ -116,7 +116,7 @@ namespace LazinatorTests.AVL
 		[Fact]
 		public void DuplicateFails()
 		{
-			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperByte>();
+			var tree = new AvlTree<WInt, WByte>();
 
 			bool success0a = tree.Insert(0);
 			bool success0b = tree.Insert(0);
@@ -319,7 +319,7 @@ namespace LazinatorTests.AVL
 			AssertTreeValid("2-:{1,8:{4,20}}", tree);
 		}
 
-		private void AssertTreeValid(string description, AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> tree)
+		private void AssertTreeValid(string description, AvlTree<WInt, WByte> tree)
 		{
 			Assert.Equal(description, tree.Description());
 			
@@ -333,9 +333,9 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private AvlTree<LazinatorWrapperInt, LazinatorWrapperByte> SetupTree(params int[] values)
+		private AvlTree<WInt, WByte> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<LazinatorWrapperInt, LazinatorWrapperByte>();
+			var tree = new AvlTree<WInt, WByte>();
 
 			foreach (int value in values)
 			{

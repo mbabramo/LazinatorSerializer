@@ -471,10 +471,10 @@ namespace LazinatorTests.Tests
             {
                 var returnObj = new ExampleStructContainer()
                 {
-                    MyListNullableExampleStruct = new List<LazinatorWrapperNullableStruct<ExampleStruct>>()
+                    MyListNullableExampleStruct = new List<WNullableStruct<ExampleStruct>>()
                     {
-                        new LazinatorWrapperNullableStruct<ExampleStruct>() { AsNullableStruct = new ExampleStruct() { MyChar = 'd' } },
-                        new LazinatorWrapperNullableStruct<ExampleStruct>() { AsNullableStruct = null },
+                        new WNullableStruct<ExampleStruct>() { AsNullableStruct = new ExampleStruct() { MyChar = 'd' } },
+                        new WNullableStruct<ExampleStruct>() { AsNullableStruct = null },
                     },
                     DeserializationFactory = GetDeserializationFactory()
                 };
@@ -629,7 +629,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void WrapperNullableStructWorks()
         {
-            LazinatorWrapperNullableStruct<ExampleStruct> w = new LazinatorWrapperNullableStruct<ExampleStruct>()
+            WNullableStruct<ExampleStruct> w = new WNullableStruct<ExampleStruct>()
             {
                 DeserializationFactory = GetDeserializationFactory(),
                 AsNullableStruct = new ExampleStruct()
@@ -648,7 +648,7 @@ namespace LazinatorTests.Tests
         public void WrapperNullableGuidWorks()
         {
             Guid g = Guid.NewGuid();
-            LazinatorWrapperNullableGuid w = new LazinatorWrapperNullableGuid(g);
+            WNullableGuid w = new WNullableGuid(g);
             var w2 = CloneWithOptionalVerification(w, true, false);
             w2.WrappedValue.Should().Be(g);
         }
@@ -954,7 +954,7 @@ namespace LazinatorTests.Tests
         public void LazinatorReadOnlySpanInStruct()
         {
             // we have special code to deal with ReadOnlySpans within structs. So, here is a test to make sure that it works.
-            LazinatorWrapperReadOnlySpanChar w = new LazinatorWrapperReadOnlySpanChar();
+            WReadOnlySpanChar w = new WReadOnlySpanChar();
             w.Value = new Span<char>("mystring".ToArray());
             var result = CloneWithOptionalVerification(w, false, false);
             new string(result.Value).Should().Be("mystring");
@@ -1408,8 +1408,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorTuple()
         {
-            LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString> item =
-                new LazinatorTuple<LazinatorWrapperInt, LazinatorWrapperString>(5, "hello");
+            LazinatorTuple<WInt, WString> item =
+                new LazinatorTuple<WInt, WString>(5, "hello");
             var clone = item.CloneLazinatorTyped();
             clone.Item1.WrappedValue.Should().Be(5);
             clone.Item2.WrappedValue.Should().Be("hello");
@@ -1707,9 +1707,9 @@ namespace LazinatorTests.Tests
         {
             OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
             {
-                ClosedGeneric = new OpenGeneric<LazinatorWrapperFloat>()
+                ClosedGeneric = new OpenGeneric<WFloat>()
                 {
-                    MyT = new LazinatorWrapperFloat(3.4F)
+                    MyT = new WFloat(3.4F)
                 }
             };
             var c = x.CloneLazinatorTyped();
@@ -2290,9 +2290,9 @@ namespace LazinatorTests.Tests
         [Fact]
         void BinaryHashInList()
         {
-            var wrapped = new LazinatorWrapperInt(1);
-            var wrapped2 = new LazinatorWrapperInt(1);
-            LazinatorList<LazinatorWrapperInt> x = new LazinatorList<LazinatorWrapperInt>();
+            var wrapped = new WInt(1);
+            var wrapped2 = new WInt(1);
+            LazinatorList<WInt> x = new LazinatorList<WInt>();
             x.Add(wrapped2);
             x.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
             x.DeserializationFactory = GetDeserializationFactory();
