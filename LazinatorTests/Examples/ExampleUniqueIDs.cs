@@ -65,6 +65,7 @@
         SubclassWithinClass,
         NonLazinatorDerivedContainer,
         Derived_DotNetList_Nested_NonSelfSerializable,
-        DerivedArray_Values
+        DerivedArray_Values,
+        SmallWrappersContainer
     }
 }
