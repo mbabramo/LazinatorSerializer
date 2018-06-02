@@ -702,6 +702,25 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ListOfWrapperWithFixedLengthWorks()
+        {
+            SmallWrappersContainer w = new SmallWrappersContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                ListWrappedBytes = new LazinatorList<WByte>()
+                {
+                    0, 1, 2, 3, 255
+                }
+            };
+            var c = w.CloneLazinatorTyped();
+            c.ListWrappedBytes[0].WrappedValue.Should().Be(0);
+            c.ListWrappedBytes[1].WrappedValue.Should().Be(1);
+            c.ListWrappedBytes[2].WrappedValue.Should().Be(2);
+            c.ListWrappedBytes[3].WrappedValue.Should().Be(3);
+            c.ListWrappedBytes[4].WrappedValue.Should().Be(255);
+        }
+
+        [Fact]
         public void WrapperHasDefaultValue()
         {
             WrapperContainer e = new WrapperContainer();

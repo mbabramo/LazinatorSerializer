@@ -46,6 +46,7 @@ namespace Lazinator.CodeDescription
         public List<string> GenericArgumentNames { get; set; }
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && (GenericArgumentNames == null || !GenericArgumentNames.Any());
+        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null;
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }
@@ -613,7 +614,7 @@ namespace Lazinator.CodeDescription
 
             sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization();
                             " : "")}int startPosition = writer.Position;
-                            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(IsSealedOrStruct ? "false" : "true")});");
+                            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
             sb.AppendLine(postEncodingDirtinessCheck);
             sb.AppendLine($@"
