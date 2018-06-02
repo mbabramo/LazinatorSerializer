@@ -89,10 +89,19 @@ namespace Lazinator.CodeDescription
         internal bool TrackDirtinessNonSerialized { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
-        private bool IsGuaranteedSingleByte { get; set; }
+        private bool IsGuaranteedFixedLength { get; set; }
+        private int FixedLength { get; set; }
         private bool IsGuaranteedSmall { get; set; }
-        private string LengthPrefixTypeString => IsGuaranteedSingleByte ? "out" : (IsGuaranteedSmall ? "Byte" : "Int");
-        private string WriteDefaultLengthString => $"writer.Write(({(IsGuaranteedSingleByte || IsGuaranteedSmall ? "byte" : "uint")})0);";
+        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (IsGuaranteedSmall ? "Byte" : "Int");
+        private string WriteDefaultLengthString =>
+            !IsGuaranteedFixedLength || FixedLength == 1 ?
+                $"writer.Write(({(IsGuaranteedSmall || IsGuaranteedFixedLength ? "byte" : "uint")})0);"
+            :
+                $@"for (int indexInFixedLength = 0; indexInFixedLength < {FixedLength}; indexInFixedLength++)
+                    {{
+                        writer.Write((byte)0);
+                    }}";
+                    
         private bool IncludableWhenExcludingMostChildren { get; set; }
         private bool ExcludableWhenIncludingMostChildren { get; set; }
 
@@ -754,7 +763,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{(IsGuaranteedSmall ? ", true" : "")}{(IsGuaranteedSingleByte ? ", true" : "")});
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{(IsGuaranteedSmall ? ", true" : "")}{(IsGuaranteedFixedLength ? $", {FixedLength}" : "")});
                         {creation}
                     }}
                     _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
@@ -934,8 +943,14 @@ namespace Lazinator.CodeDescription
                         CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
             else
             {
-                if (IsGuaranteedSingleByte)
-                    sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar++;");
+                if (IsGuaranteedFixedLength)
+                {
+                    if (FixedLength == 1)
+                        sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar++;");
+                    else
+                        sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;
+                                        bytesSoFar += {FixedLength};");
+                }
                 else if (IsGuaranteedSmall)
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;
@@ -976,7 +991,7 @@ namespace Lazinator.CodeDescription
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 {
                     sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedSingleByte ? "true" : "false")}, this);"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? "true" : "false")}, this);"));
                 }
                 else
                 {
@@ -987,7 +1002,7 @@ namespace Lazinator.CodeDescription
                             var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
-                            WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedSingleByte ? "true" : "false")}, null);
+                            WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? "true" : "false")}, null);
                         }}");
                 }
             }
