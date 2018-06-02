@@ -2194,6 +2194,16 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ShortLazinatorListWorks()
+        {
+            LazinatorList<WInt> l = new LazinatorList<WInt>();
+            l.Add(3);
+            var c = l.CloneLazinatorTyped();
+            var result = c[0];
+            result.Should().Be(3);
+        }
+
+        [Fact]
         public void LazinatorListDirtinessWorks()
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()

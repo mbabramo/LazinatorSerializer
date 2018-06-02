@@ -276,7 +276,7 @@ namespace LazinatorTests.Examples
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, false);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
             _IsDirty = false;
             _DescendantIsDirty = false;
