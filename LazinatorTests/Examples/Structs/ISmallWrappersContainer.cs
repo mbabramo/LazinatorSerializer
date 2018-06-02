@@ -7,6 +7,7 @@ namespace LazinatorTests.Examples.Structs
     public interface ISmallWrappersContainer
     {
         WByte WrappedByte { get; set; }
-        WByte WrappedByte2 { get; set; }
+        WSByte WrappedSByte { get; set; }
+        WChar WrappedChar { get; set; }
     }
 }

@@ -666,6 +666,22 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void WrappersWithFixedLengthWork()
+        {
+            SmallWrappersContainer w = new SmallWrappersContainer()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                WrappedByte = 1,
+                WrappedSByte = -2,
+                WrappedChar = 'x'
+            };
+            var c = w.CloneLazinatorTyped();
+            c.WrappedByte.Should().Be((byte) 1);
+            c.WrappedSByte.Should().Be((sbyte) -2);
+            c.WrappedChar.Should().Be('x');
+        }
+
+        [Fact]
         public void WrapperHasDefaultValue()
         {
             WrapperContainer e = new WrapperContainer();
