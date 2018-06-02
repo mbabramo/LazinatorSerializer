@@ -385,6 +385,14 @@ namespace Lazinator.CodeDescription
                     ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
                 if (smallAttribute != null)
                     IsGuaranteedSmall = true;
+
+                CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
+                    ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
+                if (fixedLengthAttribute != null)
+                {
+                    IsGuaranteedFixedLength = true;
+                    FixedLength = fixedLengthAttribute.FixedLength;
+                }
             }
 
             if (t.IsGenericType)
