@@ -32,7 +32,7 @@ namespace LazinatorTests.Tests
         private static DeserializationFactory GetDeserializationFactory()
         {
             if (TestDeserializationFactory == null)
-                TestDeserializationFactory = new DeserializationFactory(new Type[] { typeof(Example) }, true);
+                TestDeserializationFactory = new DeserializationFactory(new Type[] { typeof(Example), typeof(WInt) }, true);
             return TestDeserializationFactory;
         }
 

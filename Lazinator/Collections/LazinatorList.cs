@@ -7,6 +7,7 @@ using Lazinator.Support;
 using Lazinator.Buffers; 
 using Lazinator.Core;
 using static Lazinator.Core.LazinatorUtilities;
+using System.Linq;
 
 namespace Lazinator.Collections
 {
@@ -67,8 +68,40 @@ namespace Lazinator.Collections
                 return default;
             if (DeserializationFactory == null)
                 DeserializationFactory = DeserializationFactory.GetInstance();
-            T n2 = (T) DeserializationFactory.FactoryCreate(byteSpan, this);
+            T n2;
+            if (SerializationSkipsUniqueIDs())
+                n2 = (T)DeserializationFactory.FactoryCreate((int)typeUniqueID, byteSpan, this);
+            else
+                n2 = (T) DeserializationFactory.FactoryCreate(byteSpan, this);
             return n2;
+        }
+
+
+        bool? _SerializationSkipsUniqueIDs;
+        int? typeUniqueID;
+        private bool SerializationSkipsUniqueIDs()
+        {
+            // DEBUG: (1) Move this to DeserializationFactory during initial checks. If it's not found here, then we can assume that it doesn't skip. (2) Then combine above FactoryCreate calls to make one that works by Type. (3) Make clear that the FactoryCreate from byteSpan works by looking at the UniqueID and thus won't work with a struct / sealed class.
+            // Explanation: Most Lazinator objects include UniqueIDs, but some skip them. Usually, we know what we're dealing with, because we are serializing a property of a particular type. If the type is sealed or a struct, we just create the object directly, and then call its deserialization routines; otherwise, we call the factory, and we can be sure that there is a unique ID. But here, we seek to be able to deserialize any type, regardless of whether it includes a UniqueID.
+            if (_SerializationSkipsUniqueIDs == null)
+            { 
+                Type t = typeof(T);
+                _SerializationSkipsUniqueIDs = t.IsValueType || (t.IsSealed && t.BaseType == typeof(object));
+                if (_SerializationSkipsUniqueIDs == true)
+                {
+                    Attributes.LazinatorAttribute lazinatorAttribute = (Attributes.LazinatorAttribute)
+                        t.GetInterfaces()
+                        .Select(x => (x, x.GetCustomAttributes(typeof(Attributes.LazinatorAttribute), false)))
+                        .Where(x => x.Item2.Any())
+                        .FirstOrDefault()
+                        .Item2
+                        .FirstOrDefault();
+                    _SerializationSkipsUniqueIDs = lazinatorAttribute.Version == -1;
+                    if (_SerializationSkipsUniqueIDs == true)
+                        typeUniqueID = lazinatorAttribute.UniqueID;
+                }
+            }
+            return (bool) _SerializationSkipsUniqueIDs;
         }
 
         public uint GetListMemberHash32(int index)

@@ -76,11 +76,17 @@ namespace LazinatorTests.Tests
         public void DictionaryCanGrowAndShrink()
         {
             LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
-            d.Count.Should().Be(0);
-            for (long i = 0; i < 25; i++)
+            const int numItems = 25;
+            for (long i = 0; i < numItems; i++)
+            {
                 d[i] = i.ToString();
-            for (long i = 0; i < 25; i++)
+                // DEBUG d.Count().Should().Be((int) (i + 1));
+            }
+            for (long i = 0; i < numItems; i++)
+            {
                 d.Remove(i);
+                // DEBUG d.Count().Should().Be(25 - (int)i);
+            }
             d.Count().Should().Be(0);
         }
     }
