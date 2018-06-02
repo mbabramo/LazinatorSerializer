@@ -41,8 +41,6 @@ namespace Lazinator.Wrappers
                 return 0;
             }
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
-            
             int serializedVersionNumber = -1; /* versioning disabled */
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
@@ -252,7 +250,6 @@ namespace Lazinator.Wrappers
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedTimeSpan(writer, _WrappedValue);
