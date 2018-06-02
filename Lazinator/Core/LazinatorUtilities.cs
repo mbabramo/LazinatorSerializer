@@ -121,6 +121,16 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Completes an action to write to binary, without any length prefix.
+        /// </summary>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="action">The action to complete</param>
+        public static void WriteToBinaryWithoutLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
+        {
+            action(writer);
+        }
+
+        /// <summary>
         /// Completes an action to write to binary, but then prefixes the binary writer with the total length of what was written, excluding the length itself
         /// </summary>
         /// <param name="writer">The binary writer</param>
@@ -182,7 +192,7 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes"></param>
         public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
-            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, ILazinator parent) where T : ILazinator
+            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, ILazinator parent, bool skipLength = false /* DEBUG -- make this a regular parameter earlier */) where T : ILazinator
         {
             if (!childHasBeenAccessed && child != null)
             {
@@ -192,7 +202,9 @@ namespace Lazinator.Core
             {
                 // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
                 ReadOnlyMemory<byte> childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
-                if (restrictLengthTo250Bytes)
+                if (skipLength)
+                    childStorage.Span.Write(writer);
+                else if (restrictLengthTo250Bytes)
                     childStorage.Span.Write_WithByteLengthPrefix(writer);
                 else
                     childStorage.Span.Write_WithIntLengthPrefix(writer);
@@ -201,10 +213,13 @@ namespace Lazinator.Core
             {
                 if (child == null)
                 {
-                    if (restrictLengthTo250Bytes)
-                        writer.Write((byte)0); 
-                    else
-                        writer.Write((uint)0);
+                    if (!skipLength)
+                    {
+                        if (restrictLengthTo250Bytes)
+                            writer.Write((byte)0);
+                        else
+                            writer.Write((uint)0);
+                    }
                 }
                 else
                 {
@@ -215,7 +230,9 @@ namespace Lazinator.Core
                         else
                             child.LazinatorObjectBytes.Span.Write(w); // the child has been accessed, but is unchanged, so we can use the storage holding the child
                     }
-                    if (restrictLengthTo250Bytes)
+                    if (skipLength)
+                        LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, action);
+                    else if (restrictLengthTo250Bytes)
                         LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(writer, action);
                     else
                         LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, action);
@@ -273,16 +290,17 @@ namespace Lazinator.Core
         /// <param name="byteOffset">The byte offset into the parent object of the length prefix for the child object</param>
         /// <param name="byteLength">The byte length of the child, including the length prefix</param>
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool lengthInSingleByte = false)
+        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool lengthInSingleByte = false, bool lengthOmittedBecauseAlwaysSingleByte = false)
         {
             if (byteLength == 0)
             {
                 return new ReadOnlyMemory<byte>();
             }
+            if (lengthOmittedBecauseAlwaysSingleByte)
+                return serializedBytes.Slice(byteOffset, 1);
             if (lengthInSingleByte)
                 return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
-            else
-                return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
+            return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
 
         /// <summary>
