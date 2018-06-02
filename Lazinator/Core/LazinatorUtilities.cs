@@ -275,7 +275,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool lengthInSingleByte = false)
         {
-            if (byteLength <= sizeof(int))
+            if (byteLength == 0)
             {
                 return new ReadOnlyMemory<byte>();
             }
