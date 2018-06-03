@@ -71,6 +71,7 @@
         DerivedGeneric2c,
         DerivedGenericContainer,
         Base,
-        GenericFromBase
+        GenericFromBase,
+        BaseContainer
     }
 }

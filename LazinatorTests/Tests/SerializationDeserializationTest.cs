@@ -1886,6 +1886,18 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void GenericFromBase()
+        {
+            GenericFromBase<WInt> c = new GenericFromBase<WInt>()
+            {
+                MyT = 5
+            };
+            var c2 = c.CloneLazinatorTyped();
+            var item = c2.MyT;
+            item.WrappedValue.Should().Be(5);
+        }
+
+        [Fact]
         public void DirtinessSetsCorrectly()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
