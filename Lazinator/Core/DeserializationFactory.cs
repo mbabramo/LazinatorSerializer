@@ -106,6 +106,7 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator, new() => (T)FactoryCreate(storage, parent);
 
+        //DEBUG(); // can we make the following private, calling the previous instead? Then we can make sure that T is not a type that hides its UniqueID. Check other overloads as well.
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
         /// </summary>
@@ -147,6 +148,7 @@ namespace Lazinator.Core
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 
+        // DEBUG here too
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
         /// </summary>
@@ -222,6 +224,7 @@ namespace Lazinator.Core
             return itemToReturn;
         }
 
+        //DEBUG // here too -- must add type as protection
         /// <summary>
         /// Enumerate multiple objects stored successively in a single range of bytes and not in a Lazinator or .Net collection. Storing objects this way is useful when each is appended to the end of the storage.
         /// </summary>
