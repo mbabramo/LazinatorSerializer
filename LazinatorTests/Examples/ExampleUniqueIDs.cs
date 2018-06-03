@@ -67,6 +67,7 @@
         Derived_DotNetList_Nested_NonSelfSerializable,
         DerivedArray_Values,
         SmallWrappersContainer,
-        DotNetList_Wrapper
+        DotNetList_Wrapper,
+        UnformedGeneric2c
     }
 }
