@@ -32,8 +32,16 @@ namespace Lazinator.Core
             return _DeserializationFactory;
         }
 
+        /// <summary>
+        /// A dictionary with a key equal to a unique ID and the value equal to a factory that creates the object with that unique ID. This can be used only for types that have no open generic parameters. Types with properties that contain closed generic parameters can be included.
+        /// </summary>
         private Dictionary<int, Func<ILazinator>> FactoriesByID =
             new Dictionary<int, Func<ILazinator>>();
+
+        /// <summary>
+        /// A dictionary with a key equal to a unique ID of a Lazinator type and a value recording the type and the number of generic parameters.
+        /// </summary>
+        private Dictionary<int, (Type type, byte numberGenericParameters)> TypeDictionary = new Dictionary<int, (Type type, byte numberGenericParameters)>();
         
         private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
 
@@ -283,7 +291,6 @@ namespace Lazinator.Core
             Type[] types = assembly.DefinedTypes
                 .Where(x => x.ImplementedInterfaces.Contains(typeof(ILazinator)))
                 .Where(x => !x.IsInterface && !x.IsAbstract)
-                .Where(x => !x.ContainsGenericParameters)
                 .Select(x => x.AsType())
                 .ToArray();
             SetTypes(types);
@@ -298,14 +305,22 @@ namespace Lazinator.Core
                 int uniqueID = attribute.UniqueID;
                 if (FactoriesByID.ContainsKey(uniqueID))
                     throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
-                FactoriesByID[uniqueID] = GetFactoryForType(type);
-                int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
-                if (fixedUniqueID != null)
+                if (type.ContainsGenericParameters)
                 {
-                    FixedUniqueIDs[type] = (int)fixedUniqueID;
-                    Type exclusiveInterface = LazinatorReflection.GetCorrespondingExclusiveInterface(type);
-                    if (exclusiveInterface != null)
-                        FixedUniqueIDs[exclusiveInterface] = (int)fixedUniqueID;
+                    TypeDictionary[uniqueID] = (type, (byte) type.GenericTypeArguments.Length);
+                }
+                else
+                {
+                    TypeDictionary[uniqueID] = (type, 0);
+                    FactoriesByID[uniqueID] = GetFactoryForType(type);
+                    int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
+                    if (fixedUniqueID != null)
+                    {
+                        FixedUniqueIDs[type] = (int)fixedUniqueID;
+                        Type exclusiveInterface = LazinatorReflection.GetCorrespondingExclusiveInterface(type);
+                        if (exclusiveInterface != null)
+                            FixedUniqueIDs[exclusiveInterface] = (int)fixedUniqueID;
+                    }
                 }
             }
         }
@@ -325,6 +340,41 @@ namespace Lazinator.Core
             var lambda = Expression.Lambda<Func<ILazinator>>(converted);
             Func<ILazinator> compiledLambda = lambda.Compile();
             return compiledLambda;
+        }
+
+        private ILazinator CreateItemUsingReflection(List<int> typeAndGenericTypeArgumentIDs)
+        {
+            (Type type, _) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs, 0);
+            var result = (ILazinator) Activator.CreateInstance(type);
+            return result;
+        }
+
+        // TODO: Cache this
+        private (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(List<int> typeAndGenericTypeArgumentIDs, int index)
+        {
+            if (index >= typeAndGenericTypeArgumentIDs.Count)
+                throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count} integer IDs, but more than that was needed.");
+            int uniqueIDOfMainType = typeAndGenericTypeArgumentIDs[index];
+            if (TypeDictionary.ContainsKey(uniqueIDOfMainType))
+            {
+                (Type t, byte numberGenericParameters) = TypeDictionary[uniqueIDOfMainType];
+                int numberTypeArgumentsConsumed = 1;
+                if (numberGenericParameters == 0)
+                    return (t, numberTypeArgumentsConsumed);
+                Type[] typeParameters = new Type[numberGenericParameters];
+                for (int gp = 0; gp < numberGenericParameters; gp++)
+                {
+                    (Type genericParameterType, int moreTypeArgumentsConsumed) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs, index + numberTypeArgumentsConsumed);
+                    numberTypeArgumentsConsumed += moreTypeArgumentsConsumed;
+                    typeParameters[gp] = genericParameterType;
+                }
+                Type result = t.MakeGenericType(typeParameters);
+                if (index == 0 && numberTypeArgumentsConsumed != typeAndGenericTypeArgumentIDs.Count())
+                    throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count} integer IDs, but only {numberTypeArgumentsConsumed} were needed.");
+                return (result, numberTypeArgumentsConsumed);
+            }
+            else
+                throw new LazinatorDeserializationException($"Could not deserialize type with unique ID {uniqueIDOfMainType}. Perhaps it is a type in an assembly not initialized by the DeserializationFactory, or perhaps it is a type with non-Lazinator generic parameters?");
         }
 
         private static int? GetFixedUniqueIDOrNull(Type t)

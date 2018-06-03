@@ -45,9 +45,10 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPostDeserialization { get; set; }
         public bool ImplementsOnDirty { get; set; }
         public List<string> GenericArgumentNames { get; set; }
+        public bool IsGeneric => GenericArgumentNames != null && GenericArgumentNames.Any();
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
-        public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && (GenericArgumentNames == null || !GenericArgumentNames.Any());
-        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces;
+        public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
+        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !IsGeneric;
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }
