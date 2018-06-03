@@ -528,7 +528,7 @@ namespace Lazinator.CodeDescription
                 }
 
                 sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
-                        public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; }}
+                        public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; set; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
@@ -580,10 +580,14 @@ namespace Lazinator.CodeDescription
                     " : "")}{resetAccessed}
                 }}");
 
+            string lazinatorGenericBackingID = "";
+            if (BaseLazinatorObject == null && (IsGeneric || !IsSealedOrStruct))
+                lazinatorGenericBackingID = $@"{ProtectedIfApplicable}System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
+                        ";
+
             string lazinatorGenericID;
             if (IsGeneric)
-                lazinatorGenericID = $@"private System.Collections.Generic.List<int> _LazinatorGenericID;
-                        public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                lazinatorGenericID = $@"{lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
                         {{
                             get
                             {{
@@ -593,9 +597,17 @@ namespace Lazinator.CodeDescription
                                 }}
                                 return _LazinatorGenericID;
                             }}
+                            set
+                            {{
+                                _LazinatorGenericID = value;
+                            }}
                         }}";
             else
-                lazinatorGenericID = $"public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID => null;";
+                lazinatorGenericID = $@"{lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                        {{
+                            get => null;
+                            set => throw new NotSupportedException();
+                        }}";
 
             sb.AppendLine($@"
                 /* Conversion */
