@@ -100,7 +100,7 @@ namespace Lazinator.Core
                 InitializeDeserialized(itemToReturn, storage, parent);
             }
             else
-                itemToReturn = (T) Create(uniqueID, storage, parent); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
+                itemToReturn = (T) CreateKnownID(uniqueID, storage, parent); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
             return itemToReturn;
         }
 
@@ -123,7 +123,7 @@ namespace Lazinator.Core
                 return null;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            ILazinator itemToReturn = Create(uniqueID, storage, parent);
+            ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
             return itemToReturn;
         }
         
@@ -134,7 +134,7 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public ILazinator Create(int uniqueID, ReadOnlyMemory<byte> storage, ILazinator parent)
+        public ILazinator CreateKnownID(int uniqueID, ReadOnlyMemory<byte> storage, ILazinator parent = null)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
             {
@@ -159,12 +159,12 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public T CreateBasedOnType<T>(ReadOnlyMemory<byte> storage, ILazinator parent)
+        public T CreateBasedOnType<T>(ReadOnlyMemory<byte> storage, ILazinator parent = null)
         {
             Type t = typeof(T);
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
-                return (T) Create((int)fixedUniqueID, storage, parent);
+                return (T) CreateKnownID((int)fixedUniqueID, storage, parent);
             else
                 return (T) CreateFromBytesIncludingID(storage, parent);
         }
@@ -180,7 +180,7 @@ namespace Lazinator.Core
             Type t = typeof(T);
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
-                return (T)CreateKnownID_SpecifyingDelegate((int)fixedUniqueID, storage, informParentOfDirtinessDelegate);
+                return (T)CreateKnownIDSpecifyingDelegate((int)fixedUniqueID, storage, informParentOfDirtinessDelegate);
             else
                 return (T)CreateFromBytesIncludingIDSpecifyingDelegate(storage, informParentOfDirtinessDelegate);
         }
@@ -197,7 +197,7 @@ namespace Lazinator.Core
                 return null;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            ILazinator itemToReturn = CreateKnownID_SpecifyingDelegate(uniqueID, storage, informParentOfDirtinessDelegate);
+            ILazinator itemToReturn = CreateKnownIDSpecifyingDelegate(uniqueID, storage, informParentOfDirtinessDelegate);
             return itemToReturn;
         }
 
@@ -208,7 +208,7 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
         /// <returns>The deserialized Lazinator object</returns>
-        private ILazinator CreateKnownID_SpecifyingDelegate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private ILazinator CreateKnownIDSpecifyingDelegate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
             {

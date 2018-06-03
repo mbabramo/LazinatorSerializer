@@ -32,7 +32,7 @@ namespace LazinatorTests.Tests
             Example parent = new Example();
             ReadOnlyMemory<byte> serializedBytes = new ReadOnlyMemory<byte>();
             ILazinator selfSerialized =
-                df.Create((int) ExampleUniqueIDs.ExampleChild, serializedBytes,
+                df.CreateKnownID((int) ExampleUniqueIDs.ExampleChild, serializedBytes,
                     parent);
             selfSerialized.Should().NotBeNull();
             selfSerialized.LazinatorObjectBytes.Should().Be(serializedBytes);
