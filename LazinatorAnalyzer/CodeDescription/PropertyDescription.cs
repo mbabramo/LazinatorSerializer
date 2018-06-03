@@ -320,10 +320,16 @@ namespace Lazinator.CodeDescription
             PropertyType = LazinatorPropertyType.NonSelfSerializingType;
             InterchangeTypeName = ContainingObjectDescription.Compilation.Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = ContainingObjectDescription.Compilation.Config?.GetDirectConverterTypeName(t);
+            string fullyQualifiedTypeName = t.GetFullyQualifiedNameWithoutGlobal();
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
-                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedNameWithoutGlobal()} has both an interchange converter and a direct converter type listed. Only one should be used.");
+                throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} has both an interchange converter and a direct converter type listed. Only one should be used.");
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
-                throw new LazinatorCodeGenException($"{t.GetFullyQualifiedNameWithoutGlobal()} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically.");
+            {
+                if (fullyQualifiedTypeName == "Lazinator.Core.ILazinator")
+                    throw new LazinatorCodeGenException($"You cannot include ILazinator as a type to be serialized or as a type argument in a Lazinator interface. To define a property that can deserialize a large number of Lazinator types, create a nonexclusive interface (possibly implementing no properties) and then define your Lazinator types as implementing that interface. This nonexclusive interface can then be used as the type for a Lazinator property.");
+                else
+                    throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} is a non-Lazinator type. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically.");
+            }
         }
 
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
