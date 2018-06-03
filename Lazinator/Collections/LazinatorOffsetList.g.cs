@@ -236,7 +236,7 @@ namespace Lazinator.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _FourByteItems_ByteIndex, _FourByteItems_ByteLength/*, false*/, false, null);
                         if (childData.Length == 0)
                         {
                             _FourByteItems = default;
@@ -279,7 +279,7 @@ namespace Lazinator.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength/*, false*/, false, null);
                         if (childData.Length == 0)
                         {
                             _TwoByteItems = default;
@@ -359,11 +359,11 @@ namespace Lazinator.Collections
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _FourByteItems, includeChildrenMode, _FourByteItems_Accessed, () => GetChildSlice(LazinatorObjectBytes, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, false, null), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _FourByteItems, includeChildrenMode, _FourByteItems_Accessed, () => GetChildSlice(LazinatorObjectBytes, _FourByteItems_ByteIndex, _FourByteItems_ByteLength/*, false*/, false, null), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _TwoByteItems, includeChildrenMode, _TwoByteItems_Accessed, () => GetChildSlice(LazinatorObjectBytes, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, false, null), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _TwoByteItems, includeChildrenMode, _TwoByteItems_Accessed, () => GetChildSlice(LazinatorObjectBytes, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength/*, false*/, false, null), verifyCleanness, false, false, this);
             }
         }
         

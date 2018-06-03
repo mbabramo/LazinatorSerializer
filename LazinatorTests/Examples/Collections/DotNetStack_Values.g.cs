@@ -224,7 +224,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength/*, false*/, false, null);
                         _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData, DeserializationFactory, () => { MyStackInt_Dirty = true; });
                     }
                     _MyStackInt_Accessed = true;
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyStackInt, isBelievedDirty: MyStackInt_Dirty,
             isAccessed: _MyStackInt_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength/*, false*/, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Stack_Gint_g(w, MyStackInt,

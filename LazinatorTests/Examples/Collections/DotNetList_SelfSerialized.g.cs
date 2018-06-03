@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength/*, false*/, false, null);
                         _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData, DeserializationFactory, () => { MyListSerialized_Dirty = true; });
                     }
                     _MyListSerialized_Accessed = true;
@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListSerialized, isBelievedDirty: MyListSerialized_Dirty,
             isAccessed: _MyListSerialized_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength/*, false*/, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExampleChild_g(w, MyListSerialized,

@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength/*, false*/, false, null);
                         _MyArrayInt = ConvertFromBytes_int_B_b(childData, DeserializationFactory, () => { MyArrayInt_Dirty = true; });
                     }
                     _MyArrayInt_Accessed = true;
@@ -275,7 +275,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength/*, false*/, false, null);
                         _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData, DeserializationFactory, null);
                     }
                     _MyJaggedArrayInt_Accessed = true;
@@ -338,7 +338,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
             isAccessed: _MyArrayInt_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength/*, false*/, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b(w, MyArrayInt,
@@ -346,7 +346,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyJaggedArrayInt, isBelievedDirty: _MyJaggedArrayInt_Accessed,
             isAccessed: _MyJaggedArrayInt_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b_B_b(w, MyJaggedArrayInt,

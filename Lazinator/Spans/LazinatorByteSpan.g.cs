@@ -218,7 +218,7 @@ namespace Lazinator.Spans
             {
                 if (!_ReadOnly_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, null);
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOnly_ByteIndex, _ReadOnly_ByteLength/*, false*/, false, null);
                     _ReadOnly = childData;
                     _ReadOnly_Accessed = true;
                 }
@@ -248,7 +248,7 @@ namespace Lazinator.Spans
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength/*, false*/, false, null);
                         _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData, DeserializationFactory, null);
                     }
                     _ReadOrWrite_Accessed = true;
@@ -312,7 +312,7 @@ namespace Lazinator.Spans
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnly, isBelievedDirty: _ReadOnly_Accessed,
             isAccessed: _ReadOnly_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnly_ByteIndex, _ReadOnly_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnly,
@@ -320,7 +320,7 @@ namespace Lazinator.Spans
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed,
             isAccessed: _ReadOrWrite_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,

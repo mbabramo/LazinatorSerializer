@@ -228,7 +228,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength/*, false*/, false, null);
                         _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized_Accessed = true;
@@ -259,7 +259,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength/*, false*/, false, null);
                         _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized2_Accessed = true;
@@ -290,7 +290,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength/*, false*/, false, null);
                         _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized3_Accessed = true;
@@ -321,7 +321,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength/*, false*/, false, null);
                         _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(childData, DeserializationFactory, null);
                     }
                     _MyTupleSerialized4_Accessed = true;
@@ -388,7 +388,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized, isBelievedDirty: _MyTupleSerialized_Accessed,
             isAccessed: _MyTupleSerialized_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized,
@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized2, isBelievedDirty: _MyTupleSerialized2_Accessed,
             isAccessed: _MyTupleSerialized2_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized2,
@@ -404,7 +404,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized3, isBelievedDirty: _MyTupleSerialized3_Accessed,
             isAccessed: _MyTupleSerialized3_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized3,
@@ -412,7 +412,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized4, isBelievedDirty: _MyTupleSerialized4_Accessed,
             isAccessed: _MyTupleSerialized4_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Gint_c_C32ExampleStruct_g(w, MyTupleSerialized4,

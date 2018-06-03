@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength/*, false*/, false, null);
                         _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData, DeserializationFactory, null);
                     }
                     _MyNestedTuple_Accessed = true;
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNestedTuple, isBelievedDirty: _MyNestedTuple_Accessed,
             isAccessed: _MyNestedTuple_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(w, MyNestedTuple,

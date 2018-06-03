@@ -209,7 +209,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_Value_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength, false, null);
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength/*, true*/, false, null);
                     _Value = childData;
                     _Value_Accessed = true;
                 }
@@ -276,7 +276,7 @@ namespace Lazinator.Wrappers
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed,
             isAccessed: _Value_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value/*, true*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             copy_Value.Write(w));

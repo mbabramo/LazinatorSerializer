@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.Subclasses
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyEnumList_ByteIndex, _MyEnumList_ByteLength/*, false*/, false, null);
                         _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData, DeserializationFactory, null);
                     }
                     _MyEnumList_Accessed = true;
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples.Subclasses
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed,
             isAccessed: _MyEnumList_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyEnumList_ByteIndex, _MyEnumList_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GEnumWithinClass_g(w, MyEnumList,

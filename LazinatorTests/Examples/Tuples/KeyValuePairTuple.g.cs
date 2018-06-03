@@ -223,7 +223,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength/*, false*/, false, null);
                         _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData, DeserializationFactory, null);
                     }
                     _MyKeyValuePairSerialized_Accessed = true;
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyKeyValuePairSerialized, isBelievedDirty: _MyKeyValuePairSerialized_Accessed,
             isAccessed: _MyKeyValuePairSerialized_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength/*, false*/, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(w, MyKeyValuePairSerialized,
