@@ -541,7 +541,7 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLazinatorList, isBelievedDirty: MyLazinatorList_Dirty,
             isAccessed: _MyLazinatorList_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExample_g(w, copy_MyLazinatorList, includeChildrenMode, v));
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListValues, isBelievedDirty: _MyListValues_Accessed,
             isAccessed: _MyListValues_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, copy_MyListValues, includeChildrenMode, v));
@@ -563,7 +563,7 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTuple, isBelievedDirty: _MyTuple_Accessed,
             isAccessed: _MyTuple_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(w, copy_MyTuple, includeChildrenMode, v));

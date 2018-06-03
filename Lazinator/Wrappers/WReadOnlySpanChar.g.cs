@@ -276,7 +276,7 @@ namespace Lazinator.Wrappers
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed,
             isAccessed: _Value_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             copy_Value.Write(w));

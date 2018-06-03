@@ -277,7 +277,7 @@ namespace Lazinator.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed,
             isAccessed: _ReadOnlyBytes_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnlyBytes,
