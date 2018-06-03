@@ -223,8 +223,6 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void MarkHierarchyClean();
-                        
-                        public abstract DeserializationFactory DeserializationFactory {{ get; set; }}
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -322,7 +320,6 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                DeserializationFactory = DeserializationFactory,
                                 LazinatorParentClass = LazinatorParentClass,
                                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -387,8 +384,6 @@ namespace Lazinator.CodeDescription
                         }}
 
                         {markHierarchyCleanMethod}
-
-                        public {DerivationKeyword}DeserializationFactory DeserializationFactory {{ get; set; }}
         
                         private MemoryInBuffer _HierarchyBytes;
                         public {DerivationKeyword}MemoryInBuffer HierarchyBytes
@@ -468,7 +463,6 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                DeserializationFactory = DeserializationFactory,
                                 LazinatorParentClass = LazinatorParentClass,
                                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -610,7 +604,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 if (_LazinatorGenericID == null)
                                 {{
-                                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
+                                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
                                 }}
                                 return _LazinatorGenericID;
                             }}
