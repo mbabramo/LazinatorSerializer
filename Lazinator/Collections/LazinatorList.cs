@@ -18,10 +18,13 @@ namespace Lazinator.Collections
         [NonSerialized] private List<T> UnderlyingList;
         [NonSerialized] private List<bool> ItemsAccessedBeforeFullyDeserialized;
         [NonSerialized] private ReadOnlyMemory<byte> SerializedMainList;
+        [NonSerialized] private int? FixedID;
 
         public LazinatorList()
         {
-
+            if (DeserializationFactory == null)
+                DeserializationFactory = DeserializationFactory.GetInstance();
+            FixedID = DeserializationFactory.GetFixedUniqueID(typeof(T));
         }
 
         public LazinatorList(IEnumerable<T> items)
@@ -66,10 +69,11 @@ namespace Lazinator.Collections
             var byteSpan = GetListMemberSlice(index);
             if (byteSpan.Length == 0)
                 return default;
-            if (DeserializationFactory == null)
-                DeserializationFactory = DeserializationFactory.GetInstance();
-            // We must use the type information, because the type may be one that does not store unique IDs in storage. Note that the type for a LazinatorList cannot be an interface (such as ILazinator itself or a Lazinator interface), or a runtime error will occur.
-            T n2 = DeserializationFactory.CreateBasedOnType<T>(byteSpan, this);
+            T n2;
+            if (FixedID == null)
+                n2 = (T)DeserializationFactory.CreateFromBytesIncludingID(byteSpan, this);
+            else
+                n2 = (T)DeserializationFactory.CreateKnownID((int)FixedID, byteSpan, this);
             return n2;
         }
 
