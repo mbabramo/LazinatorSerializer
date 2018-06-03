@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _RecursiveClass = DeserializationFactory.Create(247, () => new RecursiveExample(), childData, this); 
+                        _RecursiveClass = DeserializationFactory.FactoryCreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
                     }
                     _RecursiveClass_Accessed = true;
                 }

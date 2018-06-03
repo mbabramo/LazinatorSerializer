@@ -122,7 +122,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyT = DeserializationFactory.Create(213, () => new ExampleChild(), childData, this); 
+                        _MyT = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _MyT_Accessed = true;
                 }

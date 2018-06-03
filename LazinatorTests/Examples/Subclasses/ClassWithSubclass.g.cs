@@ -256,7 +256,7 @@ namespace LazinatorTests.Examples.Subclasses
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _SubclassInstance1 = DeserializationFactory.Create(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
+                        _SubclassInstance1 = DeserializationFactory.FactoryCreateBaseOrDerivedType(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
                     }
                     _SubclassInstance1_Accessed = true;
                 }
@@ -295,7 +295,7 @@ namespace LazinatorTests.Examples.Subclasses
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _SubclassInstance2 = DeserializationFactory.Create(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
+                        _SubclassInstance2 = DeserializationFactory.FactoryCreateBaseOrDerivedType(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
                     }
                     _SubclassInstance2_Accessed = true;
                 }

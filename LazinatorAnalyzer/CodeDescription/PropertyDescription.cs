@@ -744,7 +744,7 @@ namespace Lazinator.CodeDescription
                         {{
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }}
-                        _{PropertyName} = DeserializationFactory.FactoryCreate<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.FactoryCreateAbstractType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
                 else
                     assignment =
                         $@"
@@ -752,7 +752,7 @@ namespace Lazinator.CodeDescription
                         {{
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }}
-                        _{PropertyName} = DeserializationFactory.Create({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(), childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.FactoryCreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(), childData{selfReference}); ";
             }
             else
             {

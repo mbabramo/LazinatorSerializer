@@ -248,7 +248,7 @@ namespace Lazinator.Collections.AvlTree
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _UnderlyingTree = DeserializationFactory.Create(94, () => new AvlTree<TKey, WByte>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.FactoryCreateBaseOrDerivedType(94, () => new AvlTree<TKey, WByte>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 }

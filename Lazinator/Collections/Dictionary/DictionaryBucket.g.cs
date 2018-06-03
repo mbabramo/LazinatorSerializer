@@ -242,7 +242,7 @@ namespace Lazinator.Collections.Dictionary
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Keys = DeserializationFactory.Create(51, () => new LazinatorList<TKey>(), childData, this); 
+                        _Keys = DeserializationFactory.FactoryCreateBaseOrDerivedType(51, () => new LazinatorList<TKey>(), childData, this); 
                     }
                     _Keys_Accessed = true;
                 }
@@ -281,7 +281,7 @@ namespace Lazinator.Collections.Dictionary
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Values = DeserializationFactory.Create(51, () => new LazinatorList<TValue>(), childData, this); 
+                        _Values = DeserializationFactory.FactoryCreateBaseOrDerivedType(51, () => new LazinatorList<TValue>(), childData, this); 
                     }
                     _Values_Accessed = true;
                 }

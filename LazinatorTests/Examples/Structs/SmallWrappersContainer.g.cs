@@ -285,7 +285,7 @@ namespace LazinatorTests.Examples.Structs
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _ListWrappedBytes = DeserializationFactory.Create(51, () => new LazinatorList<WByte>(), childData, this); 
+                        _ListWrappedBytes = DeserializationFactory.FactoryCreateBaseOrDerivedType(51, () => new LazinatorList<WByte>(), childData, this); 
                     }
                     _ListWrappedBytes_Accessed = true;
                 }

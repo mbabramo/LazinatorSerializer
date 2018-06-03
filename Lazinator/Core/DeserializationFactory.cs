@@ -72,15 +72,15 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Create a typed Lazinator object of a certain concrete type. If the object if of that exact type rather than of a subtype, performance will be better than if the factory creation methods are used.
+        /// Create a typed Lazinator object of a certain concrete type. If the object if of that exact type rather than of a subtype, performance will be better than if the factory creation methods are used. This method should not be used for deserializing a struct or sealed class, since the serialized bytes may not contain object IDs.
         /// </summary>
         /// <typeparam name="T">The type of the object to be created</typeparam>
         /// <param name="mostLikelyUniqueID">The expected Lazinator ID of the object. </param>
-        /// <param name="funcToCreateMostLikely">A function to create an uninitialized object of the expected type, typically a function that simply calls the parameterless constructor and returns the result. Use of this function can help avoid the need for the factory creation methods and boxing of structs.</param>
+        /// <param name="funcToCreateBaseType">A function to create an uninitialized object of the expected type, typically a function that simply calls the parameterless constructor and returns the result. Use of this function can help avoid the need for the factory creation methods and boxing of structs.</param>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns></returns>
-        public T Create<T>(int mostLikelyUniqueID, Func<T> funcToCreateMostLikely, ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator, new()
+        public T FactoryCreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator, new()
         {
             // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.Length <= 1)
@@ -90,7 +90,7 @@ namespace Lazinator.Core
             T itemToReturn;
             if (uniqueID == mostLikelyUniqueID)
             {
-                itemToReturn = funcToCreateMostLikely();
+                itemToReturn = funcToCreateBaseType();
                 InitializeDeserialized(itemToReturn, storage, parent);
             }
             else
@@ -104,15 +104,14 @@ namespace Lazinator.Core
         /// <typeparam name="T">Type of the item to create.</typeparam>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator => (T)FactoryCreateFromBytesIncludingID(storage, parent);
-
-        //DEBUG(); // can we make the following private, calling the previous instead? Then we can make sure that T is not a type that hides its UniqueID. Check other overloads as well.
+        public T FactoryCreateAbstractType<T>(ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator => (T)FactoryCreateFromBytesIncludingID(storage, parent);
+        
         /// <summary>
-        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List. This assumes that the serialized bytes contain type information.
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public ILazinator FactoryCreateFromBytesIncludingID(ReadOnlyMemory<byte> storage, ILazinator parent)
+        private ILazinator FactoryCreateFromBytesIncludingID(ReadOnlyMemory<byte> storage, ILazinator parent)
         {
             if (storage.Length <= 1)
                 return null;
@@ -174,8 +173,6 @@ namespace Lazinator.Core
         public T FactoryCreateBasedOnType<T>(ReadOnlyMemory<byte> storage, ILazinator parent)
         {
             Type t = typeof(T);
-            //DEBUGif (t.IsInterface)
-            //    throw new LazinatorSerializationException("Impermissible attempt to create a Lazinator object based on ILazinator or a Lazinator interface instead of based on a concrete generic type. This may occur, for example, by attempting to use LazinatorList<ILazinator> or LazinatorList<IMyLazinator>, where IMyLazinator is a Lazinator exclusive interface. Instead, use LazinatorList<SomeLazinatorBaseType> or LazinatorList<INonexclusiveInterface>.");
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
                 return (T) FactoryCreate((int)fixedUniqueID, storage, parent);

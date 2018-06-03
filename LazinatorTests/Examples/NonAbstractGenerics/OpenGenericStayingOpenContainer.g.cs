@@ -236,7 +236,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _ClosedGeneric = DeserializationFactory.Create(233, () => new OpenGeneric<WFloat>(), childData, this); 
+                        _ClosedGeneric = DeserializationFactory.FactoryCreateBaseOrDerivedType(233, () => new OpenGeneric<WFloat>(), childData, this); 
                     }
                     _ClosedGeneric_Accessed = true;
                 }
