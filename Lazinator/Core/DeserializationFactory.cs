@@ -335,7 +335,7 @@ namespace Lazinator.Core
                     .Where(x => x.Item2.Any())
                     .FirstOrDefault()
                     .Item2
-                    .FirstOrDefault();
+                    ?.FirstOrDefault();
 
                     if (nonexclusiveAttribute == null)
                         fixedUniqueID = lazinatorAttribute.UniqueID;
