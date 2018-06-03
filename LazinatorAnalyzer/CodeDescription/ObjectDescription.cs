@@ -28,6 +28,7 @@ namespace Lazinator.CodeDescription
         public int Version => ExclusiveInterface.Version;
         public int UniqueID => (int)ExclusiveInterface.UniqueID;
         public List<NonexclusiveInterfaceDescription> NonexclusiveInterfaces { get; set; }
+        public bool HasNonexclusiveInterfaces => NonexclusiveInterfaces != null && NonexclusiveInterfaces.Any();
         public ObjectDescription BaseLazinatorObject { get; set; }
         public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
                                       (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
@@ -46,7 +47,7 @@ namespace Lazinator.CodeDescription
         public List<string> GenericArgumentNames { get; set; }
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && (GenericArgumentNames == null || !GenericArgumentNames.Any());
-        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null;
+        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces;
         public LazinatorCompilation Compilation;
         public Guid Hash;
         public bool SuppressDate { get; set; }

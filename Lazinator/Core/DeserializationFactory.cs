@@ -172,7 +172,7 @@ namespace Lazinator.Core
         public T FactoryCreate<T>(Type t, ReadOnlyMemory<byte> storage, ILazinator parent)
         {
             if (t.IsInterface)
-                throw new LazinatorSerializationException("Impermissible attempt to create a Lazinator object based on an interface instead of based on a concrete generic type. This may occur, for example, by attempting to use LazinatorList<ILazinator> instead of LazinatorList<SomeLazinatorBaseType>.");
+                throw new LazinatorSerializationException("Impermissible attempt to create a Lazinator object based on ILazinator or a Lazinator interface instead of based on a concrete generic type. This may occur, for example, by attempting to use LazinatorList<ILazinator> or LazinatorList<IMyLazinator>, where IMyLazinator is a Lazinator exclusive interface. Instead, use LazinatorList<SomeLazinatorBaseType> or LazinatorList<INonexclusiveInterface>.");
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
                 return (T) FactoryCreate((int)fixedUniqueID, storage, parent);
@@ -327,7 +327,19 @@ namespace Lazinator.Core
                     .FirstOrDefault();
                 serializationSkipsUniqueIDs = lazinatorAttribute.Version == -1;
                 if (serializationSkipsUniqueIDs == true)
-                    fixedUniqueID = lazinatorAttribute.UniqueID;
+                {
+                    // We also can't skip a unique ID if the type has a nonexclusive interface.
+                    Attributes.NonexclusiveLazinatorAttribute nonexclusiveAttribute = (Attributes.NonexclusiveLazinatorAttribute)
+                    t.GetInterfaces()
+                    .Select(x => (x, x.GetCustomAttributes(typeof(Attributes.NonexclusiveLazinatorAttribute), true)))
+                    .Where(x => x.Item2.Any())
+                    .FirstOrDefault()
+                    .Item2
+                    .FirstOrDefault();
+
+                    if (nonexclusiveAttribute == null)
+                        fixedUniqueID = lazinatorAttribute.UniqueID;
+                }
             }
 
             return fixedUniqueID;
