@@ -245,7 +245,7 @@ namespace Lazinator.Wrappers
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Value_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.Length;
             _WReadOnlySpanChar_EndByteIndex = bytesSoFar;
         }
         
@@ -273,7 +273,7 @@ namespace Lazinator.Wrappers
             var byteIndexCopy_Value = _Value_ByteIndex;
             var byteLengthCopy_Value = _Value_ByteLength;
             var copy_Value = _Value;
-            WriteNonLazinatorObject(
+            WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed,
             isAccessed: _Value_Accessed, writer: writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value),
