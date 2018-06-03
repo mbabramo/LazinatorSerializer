@@ -1463,7 +1463,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 deserializationFactory = DeserializationFactory.GetInstance();
                             }}
-                            var item = ({AppropriatelyQualifiedTypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                            var item = ({AppropriatelyQualifiedTypeName})deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         }}
                         bytesSoFar += lengthCollectionMember;");
@@ -1653,7 +1653,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 deserializationFactory = DeserializationFactory.GetInstance();
                             }}
-                            {itemName} = ({AppropriatelyQualifiedTypeName})deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                            {itemName} = ({AppropriatelyQualifiedTypeName})deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             }
