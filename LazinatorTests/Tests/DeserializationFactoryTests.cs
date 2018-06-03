@@ -11,6 +11,7 @@ using static Lazinator.Core.LazinatorUtilities;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Abstract;
 using Lazinator.Collections;
+using System.Linq;
 
 namespace LazinatorTests.Tests
 {
@@ -47,18 +48,24 @@ namespace LazinatorTests.Tests
         public void CanGetTypeFromGenericTypeIDs_MaxOneTypeParameter()
         {
             List<int> IDs = new List<int>() { (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WInt };
-            (Type t, int numberIDsConsumed) = DeserializationFactory.GetInstance().GetTypeBasedOnTypeAndGenericTypeArgumentIDs(IDs, 0);
+            DeserializationFactory deserializationFactory = DeserializationFactory.GetInstance();
+            (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnTypeAndGenericTypeArgumentIDs(IDs, 0);
             Type expectedType = typeof(GenericFromBase<GenericFromBase<WInt>>);
             t.Equals(expectedType).Should().BeTrue();
+            var IDsForType = deserializationFactory.GetUniqueIDListForGenericType(t);
+            IDs.SequenceEqual(IDsForType).Should().BeTrue();
         }
 
         [Fact]
         public void CanGetTypeFromGenericTypeIDs_MultipleTypeParameters()
         {
             List<int> IDs = new List<int>() { (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.LazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WInt, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WLong, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WByte };
-            (Type t, int numberIDsConsumed) = DeserializationFactory.GetInstance().GetTypeBasedOnTypeAndGenericTypeArgumentIDs(IDs, 0);
+            DeserializationFactory deserializationFactory = DeserializationFactory.GetInstance();
+            (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnTypeAndGenericTypeArgumentIDs(IDs, 0);
             Type expectedType = typeof(LazinatorTriple<GenericFromBase<WInt>, WLong, GenericFromBase<GenericFromBase<WByte>>>);
             t.Equals(expectedType).Should().BeTrue();
+            var IDsForType = deserializationFactory.GetUniqueIDListForGenericType(t);
+            IDs.SequenceEqual(IDsForType).Should().BeTrue();
         }
     }
 }
