@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Item = (IAbstractGeneric1<int>)DeserializationFactory.FactoryCreateFromBytesIncludingID(childData, this); 
+                        _Item = DeserializationFactory.FactoryCreateBasedOnType<IAbstractGeneric1<int>>(childData, this); 
                     }
                     _Item_Accessed = true;
                 }

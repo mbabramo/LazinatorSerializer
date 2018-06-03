@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _RecursiveInterface = (IRecursiveExample)DeserializationFactory.FactoryCreateFromBytesIncludingID(childData, this); 
+                        _RecursiveInterface = DeserializationFactory.FactoryCreateBasedOnType<IRecursiveExample>(childData, this); 
                     }
                     _RecursiveInterface_Accessed = true;
                 }

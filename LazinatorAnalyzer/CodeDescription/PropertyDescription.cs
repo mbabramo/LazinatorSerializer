@@ -744,7 +744,7 @@ namespace Lazinator.CodeDescription
                         {{
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }}
-                        _{PropertyName} = ({AppropriatelyQualifiedTypeName})DeserializationFactory.FactoryCreate(childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.FactoryCreate<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
                 else
                     assignment =
                         $@"
