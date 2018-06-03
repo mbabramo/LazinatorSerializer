@@ -254,18 +254,22 @@ namespace Lazinator.Core
 
         public static void WriteLazinatorGenericID(BinaryBufferWriter writer, List<int> lazinatorGenericID)
         {
-            writer.Write((byte)lazinatorGenericID.Count);
-            foreach (int genericIDComponent in lazinatorGenericID)
+            // We write the first component before the total count to be consistent with non-generic items.
+            CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID[0]);
+            int numItems = lazinatorGenericID.Count;
+            writer.Write((byte)numItems);
+            for (int i = 1; i < numItems; i++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, genericIDComponent);
+                CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID[1]);
             }
         }
 
         public static List<int> ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
         {
+            int mainID = span.ToDecompressedInt(ref index);
+            List<int> l = new List<int>() { mainID };
             byte numEntries = span.ToByte(ref index);
-            List<int> l = new List<int>();
-            for (byte b = 0; b < numEntries; b++)
+            for (byte b = 1; b < numEntries; b++)
             {
                 l.Add(span.ToDecompressedInt(ref index));
             }
