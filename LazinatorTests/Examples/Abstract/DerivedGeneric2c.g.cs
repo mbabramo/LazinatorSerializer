@@ -288,6 +288,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int LazinatorUniqueID => 264;
         
+        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
             get
