@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     deserializationFactory = DeserializationFactory.GetInstance();
                 }
-                item2 = (ExampleChild)deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
+                item2 = (ExampleChild)deserializationFactory.FactoryCreateFromBytesIncludingIDSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -511,7 +511,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     deserializationFactory = DeserializationFactory.GetInstance();
                 }
-                item2 = (ExampleChild)deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
+                item2 = (ExampleChild)deserializationFactory.FactoryCreateFromBytesIncludingIDSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             

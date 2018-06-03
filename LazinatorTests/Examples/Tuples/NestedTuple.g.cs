@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     deserializationFactory = DeserializationFactory.GetInstance();
                 }
-                item1 = (ExampleChild)deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
+                item1 = (ExampleChild)deserializationFactory.FactoryCreateFromBytesIncludingIDSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item1;
             

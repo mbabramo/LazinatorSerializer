@@ -340,7 +340,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = (ExampleChild)deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
+                    var item = (ExampleChild)deserializationFactory.FactoryCreateFromBytesIncludingIDSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

@@ -163,6 +163,22 @@ namespace Lazinator.Core
                 return (T) FactoryCreateFromBytesIncludingID(storage, parent);
         }
 
+        /// <summary>
+        /// Create a Lazinator item from bytes, where the Lazinator item is known to be a particular type, which may be a type that does not preserve unique ID information in serialized bytes. This method checks whether the type is such a type. If so, the unique ID is known, and the item is created. Otherwise, the unique ID is in the serialized bytes, and the item is instantiated based on that. This approach is slower than reading the type from the serialized bytes, and it should thus be used only where it is not known at compile time what the type is.
+        /// </summary>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
+        /// <returns>The deserialized Lazinator object</returns>
+        public T FactoryCreateBasedOnTypeSpecifyingDelegate<T>(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        {
+            Type t = typeof(T);
+            int? fixedUniqueID = GetFixedUniqueID(t);
+            if (fixedUniqueID != null)
+                return (T)FactoryCreateKnownID_SpecifyingDelegate((int)fixedUniqueID, storage, informParentOfDirtinessDelegate);
+            else
+                return (T)FactoryCreateFromBytesIncludingIDSpecifyingDelegate(storage, informParentOfDirtinessDelegate);
+        }
+
         // DEBUG here too
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
@@ -170,13 +186,13 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public ILazinator FactoryCreateSpecifyingDelegate(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        public ILazinator FactoryCreateFromBytesIncludingIDSpecifyingDelegate(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length <= 1)
                 return null;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            ILazinator itemToReturn = FactoryCreateFromBytesIncludingID_SpecifyingDelgate(uniqueID, storage, informParentOfDirtinessDelegate);
+            ILazinator itemToReturn = FactoryCreateKnownID_SpecifyingDelegate(uniqueID, storage, informParentOfDirtinessDelegate);
             return itemToReturn;
         }
 
@@ -187,7 +203,7 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
         /// <returns>The deserialized Lazinator object</returns>
-        private ILazinator FactoryCreateFromBytesIncludingID_SpecifyingDelgate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private ILazinator FactoryCreateKnownID_SpecifyingDelegate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
             {
