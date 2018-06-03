@@ -581,7 +581,7 @@ namespace Lazinator.CodeDescription
                 }}");
 
             string lazinatorGenericBackingID = "";
-            if (BaseLazinatorObject == null && (IsGeneric || !IsSealedOrStruct))
+            if (!IsDerivedFromNonAbstractLazinator && (IsGeneric || !IsSealedOrStruct))
                 lazinatorGenericBackingID = $@"{ProtectedIfApplicable}System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
                         ";
 
