@@ -580,12 +580,29 @@ namespace Lazinator.CodeDescription
                     " : "")}{resetAccessed}
                 }}");
 
+            string lazinatorGenericID;
+            if (IsGeneric)
+                lazinatorGenericID = $@"private System.Collections.Generic.List<int> _LazinatorGenericID;
+                        public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                        {{
+                            get
+                            {{
+                                if (_LazinatorGenericID == null)
+                                {{
+                                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
+                                }}
+                                return _LazinatorGenericID;
+                            }}
+                        }}";
+            else
+                lazinatorGenericID = $"public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID => null;";
+
             sb.AppendLine($@"
                 /* Conversion */
 
                 public {DerivationKeyword}int LazinatorUniqueID => { UniqueID };
 
-                public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID => {(!IsGeneric ? "null" : $"DeserializationFactory.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }})")};
+                {lazinatorGenericID}
 
                 { selfSerializationVersionString }
 
