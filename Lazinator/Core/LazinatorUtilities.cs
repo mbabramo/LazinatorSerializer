@@ -298,6 +298,8 @@ namespace Lazinator.Core
         /// <param name="serializedBytes">The serialized bytes for the parent object</param>
         /// <param name="byteOffset">The byte offset into the parent object of the length prefix for the child object</param>
         /// <param name="byteLength">The byte length of the child, including the length prefix</param>
+        /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
+        /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
         public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool lengthInSingleByte = false, int? fixedLength = null)
         {
