@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = (T)deserializationFactory.FactoryCreate(childData, informParentOfDirtinessDelegate);
+                    var item = (T)deserializationFactory.FactoryCreateSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;
