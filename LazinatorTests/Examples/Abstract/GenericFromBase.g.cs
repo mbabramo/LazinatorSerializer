@@ -104,7 +104,9 @@ namespace LazinatorTests.Examples.Abstract
         /* Conversion */
         
         public override int LazinatorUniqueID => 267;
-        
+
+        public override System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(267, typeof(T));
+
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
