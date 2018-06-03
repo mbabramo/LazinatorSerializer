@@ -31,7 +31,7 @@ namespace Lazinator.CodeDescription
         private int? ArrayRank { get; set; }
         internal bool IsDefinedInLowerLevelInterface { get; set; }
         internal bool IsLast { get; set; }
-        private bool OmitLength => (IsLast && ContainingObjectDescription.IsSealedOrStruct);
+        private bool OmitLength => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
 
         /* Property type */
         internal LazinatorPropertyType PropertyType { get; set; }
@@ -973,7 +973,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;
                                         bytesSoFar = span.Length;");
                 }
-                if (IsGuaranteedFixedLength)
+                else if (IsGuaranteedFixedLength)
                 {
                     if (FixedLength == 1)
                         sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar++;");
@@ -1018,11 +1018,10 @@ namespace Lazinator.CodeDescription
                         CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
             else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                string omitLength = OmitLength ? "out" : "";
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 {
                     sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChildWith{omitLength}Length(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? "true" : "false")}, this);"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, this);"));
                 }
                 else
                 {
@@ -1033,7 +1032,7 @@ namespace Lazinator.CodeDescription
                             var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
-                            WriteChildWith{omitLength}Length(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? "true" : "false")}, null);
+                            WriteChildWithLength(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, null);
                         }}");
                 }
             }

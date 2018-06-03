@@ -188,37 +188,6 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Initiates a binary write to a child of a self-serialized object, without any length information. 
-        /// </summary>
-        /// <param name="writer">The binary writer</param>
-        /// <param name="child">The child</param>
-        /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
-        /// <param name="getChildSliceFn">A function to return the child's original storage</param>
-        /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        public static void WriteChildWithoutLength<T>(BinaryBufferWriter writer, T child, IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed, ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness) where T : ILazinator
-        {
-            if (!childHasBeenAccessed && child != null)
-                childHasBeenAccessed = true; // child is an uninitialized struct
-            if (!childHasBeenAccessed && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                ReadOnlyMemory<byte> childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
-                childStorage.Span.Write(writer);
-            }
-            else
-            {
-                if (child == null)
-                    return; // child has been changed to null -- skip this item
-                else
-                {
-                    if (child.IsDirty || verifyCleanness || child.LazinatorObjectBytes.Length == 0)
-                        child.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness); // DEBUG -- problem here? LazinatorList calls this but now we won't write type info
-                    else
-                        child.LazinatorObjectBytes.Span.Write(writer); // the child has been accessed, but is unchanged, so we can use the storage holding the child
-                }
-            }
-        }
-
-        /// <summary>
         /// Initiates a binary write to a child of a self-serialized object, including a length prefix
         /// </summary>
         /// <param name="writer">The binary writer</param>
@@ -227,7 +196,9 @@ namespace Lazinator.Core
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        /// <param name="restrictLengthTo250Bytes"></param>
+        /// <param name="restrictLengthTo250Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
+        /// <param name="skipLength">If true, the length is omitted altogether.</param>
+        /// <param name="parent">The parent of the object being written</param>
         public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
             ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
