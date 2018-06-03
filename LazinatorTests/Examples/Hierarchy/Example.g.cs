@@ -652,7 +652,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyInterfaceImplementer = (IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreate(childData, this); 
+                        _MyInterfaceImplementer = (IExampleNonexclusiveInterface)DeserializationFactory.FactoryCreateFromBytesIncludingID(childData, this); 
                     }
                     _MyInterfaceImplementer_Accessed = true;
                 }

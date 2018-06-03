@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _AbstractProperty = (Abstract1)DeserializationFactory.FactoryCreate(childData, this); 
+                        _AbstractProperty = (Abstract1)DeserializationFactory.FactoryCreateFromBytesIncludingID(childData, this); 
                     }
                     _AbstractProperty_Accessed = true;
                 }

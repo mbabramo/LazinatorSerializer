@@ -104,7 +104,7 @@ namespace Lazinator.Core
         /// <typeparam name="T">Type of the item to create.</typeparam>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator, new() => (T)FactoryCreate(storage, parent);
+        public T FactoryCreate<T>(ReadOnlyMemory<byte> storage, ILazinator parent) where T : ILazinator, new() => (T)FactoryCreateFromBytesIncludingID(storage, parent);
 
         //DEBUG(); // can we make the following private, calling the previous instead? Then we can make sure that T is not a type that hides its UniqueID. Check other overloads as well.
         /// <summary>
@@ -112,7 +112,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage, ILazinator parent)
+        public ILazinator FactoryCreateFromBytesIncludingID(ReadOnlyMemory<byte> storage, ILazinator parent)
         {
             if (storage.Length <= 1)
                 return null;
@@ -179,7 +179,7 @@ namespace Lazinator.Core
             if (fixedUniqueID != null)
                 return (T) FactoryCreate((int)fixedUniqueID, storage, parent);
             else
-                return (T) FactoryCreate(storage, parent);
+                return (T) FactoryCreateFromBytesIncludingID(storage, parent);
         }
 
         /// <summary>
