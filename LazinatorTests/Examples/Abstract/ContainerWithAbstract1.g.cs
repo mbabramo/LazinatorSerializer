@@ -228,7 +228,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, false, false, null);
                         
-                        _AbstractProperty = DeserializationFactory.GetInstance().CreateAbstractType<Abstract1>(childData, this); 
+                        _AbstractProperty = DeserializationFactory.Instance.CreateAbstractType<Abstract1>(childData, this); 
                     }
                     _AbstractProperty_Accessed = true;
                 }

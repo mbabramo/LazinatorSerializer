@@ -281,7 +281,7 @@ namespace LazinatorTests.Examples
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null);
                         
-                        _MyWrapperContainer = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(248, () => new WrapperContainer(), childData, this); 
+                        _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(248, () => new WrapperContainer(), childData, this); 
                     }
                     _MyWrapperContainer_Accessed = true;
                 }

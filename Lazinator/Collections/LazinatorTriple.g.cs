@@ -340,7 +340,7 @@ namespace Lazinator.Collections
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(106, new Type[] { typeof(T), typeof(U), typeof(V) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(106, new Type[] { typeof(T), typeof(U), typeof(V) });
                 }
                 return _LazinatorGenericID;
             }

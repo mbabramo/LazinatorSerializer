@@ -232,7 +232,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null);
                         
-                        _ExampleByInterface = DeserializationFactory.GetInstance().CreateBasedOnType<IExample>(childData, this); 
+                        _ExampleByInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
                     }
                     _ExampleByInterface_Accessed = true;
                 }
@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

@@ -241,7 +241,7 @@ namespace Lazinator.Collections.AvlTree
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null);
                         
-                        _UnderlyingSet = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(97, () => new AvlSet<LazinatorTuple<T, WInt>>(), childData, this); 
+                        _UnderlyingSet = DeserializationFactory.Instance.CreateBaseOrDerivedType(97, () => new AvlSet<LazinatorTuple<T, WInt>>(), childData, this); 
                     }
                     _UnderlyingSet_Accessed = true;
                 }
@@ -278,7 +278,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(96, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(96, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

@@ -279,7 +279,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null);
                         
-                        _Example2 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _Example2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _Example2_Accessed = true;
                 }
@@ -313,7 +313,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null);
                         
-                        _Example3 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _Example3 = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _Example3_Accessed = true;
                 }

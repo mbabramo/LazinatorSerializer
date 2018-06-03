@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
                         
-                        _MyList = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(51, () => new LazinatorList<ExampleChild>(), childData, this); 
+                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<ExampleChild>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }

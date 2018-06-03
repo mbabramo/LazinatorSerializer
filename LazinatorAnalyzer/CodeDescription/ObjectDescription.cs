@@ -604,7 +604,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 if (_LazinatorGenericID == null)
                                 {{
-                                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
+                                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
                                 }}
                                 return _LazinatorGenericID;
                             }}

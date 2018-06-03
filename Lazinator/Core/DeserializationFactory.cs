@@ -18,18 +18,21 @@ namespace Lazinator.Core
         #region Construction
 
         static object LockObj = new object();
-        static DeserializationFactory _DeserializationFactory;
-        public static DeserializationFactory GetInstance()
+        static DeserializationFactory _Instance;
+        public static DeserializationFactory Instance
         {
-            if (_DeserializationFactory != null)
-                return _DeserializationFactory;
-            lock (LockObj)
+            get
             {
-                if (_DeserializationFactory == null)
-                    // identify a type in each assembly where we want to load all types
-                    _DeserializationFactory = new DeserializationFactory();
+                if (_Instance != null)
+                    return _Instance;
+                lock (LockObj)
+                {
+                    if (_Instance == null)
+                        // identify a type in each assembly where we want to load all types
+                        _Instance = new DeserializationFactory();
+                }
+                return _Instance;
             }
-            return _DeserializationFactory;
         }
 
         /// <summary>

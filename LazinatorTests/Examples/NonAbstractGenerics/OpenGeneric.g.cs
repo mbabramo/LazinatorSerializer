@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }
@@ -382,7 +382,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<T>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<T>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

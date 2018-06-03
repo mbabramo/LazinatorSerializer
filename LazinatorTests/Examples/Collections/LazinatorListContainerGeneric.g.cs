@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
                         
-                        _MyList = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
+                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }
@@ -262,7 +262,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

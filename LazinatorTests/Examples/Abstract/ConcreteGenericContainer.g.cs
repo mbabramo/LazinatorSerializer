@@ -227,7 +227,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength, false, false, null);
                         
-                        _Item = DeserializationFactory.GetInstance().CreateBasedOnType<IAbstractGeneric1<int>>(childData, this); 
+                        _Item = DeserializationFactory.Instance.CreateBasedOnType<IAbstractGeneric1<int>>(childData, this); 
                     }
                     _Item_Accessed = true;
                 }

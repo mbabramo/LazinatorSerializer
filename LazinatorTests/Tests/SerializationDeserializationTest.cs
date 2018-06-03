@@ -2458,7 +2458,7 @@ namespace LazinatorTests.Tests
             Memory<byte> memory = new Memory<byte>(new byte[length * 10]);
             for (int i = 0; i < 10; i++)
                 e.LazinatorObjectBytes.CopyTo(memory.Slice(length * i));
-            var results = DeserializationFactory.GetInstance().CreateMultiple(memory, null).Select(x => (Example) x).Where(x => x != null).ToList();
+            var results = DeserializationFactory.Instance.CreateMultiple(memory, null).Select(x => (Example) x).Where(x => x != null).ToList();
             results.Count().Should().Be(10);
         }
 

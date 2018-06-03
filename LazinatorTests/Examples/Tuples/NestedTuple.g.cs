@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item1 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                item1 = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                item1 = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item1;
             

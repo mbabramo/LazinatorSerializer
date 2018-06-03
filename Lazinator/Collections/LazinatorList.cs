@@ -22,9 +22,7 @@ namespace Lazinator.Collections
 
         public LazinatorList()
         {
-            if (DeserializationFactory == null)
-                DeserializationFactory = DeserializationFactory.GetInstance();
-            FixedID = DeserializationFactory.GetFixedUniqueID(typeof(T));
+            FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
         }
 
         public LazinatorList(IEnumerable<T> items)
@@ -71,9 +69,9 @@ namespace Lazinator.Collections
                 return default;
             T n2;
             if (FixedID == null)
-                n2 = (T)DeserializationFactory.CreateFromBytesIncludingID(byteSpan, this);
+                n2 = (T)DeserializationFactory.Instance.CreateFromBytesIncludingID(byteSpan, this);
             else
-                n2 = (T)DeserializationFactory.CreateKnownID((int)FixedID, byteSpan, this);
+                n2 = (T)DeserializationFactory.Instance.CreateKnownID((int)FixedID, byteSpan, this);
             return n2;
         }
 

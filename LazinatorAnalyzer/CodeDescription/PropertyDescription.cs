@@ -737,15 +737,15 @@ namespace Lazinator.CodeDescription
                 if (IsInterface)
                     assignment =
                     $@"
-                        _{PropertyName} = DeserializationFactory.GetInstance().CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
                 else if (IsAbstract)
                     assignment =
                     $@"
-                        _{PropertyName} = DeserializationFactory.GetInstance().CreateAbstractType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.Instance.CreateAbstractType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
                 else
                     assignment =
                         $@"
-                        _{PropertyName} = DeserializationFactory.GetInstance().CreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(), childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(), childData{selfReference}); ";
             }
             else
             {
@@ -1463,7 +1463,7 @@ namespace Lazinator.CodeDescription
                         else
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                            var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<{AppropriatelyQualifiedTypeName}>(childData, informParentOfDirtinessDelegate);
+                            var item = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<{AppropriatelyQualifiedTypeName}>(childData, informParentOfDirtinessDelegate);
                             {collectionAddItem}
                         }}
                         bytesSoFar += lengthCollectionMember;");
@@ -1647,7 +1647,7 @@ namespace Lazinator.CodeDescription
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<{AppropriatelyQualifiedTypeName}>(childData, informParentOfDirtinessDelegate);
+                            {itemName} = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<{AppropriatelyQualifiedTypeName}>(childData, informParentOfDirtinessDelegate);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             }

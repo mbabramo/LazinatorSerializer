@@ -229,7 +229,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength, false, false, null);
                         
-                        _ClosedGeneric = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(233, () => new OpenGeneric<WFloat>(), childData, this); 
+                        _ClosedGeneric = DeserializationFactory.Instance.CreateBaseOrDerivedType(233, () => new OpenGeneric<WFloat>(), childData, this); 
                     }
                     _ClosedGeneric_Accessed = true;
                 }

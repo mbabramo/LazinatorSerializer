@@ -117,7 +117,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
                         
-                        _MyT = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _MyT = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _MyT_Accessed = true;
                 }
@@ -224,7 +224,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

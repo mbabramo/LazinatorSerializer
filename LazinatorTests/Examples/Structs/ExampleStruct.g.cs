@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
                         
-                        _MyChild1 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
+                        _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
                     }
                     _MyChild1_Accessed = true;
                 }
@@ -308,7 +308,7 @@ namespace LazinatorTests.Examples
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
                         
-                        _MyChild2 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
+                        _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
                     }
                     _MyChild2_Accessed = true;
                 }
@@ -590,7 +590,7 @@ namespace LazinatorTests.Examples
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

@@ -249,7 +249,7 @@ namespace LazinatorTests.Examples.Subclasses
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null);
                         
-                        _SubclassInstance1 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
+                        _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
                     }
                     _SubclassInstance1_Accessed = true;
                 }
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Subclasses
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null);
                         
-                        _SubclassInstance2 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
+                        _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(258, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
                     }
                     _SubclassInstance2_Accessed = true;
                 }

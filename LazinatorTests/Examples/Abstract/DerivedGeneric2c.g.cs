@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(264, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(264, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

@@ -240,7 +240,7 @@ namespace Lazinator.Collections.Dictionary
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null);
                         
-                        _Buckets = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(51, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
+                        _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
                     }
                     _Buckets_Accessed = true;
                 }
@@ -277,7 +277,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(99, new Type[] { typeof(TKey), typeof(TValue) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(99, new Type[] { typeof(TKey), typeof(TValue) });
                 }
                 return _LazinatorGenericID;
             }

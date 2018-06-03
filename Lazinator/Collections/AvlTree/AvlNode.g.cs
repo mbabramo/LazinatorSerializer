@@ -430,7 +430,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(93, new Type[] { typeof(TKey), typeof(TValue) });
+                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(93, new Type[] { typeof(TKey), typeof(TValue) });
                 }
                 return _LazinatorGenericID;
             }

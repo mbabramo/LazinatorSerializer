@@ -289,7 +289,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, false, false, null);
                         
-                        _LazinatorExample = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _LazinatorExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _LazinatorExample_Accessed = true;
                 }
