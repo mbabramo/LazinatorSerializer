@@ -66,7 +66,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Initiates the convertion to binary of a non-lazinator object. 
+        /// Initiates the conversion to binary of a non-lazinator object. 
         /// </summary>
         /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
         /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
@@ -100,6 +100,44 @@ namespace Lazinator.Core
                     ConfirmMatch(original, revised);
                 }
                 original.Span.Write_WithIntLengthPrefix(writer);
+            }
+        }
+
+        /// <summary>
+        /// Initiates the conversion to binary of a non-lazinator object, omitting the length prefix. This can be used on the last property of a struct or sealed class.
+        /// </summary>
+        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
+        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="getChildSliceForFieldFn"></param>
+        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
+        /// <param name="binaryWriterAction"></param>
+        public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
+            bool isBelievedDirty, bool isAccessed, BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
+        {
+            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
+            if (!isAccessed)
+            {
+                // object has never been loaded into memory, so there is no need to verify cleanness
+                // just return what we have.
+                original.Span.Write(writer);
+            }
+            else if (isBelievedDirty || original.Length == 0)
+            {
+                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
+                void action(BinaryBufferWriter w) => binaryWriterAction(w, verifyCleanness);
+                WriteToBinaryWithoutLengthPrefix(writer, action);
+            }
+            else
+            {
+                if (verifyCleanness)
+                {
+                    ReadOnlyMemory<byte> revised = CreateStreamForNonLazinatorObject(nonLazinatorObject, binaryWriterAction);
+                    ConfirmMatch(original, revised);
+                }
+                original.Span.Write(writer);
             }
         }
 

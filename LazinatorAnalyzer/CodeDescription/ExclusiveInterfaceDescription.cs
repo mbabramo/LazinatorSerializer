@@ -80,10 +80,13 @@ namespace Lazinator.CodeDescription
                     }
                 }
             }
-            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword) })
+            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) // defined this level later
                 .ThenBy(x => x.description.PropertyName).ToList();
+            var last = orderedPropertiesWithLevel.LastOrDefault();
+            if (last != null)
+                last.description.IsLast = true;
 
             // A property that ends with "_Dirty" is designed to track dirtiness of another property. We will thus treat it specially.
             var dirtyPropertiesWithLevel = propertiesWithLevel.Where(x => x.Property.Name.EndsWith("_Dirty")).ToList();
