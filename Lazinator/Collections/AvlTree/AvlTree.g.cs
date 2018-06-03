@@ -303,9 +303,15 @@ namespace Lazinator.Collections.Avl
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            
             if (includeUniqueID)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                var genericID = LazinatorGenericID;
+                writer.Write((byte)genericID.Count);
+                foreach (int g in genericID)
+                {
+                    CompressedIntegralTypes.WriteCompressedInt(writer, g);
+                }
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);

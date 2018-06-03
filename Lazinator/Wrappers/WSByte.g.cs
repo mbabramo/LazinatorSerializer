@@ -252,10 +252,12 @@ namespace Lazinator.Wrappers
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
             }
+            
             
             // write properties
             WriteUncompressedPrimitives.WriteSByte(writer, _WrappedValue);
