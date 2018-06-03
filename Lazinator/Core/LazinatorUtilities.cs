@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Lazinator.Buffers; 
@@ -249,6 +250,26 @@ namespace Lazinator.Core
             }
             if (child != null && child.LazinatorParentClass == null)
                 child.LazinatorParentClass = parent; // set the parent so that this object can be used like a deserialized object
+        }
+
+        public static void WriteLazinatorGenericID(BinaryBufferWriter writer, List<int> lazinatorGenericID)
+        {
+            writer.Write((byte)lazinatorGenericID.Count);
+            foreach (int genericIDComponent in lazinatorGenericID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(writer, genericIDComponent);
+            }
+        }
+
+        public static List<int> ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
+        {
+            byte numEntries = span.ToByte(ref index);
+            List<int> l = new List<int>();
+            for (byte b = 0; b < numEntries; b++)
+            {
+                l.Add(span.ToDecompressedInt(ref index));
+            }
+            return l;
         }
 
         /// <summary>

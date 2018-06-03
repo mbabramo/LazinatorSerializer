@@ -528,6 +528,8 @@ namespace Lazinator.CodeDescription
                 }
 
                 sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
+                        {ProtectedIfApplicable}abstract System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
+                        {ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};
                         public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; set; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
@@ -580,9 +582,11 @@ namespace Lazinator.CodeDescription
                     " : "")}{resetAccessed}
                 }}");
 
+            sb.AppendLine($@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};");
+
             string lazinatorGenericBackingID = "";
             if (!IsDerivedFromNonAbstractLazinator && (IsGeneric || !IsSealedOrStruct))
-                lazinatorGenericBackingID = $@"{ProtectedIfApplicable}System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
+                lazinatorGenericBackingID = $@"{ProtectedIfApplicable}{DerivationKeyword}System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
                         ";
 
             string lazinatorGenericID;
@@ -675,12 +679,7 @@ namespace Lazinator.CodeDescription
                 if (IsGeneric)
                     sb.AppendLine($@"if (includeUniqueID)
                             {{
-                                var genericID = LazinatorGenericID;
-                                writer.Write((byte)genericID.Count);
-                                foreach (int g in genericID)
-                                {{
-                                    CompressedIntegralTypes.WriteCompressedInt(writer, g);
-                                }}
+                                WriteLazinatorGenericID(writer, LazinatorGenericID);
                             }}");
                 else
                     sb.AppendLine(

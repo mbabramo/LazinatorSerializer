@@ -342,12 +342,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             
             if (includeUniqueID)
             {
-                var genericID = LazinatorGenericID;
-                writer.Write((byte)genericID.Count);
-                foreach (int g in genericID)
-                {
-                    CompressedIntegralTypes.WriteCompressedInt(writer, g);
-                }
+                WriteLazinatorGenericID(writer, LazinatorGenericID);
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
