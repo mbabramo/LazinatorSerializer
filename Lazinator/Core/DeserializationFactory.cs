@@ -101,19 +101,31 @@ namespace Lazinator.Core
         /// <returns></returns>
         public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator, new()
         {
-            // Note: It's important that Create be generic, because that allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
+            // Note: It's important that CreateBaseOrDerivedType be generic, because that often allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.Length <= 1)
                 return default;
             int bytesSoFar = 0;
-            int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
+            var span = storage.Span;
+            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             T itemToReturn;
-            if (uniqueID == mostLikelyUniqueID)
+            var typeInfo = UniqueIDToTypeMap[uniqueID];
+            if (typeInfo.numberGenericParameters > 0)
             {
-                itemToReturn = funcToCreateBaseType();
-                InitializeDeserialized(itemToReturn, storage, parent);
+                bytesSoFar = 0;
+                List<int> genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+                ILazinator result = CreateItemUsingReflection(genericID);
+                return (T)result;
             }
             else
-                itemToReturn = (T) CreateKnownID(uniqueID, storage, parent); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
+            {
+                if (uniqueID == mostLikelyUniqueID)
+                {
+                    itemToReturn = funcToCreateBaseType();
+                    InitializeDeserialized(itemToReturn, storage, parent);
+                }
+                else
+                    itemToReturn = (T)CreateKnownID(uniqueID, storage, parent); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
+            }
             return itemToReturn;
         }
 
@@ -427,6 +439,8 @@ namespace Lazinator.Core
             else
                 l.Add(TypeToUniqueIDMap[t]);
         }
+
+
 
         // TODO: Cache this
         public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(List<int> typeAndGenericTypeArgumentIDs, int index = 0)
