@@ -41,6 +41,12 @@ namespace Lazinator.Wrappers
                 return 0;
             }
             
+            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            if (uniqueID != LazinatorUniqueID)
+            {
+                throw new FormatException("Wrong self-serialized type initialized.");
+            }
+            
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
             int serializedVersionNumber = -1; /* versioning disabled */
@@ -282,7 +288,7 @@ namespace Lazinator.Wrappers
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, false);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
             _IsDirty = false;
             _DescendantIsDirty = false;
