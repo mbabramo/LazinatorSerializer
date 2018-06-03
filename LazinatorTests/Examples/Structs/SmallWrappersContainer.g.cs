@@ -781,12 +781,12 @@ namespace LazinatorTests.Examples.Structs
         {
             _ListWrappedBytes_Accessed = _WrappedBool_Accessed = _WrappedByte_Accessed = _WrappedChar_Accessed = _WrappedNullableBool_Accessed = _WrappedNullableByte_Accessed = _WrappedNullableChar_Accessed = _WrappedNullableSByte_Accessed = _WrappedSByte_Accessed = false;
         }
-        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 262;
         
+        protected virtual bool ContainsOpenGenericParameters => false;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

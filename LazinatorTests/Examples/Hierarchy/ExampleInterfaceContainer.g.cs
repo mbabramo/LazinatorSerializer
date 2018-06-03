@@ -294,12 +294,12 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
         }
-        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 246;
         
+        protected virtual bool ContainsOpenGenericParameters => false;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

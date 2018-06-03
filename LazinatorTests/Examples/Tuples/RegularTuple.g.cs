@@ -343,12 +343,12 @@ namespace LazinatorTests.Examples.Tuples
         {
             _MyTupleSerialized_Accessed = _MyTupleSerialized2_Accessed = _MyTupleSerialized3_Accessed = _MyTupleSerialized4_Accessed = false;
         }
-        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 227;
         
+        protected virtual bool ContainsOpenGenericParameters => false;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

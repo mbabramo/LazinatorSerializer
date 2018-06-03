@@ -263,12 +263,12 @@ namespace LazinatorTests.Examples.Subclasses
         {
             _MyEnumList_Accessed = false;
         }
-        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 255;
         
+        protected virtual bool ContainsOpenGenericParameters => false;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

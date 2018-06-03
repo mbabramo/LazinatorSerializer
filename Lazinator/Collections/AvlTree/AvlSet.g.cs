@@ -272,12 +272,12 @@ namespace Lazinator.Collections.AvlTree
         {
             _UnderlyingTree_Accessed = false;
         }
-        protected virtual bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 97;
         
+        protected virtual bool ContainsOpenGenericParameters => true;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

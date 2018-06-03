@@ -289,12 +289,12 @@ namespace Lazinator.Spans
         {
             _ByteSpan_Accessed = false;
         }
-        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public int LazinatorUniqueID => 91;
         
+        bool ContainsOpenGenericParameters => false;
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

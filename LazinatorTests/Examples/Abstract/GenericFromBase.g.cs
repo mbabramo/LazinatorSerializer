@@ -100,12 +100,12 @@ namespace LazinatorTests.Examples.Abstract
             base.ResetAccessedProperties();
             
         }
-        protected override bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public override int LazinatorUniqueID => 267;
         
+        protected override bool ContainsOpenGenericParameters => true;
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
             get

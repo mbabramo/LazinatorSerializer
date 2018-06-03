@@ -265,12 +265,12 @@ namespace Lazinator.Wrappers
         {
             
         }
-        bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public int LazinatorUniqueID => 88;
         
+        bool ContainsOpenGenericParameters => true;
         System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public System.Collections.Generic.List<int> LazinatorGenericID
         {

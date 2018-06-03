@@ -154,12 +154,12 @@ namespace LazinatorTests.Examples.Abstract
             base.ResetAccessedProperties();
             _IntList4_Accessed = _IntList5_Accessed = false;
         }
-        protected override bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public override int LazinatorUniqueID => 239;
         
+        protected override bool ContainsOpenGenericParameters => false;
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

@@ -333,12 +333,12 @@ namespace Lazinator.Collections
         {
             
         }
-        protected virtual bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 106;
         
+        protected virtual bool ContainsOpenGenericParameters => true;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

@@ -218,12 +218,12 @@ namespace Lazinator.Wrappers
         {
             
         }
-        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public int LazinatorUniqueID => 62;
         
+        bool ContainsOpenGenericParameters => false;
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

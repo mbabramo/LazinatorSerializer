@@ -319,12 +319,12 @@ namespace LazinatorTests.Examples.Subclasses
         {
             _SubclassInstance1_Accessed = _SubclassInstance2_Accessed = false;
         }
-        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 257;
         
+        protected virtual bool ContainsOpenGenericParameters => false;
         protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {

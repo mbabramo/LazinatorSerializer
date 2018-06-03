@@ -248,6 +248,24 @@ namespace Lazinator.CodeDescription
                 ";
                 else
                 {
+                    string readUniqueID;
+                    if (IsGeneric)
+                        readUniqueID = $@"LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+                                    if (LazinatorGenericID[0] != LazinatorUniqueID)
+                                    {{
+                                        throw new FormatException(""Wrong self-serialized type initialized."");
+                                    }}
+
+                                    ";
+                    else
+                        readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+                            if (uniqueID != LazinatorUniqueID)
+                            {{
+                                throw new FormatException(""Wrong self-serialized type initialized."");
+                            }}
+
+                            ")}";
+
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
                         {constructor}public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
@@ -264,13 +282,7 @@ namespace Lazinator.CodeDescription
                                 return 0;
                             }}{classContainingStructContainingClassError}
 
-                            {(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-                            if (uniqueID != LazinatorUniqueID)
-                            {{
-                                throw new FormatException(""Wrong self-serialized type initialized."");
-                            }}
-
-                            ")}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
                             
                         ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
 
@@ -675,8 +687,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine(
                         $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
                         {{
-                            // header information
-                        ");
+                            // header information");
 
                 if (IsGeneric)
                     sb.AppendLine($@"if (includeUniqueID)

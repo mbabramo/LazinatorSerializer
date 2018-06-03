@@ -348,12 +348,12 @@ namespace LazinatorTests.Examples.Abstract
         {
             _MyT_Accessed = _LazinatorExample_Accessed = false;
         }
-        protected override bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public override int LazinatorUniqueID => 242;
         
+        protected override bool ContainsOpenGenericParameters => false;
         protected override System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {

@@ -109,12 +109,12 @@ namespace LazinatorTests.Examples.Collections
             base.ResetAccessedProperties();
             _MyLevel2ListNestedNonLazinatorType_Accessed = false;
         }
-        protected override bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public override int LazinatorUniqueID => 260;
         
+        protected override bool ContainsOpenGenericParameters => false;
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

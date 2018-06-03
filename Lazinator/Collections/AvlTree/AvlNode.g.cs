@@ -424,12 +424,12 @@ namespace Lazinator.Collections.Avl
         {
             _Left_Accessed = _Right_Accessed = false;
         }
-        bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public int LazinatorUniqueID => 93;
         
+        bool ContainsOpenGenericParameters => true;
         System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public System.Collections.Generic.List<int> LazinatorGenericID
         {

@@ -44,9 +44,9 @@ namespace LazinatorTests.Examples.Abstract
             {
                 return 0;
             }
-            
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-            if (uniqueID != LazinatorUniqueID)
+
+            LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+            if (LazinatorGenericID[0] != LazinatorUniqueID)
             {
                 throw new FormatException("Wrong self-serialized type initialized.");
             }
@@ -283,12 +283,12 @@ namespace LazinatorTests.Examples.Abstract
         {
             
         }
-        protected override bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public override int LazinatorUniqueID => 264;
         
+        protected override bool ContainsOpenGenericParameters => true;
         protected override System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
