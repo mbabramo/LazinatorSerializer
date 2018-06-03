@@ -66,6 +66,7 @@
         NonLazinatorDerivedContainer,
         Derived_DotNetList_Nested_NonSelfSerializable,
         DerivedArray_Values,
-        SmallWrappersContainer
+        SmallWrappersContainer,
+        DotNetList_Wrapper
     }
 }

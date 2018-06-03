@@ -597,7 +597,7 @@ namespace LazinatorTests.Examples
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = (Example)deserializationFactory.FactoryCreateFromBytesIncludingIDSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
+                    var item = deserializationFactory.FactoryCreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

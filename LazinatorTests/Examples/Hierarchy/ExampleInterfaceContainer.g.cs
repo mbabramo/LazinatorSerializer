@@ -377,7 +377,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = (IExample)deserializationFactory.FactoryCreateFromBytesIncludingIDSpecifyingDelegate(childData, informParentOfDirtinessDelegate);
+                    var item = deserializationFactory.FactoryCreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

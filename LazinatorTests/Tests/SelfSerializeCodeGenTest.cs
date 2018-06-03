@@ -247,6 +247,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(DotNetList_NonSelfSerializable), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetList_SelfSerialized), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetList_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
+            await CompleteGenerateCode(typeof(DotNetList_Wrapper), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetQueue_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetStack_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(SpanAndMemory), "LazinatorTests", "/Examples/", "Collections/", ws);

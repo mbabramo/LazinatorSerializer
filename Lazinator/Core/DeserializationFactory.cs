@@ -15,6 +15,8 @@ namespace Lazinator.Core
     public class DeserializationFactory
     {
 
+        #region Construction
+
         static object LockObj = new object();
         static DeserializationFactory _DeserializationFactory;
         public static DeserializationFactory GetInstance()
@@ -70,6 +72,10 @@ namespace Lazinator.Core
         {
             SetupAllTypesInAssemblies(assemblies);
         }
+
+        #endregion
+
+        #region Factory creation
 
         /// <summary>
         /// Create a typed Lazinator object of a certain concrete type. If the object if of that exact type rather than of a subtype, performance will be better than if the factory creation methods are used. This method should not be used for deserializing a struct or sealed class, since the serialized bytes may not contain object IDs.
@@ -178,15 +184,14 @@ namespace Lazinator.Core
             else
                 return (T)FactoryCreateFromBytesIncludingIDSpecifyingDelegate(storage, informParentOfDirtinessDelegate);
         }
-
-        // DEBUG here too
+        
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public ILazinator FactoryCreateFromBytesIncludingIDSpecifyingDelegate(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private ILazinator FactoryCreateFromBytesIncludingIDSpecifyingDelegate(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length <= 1)
                 return null;
@@ -223,43 +228,32 @@ namespace Lazinator.Core
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 
+        #endregion
+
+        #region Factory setup
+
         /// <summary>
-        /// Create from bytes a Lazinator object that does not need to inform a parent object if it has changed.
+        /// Enumerate multiple objects stored successively in a single range of bytes and not in a Lazinator or .Net collection. Storing objects this way is useful when each is appended to the end of the storage. 
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
-        /// <returns>The deserialized Lazinator object</returns>
-        public ILazinator FactoryCreate(ReadOnlyMemory<byte> storage)
-        {
-            if (storage.Length <= 1)
-                return null;
-            int bytesSoFar = 0;
-            int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            ILazinator itemToReturn = FactoryCreate(uniqueID, storage);
-            return itemToReturn;
-        }
-
-        //DEBUG // here too -- must add type as protection
-        /// <summary>
-        /// Enumerate multiple objects stored successively in a single range of bytes and not in a Lazinator or .Net collection. Storing objects this way is useful when each is appended to the end of the storage.
-        /// </summary>
-        /// <param name="storage"></param>
+        /// <param name="fixedUniqueID">The fixed unique ID of a single type representing each instance stored. If null is specified, then each stored object must contain a unique ID.</param>
         /// <returns></returns>
-        public IEnumerable<ILazinator> FactoryCreateMultiple(ReadOnlyMemory<byte> storage)
+        public IEnumerable<ILazinator> FactoryCreateMultiple(ReadOnlyMemory<byte> storage, int? fixedUniqueID)
         {
             while (true) // until "yield break"
             {
                 if (storage.Length <= 1)
                     yield break;
                 int bytesSoFar = 0;
-                int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-                ILazinator itemToReturn = FactoryCreate(uniqueID, storage);
+                int uniqueID = fixedUniqueID ?? storage.Span.ToDecompressedInt(ref bytesSoFar);
+                ILazinator itemToReturn = FactoryCreateKnownUniqueID(uniqueID, storage);
                 int bytes = itemToReturn.LazinatorObjectBytes.Length;
                 storage = storage.Slice(bytes);
                 yield return itemToReturn;
             }
         }
 
-        private ILazinator FactoryCreate(int uniqueID, ReadOnlyMemory<byte> serializedBytes)
+        private ILazinator FactoryCreateKnownUniqueID(int uniqueID, ReadOnlyMemory<byte> serializedBytes)
         {
             if (FactoriesByID.ContainsKey(uniqueID))
             {
@@ -366,5 +360,7 @@ namespace Lazinator.Core
 
             return fixedUniqueID;
         }
+
+        #endregion
     }
 }
