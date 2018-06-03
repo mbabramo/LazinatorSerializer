@@ -209,7 +209,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_Value_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength);
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength, false, null);
                     _Value = childData;
                     _Value_Accessed = true;
                 }

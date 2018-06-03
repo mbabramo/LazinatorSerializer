@@ -224,7 +224,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, null);
                         _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData, DeserializationFactory, () => { MyQueueInt_Dirty = true; });
                     }
                     _MyQueueInt_Accessed = true;
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyQueueInt, isBelievedDirty: MyQueueInt_Dirty,
             isAccessed: _MyQueueInt_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Queue_Gint_g(w, MyQueueInt,

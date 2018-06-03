@@ -215,7 +215,7 @@ namespace Lazinator.Wrappers
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedValue_ByteIndex, _WrappedValue_ByteLength);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, false, null);
                         _WrappedValue = ConvertFromBytes_long_B_b(childData, DeserializationFactory, null);
                     }
                     _WrappedValue_Accessed = true;

@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -272,7 +272,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, null);
                         _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData, DeserializationFactory, null);
                     }
                     _ExampleListByInterface_Accessed = true;
@@ -337,12 +337,12 @@ namespace LazinatorTests.Examples.Hierarchy
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, null), verifyCleanness, false, false, this);
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
             isAccessed: _ExampleListByInterface_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GIExample_g(w, ExampleListByInterface,
