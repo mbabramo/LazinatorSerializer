@@ -33,6 +33,8 @@ namespace Lazinator.Core
         private Dictionary<int, Func<ILazinator>> FactoriesByID =
             new Dictionary<int, Func<ILazinator>>();
 
+        private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
+
         public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
         {
 
@@ -161,6 +163,22 @@ namespace Lazinator.Core
             return itemToReturn;
         }
 
+        /// <summary>
+        /// Create a Lazinator item from bytes, where the Lazinator item is known to be a particular type, which may be a type that does not preserve unique ID information in serialized bytes. This method checks whether the type is such a type. If so, the unique ID is known, and the item is created. Otherwise, the unique ID is in the serialized bytes, and the item is instantiated based on that.
+        /// </summary>
+        /// <param name="storage">The serialized bytes</param>
+        /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
+        /// <returns>The deserialized Lazinator object</returns>
+        public T FactoryCreate<T>(Type t, ReadOnlyMemory<byte> storage, ILazinator parent)
+        {
+            if (t.IsInterface)
+                throw new LazinatorSerializationException("Impermissible attempt to create a Lazinator object based on an interface instead of based on a concrete generic type. This may occur, for example, by attempting to use LazinatorList<ILazinator> instead of LazinatorList<SomeLazinatorBaseType>.");
+            int? fixedUniqueID = GetFixedUniqueID(t);
+            if (fixedUniqueID != null)
+                return (T) FactoryCreate((int)fixedUniqueID, storage, parent);
+            else
+                return (T) FactoryCreate(storage, parent);
+        }
 
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
@@ -270,7 +288,17 @@ namespace Lazinator.Core
                 if (FactoriesByID.ContainsKey(uniqueID))
                     throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
                 FactoriesByID[uniqueID] = GetFactoryForType(type);
+                int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
+                if (fixedUniqueID != null)
+                    FixedUniqueIDs[type] = (int)fixedUniqueID;
             }
+        }
+
+        public int? GetFixedUniqueID(Type type)
+        {
+            if (FixedUniqueIDs.ContainsKey(type))
+                return FixedUniqueIDs[type];
+            return null;
         }
 
         private Func<ILazinator> GetFactoryForType(Type type)
@@ -281,6 +309,28 @@ namespace Lazinator.Core
             var lambda = Expression.Lambda<Func<ILazinator>>(converted);
             Func<ILazinator> compiledLambda = lambda.Compile();
             return compiledLambda;
+        }
+
+        private static int? GetFixedUniqueIDOrNull(Type t)
+        {
+            // Explanation: Most Lazinator objects include UniqueIDs, but some skip them. Usually, we know what we're dealing with, because we are serializing a property of a particular type. If the type is sealed or a struct, we just create the object directly, and then call its deserialization routines; otherwise, we call the factory, and we can be sure that there is a unique ID. But here, we seek to be able to deserialize any type, regardless of whether it includes a UniqueID.
+            bool serializationSkipsUniqueIDs = t.IsValueType || (t.IsSealed && t.BaseType == typeof(object));
+            int? fixedUniqueID = null;
+            if (serializationSkipsUniqueIDs == true)
+            {
+                Attributes.LazinatorAttribute lazinatorAttribute = (Attributes.LazinatorAttribute)
+                    t.GetInterfaces()
+                    .Select(x => (x, x.GetCustomAttributes(typeof(Attributes.LazinatorAttribute), false)))
+                    .Where(x => x.Item2.Any())
+                    .FirstOrDefault()
+                    .Item2
+                    .FirstOrDefault();
+                serializationSkipsUniqueIDs = lazinatorAttribute.Version == -1;
+                if (serializationSkipsUniqueIDs == true)
+                    fixedUniqueID = lazinatorAttribute.UniqueID;
+            }
+
+            return fixedUniqueID;
         }
     }
 }

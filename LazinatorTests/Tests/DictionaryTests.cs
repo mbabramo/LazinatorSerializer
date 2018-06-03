@@ -80,13 +80,10 @@ namespace LazinatorTests.Tests
             for (long i = 0; i < numItems; i++)
             {
                 d[i] = i.ToString();
-                // DEBUG d.Count().Should().Be((int) (i + 1));
             }
             for (long i = 0; i < numItems; i++)
             {
                 d.Remove(i);
-                // DEBUG d.Count().Should().Be(25 - (int)i);
-                //DEBUG -- it looks like the hash of 0 is not being found. Maybe because it's the default and is being treated as null? 
             }
             d.Count().Should().Be(0);
         }
