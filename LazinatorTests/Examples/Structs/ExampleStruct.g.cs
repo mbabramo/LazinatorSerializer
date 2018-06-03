@@ -456,6 +456,7 @@ namespace LazinatorTests.Examples
         {
             _MyChild1_Accessed = _MyChild2_Accessed = _MyLazinatorList_Accessed = _MyListValues_Accessed = _MyTuple_Accessed = false;
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

@@ -582,7 +582,7 @@ namespace Lazinator.CodeDescription
                     " : "")}{resetAccessed}
                 }}");
 
-            sb.AppendLine($@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};");
+            string containsOpenGenericParametersString = $@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};";
 
             string lazinatorGenericBackingID = "";
             if (!IsDerivedFromNonAbstractLazinator && (IsGeneric || !IsSealedOrStruct))
@@ -591,7 +591,8 @@ namespace Lazinator.CodeDescription
 
             string lazinatorGenericID;
             if (IsGeneric)
-                lazinatorGenericID = $@"{lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                lazinatorGenericID = $@"{containsOpenGenericParametersString}
+                        {lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
                         {{
                             get
                             {{
@@ -607,7 +608,8 @@ namespace Lazinator.CodeDescription
                             }}
                         }}";
             else
-                lazinatorGenericID = $@"{lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                lazinatorGenericID = $@"{containsOpenGenericParametersString}
+                        {lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
                         {{
                             get => null;
                             set => throw new NotSupportedException();

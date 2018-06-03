@@ -313,6 +313,7 @@ namespace Lazinator.Collections
         {
             _FourByteItems_Accessed = _TwoByteItems_Accessed = false;
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

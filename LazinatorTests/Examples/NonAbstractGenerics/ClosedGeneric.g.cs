@@ -146,6 +146,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             base.ResetAccessedProperties();
             _MyListT_Accessed = _MyT_Accessed = false;
         }
+        protected override bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

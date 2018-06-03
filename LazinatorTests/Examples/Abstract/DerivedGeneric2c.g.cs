@@ -283,12 +283,13 @@ namespace LazinatorTests.Examples.Abstract
         {
             
         }
+        protected override bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
         public override int LazinatorUniqueID => 264;
         
-        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected override System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
             get
@@ -336,12 +337,7 @@ namespace LazinatorTests.Examples.Abstract
             
             if (includeUniqueID)
             {
-                var genericID = LazinatorGenericID;
-                writer.Write((byte)genericID.Count);
-                foreach (int g in genericID)
-                {
-                    CompressedIntegralTypes.WriteCompressedInt(writer, g);
-                }
+                WriteLazinatorGenericID(writer, LazinatorGenericID);
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);

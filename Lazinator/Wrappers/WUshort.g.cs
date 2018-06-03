@@ -216,6 +216,7 @@ namespace Lazinator.Wrappers
         {
             
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

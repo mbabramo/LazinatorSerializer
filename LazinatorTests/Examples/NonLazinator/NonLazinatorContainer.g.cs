@@ -309,6 +309,7 @@ namespace LazinatorTests.Examples
         {
             _NonLazinatorClass_Accessed = _NonLazinatorInterchangeableClass_Accessed = _NonLazinatorStruct_Accessed = false;
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

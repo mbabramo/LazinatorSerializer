@@ -109,6 +109,7 @@ namespace LazinatorTests.Examples.Collections
             base.ResetAccessedProperties();
             _MyLevel2ListNestedNonLazinatorType_Accessed = false;
         }
+        protected override bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

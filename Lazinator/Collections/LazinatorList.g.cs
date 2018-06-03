@@ -226,7 +226,8 @@ namespace Lazinator.Collections
 
         public virtual int LazinatorUniqueID => (int)LazinatorCollectionUniqueIDs.LazinatorList;
 
-        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected virtual bool ContainsOpenGenericParameters => true;
+        protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {
             get

@@ -336,12 +336,13 @@ namespace LazinatorTests.Examples.Collections
         {
             _MyListInt_Accessed = _MyListNullableByte_Accessed = _MyListNullableInt_Accessed = false;
         }
+        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 263;
         
-        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

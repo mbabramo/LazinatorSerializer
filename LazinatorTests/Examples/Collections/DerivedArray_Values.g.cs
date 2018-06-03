@@ -112,6 +112,7 @@ namespace LazinatorTests.Examples.Collections
             base.ResetAccessedProperties();
             _MyArrayInt_DerivedLevel_Accessed = false;
         }
+        protected override bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

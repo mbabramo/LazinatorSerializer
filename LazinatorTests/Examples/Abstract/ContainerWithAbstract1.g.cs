@@ -259,12 +259,13 @@ namespace LazinatorTests.Examples.Abstract
         {
             _AbstractProperty_Accessed = false;
         }
+        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 252;
         
-        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

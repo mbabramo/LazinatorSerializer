@@ -312,12 +312,13 @@ namespace LazinatorTests.Examples.Tuples
         {
             _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;
         }
+        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 226;
         
-        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

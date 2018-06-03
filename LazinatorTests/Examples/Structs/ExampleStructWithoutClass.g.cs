@@ -224,6 +224,7 @@ namespace LazinatorTests.Examples.Structs
         {
             
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

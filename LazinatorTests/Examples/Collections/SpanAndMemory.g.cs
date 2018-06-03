@@ -384,12 +384,13 @@ namespace LazinatorTests.Examples.Collections
         {
             _MyMemoryInt_Accessed = _MyNullableMemoryInt_Accessed = _MyReadOnlySpanByte_Accessed = _MyReadOnlySpanChar_Accessed = _MyReadOnlySpanDateTime_Accessed = _MyReadOnlySpanLong_Accessed = false;
         }
+        protected virtual bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         
         public virtual int LazinatorUniqueID => 228;
         
-        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
         public virtual System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;

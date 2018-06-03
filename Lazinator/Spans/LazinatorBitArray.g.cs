@@ -289,6 +289,7 @@ namespace Lazinator.Spans
         {
             _ByteSpan_Accessed = false;
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

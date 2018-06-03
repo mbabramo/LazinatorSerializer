@@ -274,6 +274,7 @@ namespace LazinatorTests.Examples
         {
             _MyExampleStruct_Accessed = false;
         }
+        bool ContainsOpenGenericParameters => false;
         
         /* Conversion */
         

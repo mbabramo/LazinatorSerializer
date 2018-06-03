@@ -100,6 +100,7 @@ namespace LazinatorTests.Examples.Abstract
             base.ResetAccessedProperties();
             
         }
+        protected override bool ContainsOpenGenericParameters => true;
         
         /* Conversion */
         
