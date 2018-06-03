@@ -8,6 +8,8 @@ using LazinatorTests.Examples;
 using Lazinator.Buffers; 
 using Lazinator.Core; 
 using static Lazinator.Core.LazinatorUtilities;
+using Lazinator.Wrappers;
+using LazinatorTests.Examples.Abstract;
 
 namespace LazinatorTests.Tests
 {
@@ -38,6 +40,19 @@ namespace LazinatorTests.Tests
             selfSerialized.LazinatorObjectBytes.Should().Be(serializedBytes);
             selfSerialized.LazinatorParentClass.Should().Be(parent);
             selfSerialized.DeserializationFactory.Should().Be(df);
+        }
+
+        [Fact]
+        public void CanGetTypeFromGenericTypeIDs()
+        {
+            List<int> IDs = new List<int>() { (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WInt };
+            (Type t, int numberIDsConsumed) = DeserializationFactory.GetInstance().GetTypeBasedOnTypeAndGenericTypeArgumentIDs(IDs, 0);
+            Type expectedType = typeof(GenericFromBase<GenericFromBase<WInt>>);
+            t.Equals(expectedType).Should().BeTrue();
+
+
+            //DEBUG TODO: Ignore generic parameters that aren't Lazinator.
+
         }
     }
 }

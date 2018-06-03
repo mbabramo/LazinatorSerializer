@@ -307,7 +307,11 @@ namespace Lazinator.Core
                     throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
                 if (type.ContainsGenericParameters)
                 {
-                    TypeDictionary[uniqueID] = (type, (byte) type.GenericTypeArguments.Length);
+                    var genericArguments = type.GetGenericArguments().ToList();
+                    var genericArgumentsConstrained = genericArguments.Where(x => x.GetGenericParameterConstraints().Any(y => y.Equals(typeof(Lazinator.Core.ILazinator)))).ToList();
+                    if (genericArguments.Count() == genericArgumentsConstrained.Count())
+                        TypeDictionary[uniqueID] = (type, (byte) genericArguments.Count());
+                    // otherwise, we have non-Lazinator type arguments, which we can't handle, and thus we can't add this to the dictionary. 
                 }
                 else
                 {
@@ -344,13 +348,13 @@ namespace Lazinator.Core
 
         private ILazinator CreateItemUsingReflection(List<int> typeAndGenericTypeArgumentIDs)
         {
-            (Type type, _) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs, 0);
+            (Type type, _) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs);
             var result = (ILazinator) Activator.CreateInstance(type);
             return result;
         }
 
         // TODO: Cache this
-        private (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(List<int> typeAndGenericTypeArgumentIDs, int index)
+        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(List<int> typeAndGenericTypeArgumentIDs, int index = 0)
         {
             if (index >= typeAndGenericTypeArgumentIDs.Count)
                 throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count} integer IDs, but more than that was needed.");
