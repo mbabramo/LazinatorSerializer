@@ -213,7 +213,7 @@ namespace Lazinator.Collections
             {
                 if (!_ReadOnlyBytes_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength);
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, null);
                     _ReadOnlyBytes = childData;
                     _ReadOnlyBytes_Accessed = true;
                 }
