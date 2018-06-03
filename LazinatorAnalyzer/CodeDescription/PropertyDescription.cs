@@ -728,8 +728,16 @@ namespace Lazinator.CodeDescription
             string assignment;
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
-                string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : "";
-                if (IsInterface || IsAbstract)
+                string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : ""; // DEBUG -- we don't have all overrides for second case
+                if (IsInterface)
+                    assignment =
+                    $@"
+                        if (DeserializationFactory == null)
+                        {{
+                            DeserializationFactory = DeserializationFactory.GetInstance();
+                        }}
+                        _{PropertyName} = DeserializationFactory.FactoryCreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+                else if (IsAbstract)
                     assignment =
                     $@"
                         if (DeserializationFactory == null)

@@ -32,7 +32,7 @@ namespace Lazinator.Core
 
         private Dictionary<int, Func<ILazinator>> FactoriesByID =
             new Dictionary<int, Func<ILazinator>>();
-
+        
         private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
 
         public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
@@ -166,15 +166,16 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Create a Lazinator item from bytes, where the Lazinator item is known to be a particular type, which may be a type that does not preserve unique ID information in serialized bytes. This method checks whether the type is such a type. If so, the unique ID is known, and the item is created. Otherwise, the unique ID is in the serialized bytes, and the item is instantiated based on that.
+        /// Create a Lazinator item from bytes, where the Lazinator item is known to be a particular type, which may be a type that does not preserve unique ID information in serialized bytes. This method checks whether the type is such a type. If so, the unique ID is known, and the item is created. Otherwise, the unique ID is in the serialized bytes, and the item is instantiated based on that. This approach is slower than reading the type from the serialized bytes, and it should thus be used only where it is not known at compile time what the type is.
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public T FactoryCreate<T>(Type t, ReadOnlyMemory<byte> storage, ILazinator parent)
+        public T FactoryCreateBasedOnType<T>(ReadOnlyMemory<byte> storage, ILazinator parent)
         {
-            if (t.IsInterface)
-                throw new LazinatorSerializationException("Impermissible attempt to create a Lazinator object based on ILazinator or a Lazinator interface instead of based on a concrete generic type. This may occur, for example, by attempting to use LazinatorList<ILazinator> or LazinatorList<IMyLazinator>, where IMyLazinator is a Lazinator exclusive interface. Instead, use LazinatorList<SomeLazinatorBaseType> or LazinatorList<INonexclusiveInterface>.");
+            Type t = typeof(T);
+            //DEBUGif (t.IsInterface)
+            //    throw new LazinatorSerializationException("Impermissible attempt to create a Lazinator object based on ILazinator or a Lazinator interface instead of based on a concrete generic type. This may occur, for example, by attempting to use LazinatorList<ILazinator> or LazinatorList<IMyLazinator>, where IMyLazinator is a Lazinator exclusive interface. Instead, use LazinatorList<SomeLazinatorBaseType> or LazinatorList<INonexclusiveInterface>.");
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
                 return (T) FactoryCreate((int)fixedUniqueID, storage, parent);
@@ -293,7 +294,12 @@ namespace Lazinator.Core
                 FactoriesByID[uniqueID] = GetFactoryForType(type);
                 int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
                 if (fixedUniqueID != null)
+                {
                     FixedUniqueIDs[type] = (int)fixedUniqueID;
+                    Type exclusiveInterface = LazinatorReflection.GetCorrespondingExclusiveInterface(type);
+                    if (exclusiveInterface != null)
+                        FixedUniqueIDs[exclusiveInterface] = (int)fixedUniqueID;
+                }
             }
         }
 
