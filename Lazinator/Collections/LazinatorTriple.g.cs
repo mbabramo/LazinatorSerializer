@@ -169,7 +169,7 @@ namespace Lazinator.Collections
         
         public virtual void LazinatorConvertToBytes()
         {
-            if (!IsDirty && !DescendantIsDirty)
+            if (!IsDirty && !DescendantIsDirty && _LazinatorObjectBytes.Length > 0)
             {
                 return;
             }
