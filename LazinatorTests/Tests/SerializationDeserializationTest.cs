@@ -441,6 +441,26 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorDotNetListWrappedNullableLazinators()
+        {
+            DotNetList_Wrapper w = new DotNetList_Wrapper()
+            {
+                MyListNullableByte = new List<WNullableByte>() { 3, 4, 249, null },
+                MyListNullableInt = new List<WNullableInt>() { 3, 16000, 249, null, 1000000000 }
+            };
+            var c = w.CloneLazinatorTyped();
+            c.MyListNullableByte[0].WrappedValue.Should().Be((byte)3);
+            c.MyListNullableByte[1].WrappedValue.Should().Be((byte)4);
+            c.MyListNullableByte[2].WrappedValue.Should().Be((byte)249);
+            c.MyListNullableByte[3].WrappedValue.Should().Be(null);
+            c.MyListNullableInt[0].WrappedValue.Should().Be(3);
+            c.MyListNullableInt[1].WrappedValue.Should().Be(16000);
+            c.MyListNullableInt[2].WrappedValue.Should().Be(249);
+            c.MyListNullableInt[3].WrappedValue.Should().Be(null);
+            c.MyListNullableInt[4].WrappedValue.Should().Be(1000000000);
+        }
+
+        [Fact]
         public void LazinatorDotNetListInt_Null()
         {
             DotNetList_Values GetObject()

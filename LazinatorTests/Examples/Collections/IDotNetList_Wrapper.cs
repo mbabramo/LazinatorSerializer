@@ -9,5 +9,7 @@ namespace LazinatorTests.Examples.Collections
     {
         List<WInt> MyListInt { get; set; }
         bool MyListInt_Dirty { get; set; }
+        List<WNullableInt> MyListNullableInt { get; set; }
+        List<WNullableByte> MyListNullableByte { get; set; }
     }
 }
