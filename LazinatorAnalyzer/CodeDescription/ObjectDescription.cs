@@ -45,6 +45,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPostDeserialization { get; set; }
         public bool ImplementsOnDirty { get; set; }
         public List<string> GenericArgumentNames { get; set; }
+        public string GenericArgumentNameTypes => String.Join(", ", GenericArgumentNames.Select(x => "typeof(" + x + ")"));
         public bool IsGeneric => GenericArgumentNames != null && GenericArgumentNames.Any();
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
@@ -527,6 +528,7 @@ namespace Lazinator.CodeDescription
                 }
 
                 sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
+                        public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
@@ -582,6 +584,8 @@ namespace Lazinator.CodeDescription
                 /* Conversion */
 
                 public {DerivationKeyword}int LazinatorUniqueID => { UniqueID };
+
+                public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID => {(!IsGeneric ? "null" : $"DeserializationFactory.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }})")};
 
                 { selfSerializationVersionString }
 

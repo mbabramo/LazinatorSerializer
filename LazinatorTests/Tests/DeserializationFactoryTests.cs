@@ -12,6 +12,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Abstract;
 using Lazinator.Collections;
 using System.Linq;
+using LazinatorTests.Examples.NonAbstractGenerics;
 
 namespace LazinatorTests.Tests
 {
@@ -54,6 +55,9 @@ namespace LazinatorTests.Tests
             t.Equals(expectedType).Should().BeTrue();
             var IDsForType = deserializationFactory.GetUniqueIDListForGenericType(t);
             IDs.SequenceEqual(IDsForType).Should().BeTrue();
+
+            Type DEBUG = typeof(OpenGeneric<WInt>);
+            Type DEBUG2 = typeof(ClosedGeneric);
         }
 
         [Fact]

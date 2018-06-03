@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int LazinatorUniqueID => 267;
 
-        public override System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(267, typeof(T));
+        public override System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(267, new Type[] { typeof(T) });
 
         public override int LazinatorObjectVersion { get; set; } = 0;
         
