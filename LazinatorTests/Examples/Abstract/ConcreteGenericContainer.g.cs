@@ -78,7 +78,6 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ConcreteGenericContainer()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -150,8 +149,6 @@ namespace LazinatorTests.Examples.Abstract
                 Item.MarkHierarchyClean();
             }
         }
-        
-        public override DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public override MemoryInBuffer HierarchyBytes
@@ -230,11 +227,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _Item = DeserializationFactory.CreateBasedOnType<IAbstractGeneric1<int>>(childData, this); 
+                        _Item = DeserializationFactory.GetInstance().CreateBasedOnType<IAbstractGeneric1<int>>(childData, this); 
                     }
                     _Item_Accessed = true;
                 }

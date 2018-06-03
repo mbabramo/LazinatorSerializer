@@ -76,7 +76,6 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new Concrete3()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -152,8 +151,6 @@ namespace LazinatorTests.Examples.Abstract
                 Example3.MarkHierarchyClean();
             }
         }
-        
-        public override DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public override MemoryInBuffer HierarchyBytes
@@ -282,11 +279,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _Example2 = DeserializationFactory.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _Example2 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _Example2_Accessed = true;
                 }
@@ -320,11 +313,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _Example3 = DeserializationFactory.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _Example3 = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _Example3_Accessed = true;
                 }
@@ -357,7 +346,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList1_ByteIndex, _IntList1_ByteLength, false, false, null);
-                        _IntList1 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList1 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList1_Accessed = true;
                     IsDirty = true;
@@ -387,7 +376,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList2_ByteIndex, _IntList2_ByteLength, false, false, null);
-                        _IntList2 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList2 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList2_Accessed = true;
                     IsDirty = true;
@@ -417,7 +406,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList3_ByteIndex, _IntList3_ByteLength, false, false, null);
-                        _IntList3 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList3 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList3_Accessed = true;
                     IsDirty = true;
@@ -539,7 +528,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion of supported collections and tuples */
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

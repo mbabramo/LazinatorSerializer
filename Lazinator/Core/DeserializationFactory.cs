@@ -158,7 +158,6 @@ namespace Lazinator.Core
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
         {
-            lazinatorType.DeserializationFactory = this;
             lazinatorType.LazinatorParentClass = parent;
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
@@ -232,7 +231,6 @@ namespace Lazinator.Core
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
-            lazinatorType.DeserializationFactory = this;
             if (informParentOfDirtinessDelegate != null)
                 lazinatorType.InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate;
             lazinatorType.LazinatorObjectBytes = serializedBytes;
@@ -277,7 +275,6 @@ namespace Lazinator.Core
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes)
         {
-            lazinatorType.DeserializationFactory = this;
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 

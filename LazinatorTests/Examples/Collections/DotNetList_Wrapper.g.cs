@@ -80,7 +80,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DotNetList_Wrapper()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -149,8 +148,6 @@ namespace LazinatorTests.Examples.Collections
             _DescendantIsDirty = false;
             _MyListInt_Dirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -234,7 +231,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List_GWInt_g(childData, DeserializationFactory, () => { MyListInt_Dirty = true; });
+                        _MyListInt = ConvertFromBytes_List_GWInt_g(childData, () => { MyListInt_Dirty = true; });
                     }
                     _MyListInt_Accessed = true;
                 }
@@ -284,7 +281,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
-                        _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData, DeserializationFactory, null);
+                        _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData, null);
                     }
                     _MyListNullableByte_Accessed = true;
                     IsDirty = true;
@@ -315,7 +312,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
-                        _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData, DeserializationFactory, null);
+                        _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData, null);
                     }
                     _MyListNullableInt_Accessed = true;
                     IsDirty = true;
@@ -413,7 +410,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static List<WInt> ConvertFromBytes_List_GWInt_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<WInt> ConvertFromBytes_List_GWInt_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -431,7 +428,6 @@ namespace LazinatorTests.Examples.Collections
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WInt()
                 {
-                    DeserializationFactory = deserializationFactory,
                     InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
                     LazinatorObjectBytes = childData,
                 };
@@ -457,7 +453,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -475,7 +471,6 @@ namespace LazinatorTests.Examples.Collections
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableByte()
                 {
-                    DeserializationFactory = deserializationFactory,
                     InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
                     LazinatorObjectBytes = childData,
                 };
@@ -501,7 +496,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -519,7 +514,6 @@ namespace LazinatorTests.Examples.Collections
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableInt()
                 {
-                    DeserializationFactory = deserializationFactory,
                     InformParentOfDirtinessDelegate = informParentOfDirtinessDelegate,
                     LazinatorObjectBytes = childData,
                 };

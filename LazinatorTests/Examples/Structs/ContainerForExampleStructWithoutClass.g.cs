@@ -78,7 +78,6 @@ namespace LazinatorTests.Examples.Structs
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ContainerForExampleStructWithoutClass()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -150,8 +149,6 @@ namespace LazinatorTests.Examples.Structs
                 ExampleStructWithoutClass.MarkHierarchyClean();
             }
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -232,7 +229,6 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
                         _ExampleStructWithoutClass = new ExampleStructWithoutClass()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
                             LazinatorObjectBytes = childData,
                         };
@@ -266,7 +262,6 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
                         return new ExampleStructWithoutClass()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
                         };
                     }

@@ -9,10 +9,6 @@ namespace Lazinator.Core
     public interface ILazinator
     {
         /// <summary>
-        /// A factory for producing classes implementing ILazinator based on their integer IDs, thus allowing for inheritance.
-        /// </summary>
-        DeserializationFactory DeserializationFactory { get; set; }
-        /// <summary>
         /// The memory (generally rented from a memory pool) used to initialize a self-serialized class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
         /// </summary>
         MemoryInBuffer HierarchyBytes { set; }

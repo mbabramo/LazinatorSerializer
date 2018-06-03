@@ -79,7 +79,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new OpenGenericStayingOpenContainer()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -151,8 +150,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 ClosedGeneric.MarkHierarchyClean();
             }
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -232,11 +229,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _ClosedGeneric = DeserializationFactory.CreateBaseOrDerivedType(233, () => new OpenGeneric<WFloat>(), childData, this); 
+                        _ClosedGeneric = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(233, () => new OpenGeneric<WFloat>(), childData, this); 
                     }
                     _ClosedGeneric_Accessed = true;
                 }

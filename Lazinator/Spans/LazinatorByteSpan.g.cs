@@ -75,7 +75,6 @@ namespace Lazinator.Spans
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorByteSpan()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -143,8 +142,6 @@ namespace Lazinator.Spans
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -249,7 +246,7 @@ namespace Lazinator.Spans
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null);
-                        _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData, DeserializationFactory, null);
+                        _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData, null);
                     }
                     _ReadOrWrite_Accessed = true;
                     IsDirty = true;
@@ -347,7 +344,7 @@ namespace Lazinator.Spans
             }
         }
         
-        private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

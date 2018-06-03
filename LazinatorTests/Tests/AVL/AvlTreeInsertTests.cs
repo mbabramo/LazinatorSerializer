@@ -32,7 +32,6 @@ namespace LazinatorTests.AVL
                 int itemsToInsertThenDelete = 20;
                 int insertions = itemsToInsert + itemsToInsertThenDelete;
                 AvlTree<WInt, WByte> tree = BuildTreeInRandomOrder(insertions);
-                tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
                 tree.Root.Count.Should().Be(insertions);
 
                 if (r % 2 == 0)
@@ -68,7 +67,6 @@ namespace LazinatorTests.AVL
 	    {
 	        int treeSize = 10000;
 	        var tree = BuildTreeInRandomOrder(treeSize);
-            tree.DeserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
 	        tree = tree.CloneLazinatorTyped();
 	        Random r = new Random(0);
 	        for (int j = 0; j < 10000; j++)

@@ -79,7 +79,6 @@ namespace LazinatorTests.Examples.Tuples
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new RecordLikeContainer()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -147,8 +146,6 @@ namespace LazinatorTests.Examples.Tuples
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -231,7 +228,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, false, false, null);
-                        _MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData, DeserializationFactory, null);
+                        _MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData, null);
                     }
                     _MyMismatchedRecordLikeType_Accessed = true;
                 }
@@ -261,7 +258,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, false, false, null);
-                        _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData, DeserializationFactory, null);
+                        _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData, null);
                     }
                     _MyRecordLikeClass_Accessed = true;
                     IsDirty = true;
@@ -292,7 +289,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength, false, false, null);
-                        _MyRecordLikeType = ConvertFromBytes_RecordLikeType(childData, DeserializationFactory, null);
+                        _MyRecordLikeType = ConvertFromBytes_RecordLikeType(childData, null);
                     }
                     _MyRecordLikeType_Accessed = true;
                 }
@@ -389,7 +386,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion of supported collections and tuples */
         
-        private static MismatchedRecordLikeType ConvertFromBytes_MismatchedRecordLikeType(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static MismatchedRecordLikeType ConvertFromBytes_MismatchedRecordLikeType(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -416,7 +413,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Name);
         }
         
-        private static RecordLikeClass ConvertFromBytes_RecordLikeClass(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static RecordLikeClass ConvertFromBytes_RecordLikeClass(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -433,11 +430,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                if (deserializationFactory == null)
-                {
-                    deserializationFactory = DeserializationFactory.GetInstance();
-                }
-                item2 = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
+                item2 = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -462,7 +455,7 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static RecordLikeType ConvertFromBytes_RecordLikeType(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static RecordLikeType ConvertFromBytes_RecordLikeType(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

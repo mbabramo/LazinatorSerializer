@@ -18,7 +18,7 @@ namespace LazinatorTests.Tests.AVL
         [Fact]
         public void DeserializedAvlTreeOrdersItemsCorrectly()
         {
-            GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             var enumerated = tree.Select(x => x.Value.WrappedValue).ToList();
             AvlTree<WInt, WInt> clone = tree.CloneLazinatorTyped();
@@ -31,7 +31,7 @@ namespace LazinatorTests.Tests.AVL
         [Fact]
         public void AvlTreeAllowsSearchAfterDeserialization()
         {
-            GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             MemoryInBuffer b = tree.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
             //const int repetitions = 10000;
@@ -39,7 +39,6 @@ namespace LazinatorTests.Tests.AVL
             //{
                 var tree2 = new AvlTree<WInt, WInt>()
                 {
-                    DeserializationFactory = deserializationFactory,
                     HierarchyBytes = b
                 };
                 bool found = tree2.Search(firstKey, out WInt value);
@@ -49,15 +48,13 @@ namespace LazinatorTests.Tests.AVL
 
         private AvlTree<WInt, WInt> GetTree()
         {
-            GetTreeAndItems(out _, out AvlTree<WInt, WInt> t, out _, out _ );
+            GetTreeAndItems(out AvlTree<WInt, WInt> t, out _, out _ );
             return t;
         }
 
-        private void GetTreeAndItems(out DeserializationFactory deserializationFactory, out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
+        private void GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
         {
-            deserializationFactory = new DeserializationFactory(typeof(AvlTree<,>));
             tree = new AvlTree<WInt, WInt>();
-            tree.DeserializationFactory = deserializationFactory;
             items = new Dictionary<int, int>();
             firstKey = 0;
             for (int i = 0; i < 100; i++)

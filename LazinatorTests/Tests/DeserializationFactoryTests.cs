@@ -42,7 +42,6 @@ namespace LazinatorTests.Tests
             selfSerialized.Should().NotBeNull();
             selfSerialized.LazinatorObjectBytes.Should().Be(serializedBytes);
             selfSerialized.LazinatorParentClass.Should().Be(parent);
-            selfSerialized.DeserializationFactory.Should().Be(df);
         }
 
         [Fact]
@@ -55,9 +54,6 @@ namespace LazinatorTests.Tests
             t.Equals(expectedType).Should().BeTrue();
             var IDsForType = deserializationFactory.GetUniqueIDListForGenericType(t);
             IDs.SequenceEqual(IDsForType).Should().BeTrue();
-
-            Type DEBUG = typeof(OpenGeneric<WInt>);
-            Type DEBUG2 = typeof(ClosedGeneric);
         }
 
         [Fact]

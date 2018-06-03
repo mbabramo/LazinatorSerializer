@@ -78,7 +78,6 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DerivedGeneric2c<T>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -146,8 +145,6 @@ namespace LazinatorTests.Examples.Abstract
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public override DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public override MemoryInBuffer HierarchyBytes
@@ -261,7 +258,6 @@ namespace LazinatorTests.Examples.Abstract
                         }
                         else _MyT = new T()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
                             LazinatorObjectBytes = childData,
                         };
@@ -296,7 +292,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(264, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(264, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

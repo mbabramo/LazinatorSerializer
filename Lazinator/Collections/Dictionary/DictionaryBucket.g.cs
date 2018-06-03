@@ -79,7 +79,6 @@ namespace Lazinator.Collections.Dictionary
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DictionaryBucket<TKey, TValue>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -155,8 +154,6 @@ namespace Lazinator.Collections.Dictionary
                 Values.MarkHierarchyClean();
             }
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -238,11 +235,7 @@ namespace Lazinator.Collections.Dictionary
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Keys_ByteIndex, _Keys_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _Keys = DeserializationFactory.CreateBaseOrDerivedType(51, () => new LazinatorList<TKey>(), childData, this); 
+                        _Keys = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(51, () => new LazinatorList<TKey>(), childData, this); 
                     }
                     _Keys_Accessed = true;
                 }
@@ -277,11 +270,7 @@ namespace Lazinator.Collections.Dictionary
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Values_ByteIndex, _Values_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _Values = DeserializationFactory.CreateBaseOrDerivedType(51, () => new LazinatorList<TValue>(), childData, this); 
+                        _Values = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(51, () => new LazinatorList<TValue>(), childData, this); 
                     }
                     _Values_Accessed = true;
                 }
@@ -318,7 +307,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(98, new Type[] { typeof(TKey), typeof(TValue) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(98, new Type[] { typeof(TKey), typeof(TValue) });
                 }
                 return _LazinatorGenericID;
             }

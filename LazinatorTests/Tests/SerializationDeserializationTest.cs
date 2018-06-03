@@ -28,14 +28,6 @@ namespace LazinatorTests.Tests
 {
     public class SerializationDeserializationTest
     {
-        private static DeserializationFactory TestDeserializationFactory;
-        private static DeserializationFactory GetDeserializationFactory()
-        {
-            if (TestDeserializationFactory == null)
-                TestDeserializationFactory = new DeserializationFactory(new Type[] { typeof(Example), typeof(WInt) }, true);
-            return TestDeserializationFactory;
-        }
-
         [Fact]
         public void MemoryPoolWorks()
         {
@@ -106,7 +98,6 @@ namespace LazinatorTests.Tests
             var stillOldVersion = new Example
             {
                 LazinatorObjectVersion = 2,
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = bytes,
             };
             stillOldVersion.MyOldString.Should().Be("Old string");
@@ -115,7 +106,6 @@ namespace LazinatorTests.Tests
             var upgraded = new Example
             {
                 LazinatorObjectVersion = 3,
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = bytes,
             };
             upgraded.LazinatorObjectVersion.Should().Be(3);
@@ -134,7 +124,6 @@ namespace LazinatorTests.Tests
             MemoryInBuffer serialized = original.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
             RecordLikeContainer s2 = new RecordLikeContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = serialized
             };
             s2.MyRecordLikeClass.Age.Should().Be(23);
@@ -152,7 +141,6 @@ namespace LazinatorTests.Tests
             ExampleInterfaceContainer c = new ExampleInterfaceContainer()
             {
                 ExampleByInterface = GetExample(2),
-                DeserializationFactory = GetDeserializationFactory()
             };
 
             var c2 = c.CloneLazinatorTyped();
@@ -170,7 +158,6 @@ namespace LazinatorTests.Tests
                 {
                     RecursiveClass = new RecursiveExample()
                 },
-                DeserializationFactory = GetDeserializationFactory()
             };
             var r2 = r.CloneLazinatorTyped();
             r2.RecursiveClass.Should().NotBeNull();
@@ -183,7 +170,6 @@ namespace LazinatorTests.Tests
         {
             ContainerForExampleStructWithoutClass c = new ContainerForExampleStructWithoutClass()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 }
             };
 
@@ -209,7 +195,6 @@ namespace LazinatorTests.Tests
         {
             ContainerForExampleStructWithoutClass c = new ContainerForExampleStructWithoutClass()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 }
             };
 
@@ -267,7 +252,6 @@ namespace LazinatorTests.Tests
             MemoryInBuffer serialized = s.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
             ExampleStruct s2 = new ExampleStruct()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = serialized
             };
             s2.MyBool.Should().BeTrue();
@@ -291,7 +275,6 @@ namespace LazinatorTests.Tests
 
             ExampleStruct s3 = new ExampleStruct()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = serialized
             };
             s3.IsDirty.Should().Be(false);
@@ -304,14 +287,12 @@ namespace LazinatorTests.Tests
             var s3Serialized = s3.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true);
             ExampleStruct s3b = new ExampleStruct()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = s3Serialized
             };
             s3b.MyLazinatorList[0].MyChar.Should().Be('y');
 
             ExampleStruct s4 = new ExampleStruct()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = serialized
             };
             s4.IsDirty.Should().Be(false);
@@ -323,7 +304,6 @@ namespace LazinatorTests.Tests
             MemoryInBuffer s4Serialized = s4.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true);
             ExampleStruct s5 = new ExampleStruct()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = s4Serialized
             };
             s5.MyListValues[0].Should().Be(-12345); // confirm proper serialization
@@ -505,7 +485,6 @@ namespace LazinatorTests.Tests
                 return new ExampleStructContainer()
                 {
                     MyListExampleStruct = null,
-                    DeserializationFactory = GetDeserializationFactory()
                 };
             }
 
@@ -528,7 +507,6 @@ namespace LazinatorTests.Tests
                         new WNullableStruct<ExampleStruct>() { AsNullableStruct = new ExampleStruct() { MyChar = 'd' } },
                         new WNullableStruct<ExampleStruct>() { AsNullableStruct = null },
                     },
-                    DeserializationFactory = GetDeserializationFactory()
                 };
                 return returnObj;
             }
@@ -549,7 +527,6 @@ namespace LazinatorTests.Tests
                 return new ExampleStructContainer()
                 {
                     MyListExampleStruct = new List<ExampleStruct>(),
-                    DeserializationFactory = GetDeserializationFactory()
                 };
             }
 
@@ -572,7 +549,6 @@ namespace LazinatorTests.Tests
                         new ExampleStruct() { MyChar = 'd'},
                         new ExampleStruct() { MyChar = 'e'},
                     },
-                    DeserializationFactory = GetDeserializationFactory()
                 };
                 return returnObj;
             }
@@ -594,7 +570,6 @@ namespace LazinatorTests.Tests
                 return new DotNetList_SelfSerialized()
                 {
                     MyListSerialized = null,
-                    DeserializationFactory = GetDeserializationFactory()
                 };
             }
 
@@ -648,7 +623,6 @@ namespace LazinatorTests.Tests
             {
                 return new RegularTuple()
                 {
-                    DeserializationFactory = GetDeserializationFactory(),
                     MyTupleSerialized4 = new Tuple<int, ExampleStruct>(3, new ExampleStruct() { MyChar = '5' })
                 };
             }
@@ -683,7 +657,6 @@ namespace LazinatorTests.Tests
         {
             WNullableStruct<ExampleStruct> w = new WNullableStruct<ExampleStruct>()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 AsNullableStruct = new ExampleStruct()
                 {
                     MyChar = 'q'
@@ -710,7 +683,6 @@ namespace LazinatorTests.Tests
         {
             ExampleStructContainer w = new ExampleStructContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 IntWrapper = 5
             };
             w.IntWrapper = 6;
@@ -723,7 +695,6 @@ namespace LazinatorTests.Tests
             // some of these small wrappers have fixed length. The nullable wrappers (other than nullable bool) don't, because if it's null, then we don't include the rest. This means that we need a length byte. 
             SmallWrappersContainer w = new SmallWrappersContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 WrappedBool = true,
                 WrappedByte = 1,
                 WrappedSByte = -2,
@@ -758,7 +729,6 @@ namespace LazinatorTests.Tests
         {
             SmallWrappersContainer w = new SmallWrappersContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 ListWrappedBytes = new LazinatorList<WByte>()
                 {
                     0, 1, 2, 3, 255
@@ -1300,7 +1270,6 @@ namespace LazinatorTests.Tests
             {
                 return new DotNetHashSet_SelfSerialized()
                 {
-                    DeserializationFactory = GetDeserializationFactory(),
                     MyHashSetSerialized = new HashSet<ExampleChild>()
                     {
                         GetExampleChild(1),
@@ -1335,7 +1304,6 @@ namespace LazinatorTests.Tests
             {
                 return new DotNetList_SelfSerialized()
                 {
-                    DeserializationFactory = GetDeserializationFactory(),
                     MyListSerialized = new List<ExampleChild>()
                     {
                         GetExampleChild(1),
@@ -1386,7 +1354,6 @@ namespace LazinatorTests.Tests
             {
                 return new Dictionary_Values_SelfSerialized()
                 {
-                    DeserializationFactory = GetDeserializationFactory(),
                     MyDictionary = new Dictionary<int, ExampleChild>()
                     {
                         { 100, GetExampleChild(1) },
@@ -1420,7 +1387,6 @@ namespace LazinatorTests.Tests
             {
                 return new Dictionary_Values_SelfSerialized()
                 {
-                    DeserializationFactory = GetDeserializationFactory(),
                     MySortedDictionary = new SortedDictionary<int, ExampleChild>()
                     {
                         { 100, GetExampleChild(1) },
@@ -1455,7 +1421,6 @@ namespace LazinatorTests.Tests
             {
                 return new Dictionary_Values_SelfSerialized()
                 {
-                    DeserializationFactory = GetDeserializationFactory(),
                     MySortedList = new SortedList<int, ExampleChild>()
                     {
                         { 100, GetExampleChild(1) },
@@ -1492,7 +1457,6 @@ namespace LazinatorTests.Tests
                 {
                     return new StructTuple()
                     {
-                        DeserializationFactory = GetDeserializationFactory(),
                         MyValueTupleSerialized = (3, GetExampleChild(secondIndex),
                             GetNonLazinatorType(thirdIndex))
                     };
@@ -1532,7 +1496,6 @@ namespace LazinatorTests.Tests
                 {
                     return new RegularTuple()
                     {
-                        DeserializationFactory = GetDeserializationFactory(),
                         MyTupleSerialized = new Tuple<uint, ExampleChild, NonLazinatorClass>(3, GetExampleChild(secondIndex),
                             GetNonLazinatorType(thirdIndex))
                     };
@@ -1562,7 +1525,6 @@ namespace LazinatorTests.Tests
                 {
                     return new RegularTuple()
                     {
-                        DeserializationFactory = GetDeserializationFactory(),
                         MyTupleSerialized4 = new Tuple<int, ExampleStruct>(2, new ExampleStruct() { MyChar = '1' })
                     };
                 }
@@ -1738,7 +1700,6 @@ namespace LazinatorTests.Tests
         {
             var original = new LazinatorListContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 MyList = new DerivedLazinatorList<ExampleChild>()
                 {
                     new ExampleChild() { MyShort = 22 },
@@ -1785,7 +1746,6 @@ namespace LazinatorTests.Tests
         {
             ContainerWithAbstract1 c = new ContainerWithAbstract1()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 AbstractProperty = new Concrete3() { String1 = "1", String2 = "2", String3 = "3"  }
             };
             var c2 = c.CloneLazinatorTyped();
@@ -1800,7 +1760,6 @@ namespace LazinatorTests.Tests
         {
             ContainerWithAbstract1 c = new ContainerWithAbstract1()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 AbstractProperty = new Concrete3() { Example2 = GetHierarchy(1, 1, 1, 1, 0), Example3 = GetHierarchy(1, 1, 1, 1, 0) }
             };
             var c2 = c.CloneLazinatorTyped();
@@ -1831,7 +1790,6 @@ namespace LazinatorTests.Tests
                 AnotherProperty = "hi",
                 MyT = 5, // now is an int
                 LazinatorExample = GetExample(2),
-                DeserializationFactory = GetDeserializationFactory()
             };
             var cg2a_clone = cg2a.CloneLazinatorTyped();
             cg2a_clone.AnotherProperty.Should().Be("hi");
@@ -1843,7 +1801,6 @@ namespace LazinatorTests.Tests
                 AnotherProperty = "hi",
                 MyT = GetExample(2),
                 LazinatorExample = GetExample(1),
-                DeserializationFactory = GetDeserializationFactory()
             };
             var cg2b_clone = cg2b.CloneLazinatorTyped();
             cg2b_clone.AnotherProperty.Should().Be("hi");
@@ -1856,7 +1813,6 @@ namespace LazinatorTests.Tests
         {
             ConcreteGenericContainer c = new ConcreteGenericContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 Item = new ConcreteGeneric2a()
                 {
                     AnotherProperty = "hi",
@@ -1874,7 +1830,6 @@ namespace LazinatorTests.Tests
         {
             DerivedGenericContainer<WInt> c = new DerivedGenericContainer<WInt>()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 Item = new DerivedGeneric2c<WInt>()
                 {
                     MyT = 5 // now is a wrapped int -- note that Item is defined as being IAbstract<T>
@@ -2116,11 +2071,9 @@ namespace LazinatorTests.Tests
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
             {
-                DeserializationFactory = GetDeserializationFactory()
             };
             LazinatorListContainerGeneric<ExampleChild> genericContainer = new LazinatorListContainerGeneric<ExampleChild>()
             {
-                DeserializationFactory = GetDeserializationFactory()
             };
             LazinatorList<ExampleChild> withoutContainer = null;
             LazinatorList<ExampleChild> GetList()
@@ -2154,7 +2107,6 @@ namespace LazinatorTests.Tests
 
             SetList(new LazinatorList<ExampleChild>()
             {
-                DeserializationFactory = GetDeserializationFactory(),
             });
 
             LazinatorList<ExampleChild> list = new LazinatorList<ExampleChild>();
@@ -2258,7 +2210,6 @@ namespace LazinatorTests.Tests
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
             {
-                DeserializationFactory = GetDeserializationFactory()
             };
             nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
             var clone = nonGenericContainer.CloneLazinatorTyped();
@@ -2276,7 +2227,6 @@ namespace LazinatorTests.Tests
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
             {
-                DeserializationFactory = GetDeserializationFactory()
             };
             nonGenericContainer.MyList = null;
             var clone = nonGenericContainer.CloneLazinatorTyped();
@@ -2304,7 +2254,6 @@ namespace LazinatorTests.Tests
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
             {
-                DeserializationFactory = GetDeserializationFactory()
             };
             nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
             nonGenericContainer.MyList.IsDirty.Should().BeTrue();
@@ -2367,7 +2316,6 @@ namespace LazinatorTests.Tests
         {
             ExampleStructContainer container = new ExampleStructContainer()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 MyExampleStruct = new ExampleStruct()
                 {
                     MyChild1 = GetExampleChild(1)
@@ -2456,7 +2404,6 @@ namespace LazinatorTests.Tests
             LazinatorList<WInt> x = new LazinatorList<WInt>();
             x.Add(wrapped2);
             x.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
-            x.DeserializationFactory = GetDeserializationFactory();
             var clone = x.CloneLazinatorTyped();
             clone.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
         }
@@ -2487,7 +2434,6 @@ namespace LazinatorTests.Tests
         {
             ClassWithSubclass outer = new ClassWithSubclass()
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 IntWithinSuperclass = 5,
                 SubclassInstance1 = new ClassWithSubclass.SubclassWithinClass()
                 {
@@ -2554,7 +2500,6 @@ namespace LazinatorTests.Tests
             var bytes = original.SerializeNewBuffer(includeChildren ? IncludeChildrenMode.IncludeAllChildren : IncludeChildrenMode.ExcludeAllChildren, verifyCleanness);
             var result = new T
             {
-                DeserializationFactory = GetDeserializationFactory(),
                 HierarchyBytes = bytes,
             };
 
@@ -2569,7 +2514,6 @@ namespace LazinatorTests.Tests
             parent.MyChild2 = GetExampleChild(indexUpTo3b);
             parent.MyNonLazinatorChild = GetNonLazinatorType(indexUpTo3c);
             parent.MyInterfaceImplementer = GetExampleInterfaceImplementer(indexUpTo2b);
-            parent.DeserializationFactory = GetDeserializationFactory();
             return parent;
         }
 
@@ -2665,7 +2609,6 @@ namespace LazinatorTests.Tests
                 return true;
             if ((example1 == null) != (example2 == null))
                 return false;
-            example1.DeserializationFactory = example2.DeserializationFactory = GetDeserializationFactory();
             return example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUint == example2.MyUint && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan && ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2) && InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer) && NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
         }
 

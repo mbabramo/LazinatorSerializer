@@ -41,7 +41,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DerivedArray_Values()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -71,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, false, false, null);
-                        _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData, DeserializationFactory, () => { MyArrayInt_DerivedLevel_Dirty = true; });
+                        _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData, () => { MyArrayInt_DerivedLevel_Dirty = true; });
                     }
                     _MyArrayInt_DerivedLevel_Accessed = true;
                 }
@@ -162,7 +161,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static int[] ConvertFromBytes_int_B_b(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[] ConvertFromBytes_int_B_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

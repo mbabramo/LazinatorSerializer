@@ -75,7 +75,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorListContainerGeneric<T>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -147,8 +146,6 @@ namespace LazinatorTests.Examples.Collections
                 MyList.MarkHierarchyClean();
             }
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -228,11 +225,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _MyList = DeserializationFactory.CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
+                        _MyList = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }
@@ -269,7 +262,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

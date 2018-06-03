@@ -78,7 +78,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new SpanAndMemory()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -146,8 +145,6 @@ namespace LazinatorTests.Examples.Collections
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -236,7 +233,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyMemoryInt_ByteIndex, _MyMemoryInt_ByteLength, false, false, null);
-                        _MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData, DeserializationFactory, null);
+                        _MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData, null);
                     }
                     _MyMemoryInt_Accessed = true;
                     IsDirty = true;
@@ -267,7 +264,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNullableMemoryInt_ByteIndex, _MyNullableMemoryInt_ByteLength, false, false, null);
-                        _MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_C63(childData, DeserializationFactory, null);
+                        _MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_C63(childData, null);
                     }
                     _MyNullableMemoryInt_Accessed = true;
                     IsDirty = true;
@@ -491,7 +488,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Memory<int> ConvertFromBytes_Memory_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Memory<int> ConvertFromBytes_Memory_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -524,7 +521,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Memory<int>? ConvertFromBytes_Memory_Gint_g_C63(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Memory<int>? ConvertFromBytes_Memory_Gint_g_C63(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

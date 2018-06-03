@@ -75,7 +75,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DotNetQueue_Values()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -144,8 +143,6 @@ namespace LazinatorTests.Examples.Collections
             _DescendantIsDirty = false;
             _MyQueueInt_Dirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -225,7 +222,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null);
-                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData, DeserializationFactory, () => { MyQueueInt_Dirty = true; });
+                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData, () => { MyQueueInt_Dirty = true; });
                     }
                     _MyQueueInt_Accessed = true;
                 }
@@ -322,7 +319,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Queue<int> ConvertFromBytes_Queue_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Queue<int> ConvertFromBytes_Queue_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

@@ -79,7 +79,6 @@ namespace LazinatorTests.Examples.Subclasses
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ClassWithLocalEnum()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -147,8 +146,6 @@ namespace LazinatorTests.Examples.Subclasses
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -242,7 +239,7 @@ namespace LazinatorTests.Examples.Subclasses
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null);
-                        _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData, DeserializationFactory, null);
+                        _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData, null);
                     }
                     _MyEnumList_Accessed = true;
                     IsDirty = true;
@@ -322,7 +319,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Conversion of supported collections and tuples */
         
-        private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

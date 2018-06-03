@@ -74,7 +74,6 @@ namespace Lazinator.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorTriple<T, U, V>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -142,8 +141,6 @@ namespace Lazinator.Collections
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -232,7 +229,6 @@ namespace Lazinator.Collections
                         }
                         else _Item1 = new T()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
                             LazinatorObjectBytes = childData,
                         };
@@ -271,7 +267,6 @@ namespace Lazinator.Collections
                         }
                         else _Item2 = new U()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
                             LazinatorObjectBytes = childData,
                         };
@@ -310,7 +305,6 @@ namespace Lazinator.Collections
                         }
                         else _Item3 = new V()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
                             LazinatorObjectBytes = childData,
                         };
@@ -346,7 +340,7 @@ namespace Lazinator.Collections
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(106, new Type[] { typeof(T), typeof(U), typeof(V) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(106, new Type[] { typeof(T), typeof(U), typeof(V) });
                 }
                 return _LazinatorGenericID;
             }

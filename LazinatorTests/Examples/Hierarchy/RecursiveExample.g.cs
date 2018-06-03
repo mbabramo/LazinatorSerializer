@@ -78,7 +78,6 @@ namespace LazinatorTests.Examples.Hierarchy
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new RecursiveExample()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -154,8 +153,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 RecursiveInterface.MarkHierarchyClean();
             }
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -237,11 +234,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _RecursiveClass = DeserializationFactory.CreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
+                        _RecursiveClass = DeserializationFactory.GetInstance().CreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
                     }
                     _RecursiveClass_Accessed = true;
                 }
@@ -276,11 +269,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _RecursiveInterface = DeserializationFactory.CreateBasedOnType<IRecursiveExample>(childData, this); 
+                        _RecursiveInterface = DeserializationFactory.GetInstance().CreateBasedOnType<IRecursiveExample>(childData, this); 
                     }
                     _RecursiveInterface_Accessed = true;
                 }

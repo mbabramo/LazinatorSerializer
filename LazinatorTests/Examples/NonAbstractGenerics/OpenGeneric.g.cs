@@ -79,7 +79,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new OpenGeneric<T>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -147,8 +146,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -229,7 +226,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null);
-                        _MyListT = ConvertFromBytes_List_GT_g(childData, DeserializationFactory, null);
+                        _MyListT = ConvertFromBytes_List_GT_g(childData, null);
                     }
                     _MyListT_Accessed = true;
                     IsDirty = true;
@@ -266,7 +263,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                         else _MyT = new T()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorParentClass = this,
                             LazinatorObjectBytes = childData,
                         };
@@ -302,7 +298,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }
@@ -364,7 +360,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Conversion of supported collections and tuples */
         
-        private static List<T> ConvertFromBytes_List_GT_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<T> ConvertFromBytes_List_GT_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -386,11 +382,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    if (deserializationFactory == null)
-                    {
-                        deserializationFactory = DeserializationFactory.GetInstance();
-                    }
-                    var item = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<T>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<T>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

@@ -76,7 +76,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DotNetList_SelfSerialized()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -145,8 +144,6 @@ namespace LazinatorTests.Examples.Collections
             _DescendantIsDirty = false;
             _MyListSerialized_Dirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -226,7 +223,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
-                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData, DeserializationFactory, () => { MyListSerialized_Dirty = true; });
+                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData, () => { MyListSerialized_Dirty = true; });
                     }
                     _MyListSerialized_Accessed = true;
                 }
@@ -323,7 +320,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static List<ExampleChild> ConvertFromBytes_List_GExampleChild_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<ExampleChild> ConvertFromBytes_List_GExampleChild_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -345,11 +342,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    if (deserializationFactory == null)
-                    {
-                        deserializationFactory = DeserializationFactory.GetInstance();
-                    }
-                    var item = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

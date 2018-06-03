@@ -62,7 +62,6 @@ namespace Lazinator.Collections
             MemoryInBuffer bytes = SerializeNewBuffer(includeChildrenMode, false);
             var clone = new LazinatorList<T>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -122,8 +121,6 @@ namespace Lazinator.Collections
                 }
             }
         }
-
-        public DeserializationFactory DeserializationFactory { get; set; }
 
         private MemoryInBuffer _HierarchyBytes;
         public MemoryInBuffer HierarchyBytes
@@ -199,7 +196,6 @@ namespace Lazinator.Collections
                     ReadOnlyMemory<byte> childData = LocalGetChildSlice(_Offsets_ByteIndex, _Offsets_ByteLength);
                     _Offsets = new LazinatorOffsetList()
                     {
-                        DeserializationFactory = DeserializationFactory,
                         LazinatorObjectBytes = childData,
                         LazinatorParentClass = this
                     };
@@ -234,7 +230,7 @@ namespace Lazinator.Collections
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType((int)LazinatorCollectionUniqueIDs.LazinatorList, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType((int)LazinatorCollectionUniqueIDs.LazinatorList, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

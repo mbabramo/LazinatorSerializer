@@ -74,7 +74,6 @@ namespace Lazinator.Wrappers
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new WNullableStruct<T>()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -142,8 +141,6 @@ namespace Lazinator.Wrappers
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public MemoryInBuffer HierarchyBytes
@@ -243,7 +240,6 @@ namespace Lazinator.Wrappers
                         }
                         else _NonNullValue = new T()
                         {
-                            DeserializationFactory = DeserializationFactory,
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -278,7 +274,7 @@ namespace Lazinator.Wrappers
             {
                 if (_LazinatorGenericID == null)
                 {
-                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(88, new Type[] { typeof(T) });
+                    _LazinatorGenericID = DeserializationFactory.GetInstance().GetUniqueIDListForGenericType(88, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
             }

@@ -80,7 +80,6 @@ namespace LazinatorTests.Examples.Hierarchy
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ExampleInterfaceContainer()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -152,8 +151,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 ExampleByInterface.MarkHierarchyClean();
             }
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -235,11 +232,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null);
                         
-                        if (DeserializationFactory == null)
-                        {
-                            DeserializationFactory = DeserializationFactory.GetInstance();
-                        }
-                        _ExampleByInterface = DeserializationFactory.CreateBasedOnType<IExample>(childData, this); 
+                        _ExampleByInterface = DeserializationFactory.GetInstance().CreateBasedOnType<IExample>(childData, this); 
                     }
                     _ExampleByInterface_Accessed = true;
                 }
@@ -273,7 +266,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
-                        _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData, DeserializationFactory, null);
+                        _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData, null);
                     }
                     _ExampleListByInterface_Accessed = true;
                     IsDirty = true;
@@ -360,7 +353,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Conversion of supported collections and tuples */
         
-        private static List<IExample> ConvertFromBytes_List_GIExample_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<IExample> ConvertFromBytes_List_GIExample_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -382,11 +375,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    if (deserializationFactory == null)
-                    {
-                        deserializationFactory = DeserializationFactory.GetInstance();
-                    }
-                    var item = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.GetInstance().CreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

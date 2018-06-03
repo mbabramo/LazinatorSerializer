@@ -75,7 +75,6 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DotNetList_Values()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -146,8 +145,6 @@ namespace LazinatorTests.Examples.Collections
             _MyListInt_Dirty = false;
             _MySortedSetInt_Dirty = false;
         }
-        
-        public virtual DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
@@ -231,7 +228,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null);
-                        _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData, DeserializationFactory, () => { MyLinkedListInt_Dirty = true; });
+                        _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData, () => { MyLinkedListInt_Dirty = true; });
                     }
                     _MyLinkedListInt_Accessed = true;
                 }
@@ -282,7 +279,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, () => { MyListInt_Dirty = true; });
+                        _MyListInt = ConvertFromBytes_List_Gint_g(childData, () => { MyListInt_Dirty = true; });
                     }
                     _MyListInt_Accessed = true;
                 }
@@ -333,7 +330,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null);
-                        _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData, DeserializationFactory, () => { MySortedSetInt_Dirty = true; });
+                        _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData, () => { MySortedSetInt_Dirty = true; });
                     }
                     _MySortedSetInt_Accessed = true;
                 }
@@ -450,7 +447,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static LinkedList<int> ConvertFromBytes_LinkedList_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static LinkedList<int> ConvertFromBytes_LinkedList_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -485,7 +482,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
@@ -520,7 +517,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedSet<int> ConvertFromBytes_SortedSet_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static SortedSet<int> ConvertFromBytes_SortedSet_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

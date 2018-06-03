@@ -42,7 +42,6 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new Concrete5()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -102,7 +101,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList4_ByteIndex, _IntList4_ByteLength, false, false, null);
-                        _IntList4 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList4 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList4_Accessed = true;
                     IsDirty = true;
@@ -132,7 +131,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList5_ByteIndex, _IntList5_ByteLength, false, false, null);
-                        _IntList5 = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
+                        _IntList5 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList5_Accessed = true;
                     IsDirty = true;
@@ -218,7 +217,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion of supported collections and tuples */
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {

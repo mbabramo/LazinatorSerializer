@@ -68,7 +68,6 @@ namespace Lazinator.Wrappers
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new WFloatArray()
             {
-                DeserializationFactory = DeserializationFactory,
                 LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
@@ -136,8 +135,6 @@ namespace Lazinator.Wrappers
             _IsDirty = false;
             _DescendantIsDirty = false;
         }
-        
-        public DeserializationFactory DeserializationFactory { get; set; }
         
         private MemoryInBuffer _HierarchyBytes;
         public MemoryInBuffer HierarchyBytes
@@ -216,7 +213,7 @@ namespace Lazinator.Wrappers
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
-                        _WrappedValue = ConvertFromBytes_float_B_b(childData, DeserializationFactory, null);
+                        _WrappedValue = ConvertFromBytes_float_B_b(childData, null);
                     }
                     _WrappedValue_Accessed = true;
                     IsDirty = true;
@@ -299,7 +296,7 @@ namespace Lazinator.Wrappers
         
         /* Conversion of supported collections and tuples */
         
-        private static float[] ConvertFromBytes_float_B_b(ReadOnlyMemory<byte> storage, DeserializationFactory deserializationFactory, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static float[] ConvertFromBytes_float_B_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
             if (storage.Length == 0)
             {
