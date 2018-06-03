@@ -429,6 +429,8 @@ namespace Lazinator.Collections.Avl
         
         public int LazinatorUniqueID => 93;
         
+        public System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(93, new Type[] { typeof(TKey), typeof(TValue) });
+        
         public int LazinatorObjectVersion { get; set; } = 0;
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

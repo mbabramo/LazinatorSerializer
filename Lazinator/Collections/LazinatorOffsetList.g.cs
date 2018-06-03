@@ -318,6 +318,8 @@ namespace Lazinator.Collections
         
         public int LazinatorUniqueID => 50;
         
+        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        
         public int LazinatorObjectVersion { get; set; } = 0;
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

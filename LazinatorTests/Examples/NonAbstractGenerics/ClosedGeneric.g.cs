@@ -151,6 +151,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override int LazinatorUniqueID => 250;
         
+        public override System.Collections.Generic.List<int> LazinatorGenericID => null;
+        
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

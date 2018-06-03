@@ -86,6 +86,7 @@ namespace Lazinator.Wrappers
             set;
         }
         public abstract int LazinatorUniqueID { get; }
+        public abstract System.Collections.Generic.List<int> LazinatorGenericID { get; }
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);

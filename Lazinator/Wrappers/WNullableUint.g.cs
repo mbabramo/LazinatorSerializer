@@ -221,6 +221,8 @@ namespace Lazinator.Wrappers
         
         public int LazinatorUniqueID => 71;
         
+        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        
         public int LazinatorObjectVersion
         {
             get => -1;

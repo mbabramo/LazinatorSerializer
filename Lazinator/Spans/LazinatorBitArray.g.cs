@@ -294,6 +294,8 @@ namespace Lazinator.Spans
         
         public int LazinatorUniqueID => 91;
         
+        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        
         public int LazinatorObjectVersion { get; set; } = 0;
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

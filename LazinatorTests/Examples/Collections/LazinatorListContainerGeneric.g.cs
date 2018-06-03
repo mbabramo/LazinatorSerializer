@@ -261,6 +261,8 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int LazinatorUniqueID => 223;
         
+        public virtual System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
+        
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)

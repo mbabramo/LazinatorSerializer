@@ -279,6 +279,8 @@ namespace LazinatorTests.Examples
         
         public int LazinatorUniqueID => 218;
         
+        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        
         private bool _LazinatorObjectVersionChanged;
         private int _LazinatorObjectVersionOverride;
         public int LazinatorObjectVersion

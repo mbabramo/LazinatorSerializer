@@ -248,6 +248,8 @@ namespace LazinatorTests.Examples
         
         public virtual int LazinatorUniqueID => 231;
         
+        public virtual System.Collections.Generic.List<int> LazinatorGenericID => null;
+        
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
