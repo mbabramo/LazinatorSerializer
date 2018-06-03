@@ -1449,9 +1449,16 @@ namespace Lazinator.CodeDescription
             }
             else // Lazinator type
             {
+                string lengthCollectionMemberString = null;
+                if (IsGuaranteedFixedLength)
+                    lengthCollectionMemberString = $"int lengthCollectionMember = {FixedLength};";
+                else if (IsGuaranteedSmall)
+                    lengthCollectionMemberString = "int lengthCollectionMember = span.ToByte(ref bytesSoFar);";
+                else
+                    lengthCollectionMemberString = "int lengthCollectionMember = span.ToInt32(ref bytesSoFar);";
                 if (Nullable)
                     return ($@"
-                        int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                        {lengthCollectionMemberString}
                         if (lengthCollectionMember == 0)
                         {{
                             {collectionAddNull}
@@ -1470,7 +1477,7 @@ namespace Lazinator.CodeDescription
                 else
                     return (
                         $@"
-                        int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                        {lengthCollectionMemberString}
                         ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                         var item = new {AppropriatelyQualifiedTypeName}()
                         {{

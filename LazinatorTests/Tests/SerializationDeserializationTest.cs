@@ -408,6 +408,38 @@ namespace LazinatorTests.Tests
             attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
         }
 
+
+        [Fact]
+        public void LazinatorDotNetListWrappedInts()
+        {
+            DotNetList_Wrapper GetObject(int thirdItem)
+            {
+                return new DotNetList_Wrapper()
+                {
+                    MyListInt = new List<WInt>() { 3, 4, thirdItem }
+                };
+            }
+
+            var original = GetObject(5);
+            var copy = GetObject(5);
+            var copyWithGoal = GetObject(5);
+            copyWithGoal.MyListInt[2] = 6;
+            var result = original.CloneLazinatorTyped();
+            copy.MyListInt.SequenceEqual(result.MyListInt).Should().BeTrue();
+            // make sure that updates are registered when dirty flag is set
+            result.MyListInt[2] = 6;
+            result.MyListInt_Dirty = true;
+            var result2 = result.CloneLazinatorTyped();
+            copyWithGoal.MyListInt.SequenceEqual(result2.MyListInt).Should().BeTrue();
+            // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
+            result2.MyListInt[2] = 7;
+            var result3 = result2.CloneLazinatorTyped();
+            result3.MyListInt[2].Should().Be(6); // the change is ignored, since dirtiness flag wasn't set
+            // make sure that error is thrown if we do verify cleanliness
+            Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
+            attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
+        }
+
         [Fact]
         public void LazinatorDotNetListInt_Null()
         {
@@ -2416,7 +2448,7 @@ namespace LazinatorTests.Tests
             Memory<byte> memory = new Memory<byte>(new byte[length * 10]);
             for (int i = 0; i < 10; i++)
                 e.LazinatorObjectBytes.CopyTo(memory.Slice(length * i));
-            var results = DeserializationFactory.GetInstance().FactoryCreateMultiple(memory).Select(x => (Example) x).Where(x => x != null).ToList();
+            var results = DeserializationFactory.GetInstance().FactoryCreateMultiple(memory, null).Select(x => (Example) x).Where(x => x != null).ToList();
             results.Count().Should().Be(10);
         }
 
