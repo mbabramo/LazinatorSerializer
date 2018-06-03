@@ -45,8 +45,8 @@ namespace LazinatorTests.Examples.Abstract
                 return 0;
             }
             
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-            if (uniqueID != LazinatorUniqueID)
+            LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+            if (LazinatorGenericID[0] != LazinatorUniqueID)
             {
                 throw new FormatException("Wrong self-serialized type initialized.");
             }
@@ -308,7 +308,6 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
-            
             if (includeUniqueID)
             {
                 WriteLazinatorGenericID(writer, LazinatorGenericID);

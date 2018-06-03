@@ -44,7 +44,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 return 0;
             }
-
+            
             LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
             if (LazinatorGenericID[0] != LazinatorUniqueID)
             {
@@ -334,7 +334,6 @@ namespace LazinatorTests.Examples.Abstract
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
-            
             if (includeUniqueID)
             {
                 WriteLazinatorGenericID(writer, LazinatorGenericID);
