@@ -45,7 +45,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 return 0;
             }
-            
+
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
             {
@@ -341,7 +341,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             // header information
             if (includeUniqueID)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                var genericID = LazinatorGenericID;
+                writer.Write((byte)genericID.Count);
+                foreach (int g in genericID)
+                    CompressedIntegralTypes.WriteCompressedInt(writer, g);
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);

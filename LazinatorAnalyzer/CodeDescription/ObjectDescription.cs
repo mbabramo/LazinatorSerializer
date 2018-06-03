@@ -665,17 +665,36 @@ namespace Lazinator.CodeDescription
                         {{
                             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);");
             else
+            {
                 sb.AppendLine(
                         $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
                         {{
                             // header information
-                            if (includeUniqueID)
+                        ");
+
+                if (IsGeneric)
+                    sb.AppendLine($@"if (includeUniqueID)
+                            {{
+                                var genericID = LazinatorGenericID;
+                                writer.Write((byte)genericID.Count);
+                                foreach (int g in genericID)
+                                {{
+                                    CompressedIntegralTypes.WriteCompressedInt(writer, g);
+                                }}
+                            }}");
+                else
+                    sb.AppendLine(
+                       $@"if (includeUniqueID)
                             {{
                                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                             }}
-                            {(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                        ");
+
+                sb.AppendLine(
+                        $@"{(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
                         ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
                         ")}{(CanNeverHaveChildren ? "" : $@"writer.Write((byte)includeChildrenMode);")}");
+            }
 
             sb.AppendLine("// write properties");
 
