@@ -294,7 +294,11 @@ namespace Lazinator.Spans
         
         public int LazinatorUniqueID => 91;
         
-        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        public System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get => null;
+            set => throw new NotSupportedException();
+        }
         
         public int LazinatorObjectVersion { get; set; } = 0;
         

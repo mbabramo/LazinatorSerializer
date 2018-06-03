@@ -233,7 +233,12 @@ namespace LazinatorTests.Examples.NonLazinator
         
         public virtual int LazinatorUniqueID => 243;
         
-        public virtual System.Collections.Generic.List<int> LazinatorGenericID => null;
+        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        public virtual System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get => null;
+            set => throw new NotSupportedException();
+        }
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

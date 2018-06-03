@@ -318,7 +318,11 @@ namespace Lazinator.Collections
         
         public int LazinatorUniqueID => 50;
         
-        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        public System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get => null;
+            set => throw new NotSupportedException();
+        }
         
         public int LazinatorObjectVersion { get; set; } = 0;
         

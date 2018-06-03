@@ -226,7 +226,22 @@ namespace Lazinator.Collections
 
         public virtual int LazinatorUniqueID => (int)LazinatorCollectionUniqueIDs.LazinatorList;
 
-        public virtual System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(LazinatorUniqueID, new Type[] { typeof(T) });
+        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        public virtual System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get
+            {
+                if (_LazinatorGenericID == null)
+                {
+                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType((int)LazinatorCollectionUniqueIDs.LazinatorList, new Type[] { typeof(T) });
+                }
+                return _LazinatorGenericID;
+            }
+            set
+            {
+                _LazinatorGenericID = value;
+            }
+        }
 
         public virtual int LazinatorObjectVersion { get; set; } = 0;
 

@@ -270,7 +270,22 @@ namespace Lazinator.Wrappers
         
         public int LazinatorUniqueID => 88;
         
-        public System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(88, new Type[] { typeof(T) });
+        System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        public System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get
+            {
+                if (_LazinatorGenericID == null)
+                {
+                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(88, new Type[] { typeof(T) });
+                }
+                return _LazinatorGenericID;
+            }
+            set
+            {
+                _LazinatorGenericID = value;
+            }
+        }
         
         public int LazinatorObjectVersion
         {

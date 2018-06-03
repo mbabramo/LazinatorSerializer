@@ -221,7 +221,11 @@ namespace Lazinator.Wrappers
         
         public int LazinatorUniqueID => 61;
         
-        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        public System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get => null;
+            set => throw new NotSupportedException();
+        }
         
         public int LazinatorObjectVersion
         {

@@ -294,7 +294,22 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual int LazinatorUniqueID => 233;
         
-        public virtual System.Collections.Generic.List<int> LazinatorGenericID => DeserializationFactory.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
+        protected System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        public virtual System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get
+            {
+                if (_LazinatorGenericID == null)
+                {
+                    _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
+                }
+                return _LazinatorGenericID;
+            }
+            set
+            {
+                _LazinatorGenericID = value;
+            }
+        }
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

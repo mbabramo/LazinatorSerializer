@@ -117,7 +117,11 @@ namespace LazinatorTests.Examples.Collections
         
         public override int LazinatorUniqueID => 261;
         
-        public override System.Collections.Generic.List<int> LazinatorGenericID => null;
+        public override System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get => null;
+            set => throw new NotSupportedException();
+        }
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         

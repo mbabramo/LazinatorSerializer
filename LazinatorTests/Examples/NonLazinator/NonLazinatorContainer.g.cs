@@ -314,7 +314,11 @@ namespace LazinatorTests.Examples
         
         public int LazinatorUniqueID => 232;
         
-        public System.Collections.Generic.List<int> LazinatorGenericID => null;
+        public System.Collections.Generic.List<int> LazinatorGenericID
+        {
+            get => null;
+            set => throw new NotSupportedException();
+        }
         
         private bool _LazinatorObjectVersionChanged;
         private int _LazinatorObjectVersionOverride;

@@ -104,8 +104,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Conversion */
         
         public override int LazinatorUniqueID => 267;
-
-        private System.Collections.Generic.List<int> _LazinatorGenericID;
+        
         public override System.Collections.Generic.List<int> LazinatorGenericID
         {
             get
@@ -115,6 +114,10 @@ namespace LazinatorTests.Examples.Abstract
                     _LazinatorGenericID = DeserializationFactory.GetUniqueIDListForGenericType(267, new Type[] { typeof(T) });
                 }
                 return _LazinatorGenericID;
+            }
+            set
+            {
+                _LazinatorGenericID = value;
             }
         }
         
