@@ -242,7 +242,7 @@ namespace Lazinator.Collections.AvlTree
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -315,7 +315,7 @@ namespace Lazinator.Collections.AvlTree
             CompressedIntegralTypes.WriteCompressedInt(writer, _NumItemsAdded);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength/*, false*/, false, null), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

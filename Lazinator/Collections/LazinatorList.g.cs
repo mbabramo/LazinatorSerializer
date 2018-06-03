@@ -18,7 +18,7 @@ namespace Lazinator.Collections
 
         public ILazinator LazinatorParentClass { get; set; }
 
-        public ReadOnlyMemory<byte> GetChildSlice(int byteOffset, int byteLength)
+        public ReadOnlyMemory<byte> LocalGetChildSlice(int byteOffset, int byteLength)
         {
             if (byteLength <= sizeof(int))
                 return new ReadOnlyMemory<byte>();
@@ -196,7 +196,7 @@ namespace Lazinator.Collections
             {
                 if (!_Offsets_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(_Offsets_ByteIndex, _Offsets_ByteLength);
+                    ReadOnlyMemory<byte> childData = LocalGetChildSlice(_Offsets_ByteIndex, _Offsets_ByteLength);
                     _Offsets = new LazinatorOffsetList()
                     {
                         DeserializationFactory = DeserializationFactory,

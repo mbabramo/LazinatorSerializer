@@ -213,7 +213,7 @@ namespace Lazinator.Collections
             {
                 if (!_ReadOnlyBytes_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, null);
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, false, null);
                     _ReadOnlyBytes = childData;
                     _ReadOnlyBytes_Accessed = true;
                 }
@@ -277,7 +277,7 @@ namespace Lazinator.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed,
             isAccessed: _ReadOnlyBytes_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnlyBytes,

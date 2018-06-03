@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
                         _MyExampleStruct = new ExampleStruct()
                         {
                             DeserializationFactory = DeserializationFactory,
@@ -258,7 +258,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
                         return new ExampleStruct()
                         {
                             DeserializationFactory = DeserializationFactory,
@@ -328,7 +328,7 @@ namespace LazinatorTests.Examples
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyExampleStruct_ByteIndex;
                 var byteLengthCopy = _MyExampleStruct_ByteLength;
-                WriteChildWithLength(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy/*, false*/, false, null), verifyCleanness, false, false, null);
+                WriteChildWithLength(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
             }
         }
         

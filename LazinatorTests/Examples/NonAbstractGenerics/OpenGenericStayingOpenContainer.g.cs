@@ -230,7 +230,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength, false, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -301,7 +301,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _ClosedGeneric, includeChildrenMode, _ClosedGeneric_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength/*, false*/, false, null), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _ClosedGeneric, includeChildrenMode, _ClosedGeneric_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

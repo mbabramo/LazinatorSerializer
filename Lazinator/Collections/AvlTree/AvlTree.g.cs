@@ -225,7 +225,7 @@ namespace Lazinator.Collections.Avl
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength, false, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -296,7 +296,7 @@ namespace Lazinator.Collections.Avl
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength/*, false*/, false, null), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

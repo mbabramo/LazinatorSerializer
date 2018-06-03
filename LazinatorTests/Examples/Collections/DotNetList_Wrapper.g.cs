@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
                         _MyListInt = ConvertFromBytes_List_GWInt_g(childData, DeserializationFactory, () => { MyListInt_Dirty = true; });
                     }
                     _MyListInt_Accessed = true;
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
                         _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData, DeserializationFactory, null);
                     }
                     _MyListNullableByte_Accessed = true;
@@ -314,7 +314,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
                         _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData, DeserializationFactory, null);
                     }
                     _MyListNullableInt_Accessed = true;
@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
             isAccessed: _MyListInt_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength/*, false*/, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GWInt_g(w, MyListInt,
@@ -387,7 +387,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableByte, isBelievedDirty: _MyListNullableByte_Accessed,
             isAccessed: _MyListNullableByte_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength/*, false*/, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GWNullableByte_g(w, MyListNullableByte,
@@ -395,7 +395,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableInt, isBelievedDirty: _MyListNullableInt_Accessed,
             isAccessed: _MyListNullableInt_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength/*, false*/, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GWNullableInt_g(w, MyListNullableInt,

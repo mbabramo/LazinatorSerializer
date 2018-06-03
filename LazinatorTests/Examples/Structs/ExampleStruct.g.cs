@@ -274,7 +274,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -313,7 +313,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -353,7 +353,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
                         _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData, DeserializationFactory, null);
                     }
                     _MyLazinatorList_Accessed = true;
@@ -403,7 +403,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListValues_ByteIndex, _MyListValues_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
                         _MyListValues = ConvertFromBytes_List_Gint_g(childData, DeserializationFactory, null);
                     }
                     _MyListValues_Accessed = true;
@@ -434,7 +434,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTuple_ByteIndex, _MyTuple_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
                         _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData, DeserializationFactory, null);
                     }
                     _MyTuple_Accessed = true;
@@ -525,14 +525,14 @@ namespace LazinatorTests.Examples
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyChild1_ByteIndex;
                 var byteLengthCopy = _MyChild1_ByteLength;
-                WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy/*, false*/, false, null), verifyCleanness, false, false, null);
+                WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyChild2_ByteIndex;
                 var byteLengthCopy = _MyChild2_ByteLength;
-                WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy/*, false*/, false, null), verifyCleanness, false, false, null);
+                WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
             }
             var serializedBytesCopy_MyLazinatorList = LazinatorObjectBytes;
             var byteIndexCopy_MyLazinatorList = _MyLazinatorList_ByteIndex;
@@ -541,7 +541,7 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLazinatorList, isBelievedDirty: MyLazinatorList_Dirty,
             isAccessed: _MyLazinatorList_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList/*, false*/, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExample_g(w, copy_MyLazinatorList, includeChildrenMode, v));
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListValues, isBelievedDirty: _MyListValues_Accessed,
             isAccessed: _MyListValues_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues/*, false*/, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, copy_MyListValues, includeChildrenMode, v));
@@ -563,7 +563,7 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTuple, isBelievedDirty: _MyTuple_Accessed,
             isAccessed: _MyTuple_Accessed, writer: writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple/*, false*/, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(w, copy_MyTuple, includeChildrenMode, v));

@@ -227,7 +227,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength/*, false*/, false, null);
+                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
                         
                         if (DeserializationFactory == null)
                         {
@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _MyList, includeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength/*, false*/, false, null), verifyCleanness, false, false, this);
+                WriteChildWithLength(writer, _MyList, includeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

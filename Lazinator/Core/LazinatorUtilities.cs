@@ -301,12 +301,14 @@ namespace Lazinator.Core
         /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool lengthInSingleByte, int? fixedLength)
+        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
         {
             if (byteLength == 0)
             {
                 return new ReadOnlyMemory<byte>();
             }
+            if (omitLength) // length is omitted because the child takes up the full slice
+                return serializedBytes.Slice(byteOffset, byteLength);
             if (fixedLength != null)
                 return serializedBytes.Slice(byteOffset, (int) fixedLength);
             if (lengthInSingleByte)
