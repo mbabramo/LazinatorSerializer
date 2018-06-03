@@ -33,7 +33,7 @@ namespace Lazinator.CodeDescription
         internal bool IsLast { get; set; }
         private bool OmitLength => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
         private string ChildSliceString => $"GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
-        private string ChildSliceEndString => $"/*, {(OmitLength ? "true" : "false")}*/, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
+        private string ChildSliceEndString => $", {(OmitLength ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
 
         /* Property type */
         internal LazinatorPropertyType PropertyType { get; set; }
