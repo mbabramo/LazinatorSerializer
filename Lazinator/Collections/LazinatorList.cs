@@ -81,7 +81,7 @@ namespace Lazinator.Collections
         int? typeUniqueID;
         private bool SerializationSkipsUniqueIDs()
         {
-            // DEBUG: (1) Move this to DeserializationFactory during initial checks. If it's not found here, then we can assume that it doesn't skip. (2) Then combine above FactoryCreate calls to make one that works by Type. (3) Make clear that the FactoryCreate from byteSpan works by looking at the UniqueID and thus won't work with a struct / sealed class.
+            // DEBUG: (1) Move this to DeserializationFactory during initial checks. If it's not found here, then we can assume that it doesn't skip. (2) Then combine above FactoryCreate calls to make one that works by Type. But also make sure that it throws an Exception if Type is an interface (e.g., ILazinator) rather than a concrete Lazinator type. (3) Make clear that the FactoryCreate from byteSpan works by looking at the UniqueID and thus won't work with a struct / sealed class. 
             // Explanation: Most Lazinator objects include UniqueIDs, but some skip them. Usually, we know what we're dealing with, because we are serializing a property of a particular type. If the type is sealed or a struct, we just create the object directly, and then call its deserialization routines; otherwise, we call the factory, and we can be sure that there is a unique ID. But here, we seek to be able to deserialize any type, regardless of whether it includes a UniqueID.
             if (_SerializationSkipsUniqueIDs == null)
             { 

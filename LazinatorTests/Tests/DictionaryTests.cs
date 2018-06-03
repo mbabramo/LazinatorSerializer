@@ -86,6 +86,7 @@ namespace LazinatorTests.Tests
             {
                 d.Remove(i);
                 // DEBUG d.Count().Should().Be(25 - (int)i);
+                //DEBUG -- it looks like the hash of 0 is not being found. Maybe because it's the default and is being treated as null? 
             }
             d.Count().Should().Be(0);
         }
