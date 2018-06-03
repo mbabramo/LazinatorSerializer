@@ -69,6 +69,8 @@
         SmallWrappersContainer,
         DotNetList_Wrapper,
         DerivedGeneric2c,
-        DerivedGenericContainer
+        DerivedGenericContainer,
+        Base,
+        GenericFromBase
     }
 }

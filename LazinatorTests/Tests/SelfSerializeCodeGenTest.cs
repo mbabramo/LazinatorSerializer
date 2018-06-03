@@ -224,6 +224,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(Abstract4), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(Concrete5), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(Concrete6), "LazinatorTests", "/Examples/", "Abstract/", ws);
+            await CompleteGenerateCode(typeof(Base), "LazinatorTests", "/Examples/", "Abstract/", ws);
+            await CompleteGenerateCode(typeof(GenericFromBase<>), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(AbstractGeneric1<>), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ConcreteGeneric2b), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ConcreteGeneric2a), "LazinatorTests", "/Examples/", "Abstract/", ws);
