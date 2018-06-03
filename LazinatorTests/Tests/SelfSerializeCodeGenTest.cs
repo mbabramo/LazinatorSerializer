@@ -228,6 +228,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ConcreteGeneric2b), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ConcreteGeneric2a), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(UnformedGeneric2c<>), "LazinatorTests", "/Examples/", "Abstract/", ws);
+            await CompleteGenerateCode(typeof(UnformedGenericContainer<>), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(AbstractGenericContainer<>), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ConcreteGenericContainer), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(DerivedLazinatorList<>), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);

@@ -68,6 +68,7 @@
         DerivedArray_Values,
         SmallWrappersContainer,
         DotNetList_Wrapper,
-        UnformedGeneric2c
+        UnformedGeneric2c,
+        UnformedGenericContainer
     }
 }

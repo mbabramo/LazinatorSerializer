@@ -1870,6 +1870,22 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ConcreteGenericContainerWithUnformedGeneric()
+        {
+            UnformedGenericContainer<WInt> c = new UnformedGenericContainer<WInt>()
+            {
+                DeserializationFactory = GetDeserializationFactory(),
+                Item = new UnformedGeneric2c<WInt>()
+                {
+                    MyT = 5 // now is a wrapped int -- note that Item is defined as being IAbstract<T>
+                },
+            };
+            var c2 = c.CloneLazinatorTyped();
+            var item = c2.Item;
+            ((UnformedGeneric2c<WInt>)item).MyT.WrappedValue.Should().Be(5);
+        }
+
+        [Fact]
         public void DirtinessSetsCorrectly()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
