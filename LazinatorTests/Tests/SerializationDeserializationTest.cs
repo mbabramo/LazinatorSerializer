@@ -1870,19 +1870,19 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void ConcreteGenericContainerWithUnformedGeneric()
+        public void ConcreteGenericContainerWithDerivedGeneric()
         {
-            UnformedGenericContainer<WInt> c = new UnformedGenericContainer<WInt>()
+            DerivedGenericContainer<WInt> c = new DerivedGenericContainer<WInt>()
             {
                 DeserializationFactory = GetDeserializationFactory(),
-                Item = new UnformedGeneric2c<WInt>()
+                Item = new DerivedGeneric2c<WInt>()
                 {
                     MyT = 5 // now is a wrapped int -- note that Item is defined as being IAbstract<T>
                 },
             };
             var c2 = c.CloneLazinatorTyped();
             var item = c2.Item;
-            ((UnformedGeneric2c<WInt>)item).MyT.WrappedValue.Should().Be(5);
+            ((DerivedGeneric2c<WInt>)item).MyT.WrappedValue.Should().Be(5);
         }
 
         [Fact]
