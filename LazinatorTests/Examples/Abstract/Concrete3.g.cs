@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Example2 = DeserializationFactory.FactoryCreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _Example2 = DeserializationFactory.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _Example2_Accessed = true;
                 }
@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Example3 = DeserializationFactory.FactoryCreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _Example3 = DeserializationFactory.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _Example3_Accessed = true;
                 }

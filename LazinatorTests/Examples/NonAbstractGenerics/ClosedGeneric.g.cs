@@ -122,7 +122,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyT = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _MyT = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _MyT_Accessed = true;
                 }
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = deserializationFactory.FactoryCreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                    var item = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

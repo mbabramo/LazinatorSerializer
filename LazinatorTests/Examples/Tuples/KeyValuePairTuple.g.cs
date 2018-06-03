@@ -314,7 +314,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     deserializationFactory = DeserializationFactory.GetInstance();
                 }
-                item2 = deserializationFactory.FactoryCreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                item2 = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
             }
             bytesSoFar += lengthCollectionMember_item2;
             

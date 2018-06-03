@@ -288,7 +288,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyWrapperContainer = DeserializationFactory.FactoryCreateBaseOrDerivedType(248, () => new WrapperContainer(), childData, this); 
+                        _MyWrapperContainer = DeserializationFactory.CreateBaseOrDerivedType(248, () => new WrapperContainer(), childData, this); 
                     }
                     _MyWrapperContainer_Accessed = true;
                 }

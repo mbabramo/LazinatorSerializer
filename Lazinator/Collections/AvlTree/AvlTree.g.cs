@@ -231,7 +231,7 @@ namespace Lazinator.Collections.Avl
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Root = DeserializationFactory.FactoryCreateBaseOrDerivedType(93, () => new AvlNode<TKey, TValue>(), childData, this); 
+                        _Root = DeserializationFactory.CreateBaseOrDerivedType(93, () => new AvlNode<TKey, TValue>(), childData, this); 
                     }
                     _Root_Accessed = true;
                 }

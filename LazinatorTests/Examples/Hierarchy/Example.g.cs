@@ -457,7 +457,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _ExcludableChild = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _ExcludableChild = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _ExcludableChild_Accessed = true;
                 }
@@ -496,7 +496,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _IncludableChild = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _IncludableChild = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _IncludableChild_Accessed = true;
                 }
@@ -535,7 +535,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyChild1 = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _MyChild1 = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _MyChild1_Accessed = true;
                 }
@@ -574,7 +574,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyChild2 = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _MyChild2 = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _MyChild2_Accessed = true;
                 }
@@ -613,7 +613,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyChild2Previous = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _MyChild2Previous = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _MyChild2Previous_Accessed = true;
                 }
@@ -652,7 +652,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyInterfaceImplementer = DeserializationFactory.FactoryCreateBasedOnType<IExampleNonexclusiveInterface>(childData, this); 
+                        _MyInterfaceImplementer = DeserializationFactory.CreateBasedOnType<IExampleNonexclusiveInterface>(childData, this); 
                     }
                     _MyInterfaceImplementer_Accessed = true;
                 }

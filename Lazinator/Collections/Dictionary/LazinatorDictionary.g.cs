@@ -247,7 +247,7 @@ namespace Lazinator.Collections.Dictionary
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _Buckets = DeserializationFactory.FactoryCreateBaseOrDerivedType(51, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
+                        _Buckets = DeserializationFactory.CreateBaseOrDerivedType(51, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
                     }
                     _Buckets_Accessed = true;
                 }

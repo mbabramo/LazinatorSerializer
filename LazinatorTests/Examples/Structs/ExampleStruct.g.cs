@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyChild1 = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
+                        _MyChild1 = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
                     }
                     _MyChild1_Accessed = true;
                 }
@@ -319,7 +319,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyChild2 = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
+                        _MyChild2 = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
                     }
                     _MyChild2_Accessed = true;
                 }
@@ -597,7 +597,7 @@ namespace LazinatorTests.Examples
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = deserializationFactory.FactoryCreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
+                    var item = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<Example>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

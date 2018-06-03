@@ -239,7 +239,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _ExampleByInterface = DeserializationFactory.FactoryCreateBasedOnType<IExample>(childData, this); 
+                        _ExampleByInterface = DeserializationFactory.CreateBasedOnType<IExample>(childData, this); 
                     }
                     _ExampleByInterface_Accessed = true;
                 }
@@ -377,7 +377,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         deserializationFactory = DeserializationFactory.GetInstance();
                     }
-                    var item = deserializationFactory.FactoryCreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
+                    var item = deserializationFactory.CreateBasedOnTypeSpecifyingDelegate<IExample>(childData, informParentOfDirtinessDelegate);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;

@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _ItemU = DeserializationFactory.FactoryCreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                        _ItemU = DeserializationFactory.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
                     }
                     _ItemU_Accessed = true;
                 }

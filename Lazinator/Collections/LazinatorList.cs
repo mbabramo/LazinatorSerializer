@@ -69,7 +69,7 @@ namespace Lazinator.Collections
             if (DeserializationFactory == null)
                 DeserializationFactory = DeserializationFactory.GetInstance();
             // We must use the type information, because the type may be one that does not store unique IDs in storage. Note that the type for a LazinatorList cannot be an interface (such as ILazinator itself or a Lazinator interface), or a runtime error will occur.
-            T n2 = DeserializationFactory.FactoryCreateBasedOnType<T>(byteSpan, this);
+            T n2 = DeserializationFactory.CreateBasedOnType<T>(byteSpan, this);
             return n2;
         }
 

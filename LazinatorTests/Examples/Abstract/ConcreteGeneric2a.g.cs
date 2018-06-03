@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Abstract
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _LazinatorExample = DeserializationFactory.FactoryCreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _LazinatorExample = DeserializationFactory.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
                     }
                     _LazinatorExample_Accessed = true;
                 }

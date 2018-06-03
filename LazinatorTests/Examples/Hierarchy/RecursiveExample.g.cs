@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _RecursiveClass = DeserializationFactory.FactoryCreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
+                        _RecursiveClass = DeserializationFactory.CreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
                     }
                     _RecursiveClass_Accessed = true;
                 }
@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _RecursiveInterface = DeserializationFactory.FactoryCreateBasedOnType<IRecursiveExample>(childData, this); 
+                        _RecursiveInterface = DeserializationFactory.CreateBasedOnType<IRecursiveExample>(childData, this); 
                     }
                     _RecursiveInterface_Accessed = true;
                 }

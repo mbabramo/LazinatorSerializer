@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Collections
                         {
                             DeserializationFactory = DeserializationFactory.GetInstance();
                         }
-                        _MyList = DeserializationFactory.FactoryCreateBaseOrDerivedType(51, () => new LazinatorList<ExampleChild>(), childData, this); 
+                        _MyList = DeserializationFactory.CreateBaseOrDerivedType(51, () => new LazinatorList<ExampleChild>(), childData, this); 
                     }
                     _MyList_Accessed = true;
                 }
