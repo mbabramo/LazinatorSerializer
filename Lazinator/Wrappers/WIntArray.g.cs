@@ -275,7 +275,7 @@ namespace Lazinator.Wrappers
             // header information
             if (includeUniqueID)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                WriteLazinatorGenericID(writer, LazinatorGenericID);
             }
             
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);

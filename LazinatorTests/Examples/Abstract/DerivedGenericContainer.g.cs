@@ -303,7 +303,14 @@ namespace LazinatorTests.Examples.Abstract
             // header information
             if (includeUniqueID)
             {
-                WriteLazinatorGenericID(writer, LazinatorGenericID);
+                if (LazinatorGenericID == null)
+                {
+                    CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                }
+                else
+                {
+                    WriteLazinatorGenericID(writer, LazinatorGenericID);
+                }
             }
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);

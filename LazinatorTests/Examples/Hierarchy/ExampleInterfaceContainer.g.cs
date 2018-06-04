@@ -330,9 +330,15 @@ namespace LazinatorTests.Examples.Hierarchy
             // header information
             if (includeUniqueID)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                if (LazinatorGenericID == null)
+                {
+                    CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                }
+                else
+                {
+                    WriteLazinatorGenericID(writer, LazinatorGenericID);
+                }
             }
-            
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
