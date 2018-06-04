@@ -8,6 +8,7 @@
         Array,
         Dictionary,
         ReadOnlySpan,
+        ReadOnlyMemory,
         Queue,
         Stack,
         SortedDictionary,

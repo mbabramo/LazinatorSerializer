@@ -605,6 +605,10 @@ namespace Lazinator.CodeDescription
                     SupportedCollectionType = LazinatorSupportedCollectionType.ReadOnlySpan;
                     PropertyType = LazinatorPropertyType.SupportedCollection;
                     break;
+                case "ReadOnlyMemory":
+                    SupportedCollectionType = LazinatorSupportedCollectionType.ReadOnlyMemory;
+                    PropertyType = LazinatorPropertyType.SupportedCollection;
+                    break;
                 case "HashSet":
                     SupportedCollectionType = LazinatorSupportedCollectionType.HashSet;
                     PropertyType = LazinatorPropertyType.SupportedCollection;
@@ -629,13 +633,13 @@ namespace Lazinator.CodeDescription
         static INamedTypeSymbol keyValuePairType = null;
         private void SetSupportedCollectionTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
-            if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan)
+            if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory)
                 Nullable = true;
 
             InnerProperties = t.TypeArguments
                 .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
 
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
                 if (InnerProperties[0].Nullable)
                     throw new LazinatorCodeGenException("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
 
@@ -727,6 +731,12 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
                 AppendReadOnlySpanProperty(sb);
+                return;
+            }
+
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
+            {
+                AppendReadOnlyMemoryProperty(sb);
                 return;
             }
 
@@ -853,13 +863,18 @@ namespace Lazinator.CodeDescription
             return creation;
         }
 
-        private void AppendReadOnlySpanProperty(CodeStringBuilder sb)
+        private void AppendReadOnlyMemoryProperty(CodeStringBuilder sb) => AppendReadOnlySpanOrMemoryProperty(sb, false);
+
+        private void AppendReadOnlySpanProperty(CodeStringBuilder sb) => AppendReadOnlySpanOrMemoryProperty(sb, true);
+
+        private void AppendReadOnlySpanOrMemoryProperty(CodeStringBuilder sb, bool isSpan)
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string castToSpanOfCorrectType;
+            string spanAccessor = isSpan ? ".Span" : "";
             if (innerFullType == "byte")
-                castToSpanOfCorrectType = $"_{PropertyName}.Span";
-            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}.Span)";
+                castToSpanOfCorrectType = $"_{PropertyName}{spanAccessor}";
+            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}{spanAccessor})";
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{
@@ -1040,7 +1055,7 @@ namespace Lazinator.CodeDescription
                 else
                 { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
                     string binaryWriterAction;
-                    if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                    if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
                         binaryWriterAction = $"copy_Value.Write(w)";
                     else
                         binaryWriterAction = $"{DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v)";
@@ -1048,7 +1063,7 @@ namespace Lazinator.CodeDescription
                         $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
                         var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
-                        var copy_{PropertyName} = {(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? "_" : "")}{PropertyName};
+                        var copy_{PropertyName} = {(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "_" : "")}{PropertyName};
                         WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
                         isAccessed: _{PropertyName}_Accessed, writer: writer,
@@ -1079,6 +1094,11 @@ namespace Lazinator.CodeDescription
                 AppendReadOnlySpan_SerializeExistingBuffer(sb);
                 return;
             }
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
+            {
+                AppendReadOnlyMemory_SerializeExistingBuffer(sb);
+                return;
+            }
 
             AppendSupportedCollection_ConvertFromBytes(sb);
             AppendSupportedCollection_SerializeExistingBuffer(sb);
@@ -1086,7 +1106,11 @@ namespace Lazinator.CodeDescription
             RecursivelyAppendConversionMethods(sb, alreadyGenerated);
         }
 
-        private void AppendReadOnlySpan_SerializeExistingBuffer(CodeStringBuilder sb)
+        private void AppendReadOnlySpan_SerializeExistingBuffer(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_SerializeExistingBuffer(sb, true);
+
+        private void AppendReadOnlyMemory_SerializeExistingBuffer(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_SerializeExistingBuffer(sb, false);
+
+        private void AppendReadOnlySpanOrMemory_SerializeExistingBuffer(CodeStringBuilder sb, bool isSpan)
         {
             // this method is used within classes, but not within structs
             if (ContainingObjectDescription.ObjectType != LazinatorObjectType.Class)

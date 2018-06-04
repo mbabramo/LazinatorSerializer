@@ -277,6 +277,36 @@ namespace LazinatorTests.Examples.Collections
         }
         protected bool _MyNullableMemoryInt_Accessed;
         private ReadOnlyMemory<byte> _MyReadOnlySpanByte;
+        public ReadOnlyMemory<byte> MyReadOnlySpanByte_AsReadOnlyMemory
+        {
+            get
+            {
+                var span = MyReadOnlySpanByte; // ensure backing exists
+                return _MyReadOnlySpanByte;
+            }
+        }
+        public ReadOnlyMemory<byte> DEBUG
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_MyReadOnlySpanByte_Accessed)
+                {
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null);
+                    _MyReadOnlySpanByte = childData;
+                    _MyReadOnlySpanByte_Accessed = true;
+                }
+                return _MyReadOnlySpanByte;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+
+                IsDirty = true;
+                _MyReadOnlySpanByte = value;
+                _MyReadOnlySpanByte_Accessed = true;
+            }
+        }
         public ReadOnlySpan<byte> MyReadOnlySpanByte
         {
             [DebuggerStepThrough]
