@@ -1696,7 +1696,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void GenericInheritanceThrows()
+        public void DerivedLazinatorListWorks()
         {
             var original = new LazinatorListContainer()
             {
@@ -1709,16 +1709,14 @@ namespace LazinatorTests.Tests
             var result = original.CloneLazinatorTyped(); // no immediate exception, because we haven't deserialized yet
             LazinatorList<ExampleChild> l = null;
             Action action = () => l = result.MyList;
-            action.Should().Throw<Exception>();
-            //If we can implement this, then we should uncomment the following
-            //var clone = original.CloneTyped();
-            //var derived = clone.MyList as DerivedLazinatorList<ExampleChild>;
-            //derived.Should().NotBeNull();
-            //derived[0].MyShort.Should().Be(22);
-            //var innerDerived = derived[1] as ExampleChildInherited;
-            //innerDerived.Should().NotBeNull();
-            //innerDerived.MyShort.Should().Be(21);
-            //innerDerived.MyInt.Should().Be(23);
+            var clone = original.CloneLazinatorTyped();
+            var derived = clone.MyList as DerivedLazinatorList<ExampleChild>;
+            derived.Should().NotBeNull();
+            derived[0].MyShort.Should().Be(22);
+            var innerDerived = derived[1] as ExampleChildInherited;
+            innerDerived.Should().NotBeNull();
+            innerDerived.MyShort.Should().Be(21);
+            innerDerived.MyInt.Should().Be(23);
         }
 
         [Fact]
@@ -2170,7 +2168,7 @@ namespace LazinatorTests.Tests
                 switch (containerOption)
                 {
                     case ContainerForLazinatorList.NoContainer:
-                        SetList(GetList().CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren));
+                        SetList(GetList().CloneLazinatorTyped());
                         break;
                     case ContainerForLazinatorList.NonGenericContainer:
                         nonGenericContainer = nonGenericContainer.CloneLazinatorTyped();
