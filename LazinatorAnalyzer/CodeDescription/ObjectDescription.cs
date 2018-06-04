@@ -699,7 +699,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine(
                        $@"if (includeUniqueID)
                             {{
-                                WriteLazinatorGenericID(writer, LazinatorGenericID);
+                                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                             }}
                         ");
 
