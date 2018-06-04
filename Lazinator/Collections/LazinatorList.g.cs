@@ -185,6 +185,36 @@ namespace Lazinator.Collections
         internal int _Offsets_ByteIndex;
         internal int _Offsets_ByteLength => LazinatorObjectBytes.Length - _Offsets_ByteIndex;
 
+        public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        {
+           
+        }
+
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        {
+            // header information
+            if (includeUniqueID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+            }
+            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
+            writer.Write((byte)includeChildrenMode);
+
+            if (UnderlyingList == null)
+            {
+                if (SerializedMainList.Length == 0)
+                    writer.Write((uint)0); // indicates empty list
+                else
+                { // Not necessarily null -- nothing has changed, so just write back the bytes (including the byte length, the number of items, the serialized main list, and the offset list, if they exist)
+                    LazinatorObjectBytes.Span.Write(writer);
+                }
+                return;
+            }
+
+            // we need to start with the byte length of the entire list
+
+            // Write the offsets (including size information). Do this regardless of whether there is anything in the list.
+        }
         private LazinatorOffsetList _Offsets;
         public LazinatorOffsetList Offsets
         {
@@ -244,6 +274,11 @@ namespace Lazinator.Collections
 
         public void LazinatorObjectVersionUpgrade(int oldFormatVersion)
         {
+        }
+
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        {
+            throw new NotImplementedException();
         }
     }
 }

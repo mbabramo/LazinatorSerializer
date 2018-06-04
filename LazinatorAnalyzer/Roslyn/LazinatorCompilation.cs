@@ -19,7 +19,7 @@ namespace LazinatorCodeGen.Roslyn
     {
 
         // We must be able to determine whether a type implements various methods, but we want to exclude methods implemented in code behind
-        static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization", "OnDirty" };
+        static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization", "OnDirty", "MarkHierarchyClean", "ConvertFromBytesAfterHeader", "WritePropertiesIntoBuffer" };
 
         public Compilation Compilation;
         public LazinatorConfig Config { get; private set; }
