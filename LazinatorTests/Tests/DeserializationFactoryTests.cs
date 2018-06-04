@@ -18,19 +18,6 @@ namespace LazinatorTests.Tests
 {
     public class DeserializationFactoryTests
     {
-        [Fact]
-        public void CanSetupDeserializationFactoryType()
-        {
-            DeserializationFactory df = new DeserializationFactory(new Type[] { typeof(ExampleChild) }, false);
-            ConfirmDeserializationFactoryWorks(df);
-        }
-
-        [Fact]
-        public void CanSetupDeserializationFactoryTypeFromAnotherType()
-        {
-            DeserializationFactory df = new DeserializationFactory(new Type[] { typeof(Example) }, true);
-            ConfirmDeserializationFactoryWorks(df);
-        }
 
         private static void ConfirmDeserializationFactoryWorks(DeserializationFactory df)
         {

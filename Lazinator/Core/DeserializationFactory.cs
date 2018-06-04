@@ -56,28 +56,6 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Construct a deserialization factory that is aware of all Lazinator types in the same assembly as a specified type.
-        /// </summary>
-        /// <param name="type">A type used to identify an assembly</param>
-        public DeserializationFactory(Type type) : this(new Type[] {type}, true)
-        {
-
-        }
-
-        /// <summary>
-        /// Construct a deserialization factory
-        /// </summary>
-        /// <param name="types">Types the deserialization factory should be aware of</param>
-        /// <param name="loadAllEligibleTypesInCorrespondingAssemblies">Whether the deserialization factory should also consider all other types in the same assemblies as the specified types</param>
-        public DeserializationFactory(Type[] types, bool loadAllEligibleTypesInCorrespondingAssemblies)
-        {
-            if (!loadAllEligibleTypesInCorrespondingAssemblies)
-                SetTypes(types);
-            else
-                SetupAllTypesInAssemblies(types.Select(x => x.Assembly).Distinct().ToArray());
-        }
-
-        /// <summary>
         /// Construct a deserialization factory, considering all types in the specified assemblies
         /// </summary>
         /// <param name="assemblies">The assemblies in which to search for Lazinator types</param>
