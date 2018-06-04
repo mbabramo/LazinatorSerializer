@@ -247,15 +247,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string readUniqueID;
-                    if (IsGeneric)
-                        readUniqueID = $@"LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                                    if (LazinatorGenericID[0] != LazinatorUniqueID)
-                                    {{
-                                        throw new FormatException(""Wrong self-serialized type initialized."");
-                                    }}
-
-                                    ";
-                    else
+                    if (!IsGeneric && IsSealedOrStruct)
                         readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
@@ -263,6 +255,25 @@ namespace Lazinator.CodeDescription
                             }}
 
                             ")}";
+                    else
+                        readUniqueID = $@"if (ContainsOpenGenericParameters)
+                                    {{
+                                        LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+                                        if (LazinatorGenericID[0] != LazinatorUniqueID)
+                                        {{
+                                            throw new FormatException(""Wrong self-serialized type initialized."");
+                                        }}
+                                    }}
+                                    else
+                                    {{
+                                        int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+                                        if (uniqueID != LazinatorUniqueID)
+                                        {{
+                                            throw new FormatException(""Wrong self-serialized type initialized."");
+                                        }}
+                                    }}
+
+                                    ";
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 

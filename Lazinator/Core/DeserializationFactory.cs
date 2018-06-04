@@ -113,19 +113,25 @@ namespace Lazinator.Core
             {
                 bytesSoFar = 0;
                 List<int> genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                ILazinator result = CreateItemUsingReflection(genericID);
-                return (T)result;
+                itemToReturn = (T) CreateItemUsingReflection(genericID);
             }
             else
             {
                 if (uniqueID == mostLikelyUniqueID)
                 {
                     itemToReturn = funcToCreateBaseType();
-                    InitializeDeserialized(itemToReturn, storage, parent);
                 }
                 else
-                    itemToReturn = (T)CreateKnownID(uniqueID, storage, parent); // we'll have to box structs here. We can't get around it because our dictionary's values are Func<ILazinator>, so we're going to have to cast that. We could alternatively have a dictionary of dictionaries indexed by type, but that might have a significant performance cost as well.
+                {
+                    if (FactoriesByID.ContainsKey(uniqueID))
+                    {
+                        itemToReturn = (T) FactoriesByID[uniqueID]();
+                    }
+                    else
+                        throw new UnknownSerializedTypeException(uniqueID);
+                }
             }
+            InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
         }
 
