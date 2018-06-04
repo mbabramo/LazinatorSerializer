@@ -683,16 +683,23 @@ namespace Lazinator.CodeDescription
                         {{
                             // header information");
 
-                if (IsGeneric)
+                if (IsGeneric || !IsSealedOrStruct)
                     sb.AppendLine($@"if (includeUniqueID)
                             {{
-                                WriteLazinatorGenericID(writer, LazinatorGenericID);
+                                if (LazinatorGenericID == null)
+                                {{
+                                    CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                                }}
+                                else
+                                {{
+                                    WriteLazinatorGenericID(writer, LazinatorGenericID);
+                                }}
                             }}");
                 else
                     sb.AppendLine(
                        $@"if (includeUniqueID)
                             {{
-                                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                                WriteLazinatorGenericID(writer, LazinatorGenericID);
                             }}
                         ");
 
