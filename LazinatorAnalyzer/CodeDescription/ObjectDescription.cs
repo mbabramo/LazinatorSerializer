@@ -255,23 +255,8 @@ namespace Lazinator.CodeDescription
                             }}
 
                             ")}";
-                    else // DEBUG -- move this to utility method
-                        readUniqueID = $@"if (ContainsOpenGenericParameters)
-                                    {{
-                                        LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                                        if (LazinatorGenericID[0] != LazinatorUniqueID)
-                                        {{
-                                            throw new FormatException(""Wrong self-serialized type initialized."");
-                                        }}
-                                    }}
-                                    else
-                                    {{
-                                        int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-                                        if (uniqueID != LazinatorUniqueID)
-                                        {{
-                                            throw new FormatException(""Wrong self-serialized type initialized."");
-                                        }}
-                                    }}
+                    else
+                        readUniqueID = $@"GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
 
@@ -629,7 +614,7 @@ namespace Lazinator.CodeDescription
                         {lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
                         {{
                             get => null;
-                            set => throw new NotSupportedException();
+                            set {{ }}
                         }}";
 
             sb.AppendLine($@"

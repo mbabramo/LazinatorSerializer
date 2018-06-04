@@ -252,6 +252,28 @@ namespace Lazinator.Core
                 child.LazinatorParentClass = parent; // set the parent so that this object can be used like a deserialized object
         }
 
+        public static List<int> GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
+        {
+            if (containsOpenGenericParameters)
+            {
+                List<int> LazinatorGenericID = ReadLazinatorGenericID(span, ref index);
+                if (LazinatorGenericID[0] != uniqueID)
+                {
+                    throw new FormatException("Wrong self-serialized type initialized.");
+                }
+                return LazinatorGenericID;
+            }
+            else
+            {
+                int readUniqueID = span.ToDecompressedInt(ref index);
+                if (readUniqueID != uniqueID)
+                {
+                    throw new FormatException("Wrong self-serialized type initialized.");
+                }
+                return null;
+            }
+        }
+
         public static void WriteLazinatorGenericID(BinaryBufferWriter writer, List<int> lazinatorGenericID)
         {
             // We write the first component before the total count to be consistent with non-generic items.
