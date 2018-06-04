@@ -252,10 +252,10 @@ namespace Lazinator.Wrappers
             set => throw new LazinatorSerializationException("Lazinator versioning disabled for WLongArray.");
         }
         
+        
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _WrappedValue_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_WrappedValue_ByteIndex = bytesSoFar;
             bytesSoFar = span.Length;
             _WLongArray_EndByteIndex = bytesSoFar;
         }

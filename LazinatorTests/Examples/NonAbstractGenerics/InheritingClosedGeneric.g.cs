@@ -87,11 +87,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _YetAnotherInt = span.ToDecompressedInt(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_YetAnotherInt = span.ToDecompressedInt(ref bytesSoFar);
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

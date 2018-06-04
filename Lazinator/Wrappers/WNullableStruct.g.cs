@@ -286,10 +286,10 @@ namespace Lazinator.Wrappers
             set => throw new LazinatorSerializationException("Lazinator versioning disabled for WNullableStruct<T>.");
         }
         
+        
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _HasValue = span.ToBoolean(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_HasValue = span.ToBoolean(ref bytesSoFar);
             _NonNullValue_ByteIndex = bytesSoFar;
             bytesSoFar = span.Length;
             _WNullableStruct_T_EndByteIndex = bytesSoFar;

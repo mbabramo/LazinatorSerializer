@@ -275,10 +275,10 @@ namespace LazinatorTests.Examples
             }
         }
         
+        
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _IsNull = span.ToBoolean(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_IsNull = span.ToBoolean(ref bytesSoFar);
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
             _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }

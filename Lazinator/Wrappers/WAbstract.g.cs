@@ -92,5 +92,6 @@ namespace Lazinator.Wrappers
         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         protected abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID);
         protected abstract void ResetAccessedProperties();
+        
     }
 }

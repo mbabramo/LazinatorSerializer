@@ -221,40 +221,40 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-        }
-        
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
-        {
-            int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;        }
             
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
-        }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
-        {
-            // header information
-            if (includeUniqueID)
+            public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
             {
-                if (LazinatorGenericID == null)
-                {
-                    CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
-                }
-                else
-                {
-                    WriteLazinatorGenericID(writer, LazinatorGenericID);
-                }
+                int startPosition = writer.Position;
+                WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
-            writer.Write((byte)includeChildrenMode);
-            // write properties
+            protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+            {
+                // header information
+                if (includeUniqueID)
+                {
+                    if (LazinatorGenericID == null)
+                    {
+                        CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                    }
+                    else
+                    {
+                        WriteLazinatorGenericID(writer, LazinatorGenericID);
+                    }
+                }
+                CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
+                writer.Write((byte)includeChildrenMode);
+                // write properties
+            }
+            
         }
-        
     }
-}

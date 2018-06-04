@@ -155,11 +155,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _AnotherPropertyAdded = span.ToDecompressedInt(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_AnotherPropertyAdded = span.ToDecompressedInt(ref bytesSoFar);
             _MyListT_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyT_ByteIndex = bytesSoFar;

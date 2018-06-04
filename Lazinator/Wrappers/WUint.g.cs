@@ -231,10 +231,10 @@ namespace Lazinator.Wrappers
             set => throw new LazinatorSerializationException("Lazinator versioning disabled for WUint.");
         }
         
+        
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _WrappedValue = span.ToDecompressedUint(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_WrappedValue = span.ToDecompressedUint(ref bytesSoFar);
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

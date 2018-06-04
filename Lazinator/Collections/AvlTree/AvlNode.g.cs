@@ -438,10 +438,10 @@ namespace Lazinator.Collections.Avl
         
         public int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _Balance = span.ToDecompressedInt(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_Balance = span.ToDecompressedInt(ref bytesSoFar);
             _Count = span.ToDecompressedInt(ref bytesSoFar);
             _Key_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 

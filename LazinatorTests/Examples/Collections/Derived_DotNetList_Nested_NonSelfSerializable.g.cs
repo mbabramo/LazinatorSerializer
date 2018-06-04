@@ -122,11 +122,11 @@ namespace LazinatorTests.Examples.Collections
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyLevel2Int = span.ToDecompressedInt(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyLevel2Int = span.ToDecompressedInt(ref bytesSoFar);
             _MyLevel2ListNestedNonLazinatorType_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _Derived_DotNetList_Nested_NonSelfSerializable_EndByteIndex = bytesSoFar;

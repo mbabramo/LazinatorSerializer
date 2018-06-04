@@ -50,5 +50,6 @@ namespace LazinatorTests.Examples.Abstract
             get;
             set;
         }
+        
     }
 }

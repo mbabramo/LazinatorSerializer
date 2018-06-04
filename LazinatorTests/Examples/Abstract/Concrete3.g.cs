@@ -438,10 +438,10 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _String1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_String1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String3 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _Example2_ByteIndex = bytesSoFar;

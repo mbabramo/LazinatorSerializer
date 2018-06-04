@@ -233,10 +233,10 @@ namespace Lazinator.Wrappers
             set => throw new LazinatorSerializationException("Lazinator versioning disabled for WNullableDouble.");
         }
         
+        
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _WrappedValue = span.ToNullableDouble(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_WrappedValue = span.ToNullableDouble(ref bytesSoFar);
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)

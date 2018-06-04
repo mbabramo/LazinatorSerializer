@@ -768,10 +768,10 @@ namespace LazinatorTests.Examples
         
         public virtual int LazinatorObjectVersion { get; set; } = 3;
         
+        
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyBool = span.ToBoolean(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
             if (serializedVersionNumber >= 3) 

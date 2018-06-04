@@ -251,10 +251,10 @@ namespace LazinatorTests.Examples
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
+        
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyLong = span.ToDecompressedLong(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyLong = span.ToDecompressedLong(ref bytesSoFar);
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
         }
         
