@@ -309,6 +309,7 @@ namespace Lazinator.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            PreSerialization();
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             

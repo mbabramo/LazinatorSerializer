@@ -406,9 +406,18 @@ namespace LazinatorCodeGen.Roslyn
             return typeDeclaration.AttributeLists.Any(y => y.Attributes.Any(z => ((string) (z.Name as IdentifierNameSyntax)?.Identifier.Value) == attributeName));
         }
 
-        private static HashSet<MethodDeclarationSyntax> GetMethodDeclarations(TypeDeclarationSyntax typeDeclaration)
+        public static HashSet<MethodDeclarationSyntax> GetMethodDeclarations(this TypeDeclarationSyntax typeDeclaration)
         {
-            return new HashSet<MethodDeclarationSyntax>(typeDeclaration.DescendantNodes().Where(x => x is MethodDeclarationSyntax).Cast<MethodDeclarationSyntax>());
+            return new HashSet<MethodDeclarationSyntax>(typeDeclaration.DescendantNodes()
+                .Where(x => x is MethodDeclarationSyntax)
+                .Cast<MethodDeclarationSyntax>());
+        }
+
+        public static HashSet<TypeDeclarationSyntax> GetSubtypeDeclarations(this TypeDeclarationSyntax typeDeclaration)
+        {
+            return new HashSet<TypeDeclarationSyntax>(typeDeclaration.DescendantNodes()
+                .Where(x => x is TypeDeclarationSyntax)
+                .Cast<TypeDeclarationSyntax>());
         }
 
         public static bool IsReadOnlyStruct(this ITypeSymbol type)

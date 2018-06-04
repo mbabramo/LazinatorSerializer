@@ -574,8 +574,16 @@ namespace LazinatorCodeGen.Roslyn
         private static void GetMethodImplementationsHelper(TypeDeclarationSyntax typeDeclaration,
             INamedTypeSymbol typeSymbol, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethod)
         {
+            HashSet<MethodDeclarationSyntax> methodDeclarations = typeDeclaration.GetMethodDeclarations();
+            HashSet<TypeDeclarationSyntax> subtypeDeclarations = typeDeclaration.GetSubtypeDeclarations();
+            if (subtypeDeclarations.Any())
+            { // remove methods defined only in subclass
+                var containedMethodDeclarations = subtypeDeclarations.SelectMany(x => x.GetMethodDeclarations());
+                foreach (var methodDeclaration in containedMethodDeclarations)
+                    methodDeclarations.Remove(methodDeclaration);
+            }
             foreach (string methodName in _methodNamesToLookFor)
-                if (RoslynHelpers.TypeDeclarationIncludesMethod(typeDeclaration, methodName))
+                if (methodDeclarations.Any(x => x.Identifier.Text == methodName))
                     typeImplementsMethod.Add((typeSymbol, methodName));
         }
     }

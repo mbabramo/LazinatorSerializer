@@ -245,29 +245,25 @@ namespace Lazinator.Collections
             MarkDirty();
         }
 
-        // Structure of LazinatorObjectBytes (after length header, if a child, and other bytes of header)
-        // uint: byte length of main list (excluding this, including the items themselves, excluding offsets). If list is null, then this is 0, and everything else is omitted.
-        // *SerializedMainList
-        // *foreach item
-        // *  the item. This is the range returned by GetListMemberSlice. Length bytes are excluded, because they are included separately in offsets below.
-        // offsets. this is serialized based on SelfSerializingOffsetList (including size information etc.), but we don't need to worry about that here
-        //   second item: distance from first foreach (the number of bytes reference)
-        //   ...
-        //   after last item: where next thing after offset would start (but not used by this list)
-
-//        _Offsets_Accessed = true;
-//            _Offsets = new LazinatorOffsetList();
-//        _Offsets.IsDirty = true;
-//            LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, w =>
-//            {
-//                int startingPosition = w.Position;
-//                for (int i = 0; i<UnderlyingList.Count; i++)
-//                {
-//                    var item = i; // avoid closure problem
-//        LazinatorUtilities.WriteChildWithLength(w, UnderlyingList[item], includeChildrenMode, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness, false, true /* skip length */, this);
-//                    var offset = (int)(w.Position - startingPosition);
-//        _Offsets.AddOffset(offset);
-//                }
-//});
+        public void PreSerialization()
+        {
+            BinaryBufferWriter writer = new BinaryBufferWriter(Math.Max(100, (int) (SerializedMainList.Length * 1.2))); // try to allocate enough space initially to minimize the risk of buffer recopies, but don't go overboard.
+            _Offsets_Accessed = true;
+            _Offsets = new LazinatorOffsetList();
+            _Offsets.IsDirty = true;
+            LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, w =>
+            {
+                int startingPosition = w.Position;
+                bool verifyCleanness = false; // DEBUG -- make this a parameter
+                for (int i = 0; i < UnderlyingList.Count; i++)
+                {
+                    var item = i; // avoid closure problem
+                    LazinatorUtilities.WriteChildWithLength(w, UnderlyingList[item], IncludeChildrenMode.IncludeAllChildren, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness, false, true /* skip length altogether */, this);
+                    var offset = (int)(w.Position - startingPosition);
+                    _Offsets.AddOffset(offset);
+                }
+            });
+        }
+        
     }
 }
