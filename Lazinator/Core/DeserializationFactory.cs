@@ -154,7 +154,9 @@ namespace Lazinator.Core
                 return null;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            return CreateKnownID(uniqueID, storage, parent);
+            ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
+            InitializeDeserialized(itemToReturn, storage, parent);
+            return itemToReturn;
         }
         
         /// <summary>
