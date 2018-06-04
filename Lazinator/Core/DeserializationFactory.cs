@@ -113,7 +113,7 @@ namespace Lazinator.Core
             {
                 bytesSoFar = 0;
                 List<int> genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                itemToReturn = (T) CreateItemUsingReflection(genericID);
+                itemToReturn = (T) CreateGenericItemUsingReflection(genericID);
             }
             else
             {
@@ -154,8 +154,7 @@ namespace Lazinator.Core
                 return null;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
-            return itemToReturn;
+            return CreateKnownID(uniqueID, storage, parent);
         }
         
         /// <summary>
@@ -174,7 +173,14 @@ namespace Lazinator.Core
                 return selfSerialized;
             }
             else
+            {
+                (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
+                if (numGenericParameters > 0)
+                {
+                    return CreateGenericItemUsingReflection(storage.Span);
+                }
                 throw new UnknownSerializedTypeException(uniqueID);
+            }
         }
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
@@ -405,7 +411,14 @@ namespace Lazinator.Core
 
         #region Generic composition
 
-        private ILazinator CreateItemUsingReflection(List<int> typeAndGenericTypeArgumentIDs)
+        private ILazinator CreateGenericItemUsingReflection(ReadOnlySpan<byte> span)
+        {
+            int index = 0;
+            List<int> id = ReadLazinatorGenericID(span, ref index);
+            return CreateGenericItemUsingReflection(id);
+        }
+
+        private ILazinator CreateGenericItemUsingReflection(List<int> typeAndGenericTypeArgumentIDs)
         {
             (Type type, _) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs);
             var result = (ILazinator)Activator.CreateInstance(type);

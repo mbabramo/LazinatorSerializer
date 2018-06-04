@@ -315,7 +315,7 @@ namespace LazinatorTests.Examples
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;
-            set => throw new NotSupportedException();
+            set { }
         }
         
         private bool _LazinatorObjectVersionChanged;

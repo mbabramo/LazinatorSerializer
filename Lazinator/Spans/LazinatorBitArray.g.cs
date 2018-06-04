@@ -294,7 +294,7 @@ namespace Lazinator.Spans
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;
-            set => throw new NotSupportedException();
+            set { }
         }
         
         public int LazinatorObjectVersion { get; set; } = 0;

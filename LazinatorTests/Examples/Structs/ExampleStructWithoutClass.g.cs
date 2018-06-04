@@ -230,7 +230,7 @@ namespace LazinatorTests.Examples.Structs
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;
-            set => throw new NotSupportedException();
+            set { }
         }
         
         private bool _LazinatorObjectVersionChanged;

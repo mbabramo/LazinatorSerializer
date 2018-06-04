@@ -224,7 +224,7 @@ namespace Lazinator.Wrappers
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
             get => null;
-            set => throw new NotSupportedException();
+            set { }
         }
         
         public int LazinatorObjectVersion
