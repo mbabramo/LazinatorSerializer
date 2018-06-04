@@ -1049,6 +1049,7 @@ namespace LazinatorTests.Tests
                     return new SpanAndMemory
                     {
                         MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
+                        MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { }),
                         MyReadOnlySpanDateTime = new Span<DateTime>(), // should also work with no array
                         MyReadOnlySpanLong = new Span<long>(new long[] { }),
                         
@@ -1056,6 +1057,7 @@ namespace LazinatorTests.Tests
                 return new SpanAndMemory
                 {
                     MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5}),
+                    MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
                     MyReadOnlySpanDateTime = new Span<DateTime>(new DateTime[] { now }),
                     MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue}),
                     MyReadOnlySpanChar = new ReadOnlySpan<char>(chars)
@@ -1069,6 +1071,8 @@ namespace LazinatorTests.Tests
                 var result = copy.CloneLazinatorTyped();
                 result.MyReadOnlySpanByte.Length.Should().Be(3);
                 result.MyReadOnlySpanByte[1].Should().Be(4);
+                result.MyReadOnlyMemoryByte.Span[1].Should().Be(4);
+                result.MyReadOnlyMemoryByte.Length.Should().Be(3);
                 result.MyReadOnlySpanDateTime.Length.Should().Be(1);
                 result.MyReadOnlySpanDateTime[0].Should().Be(now);
                 result.MyReadOnlySpanLong.Length.Should().Be(2);
@@ -1084,6 +1088,7 @@ namespace LazinatorTests.Tests
             {
                 var result = copy.CloneLazinatorTyped();
                 result.MyReadOnlySpanByte.Length.Should().Be(0);
+                result.MyReadOnlyMemoryByte.Length.Should().Be(0);
                 result.MyReadOnlySpanDateTime.Length.Should().Be(0);
                 result.MyReadOnlySpanLong.Length.Should().Be(0);
                 copy = result;
