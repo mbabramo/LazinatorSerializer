@@ -255,7 +255,7 @@ namespace Lazinator.CodeDescription
                             }}
 
                             ")}";
-                    else
+                    else // DEBUG -- move this to utility method
                         readUniqueID = $@"if (ContainsOpenGenericParameters)
                                     {{
                                         LazinatorGenericID = ReadLazinatorGenericID(span, ref bytesSoFar);
