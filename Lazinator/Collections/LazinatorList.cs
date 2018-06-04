@@ -13,9 +13,6 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T> where T : ILazinator
     {
-
-        public Memory<byte> SerializedMainList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         [NonSerialized] private bool FullyDeserialized;
         [NonSerialized] private int CountWhenDeserialized;
         [NonSerialized] private List<T> UnderlyingList;
