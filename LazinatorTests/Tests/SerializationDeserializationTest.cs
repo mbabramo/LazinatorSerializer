@@ -1696,7 +1696,28 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void DerivedLazinatorListWorks()
+        public void LazinatorListWithObjectsWorks()
+        {
+            var original = new LazinatorListContainer()
+            {
+                MyList = new LazinatorList<ExampleChild>()
+                {
+                    new ExampleChild() { MyShort = 22 },
+                    new ExampleChildInherited() { MyShort = 21, MyInt = 23 }
+                }
+            };
+            var clone = original.CloneLazinatorTyped(); // second clone
+            var list = clone.MyList;
+            list.Should().NotBeNull();
+            list[0].MyShort.Should().Be(22);
+            var innerDerived = list[1] as ExampleChildInherited;
+            innerDerived.Should().NotBeNull();
+            innerDerived.MyShort.Should().Be(21);
+            innerDerived.MyInt.Should().Be(23);
+        }
+
+        [Fact]
+        public void DerivedLazinatorListWithObjectsWorks()
         {
             var original = new LazinatorListContainer()
             {
@@ -1706,14 +1727,11 @@ namespace LazinatorTests.Tests
                     new ExampleChildInherited() { MyShort = 21, MyInt = 23 }
                 }
             };
-            var result = original.CloneLazinatorTyped(); // no immediate exception, because we haven't deserialized yet
-            LazinatorList<ExampleChild> l = null;
-            Action action = () => l = result.MyList;
-            var clone = original.CloneLazinatorTyped();
-            var derived = clone.MyList as DerivedLazinatorList<ExampleChild>;
-            derived.Should().NotBeNull();
-            derived[0].MyShort.Should().Be(22);
-            var innerDerived = derived[1] as ExampleChildInherited;
+            var clone = original.CloneLazinatorTyped(); // second clone
+            var list = clone.MyList;
+            list.Should().NotBeNull();
+            list[0].MyShort.Should().Be(22);
+            var innerDerived = list[1] as ExampleChildInherited;
             innerDerived.Should().NotBeNull();
             innerDerived.MyShort.Should().Be(21);
             innerDerived.MyInt.Should().Be(23);

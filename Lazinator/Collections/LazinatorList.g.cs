@@ -201,6 +201,7 @@ namespace Lazinator.Collections
         private LazinatorOffsetList _Offsets;
         public LazinatorOffsetList Offsets
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Offsets_Accessed)
@@ -219,6 +220,7 @@ namespace Lazinator.Collections
                 }
                 return _Offsets;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -234,6 +236,7 @@ namespace Lazinator.Collections
         private Memory<byte> _SerializedMainList;
         public Memory<byte> SerializedMainList
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_SerializedMainList_Accessed)
@@ -252,6 +255,7 @@ namespace Lazinator.Collections
                 }
                 return _SerializedMainList;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

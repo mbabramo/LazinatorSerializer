@@ -245,7 +245,7 @@ namespace Lazinator.Collections
             MarkDirty();
         }
 
-        public void PreSerialization()
+        public virtual void PreSerialization()
         {
             if (IsDirty)
             {
