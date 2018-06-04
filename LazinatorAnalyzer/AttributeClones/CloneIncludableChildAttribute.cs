@@ -3,7 +3,7 @@
 namespace LazinatorCodeGen.AttributeClones
 {
     /// <summary>
-    /// Used to mark a field. This indicates that if IncludeChildrenMode is set to IncludeOnlyIncludableChildren, then this field should be included.
+    /// Indicates that this property will be included unless IncludeChildrenMode is ExcludeAllChildren.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class CloneIncludableChildAttribute : Attribute

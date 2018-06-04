@@ -3,7 +3,7 @@
 namespace Lazinator.Attributes
 {
     /// <summary>
-    /// Indicates that if IncludeChildrenMode is set to ExcludeOnlyExcludableChildren, then this property should be excluded. Otherwise, it will be included.
+    /// Indicates that this property will be included unless IncludeChildrenMode is ExcludeAllChildren.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class IncludableChildAttribute : Attribute

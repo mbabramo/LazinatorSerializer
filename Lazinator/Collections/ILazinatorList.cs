@@ -8,6 +8,7 @@ namespace Lazinator.Collections
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorList)]
     interface ILazinatorList<T> where T : ILazinator
     {
+        [IncludableChild]
         LazinatorOffsetList Offsets { get; set; }
     }
 }

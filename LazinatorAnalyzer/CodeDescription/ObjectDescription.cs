@@ -11,50 +11,65 @@ namespace Lazinator.CodeDescription
 {
     public class ObjectDescription
     {
+        /* Main properties */
         public INamedTypeSymbol ILazinatorTypeSymbol { get; set; }
         public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
-        public Accessibility Accessibility { get; set; }
+        public LazinatorObjectType ObjectType { get; set; }
+        public LazinatorCompilation Compilation { get; set; }
+        public Guid Hash { get; set; }
+
+        /* Derivation */
+        public ObjectDescription BaseLazinatorObject { get; set; }
+        public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
+                        (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
+                        !BaseLazinatorObject.IsAbstract);
+        public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
+                        (BaseLazinatorObject.IsDerivedFromAbstractLazinator || BaseLazinatorObject.IsAbstract);
+        public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
+        public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.NameIncludingGenerics : BaseLazinatorObject.FullyQualifiedObjectName;
+        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed) ? "" : "protected ";
+
+        /* Names */
         public string Namespace { get; set; }
         public string NameIncludingGenerics { get; set; }
         public string SimpleName { get; set; }
         public string FullyQualifiedObjectName { get; set; }
         public string ObjectNameEncodable => RoslynHelpers.EncodableTypeName(ILazinatorTypeSymbol);
-        public LazinatorObjectType ObjectType { get; set; }
+
+        /* General aspects */
+        public Accessibility Accessibility { get; set; }
         public bool IsNonLazinatorBaseClass { get; set; }
         public bool IsAbstract { get; set; }
         public bool IsSealed { get; set; }
         public string SealedKeyword => IsSealed ? "sealed " : "";
+        public bool IsSealedOrStruct => IsSealed || ObjectType != LazinatorObjectType.Class;
+
+        /* Interfaces */
         public ExclusiveInterfaceDescription ExclusiveInterface { get; set; }
         public int Version => ExclusiveInterface.Version;
         public int UniqueID => (int)ExclusiveInterface.UniqueID;
         public List<NonexclusiveInterfaceDescription> NonexclusiveInterfaces { get; set; }
         public bool HasNonexclusiveInterfaces => NonexclusiveInterfaces != null && NonexclusiveInterfaces.Any();
-        public ObjectDescription BaseLazinatorObject { get; set; }
-        public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
-                                      (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
-                                       !BaseLazinatorObject.IsAbstract);
-        public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
-                                                         (BaseLazinatorObject.IsDerivedFromAbstractLazinator ||
-                                                          BaseLazinatorObject.IsAbstract);
-        public bool IsSealedOrStruct => IsSealed || ObjectType != LazinatorObjectType.Class;
-        public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
-        public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.NameIncludingGenerics : BaseLazinatorObject.FullyQualifiedObjectName;
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
+
+        /* Implementations */
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
         public bool ImplementsPreSerialization { get; set; }
         public bool ImplementsPostDeserialization { get; set; }
         public bool ImplementsOnDirty { get; set; }
+        public bool ImplementsMarkHierarchyClean { get; set; }
+        public bool ImplementsConvertFromBytesAfterHeader { get; set; }
+        public bool ImplementsWritePropertiesIntoBuffer { get; set; }
+
+        /* Complications */
         public List<string> GenericArgumentNames { get; set; }
         public string GenericArgumentNameTypes => String.Join(", ", GenericArgumentNames.Select(x => "typeof(" + x + ")"));
         public bool IsGeneric => GenericArgumentNames != null && GenericArgumentNames.Any();
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !IsGeneric;
-        public LazinatorCompilation Compilation;
-        public Guid Hash;
         public bool SuppressDate { get; set; }
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
-        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed) ? "" : "protected ";
 
         public ObjectDescription()
         {
@@ -119,6 +134,9 @@ namespace Lazinator.CodeDescription
             ImplementsPreSerialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PreSerialization"));
             ImplementsPostDeserialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PostDeserialization"));
             ImplementsOnDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDirty"));
+            ImplementsMarkHierarchyClean = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "MarkHierarchyClean"));
+            ImplementsConvertFromBytesAfterHeader = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "ConvertFromBytesAfterHeader"));
+            ImplementsWritePropertiesIntoBuffer = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "WritePropertiesIntoBuffer"));
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
@@ -155,13 +173,55 @@ namespace Lazinator.CodeDescription
 
         private void AppendCodeBehindFile(CodeStringBuilder sb)
         {
+            string partialsuperclasses;
+            IEnumerable<ITypeSymbol> supertypes;
+            AppendSupertypesInformation(out partialsuperclasses, out supertypes);
+            AppendDeclaration(sb, partialsuperclasses);
+            AppendGeneralDefinitions(sb);
+            AppendPropertyDefinitions(sb);
+            AppendConversions(sb);
+            AppendCloseClassSupertypesAndNamespace(sb, supertypes);
+        }
+
+        private void AppendConversions(CodeStringBuilder sb)
+        {
+            if (IsAbstract)
+            {
+                if (!IsDerivedFromAbstractLazinator && !IsDerivedFromNonAbstractLazinator)
+                    AppendAbstractConversions(sb);
+                // otherwise, lower level has already defined these methods, so nothing more to do
+            }
+            else
+            {
+                AppendResetProperties(sb);
+                AppendConversionSectionStart(sb);
+                AppendConvertFromBytesAfterHeader(sb);
+                AppendSerializeExistingBuffer(sb);
+                AppendWritePropertiesIntoBuffer(sb);
+                AppendSupportedConversions(sb);
+            }
+        }
+
+        private void AppendDeclaration(CodeStringBuilder sb, string partialsuperclasses)
+        {
             List<string> namespaces = PropertiesToDefineThisLevel.SelectMany(x => x.PropertyAndInnerProperties().Select(y => y.Namespace)).ToList();
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfTypesAndContainedTypes());
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfContainingTypes());
 
+            string theBeginning =
+                            $@"{GetFileHeader(Hash.ToString(), Namespace, namespaces)}
+
+                    {partialsuperclasses}[Autogenerated]
+                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { NameIncludingGenerics } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
+                    {{";
+            sb.AppendLine(theBeginning);
+        }
+
+        private void AppendSupertypesInformation(out string partialsuperclasses, out IEnumerable<ITypeSymbol> supertypes)
+        {
             // we may have nested lazinator classes, in which class we need to nest the partial class definitions. We assume that the 
-            string partialsuperclasses = "";
-            IEnumerable<ITypeSymbol> supertypes = null;
+            partialsuperclasses = "";
+            supertypes = null;
             if (ILazinatorTypeSymbol.ContainingType != null)
             {
                 supertypes = ILazinatorTypeSymbol.GetContainingTypes();
@@ -172,20 +232,14 @@ namespace Lazinator.CodeDescription
                         ";
                 }
             }
+        }
 
-            string theBeginning =
-                $@"{GetFileHeader(Hash.ToString(), Namespace, namespaces)}
-
-                    {partialsuperclasses}[Autogenerated]
-                    {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { NameIncludingGenerics } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
-                    {{";
-            sb.AppendLine(theBeginning);
-
+        private void AppendGeneralDefinitions(CodeStringBuilder sb)
+        {
+            string additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
+            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
-            string manualDescendantDirtinessChecks, additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
-
-            GetDescendantDirtinessChecks(out manualDescendantDirtinessChecks, out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
             string markHierarchyCleanMethod = GetMarkHierarchyCleanMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
@@ -222,7 +276,7 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
-                        public abstract void MarkHierarchyClean();
+                        {(ImplementsMarkHierarchyClean ? skipMarkHierarchyClean : "public abstract void MarkHierarchyClean();")}
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -470,8 +524,10 @@ namespace Lazinator.CodeDescription
                         /* Properties */
 ");
             }
+        }
 
-
+        private void AppendPropertyDefinitions(CodeStringBuilder sb)
+        {
             var thisLevel = PropertiesToDefineThisLevel;
             var withRecordedIndices = thisLevel
                 .Where(property =>
@@ -519,56 +575,24 @@ namespace Lazinator.CodeDescription
             {
                 property.AppendPropertyDefinitionString(sb);
             }
+        }
 
-            if (IsAbstract)
-            {
-                if (IsDerivedFromAbstractLazinator || IsDerivedFromNonAbstractLazinator)
-                { // lowere level has already defined these methods, so nothing more to do
-                    sb.AppendLine($@"}}
-                            }}");
-                    return;
-                }
-
-                sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
+        private void AppendAbstractConversions(CodeStringBuilder sb)
+        {
+            sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
                         {ProtectedIfApplicable}abstract System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
                         {ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};
                         public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; set; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
-                        public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
-                        {ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID);
+                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID);")}
                         {ProtectedIfApplicable}abstract void ResetAccessedProperties();
-                }}
-            }}
 ");
-                return;
-            }
+        }
 
-            string selfSerializationVersionString;
-            if (Version == -1)
-                selfSerializationVersionString = $@"public int LazinatorObjectVersion
-                {{
-                    get => -1;
-                    set => throw new LazinatorSerializationException(""Lazinator versioning disabled for {NameIncludingGenerics}."");
-                }}";
-            else if (ObjectType == LazinatorObjectType.Class)
-                selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
-            else
-            { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 
-                selfSerializationVersionString =
-                        $@"private bool _LazinatorObjectVersionChanged;
-                        private int _LazinatorObjectVersionOverride;
-                        public int LazinatorObjectVersion
-                        {{
-                            get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : { Version };
-                            set
-                            {{
-                                _LazinatorObjectVersionOverride = value;
-                                _LazinatorObjectVersionChanged = true;
-                            }}
-                        }}";
-            }
-
+        private void AppendResetProperties(CodeStringBuilder sb)
+        {
             string resetAccessed = "";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType != LazinatorPropertyType.OpenGenericParameter && x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable))
             {
@@ -583,7 +607,10 @@ namespace Lazinator.CodeDescription
                     {(IsDerivedFromNonAbstractLazinator ? $@"base.ResetAccessedProperties();
                     " : "")}{resetAccessed}
                 }}");
+        }
 
+        private void AppendConversionSectionStart(CodeStringBuilder sb)
+        {
             string containsOpenGenericParametersString = $@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};";
 
             string lazinatorGenericBackingID = "";
@@ -617,6 +644,30 @@ namespace Lazinator.CodeDescription
                             set {{ }}
                         }}";
 
+            string selfSerializationVersionString;
+            if (Version == -1)
+                selfSerializationVersionString = $@"public int LazinatorObjectVersion
+                {{
+                    get => -1;
+                    set => throw new LazinatorSerializationException(""Lazinator versioning disabled for {NameIncludingGenerics}."");
+                }}";
+            else if (ObjectType == LazinatorObjectType.Class)
+                selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
+            else
+            { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 
+                selfSerializationVersionString =
+                        $@"private bool _LazinatorObjectVersionChanged;
+                        private int _LazinatorObjectVersionOverride;
+                        public int LazinatorObjectVersion
+                        {{
+                            get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : { Version };
+                            set
+                            {{
+                                _LazinatorObjectVersionOverride = value;
+                                _LazinatorObjectVersionChanged = true;
+                            }}
+                        }}";
+            }
             sb.AppendLine($@"
                 /* Conversion */
 
@@ -626,25 +677,34 @@ namespace Lazinator.CodeDescription
 
                 { selfSerializationVersionString }
 
-                public {DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
-                {{
-                    {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;");
+                ");
+        }
 
-            foreach (var property in thisLevel)
-            {
-                property.AppendPropertyReadString(sb);
-            }
-            var lastProperty = thisLevel.LastOrDefault();
-            if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
-            {
-                sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = bytesSoFar;
-                    ");
-            }
+        private static void AppendCloseClassSupertypesAndNamespace(CodeStringBuilder sb, IEnumerable<ITypeSymbol> supertypes)
+        {
+            if (supertypes != null)
+                foreach (var supertype in supertypes)
+                    sb.Append($@"
+                                }}
+                            ");
 
-            sb.Append($@"        }}
+            sb.Append($@"
+                            }}
+                        }}
+                        ");
+        }
 
-        ");
+        private void AppendSupportedConversions(CodeStringBuilder sb)
+        {
+            var propertiesSupportedCollections = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedCollection).ToList();
+            var propertiesSupportedTuples = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedTuple).ToList();
+            var propertiesNonSerialized = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonSelfSerializingType).ToList();
+
+            GetSupportedConversions(sb, propertiesSupportedCollections, propertiesSupportedTuples, propertiesNonSerialized);
+        }
+
+        private void AppendSerializeExistingBuffer(CodeStringBuilder sb)
+        {
 
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
@@ -659,13 +719,28 @@ namespace Lazinator.CodeDescription
                             " : "")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
+            string additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
+            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
             sb.AppendLine(postEncodingDirtinessCheck);
             sb.AppendLine($@"
                 _LazinatorObjectBytes = writer.Slice(startPosition);");
 
             sb.Append($@"}}
 ");
+        }
 
+        string skipWritePropertiesIntoBufferString = "// WritePropertiesIntoBuffer defined in main class; thus skipped here";
+
+        private void AppendWritePropertiesIntoBuffer(CodeStringBuilder sb)
+        {
+            if (ImplementsWritePropertiesIntoBuffer)
+            {
+                sb.AppendLine($@"
+                            {skipWritePropertiesIntoBufferString}");
+                return;
+            }
+
+            var thisLevel = PropertiesToDefineThisLevel;
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"
@@ -713,23 +788,40 @@ namespace Lazinator.CodeDescription
             }
             sb.Append($@"}}
 ");
+        }
 
-            var propertiesSupportedCollections = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedCollection).ToList();
-            var propertiesSupportedTuples = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedTuple).ToList();
-            var propertiesNonSerialized = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonSelfSerializingType).ToList();
+        string skipConvertFromBytesAfterHeaderString = "// ConvertFromBytesAfterHeader defined in main class; thus skipped here";
 
-            GetSupportedConversions(sb, propertiesSupportedCollections, propertiesSupportedTuples, propertiesNonSerialized);
+        private void AppendConvertFromBytesAfterHeader(CodeStringBuilder sb)
+        {
+            var thisLevel = PropertiesToDefineThisLevel;
+            if (ImplementsConvertFromBytesAfterHeader)
+            {
+                sb.Append($@"{skipConvertFromBytesAfterHeaderString}
 
-            if (supertypes != null)
-                foreach (var supertype in supertypes)
-                    sb.Append($@"
-                                }}
-                            ");
-
-            sb.Append($@"
-                            }}
-                        }}
                         ");
+                return;
+            }
+
+            sb.Append($@"public {DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+                {{
+                    {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+                    ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;");
+
+            foreach (var property in thisLevel)
+            {
+                property.AppendPropertyReadString(sb);
+            }
+            var lastProperty = thisLevel.LastOrDefault();
+            if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
+            {
+                sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = bytesSoFar;
+                    ");
+            }
+
+            sb.Append($@"        }}
+
+        ");
         }
 
         private string GetConstructor()
@@ -761,8 +853,12 @@ namespace Lazinator.CodeDescription
             return classContainingStructContainingClassError;
         }
 
+        const string skipMarkHierarchyClean = "// MarkHierarchyClean defined in main class; thus skipped here";
+
         private string GetMarkHierarchyCleanMethod()
         {
+            if (ImplementsMarkHierarchyClean)
+                return skipMarkHierarchyClean;
             string markHierarchyCleanMethod = "";
             if (!IsAbstract)
             {
@@ -800,10 +896,10 @@ namespace Lazinator.CodeDescription
             return markHierarchyCleanMethod;
         }
 
-        private void GetDescendantDirtinessChecks(out string manualDescendantDirtinessChecks, out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessCheck)
+        private void GetDescendantDirtinessChecks(out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessCheck)
         {
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
-            manualDescendantDirtinessChecks = "";
+            string manualDescendantDirtinessChecks = "";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
