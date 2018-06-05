@@ -282,7 +282,7 @@ namespace Lazinator.Core
             writer.Write((byte)numItems);
             for (int i = 1; i < numItems; i++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID[1]);
+                CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID[i]);
             }
         }
 
