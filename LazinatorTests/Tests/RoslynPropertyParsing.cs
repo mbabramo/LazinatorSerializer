@@ -141,12 +141,12 @@ namespace LazinatorTests.Tests
                 ("Lazinator", "/Attributes/", "", "LazinatorAttribute"),
                 ("LazinatorTests", "/Examples/", "Collections/", "DotNetList_SelfSerialized"),
                 ("LazinatorTests", "/Examples/", "Collections/", "IDotNetList_SelfSerialized"),
-                ("LazinatorTests", "/Examples/", "Hierarchy/", "Example"),
-                ("LazinatorTests", "/Examples/", "Hierarchy/", "IExample"),
-                ("LazinatorTests", "/Examples/", "Hierarchy/", "ExampleChild"),
-                ("LazinatorTests", "/Examples/", "Hierarchy/", "IExampleChild"),
-                ("LazinatorTests", "/Examples/", "Hierarchy/", "ExampleChildInherited"),
-                ("LazinatorTests", "/Examples/", "Hierarchy/", "IExampleChildInherited"),
+                ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "Example"),
+                ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "IExample"),
+                ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "ExampleChild"),
+                ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "IExampleChild"),
+                ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "ExampleChildInherited"),
+                ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "IExampleChildInherited"),
             };
             var ws = AdhocWorkspaceManager.CreateAdHocWorkspaceWithFiles(fileinfos, ".g.cs");
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
