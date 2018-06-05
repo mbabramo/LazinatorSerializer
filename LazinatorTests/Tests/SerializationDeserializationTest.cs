@@ -796,6 +796,20 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ChildOfLazinatorWithoutAttributeWorks()
+        {
+            ChildOfLazinatorWithoutAttribute b = new ChildOfLazinatorWithoutAttribute()
+            {
+                MyInt = 3 // property defined virtually in base class
+            };
+            var typedClone = b.CloneLazinatorTyped();
+            typedClone.Should().BeNull(); // we can't return an item of same type as ChildOfLazinatorWithoutAttribute, since Lazinator doesn't know about that type
+            ILazinator untypedClone = b.CloneLazinator();
+            (untypedClone as ChildOfLazinatorWithoutAttribute).Should().BeNull();
+            (untypedClone as FromNonLazinatorBase).MyInt.Should().Be(3);
+        }
+
+        [Fact]
         public void LazinatorDotNetLinkedListInt()
         {
             DotNetList_Values GetObject(int thirdItem)

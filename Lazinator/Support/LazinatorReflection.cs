@@ -12,6 +12,8 @@ namespace Lazinator.Support
         public static LazinatorAttribute GetLazinatorAttributeForILazinator(Type type)
         {
             var correspondingInterface = GetCorrespondingExclusiveInterface(type);
+            if (correspondingInterface == null)
+                return null;
             var attribute = GetLazinatorAttributeForInterface(correspondingInterface);
             return attribute;
         }
@@ -73,9 +75,13 @@ namespace Lazinator.Support
                 .Except(BaseTypes(type).SelectMany(t => t.GetInterfaces()))
                 .Where(x => x.GetCustomAttributes(typeof(LazinatorAttribute), false).Any())
                 .ToList();
-            if (minimalInterfaces.Count() != 1)
-                throw new LazinatorDeserializationException(
-                    $"There must be a one-to-one relationship between each ILazinator type and an interface, directly implemented by that type, with a Lazinator attribute. The type {type} directly implements {minimalInterfaces.Count()} interfaces with a Lazinator attribute.");
+            int count = minimalInterfaces.Count();
+            if (count == 0)
+                return null;
+            if (count > 1)
+                    throw new LazinatorDeserializationException(
+                    $"An ILazinator type must not directly implement more than one interface with a Lazinator attribute. The type {type} directly implements {minimalInterfaces.Count()} interfaces ({String.Join(",", minimalInterfaces.Select(x => x.Name).ToArray())}) with a Lazinator attribute.");
+
             var correspondingInterface = minimalInterfaces.Single();
             return correspondingInterface;
         }

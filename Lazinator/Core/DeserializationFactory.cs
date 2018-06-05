@@ -126,7 +126,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public ILazinator CreateFromBytesIncludingID(ReadOnlyMemory<byte> storage, ILazinator parent)
+        public ILazinator CreateFromBytesIncludingID(ReadOnlyMemory<byte> storage, ILazinator parent = null)
         {
             if (storage.Length <= 1)
                 return null;
@@ -308,6 +308,8 @@ namespace Lazinator.Core
             foreach (Type type in typesImplementingILazinator)
             {
                 var attribute = LazinatorReflection.GetLazinatorAttributeForILazinator(type);
+                if (attribute == null)
+                    continue;
                 int uniqueID = attribute.UniqueID;
                 TypeToUniqueIDMap[type] = uniqueID;
                 if (FactoriesByID.ContainsKey(uniqueID))
