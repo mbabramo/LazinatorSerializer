@@ -245,8 +245,8 @@ namespace Lazinator.Spans
                         _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData, null);
                     }
                     _ReadOrWrite_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _ReadOrWrite;
             }
             [DebuggerStepThrough]

@@ -225,8 +225,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         _MyListT = ConvertFromBytes_List_GT_g(childData, null);
                     }
                     _MyListT_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListT;
             }
             [DebuggerStepThrough]

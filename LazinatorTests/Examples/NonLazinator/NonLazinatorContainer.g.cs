@@ -226,8 +226,8 @@ namespace LazinatorTests.Examples
                         _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, null);
                     }
                     _NonLazinatorClass_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _NonLazinatorClass;
             }
             [DebuggerStepThrough]
@@ -257,8 +257,8 @@ namespace LazinatorTests.Examples
                         _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData, null);
                     }
                     _NonLazinatorInterchangeableClass_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _NonLazinatorInterchangeableClass;
             }
             [DebuggerStepThrough]
@@ -288,8 +288,8 @@ namespace LazinatorTests.Examples
                         _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData, null);
                     }
                     _NonLazinatorStruct_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _NonLazinatorStruct;
             }
             [DebuggerStepThrough]

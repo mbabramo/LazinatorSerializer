@@ -220,8 +220,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData, null);
                     }
                     _MyHashSetSerialized_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyHashSetSerialized;
             }
             [DebuggerStepThrough]

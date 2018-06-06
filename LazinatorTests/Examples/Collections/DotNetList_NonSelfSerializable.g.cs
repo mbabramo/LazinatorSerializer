@@ -274,8 +274,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData, null);
                     }
                     _MyListNonLazinatorType2_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListNonLazinatorType2;
             }
             [DebuggerStepThrough]

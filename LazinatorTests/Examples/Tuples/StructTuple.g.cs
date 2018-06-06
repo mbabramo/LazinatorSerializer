@@ -225,8 +225,8 @@ namespace LazinatorTests.Examples.Tuples
                         _EnumTuple = ConvertFromBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(childData, null);
                     }
                     _EnumTuple_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _EnumTuple;
             }
             [DebuggerStepThrough]
@@ -256,8 +256,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyNamedTuple = ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(childData, null);
                     }
                     _MyNamedTuple_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyNamedTuple;
             }
             [DebuggerStepThrough]
@@ -287,8 +287,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyNullableTuple = ConvertFromBytes__Pint_c_C32double_p_C63(childData, null);
                     }
                     _MyNullableTuple_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyNullableTuple;
             }
             [DebuggerStepThrough]
@@ -318,8 +318,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyValueTupleSerialized = ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(childData, null);
                     }
                     _MyValueTupleSerialized_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyValueTupleSerialized;
             }
             [DebuggerStepThrough]

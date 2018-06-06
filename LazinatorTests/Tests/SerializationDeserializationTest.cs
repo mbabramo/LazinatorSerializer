@@ -2002,9 +2002,10 @@ namespace LazinatorTests.Tests
             l.IsDirty.Should().BeFalse();
             l.DescendantIsDirty.Should().BeFalse();
             var firstItem = l.MyHashSetSerialized.First();
-            l.DescendantIsDirty.Should().BeTrue(); // should be true because .Net collection without special _Dirty property has been accessed
-            firstItem.MyLong = 3455423789458;
-            l.DescendantIsDirty.Should().BeTrue();
+            l.IsDirty.Should().BeTrue(); // should be true because .Net collection without special _Dirty property has been accessed
+            firstItem.MyLong = 54321;
+            var c = l.CloneLazinatorTyped();
+            c.MyHashSetSerialized.First().MyLong.Should().Be(54321);
         }
 
         [Fact]

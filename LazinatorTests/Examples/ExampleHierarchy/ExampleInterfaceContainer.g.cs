@@ -265,8 +265,8 @@ namespace LazinatorTests.Examples.Hierarchy
                         _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData, null);
                     }
                     _ExampleListByInterface_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _ExampleListByInterface;
             }
             [DebuggerStepThrough]

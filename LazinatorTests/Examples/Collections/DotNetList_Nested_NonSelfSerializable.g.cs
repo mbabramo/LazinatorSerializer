@@ -220,8 +220,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData, null);
                     }
                     _MyListNestedNonLazinatorType_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListNestedNonLazinatorType;
             }
             [DebuggerStepThrough]

@@ -220,8 +220,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData, null);
                     }
                     _MyKeyValuePairSerialized_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyKeyValuePairSerialized;
             }
             [DebuggerStepThrough]

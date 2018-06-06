@@ -396,8 +396,8 @@ namespace LazinatorTests.Examples
                         _MyListValues = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _MyListValues_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListValues;
             }
             [DebuggerStepThrough]
@@ -427,8 +427,8 @@ namespace LazinatorTests.Examples
                         _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData, null);
                     }
                     _MyTuple_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyTuple;
             }
             [DebuggerStepThrough]

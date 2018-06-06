@@ -352,8 +352,8 @@ namespace LazinatorTests.Examples
                         _MyListExampleStruct = ConvertFromBytes_List_GExampleStruct_g(childData, null);
                     }
                     _MyListExampleStruct_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListExampleStruct;
             }
             [DebuggerStepThrough]
@@ -383,8 +383,8 @@ namespace LazinatorTests.Examples
                         _MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStruct_g_g(childData, null);
                     }
                     _MyListNullableExampleStruct_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListNullableExampleStruct;
             }
             [DebuggerStepThrough]

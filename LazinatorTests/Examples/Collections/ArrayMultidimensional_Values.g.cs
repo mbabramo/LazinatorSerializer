@@ -274,8 +274,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData, null);
                     }
                     _MyCrazyJaggedArray_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyCrazyJaggedArray;
             }
             [DebuggerStepThrough]
@@ -305,8 +305,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData, null);
                     }
                     _MyThreeDimArrayInt_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyThreeDimArrayInt;
             }
             [DebuggerStepThrough]

@@ -224,8 +224,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData, null);
                     }
                     _MyDictionary_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyDictionary;
             }
             [DebuggerStepThrough]
@@ -255,8 +255,8 @@ namespace LazinatorTests.Examples.Collections
                         _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData, null);
                     }
                     _MySortedDictionary_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MySortedDictionary;
             }
             [DebuggerStepThrough]
@@ -286,8 +286,8 @@ namespace LazinatorTests.Examples.Collections
                         _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData, null);
                     }
                     _MySortedList_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MySortedList;
             }
             [DebuggerStepThrough]

@@ -238,8 +238,8 @@ namespace LazinatorTests.Examples.Subclasses
                         _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData, null);
                     }
                     _MyEnumList_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyEnumList;
             }
             [DebuggerStepThrough]

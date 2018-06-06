@@ -257,8 +257,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData, null);
                     }
                     _MyRecordLikeClass_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyRecordLikeClass;
             }
             [DebuggerStepThrough]

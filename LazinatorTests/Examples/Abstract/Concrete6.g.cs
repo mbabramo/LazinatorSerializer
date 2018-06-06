@@ -73,8 +73,8 @@ namespace LazinatorTests.Examples.Abstract
                         _IntList6 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList6_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _IntList6;
             }
             [DebuggerStepThrough]

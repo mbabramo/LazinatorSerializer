@@ -280,8 +280,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData, null);
                     }
                     _MyListNullableByte_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListNullableByte;
             }
             [DebuggerStepThrough]
@@ -311,8 +311,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData, null);
                     }
                     _MyListNullableInt_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyListNullableInt;
             }
             [DebuggerStepThrough]

@@ -234,8 +234,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData, null);
                     }
                     _MyMemoryInt_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyMemoryInt;
             }
             [DebuggerStepThrough]
@@ -265,8 +265,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_C63(childData, null);
                     }
                     _MyNullableMemoryInt_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyNullableMemoryInt;
             }
             [DebuggerStepThrough]

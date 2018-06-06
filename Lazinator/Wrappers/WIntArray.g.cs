@@ -216,8 +216,8 @@ namespace Lazinator.Wrappers
                         _WrappedValue = ConvertFromBytes_int_B_b(childData, null);
                     }
                     _WrappedValue_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _WrappedValue;
             }
             [DebuggerStepThrough]

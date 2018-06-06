@@ -272,8 +272,8 @@ namespace LazinatorTests.Examples.Collections
                         _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData, null);
                     }
                     _MyJaggedArrayInt_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyJaggedArrayInt;
             }
             [DebuggerStepThrough]

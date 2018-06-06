@@ -104,8 +104,8 @@ namespace LazinatorTests.Examples.Abstract
                         _IntList4 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList4_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _IntList4;
             }
             [DebuggerStepThrough]
@@ -134,8 +134,8 @@ namespace LazinatorTests.Examples.Abstract
                         _IntList5 = ConvertFromBytes_List_Gint_g(childData, null);
                     }
                     _IntList5_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _IntList5;
             }
             [DebuggerStepThrough]

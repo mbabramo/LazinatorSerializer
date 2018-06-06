@@ -225,8 +225,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, null);
                     }
                     _MyTupleSerialized_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyTupleSerialized;
             }
             [DebuggerStepThrough]
@@ -256,8 +256,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, null);
                     }
                     _MyTupleSerialized2_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyTupleSerialized2;
             }
             [DebuggerStepThrough]
@@ -287,8 +287,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData, null);
                     }
                     _MyTupleSerialized3_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyTupleSerialized3;
             }
             [DebuggerStepThrough]
@@ -318,8 +318,8 @@ namespace LazinatorTests.Examples.Tuples
                         _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(childData, null);
                     }
                     _MyTupleSerialized4_Accessed = true;
-                    IsDirty = true;
                 }
+                IsDirty = true;
                 return _MyTupleSerialized4;
             }
             [DebuggerStepThrough]
