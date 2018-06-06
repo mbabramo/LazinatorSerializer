@@ -791,9 +791,9 @@ namespace Lazinator.CodeDescription
                         ReadOnlyMemory<byte> childData = {ChildSliceString};
                         {creation}
                     }}
-                    _{PropertyName}_Accessed = true;{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
+                    _{PropertyName}_Accessed = true;
+                }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
                     IsDirty = true;" : "")}
-                }}
                 return _{PropertyName};
             }}
             [DebuggerStepThrough]

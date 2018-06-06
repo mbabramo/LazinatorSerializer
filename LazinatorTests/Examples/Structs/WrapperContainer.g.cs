@@ -86,9 +86,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
-            [DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -212,7 +210,6 @@ namespace LazinatorTests.Examples.Structs
         private WInt _WrappedInt;
         public WInt WrappedInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)
@@ -234,7 +231,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

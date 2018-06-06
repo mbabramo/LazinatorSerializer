@@ -84,7 +84,6 @@ namespace LazinatorTests.Examples
         {
             [DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -264,7 +263,6 @@ namespace LazinatorTests.Examples
         private WrapperContainer _MyWrapperContainer;
         public WrapperContainer MyWrapperContainer
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyWrapperContainer_Accessed)
@@ -283,7 +281,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyWrapperContainer;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;

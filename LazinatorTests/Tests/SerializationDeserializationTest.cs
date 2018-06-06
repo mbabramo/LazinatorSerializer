@@ -1961,6 +1961,7 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.MyLong.Should().Be(987654);
         }
 
+
         [Fact]
         public void DistantPropertiesSerialized()
         {
@@ -1971,6 +1972,39 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 19;
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(19);
+        }
+
+        [Fact]
+        public void DirtinessWorksAfterConvertToBytes()
+        {
+            var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
+            hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
+            hierarchy.MyChild1.IsDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse(); // false because MyWrapperContainer doesn't have parent set and thus can't notify MyChild1
+            hierarchy.MyChild1.MyWrapperContainer.LazinatorConvertToBytes();
+            hierarchy.MyChild1.IsDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
+            hierarchy.MyChild1.IsDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            var clone = hierarchy.CloneLazinatorTyped();
+            // The following is the tricky part. We must make sure that LazinatorConvertToBytes doesn't cause MyChild1 to think that no serialization is necessary.
+            clone.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(18);
+        }
+
+        [Fact]
+        public void DirtinessWorksAfterDotNetCollectionConverted()
+        {
+            DotNetHashSet_SelfSerialized l = new DotNetHashSet_SelfSerialized();
+            l.MyHashSetSerialized = new HashSet<ExampleChild>();
+            l.MyHashSetSerialized.Add(new ExampleChild());
+            l.LazinatorConvertToBytes();
+            l.IsDirty.Should().BeFalse();
+            l.DescendantIsDirty.Should().BeFalse();
+            var firstItem = l.MyHashSetSerialized.First();
+            l.DescendantIsDirty.Should().BeTrue(); // should be true because .Net collection without special _Dirty property has been accessed
+            firstItem.MyLong = 3455423789458;
+            l.DescendantIsDirty.Should().BeTrue();
         }
 
         [Fact]
