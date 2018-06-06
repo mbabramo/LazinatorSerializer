@@ -138,7 +138,7 @@ namespace Lazinator.Core
         }
         
         /// <summary>
-        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
+        /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. The ID is passed as a parameter and need not be contained within the bytes themselves.
         /// </summary>
         /// <param name="uniqueID">The type of the item to create</param>
         /// <param name="storage">The serialized bytes</param>
@@ -146,21 +146,19 @@ namespace Lazinator.Core
         /// <returns>The deserialized Lazinator object</returns>
         public ILazinator CreateKnownID(int uniqueID, ReadOnlyMemory<byte> storage, ILazinator parent = null)
         {
+            ILazinator selfSerialized = null;
             if (FactoriesByID.ContainsKey(uniqueID))
-            {
-                ILazinator selfSerialized = FactoriesByID[uniqueID]();
-                InitializeDeserialized(selfSerialized, storage, parent);
-                return selfSerialized;
-            }
+                selfSerialized = FactoriesByID[uniqueID]();
             else
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                {
-                    return CreateGenericItemUsingReflection(storage.Span);
-                }
-                throw new UnknownSerializedTypeException(uniqueID);
+                    selfSerialized = CreateGenericItemUsingReflection(storage.Span);
             }
+            if (selfSerialized == null)
+                throw new UnknownSerializedTypeException(uniqueID);
+            InitializeDeserialized(selfSerialized, storage, parent);
+            return selfSerialized;
         }
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
@@ -257,23 +255,11 @@ namespace Lazinator.Core
                     yield break;
                 int bytesSoFar = 0;
                 int uniqueID = fixedUniqueID ?? storage.Span.ToDecompressedInt(ref bytesSoFar);
-                ILazinator itemToReturn = CreateKnownUniqueID(uniqueID, storage);
+                ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
                 int bytes = itemToReturn.LazinatorObjectBytes.Length;
                 storage = storage.Slice(bytes);
                 yield return itemToReturn;
             }
-        }
-
-        private ILazinator CreateKnownUniqueID(int uniqueID, ReadOnlyMemory<byte> serializedBytes)
-        {
-            if (FactoriesByID.ContainsKey(uniqueID))
-            {
-                ILazinator selfSerialized = FactoriesByID[uniqueID]();
-                InitializeDeserialized(selfSerialized, serializedBytes);
-                return selfSerialized;
-            }
-            else
-                throw new UnknownSerializedTypeException(uniqueID);
         }
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes)
