@@ -62,7 +62,7 @@ namespace Lazinator.Core
         public static MemoryInBuffer EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) where T : ILazinator, new()
         {
             BinaryBufferWriter writer = new BinaryBufferWriter(BinaryBufferWriter.MinMinBufferSize);
-            selfSerialized.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness); // DEBUG problem() maybe we should want to include the uniqueID since it's the top of the hierarchy. But we need to create the object anyway before we get here, so we shouldn't need to know its uniqueID. If we're creating a specific type, the user can manually instantiate the object. If it can be a range of types, then the ID will be there. 
+            selfSerialized.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
             return writer.MemoryInBuffer;
         }
 
