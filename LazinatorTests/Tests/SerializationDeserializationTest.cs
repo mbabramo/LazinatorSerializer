@@ -2489,12 +2489,38 @@ namespace LazinatorTests.Tests
         public void DeserializeMultipleWorks()
         {
             Example e = GetHierarchy(1, 1, 1, 1, 0);
-            int length = e.CloneLazinator().LazinatorObjectBytes.Length;
-            Memory<byte> memory = new Memory<byte>(new byte[length * 10]);
-            for (int i = 0; i < 10; i++)
-                e.LazinatorObjectBytes.CopyTo(memory.Slice(length * i));
-            var results = DeserializationFactory.Instance.CreateMultiple(memory, null).Select(x => (Example) x).Where(x => x != null).ToList();
+            OpenGeneric<WFloat> o = new OpenGeneric<WFloat>()
+            {
+                MyT = 3.0F,
+                MyListT = new List<WFloat>()
+                    {
+                        1.0F,
+                        2.0F
+                    }
+            };
+            int lengthExample = e.CloneLazinator().LazinatorObjectBytes.Length;
+            int lengthOpenGeneric = o.CloneLazinator().LazinatorObjectBytes.Length;
+            int lengthSoFar = 0;
+            const int numPairs = 5;
+            Memory<byte> memory = new Memory<byte>(new byte[numPairs * (lengthExample + lengthOpenGeneric)]);
+            for (int i = 0; i < numPairs; i++)
+            {
+                e.LazinatorObjectBytes.CopyTo(memory.Slice(lengthSoFar));
+                lengthSoFar += lengthExample;
+                o.LazinatorObjectBytes.CopyTo(memory.Slice(lengthSoFar));
+                lengthSoFar += lengthOpenGeneric;
+            }
+            var results = DeserializationFactory.Instance
+                .CreateMultiple(memory, null)
+                .Select(x => (ILazinator)x)
+                .Where(x => x != null).ToList();
             results.Count().Should().Be(10);
+            for (int i = 0; i < numPairs; i++)
+            {
+                (results[2 * i] as Example).Should().NotBeNull();
+                (results[2 * i + 1] as OpenGeneric<WFloat>).Should().NotBeNull();
+                (results[2 * i + 1] as OpenGeneric<WInt>).Should().BeNull();
+            }
         }
 
         [Fact]

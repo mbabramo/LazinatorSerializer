@@ -243,10 +243,6 @@ namespace Lazinator.Core
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 
-        #endregion
-
-        #region Factory setup
-
         /// <summary>
         /// Enumerate multiple objects stored successively in a single range of bytes and not in a Lazinator or .Net collection. Storing objects this way is useful when each is appended to the end of the storage. 
         /// </summary>
@@ -284,6 +280,11 @@ namespace Lazinator.Core
         {
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
+
+        #endregion
+
+        #region Factory setup
+
 
 
         private void SetupAllTypesInAssemblies(Assembly[] assemblies)
