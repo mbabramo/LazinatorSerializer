@@ -89,7 +89,9 @@ namespace LazinatorAnalyzer.Analyzer
             Compilation compilation = await p.GetCompilationAsync();
             var additionalDocuments = p.AdditionalDocuments;
             LazinatorCompilationAnalyzer analyzer = await
-                LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
+                LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments?.ToImmutableArray() ?? new ImmutableArray<TextDocument>());
+            if (analyzer == null)
+                return;
             analyzer.DisableStartingFromInterface = true;
             var config = analyzer.Config;
             foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular && !x.FilePath.EndsWith(config?.GeneratedCodeFileExtension ?? ".laz.cs")))

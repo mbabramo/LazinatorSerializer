@@ -81,9 +81,9 @@ namespace Lazinator.Collections
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -116,9 +116,9 @@ namespace Lazinator.Collections
         protected bool _DescendantIsDirty;
         public virtual bool DescendantIsDirty
         {
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             get => _DescendantIsDirty;
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             set
             {
                 if (_DescendantIsDirty != value)
@@ -201,7 +201,7 @@ namespace Lazinator.Collections
         private LazinatorOffsetList _Offsets;
         public LazinatorOffsetList Offsets
         {
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             get
             {
                 if (!_Offsets_Accessed)
@@ -220,7 +220,7 @@ namespace Lazinator.Collections
                 }
                 return _Offsets;
             }
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -236,7 +236,7 @@ namespace Lazinator.Collections
         private ReadOnlyMemory<byte> _SerializedMainList;
         public ReadOnlyMemory<byte> SerializedMainList
         {
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             get
             {
                 if (!_SerializedMainList_Accessed)
@@ -247,7 +247,7 @@ namespace Lazinator.Collections
                 }
                 return _SerializedMainList;
             }
-            [DebuggerStepThrough]
+            //[DebuggerStepThrough]
             set
             {
                 
