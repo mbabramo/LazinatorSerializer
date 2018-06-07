@@ -465,6 +465,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete3 ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -476,6 +477,9 @@ namespace LazinatorTests.Examples.Abstract
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Abstract.Concrete3 starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID == null)
@@ -491,17 +495,34 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before String1 value {String1}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String1);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before String2 value {String2}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String2);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before String3 value {String3}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String3);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before Example2 (accessed? {_Example2_Accessed}");
+            TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before Example3 (accessed? {_Example3_Accessed}");
+            TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntList1 (accessed? {_IntList1_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList1, isBelievedDirty: _IntList1_Accessed,
             isAccessed: _IntList1_Accessed, writer: writer,
@@ -510,6 +531,9 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList1,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntList2 (accessed? {_IntList2_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList2, isBelievedDirty: _IntList2_Accessed,
             isAccessed: _IntList2_Accessed, writer: writer,
@@ -518,6 +542,9 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList2,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntList3 (accessed? {_IntList3_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList3, isBelievedDirty: _IntList3_Accessed,
             isAccessed: _IntList3_Accessed, writer: writer,
@@ -526,6 +553,7 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList3,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

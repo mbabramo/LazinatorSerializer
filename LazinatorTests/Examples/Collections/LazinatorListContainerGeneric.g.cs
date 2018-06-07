@@ -283,6 +283,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.LazinatorListContainerGeneric<T> ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -294,6 +295,9 @@ namespace LazinatorTests.Examples.Collections
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.LazinatorListContainerGeneric<T> starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID == null)
@@ -309,10 +313,13 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyList (accessed? {_MyList_Accessed}");
+            TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _MyList, includeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
+            TabbedText.Tabs--;
         }
         
     }

@@ -285,6 +285,7 @@ namespace LazinatorTests.Examples
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonLazinatorInterchangeClass ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -296,6 +297,9 @@ namespace LazinatorTests.Examples
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.NonLazinatorInterchangeClass starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
@@ -305,9 +309,18 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before IsNull value {IsNull}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(writer, _IsNull);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyInt value {MyInt}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyString value {MyString}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
+            TabbedText.Tabs--;
         }
         
     }

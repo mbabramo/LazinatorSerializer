@@ -282,6 +282,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Subclasses.ClassWithLocalEnum ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -293,6 +294,9 @@ namespace LazinatorTests.Examples.Subclasses
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithLocalEnum starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID == null)
@@ -308,7 +312,12 @@ namespace LazinatorTests.Examples.Subclasses
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyEnum value {MyEnum}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnum);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyEnumList (accessed? {_MyEnumList_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed,
             isAccessed: _MyEnumList_Accessed, writer: writer,
@@ -317,6 +326,7 @@ namespace LazinatorTests.Examples.Subclasses
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GEnumWithinClass_g(w, MyEnumList,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

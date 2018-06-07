@@ -182,6 +182,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete5 ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -195,8 +196,16 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before String4 value {String4}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String4);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before String5 value {String5}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String5);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntList4 (accessed? {_IntList4_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList4, isBelievedDirty: _IntList4_Accessed,
             isAccessed: _IntList4_Accessed, writer: writer,
@@ -205,6 +214,9 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList4,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntList5 (accessed? {_IntList5_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
             isAccessed: _IntList5_Accessed, writer: writer,
@@ -213,6 +225,7 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList5,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

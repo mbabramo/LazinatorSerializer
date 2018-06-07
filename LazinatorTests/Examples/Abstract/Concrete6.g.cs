@@ -117,6 +117,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete6 ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -130,6 +131,8 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntList6 (accessed? {_IntList6_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed,
             isAccessed: _IntList6_Accessed, writer: writer,
@@ -138,6 +141,7 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList6,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

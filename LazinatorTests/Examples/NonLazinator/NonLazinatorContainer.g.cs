@@ -344,6 +344,7 @@ namespace LazinatorTests.Examples
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonLazinatorContainer ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -355,6 +356,9 @@ namespace LazinatorTests.Examples
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.NonLazinatorContainer starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
@@ -364,6 +368,8 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before NonLazinatorClass (accessed? {_NonLazinatorClass_Accessed}");
+            TabbedText.Tabs++;
             var serializedBytesCopy_NonLazinatorClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorClass = _NonLazinatorClass_ByteIndex;
             var byteLengthCopy_NonLazinatorClass = _NonLazinatorClass_ByteLength;
@@ -375,6 +381,9 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before NonLazinatorInterchangeableClass (accessed? {_NonLazinatorInterchangeableClass_Accessed}");
+            TabbedText.Tabs++;
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
@@ -386,6 +395,9 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before NonLazinatorStruct (accessed? {_NonLazinatorStruct_Accessed}");
+            TabbedText.Tabs++;
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
@@ -397,6 +409,7 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)

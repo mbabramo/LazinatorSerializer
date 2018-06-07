@@ -136,6 +136,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.DerivedArray_Values ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -149,6 +150,8 @@ namespace LazinatorTests.Examples.Collections
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt_DerivedLevel, isBelievedDirty: MyArrayInt_DerivedLevel_Dirty,
             isAccessed: _MyArrayInt_DerivedLevel_Accessed, writer: writer,
@@ -157,6 +160,7 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b(w, MyArrayInt_DerivedLevel,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

@@ -134,6 +134,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.Derived_DotNetList_Nested_NonSelfSerializable ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -147,7 +148,12 @@ namespace LazinatorTests.Examples.Collections
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyLevel2Int value {MyLevel2Int}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyLevel2Int);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyLevel2ListNestedNonLazinatorType (accessed? {_MyLevel2ListNestedNonLazinatorType_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLevel2ListNestedNonLazinatorType, isBelievedDirty: _MyLevel2ListNestedNonLazinatorType_Accessed,
             isAccessed: _MyLevel2ListNestedNonLazinatorType_Accessed, writer: writer,
@@ -156,6 +162,7 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GList_GNonLazinatorClass_g_g(w, MyLevel2ListNestedNonLazinatorType,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

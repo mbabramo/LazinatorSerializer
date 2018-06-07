@@ -495,6 +495,7 @@ namespace LazinatorTests.Examples
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.ExampleStruct ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -506,6 +507,9 @@ namespace LazinatorTests.Examples
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
         {
             // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.ExampleStruct starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
@@ -515,8 +519,16 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyBool value {MyBool}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(writer, _MyBool);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChar value {MyChar}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteCharInTwoBytes(writer, _MyChar);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild1 (accessed? {_MyChild1_Accessed}");
+            TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
                 var serializedBytesCopy = LazinatorObjectBytes;
@@ -524,6 +536,9 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyChild1_ByteLength;
                 WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2 (accessed? {_MyChild2_Accessed}");
+            TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
                 var serializedBytesCopy = LazinatorObjectBytes;
@@ -531,6 +546,9 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyChild2_ByteLength;
                 WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyLazinatorList (accessed? {_MyLazinatorList_Accessed}) (dirty? {_MyLazinatorList_Dirty})");
+            TabbedText.Tabs++;
             var serializedBytesCopy_MyLazinatorList = LazinatorObjectBytes;
             var byteIndexCopy_MyLazinatorList = _MyLazinatorList_ByteIndex;
             var byteLengthCopy_MyLazinatorList = _MyLazinatorList_ByteLength;
@@ -542,6 +560,9 @@ namespace LazinatorTests.Examples
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExample_g(w, copy_MyLazinatorList, includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyListValues (accessed? {_MyListValues_Accessed}");
+            TabbedText.Tabs++;
             var serializedBytesCopy_MyListValues = LazinatorObjectBytes;
             var byteIndexCopy_MyListValues = _MyListValues_ByteIndex;
             var byteLengthCopy_MyListValues = _MyListValues_ByteLength;
@@ -553,6 +574,9 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, copy_MyListValues, includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyTuple (accessed? {_MyTuple_Accessed}");
+            TabbedText.Tabs++;
             var serializedBytesCopy_MyTuple = LazinatorObjectBytes;
             var byteIndexCopy_MyTuple = _MyTuple_ByteIndex;
             var byteLengthCopy_MyTuple = _MyTuple_ByteLength;
@@ -564,6 +588,7 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(w, copy_MyTuple, includeChildrenMode, v));
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

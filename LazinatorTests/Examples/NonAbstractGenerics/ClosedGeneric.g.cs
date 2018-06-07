@@ -172,6 +172,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonAbstractGenerics.ClosedGeneric ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -185,7 +186,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before AnotherPropertyAdded value {AnotherPropertyAdded}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _AnotherPropertyAdded);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyListT (accessed? {_MyListT_Accessed}");
+            TabbedText.Tabs++;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListT, isBelievedDirty: _MyListT_Accessed,
             isAccessed: _MyListT_Accessed, writer: writer,
@@ -194,10 +200,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExampleChild_g(w, MyListT,
             includeChildrenMode, v));
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyT (accessed? {_MyT_Accessed}");
+            TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
+            TabbedText.Tabs--;
         }
         
         /* Conversion of supported collections and tuples */

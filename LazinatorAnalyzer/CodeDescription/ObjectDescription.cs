@@ -801,9 +801,13 @@ namespace Lazinator.CodeDescription
             {
                 if (IncludeTracingCode)
                 {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStruct && property.Nullable))
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (empty storage? {{_{property.PropertyName} == null}}) "");");
+                    }
+                    else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                    {
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) "");");
                     }
                     else if (property.TrackDirtinessNonSerialized)
                         sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (dirty? {{_{property.PropertyName}_Dirty}})"");");

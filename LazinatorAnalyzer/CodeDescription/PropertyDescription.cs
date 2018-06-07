@@ -25,7 +25,7 @@ namespace Lazinator.CodeDescription
         private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
-        private bool Nullable { get; set; }
+        internal bool Nullable { get; set; }
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
         private int? ArrayRank { get; set; }

@@ -96,6 +96,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonAbstractGenerics.InheritingClosedGeneric ");
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
             
@@ -109,7 +110,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Now at {writer.Position}, before YetAnotherInt value {YetAnotherInt}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _YetAnotherInt);
+            TabbedText.Tabs--;
         }
         
     }
