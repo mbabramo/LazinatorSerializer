@@ -15,5 +15,6 @@
   ],
   "DefaultAllowRecordLikeClasses": false,
   "DefaultAllowRecordLikeRegularStructs": false,
-  "DefaultAllowRecordLikeReadOnlyStructs": true
+  "DefaultAllowRecordLikeReadOnlyStructs": true,
+  "IncludeTracingCode":  true
 }

@@ -70,6 +70,7 @@ namespace Lazinator.CodeDescription
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !IsGeneric;
         public bool SuppressDate { get; set; }
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
+        public bool IncludeTracingCode => Compilation.Config?.IncludeTracingCode ?? false;
 
         public ObjectDescription()
         {
@@ -716,6 +717,11 @@ namespace Lazinator.CodeDescription
                         $@"public {DerivationKeyword}void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{");
 
+            if (IncludeTracingCode)
+            {
+                sb.AppendLine($@"TabbedText.WriteLine($""Initiating serialization of {ILazinatorTypeSymbol} "");");
+            }
+
             sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization();
                             " : "")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(UniqueIDCanBeSkipped ? "false" : "true")});");
@@ -755,6 +761,14 @@ namespace Lazinator.CodeDescription
                         {{
                             // header information");
 
+
+                if (IncludeTracingCode)
+                {
+                    sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass != null}}"");");
+                }
+
                 if (IsGeneric || !IsSealedOrStruct)
                     sb.AppendLine($@"if (includeUniqueID)
                             {{
@@ -785,7 +799,25 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
+                if (IncludeTracingCode)
+                {
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                    {
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
+                    }
+                    else if (property.TrackDirtinessNonSerialized)
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
+                    else if (property.PropertyType == LazinatorPropertyType.NonSelfSerializingType || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
+                    else
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} value {{{property.PropertyName}}}"");");
+                    sb.AppendLine($@"TabbedText.Tabs++;");
+                }
                 property.AppendPropertyWriteString(sb);
+                if (IncludeTracingCode)
+                {
+                    sb.AppendLine($@"TabbedText.Tabs--;");
+                }
             }
             sb.Append($@"}}
 ");

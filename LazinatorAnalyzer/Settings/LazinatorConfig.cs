@@ -17,6 +17,7 @@ namespace LazinatorAnalyzer.Settings
         private const string DirectConvertersString = "DirectConverters";
         private const string IgnoreRecordLikeTypesString = "IgnoreRecordLikeTypes";
         private const string IncludeRecordLikeTypesString = "IncludeRecordLikeTypes";
+        private const string IncludeTracingCodeString = "IncludeTracingCode";
         private const string DefaultAllowRecordLikeClassesString = "DefaultAllowRecordLikeClasses";
         private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
@@ -29,6 +30,7 @@ namespace LazinatorAnalyzer.Settings
         public List<string> IncludeRecordLikeTypes;
         public string ConfigFilePath;
         public string RelativeGeneratedCodePath, GeneratedCodePath;
+        public bool IncludeTracingCode;
 
         public LazinatorConfig()
         {
@@ -46,6 +48,7 @@ namespace LazinatorAnalyzer.Settings
                 try
                 {
                     JsonObject json = JsonValue.Parse(configString).AsJsonObject;
+                    IncludeTracingCode = json.ContainsKey(IncludeTracingCodeString) ? json[IncludeTracingCodeString].AsBoolean : false;
                     UseFullyQualifiedNames = json.ContainsKey(UseFullyQualifiedNamesString) ? json[UseFullyQualifiedNamesString].AsBoolean : false;
                     GeneratedCodeFileExtension = json.ContainsKey(GeneratedCodeFileExtensionString) ? json[GeneratedCodeFileExtensionString].AsString : ".laz.cs";
                     LoadDictionary(json, InterchangeConvertersString, InterchangeConverters);
