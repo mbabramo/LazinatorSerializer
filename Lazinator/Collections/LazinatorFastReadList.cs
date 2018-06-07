@@ -63,7 +63,7 @@ namespace Lazinator.Collections
             IsDirty = true;
         }
 
-        public void PreSerialization()
+        public void PreSerialization(bool verifyCleanness)
         {
             if (IsDirty)
                 ConvertFromList();

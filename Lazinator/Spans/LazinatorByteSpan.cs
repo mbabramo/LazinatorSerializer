@@ -69,7 +69,7 @@ namespace Lazinator.Spans
 
         public bool GetIsReadOnlyMode() => ReadOnlyMode;
 
-        public void PreSerialization()
+        public void PreSerialization(bool verifyCleanness)
         {
             if (!ReadOnlyMode)
             {

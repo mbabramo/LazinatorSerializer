@@ -245,7 +245,7 @@ namespace Lazinator.Collections
             MarkDirty();
         }
 
-        public virtual void PreSerialization()
+        public virtual void PreSerialization(bool verifyCleanness)
         {
             if (IsDirty || DescendantIsDirty)
             {
@@ -256,7 +256,6 @@ namespace Lazinator.Collections
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, w =>
                 {
                     int startingPosition = w.Position;
-                    bool verifyCleanness = false; // DEBUG -- make this a parameter
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
                         var item = i; // avoid closure problem

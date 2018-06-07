@@ -722,7 +722,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine($@"TabbedText.WriteLine($""Initiating serialization of {ILazinatorTypeSymbol} "");");
             }
 
-            sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization();
+            sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization(verifyCleanness);
                             " : "")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
