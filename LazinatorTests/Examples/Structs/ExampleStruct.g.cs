@@ -527,7 +527,7 @@ namespace LazinatorTests.Examples
             TabbedText.Tabs++;
             EncodeCharAndString.WriteCharInTwoBytes(writer, _MyChar);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild1 (accessed? {_MyChild1_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild1 (accessed? {_MyChild1_Accessed}) (empty storage? {_MyChild1 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
@@ -537,7 +537,7 @@ namespace LazinatorTests.Examples
                 WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2 (accessed? {_MyChild2_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2 (accessed? {_MyChild2_Accessed}) (empty storage? {_MyChild2 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {

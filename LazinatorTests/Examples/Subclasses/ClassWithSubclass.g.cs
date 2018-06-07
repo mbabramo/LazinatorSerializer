@@ -372,14 +372,14 @@ namespace LazinatorTests.Examples.Subclasses
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _IntWithinSuperclass);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before SubclassInstance1 (accessed? {_SubclassInstance1_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before SubclassInstance1 (accessed? {_SubclassInstance1_Accessed}) (empty storage? {_SubclassInstance1 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before SubclassInstance2 (accessed? {_SubclassInstance2_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before SubclassInstance2 (accessed? {_SubclassInstance2_Accessed}) (empty storage? {_SubclassInstance2 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

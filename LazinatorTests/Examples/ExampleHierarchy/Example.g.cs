@@ -915,42 +915,42 @@ namespace LazinatorTests.Examples
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before ExcludableChild (accessed? {_ExcludableChild_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before ExcludableChild (accessed? {_ExcludableChild_Accessed}) (empty storage? {_ExcludableChild == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
                 WriteChildWithLength(writer, _ExcludableChild, includeChildrenMode, _ExcludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before IncludableChild (accessed? {_IncludableChild_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before IncludableChild (accessed? {_IncludableChild_Accessed}) (empty storage? {_IncludableChild == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 WriteChildWithLength(writer, _IncludableChild, includeChildrenMode, _IncludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild1 (accessed? {_MyChild1_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild1 (accessed? {_MyChild1_Accessed}) (empty storage? {_MyChild1 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2 (accessed? {_MyChild2_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2 (accessed? {_MyChild2_Accessed}) (empty storage? {_MyChild2 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2Previous (accessed? {_MyChild2Previous_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyChild2Previous (accessed? {_MyChild2Previous_Accessed}) (empty storage? {_MyChild2Previous == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
             {
                 WriteChildWithLength(writer, _MyChild2Previous, includeChildrenMode, _MyChild2Previous_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyInterfaceImplementer (accessed? {_MyInterfaceImplementer_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyInterfaceImplementer (accessed? {_MyInterfaceImplementer_Accessed}) (empty storage? {_MyInterfaceImplementer == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -968,7 +968,7 @@ namespace LazinatorTests.Examples
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, MyNonLazinatorChild,
             includeChildrenMode, v));
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before WrappedInt (accessed? {_WrappedInt_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before WrappedInt (accessed? {_WrappedInt_Accessed}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

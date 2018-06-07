@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Structs
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Now at {writer.Position}, before WrappedInt (accessed? {_WrappedInt_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before WrappedInt (accessed? {_WrappedInt_Accessed}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

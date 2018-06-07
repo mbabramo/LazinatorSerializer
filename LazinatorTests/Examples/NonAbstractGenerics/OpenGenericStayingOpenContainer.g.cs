@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Now at {writer.Position}, before ClosedGeneric (accessed? {_ClosedGeneric_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before ClosedGeneric (accessed? {_ClosedGeneric_Accessed}) (empty storage? {_ClosedGeneric == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

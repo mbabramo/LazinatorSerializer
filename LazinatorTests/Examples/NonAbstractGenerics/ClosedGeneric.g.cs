@@ -201,7 +201,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             ConvertToBytes_List_GExampleChild_g(w, MyListT,
             includeChildrenMode, v));
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyT (accessed? {_MyT_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyT (accessed? {_MyT_Accessed}) (empty storage? {_MyT == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

@@ -382,7 +382,7 @@ namespace LazinatorTests.Examples
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ByteSpan,
             includeChildrenMode, v));
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyWrapperContainer (accessed? {_MyWrapperContainer_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyWrapperContainer (accessed? {_MyWrapperContainer_Accessed}) (empty storage? {_MyWrapperContainer == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

@@ -507,14 +507,14 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String3);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before Example2 (accessed? {_Example2_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before Example2 (accessed? {_Example2_Accessed}) (empty storage? {_Example2 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before Example3 (accessed? {_Example3_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before Example3 (accessed? {_Example3_Accessed}) (empty storage? {_Example3 == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

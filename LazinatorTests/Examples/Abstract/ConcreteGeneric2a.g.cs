@@ -387,7 +387,7 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _AnotherProperty);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before LazinatorExample (accessed? {_LazinatorExample_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before LazinatorExample (accessed? {_LazinatorExample_Accessed}) (empty storage? {_LazinatorExample == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

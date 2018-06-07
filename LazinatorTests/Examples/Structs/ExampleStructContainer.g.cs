@@ -468,14 +468,14 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Now at {writer.Position}, before IntWrapper (accessed? {_IntWrapper_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before IntWrapper (accessed? {_IntWrapper_Accessed}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _IntWrapper, includeChildrenMode, _IntWrapper_Accessed, () => GetChildSlice(LazinatorObjectBytes, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null), verifyCleanness, true, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before MyExampleStruct (accessed? {_MyExampleStruct_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before MyExampleStruct (accessed? {_MyExampleStruct_Accessed}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

@@ -352,14 +352,14 @@ namespace LazinatorTests.Examples.Hierarchy
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Now at {writer.Position}, before RecursiveClass (accessed? {_RecursiveClass_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before RecursiveClass (accessed? {_RecursiveClass_Accessed}) (empty storage? {_RecursiveClass == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _RecursiveClass, includeChildrenMode, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Now at {writer.Position}, before RecursiveInterface (accessed? {_RecursiveInterface_Accessed}");
+            TabbedText.WriteLine($"Now at {writer.Position}, before RecursiveInterface (accessed? {_RecursiveInterface_Accessed}) (empty storage? {_RecursiveInterface == null}) ");
             TabbedText.Tabs++;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

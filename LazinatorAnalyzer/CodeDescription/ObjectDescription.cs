@@ -803,7 +803,7 @@ namespace Lazinator.CodeDescription
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStruct && property.Nullable))
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (empty storage? {{_{property.PropertyName} == null}}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
                     else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     {
