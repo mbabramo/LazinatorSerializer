@@ -77,12 +77,15 @@ namespace LazinatorAnalyzer.Analyzer
 
         public async Task AddDiagnosticsToBuilder(Solution s, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
         {
-            foreach (var project in s.Projects)
-                await AddDiagnosticsToBuilder(project, builder, cancellationToken);
+            if (s != null)
+                foreach (var project in s.Projects)
+                    await AddDiagnosticsToBuilder(project, builder, cancellationToken);
         }
 
         public async Task AddDiagnosticsToBuilder(Project p, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
         {
+            if (p == null)
+                return;
             Compilation compilation = await p.GetCompilationAsync();
             var additionalDocuments = p.AdditionalDocuments;
             LazinatorCompilationAnalyzer analyzer = await
@@ -97,6 +100,8 @@ namespace LazinatorAnalyzer.Analyzer
 
         public async Task AddDiagnosticsToBuilder(Document d, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
         {
+            if (d == null)
+                return;
             Project p = d.Project;
             Compilation compilation = await p.GetCompilationAsync();
             var additionalDocuments = p.AdditionalDocuments;

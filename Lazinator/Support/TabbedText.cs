@@ -46,7 +46,10 @@ namespace Lazinator.Support
         public static void WriteWithoutTabs(string format, object[] args)
         {
             StringBuilder local = new StringBuilder();
-            local.Append(String.Format(format, args));
+            if (args != null && args.Any())
+                local.Append(String.Format(format, args));
+            else
+                local.Append(format);
             OutputAndAccumulate(local);
         }
 
