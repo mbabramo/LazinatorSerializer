@@ -247,7 +247,7 @@ namespace Lazinator.Collections
 
         public virtual void PreSerialization(bool verifyCleanness)
         {
-            if (IsDirty || DescendantIsDirty)
+            if (IsDirty)
             {
                 BinaryBufferWriter writer = new BinaryBufferWriter(Math.Max(100, (int)(SerializedMainList.Length * 1.2))); // try to allocate enough space initially to minimize the risk of buffer recopies, but don't go overboard.
                 _Offsets_Accessed = true;
