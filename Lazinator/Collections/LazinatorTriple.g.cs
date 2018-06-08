@@ -245,6 +245,7 @@ namespace Lazinator.Collections
         private U _Item2;
         public virtual U Item2
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Item2_Accessed)
@@ -270,6 +271,7 @@ namespace Lazinator.Collections
                 }
                 return _Item2;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
