@@ -730,7 +730,10 @@ namespace Lazinator.CodeDescription
             GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
-                        ");
+                            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+                            {{
+                                throw new LazinatorSerializationException(""Cannot update the stored buffer without including all children in the serialization."");
+                            }}");
             sb.AppendLine(postEncodingDirtinessCheck);
             sb.AppendLine($@"
                 _LazinatorObjectBytes = writer.Slice(startPosition);");
