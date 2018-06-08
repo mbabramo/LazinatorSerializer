@@ -334,7 +334,7 @@ namespace Lazinator.Collections.AvlTree
             CompressedIntegralTypes.WriteCompressedInt(writer, _NumItemsAdded);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

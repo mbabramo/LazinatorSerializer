@@ -355,11 +355,11 @@ namespace LazinatorTests.Examples.Hierarchy
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _RecursiveClass, includeChildrenMode, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _RecursiveClass, includeChildrenMode, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _RecursiveInterface, includeChildrenMode, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _RecursiveInterface, includeChildrenMode, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

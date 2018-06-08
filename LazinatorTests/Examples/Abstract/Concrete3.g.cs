@@ -501,11 +501,11 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String3);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList1, isBelievedDirty: _IntList1_Accessed,

@@ -189,7 +189,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Initiates a binary write to a child of a self-serialized object, including a length prefix
+        /// Initiates a binary write to a child of a self-serialized object, optionally including a length prefix
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child</param>
@@ -200,7 +200,7 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
         /// <param name="skipLength">If true, the length is omitted altogether.</param>
         /// <param name="parent">The parent of the object being written</param>
-        public static void WriteChildWithLength<T>(BinaryBufferWriter writer, T child,
+        public static void WriteChild<T>(BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
             ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {

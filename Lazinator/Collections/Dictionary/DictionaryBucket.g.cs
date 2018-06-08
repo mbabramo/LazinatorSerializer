@@ -366,11 +366,11 @@ namespace Lazinator.Collections.Dictionary
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Keys, includeChildrenMode, _Keys_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Keys_ByteIndex, _Keys_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _Keys, includeChildrenMode, _Keys_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Keys_ByteIndex, _Keys_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Values, includeChildrenMode, _Values_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Values_ByteIndex, _Values_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _Values, includeChildrenMode, _Values_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Values_ByteIndex, _Values_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

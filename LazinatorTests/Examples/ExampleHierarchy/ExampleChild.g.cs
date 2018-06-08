@@ -376,7 +376,7 @@ namespace LazinatorTests.Examples
             includeChildrenMode, v, updateStoredBuffer));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _MyWrapperContainer, includeChildrenMode, _MyWrapperContainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _MyWrapperContainer, includeChildrenMode, _MyWrapperContainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

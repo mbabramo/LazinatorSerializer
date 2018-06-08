@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples.Structs
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _ExampleStructWithoutClass, includeChildrenMode, _ExampleStructWithoutClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _ExampleStructWithoutClass, includeChildrenMode, _ExampleStructWithoutClass_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         

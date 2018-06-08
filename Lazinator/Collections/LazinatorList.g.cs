@@ -336,7 +336,7 @@ namespace Lazinator.Collections
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _SerializedMainList, isBelievedDirty: _SerializedMainList_Accessed,

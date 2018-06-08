@@ -372,11 +372,11 @@ namespace LazinatorTests.Examples.Subclasses
             CompressedIntegralTypes.WriteCompressedInt(writer, _IntWithinSuperclass);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChildWithLength(writer, _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null), verifyCleanness, false, false, this);
             }
         }
         
