@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Structs
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _ExampleStructWithoutClass_ByteIndex;
         private int _ContainerForExampleStructWithoutClass_EndByteIndex;

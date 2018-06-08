@@ -199,7 +199,7 @@ namespace Lazinator.Collections.Dictionary
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _Buckets_ByteIndex;
         private int _LazinatorDictionary_TKey_TValue_EndByteIndex;

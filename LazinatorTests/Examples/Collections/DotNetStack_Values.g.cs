@@ -196,7 +196,7 @@ namespace LazinatorTests.Examples.Collections
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _MyStackInt_ByteIndex;
         private int _DotNetStack_Values_EndByteIndex;

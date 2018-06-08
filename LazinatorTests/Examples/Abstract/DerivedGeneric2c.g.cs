@@ -198,7 +198,7 @@ namespace LazinatorTests.Examples.Abstract
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         private int _DerivedGeneric2c_T_EndByteIndex = 0;
         protected override int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;

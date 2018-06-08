@@ -195,7 +195,7 @@ namespace LazinatorTests.Examples.Tuples
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _MyNestedTuple_ByteIndex;
         private int _NestedTuple_EndByteIndex;

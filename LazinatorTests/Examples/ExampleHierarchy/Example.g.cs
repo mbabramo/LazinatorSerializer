@@ -229,7 +229,7 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _ExcludableChild_ByteIndex;
         protected int _IncludableChild_ByteIndex;

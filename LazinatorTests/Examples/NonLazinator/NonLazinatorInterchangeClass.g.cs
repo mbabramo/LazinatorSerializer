@@ -198,7 +198,7 @@ namespace LazinatorTests.Examples
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         
         private bool _IsNull;

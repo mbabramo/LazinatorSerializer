@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _ExampleByInterface_ByteIndex;
         protected int _ExampleListByInterface_ByteIndex;

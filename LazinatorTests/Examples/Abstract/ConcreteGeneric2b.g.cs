@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Abstract
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _LazinatorExample_ByteIndex;
         protected override int _MyT_ByteLength => _LazinatorExample_ByteIndex - _MyT_ByteIndex;

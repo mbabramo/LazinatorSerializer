@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _MyListT_ByteIndex;
         protected int _MyT_ByteIndex;

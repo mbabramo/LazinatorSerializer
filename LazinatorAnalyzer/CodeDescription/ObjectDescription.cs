@@ -297,7 +297,7 @@ namespace Lazinator.CodeDescription
                         public abstract ulong GetBinaryHashCode64();
                         public abstract Guid GetBinaryHashCode128();
 
-                        /* Field definitions */
+                        /* Property definitions */
         
                 ";
                 else
@@ -493,7 +493,7 @@ namespace Lazinator.CodeDescription
                             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
                         }}
 
-                        /* Field definitions */
+                        /* Property definitions */
         
                 ";
                 }

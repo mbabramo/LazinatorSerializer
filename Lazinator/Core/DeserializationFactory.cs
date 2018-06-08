@@ -281,12 +281,26 @@ namespace Lazinator.Core
 
         private void SetupAllTypesInAssembly(Assembly assembly)
         {
-            Type[] types = assembly.DefinedTypes
+            Type[] types = GetLoadableTypes(assembly)
+                .Select(x => x.GetTypeInfo())
                 .Where(x => x.ImplementedInterfaces.Contains(typeof(ILazinator)))
                 .Where(x => !x.IsInterface && !x.IsAbstract)
                 .Select(x => x.AsType())
                 .ToArray();
             SetTypes(types);
+        }
+
+        // see https://stackoverflow.com/questions/7889228/how-to-prevent-reflectiontypeloadexception-when-calling-assembly-gettypes
+        private IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null);
+            }
         }
 
         private void SetTypes(Type[] typesImplementingILazinator)

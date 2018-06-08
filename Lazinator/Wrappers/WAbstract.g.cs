@@ -72,7 +72,7 @@ namespace Lazinator.Wrappers
         public abstract ulong GetBinaryHashCode64();
         public abstract Guid GetBinaryHashCode128();
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _Wrapped_ByteIndex;
         protected virtual int _Wrapped_ByteLength { get; }

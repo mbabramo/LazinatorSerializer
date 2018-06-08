@@ -203,7 +203,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _ClosedGeneric_ByteIndex;
         private int _OpenGenericStayingOpenContainer_EndByteIndex;

@@ -196,7 +196,7 @@ namespace LazinatorTests.Examples.Collections
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _MyDictionary_ByteIndex;
         protected int _MySortedDictionary_ByteIndex;

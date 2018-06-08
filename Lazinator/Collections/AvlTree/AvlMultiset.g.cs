@@ -200,7 +200,7 @@ namespace Lazinator.Collections.AvlTree
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _UnderlyingSet_ByteIndex;
         private int _AvlMultiset_T_EndByteIndex;

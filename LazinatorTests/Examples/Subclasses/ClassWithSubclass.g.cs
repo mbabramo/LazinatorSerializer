@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Subclasses
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _SubclassInstance1_ByteIndex;
         protected int _SubclassInstance2_ByteIndex;

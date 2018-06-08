@@ -192,7 +192,7 @@ namespace Lazinator.Wrappers
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         int _WrappedValue_ByteIndex;
         private int _WIntArray_EndByteIndex;

@@ -74,7 +74,7 @@ namespace LazinatorTests.Examples.Abstract
         public abstract ulong GetBinaryHashCode64();
         public abstract Guid GetBinaryHashCode128();
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _Example3_ByteIndex;
         protected int _IntList1_ByteIndex;

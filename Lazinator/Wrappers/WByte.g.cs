@@ -190,7 +190,7 @@ namespace Lazinator.Wrappers
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         
         private byte _WrappedValue;

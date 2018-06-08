@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _RecursiveClass_ByteIndex;
         protected int _RecursiveInterface_ByteIndex;

@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Tuples
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _MyMismatchedRecordLikeType_ByteIndex;
         protected int _MyRecordLikeClass_ByteIndex;

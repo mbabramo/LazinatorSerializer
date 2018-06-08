@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Subclasses
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         protected int _MyEnumList_ByteIndex;
         private int _ClassWithLocalEnum_EndByteIndex;

@@ -211,7 +211,7 @@ namespace Lazinator.Collections
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         
-        /* Field definitions */
+        /* Property definitions */
         
         int _FourByteItems_ByteIndex;
         int _TwoByteItems_ByteIndex;
