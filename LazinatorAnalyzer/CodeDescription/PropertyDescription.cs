@@ -743,7 +743,7 @@ namespace Lazinator.CodeDescription
             string assignment;
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
-                string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : ""; // DEBUG -- we don't have all overrides for second case
+                string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : "";
                 if (IsInterface)
                     assignment =
                     $@"
@@ -1746,10 +1746,10 @@ namespace Lazinator.CodeDescription
 
                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(BinaryBufferWriter writer,
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
-                            bool verifyCleanness, updateStoredBuffer)
+                            bool verifyCleanness, bool updateStoredBuffer)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
-                            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
                         ");
         }
