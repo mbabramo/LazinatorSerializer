@@ -832,11 +832,14 @@ namespace LazinatorTests.Examples
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            {
+                updateStoredBuffer = false;
+            }
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));

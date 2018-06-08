@@ -334,11 +334,14 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            {
+                updateStoredBuffer = false;
+            }
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Keys_Accessed && Keys != null && (Keys.IsDirty || Keys.DescendantIsDirty)) || (_Values_Accessed && Values != null && (Values.IsDirty || Values.DescendantIsDirty)));

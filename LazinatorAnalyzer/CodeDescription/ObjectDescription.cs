@@ -722,6 +722,11 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine($@"TabbedText.WriteLine($""Initiating serialization of {ILazinatorTypeSymbol} "");");
             }
 
+            sb.AppendLine($@"if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+                            {{
+                                updateStoredBuffer = false;
+                            }}");
+
             sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization(verifyCleanness, updateStoredBuffer);
                             " : "")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
@@ -729,11 +734,7 @@ namespace Lazinator.CodeDescription
             string additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
             GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
             sb.AppendLine($@"if (updateStoredBuffer)
-                        {{
-                            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
-                            {{
-                                throw new LazinatorSerializationException(""Cannot update the stored buffer without including all children in the serialization."");
-                            }}");
+                        {{");
             sb.AppendLine(postEncodingDirtinessCheck);
             sb.AppendLine($@"
                 _LazinatorObjectBytes = writer.Slice(startPosition);");

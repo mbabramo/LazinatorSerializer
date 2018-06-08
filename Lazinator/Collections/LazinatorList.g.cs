@@ -303,12 +303,15 @@ namespace Lazinator.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            {
+                updateStoredBuffer = false;
+            }
             PreSerialization(verifyCleanness, updateStoredBuffer);
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Offsets_Accessed && Offsets != null && (Offsets.IsDirty || Offsets.DescendantIsDirty)));
