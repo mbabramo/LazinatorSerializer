@@ -2365,22 +2365,32 @@ namespace LazinatorTests.Tests
             v2.MyList.IsDirty.Should().BeTrue();
             v2.IsDirty.Should().BeFalse();
             v2.DescendantIsDirty.Should().BeTrue();
-            
-            v2.MyList.Add(GetExampleChild(1));
-            v2.MyList.Add(GetExampleChild(1));
-            v2.MyList.Add(GetExampleChild(1));
+
             var v3 = v2.CloneLazinatorTyped();
-            v3.IsDirty.Should().BeFalse();
-            v3.DescendantIsDirty.Should().BeFalse();
-            v3.MyList.IsDirty.Should().BeFalse();
-            var x = v3.MyList[2];
             v3.MyList.IsDirty.Should().BeFalse();
             v3.MyList.DescendantIsDirty.Should().BeFalse();
-            x.MyLong = 25;
+            v3.MyList[0].MyLong = 987654321;
             v3.MyList.IsDirty.Should().BeFalse();
             v3.MyList.DescendantIsDirty.Should().BeTrue();
-            v3.IsDirty.Should().BeFalse();
-            v3.DescendantIsDirty.Should().BeTrue();
+            var v4 = v3.CloneLazinatorTyped();
+            v4.MyList[0].MyLong.Should().Be(987654321);
+
+            // now, back to prior list
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+            var v5 = v2.CloneLazinatorTyped();
+            v5.IsDirty.Should().BeFalse();
+            v5.DescendantIsDirty.Should().BeFalse();
+            v5.MyList.IsDirty.Should().BeFalse();
+            var x = v5.MyList[2];
+            v5.MyList.IsDirty.Should().BeFalse();
+            v5.MyList.DescendantIsDirty.Should().BeFalse();
+            x.MyLong = 25;
+            v5.MyList.IsDirty.Should().BeFalse();
+            v5.MyList.DescendantIsDirty.Should().BeTrue();
+            v5.IsDirty.Should().BeFalse();
+            v5.DescendantIsDirty.Should().BeTrue();
         }
 
         [Fact]
