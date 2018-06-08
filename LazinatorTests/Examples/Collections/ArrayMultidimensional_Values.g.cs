@@ -397,7 +397,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_c_b(w, MyArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyArrayInt_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyArrayInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed,
@@ -407,7 +410,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(w, MyCrazyJaggedArray,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyCrazyJaggedArray_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyCrazyJaggedArray_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed,
@@ -417,8 +423,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_c_c_b(w, MyThreeDimArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyThreeDimArrayInt_ByteIndex = startOfObjectPosition - startPosition;
-            _ArrayMultidimensional_Values_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyThreeDimArrayInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _ArrayMultidimensional_Values_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

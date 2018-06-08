@@ -366,14 +366,23 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GT_g(w, MyListT,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyListT_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyListT_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _MyT_ByteIndex = startOfObjectPosition - startPosition;
-            _OpenGeneric_T_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyT_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _OpenGeneric_T_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

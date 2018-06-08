@@ -412,7 +412,10 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(w, EnumTuple,
             includeChildrenMode, v, updateStoredBuffer));
-            _EnumTuple_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _EnumTuple_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNamedTuple, isBelievedDirty: _MyNamedTuple_Accessed,
@@ -422,7 +425,10 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(w, MyNamedTuple,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyNamedTuple_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyNamedTuple_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableTuple, isBelievedDirty: _MyNullableTuple_Accessed,
@@ -432,7 +438,10 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes__Pint_c_C32double_p_C63(w, MyNullableTuple,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyNullableTuple_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyNullableTuple_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyValueTupleSerialized, isBelievedDirty: _MyValueTupleSerialized_Accessed,
@@ -442,8 +451,14 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(w, MyValueTupleSerialized,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyValueTupleSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _StructTuple_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyValueTupleSerialized_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _StructTuple_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

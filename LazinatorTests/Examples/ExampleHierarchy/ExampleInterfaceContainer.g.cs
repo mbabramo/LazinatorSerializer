@@ -354,7 +354,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 WriteChild(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _ExampleByInterface_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _ExampleByInterface_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
@@ -364,8 +367,14 @@ namespace LazinatorTests.Examples.Hierarchy
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GIExample_g(w, ExampleListByInterface,
             includeChildrenMode, v, updateStoredBuffer));
-            _ExampleListByInterface_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleInterfaceContainer_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _ExampleListByInterface_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _ExampleInterfaceContainer_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

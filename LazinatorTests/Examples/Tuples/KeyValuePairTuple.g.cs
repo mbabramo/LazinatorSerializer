@@ -308,8 +308,14 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(w, MyKeyValuePairSerialized,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyKeyValuePairSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _KeyValuePairTuple_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyKeyValuePairSerialized_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _KeyValuePairTuple_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

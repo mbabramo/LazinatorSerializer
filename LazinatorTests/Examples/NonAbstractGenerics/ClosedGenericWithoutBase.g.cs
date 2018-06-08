@@ -334,8 +334,14 @@ namespace LazinatorTests.Examples
             {
                 WriteChild(writer, _ItemU, includeChildrenMode, _ItemU_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _ItemU_ByteIndex = startOfObjectPosition - startPosition;
-            _ClosedGenericWithoutBase_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _ItemU_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericWithoutBase_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

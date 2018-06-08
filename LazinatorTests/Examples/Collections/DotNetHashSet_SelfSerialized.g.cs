@@ -308,8 +308,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_HashSet_GExampleChild_g(w, MyHashSetSerialized,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyHashSetSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetHashSet_SelfSerialized_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyHashSetSerialized_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetHashSet_SelfSerialized_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

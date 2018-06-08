@@ -378,7 +378,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Dictionary_Gint_c_C32ExampleChild_g(w, MyDictionary,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyDictionary_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyDictionary_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed,
@@ -388,7 +391,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_SortedDictionary_Gint_c_C32ExampleChild_g(w, MySortedDictionary,
             includeChildrenMode, v, updateStoredBuffer));
-            _MySortedDictionary_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MySortedDictionary_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed,
@@ -398,8 +404,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(w, MySortedList,
             includeChildrenMode, v, updateStoredBuffer));
-            _MySortedList_ByteIndex = startOfObjectPosition - startPosition;
-            _Dictionary_Values_SelfSerialized_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MySortedList_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _Dictionary_Values_SelfSerialized_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

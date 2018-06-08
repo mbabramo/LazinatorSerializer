@@ -328,8 +328,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Queue_Gint_g(w, MyQueueInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyQueueInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetQueue_Values_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyQueueInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetQueue_Values_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

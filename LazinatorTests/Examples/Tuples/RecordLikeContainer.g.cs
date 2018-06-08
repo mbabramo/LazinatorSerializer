@@ -379,7 +379,10 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_MismatchedRecordLikeType(w, MyMismatchedRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyMismatchedRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyMismatchedRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed,
@@ -389,7 +392,10 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_RecordLikeClass(w, MyRecordLikeClass,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyRecordLikeClass_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyRecordLikeClass_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed,
@@ -399,8 +405,14 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_RecordLikeType(w, MyRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
-            _RecordLikeContainer_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _RecordLikeContainer_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

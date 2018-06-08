@@ -149,8 +149,14 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList6,
             includeChildrenMode, v, updateStoredBuffer));
-            _IntList6_ByteIndex = startOfObjectPosition - startPosition;
-            _Concrete6_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _IntList6_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _Concrete6_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

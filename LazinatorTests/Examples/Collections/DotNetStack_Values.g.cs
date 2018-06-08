@@ -328,8 +328,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Stack_Gint_g(w, MyStackInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyStackInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetStack_Values_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyStackInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetStack_Values_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

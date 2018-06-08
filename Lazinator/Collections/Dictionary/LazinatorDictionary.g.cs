@@ -341,8 +341,14 @@ namespace Lazinator.Collections.Dictionary
             {
                 WriteChild(writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _Buckets_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorDictionary_TKey_TValue_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _Buckets_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _LazinatorDictionary_TKey_TValue_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

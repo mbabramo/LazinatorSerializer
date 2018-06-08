@@ -329,8 +329,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExampleChild_g(w, MyListSerialized,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyListSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_SelfSerialized_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyListSerialized_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetList_SelfSerialized_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

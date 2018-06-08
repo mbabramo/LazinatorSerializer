@@ -344,7 +344,10 @@ namespace Lazinator.Collections
             {
                 WriteChild(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _Offsets_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _Offsets_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _SerializedMainList, isBelievedDirty: _SerializedMainList_Accessed,
@@ -354,8 +357,14 @@ namespace Lazinator.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(w, SerializedMainList,
             includeChildrenMode, v, updateStoredBuffer));
-            _SerializedMainList_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorList_T_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _SerializedMainList_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _LazinatorList_T_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

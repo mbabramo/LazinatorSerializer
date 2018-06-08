@@ -341,8 +341,14 @@ namespace Lazinator.Wrappers
                 var byteLengthCopy = _NonNullValue_ByteLength;
                 WriteChild(writer, _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
-            _NonNullValue_ByteIndex = startOfObjectPosition - startPosition;
-            _WNullableStruct_T_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _NonNullValue_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _WNullableStruct_T_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

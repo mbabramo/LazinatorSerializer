@@ -351,8 +351,14 @@ namespace Lazinator.Spans
             {
                 WriteChild(writer, _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _ByteSpan_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorBitArray_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _ByteSpan_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _LazinatorBitArray_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

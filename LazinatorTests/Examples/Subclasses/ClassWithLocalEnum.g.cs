@@ -328,8 +328,14 @@ namespace LazinatorTests.Examples.Subclasses
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GEnumWithinClass_g(w, MyEnumList,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyEnumList_ByteIndex = startOfObjectPosition - startPosition;
-            _ClassWithLocalEnum_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyEnumList_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _ClassWithLocalEnum_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

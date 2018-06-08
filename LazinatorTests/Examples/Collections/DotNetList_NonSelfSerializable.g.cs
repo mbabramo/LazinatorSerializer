@@ -364,7 +364,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyListNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyListNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType2, isBelievedDirty: _MyListNonLazinatorType2_Accessed,
@@ -374,8 +377,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType2,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyListNonLazinatorType2_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_NonSelfSerializable_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyListNonLazinatorType2_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetList_NonSelfSerializable_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

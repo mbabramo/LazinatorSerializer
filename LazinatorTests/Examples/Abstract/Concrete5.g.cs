@@ -216,7 +216,10 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList4,
             includeChildrenMode, v, updateStoredBuffer));
-            _IntList4_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _IntList4_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
@@ -226,8 +229,14 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList5,
             includeChildrenMode, v, updateStoredBuffer));
-            _IntList5_ByteIndex = startOfObjectPosition - startPosition;
-            _Concrete5_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _IntList5_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _Concrete5_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

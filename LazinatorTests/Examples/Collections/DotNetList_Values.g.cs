@@ -440,7 +440,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_LinkedList_Gint_g(w, MyLinkedListInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyLinkedListInt_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyLinkedListInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
@@ -450,7 +453,10 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, MyListInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyListInt_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyListInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty,
@@ -460,8 +466,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_SortedSet_Gint_g(w, MySortedSetInt,
             includeChildrenMode, v, updateStoredBuffer));
-            _MySortedSetInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_Values_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MySortedSetInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetList_Values_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

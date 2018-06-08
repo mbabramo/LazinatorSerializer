@@ -340,8 +340,14 @@ namespace LazinatorTests.Examples.Structs
             {
                 WriteChild(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
-            _WrappedInt_ByteIndex = startOfObjectPosition - startPosition;
-            _WrapperContainer_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _WrappedInt_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _WrapperContainer_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

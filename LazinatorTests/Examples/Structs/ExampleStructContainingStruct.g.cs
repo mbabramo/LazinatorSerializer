@@ -344,8 +344,14 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyExampleStruct_ByteLength;
                 WriteChild(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
             }
-            _MyExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleStructContainingStruct_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _ExampleStructContainingStruct_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

@@ -323,8 +323,14 @@ namespace Lazinator.Collections.Avl
             {
                 WriteChild(writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _Root_ByteIndex = startOfObjectPosition - startPosition;
-            _AvlTree_TKey_TValue_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _Root_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _AvlTree_TKey_TValue_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

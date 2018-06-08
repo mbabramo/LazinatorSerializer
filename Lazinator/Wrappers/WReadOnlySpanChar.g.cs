@@ -296,8 +296,14 @@ namespace Lazinator.Wrappers
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             copy_Value.Write(w));
-            _Value_ByteIndex = startOfObjectPosition - startPosition;
-            _WReadOnlySpanChar_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _Value_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _WReadOnlySpanChar_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

@@ -336,7 +336,10 @@ namespace Lazinator.Spans
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnly,
             includeChildrenMode, v, updateStoredBuffer));
-            _ReadOnly_ByteIndex = startOfObjectPosition - startPosition;
+            if (updateStoredBuffer)
+            {
+                _ReadOnly_ByteIndex = startOfObjectPosition - startPosition;
+            }
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed,
@@ -346,8 +349,14 @@ namespace Lazinator.Spans
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,
             includeChildrenMode, v, updateStoredBuffer));
-            _ReadOrWrite_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorByteSpan_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _ReadOrWrite_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _LazinatorByteSpan_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

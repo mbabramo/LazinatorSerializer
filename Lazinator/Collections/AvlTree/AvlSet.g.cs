@@ -342,8 +342,14 @@ namespace Lazinator.Collections.AvlTree
             {
                 WriteChild(writer, _UnderlyingTree, includeChildrenMode, _UnderlyingTree_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            _UnderlyingTree_ByteIndex = startOfObjectPosition - startPosition;
-            _AvlSet_TKey_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _UnderlyingTree_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _AvlSet_TKey_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
     }

@@ -168,8 +168,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b(w, MyArrayInt_DerivedLevel,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyArrayInt_DerivedLevel_ByteIndex = startOfObjectPosition - startPosition;
-            _DerivedArray_Values_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyArrayInt_DerivedLevel_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DerivedArray_Values_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */

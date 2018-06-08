@@ -308,8 +308,14 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GList_GNonLazinatorClass_g_g(w, MyListNestedNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
-            _MyListNestedNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_Nested_NonSelfSerializable_EndByteIndex = writer.Position - startPosition;
+            if (updateStoredBuffer)
+            {
+                _MyListNestedNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _DotNetList_Nested_NonSelfSerializable_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */
