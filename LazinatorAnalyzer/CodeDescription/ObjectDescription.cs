@@ -587,8 +587,8 @@ namespace Lazinator.CodeDescription
                         public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; set; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
-                        public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
-                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID);")}
+                        public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
                         {ProtectedIfApplicable}abstract void ResetAccessedProperties();
 ");
         }
@@ -710,11 +710,11 @@ namespace Lazinator.CodeDescription
 
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
-                        $@"public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        $@"public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                         {{");
             else
                 sb.AppendLine(
-                        $@"public {DerivationKeyword}void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        $@"public {DerivationKeyword}void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                         {{");
 
             if (IncludeTracingCode)
@@ -724,14 +724,18 @@ namespace Lazinator.CodeDescription
 
             sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization(verifyCleanness);
                             " : "")}int startPosition = writer.Position;
-                            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, {(UniqueIDCanBeSkipped ? "false" : "true")});");
+                            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
             string additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
             GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
+            sb.AppendLine($@"if (updateStoredBuffer)
+                        {{
+                        ");
             sb.AppendLine(postEncodingDirtinessCheck);
             sb.AppendLine($@"
                 _LazinatorObjectBytes = writer.Slice(startPosition);");
-
+            sb.Append($@"}}
+");
             sb.Append($@"}}
 ");
         }
@@ -751,13 +755,13 @@ namespace Lazinator.CodeDescription
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"
-                        {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+                        {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
                         {{
-                            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);");
+                            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
             else
             {
                 sb.AppendLine(
-                        $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+                        $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
                         {{
                             // header information");
 
@@ -843,7 +847,8 @@ namespace Lazinator.CodeDescription
             sb.Append($@"public {DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{
                     {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;");
+                    ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+                        ");
 
             foreach (var property in thisLevel)
             {
