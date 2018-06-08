@@ -1024,7 +1024,7 @@ namespace Lazinator.CodeDescription
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 {
                     sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, this);"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, this);"));
                 }
                 else
                 {
@@ -1035,7 +1035,7 @@ namespace Lazinator.CodeDescription
                             var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
-                            WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, null);
+                            WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, null);
                         }}");
                 }
             }
