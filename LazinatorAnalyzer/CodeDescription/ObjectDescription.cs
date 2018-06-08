@@ -752,17 +752,22 @@ namespace Lazinator.CodeDescription
             }
 
             var thisLevel = PropertiesToDefineThisLevel;
+            bool hasChildrenThisLevel = thisLevel.Any(x => !x.IsPrimitive);
+            string positionInitialization = !hasChildrenThisLevel ? $@"" : $@"
+                    int startPosition = writer.Position;
+                    int startOfObjectPosition = 0;";
+
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"
                         {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-                        {{
+                        {{{positionInitialization}
                             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
             else
             {
                 sb.AppendLine(
                         $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-                        {{
+                        {{{positionInitialization}
                             // header information");
 
 
@@ -827,6 +832,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine($@"TabbedText.Tabs--;");
                 }
             }
+            AppendEndByteIndex(sb, thisLevel, "writer.Position");
             sb.Append($@"}}
 ");
         }
@@ -854,16 +860,21 @@ namespace Lazinator.CodeDescription
             {
                 property.AppendPropertyReadString(sb);
             }
-            var lastProperty = thisLevel.LastOrDefault();
-            if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
-            {
-                sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = bytesSoFar;
-                    ");
-            }
+            AppendEndByteIndex(sb, thisLevel, "bytesSoFar");
 
             sb.Append($@"        }}
 
         ");
+        }
+
+        private void AppendEndByteIndex(CodeStringBuilder sb, List<PropertyDescription> thisLevel, string endByteString)
+        {
+            var lastProperty = thisLevel.LastOrDefault();
+            if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
+            {
+                sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = {endByteString};
+                    ");
+            }
         }
 
         private string GetConstructor()
