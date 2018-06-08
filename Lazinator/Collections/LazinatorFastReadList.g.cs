@@ -26,7 +26,7 @@ namespace Lazinator.Collections
     public sealed partial class LazinatorFastReadList<T> : ILazinator where T : struct
     {
         /* Serialization, deserialization, and object relationships */
-
+        
         public LazinatorFastReadList() : base()
         {
         }
@@ -260,12 +260,15 @@ namespace Lazinator.Collections
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            {
+                updateStoredBuffer = false;
+            }
             PreSerialization(verifyCleanness, updateStoredBuffer);
             int startPosition = writer.Position;
             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, false);
             if (updateStoredBuffer)
             {
-                
                 
                 _IsDirty = false;
                 _DescendantIsDirty = false;
@@ -275,6 +278,8 @@ namespace Lazinator.Collections
         }
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -284,6 +289,7 @@ namespace Lazinator.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed,
             isAccessed: _ReadOnlyBytes_Accessed, writer: writer,
@@ -292,6 +298,14 @@ namespace Lazinator.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnlyBytes,
             includeChildrenMode, v, updateStoredBuffer));
+            if (updateStoredBuffer)
+            {
+                _ReadOnlyBytes_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (updateStoredBuffer)
+            {
+                _LazinatorFastReadList_T_EndByteIndex = writer.Position - startPosition;
+            }
         }
         
         /* Conversion of supported collections and tuples */
