@@ -836,7 +836,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine($@"TabbedText.Tabs--;");
                 }
             }
-            AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition");
+            AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition", true);
             sb.Append($@"}}
 ");
         }
@@ -864,20 +864,25 @@ namespace Lazinator.CodeDescription
             {
                 property.AppendPropertyReadString(sb);
             }
-            AppendEndByteIndex(sb, thisLevel, "bytesSoFar");
+            AppendEndByteIndex(sb, thisLevel, "bytesSoFar", false);
 
             sb.Append($@"        }}
 
         ");
         }
 
-        private void AppendEndByteIndex(CodeStringBuilder sb, List<PropertyDescription> thisLevel, string endByteString)
+        private void AppendEndByteIndex(CodeStringBuilder sb, List<PropertyDescription> thisLevel, string endByteString, bool addConditionalForUpdateStoredBuffer)
         {
             var lastProperty = thisLevel.LastOrDefault();
             if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
             {
+                if (addConditionalForUpdateStoredBuffer)
+                    sb.AppendLine($@"if (updateStoredBuffer)
+                                {{");
                 sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = {endByteString};
                     ");
+                if (addConditionalForUpdateStoredBuffer)
+                    sb.AppendLine($@"}}");
             }
         }
 

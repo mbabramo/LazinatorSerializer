@@ -1026,7 +1026,10 @@ namespace Lazinator.CodeDescription
                     AppendPropertyWriteString_SelfSerialized(sb);
                 else
                     AppendPropertyWriteString_NonSelfSerialized(sb);
-                sb.AppendLine($"_{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;");
+                sb.AppendLine($@"if (updateStoredBuffer)
+                                {{
+                                    _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;
+                                }}");
             }
         }
 
