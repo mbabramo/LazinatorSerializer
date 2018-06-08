@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Subclasses
             ConvertToBytes_List_GEnumWithinClass_g(w, MyEnumList,
             includeChildrenMode, v, updateStoredBuffer));
             _MyEnumList_ByteIndex = startOfObjectPosition - startPosition;
-            _ClassWithLocalEnum_EndByteIndex = writer.Position;
+            _ClassWithLocalEnum_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

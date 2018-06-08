@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Stack_Gint_g(w, MyStackInt,
             includeChildrenMode, v, updateStoredBuffer));
             _MyStackInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetStack_Values_EndByteIndex = writer.Position;
+            _DotNetStack_Values_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

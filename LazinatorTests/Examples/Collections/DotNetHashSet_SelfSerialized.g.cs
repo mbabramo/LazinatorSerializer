@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_HashSet_GExampleChild_g(w, MyHashSetSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             _MyHashSetSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetHashSet_SelfSerialized_EndByteIndex = writer.Position;
+            _DotNetHashSet_SelfSerialized_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

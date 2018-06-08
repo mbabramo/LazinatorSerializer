@@ -503,7 +503,7 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(w, MyListNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer));
             _MyListNullableExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleStructContainer_EndByteIndex = writer.Position;
+            _ExampleStructContainer_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(w, MyKeyValuePairSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             _MyKeyValuePairSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _KeyValuePairTuple_EndByteIndex = writer.Position;
+            _KeyValuePairTuple_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

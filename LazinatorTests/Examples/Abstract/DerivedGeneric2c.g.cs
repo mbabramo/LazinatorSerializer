@@ -356,7 +356,7 @@ namespace LazinatorTests.Examples.Abstract
                 WriteChild(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _MyT_ByteIndex = startOfObjectPosition - startPosition;
-            _DerivedGeneric2c_T_EndByteIndex = writer.Position;
+            _DerivedGeneric2c_T_EndByteIndex = writer.Position - startPosition;
         }
         
     }

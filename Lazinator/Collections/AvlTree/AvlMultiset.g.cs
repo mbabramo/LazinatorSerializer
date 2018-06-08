@@ -340,7 +340,7 @@ namespace Lazinator.Collections.AvlTree
                 WriteChild(writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _UnderlyingSet_ByteIndex = startOfObjectPosition - startPosition;
-            _AvlMultiset_T_EndByteIndex = writer.Position;
+            _AvlMultiset_T_EndByteIndex = writer.Position - startPosition;
         }
         
     }

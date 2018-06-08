@@ -415,7 +415,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_B_c_c_b(w, MyThreeDimArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
             _MyThreeDimArrayInt_ByteIndex = startOfObjectPosition - startPosition;
-            _ArrayMultidimensional_Values_EndByteIndex = writer.Position;
+            _ArrayMultidimensional_Values_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

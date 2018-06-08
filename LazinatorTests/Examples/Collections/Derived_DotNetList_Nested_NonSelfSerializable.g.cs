@@ -165,7 +165,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GList_GNonLazinatorClass_g_g(w, MyLevel2ListNestedNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
             _MyLevel2ListNestedNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
-            _Derived_DotNetList_Nested_NonSelfSerializable_EndByteIndex = writer.Position;
+            _Derived_DotNetList_Nested_NonSelfSerializable_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

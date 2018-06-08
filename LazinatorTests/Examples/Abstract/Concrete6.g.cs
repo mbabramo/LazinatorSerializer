@@ -147,7 +147,7 @@ namespace LazinatorTests.Examples.Abstract
             ConvertToBytes_List_Gint_g(w, IntList6,
             includeChildrenMode, v, updateStoredBuffer));
             _IntList6_ByteIndex = startOfObjectPosition - startPosition;
-            _Concrete6_EndByteIndex = writer.Position;
+            _Concrete6_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

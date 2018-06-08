@@ -458,7 +458,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_SortedSet_Gint_g(w, MySortedSetInt,
             includeChildrenMode, v, updateStoredBuffer));
             _MySortedSetInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_Values_EndByteIndex = writer.Position;
+            _DotNetList_Values_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

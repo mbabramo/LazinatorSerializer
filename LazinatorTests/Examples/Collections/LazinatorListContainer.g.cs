@@ -313,7 +313,7 @@ namespace LazinatorTests.Examples.Collections
                 WriteChild(writer, _MyList, includeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyList_ByteIndex, _MyList_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _MyList_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorListContainer_EndByteIndex = writer.Position;
+            _LazinatorListContainer_EndByteIndex = writer.Position - startPosition;
         }
         
     }

@@ -342,7 +342,7 @@ namespace LazinatorTests.Examples
                 WriteChild(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
             }
             _MyExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleStructContainingStruct_EndByteIndex = writer.Position;
+            _ExampleStructContainingStruct_EndByteIndex = writer.Position - startPosition;
         }
         
     }

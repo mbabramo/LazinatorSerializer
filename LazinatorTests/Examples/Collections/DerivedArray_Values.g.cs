@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_B_b(w, MyArrayInt_DerivedLevel,
             includeChildrenMode, v, updateStoredBuffer));
             _MyArrayInt_DerivedLevel_ByteIndex = startOfObjectPosition - startPosition;
-            _DerivedArray_Values_EndByteIndex = writer.Position;
+            _DerivedArray_Values_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

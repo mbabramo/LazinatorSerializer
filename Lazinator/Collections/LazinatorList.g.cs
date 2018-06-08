@@ -352,7 +352,7 @@ namespace Lazinator.Collections
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(w, SerializedMainList,
             includeChildrenMode, v, updateStoredBuffer));
             _SerializedMainList_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorList_T_EndByteIndex = writer.Position;
+            _LazinatorList_T_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

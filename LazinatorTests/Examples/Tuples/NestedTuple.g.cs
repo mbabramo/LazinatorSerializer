@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(w, MyNestedTuple,
             includeChildrenMode, v, updateStoredBuffer));
             _MyNestedTuple_ByteIndex = startOfObjectPosition - startPosition;
-            _NestedTuple_EndByteIndex = writer.Position;
+            _NestedTuple_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

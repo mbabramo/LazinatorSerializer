@@ -397,7 +397,7 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_RecordLikeType(w, MyRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
             _MyRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
-            _RecordLikeContainer_EndByteIndex = writer.Position;
+            _RecordLikeContainer_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

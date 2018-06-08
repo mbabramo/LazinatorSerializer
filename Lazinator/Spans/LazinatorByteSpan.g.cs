@@ -344,7 +344,7 @@ namespace Lazinator.Spans
             ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,
             includeChildrenMode, v, updateStoredBuffer));
             _ReadOrWrite_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorByteSpan_EndByteIndex = writer.Position;
+            _LazinatorByteSpan_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

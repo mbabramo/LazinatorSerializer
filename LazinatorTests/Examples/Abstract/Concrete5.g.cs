@@ -224,7 +224,7 @@ namespace LazinatorTests.Examples.Abstract
             ConvertToBytes_List_Gint_g(w, IntList5,
             includeChildrenMode, v, updateStoredBuffer));
             _IntList5_ByteIndex = startOfObjectPosition - startPosition;
-            _Concrete5_EndByteIndex = writer.Position;
+            _Concrete5_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

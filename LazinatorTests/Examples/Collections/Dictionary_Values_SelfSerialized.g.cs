@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(w, MySortedList,
             includeChildrenMode, v, updateStoredBuffer));
             _MySortedList_ByteIndex = startOfObjectPosition - startPosition;
-            _Dictionary_Values_SelfSerialized_EndByteIndex = writer.Position;
+            _Dictionary_Values_SelfSerialized_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

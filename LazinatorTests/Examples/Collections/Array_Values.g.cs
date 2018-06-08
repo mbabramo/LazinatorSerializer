@@ -370,7 +370,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_B_b_B_b(w, MyJaggedArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
             _MyJaggedArrayInt_ByteIndex = startOfObjectPosition - startPosition;
-            _Array_Values_EndByteIndex = writer.Position;
+            _Array_Values_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

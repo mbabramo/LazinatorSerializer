@@ -832,7 +832,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine($@"TabbedText.Tabs--;");
                 }
             }
-            AppendEndByteIndex(sb, thisLevel, "writer.Position");
+            AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition");
             sb.Append($@"}}
 ");
         }

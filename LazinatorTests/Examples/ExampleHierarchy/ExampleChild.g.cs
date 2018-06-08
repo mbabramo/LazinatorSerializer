@@ -384,7 +384,7 @@ namespace LazinatorTests.Examples
                 WriteChild(writer, _MyWrapperContainer, includeChildrenMode, _MyWrapperContainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _MyWrapperContainer_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleChild_EndByteIndex = writer.Position;
+            _ExampleChild_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

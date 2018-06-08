@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Queue_Gint_g(w, MyQueueInt,
             includeChildrenMode, v, updateStoredBuffer));
             _MyQueueInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetQueue_Values_EndByteIndex = writer.Position;
+            _DotNetQueue_Values_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

@@ -543,7 +543,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlySpan_Glong_g(w, MyReadOnlySpanLong,
             includeChildrenMode, v, updateStoredBuffer));
             _MyReadOnlySpanLong_ByteIndex = startOfObjectPosition - startPosition;
-            _SpanAndMemory_EndByteIndex = writer.Position;
+            _SpanAndMemory_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

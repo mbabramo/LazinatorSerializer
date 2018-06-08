@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 WriteChild(writer, _RecursiveInterface, includeChildrenMode, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _RecursiveInterface_ByteIndex = startOfObjectPosition - startPosition;
-            _RecursiveExample_EndByteIndex = writer.Position;
+            _RecursiveExample_EndByteIndex = writer.Position - startPosition;
         }
         
     }

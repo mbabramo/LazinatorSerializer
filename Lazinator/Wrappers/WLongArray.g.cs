@@ -301,7 +301,7 @@ namespace Lazinator.Wrappers
             binaryWriterAction: (w, v) =>
             ConvertToBytes_long_B_b(w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
             _WrappedValue_ByteIndex = startOfObjectPosition - startPosition;
-            _WLongArray_EndByteIndex = writer.Position;
+            _WLongArray_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

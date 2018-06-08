@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType2,
             includeChildrenMode, v, updateStoredBuffer));
             _MyListNonLazinatorType2_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_NonSelfSerializable_EndByteIndex = writer.Position;
+            _DotNetList_NonSelfSerializable_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

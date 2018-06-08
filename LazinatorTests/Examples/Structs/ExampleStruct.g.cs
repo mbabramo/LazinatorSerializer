@@ -581,7 +581,7 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(w, copy_MyTuple, includeChildrenMode, v, updateStoredBuffer));
             _MyTuple_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleStruct_EndByteIndex = writer.Position;
+            _ExampleStruct_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

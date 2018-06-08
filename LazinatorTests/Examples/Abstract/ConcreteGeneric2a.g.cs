@@ -384,7 +384,7 @@ namespace LazinatorTests.Examples.Abstract
                 WriteChild(writer, _LazinatorExample, includeChildrenMode, _LazinatorExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _LazinatorExample_ByteIndex = startOfObjectPosition - startPosition;
-            _ConcreteGeneric2a_EndByteIndex = writer.Position;
+            _ConcreteGeneric2a_EndByteIndex = writer.Position - startPosition;
         }
         
     }

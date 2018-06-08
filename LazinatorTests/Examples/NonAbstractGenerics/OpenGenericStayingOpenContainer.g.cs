@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 WriteChild(writer, _ClosedGeneric, includeChildrenMode, _ClosedGeneric_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ClosedGeneric_ByteIndex, _ClosedGeneric_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _ClosedGeneric_ByteIndex = startOfObjectPosition - startPosition;
-            _OpenGenericStayingOpenContainer_EndByteIndex = writer.Position;
+            _OpenGenericStayingOpenContainer_EndByteIndex = writer.Position - startPosition;
         }
         
     }

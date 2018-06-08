@@ -422,7 +422,7 @@ namespace Lazinator.Collections
                 WriteChild(writer, _Item3, includeChildrenMode, _Item3_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item3_ByteIndex, _Item3_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _Item3_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorTriple_T_U_V_EndByteIndex = writer.Position;
+            _LazinatorTriple_T_U_V_EndByteIndex = writer.Position - startPosition;
         }
         
     }

@@ -527,7 +527,7 @@ namespace Lazinator.Collections.Avl
                 WriteChild(writer, _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _Value_ByteIndex = startOfObjectPosition - startPosition;
-            _AvlNode_TKey_TValue_EndByteIndex = writer.Position;
+            _AvlNode_TKey_TValue_EndByteIndex = writer.Position - startPosition;
         }
         
     }

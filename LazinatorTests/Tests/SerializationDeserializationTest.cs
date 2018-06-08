@@ -2032,7 +2032,7 @@ namespace LazinatorTests.Tests
             c3.Item1 = "another";
             var c4 = c3.CloneLazinatorTyped(); // LazinatorObjectBytes are now updated in C3
             c3.Item1.Should().Be("another");
-            c3.Item2.Should().Be("andtwo"); // this will cause a problem
+            c3.Item2.Should().Be("andtwo"); // this will cause a problem if the byte indides are not set correctly
         }
 
         [Fact]

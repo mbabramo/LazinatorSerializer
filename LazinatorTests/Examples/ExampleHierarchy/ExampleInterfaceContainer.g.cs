@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.Hierarchy
             ConvertToBytes_List_GIExample_g(w, ExampleListByInterface,
             includeChildrenMode, v, updateStoredBuffer));
             _ExampleListByInterface_ByteIndex = startOfObjectPosition - startPosition;
-            _ExampleInterfaceContainer_EndByteIndex = writer.Position;
+            _ExampleInterfaceContainer_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

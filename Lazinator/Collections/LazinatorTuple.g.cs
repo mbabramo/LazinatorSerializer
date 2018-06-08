@@ -371,7 +371,7 @@ namespace Lazinator.Collections
                 WriteChild(writer, _Item2, includeChildrenMode, _Item2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item2_ByteIndex, _Item2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _Item2_ByteIndex = startOfObjectPosition - startPosition;
-            _LazinatorTuple_T_U_EndByteIndex = writer.Position;
+            _LazinatorTuple_T_U_EndByteIndex = writer.Position - startPosition;
         }
         
     }

@@ -421,7 +421,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GWNullableInt_g(w, MyListNullableInt,
             includeChildrenMode, v, updateStoredBuffer));
             _MyListNullableInt_ByteIndex = startOfObjectPosition - startPosition;
-            _DotNetList_Wrapper_EndByteIndex = writer.Position;
+            _DotNetList_Wrapper_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

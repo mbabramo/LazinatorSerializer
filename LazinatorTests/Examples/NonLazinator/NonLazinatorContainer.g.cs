@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v, updateStoredBuffer));
             _NonLazinatorStruct_ByteIndex = startOfObjectPosition - startPosition;
-            _NonLazinatorContainer_EndByteIndex = writer.Position;
+            _NonLazinatorContainer_EndByteIndex = writer.Position - startPosition;
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)

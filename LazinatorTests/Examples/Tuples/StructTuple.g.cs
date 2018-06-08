@@ -440,7 +440,7 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(w, MyValueTupleSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             _MyValueTupleSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            _StructTuple_EndByteIndex = writer.Position;
+            _StructTuple_EndByteIndex = writer.Position - startPosition;
         }
         
         /* Conversion of supported collections and tuples */

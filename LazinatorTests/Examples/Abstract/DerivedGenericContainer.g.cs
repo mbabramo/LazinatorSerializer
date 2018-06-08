@@ -325,7 +325,7 @@ namespace LazinatorTests.Examples.Abstract
                 WriteChild(writer, _Item, includeChildrenMode, _Item_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             _Item_ByteIndex = startOfObjectPosition - startPosition;
-            _DerivedGenericContainer_T_EndByteIndex = writer.Position;
+            _DerivedGenericContainer_T_EndByteIndex = writer.Position - startPosition;
         }
         
     }

@@ -934,7 +934,7 @@ namespace LazinatorTests.Examples
                 WriteChild(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
             _WrappedInt_ByteIndex = startOfObjectPosition - startPosition;
-            _Example_EndByteIndex = writer.Position;
+            _Example_EndByteIndex = writer.Position - startPosition;
         }
         
     }
