@@ -23,7 +23,7 @@ namespace Lazinator.Wrappers
 
         public override string ToString()
         {
-            return WrappedValue.ToString();
+            return WrappedValue?.ToString() ?? "";
         }
 
         public override int GetHashCode()
