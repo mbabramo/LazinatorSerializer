@@ -12,9 +12,9 @@ namespace LazinatorTests.Examples
     {
         // We must override these methods, so that the code behind knows that they are defined in this class. Otherwise, it will not call them. 
 
-        public override void PreSerialization(bool verifyCleanness)
+        public override void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
-            base.PreSerialization(verifyCleanness);
+            base.PreSerialization(verifyCleanness, updateStoredBuffer);
         }
 
         public override void MarkHierarchyClean()
