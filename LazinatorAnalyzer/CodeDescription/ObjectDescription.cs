@@ -827,7 +827,7 @@ namespace Lazinator.CodeDescription
                     else if (property.PropertyType == LazinatorPropertyType.NonSelfSerializingType || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
                         sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
                     else
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} value {{{property.PropertyName}}}"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} value {{_{property.PropertyName}}}"");");
                     sb.AppendLine($@"TabbedText.Tabs++;");
                 }
                 property.AppendPropertyWriteString(sb);
