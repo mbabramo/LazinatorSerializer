@@ -1791,8 +1791,22 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void AbstractPropertyChangedInConstructorSerializes()
+        public void PropertyChangedInConstructorSerializes()
         {
+            // Concrete3's constructor sets Example2 and Example3 to null. This means that their _Accessed fields will be true.
+            // When we deserialize ContainerWithAbstract1, we also deserialize Concrete3. If we did not call ResetAccessedProperties,
+            // then when we access Example2, it would appear that no deserialization is necessary, and Example2 will stay at its null value.
+            // Both of the following examples fail without ResetAccessedProperties().
+
+            var concrete = new Concrete3()
+            {
+                Example2 = GetHierarchy(1, 1, 1, 1, 0),
+                Example3 = GetHierarchy(1, 1, 1, 1, 0)
+            };
+            var concrete2 = concrete.CloneLazinatorTyped();
+            concrete2.Example2.Should().NotBeNull();
+            concrete2.Example3.Should().NotBeNull();
+
             ContainerWithAbstract1 c = new ContainerWithAbstract1()
             {
                 AbstractProperty = new Concrete3() { Example2 = GetHierarchy(1, 1, 1, 1, 0), Example3 = GetHierarchy(1, 1, 1, 1, 0) }
