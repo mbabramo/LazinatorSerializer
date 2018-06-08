@@ -259,7 +259,7 @@ namespace Lazinator.Collections
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
                         var item = i; // avoid closure problem
-                        WriteChild(w, UnderlyingList[item], IncludeChildrenMode.IncludeAllChildren, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness, false, true /* skip length altogether */, this);
+                        WriteChild(w, UnderlyingList[item], IncludeChildrenMode.IncludeAllChildren, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness, true /* DEBUG */, false, true /* skip length altogether */, this);
                         var offset = (int)(w.Position - startingPosition);
                         _Offsets.AddOffset(offset);
                     }

@@ -336,7 +336,7 @@ namespace LazinatorTests.Examples
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyExampleStruct_ByteIndex;
                 var byteLengthCopy = _MyExampleStruct_ByteLength;
-                WriteChild(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, false, false, null);
+                WriteChild(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
             }
         }
         

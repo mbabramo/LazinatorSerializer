@@ -319,7 +319,7 @@ namespace LazinatorTests.Examples.Abstract
             // write properties
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChild(writer, _Item, includeChildrenMode, _Item_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _Item, includeChildrenMode, _Item_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item_ByteIndex, _Item_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
         }
         

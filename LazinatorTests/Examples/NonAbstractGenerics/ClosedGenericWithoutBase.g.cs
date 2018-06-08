@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, _ItemT);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                WriteChild(writer, _ItemU, includeChildrenMode, _ItemU_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null), verifyCleanness, false, false, this);
+                WriteChild(writer, _ItemU, includeChildrenMode, _ItemU_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
         }
         

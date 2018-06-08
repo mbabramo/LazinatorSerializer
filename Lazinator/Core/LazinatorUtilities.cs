@@ -202,7 +202,7 @@ namespace Lazinator.Core
         /// <param name="parent">The parent of the object being written</param>
         public static void WriteChild<T>(BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
-            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
+            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
             if (!childHasBeenAccessed && child != null)
             {
@@ -236,7 +236,7 @@ namespace Lazinator.Core
                     void action(BinaryBufferWriter w)
                     {
                         if (child.IsDirty || child.DescendantIsDirty || verifyCleanness || child.LazinatorObjectBytes.Length == 0)
-                            child.SerializeExistingBuffer(w, includeChildrenMode, verifyCleanness, true /* DEBUG -- add parameter */);
+                            child.SerializeExistingBuffer(w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         else
                             child.LazinatorObjectBytes.Span.Write(w); // the child has been accessed, but is unchanged, so we can use the storage holding the child
                     }
