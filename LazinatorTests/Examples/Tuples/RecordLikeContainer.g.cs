@@ -349,6 +349,8 @@ namespace LazinatorTests.Examples.Tuples
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -365,6 +367,7 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyMismatchedRecordLikeType, isBelievedDirty: _MyMismatchedRecordLikeType_Accessed,
             isAccessed: _MyMismatchedRecordLikeType_Accessed, writer: writer,
@@ -373,6 +376,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_MismatchedRecordLikeType(w, MyMismatchedRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyMismatchedRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed,
             isAccessed: _MyRecordLikeClass_Accessed, writer: writer,
@@ -381,6 +386,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_RecordLikeClass(w, MyRecordLikeClass,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyRecordLikeClass_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed,
             isAccessed: _MyRecordLikeType_Accessed, writer: writer,
@@ -389,6 +396,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_RecordLikeType(w, MyRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
+            _RecordLikeContainer_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

@@ -348,6 +348,8 @@ namespace Lazinator.Collections.Dictionary
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -364,14 +366,19 @@ namespace Lazinator.Collections.Dictionary
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _Keys, includeChildrenMode, _Keys_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Keys_ByteIndex, _Keys_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _Keys_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _Values, includeChildrenMode, _Values_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Values_ByteIndex, _Values_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _Values_ByteIndex = startOfObjectPosition - startPosition;
+            _DictionaryBucket_TKey_TValue_EndByteIndex = writer.Position;
         }
         
     }

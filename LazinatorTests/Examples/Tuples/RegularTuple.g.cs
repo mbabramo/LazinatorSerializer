@@ -382,6 +382,8 @@ namespace LazinatorTests.Examples.Tuples
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -398,6 +400,7 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized, isBelievedDirty: _MyTupleSerialized_Accessed,
             isAccessed: _MyTupleSerialized_Accessed, writer: writer,
@@ -406,6 +409,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyTupleSerialized_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized2, isBelievedDirty: _MyTupleSerialized2_Accessed,
             isAccessed: _MyTupleSerialized2_Accessed, writer: writer,
@@ -414,6 +419,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized2,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyTupleSerialized2_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized3, isBelievedDirty: _MyTupleSerialized3_Accessed,
             isAccessed: _MyTupleSerialized3_Accessed, writer: writer,
@@ -422,6 +429,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(w, MyTupleSerialized3,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyTupleSerialized3_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized4, isBelievedDirty: _MyTupleSerialized4_Accessed,
             isAccessed: _MyTupleSerialized4_Accessed, writer: writer,
@@ -430,6 +439,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Gint_c_C32ExampleStruct_g(w, MyTupleSerialized4,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyTupleSerialized4_ByteIndex = startOfObjectPosition - startPosition;
+            _RegularTuple_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

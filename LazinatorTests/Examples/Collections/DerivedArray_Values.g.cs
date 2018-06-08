@@ -152,8 +152,11 @@ namespace LazinatorTests.Examples.Collections
         
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt_DerivedLevel, isBelievedDirty: MyArrayInt_DerivedLevel_Dirty,
             isAccessed: _MyArrayInt_DerivedLevel_Accessed, writer: writer,
@@ -162,6 +165,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b(w, MyArrayInt_DerivedLevel,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyArrayInt_DerivedLevel_ByteIndex = startOfObjectPosition - startPosition;
+            _DerivedArray_Values_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

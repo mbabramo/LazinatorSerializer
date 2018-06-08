@@ -328,6 +328,8 @@ namespace LazinatorTests.Examples.Hierarchy
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -344,10 +346,13 @@ namespace LazinatorTests.Examples.Hierarchy
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _ExampleByInterface_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
             isAccessed: _ExampleListByInterface_Accessed, writer: writer,
@@ -356,6 +361,8 @@ namespace LazinatorTests.Examples.Hierarchy
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GIExample_g(w, ExampleListByInterface,
             includeChildrenMode, v, updateStoredBuffer));
+            _ExampleListByInterface_ByteIndex = startOfObjectPosition - startPosition;
+            _ExampleInterfaceContainer_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

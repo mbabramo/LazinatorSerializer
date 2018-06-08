@@ -332,6 +332,8 @@ namespace LazinatorTests.Examples.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -348,6 +350,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
             isAccessed: _MyArrayInt_Accessed, writer: writer,
@@ -356,6 +359,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b(w, MyArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyArrayInt_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyJaggedArrayInt, isBelievedDirty: _MyJaggedArrayInt_Accessed,
             isAccessed: _MyJaggedArrayInt_Accessed, writer: writer,
@@ -364,6 +369,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b_B_b(w, MyJaggedArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyJaggedArrayInt_ByteIndex = startOfObjectPosition - startPosition;
+            _Array_Values_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

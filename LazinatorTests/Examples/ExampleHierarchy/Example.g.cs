@@ -846,6 +846,8 @@ namespace LazinatorTests.Examples
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -880,30 +882,43 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyTestEnum);
             CompressedIntegralTypes.WriteCompressedNullableByte(writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
                 WriteChild(writer, _ExcludableChild, includeChildrenMode, _ExcludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _ExcludableChild_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
                 WriteChild(writer, _IncludableChild, includeChildrenMode, _IncludableChild_Accessed, () => GetChildSlice(LazinatorObjectBytes, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _IncludableChild_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _MyChild1_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _MyChild2_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
             {
                 WriteChild(writer, _MyChild2Previous, includeChildrenMode, _MyChild2Previous_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _MyChild2Previous_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _MyInterfaceImplementer_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty,
             isAccessed: _MyNonLazinatorChild_Accessed, writer: writer,
@@ -912,10 +927,14 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, MyNonLazinatorChild,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyNonLazinatorChild_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
+            _WrappedInt_ByteIndex = startOfObjectPosition - startPosition;
+            _Example_EndByteIndex = writer.Position;
         }
         
     }

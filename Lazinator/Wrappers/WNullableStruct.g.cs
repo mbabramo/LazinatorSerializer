@@ -312,6 +312,8 @@ namespace Lazinator.Wrappers
         }
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -328,6 +330,7 @@ namespace Lazinator.Wrappers
             writer.Write((byte)includeChildrenMode);
             // write properties
             WriteUncompressedPrimitives.WriteBool(writer, _HasValue);
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
                 var serializedBytesCopy = LazinatorObjectBytes;
@@ -335,6 +338,8 @@ namespace Lazinator.Wrappers
                 var byteLengthCopy = _NonNullValue_ByteLength;
                 WriteChild(writer, _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
+            _NonNullValue_ByteIndex = startOfObjectPosition - startPosition;
+            _WNullableStruct_T_EndByteIndex = writer.Position;
         }
         
     }

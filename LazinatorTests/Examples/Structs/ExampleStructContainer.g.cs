@@ -453,6 +453,8 @@ namespace LazinatorTests.Examples
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -469,14 +471,19 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _IntWrapper, includeChildrenMode, _IntWrapper_Accessed, () => GetChildSlice(LazinatorObjectBytes, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
+            _IntWrapper_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _MyExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListExampleStruct, isBelievedDirty: _MyListExampleStruct_Accessed,
             isAccessed: _MyListExampleStruct_Accessed, writer: writer,
@@ -485,6 +492,8 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExampleStruct_g(w, MyListExampleStruct,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableExampleStruct, isBelievedDirty: _MyListNullableExampleStruct_Accessed,
             isAccessed: _MyListNullableExampleStruct_Accessed, writer: writer,
@@ -493,6 +502,8 @@ namespace LazinatorTests.Examples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(w, MyListNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListNullableExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
+            _ExampleStructContainer_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

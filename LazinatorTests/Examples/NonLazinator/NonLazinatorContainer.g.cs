@@ -359,6 +359,8 @@ namespace LazinatorTests.Examples
         }
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -369,6 +371,7 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             var serializedBytesCopy_NonLazinatorClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorClass = _NonLazinatorClass_ByteIndex;
             var byteLengthCopy_NonLazinatorClass = _NonLazinatorClass_ByteLength;
@@ -380,6 +383,8 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v, updateStoredBuffer));
+            _NonLazinatorClass_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
@@ -391,6 +396,8 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v, updateStoredBuffer));
+            _NonLazinatorInterchangeableClass_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
@@ -402,6 +409,8 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v, updateStoredBuffer));
+            _NonLazinatorStruct_ByteIndex = startOfObjectPosition - startPosition;
+            _NonLazinatorContainer_EndByteIndex = writer.Position;
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)

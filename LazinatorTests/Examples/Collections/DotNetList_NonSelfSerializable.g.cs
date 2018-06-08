@@ -334,6 +334,8 @@ namespace LazinatorTests.Examples.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -350,6 +352,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType, isBelievedDirty: MyListNonLazinatorType_Dirty,
             isAccessed: _MyListNonLazinatorType_Accessed, writer: writer,
@@ -358,6 +361,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType2, isBelievedDirty: _MyListNonLazinatorType2_Accessed,
             isAccessed: _MyListNonLazinatorType2_Accessed, writer: writer,
@@ -366,6 +371,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType2,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListNonLazinatorType2_ByteIndex = startOfObjectPosition - startPosition;
+            _DotNetList_NonSelfSerializable_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

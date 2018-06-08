@@ -297,6 +297,8 @@ namespace LazinatorTests.Examples.Subclasses
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -314,6 +316,7 @@ namespace LazinatorTests.Examples.Subclasses
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnum);
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed,
             isAccessed: _MyEnumList_Accessed, writer: writer,
@@ -322,6 +325,8 @@ namespace LazinatorTests.Examples.Subclasses
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GEnumWithinClass_g(w, MyEnumList,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyEnumList_ByteIndex = startOfObjectPosition - startPosition;
+            _ClassWithLocalEnum_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

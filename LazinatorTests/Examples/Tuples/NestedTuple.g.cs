@@ -277,6 +277,8 @@ namespace LazinatorTests.Examples.Tuples
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -293,6 +295,7 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNestedTuple, isBelievedDirty: _MyNestedTuple_Accessed,
             isAccessed: _MyNestedTuple_Accessed, writer: writer,
@@ -301,6 +304,8 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(w, MyNestedTuple,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyNestedTuple_ByteIndex = startOfObjectPosition - startPosition;
+            _NestedTuple_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

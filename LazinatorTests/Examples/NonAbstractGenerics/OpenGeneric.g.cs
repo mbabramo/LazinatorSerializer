@@ -336,6 +336,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -352,6 +354,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListT, isBelievedDirty: _MyListT_Accessed,
             isAccessed: _MyListT_Accessed, writer: writer,
@@ -360,10 +363,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GT_g(w, MyListT,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListT_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _MyT_ByteIndex = startOfObjectPosition - startPosition;
+            _OpenGeneric_T_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

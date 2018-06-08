@@ -198,10 +198,13 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String4);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String5);
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList4, isBelievedDirty: _IntList4_Accessed,
             isAccessed: _IntList4_Accessed, writer: writer,
@@ -210,6 +213,8 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList4,
             includeChildrenMode, v, updateStoredBuffer));
+            _IntList4_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
             isAccessed: _IntList5_Accessed, writer: writer,
@@ -218,6 +223,8 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList5,
             includeChildrenMode, v, updateStoredBuffer));
+            _IntList5_ByteIndex = startOfObjectPosition - startPosition;
+            _Concrete5_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

@@ -150,9 +150,12 @@ namespace LazinatorTests.Examples.Collections
         
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyLevel2Int);
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLevel2ListNestedNonLazinatorType, isBelievedDirty: _MyLevel2ListNestedNonLazinatorType_Accessed,
             isAccessed: _MyLevel2ListNestedNonLazinatorType_Accessed, writer: writer,
@@ -161,6 +164,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GList_GNonLazinatorClass_g_g(w, MyLevel2ListNestedNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyLevel2ListNestedNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
+            _Derived_DotNetList_Nested_NonSelfSerializable_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

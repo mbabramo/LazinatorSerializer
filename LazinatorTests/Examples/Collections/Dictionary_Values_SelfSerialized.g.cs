@@ -348,6 +348,8 @@ namespace LazinatorTests.Examples.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -364,6 +366,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyDictionary, isBelievedDirty: _MyDictionary_Accessed,
             isAccessed: _MyDictionary_Accessed, writer: writer,
@@ -372,6 +375,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Dictionary_Gint_c_C32ExampleChild_g(w, MyDictionary,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyDictionary_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed,
             isAccessed: _MySortedDictionary_Accessed, writer: writer,
@@ -380,6 +385,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_SortedDictionary_Gint_c_C32ExampleChild_g(w, MySortedDictionary,
             includeChildrenMode, v, updateStoredBuffer));
+            _MySortedDictionary_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed,
             isAccessed: _MySortedList_Accessed, writer: writer,
@@ -388,6 +395,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(w, MySortedList,
             includeChildrenMode, v, updateStoredBuffer));
+            _MySortedList_ByteIndex = startOfObjectPosition - startPosition;
+            _Dictionary_Values_SelfSerialized_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

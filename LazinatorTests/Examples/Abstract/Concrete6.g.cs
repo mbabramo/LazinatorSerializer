@@ -133,8 +133,11 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed,
             isAccessed: _IntList6_Accessed, writer: writer,
@@ -143,6 +146,8 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList6,
             includeChildrenMode, v, updateStoredBuffer));
+            _IntList6_ByteIndex = startOfObjectPosition - startPosition;
+            _Concrete6_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

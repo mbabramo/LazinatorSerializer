@@ -306,6 +306,8 @@ namespace Lazinator.Spans
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -322,6 +324,7 @@ namespace Lazinator.Spans
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnly, isBelievedDirty: _ReadOnly_Accessed,
             isAccessed: _ReadOnly_Accessed, writer: writer,
@@ -330,6 +333,8 @@ namespace Lazinator.Spans
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnly,
             includeChildrenMode, v, updateStoredBuffer));
+            _ReadOnly_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed,
             isAccessed: _ReadOrWrite_Accessed, writer: writer,
@@ -338,6 +343,8 @@ namespace Lazinator.Spans
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,
             includeChildrenMode, v, updateStoredBuffer));
+            _ReadOrWrite_ByteIndex = startOfObjectPosition - startPosition;
+            _LazinatorByteSpan_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

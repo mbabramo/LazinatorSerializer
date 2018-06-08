@@ -291,6 +291,8 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -307,10 +309,13 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _AbstractProperty, includeChildrenMode, _AbstractProperty_Accessed, () => GetChildSlice(LazinatorObjectBytes, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _AbstractProperty_ByteIndex = startOfObjectPosition - startPosition;
+            _ContainerWithAbstract1_EndByteIndex = writer.Position;
         }
         
     }

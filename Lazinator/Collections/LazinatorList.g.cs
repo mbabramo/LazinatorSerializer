@@ -318,6 +318,8 @@ namespace Lazinator.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -334,10 +336,13 @@ namespace Lazinator.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _Offsets_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _SerializedMainList, isBelievedDirty: _SerializedMainList_Accessed,
             isAccessed: _SerializedMainList_Accessed, writer: writer,
@@ -346,6 +351,8 @@ namespace Lazinator.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(w, SerializedMainList,
             includeChildrenMode, v, updateStoredBuffer));
+            _SerializedMainList_ByteIndex = startOfObjectPosition - startPosition;
+            _LazinatorList_T_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

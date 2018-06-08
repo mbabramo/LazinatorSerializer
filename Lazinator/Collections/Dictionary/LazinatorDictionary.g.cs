@@ -314,6 +314,8 @@ namespace Lazinator.Collections.Dictionary
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -331,10 +333,13 @@ namespace Lazinator.Collections.Dictionary
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _Count);
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _Buckets_ByteIndex = startOfObjectPosition - startPosition;
+            _LazinatorDictionary_TKey_TValue_EndByteIndex = writer.Position;
         }
         
     }

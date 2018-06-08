@@ -410,6 +410,8 @@ namespace LazinatorTests.Examples.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -426,6 +428,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLinkedListInt, isBelievedDirty: MyLinkedListInt_Dirty,
             isAccessed: _MyLinkedListInt_Accessed, writer: writer,
@@ -434,6 +437,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_LinkedList_Gint_g(w, MyLinkedListInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyLinkedListInt_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
             isAccessed: _MyListInt_Accessed, writer: writer,
@@ -442,6 +447,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, MyListInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListInt_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty,
             isAccessed: _MySortedSetInt_Accessed, writer: writer,
@@ -450,6 +457,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_SortedSet_Gint_g(w, MySortedSetInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MySortedSetInt_ByteIndex = startOfObjectPosition - startPosition;
+            _DotNetList_Values_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

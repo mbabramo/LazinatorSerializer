@@ -277,6 +277,8 @@ namespace Lazinator.Wrappers
         }
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -286,6 +288,7 @@ namespace Lazinator.Wrappers
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             var serializedBytesCopy_WrappedValue = LazinatorObjectBytes;
             var byteIndexCopy_WrappedValue = _WrappedValue_ByteIndex;
             var byteLengthCopy_WrappedValue = _WrappedValue_ByteLength;
@@ -297,6 +300,8 @@ namespace Lazinator.Wrappers
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_long_B_b(w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
+            _WrappedValue_ByteIndex = startOfObjectPosition - startPosition;
+            _WLongArray_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

@@ -455,6 +455,8 @@ namespace LazinatorTests.Examples.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -471,6 +473,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyMemoryInt, isBelievedDirty: _MyMemoryInt_Accessed,
             isAccessed: _MyMemoryInt_Accessed, writer: writer,
@@ -479,6 +482,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gint_g(w, MyMemoryInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyMemoryInt_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableMemoryInt, isBelievedDirty: _MyNullableMemoryInt_Accessed,
             isAccessed: _MyNullableMemoryInt_Accessed, writer: writer,
@@ -487,6 +492,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gint_g_C63(w, MyNullableMemoryInt,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyNullableMemoryInt_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlyMemoryByte, isBelievedDirty: _MyReadOnlyMemoryByte_Accessed,
             isAccessed: _MyReadOnlyMemoryByte_Accessed, writer: writer,
@@ -495,6 +502,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(w, MyReadOnlyMemoryByte,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyReadOnlyMemoryByte_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanByte, isBelievedDirty: _MyReadOnlySpanByte_Accessed,
             isAccessed: _MyReadOnlySpanByte_Accessed, writer: writer,
@@ -503,6 +512,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, MyReadOnlySpanByte,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyReadOnlySpanByte_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanChar, isBelievedDirty: _MyReadOnlySpanChar_Accessed,
             isAccessed: _MyReadOnlySpanChar_Accessed, writer: writer,
@@ -511,6 +522,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gchar_g(w, MyReadOnlySpanChar,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyReadOnlySpanChar_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanDateTime, isBelievedDirty: _MyReadOnlySpanDateTime_Accessed,
             isAccessed: _MyReadOnlySpanDateTime_Accessed, writer: writer,
@@ -519,6 +532,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_GDateTime_g(w, MyReadOnlySpanDateTime,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyReadOnlySpanDateTime_ByteIndex = startOfObjectPosition - startPosition;
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanLong, isBelievedDirty: _MyReadOnlySpanLong_Accessed,
             isAccessed: _MyReadOnlySpanLong_Accessed, writer: writer,
@@ -527,6 +542,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Glong_g(w, MyReadOnlySpanLong,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyReadOnlySpanLong_ByteIndex = startOfObjectPosition - startPosition;
+            _SpanAndMemory_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */

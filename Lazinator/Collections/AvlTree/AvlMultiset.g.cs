@@ -315,6 +315,8 @@ namespace Lazinator.Collections.AvlTree
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -332,10 +334,13 @@ namespace Lazinator.Collections.AvlTree
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, _NumItemsAdded);
+            startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChild(writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorObjectBytes, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            _UnderlyingSet_ByteIndex = startOfObjectPosition - startPosition;
+            _AvlMultiset_T_EndByteIndex = writer.Position;
         }
         
     }

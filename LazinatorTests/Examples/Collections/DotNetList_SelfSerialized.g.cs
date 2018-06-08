@@ -299,6 +299,8 @@ namespace LazinatorTests.Examples.Collections
         }
         protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
+            int startPosition = writer.Position;
+            int startOfObjectPosition = 0;
             // header information
             if (includeUniqueID)
             {
@@ -315,6 +317,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListSerialized, isBelievedDirty: MyListSerialized_Dirty,
             isAccessed: _MyListSerialized_Accessed, writer: writer,
@@ -323,6 +326,8 @@ namespace LazinatorTests.Examples.Collections
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExampleChild_g(w, MyListSerialized,
             includeChildrenMode, v, updateStoredBuffer));
+            _MyListSerialized_ByteIndex = startOfObjectPosition - startPosition;
+            _DotNetList_SelfSerialized_EndByteIndex = writer.Position;
         }
         
         /* Conversion of supported collections and tuples */
