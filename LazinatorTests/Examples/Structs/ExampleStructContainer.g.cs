@@ -419,7 +419,8 @@ namespace LazinatorTests.Examples
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_IntWrapper_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _IntWrapper_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
@@ -436,17 +437,21 @@ namespace LazinatorTests.Examples
             _ExampleStructContainer_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_IntWrapper_Accessed && (IntWrapper.IsDirty || IntWrapper.DescendantIsDirty)) || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_IntWrapper_Accessed && (IntWrapper.IsDirty || IntWrapper.DescendantIsDirty)) || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty)));
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -479,7 +484,7 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GExampleStruct_g(w, MyListExampleStruct,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableExampleStruct, isBelievedDirty: _MyListNullableExampleStruct_Accessed,
             isAccessed: _MyListNullableExampleStruct_Accessed, writer: writer,
@@ -487,7 +492,7 @@ namespace LazinatorTests.Examples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(w, MyListNullableExampleStruct,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -520,7 +525,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List_GExampleStruct_g(BinaryBufferWriter writer, List<ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_GExampleStruct_g(BinaryBufferWriter writer, List<ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<ExampleStruct>))
             {
@@ -530,7 +535,7 @@ namespace LazinatorTests.Examples
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }
@@ -563,7 +568,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(BinaryBufferWriter writer, List<WNullableStruct<ExampleStruct>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(BinaryBufferWriter writer, List<WNullableStruct<ExampleStruct>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<WNullableStruct<ExampleStruct>>))
             {
@@ -573,7 +578,7 @@ namespace LazinatorTests.Examples
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                void action(BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(writer, action);
             }
         }

@@ -171,7 +171,8 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_String4 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _String4 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _IntList4_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -180,20 +181,24 @@ namespace LazinatorTests.Examples.Abstract
             _Concrete5_EndByteIndex = bytesSoFar;
         }
         
-        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
         
-        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
+            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String4);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String5);
@@ -204,7 +209,7 @@ namespace LazinatorTests.Examples.Abstract
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList4,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
             isAccessed: _IntList5_Accessed, writer: writer,
@@ -212,7 +217,7 @@ namespace LazinatorTests.Examples.Abstract
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList5,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -238,7 +243,7 @@ namespace LazinatorTests.Examples.Abstract
             return collection;
         }
         
-        private static void ConvertToBytes_List_Gint_g(BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_Gint_g(BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<int>))
             {

@@ -266,7 +266,8 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_AbstractProperty_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _AbstractProperty_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -274,17 +275,21 @@ namespace LazinatorTests.Examples.Abstract
             _ContainerWithAbstract1_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_AbstractProperty_Accessed && AbstractProperty != null && (AbstractProperty.IsDirty || AbstractProperty.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_AbstractProperty_Accessed && AbstractProperty != null && (AbstractProperty.IsDirty || AbstractProperty.DescendantIsDirty)));
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)

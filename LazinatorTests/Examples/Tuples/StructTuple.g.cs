@@ -354,7 +354,8 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_EnumTuple_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _EnumTuple_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyNamedTuple_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -365,17 +366,21 @@ namespace LazinatorTests.Examples.Tuples
             _StructTuple_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -400,7 +405,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(w, EnumTuple,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNamedTuple, isBelievedDirty: _MyNamedTuple_Accessed,
             isAccessed: _MyNamedTuple_Accessed, writer: writer,
@@ -408,7 +413,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(w, MyNamedTuple,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableTuple, isBelievedDirty: _MyNullableTuple_Accessed,
             isAccessed: _MyNullableTuple_Accessed, writer: writer,
@@ -416,7 +421,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__Pint_c_C32double_p_C63(w, MyNullableTuple,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyValueTupleSerialized, isBelievedDirty: _MyValueTupleSerialized_Accessed,
             isAccessed: _MyValueTupleSerialized_Accessed, writer: writer,
@@ -424,7 +429,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(w, MyValueTupleSerialized,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -448,7 +453,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(BinaryBufferWriter writer, (TestEnum firstEnum, TestEnum anotherEnum) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(BinaryBufferWriter writer, (TestEnum firstEnum, TestEnum anotherEnum) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) itemToConvert.Item1);
@@ -475,7 +480,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(BinaryBufferWriter writer, (int MyFirstItem, double MySecondItem) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(BinaryBufferWriter writer, (int MyFirstItem, double MySecondItem) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Item1);
@@ -502,7 +507,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes__Pint_c_C32double_p_C63(BinaryBufferWriter writer, (int, double)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__Pint_c_C32double_p_C63(BinaryBufferWriter writer, (int, double)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == null)
             {
@@ -549,7 +554,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(BinaryBufferWriter writer, (uint, ExampleChild, NonLazinatorClass) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(BinaryBufferWriter writer, (uint, ExampleChild, NonLazinatorClass) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
             CompressedIntegralTypes.WriteCompressedUint(writer, itemToConvert.Item1);
@@ -560,7 +565,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem2(BinaryBufferWriter w) => itemToConvert.Item2.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                void actionItem2(BinaryBufferWriter w) => itemToConvert.Item2.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem2);
             };
             
@@ -570,7 +575,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness);
+                void actionItem3(BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(writer, itemToConvert.Item3, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(writer, actionItem3);
             }
         }

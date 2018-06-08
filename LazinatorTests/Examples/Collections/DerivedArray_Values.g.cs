@@ -129,25 +129,30 @@ namespace LazinatorTests.Examples.Collections
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyArrayInt_DerivedLevel_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyArrayInt_DerivedLevel_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DerivedArray_Values_EndByteIndex = bytesSoFar;
         }
         
-        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
         
-        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, includeUniqueID);
+            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt_DerivedLevel, isBelievedDirty: MyArrayInt_DerivedLevel_Dirty,
@@ -156,7 +161,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b(w, MyArrayInt_DerivedLevel,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -182,7 +187,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_b(BinaryBufferWriter writer, int[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_b(BinaryBufferWriter writer, int[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[]))
             {

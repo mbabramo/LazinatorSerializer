@@ -771,7 +771,8 @@ namespace LazinatorTests.Examples
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyBool = span.ToBoolean(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
             if (serializedVersionNumber >= 3) 
@@ -829,17 +830,21 @@ namespace LazinatorTests.Examples
             _Example_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -906,7 +911,7 @@ namespace LazinatorTests.Examples
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, MyNonLazinatorChild,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 WriteChildWithLength(writer, _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, true, false, this);

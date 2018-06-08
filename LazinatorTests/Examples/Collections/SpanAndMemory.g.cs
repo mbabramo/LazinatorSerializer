@@ -421,7 +421,8 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyMemoryInt_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyMemoryInt_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyNullableMemoryInt_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -438,17 +439,21 @@ namespace LazinatorTests.Examples.Collections
             _SpanAndMemory_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -473,7 +478,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gint_g(w, MyMemoryInt,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableMemoryInt, isBelievedDirty: _MyNullableMemoryInt_Accessed,
             isAccessed: _MyNullableMemoryInt_Accessed, writer: writer,
@@ -481,7 +486,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_Memory_Gint_g_C63(w, MyNullableMemoryInt,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlyMemoryByte, isBelievedDirty: _MyReadOnlyMemoryByte_Accessed,
             isAccessed: _MyReadOnlyMemoryByte_Accessed, writer: writer,
@@ -489,7 +494,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(w, MyReadOnlyMemoryByte,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanByte, isBelievedDirty: _MyReadOnlySpanByte_Accessed,
             isAccessed: _MyReadOnlySpanByte_Accessed, writer: writer,
@@ -497,7 +502,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(w, MyReadOnlySpanByte,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanChar, isBelievedDirty: _MyReadOnlySpanChar_Accessed,
             isAccessed: _MyReadOnlySpanChar_Accessed, writer: writer,
@@ -505,7 +510,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Gchar_g(w, MyReadOnlySpanChar,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanDateTime, isBelievedDirty: _MyReadOnlySpanDateTime_Accessed,
             isAccessed: _MyReadOnlySpanDateTime_Accessed, writer: writer,
@@ -513,7 +518,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_GDateTime_g(w, MyReadOnlySpanDateTime,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanLong, isBelievedDirty: _MyReadOnlySpanLong_Accessed,
             isAccessed: _MyReadOnlySpanLong_Accessed, writer: writer,
@@ -521,7 +526,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_ReadOnlySpan_Glong_g(w, MyReadOnlySpanLong,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -548,7 +553,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Memory_Gint_g(BinaryBufferWriter writer, Memory<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Memory_Gint_g(BinaryBufferWriter writer, Memory<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Length);
             var itemToConvertSpan = itemToConvert.Span;
@@ -581,7 +586,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Memory_Gint_g_C63(BinaryBufferWriter writer, Memory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_Memory_Gint_g_C63(BinaryBufferWriter writer, Memory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == null)
             {
@@ -589,11 +594,11 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                ConvertToBytes_Memory_Gint_g(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness);
+                ConvertToBytes_Memory_Gint_g(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             }
         }
         
-        private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert.Span);
             for (int i = 0; i < toConvert.Length; i++)
@@ -602,7 +607,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -611,7 +616,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_Gchar_g(BinaryBufferWriter writer, ReadOnlySpan<char> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_Gchar_g(BinaryBufferWriter writer, ReadOnlySpan<char> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<char, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -620,7 +625,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_GDateTime_g(BinaryBufferWriter writer, ReadOnlySpan<DateTime> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_GDateTime_g(BinaryBufferWriter writer, ReadOnlySpan<DateTime> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<DateTime, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -629,7 +634,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static void ConvertToBytes_ReadOnlySpan_Glong_g(BinaryBufferWriter writer, ReadOnlySpan<long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_ReadOnlySpan_Glong_g(BinaryBufferWriter writer, ReadOnlySpan<long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<long, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)

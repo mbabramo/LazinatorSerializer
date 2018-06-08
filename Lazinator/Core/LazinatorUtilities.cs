@@ -62,7 +62,7 @@ namespace Lazinator.Core
         public static MemoryInBuffer EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) where T : ILazinator, new()
         {
             BinaryBufferWriter writer = new BinaryBufferWriter(BinaryBufferWriter.MinMinBufferSize);
-            selfSerialized.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+            selfSerialized.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, true);
             return writer.MemoryInBuffer;
         }
 
@@ -236,7 +236,7 @@ namespace Lazinator.Core
                     void action(BinaryBufferWriter w)
                     {
                         if (child.IsDirty || child.DescendantIsDirty || verifyCleanness || child.LazinatorObjectBytes.Length == 0)
-                            child.SerializeExistingBuffer(w, includeChildrenMode, verifyCleanness);
+                            child.SerializeExistingBuffer(w, includeChildrenMode, verifyCleanness, true /* DEBUG -- add parameter */);
                         else
                             child.LazinatorObjectBytes.Span.Write(w); // the child has been accessed, but is unchanged, so we can use the storage holding the child
                     }

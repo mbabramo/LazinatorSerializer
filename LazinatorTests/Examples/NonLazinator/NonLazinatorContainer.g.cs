@@ -333,7 +333,8 @@ namespace LazinatorTests.Examples
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_NonLazinatorClass_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _NonLazinatorClass_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorInterchangeableClass_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -342,17 +343,21 @@ namespace LazinatorTests.Examples
             _NonLazinatorContainer_EndByteIndex = bytesSoFar;
         }
         
-        public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -374,7 +379,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorClass, byteIndexCopy_NonLazinatorClass, byteLengthCopy_NonLazinatorClass, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v));
+            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v, updateStoredBuffer));
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
@@ -385,7 +390,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorInterchangeableClass, byteIndexCopy_NonLazinatorInterchangeableClass, byteLengthCopy_NonLazinatorInterchangeableClass, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v));
+            ConvertToBytes_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v, updateStoredBuffer));
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
@@ -396,7 +401,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorStruct, byteIndexCopy_NonLazinatorStruct, byteLengthCopy_NonLazinatorStruct, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v));
+            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v, updateStoredBuffer));
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
@@ -410,10 +415,10 @@ namespace LazinatorTests.Examples
         
         private static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
         NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
-        bool verifyCleanness)
+        bool verifyCleanness, bool updateStoredBuffer)
         {
             NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
-            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
     }

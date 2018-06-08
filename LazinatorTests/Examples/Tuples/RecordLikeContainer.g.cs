@@ -323,7 +323,8 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyMismatchedRecordLikeType_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyMismatchedRecordLikeType_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyRecordLikeClass_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -332,17 +333,21 @@ namespace LazinatorTests.Examples.Tuples
             _RecordLikeContainer_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -367,7 +372,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_MismatchedRecordLikeType(w, MyMismatchedRecordLikeType,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed,
             isAccessed: _MyRecordLikeClass_Accessed, writer: writer,
@@ -375,7 +380,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_RecordLikeClass(w, MyRecordLikeClass,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed,
             isAccessed: _MyRecordLikeType_Accessed, writer: writer,
@@ -383,7 +388,7 @@ namespace LazinatorTests.Examples.Tuples
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_RecordLikeType(w, MyRecordLikeType,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -407,7 +412,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_MismatchedRecordLikeType(BinaryBufferWriter writer, MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_MismatchedRecordLikeType(BinaryBufferWriter writer, MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
@@ -441,7 +446,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_RecordLikeClass(BinaryBufferWriter writer, RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_RecordLikeClass(BinaryBufferWriter writer, RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
@@ -452,7 +457,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                void actionExample(BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(writer, actionExample);
             };
         }
@@ -476,7 +481,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_RecordLikeType(BinaryBufferWriter writer, RecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_RecordLikeType(BinaryBufferWriter writer, RecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);

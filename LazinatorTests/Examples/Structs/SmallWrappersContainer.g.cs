@@ -772,7 +772,8 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_ListWrappedBytes_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _ListWrappedBytes_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -801,17 +802,21 @@ namespace LazinatorTests.Examples.Structs
             _SmallWrappersContainer_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ListWrappedBytes_Accessed && ListWrappedBytes != null && (ListWrappedBytes.IsDirty || ListWrappedBytes.DescendantIsDirty)) || (_WrappedBool_Accessed && (WrappedBool.IsDirty || WrappedBool.DescendantIsDirty)) || (_WrappedByte_Accessed && (WrappedByte.IsDirty || WrappedByte.DescendantIsDirty)) || (_WrappedChar_Accessed && (WrappedChar.IsDirty || WrappedChar.DescendantIsDirty)) || (_WrappedNullableBool_Accessed && (WrappedNullableBool.IsDirty || WrappedNullableBool.DescendantIsDirty)) || (_WrappedNullableByte_Accessed && (WrappedNullableByte.IsDirty || WrappedNullableByte.DescendantIsDirty)) || (_WrappedNullableChar_Accessed && (WrappedNullableChar.IsDirty || WrappedNullableChar.DescendantIsDirty)) || (_WrappedNullableSByte_Accessed && (WrappedNullableSByte.IsDirty || WrappedNullableSByte.DescendantIsDirty)) || (_WrappedSByte_Accessed && (WrappedSByte.IsDirty || WrappedSByte.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ListWrappedBytes_Accessed && ListWrappedBytes != null && (ListWrappedBytes.IsDirty || ListWrappedBytes.DescendantIsDirty)) || (_WrappedBool_Accessed && (WrappedBool.IsDirty || WrappedBool.DescendantIsDirty)) || (_WrappedByte_Accessed && (WrappedByte.IsDirty || WrappedByte.DescendantIsDirty)) || (_WrappedChar_Accessed && (WrappedChar.IsDirty || WrappedChar.DescendantIsDirty)) || (_WrappedNullableBool_Accessed && (WrappedNullableBool.IsDirty || WrappedNullableBool.DescendantIsDirty)) || (_WrappedNullableByte_Accessed && (WrappedNullableByte.IsDirty || WrappedNullableByte.DescendantIsDirty)) || (_WrappedNullableChar_Accessed && (WrappedNullableChar.IsDirty || WrappedNullableChar.DescendantIsDirty)) || (_WrappedNullableSByte_Accessed && (WrappedNullableSByte.IsDirty || WrappedNullableSByte.DescendantIsDirty)) || (_WrappedSByte_Accessed && (WrappedSByte.IsDirty || WrappedSByte.DescendantIsDirty)));
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)

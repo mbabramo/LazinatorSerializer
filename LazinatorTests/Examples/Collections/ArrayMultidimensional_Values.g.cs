@@ -341,7 +341,8 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_MyArrayInt_ByteIndex = bytesSoFar;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _MyArrayInt_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyCrazyJaggedArray_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -350,17 +351,21 @@ namespace LazinatorTests.Examples.Collections
             _ArrayMultidimensional_Values_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = false;
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -385,7 +390,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_c_b(w, MyArrayInt,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed,
             isAccessed: _MyCrazyJaggedArray_Accessed, writer: writer,
@@ -393,7 +398,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(w, MyCrazyJaggedArray,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed,
             isAccessed: _MyThreeDimArrayInt_Accessed, writer: writer,
@@ -401,7 +406,7 @@ namespace LazinatorTests.Examples.Collections
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_int_B_c_c_b(w, MyThreeDimArrayInt,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -429,7 +434,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_b(BinaryBufferWriter writer, int[,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_c_b(BinaryBufferWriter writer, int[,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,]))
             {
@@ -477,7 +482,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(BinaryBufferWriter writer, int[][,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(BinaryBufferWriter writer, int[][,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[][,,][,,,]))
             {
@@ -494,7 +499,7 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_b_B_c_c_c_b(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness);
+                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_b_B_c_c_c_b(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
@@ -536,7 +541,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_c_b_B_c_c_c_b(BinaryBufferWriter writer, int[,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_c_c_b_B_c_c_c_b(BinaryBufferWriter writer, int[,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,,][,,,]))
             {
@@ -559,7 +564,7 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_c_b(writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode, verifyCleanness);
+                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_c_b(writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 
@@ -593,7 +598,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_c_c_b(BinaryBufferWriter writer, int[,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_c_c_c_b(BinaryBufferWriter writer, int[,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,,,]))
             {
@@ -641,7 +646,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_c_b(BinaryBufferWriter writer, int[,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_int_B_c_c_b(BinaryBufferWriter writer, int[,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,,]))
             {

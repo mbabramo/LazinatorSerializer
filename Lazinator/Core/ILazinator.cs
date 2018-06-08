@@ -43,7 +43,7 @@ namespace Lazinator.Core
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
         /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
-        void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
         /// Clones the class/struct by serializing, including all children, and then deserializing.
         /// </summary>

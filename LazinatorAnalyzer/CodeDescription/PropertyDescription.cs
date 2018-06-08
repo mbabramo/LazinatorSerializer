@@ -1705,7 +1705,7 @@ namespace Lazinator.CodeDescription
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
                     return ($@"
-                        void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                        void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(writer, action{itemName});");
                 else
                     return ($@"
@@ -1715,7 +1715,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness);
+                            void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                             WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(writer, action{itemName});
                         }};");
             }

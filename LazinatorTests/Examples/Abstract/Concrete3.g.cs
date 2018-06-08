@@ -441,7 +441,8 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;_String1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _String1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String3 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _Example2_ByteIndex = bytesSoFar;
@@ -463,17 +464,21 @@ namespace LazinatorTests.Examples.Abstract
             _Concrete3_EndByteIndex = bytesSoFar;
         }
         
-        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, true);
-            
-            _IsDirty = false;
-            _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Example2_Accessed && Example2 != null && (Example2.IsDirty || Example2.DescendantIsDirty)) || (_Example3_Accessed && Example3 != null && (Example3.IsDirty || Example3.DescendantIsDirty)));
-            
-            _LazinatorObjectBytes = writer.Slice(startPosition);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                
+                
+                _IsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Example2_Accessed && Example2 != null && (Example2.IsDirty || Example2.DescendantIsDirty)) || (_Example3_Accessed && Example3 != null && (Example3.IsDirty || Example3.DescendantIsDirty)));
+                
+                _LazinatorObjectBytes = writer.Slice(startPosition);
+            }
         }
-        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool includeUniqueID)
+        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
             if (includeUniqueID)
@@ -509,7 +514,7 @@ namespace LazinatorTests.Examples.Abstract
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList1,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList2, isBelievedDirty: _IntList2_Accessed,
             isAccessed: _IntList2_Accessed, writer: writer,
@@ -517,7 +522,7 @@ namespace LazinatorTests.Examples.Abstract
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList2,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList3, isBelievedDirty: _IntList3_Accessed,
             isAccessed: _IntList3_Accessed, writer: writer,
@@ -525,7 +530,7 @@ namespace LazinatorTests.Examples.Abstract
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
             ConvertToBytes_List_Gint_g(w, IntList3,
-            includeChildrenMode, v));
+            includeChildrenMode, v, updateStoredBuffer));
         }
         
         /* Conversion of supported collections and tuples */
@@ -551,7 +556,7 @@ namespace LazinatorTests.Examples.Abstract
             return collection;
         }
         
-        private static void ConvertToBytes_List_Gint_g(BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        private static void ConvertToBytes_List_Gint_g(BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<int>))
             {
