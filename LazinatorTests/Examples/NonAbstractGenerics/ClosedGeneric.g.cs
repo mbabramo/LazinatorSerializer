@@ -130,8 +130,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _MyT = value;

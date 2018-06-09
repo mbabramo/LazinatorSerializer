@@ -284,8 +284,8 @@ namespace Lazinator.Collections.Avl
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _Key = value;
@@ -325,7 +325,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                value.LazinatorParentClass = this;
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Left = value;
                 if (_Left != null)
@@ -368,7 +371,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                value.LazinatorParentClass = this;
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Right = value;
                 if (_Right != null)
@@ -416,8 +422,8 @@ namespace Lazinator.Collections.Avl
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _Value = value;

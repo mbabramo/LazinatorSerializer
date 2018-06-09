@@ -288,8 +288,8 @@ namespace LazinatorTests.Examples.Abstract
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _Example2 = value;
@@ -330,8 +330,8 @@ namespace LazinatorTests.Examples.Abstract
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _Example3 = value;

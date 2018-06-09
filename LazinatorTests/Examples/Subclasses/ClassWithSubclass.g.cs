@@ -258,8 +258,8 @@ namespace LazinatorTests.Examples.Subclasses
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _SubclassInstance1 = value;
@@ -301,8 +301,8 @@ namespace LazinatorTests.Examples.Subclasses
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _SubclassInstance2 = value;

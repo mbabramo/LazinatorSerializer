@@ -243,8 +243,8 @@ namespace LazinatorTests.Examples.Hierarchy
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _RecursiveClass = value;
@@ -286,8 +286,8 @@ namespace LazinatorTests.Examples.Hierarchy
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _RecursiveInterface = value;

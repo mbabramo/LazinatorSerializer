@@ -250,8 +250,8 @@ namespace Lazinator.Collections.AvlTree
                     if (value.LazinatorParentClass != null)
                     {
                         throw new MovedLazinatorException();
-                    }value.LazinatorParentClass = this;
-                    
+                    }
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
                 _UnderlyingSet = value;
