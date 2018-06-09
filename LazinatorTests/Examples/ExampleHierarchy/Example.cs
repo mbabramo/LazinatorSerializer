@@ -8,6 +8,10 @@ namespace LazinatorTests.Examples
 {
     public partial class Example : IExample
     {
+
+        public ExampleChild MyAutocloneChild { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ExampleStruct MyAutocloneChildStruct { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public Example()
         {
 
