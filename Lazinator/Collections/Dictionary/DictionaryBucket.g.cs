@@ -229,7 +229,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException();
+                        throw new MovedLazinatorException($"The property Keys cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -272,7 +272,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException();
+                        throw new MovedLazinatorException($"The property Values cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }

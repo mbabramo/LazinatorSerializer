@@ -233,7 +233,7 @@ namespace Lazinator.Collections
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException();
+                        throw new MovedLazinatorException($"The property Item1 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -279,7 +279,7 @@ namespace Lazinator.Collections
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException();
+                        throw new MovedLazinatorException($"The property Item2 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -325,7 +325,7 @@ namespace Lazinator.Collections
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException();
+                        throw new MovedLazinatorException($"The property Item3 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }

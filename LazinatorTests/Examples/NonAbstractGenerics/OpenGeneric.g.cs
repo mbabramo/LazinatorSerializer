@@ -267,7 +267,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException();
+                        throw new MovedLazinatorException($"The property MyT cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
