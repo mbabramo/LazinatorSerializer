@@ -779,13 +779,21 @@ namespace Lazinator.CodeDescription
                 {
                     parentSet = $@"if (value != null)
                                 {{
+                                    if (value.LazinatorParentClass != null)
+                                    {{
+                                        throw new Exception();
+                                    }}
                                     value.LazinatorParentClass = this;
                                 }}
                             ";
                 }
                 else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                 {
-                    parentSet = $@"value.LazinatorParentClass = this;
+                    parentSet = $@"if (value.LazinatorParentClass != null)
+                                    {{
+                                        throw new Exception();
+                                    }}
+                                    value.LazinatorParentClass = this;
                             ";
                 }
             }
