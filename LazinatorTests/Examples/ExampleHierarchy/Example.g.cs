@@ -510,16 +510,12 @@ namespace LazinatorTests.Examples
             set
             {
                 var clone = value.CloneLazinatorTyped();
-                if (value != null)
+                if (clone != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyAutocloneChild cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                    }
-                    value.LazinatorParentClass = this;
+                    clone.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _MyAutocloneChild = value;
+                _MyAutocloneChild = clone;
                 if (_MyAutocloneChild != null)
                 {
                     _MyAutocloneChild.IsDirty = true;
@@ -557,14 +553,10 @@ namespace LazinatorTests.Examples
             set
             {
                 var clone = value;
-                clone.LazinatorParentClass = null;
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property MyAutocloneChildStruct cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
-                value.LazinatorParentClass = this;
+                
+                clone.LazinatorParentClass = this;
                 IsDirty = true;
-                _MyAutocloneChildStruct = value;
+                _MyAutocloneChildStruct = clone;
                 _MyAutocloneChildStruct_Accessed = true;
             }
         }
