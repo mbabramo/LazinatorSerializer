@@ -704,6 +704,21 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void WrapperStringEqualsWorks()
+        {
+            WString a = "a";
+            WString b = "b";
+            WString n = null; // wrapped value is null
+            a.Equals(b).Should().Be(false);
+            b.Equals(a).Should().Be(false);
+            a.Equals((string)null).Should().Be(false);
+            a.Equals(n).Should().Be(false);
+            n.Equals(a).Should().Be(false);
+            n.Equals(n).Should().Be(true);
+            a.Equals(a).Should().Be(true);
+        }
+
+        [Fact]
         public void WrappersWithFixedLengthWork()
         {
             // some of these small wrappers have fixed length. The nullable wrappers (other than nullable bool) don't, because if it's null, then we don't include the rest. This means that we need a length byte. 

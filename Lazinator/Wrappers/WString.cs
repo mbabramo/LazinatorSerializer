@@ -53,21 +53,29 @@ namespace Lazinator.Wrappers
 
         public int CompareTo(string other)
         {
+            if (WrappedValue == null)
+                return other == null ? 0 : -1;
             return WrappedValue.CompareTo(other);
         }
 
         public bool Equals(string other)
         {
+            if (WrappedValue == null)
+                return other == null ? true : false;
             return WrappedValue.Equals(other);
         }
 
         public int CompareTo(WString other)
         {
+            if (WrappedValue == null)
+                return other == null ? 0 : -1;
             return WrappedValue.CompareTo(other.WrappedValue);
         }
 
         public bool Equals(WString other)
         {
+            if (WrappedValue == null)
+                return other.WrappedValue == null ? true : false;
             return WrappedValue.Equals(other.WrappedValue);
         }
     }
