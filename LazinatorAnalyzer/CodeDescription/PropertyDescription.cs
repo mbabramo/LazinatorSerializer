@@ -778,13 +778,35 @@ namespace Lazinator.CodeDescription
 
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
-                parentSet = $@"value.LazinatorParentClass = this;
-                            ";
+                parentSet = $@"
+                            value.LazinatorParentClass = this;";
             if (MovesFromOtherHierarchiesAllowed)
-                parentRelationship = parentSet;
-            else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
             {
-                parentRelationship = $@"if (value != null)
+                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
+                {
+                    parentRelationship = $@"if (value != null)
+                            {{{parentSet}
+                            }}
+                        ";
+                }
+                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                {
+                    parentRelationship = $@"if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
+                            {{{parentSet}
+                            }}
+                        ";
+                }
+                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+                {
+                    parentRelationship = $@"{parentSet}
+                        ";
+                }
+            }
+            else
+            {
+                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
+                {
+                    parentRelationship = $@"if (value != null)
                             {{
                                 if (value.LazinatorParentClass != null)
                                 {{
@@ -792,10 +814,10 @@ namespace Lazinator.CodeDescription
                                 }}{parentSet}
                             }}
                         ";
-            }
-            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-            {
-                parentRelationship = $@"if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
+                }
+                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                {
+                    parentRelationship = $@"if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
                             {{
                                 if (value.LazinatorParentClass != null)
                                 {{
@@ -803,14 +825,15 @@ namespace Lazinator.CodeDescription
                                 }}{parentSet}
                             }}
                         ";
-            }
-            else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-            {
-                parentRelationship = $@"if (value.LazinatorParentClass != null)
+                }
+                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+                {
+                    parentRelationship = $@"if (value.LazinatorParentClass != null)
                                 {{
                                     throw new MovedLazinatorException();
                                 }}{parentSet}
                         ";
+                }
             }
 
 
