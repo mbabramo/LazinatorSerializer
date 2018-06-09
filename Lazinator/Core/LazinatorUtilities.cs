@@ -415,27 +415,6 @@ namespace Lazinator.Core
             return MemoryPool<byte>.Shared.Rent(minimumSize);
         }
 
-        /// <summary>
-        /// Detaches a Lazinator class from its Lazinator hierarchy by setting its parent to null. Note that this will not work with Lazinator struct types.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="lazinatorClassObject"></param>
-        public static void DetachClassFromLazinatorHierarchy<T>(this T lazinatorClassObject) where T : ILazinator
-        {
-            if (lazinatorClassObject != null)
-                lazinatorClassObject.LazinatorParentClass = null;
-        }
-
-        /// <summary>
-        /// Detaches a Lazinator object from its Lazinator hierarchy by setting its parent to null. 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="lazinatorStruct"></param>
-        public static void DetachFromLazinatorParent<T>(ref T lazinatorStruct) where T : ILazinator
-        {
-            lazinatorStruct.LazinatorParentClass = null;
-        }
-
 
     }
 }

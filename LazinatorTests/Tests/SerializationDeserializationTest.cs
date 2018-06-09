@@ -2433,7 +2433,7 @@ namespace LazinatorTests.Tests
             // If we want to change the hierarchy, we must do it like this:
             var copyOfStruct = container.MyExampleStruct_Copy;
             copyOfStruct.MyChild1.MyLong = 25;
-            LazinatorUtilities.DetachFromLazinatorParent(ref copyOfStruct);
+            copyOfStruct.LazinatorParentClass = null;
             container.MyExampleStruct = copyOfStruct;
             container.MyExampleStruct.MyChild1.IsDirty.Should().BeTrue();
             container.MyExampleStruct.DescendantIsDirty.Should().BeTrue();
