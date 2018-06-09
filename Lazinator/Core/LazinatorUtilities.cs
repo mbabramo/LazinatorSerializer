@@ -414,6 +414,12 @@ namespace Lazinator.Core
         {
             return MemoryPool<byte>.Shared.Rent(minimumSize);
         }
-        
+
+        public static void DetachFromLazinatorParent<T>(this T node) where T : ILazinator
+        {
+            if (node != null)
+                node.LazinatorParentClass = null;
+        }
+
     }
 }

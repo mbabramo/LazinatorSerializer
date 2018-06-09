@@ -236,6 +236,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;

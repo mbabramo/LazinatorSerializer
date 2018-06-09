@@ -457,6 +457,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -496,6 +500,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -535,6 +543,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -574,6 +586,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -613,6 +629,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -652,6 +672,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -743,6 +767,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedInt = value;

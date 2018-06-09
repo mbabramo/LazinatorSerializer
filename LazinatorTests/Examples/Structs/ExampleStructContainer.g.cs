@@ -248,6 +248,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _IntWrapper = value;
@@ -306,6 +310,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _MyExampleStruct = value;

@@ -242,6 +242,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -281,6 +285,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;

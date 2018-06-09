@@ -286,6 +286,10 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -324,6 +328,10 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;

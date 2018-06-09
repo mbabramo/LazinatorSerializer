@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Core;
+using static Lazinator.Core.LazinatorUtilities;
 
 namespace Lazinator.Collections.Avl
 {
@@ -222,8 +223,10 @@ namespace Lazinator.Collections.Avl
 		        rightLeft.NodeVisitedDuringChange = true;
 
 			right.Parent = parent;
-			right.Left = node;
-			node.Right = rightLeft;
+            node.DetachFromLazinatorParent();
+            right.Left = node;
+            rightLeft.DetachFromLazinatorParent();
+            node.Right = rightLeft;
 			node.Parent = right;
 
 			if (rightLeft != null)
@@ -233,14 +236,17 @@ namespace Lazinator.Collections.Avl
 
 			if (node == Root)
 			{
+                right.DetachFromLazinatorParent();
 				Root = right;
 			}
 			else if (parent.Right == node)
 			{
+                right.DetachFromLazinatorParent();
 				parent.Right = right;
 			}
 			else
 			{
+                right.DetachFromLazinatorParent();
 				parent.Left = right;
 			}
 
@@ -260,7 +266,9 @@ namespace Lazinator.Collections.Avl
 		        leftRight.NodeVisitedDuringChange = true;
 
 			left.Parent = parent;
+            node.DetachFromLazinatorParent();
 			left.Right = node;
+            leftRight.DetachFromLazinatorParent();
 			node.Left = leftRight;
 			node.Parent = left;
 
@@ -271,14 +279,17 @@ namespace Lazinator.Collections.Avl
 
 			if (node == Root)
 			{
+                left.DetachFromLazinatorParent();
 				Root = left;
 			}
 			else if (parent.Left == node)
 			{
+                left.DetachFromLazinatorParent();
 				parent.Left = left;
 			}
 			else
 			{
+                left.DetachFromLazinatorParent();
 				parent.Right = left;
 			}
 
@@ -303,9 +314,13 @@ namespace Lazinator.Collections.Avl
 		        leftRightLeft.NodeVisitedDuringChange = true;
 
             leftRight.Parent = parent;
+            leftRightRight.DetachFromLazinatorParent();
 			node.Left = leftRightRight;
+            leftRightLeft.DetachFromLazinatorParent();
 			left.Right = leftRightLeft;
+            left.DetachFromLazinatorParent();
 			leftRight.Left = left;
+            node.DetachFromLazinatorParent();
 			leftRight.Right = node;
 			left.Parent = leftRight;
 			node.Parent = leftRight;
@@ -321,15 +336,18 @@ namespace Lazinator.Collections.Avl
 			}
 
 			if (node == Root)
-			{
-				Root = leftRight;
+            {
+                leftRight.DetachFromLazinatorParent();
+                Root = leftRight;
 			}
 			else if (parent.Left == node)
 			{
+                leftRight.DetachFromLazinatorParent();
 				parent.Left = leftRight;
 			}
 			else
 			{
+                leftRight.DetachFromLazinatorParent();
 				parent.Right = leftRight;
 			}
 
@@ -369,9 +387,13 @@ namespace Lazinator.Collections.Avl
 		        rightLeftRight.NodeVisitedDuringChange = true;
 
             rightLeft.Parent = parent;
+            rightLeftLeft.DetachFromLazinatorParent();
 			node.Right = rightLeftLeft;
+            rightLeftRight.DetachFromLazinatorParent();
 			right.Left = rightLeftRight;
+            right.DetachFromLazinatorParent();
 			rightLeft.Right = right;
+            node.DetachFromLazinatorParent();
 			rightLeft.Left = node;
 			right.Parent = rightLeft;
 			node.Parent = rightLeft;
@@ -388,14 +410,17 @@ namespace Lazinator.Collections.Avl
 
 			if (node == Root)
 			{
+                rightLeft.DetachFromLazinatorParent();
 				Root = rightLeft;
 			}
 			else if (parent.Right == node)
-			{
-				parent.Right = rightLeft;
+            {
+                rightLeft.DetachFromLazinatorParent();
+                parent.Right = rightLeft;
 			}
 			else
 			{
+                rightLeft.DetachFromLazinatorParent();
 				parent.Left = rightLeft;
 			}
 
@@ -503,23 +528,27 @@ namespace Lazinator.Collections.Avl
 							AvlNode<TKey, TValue> parent = node.Parent;
 
 							successor.Parent = parent;
+                            left.DetachFromLazinatorParent();
 							successor.Left = left;
 							successor.Balance = node.Balance;
 							left.Parent = successor;
 
 							if (node == Root)
 							{
+                                successor.DetachFromLazinatorParent();
 								Root = successor;
 							}
 							else
 							{
 								if (parent.Left == node)
 								{
+                                    successor.DetachFromLazinatorParent();
 									parent.Left = successor;
 								}
 								else
-								{
-									parent.Right = successor;
+                                {
+                                    successor.DetachFromLazinatorParent();
+                                    parent.Right = successor;
 								}
 							}
 
@@ -541,11 +570,13 @@ namespace Lazinator.Collections.Avl
 
 							if (successorParent.Left == successor)
 							{
+                                successorRight.DetachFromLazinatorParent();
 								successorParent.Left = successorRight;
 							}
 							else
-							{
-								successorParent.Right = successorRight;
+                            {
+                                successorRight.DetachFromLazinatorParent();
+                                successorParent.Right = successorRight;
 							}
 
 							if (successorRight != null)
@@ -554,25 +585,30 @@ namespace Lazinator.Collections.Avl
 							}
 
 							successor.Parent = parent;
+                            left.DetachFromLazinatorParent();
 							successor.Left = left;
 							successor.Balance = node.Balance;
+                            right.DetachFromLazinatorParent();
 							successor.Right = right;
 							right.Parent = successor;
 							left.Parent = successor;
 
 							if (node == Root)
 							{
+                                successor.DetachFromLazinatorParent();
 								Root = successor;
 							}
 							else
 							{
 								if (parent.Left == node)
 								{
+                                    successor.DetachFromLazinatorParent();
 									parent.Left = successor;
 								}
 								else
-								{
-									parent.Right = successor;
+                                {
+                                    successor.DetachFromLazinatorParent();
+                                    parent.Right = successor;
 								}
 							}
 
@@ -647,9 +683,12 @@ namespace Lazinator.Collections.Avl
 			AvlNode<TKey, TValue> right = source.Right;
 
 			target.Balance = source.Balance;
-			target.Key = source.Key;
-			target.Value = source.Value;
+            TKey keyClone = (TKey)source.Key.CloneLazinator();
+            target.Key = keyClone;
+			target.Value = (TValue) source.Value.CloneLazinator();
+            left.DetachFromLazinatorParent();
 			target.Left = left;
+            right.DetachFromLazinatorParent();
 			target.Right = right;
 
 			if (left != null)

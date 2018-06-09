@@ -285,6 +285,10 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (value != null)
                 {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new Exception();
+                    }
                     value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
@@ -325,6 +329,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedBool = value;
@@ -383,6 +391,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedByte = value;
@@ -441,6 +453,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedChar = value;
@@ -499,6 +515,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableBool = value;
@@ -557,6 +577,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableByte = value;
@@ -615,6 +639,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableChar = value;
@@ -673,6 +701,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableSByte = value;
@@ -731,6 +763,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new Exception();
+                }
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedSByte = value;
