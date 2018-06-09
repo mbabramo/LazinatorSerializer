@@ -390,6 +390,8 @@ namespace Lazinator.Core
         /// <returns>A clone of the Lazinator class</returns>
         public static T CloneLazinatorTyped<T>(this T lazinator) where T : class, ILazinator
         {
+            if (lazinator == null)
+                return null;
             return lazinator.CloneLazinator() as T;
         }
 
