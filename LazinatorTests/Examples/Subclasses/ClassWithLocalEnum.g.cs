@@ -75,10 +75,9 @@ namespace LazinatorTests.Examples.Subclasses
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ClassWithLocalEnum()
             {
-                LazinatorParentClass = LazinatorParentClass,
                 InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
                 OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyBytes = bytes
+                HierarchyBytes = bytes,
             };
             return clone;
         }
