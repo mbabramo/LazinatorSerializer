@@ -2575,6 +2575,27 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void AutocloneWorks()
+        {
+            var original = GetHierarchy(1, 1, 1, 1, 0);
+            var another = GetHierarchy(1, 1, 1, 1, 0);
+            original.MyAutocloneChild = new ExampleChild();
+            original.MyAutocloneChild.LazinatorParentClass.Should().Be(original);
+            another.MyAutocloneChild = original.MyAutocloneChild;
+            original.MyAutocloneChild.LazinatorParentClass.Should().Be(original);
+            another.MyAutocloneChild.LazinatorParentClass.Should().Be(another);
+
+            original.MyAutocloneChildStruct = new ExampleStruct();
+            original.MyAutocloneChildStruct.LazinatorParentClass.Should().Be(original);
+            another.MyAutocloneChildStruct = original.MyAutocloneChildStruct;
+            original.MyAutocloneChildStruct.LazinatorParentClass.Should().Be(original);
+            another.MyAutocloneChildStruct.LazinatorParentClass.Should().Be(another);
+
+            original.MyAutocloneChild = null;
+            original.MyAutocloneChild.Should().BeNull();
+        }
+
+        [Fact]
         public void ConfirmSerialization()
         {
             for (int i = 0; i <= 2; i++)

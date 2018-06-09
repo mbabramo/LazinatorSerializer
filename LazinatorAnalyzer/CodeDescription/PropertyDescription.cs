@@ -778,11 +778,11 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
-            string incomingValue = "value";
+            string incomingValue = Autoclone ? "clone" : "value";
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
-                            value.LazinatorParentClass = this;";
+                            {incomingValue}.LazinatorParentClass = this;";
             if (MovesFromOtherHierarchiesAllowed)
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
@@ -805,14 +805,36 @@ namespace Lazinator.CodeDescription
                         ";
                 }
             }
-            else
+            else if (Autoclone)
             {
-                string autocloneString = Autoclone ? $@"var clone = value.CloneLazinatorTyped();
-                                " : "";
-
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
                 {
-                    parentRelationship = $@"{autocloneString}if ({incomingValue} != null)
+                    parentRelationship = $@"var clone = value.CloneLazinatorTyped();
+                            if ({incomingValue} != null)
+                            {{{parentSet}
+                            }}
+                        ";
+                }
+                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                {
+                    parentRelationship = $@"var clone = value.CloneLazinatorTyped();
+                            if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
+                            {{{parentSet}
+                            }}
+                        ";
+                }
+                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+                {
+                    parentRelationship = $@"var clone = value;
+                                {parentSet}
+                        ";
+                }
+            }
+            else 
+            {
+                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
+                {
+                    parentRelationship = $@"if ({incomingValue} != null)
                             {{
                                 if ({incomingValue}.LazinatorParentClass != null)
                                 {{
@@ -823,7 +845,7 @@ namespace Lazinator.CodeDescription
                 }
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 {
-                    parentRelationship = $@"{autocloneString}if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
+                    parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
                             {{
                                 if ({incomingValue}.LazinatorParentClass != null)
                                 {{
@@ -834,10 +856,7 @@ namespace Lazinator.CodeDescription
                 }
                 else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                 {
-                    autocloneString = Autoclone ? $@"var clone = value;
-                                clone.LazinatorParentClass = null;
-                                " : "";
-                    parentRelationship = $@"{autocloneString}if ({incomingValue}.LazinatorParentClass != null)
+                    parentRelationship = $@"if ({incomingValue}.LazinatorParentClass != null)
                                 {{
                                     throw new MovedLazinatorException($""The property {PropertyName} cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute."");
                                 }}{parentSet}
