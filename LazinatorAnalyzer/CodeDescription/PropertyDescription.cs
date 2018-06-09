@@ -791,7 +791,7 @@ namespace Lazinator.CodeDescription
                 }
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 {
-                    parentRelationship = $@"if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
+                    parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
                             {{{parentSet}
                             }}
                         ";
@@ -817,7 +817,7 @@ namespace Lazinator.CodeDescription
                 }
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 {
-                    parentRelationship = $@"if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
+                    parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
                             {{
                                 if (value.LazinatorParentClass != null)
                                 {{
