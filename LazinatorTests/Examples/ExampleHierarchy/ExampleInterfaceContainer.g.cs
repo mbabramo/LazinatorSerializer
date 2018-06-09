@@ -237,6 +237,10 @@ namespace LazinatorTests.Examples.Hierarchy
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _ExampleByInterface = value;
                 if (_ExampleByInterface != null)

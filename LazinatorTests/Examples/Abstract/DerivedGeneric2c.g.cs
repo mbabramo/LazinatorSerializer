@@ -265,6 +265,10 @@ namespace LazinatorTests.Examples.Abstract
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;

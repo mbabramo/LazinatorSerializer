@@ -248,6 +248,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _ItemU = value;
                 if (_ItemU != null)

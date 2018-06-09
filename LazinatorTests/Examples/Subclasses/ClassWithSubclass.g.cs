@@ -254,6 +254,10 @@ namespace LazinatorTests.Examples.Subclasses
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _SubclassInstance1 = value;
                 if (_SubclassInstance1 != null)
@@ -289,6 +293,10 @@ namespace LazinatorTests.Examples.Subclasses
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _SubclassInstance2 = value;
                 if (_SubclassInstance2 != null)

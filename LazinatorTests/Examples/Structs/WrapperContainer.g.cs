@@ -237,6 +237,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;

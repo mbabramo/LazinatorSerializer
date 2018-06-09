@@ -280,6 +280,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Key = value;
                 _Key_Accessed = true;
@@ -318,6 +322,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Left = value;
                 if (_Left != null)
@@ -360,6 +368,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Right = value;
                 if (_Right != null)
@@ -402,6 +414,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Value = value;
                 _Value_Accessed = true;

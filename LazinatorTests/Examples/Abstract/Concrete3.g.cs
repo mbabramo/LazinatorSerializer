@@ -284,6 +284,10 @@ namespace LazinatorTests.Examples.Abstract
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Example2 = value;
                 if (_Example2 != null)
@@ -318,6 +322,10 @@ namespace LazinatorTests.Examples.Abstract
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Example3 = value;
                 if (_Example3 != null)

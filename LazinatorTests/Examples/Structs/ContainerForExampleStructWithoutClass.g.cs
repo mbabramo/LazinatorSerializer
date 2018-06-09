@@ -236,6 +236,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;
                 _ExampleStructWithoutClass_Accessed = true;

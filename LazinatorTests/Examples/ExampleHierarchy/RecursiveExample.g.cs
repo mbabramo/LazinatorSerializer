@@ -239,6 +239,10 @@ namespace LazinatorTests.Examples.Hierarchy
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _RecursiveClass = value;
                 if (_RecursiveClass != null)
@@ -274,6 +278,10 @@ namespace LazinatorTests.Examples.Hierarchy
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _RecursiveInterface = value;
                 if (_RecursiveInterface != null)

@@ -234,6 +234,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _ClosedGeneric = value;
                 if (_ClosedGeneric != null)

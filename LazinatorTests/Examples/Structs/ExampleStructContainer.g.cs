@@ -248,6 +248,7 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
@@ -305,6 +306,7 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;

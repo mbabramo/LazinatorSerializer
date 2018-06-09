@@ -229,6 +229,10 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Root = value;
                 if (_Root != null)

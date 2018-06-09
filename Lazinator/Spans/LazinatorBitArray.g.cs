@@ -270,6 +270,10 @@ namespace Lazinator.Spans
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _ByteSpan = value;
                 if (_ByteSpan != null)

@@ -251,6 +251,10 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _FourByteItems = value;
                 if (_FourByteItems != null)
@@ -293,6 +297,10 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _TwoByteItems = value;
                 if (_TwoByteItems != null)

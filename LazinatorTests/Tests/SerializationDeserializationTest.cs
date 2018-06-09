@@ -1960,9 +1960,8 @@ namespace LazinatorTests.Tests
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.LazinatorParentClass.Should().Be(null); // parent class isn't set until after deserialization
             hierarchy.MyChild1.MyShort = 5234; 
-            hierarchy.DescendantIsDirty.Should().BeFalse(); // not affected by change to new child -- but the parent is dirty, so it shouldn't matter
+            hierarchy.DescendantIsDirty.Should().BeFalse(); // not affected by change to new child when the child was already marked as dirty
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyShort.Should().Be(5234);
@@ -1994,13 +1993,15 @@ namespace LazinatorTests.Tests
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse(); // false because MyWrapperContainer doesn't have parent set and thus can't notify MyChild1
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse(); // false because MyWrapperContainer is dirty and thus doesn't notify new parent
             hierarchy.MyChild1.MyWrapperContainer.LazinatorConvertToBytes();
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
-            hierarchy.MyChild1.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeTrue(); 
+            hierarchy.MyChild1.IsDirty.Should().BeTrue(); // hasn't changed
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue(); // this time, wrapper's dirtiness change, so MyChild1 is notified
             var clone = hierarchy.CloneLazinatorTyped();
             // The following is the tricky part. We must make sure that LazinatorConvertToBytes doesn't cause MyChild1 to think that no serialization is necessary.
             clone.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(18);
@@ -2355,7 +2356,7 @@ namespace LazinatorTests.Tests
             nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
             nonGenericContainer.MyList.IsDirty.Should().BeTrue();
             nonGenericContainer.IsDirty.Should().BeTrue();
-            nonGenericContainer.DescendantIsDirty.Should().BeFalse(); // MyList counts as a property of the container. Thus, the container is dirty, but we don't count that as a descendant being dirty. 
+            nonGenericContainer.DescendantIsDirty.Should().BeTrue(); 
 
             var v2 = nonGenericContainer.CloneLazinatorTyped();
             v2.IsDirty.Should().BeFalse();

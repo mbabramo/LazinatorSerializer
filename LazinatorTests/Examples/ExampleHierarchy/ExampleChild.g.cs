@@ -286,6 +286,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _MyWrapperContainer = value;
                 if (_MyWrapperContainer != null)

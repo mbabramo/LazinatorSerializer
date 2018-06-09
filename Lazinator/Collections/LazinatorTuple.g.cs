@@ -234,6 +234,10 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Item1 = value;
                 _Item1_Accessed = true;
@@ -272,6 +276,10 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Item2 = value;
                 _Item2_Accessed = true;

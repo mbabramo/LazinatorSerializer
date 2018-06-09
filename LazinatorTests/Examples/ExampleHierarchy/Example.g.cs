@@ -455,6 +455,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _ExcludableChild = value;
                 if (_ExcludableChild != null)
@@ -490,6 +494,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _IncludableChild = value;
                 if (_IncludableChild != null)
@@ -525,6 +533,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _MyChild1 = value;
                 if (_MyChild1 != null)
@@ -560,6 +572,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _MyChild2 = value;
                 if (_MyChild2 != null)
@@ -595,6 +611,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _MyChild2Previous = value;
                 if (_MyChild2Previous != null)
@@ -630,6 +650,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _MyInterfaceImplementer = value;
                 if (_MyInterfaceImplementer != null)
@@ -719,6 +743,7 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;

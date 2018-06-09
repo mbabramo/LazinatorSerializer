@@ -240,6 +240,10 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Keys = value;
                 if (_Keys != null)
@@ -275,6 +279,10 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Values = value;
                 if (_Values != null)

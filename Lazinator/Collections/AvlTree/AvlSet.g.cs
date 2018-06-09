@@ -246,6 +246,10 @@ namespace Lazinator.Collections.AvlTree
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _UnderlyingTree = value;
                 if (_UnderlyingTree != null)

@@ -223,6 +223,10 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Offsets = value;
                 if (_Offsets != null)

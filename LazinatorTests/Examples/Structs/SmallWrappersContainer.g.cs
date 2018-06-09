@@ -283,6 +283,10 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _ListWrappedBytes = value;
                 if (_ListWrappedBytes != null)
@@ -321,6 +325,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedBool = value;
                 _WrappedBool_Accessed = true;
@@ -378,6 +383,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedByte = value;
                 _WrappedByte_Accessed = true;
@@ -435,6 +441,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedChar = value;
                 _WrappedChar_Accessed = true;
@@ -492,6 +499,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableBool = value;
                 _WrappedNullableBool_Accessed = true;
@@ -549,6 +557,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableByte = value;
                 _WrappedNullableByte_Accessed = true;
@@ -606,6 +615,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableChar = value;
                 _WrappedNullableChar_Accessed = true;
@@ -663,6 +673,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableSByte = value;
                 _WrappedNullableSByte_Accessed = true;
@@ -720,6 +731,7 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
+                value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedSByte = value;
                 _WrappedSByte_Accessed = true;

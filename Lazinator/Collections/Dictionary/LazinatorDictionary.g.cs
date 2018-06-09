@@ -245,6 +245,10 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    value.LazinatorParentClass = this;
+                }
                 IsDirty = true;
                 _Buckets = value;
                 if (_Buckets != null)
