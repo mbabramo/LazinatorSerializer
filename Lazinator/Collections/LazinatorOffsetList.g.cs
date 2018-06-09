@@ -254,9 +254,9 @@ namespace Lazinator.Collections
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _FourByteItems = value;
@@ -304,9 +304,9 @@ namespace Lazinator.Collections
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _TwoByteItems = value;

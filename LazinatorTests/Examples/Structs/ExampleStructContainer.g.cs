@@ -249,9 +249,9 @@ namespace LazinatorTests.Examples
             {
                 if (value.LazinatorParentClass != null)
                 {
-                    throw new Exception();
-                }
-                value.LazinatorParentClass = this;
+                    throw new MovedLazinatorException();
+                }value.LazinatorParentClass = this;
+                
                 IsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
@@ -311,9 +311,9 @@ namespace LazinatorTests.Examples
             {
                 if (value.LazinatorParentClass != null)
                 {
-                    throw new Exception();
-                }
-                value.LazinatorParentClass = this;
+                    throw new MovedLazinatorException();
+                }value.LazinatorParentClass = this;
+                
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;

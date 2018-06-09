@@ -237,9 +237,9 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (value.LazinatorParentClass != null)
                 {
-                    throw new Exception();
-                }
-                value.LazinatorParentClass = this;
+                    throw new MovedLazinatorException();
+                }value.LazinatorParentClass = this;
+                
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;
                 _ExampleStructWithoutClass_Accessed = true;

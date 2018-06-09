@@ -235,13 +235,13 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (value != null)
+                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Item1 = value;
@@ -281,13 +281,13 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (value != null)
+                if (System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Item2 = value;
@@ -327,13 +327,13 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (value != null)
+                if (System.Collections.Generic.EqualityComparer<V>.Default.Equals(value, default(V)))
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Item3 = value;

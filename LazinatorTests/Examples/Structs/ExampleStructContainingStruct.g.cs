@@ -234,6 +234,10 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value.LazinatorParentClass != null)
+                {
+                    throw new MovedLazinatorException();
+                }
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;

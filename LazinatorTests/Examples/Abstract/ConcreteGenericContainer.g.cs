@@ -235,9 +235,9 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Item = value;

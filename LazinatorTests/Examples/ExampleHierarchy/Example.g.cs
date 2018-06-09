@@ -458,9 +458,9 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _ExcludableChild = value;
@@ -501,9 +501,9 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _IncludableChild = value;
@@ -544,9 +544,9 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _MyChild1 = value;
@@ -587,9 +587,9 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _MyChild2 = value;
@@ -630,9 +630,9 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _MyChild2Previous = value;
@@ -673,9 +673,9 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _MyInterfaceImplementer = value;
@@ -768,9 +768,9 @@ namespace LazinatorTests.Examples
             {
                 if (value.LazinatorParentClass != null)
                 {
-                    throw new Exception();
-                }
-                value.LazinatorParentClass = this;
+                    throw new MovedLazinatorException();
+                }value.LazinatorParentClass = this;
+                
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;

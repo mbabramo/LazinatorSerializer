@@ -281,6 +281,13 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new MovedLazinatorException();
+                    }
+                }
                 IsDirty = true;
                 _MyChild1 = value;
                 if (_MyChild1 != null)
@@ -316,6 +323,13 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
+                if (value != null)
+                {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new MovedLazinatorException();
+                    }
+                }
                 IsDirty = true;
                 _MyChild2 = value;
                 if (_MyChild2 != null)

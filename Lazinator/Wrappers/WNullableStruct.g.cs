@@ -245,6 +245,13 @@ namespace Lazinator.Wrappers
             [DebuggerStepThrough]
             set
             {
+                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
+                {
+                    if (value.LazinatorParentClass != null)
+                    {
+                        throw new MovedLazinatorException();
+                    }
+                }
                 IsDirty = true;
                 _NonNullValue = value;
                 _NonNullValue_Accessed = true;

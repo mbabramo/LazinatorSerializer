@@ -279,13 +279,13 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                if (value != null)
+                if (System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Key = value;
@@ -329,9 +329,9 @@ namespace Lazinator.Collections.Avl
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Left = value;
@@ -379,9 +379,9 @@ namespace Lazinator.Collections.Avl
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Right = value;
@@ -425,13 +425,13 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                if (value != null)
+                if (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new Exception();
-                    }
-                    value.LazinatorParentClass = this;
+                        throw new MovedLazinatorException();
+                    }value.LazinatorParentClass = this;
+                    
                 }
                 IsDirty = true;
                 _Value = value;
