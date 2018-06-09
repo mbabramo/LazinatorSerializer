@@ -57,7 +57,6 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPreSerialization { get; set; }
         public bool ImplementsPostDeserialization { get; set; }
         public bool ImplementsOnDirty { get; set; }
-        public bool ImplementsMarkHierarchyClean { get; set; }
         public bool ImplementsConvertFromBytesAfterHeader { get; set; }
         public bool ImplementsWritePropertiesIntoBuffer { get; set; }
 
@@ -136,7 +135,6 @@ namespace Lazinator.CodeDescription
             ImplementsPreSerialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PreSerialization"));
             ImplementsPostDeserialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PostDeserialization"));
             ImplementsOnDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDirty"));
-            ImplementsMarkHierarchyClean = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "MarkHierarchyClean"));
             ImplementsConvertFromBytesAfterHeader = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "ConvertFromBytesAfterHeader"));
             ImplementsWritePropertiesIntoBuffer = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "WritePropertiesIntoBuffer"));
         }
@@ -242,7 +240,6 @@ namespace Lazinator.CodeDescription
             GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
-            string markHierarchyCleanMethod = GetMarkHierarchyCleanMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
             {
@@ -431,8 +428,6 @@ namespace Lazinator.CodeDescription
                                 }}
                             }}
                         }}
-
-                        {markHierarchyCleanMethod}
         
                         private MemoryInBuffer _HierarchyBytes;
                         public {DerivationKeyword}MemoryInBuffer HierarchyBytes
@@ -909,50 +904,6 @@ namespace Lazinator.CodeDescription
             }
 
             return classContainingStructContainingClassError;
-        }
-
-        const string skipMarkHierarchyClean = "// MarkHierarchyClean defined in main class; thus skipped here";
-
-        private string GetMarkHierarchyCleanMethod()
-        {
-            return ""; // DEBUG -- delete this 
-            if (ImplementsMarkHierarchyClean)
-                return skipMarkHierarchyClean;
-            string markHierarchyCleanMethod = "";
-            if (!IsAbstract)
-            {
-                markHierarchyCleanMethod = $@"public {DerivationKeyword}void MarkHierarchyClean()
-                            {{";
-                if (IsDerivedFromNonAbstractLazinator)
-                    markHierarchyCleanMethod += $@"
-                        base.MarkHierarchyClean();";
-                else
-                    markHierarchyCleanMethod += $@"
-                            _IsDirty = false;
-                            _DescendantIsDirty = false;";
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
-                {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                        markHierarchyCleanMethod += $@"
-                            if (_{property.PropertyName}_Accessed)
-                            {{
-                                {property.PropertyName}{property.NullableStructValueAccessor}.MarkHierarchyClean();
-                            }}";
-                    else
-                        markHierarchyCleanMethod += $@"
-                            if (_{property.PropertyName}_Accessed)
-                            {{
-                                {property.PropertyName}.MarkHierarchyClean();
-                            }}";
-                }
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
-                    markHierarchyCleanMethod += $@"
-                            _{property.PropertyName}_Dirty = false;";
-                markHierarchyCleanMethod += $@"
-                    }}";
-            }
-
-            return markHierarchyCleanMethod;
         }
 
         private void GetDescendantDirtinessChecks(out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessCheck)
