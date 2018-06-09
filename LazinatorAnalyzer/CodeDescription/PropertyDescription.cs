@@ -93,6 +93,7 @@ namespace Lazinator.CodeDescription
         internal bool TrackDirtinessNonSerialized { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
+        private bool MovesFromOtherHierarchiesAllowed { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool IsGuaranteedSmall { get; set; }
@@ -183,6 +184,8 @@ namespace Lazinator.CodeDescription
 
         private void ParseOtherPropertyAttributes()
         {
+            CloneAllowMovedAttribute allowMoved = UserAttributes.OfType<CloneAllowMovedAttribute>().FirstOrDefault();
+            MovesFromOtherHierarchiesAllowed = allowMoved != null;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
@@ -772,30 +775,42 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
-            string parentSet = "";
+
+            string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                parentSet = $@"value.LazinatorParentClass = this;
+                            ";
+            if (MovesFromOtherHierarchiesAllowed)
+                parentRelationship = parentSet;
+            else if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                {
-                    parentSet = $@"if (value != null)
+                parentRelationship = $@"if (value != null)
+                            {{
+                                if (value.LazinatorParentClass != null)
                                 {{
-                                    if (value.LazinatorParentClass != null)
-                                    {{
-                                        throw new Exception();
-                                    }}
-                                    value.LazinatorParentClass = this;
-                                }}
-                            ";
-                }
-                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                {
-                    parentSet = $@"if (value.LazinatorParentClass != null)
-                                    {{
-                                        throw new Exception();
-                                    }}
-                                    value.LazinatorParentClass = this;
-                            ";
-                }
+                                    throw new MovedLazinatorException();
+                                }}{parentSet}
+                            }}
+                        ";
+            }
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            {
+                parentRelationship = $@"if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
+                            {{
+                                if (value.LazinatorParentClass != null)
+                                {{
+                                    throw new MovedLazinatorException();
+                                }}{parentSet}
+                            }}
+                        ";
+            }
+            else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+            {
+                parentRelationship = $@"if (value.LazinatorParentClass != null)
+                                {{
+                                    throw new MovedLazinatorException();
+                                }}{parentSet}
+                        ";
             }
 
 
@@ -825,7 +840,7 @@ namespace Lazinator.CodeDescription
             [DebuggerStepThrough]
             set
             {{
-                {parentSet}IsDirty = true;
+                {parentRelationship}IsDirty = true;
                 _{PropertyName} = value;{(IsSerialized && PropertyType != LazinatorPropertyType.LazinatorStruct ? $@"
                 if (_{PropertyName} != null)
                 {{
