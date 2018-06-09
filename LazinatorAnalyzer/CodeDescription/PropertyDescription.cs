@@ -772,6 +772,24 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
+            string parentSet = "";
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+            {
+                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                {
+                    parentSet = $@"if (value != null)
+                                {{
+                                    value.LazinatorParentClass = this;
+                                }}
+                            ";
+                }
+                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+                {
+                    parentSet = $@"value.LazinatorParentClass = this;
+                            ";
+                }
+            }
+
 
             sb.Append($@"private {AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
@@ -799,7 +817,7 @@ namespace Lazinator.CodeDescription
             [DebuggerStepThrough]
             set
             {{
-                IsDirty = true;
+                {parentSet}IsDirty = true;
                 _{PropertyName} = value;{(IsSerialized && PropertyType != LazinatorPropertyType.LazinatorStruct ? $@"
                 if (_{PropertyName} != null)
                 {{

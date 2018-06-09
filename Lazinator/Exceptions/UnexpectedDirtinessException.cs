@@ -4,7 +4,7 @@ namespace Lazinator.Exceptions
 {
     public class UnexpectedDirtinessException : Exception
     {
-        private const string explanation = "A self-serialized object was found to be dirty, even though it was not set as dirty.";
+        private const string explanation = "A Lazinator object was found to be dirty, even though it was not set as dirty.";
 
         public UnexpectedDirtinessException() : this(explanation)
         {
