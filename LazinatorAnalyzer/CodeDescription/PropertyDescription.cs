@@ -809,15 +809,15 @@ namespace Lazinator.CodeDescription
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
                 {
-                    parentRelationship = $@"var clone = value.CloneLazinatorTyped();
-                            if ({incomingValue} != null)
+                    parentRelationship = $@"{AppropriatelyQualifiedTypeName} clone = (value?.LazinatorParentClass == null) ? ({AppropriatelyQualifiedTypeName}) value : ({AppropriatelyQualifiedTypeName}) value.CloneLazinator();
+                            if (clone != null)
                             {{{parentSet}
                             }}
                         ";
                 }
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 {
-                    parentRelationship = $@"var clone = value.CloneLazinatorTyped();
+                    parentRelationship = $@"var clone = ({AppropriatelyQualifiedTypeName}) value.CloneLazinator();
                             if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
                             {{{parentSet}
                             }}
