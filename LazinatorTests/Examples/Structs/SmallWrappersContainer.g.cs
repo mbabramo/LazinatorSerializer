@@ -137,47 +137,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_ListWrappedBytes_Accessed)
-            {
-                ListWrappedBytes.MarkHierarchyClean();
-            }
-            if (_WrappedBool_Accessed)
-            {
-                WrappedBool.MarkHierarchyClean();
-            }
-            if (_WrappedByte_Accessed)
-            {
-                WrappedByte.MarkHierarchyClean();
-            }
-            if (_WrappedChar_Accessed)
-            {
-                WrappedChar.MarkHierarchyClean();
-            }
-            if (_WrappedNullableBool_Accessed)
-            {
-                WrappedNullableBool.MarkHierarchyClean();
-            }
-            if (_WrappedNullableByte_Accessed)
-            {
-                WrappedNullableByte.MarkHierarchyClean();
-            }
-            if (_WrappedNullableChar_Accessed)
-            {
-                WrappedNullableChar.MarkHierarchyClean();
-            }
-            if (_WrappedNullableSByte_Accessed)
-            {
-                WrappedNullableSByte.MarkHierarchyClean();
-            }
-            if (_WrappedSByte_Accessed)
-            {
-                WrappedSByte.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

@@ -53,8 +53,6 @@ namespace Lazinator.Wrappers
             set;
         }
         
-        public abstract void MarkHierarchyClean();
-        
         public abstract MemoryInBuffer HierarchyBytes
         {
             set;

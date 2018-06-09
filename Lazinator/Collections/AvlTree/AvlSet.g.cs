@@ -133,15 +133,7 @@ namespace Lazinator.Collections.AvlTree
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_UnderlyingTree_Accessed)
-            {
-                UnderlyingTree.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

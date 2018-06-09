@@ -277,8 +277,6 @@ namespace Lazinator.CodeDescription
 			                get;
 			                set;
                         }}
-
-                        {(ImplementsMarkHierarchyClean ? skipMarkHierarchyClean : "public abstract void MarkHierarchyClean();")}
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -917,6 +915,7 @@ namespace Lazinator.CodeDescription
 
         private string GetMarkHierarchyCleanMethod()
         {
+            return ""; // DEBUG -- delete this 
             if (ImplementsMarkHierarchyClean)
                 return skipMarkHierarchyClean;
             string markHierarchyCleanMethod = "";

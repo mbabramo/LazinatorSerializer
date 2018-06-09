@@ -137,15 +137,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_ExampleByInterface_Accessed)
-            {
-                ExampleByInterface.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

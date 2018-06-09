@@ -2394,58 +2394,6 @@ namespace LazinatorTests.Tests
             v5.DescendantIsDirty.Should().BeTrue();
         }
 
-        [Fact]
-        public void MarkHierarchyCleanWorks()
-        {
-            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
-            hierarchy.IsDirty.Should().BeTrue(); // since it's new
-
-            hierarchy = hierarchy.CloneLazinatorTyped();
-            hierarchy.IsDirty.Should().BeFalse();
-            hierarchy.DescendantIsDirty.Should().BeFalse();
-            hierarchy.MyChild1.MyLong = 25;
-            hierarchy.IsDirty.Should().BeFalse();
-            hierarchy.DescendantIsDirty.Should().BeTrue();
-            hierarchy.MyChild1.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
-            hierarchy.MyNonLazinatorChild_Dirty = true;
-
-            hierarchy.MarkHierarchyClean();
-            hierarchy.IsDirty.Should().BeFalse();
-            hierarchy.DescendantIsDirty.Should().BeFalse();
-            hierarchy.MyChild1.IsDirty.Should().BeFalse();
-            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
-            hierarchy.MyNonLazinatorChild_Dirty.Should().BeFalse();
-
-        }
-
-        [Fact]
-        public void MarkHierarchyCleanWithStructsWorks()
-        {
-            ExampleStructContainer container = new ExampleStructContainer()
-            {
-                MyExampleStruct = new ExampleStruct()
-                {
-                    MyChild1 = GetExampleChild(1)
-                }
-            }; // note that we can't clone this, because it's a class-struct-class hierarchy, but we can still use it to test MarkHierarchyClean
-
-            // If we want to change the hierarchy, we must do it like this:
-            var copyOfStruct = container.MyExampleStruct_Copy;
-            copyOfStruct.MyChild1.MyLong = 25;
-            copyOfStruct.LazinatorParentClass = null;
-            container.MyExampleStruct = copyOfStruct;
-            container.MyExampleStruct.MyChild1.IsDirty.Should().BeTrue();
-            container.MyExampleStruct.DescendantIsDirty.Should().BeTrue();
-            container.IsDirty.Should().BeTrue();
-
-            container.MarkHierarchyClean();
-            container.MyExampleStruct.MyChild1.IsDirty.Should().BeFalse();
-            container.MyExampleStruct.DescendantIsDirty.Should().BeFalse();
-            container.DescendantIsDirty.Should().BeFalse();
-            container.IsDirty.Should().BeFalse();
-        }
-
         private void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)
         {
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);

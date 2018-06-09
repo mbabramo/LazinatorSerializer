@@ -16,10 +16,5 @@ namespace LazinatorTests.Examples
         {
             base.PreSerialization(verifyCleanness, updateStoredBuffer);
         }
-
-        public override void MarkHierarchyClean()
-        {
-            base.MarkHierarchyClean();
-        }
     }
 }

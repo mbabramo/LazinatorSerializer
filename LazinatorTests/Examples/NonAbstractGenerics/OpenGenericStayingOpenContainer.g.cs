@@ -136,15 +136,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_ClosedGeneric_Accessed)
-            {
-                ClosedGeneric.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

@@ -135,19 +135,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_SubclassInstance1_Accessed)
-            {
-                SubclassInstance1.MarkHierarchyClean();
-            }
-            if (_SubclassInstance2_Accessed)
-            {
-                SubclassInstance2.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

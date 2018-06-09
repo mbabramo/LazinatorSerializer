@@ -135,19 +135,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_RecursiveClass_Accessed)
-            {
-                RecursiveClass.MarkHierarchyClean();
-            }
-            if (_RecursiveInterface_Accessed)
-            {
-                RecursiveInterface.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

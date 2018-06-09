@@ -131,12 +131,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        public virtual void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            _MyArrayInt_Dirty = false;
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes

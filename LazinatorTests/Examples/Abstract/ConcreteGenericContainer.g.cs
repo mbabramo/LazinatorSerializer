@@ -135,15 +135,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        public override void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_Item_Accessed)
-            {
-                Item.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public override MemoryInBuffer HierarchyBytes

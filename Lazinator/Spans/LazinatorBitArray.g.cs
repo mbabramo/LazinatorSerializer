@@ -135,15 +135,7 @@ namespace Lazinator.Spans
             }
         }
         
-        public void MarkHierarchyClean()
-        {
-            _IsDirty = false;
-            _DescendantIsDirty = false;
-            if (_ByteSpan_Accessed)
-            {
-                ByteSpan.MarkHierarchyClean();
-            }
-        }
+        
         
         private MemoryInBuffer _HierarchyBytes;
         public MemoryInBuffer HierarchyBytes
