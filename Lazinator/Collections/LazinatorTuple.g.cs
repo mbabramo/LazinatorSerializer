@@ -131,8 +131,6 @@ namespace Lazinator.Collections
             }
         }
         
-        
-        
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
         {

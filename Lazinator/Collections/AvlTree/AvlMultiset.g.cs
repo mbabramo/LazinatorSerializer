@@ -133,8 +133,6 @@ namespace Lazinator.Collections.AvlTree
             }
         }
         
-        
-        
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
         {

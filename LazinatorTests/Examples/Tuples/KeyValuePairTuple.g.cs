@@ -133,8 +133,6 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        
-        
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
         {

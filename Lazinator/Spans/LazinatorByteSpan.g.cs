@@ -132,8 +132,6 @@ namespace Lazinator.Spans
             }
         }
         
-        
-        
         private MemoryInBuffer _HierarchyBytes;
         public virtual MemoryInBuffer HierarchyBytes
         {

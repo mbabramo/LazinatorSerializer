@@ -129,8 +129,6 @@ namespace Lazinator.Wrappers
             }
         }
         
-        
-        
         private MemoryInBuffer _HierarchyBytes;
         public MemoryInBuffer HierarchyBytes
         {
