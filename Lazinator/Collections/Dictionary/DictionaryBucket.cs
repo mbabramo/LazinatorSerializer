@@ -57,6 +57,10 @@ namespace Lazinator.Collections.Dictionary
                 Values[index] = value;
             else
             {
+                if (key.LazinatorParentClass != null)
+                    key = key.CloneLazinatorTyped();
+                if (value.LazinatorParentClass != null)
+                    value = value.CloneLazinatorTyped();
                 Keys.Add(key);
                 Values.Add(value);
             }
