@@ -249,11 +249,7 @@ namespace LazinatorTests.Tests
             s.MyTuple = (new NonLazinatorClass() { MyInt = 5 }, 4);
             s.MyLazinatorList = new List<Example>() { new Example() };
 
-            MemoryInBuffer serialized = s.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
-            ExampleStruct s2 = new ExampleStruct()
-            {
-                HierarchyBytes = serialized
-            };
+            var s2 = s.CloneLazinatorTyped();
             s2.MyBool.Should().BeTrue();
             s2.MyChar.Should().Be('x');
             s2.MyChild1.Should().NotBeNull();
@@ -273,10 +269,7 @@ namespace LazinatorTests.Tests
             child1.MyLong = 17;
             s2.DescendantIsDirty.Should().BeTrue();
 
-            ExampleStruct s3 = new ExampleStruct()
-            {
-                HierarchyBytes = serialized
-            };
+            var s3 = s.CloneLazinatorTyped();
             s3.IsDirty.Should().Be(false);
             s3.MyLazinatorList[0] = new Example() { MyChar = 'y' };
             s3.IsDirty.Should().Be(false);
@@ -291,21 +284,13 @@ namespace LazinatorTests.Tests
             };
             s3b.MyLazinatorList[0].MyChar.Should().Be('y');
 
-            ExampleStruct s4 = new ExampleStruct()
-            {
-                HierarchyBytes = serialized
-            };
+            var s4 = s.CloneLazinatorTyped();
             s4.IsDirty.Should().Be(false);
             s4.MyListValues[0] = -12345;
             s4.IsDirty.Should().Be(true); // just accessing should set IsDirty to true
             s4.DescendantIsDirty.Should().Be(false); // struct can't be informed about this kind of change
-            reserializationAction = () => s4.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true);
-            reserializationAction.Should().NotThrow(); // no exception, because IsDirty is true.
-            MemoryInBuffer s4Serialized = s4.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true);
-            ExampleStruct s5 = new ExampleStruct()
-            {
-                HierarchyBytes = s4Serialized
-            };
+
+            var s5 = s4.CloneLazinatorTyped();
             s5.MyListValues[0].Should().Be(-12345); // confirm proper serialization
         }
 
@@ -831,8 +816,12 @@ namespace LazinatorTests.Tests
             {
                 MyInt = 3 // property defined virtually in base class
             };
-            var typedClone = b.CloneLazinatorTyped();
-            typedClone.Should().BeNull(); // we can't return an item of same type as ChildOfLazinatorWithoutAttribute, since Lazinator doesn't know about that type
+            Action a = () =>
+            {
+                var typedClone = b.CloneLazinatorTyped();
+            };
+            a.Should().Throw<Exception>(); // we can't return an item of same type as ChildOfLazinatorWithoutAttribute, since Lazinator doesn't know about that type
+
             ILazinator untypedClone = b.CloneLazinator();
             (untypedClone as ChildOfLazinatorWithoutAttribute).Should().BeNull();
             (untypedClone as FromNonLazinatorBase).MyInt.Should().Be(3);

@@ -383,16 +383,16 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Clones a Lazinator class, returning the object as its own type. Thsi cannot be used for Lazinator structs.
+        /// Clones a Lazinator class, returning the object as its own type.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
         /// <param name="lazinator">The lazinator object</param>
         /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneLazinatorTyped<T>(this T lazinator) where T : class, ILazinator
+        public static T CloneLazinatorTyped<T>(this T lazinator) where T : ILazinator
         {
-            if (lazinator == null)
-                return null;
-            return lazinator.CloneLazinator() as T;
+            if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
+                return default(T);
+            return (T) lazinator.CloneLazinator();
         }
 
         /// <summary>
