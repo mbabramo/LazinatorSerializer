@@ -125,16 +125,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             [DebuggerStepThrough]
             set
             {
-                if (value != null)
+                ExampleChild clone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value.CloneLazinatorTyped();
+                if (clone != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyT cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
-                    }
-                    value.LazinatorParentClass = this;
+                    clone.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _MyT = value;
+                _MyT = clone;
                 if (_MyT != null)
                 {
                     _MyT.IsDirty = true;

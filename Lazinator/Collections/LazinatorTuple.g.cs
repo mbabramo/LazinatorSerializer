@@ -227,7 +227,7 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                var clone = (T) value.CloneLazinator();
+                var clone = (T) value.CloneLazinatorTyped();
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(clone, default(T)))
                 {
                     clone.LazinatorParentClass = this;
@@ -270,7 +270,7 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                var clone = (U) value.CloneLazinator();
+                var clone = (U) value.CloneLazinatorTyped();
                 if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(clone, default(U)))
                 {
                     clone.LazinatorParentClass = this;
