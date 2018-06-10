@@ -233,10 +233,8 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property IntWrapper cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _IntWrapper = value;
@@ -295,10 +293,8 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property MyExampleStruct cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _MyExampleStruct = value;

@@ -287,7 +287,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property LazinatorExample cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property LazinatorExample cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }

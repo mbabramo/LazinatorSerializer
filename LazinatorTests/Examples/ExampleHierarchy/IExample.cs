@@ -31,6 +31,6 @@ namespace LazinatorTests.Examples
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }
         [Autoclone] ExampleChild MyAutocloneChild { get; set; }
-        [Autoclone] ExampleStruct MyAutocloneChildStruct { get; set; }
+        ExampleStruct MyAutocloneChildStruct { get; set; } // autoclone is automatic for structs
     }
 }

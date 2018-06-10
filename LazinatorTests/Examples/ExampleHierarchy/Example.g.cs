@@ -427,7 +427,7 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property ExcludableChild cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property ExcludableChild cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -470,7 +470,7 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property IncludableChild cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property IncludableChild cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -613,7 +613,7 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property MyChild1 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property MyChild1 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -656,7 +656,7 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property MyChild2 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property MyChild2 cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -699,7 +699,7 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property MyChild2Previous cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property MyChild2Previous cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -742,7 +742,7 @@ namespace LazinatorTests.Examples
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property MyInterfaceImplementer cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property MyInterfaceImplementer cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -835,10 +835,8 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedInt cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedInt = value;

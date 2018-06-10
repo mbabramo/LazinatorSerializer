@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (value.LazinatorParentClass != null)
                     {
-                        throw new MovedLazinatorException($"The property ListWrappedBytes cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
+                        throw new MovedLazinatorException($"The property ListWrappedBytes cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute.");
                     }
                     value.LazinatorParentClass = this;
                 }
@@ -286,10 +286,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedBool cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedBool = value;
@@ -348,10 +346,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedByte cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedByte = value;
@@ -410,10 +406,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedChar cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedChar = value;
@@ -472,10 +466,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedNullableBool cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableBool = value;
@@ -534,10 +526,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedNullableByte cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableByte = value;
@@ -596,10 +586,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedNullableChar cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableChar = value;
@@ -658,10 +646,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedNullableSByte cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedNullableSByte = value;
@@ -720,10 +706,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property WrappedSByte cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _WrappedSByte = value;

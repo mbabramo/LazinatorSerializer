@@ -225,10 +225,8 @@ namespace LazinatorTests.Examples.Structs
             [DebuggerStepThrough]
             set
             {
-                if (value.LazinatorParentClass != null)
-                {
-                    throw new MovedLazinatorException($"The property ExampleStructWithoutClass cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AllowMovedAttribute.");
-                }
+                var clone = value;
+                
                 value.LazinatorParentClass = this;
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;
