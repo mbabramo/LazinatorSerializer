@@ -331,13 +331,15 @@ namespace LazinatorAnalyzer.Analyzer
                     return null;
                 }
                 else
-                { 
+                {
+                    List<Diagnostic> diagnosticsToReturn;
                     if (UnaccountedForFieldExists(lazinatorPairInfo, out var problemFields))
                     {
-                        return problemFields.Select(x => Diagnostic.Create(LazinatorCodeAnalyzer.UnaccountedForFieldRule, x.GetLocation())).ToList();
+                        diagnosticsToReturn = problemFields.Select(x => Diagnostic.Create(LazinatorCodeAnalyzer.UnaccountedForFieldRule, x.GetLocation())).ToList();
                     }
                     else
-                        return new List<Diagnostic>() { GetDiagnosticForGeneratable(lazinatorPairInfo, needsGeneration, locationOfImplementingType, textSpan) };
+                        diagnosticsToReturn = new List<Diagnostic>();
+                    diagnosticsToReturn.Add(GetDiagnosticForGeneratable(lazinatorPairInfo, needsGeneration, locationOfImplementingType, textSpan));
                 }
             }
             else
