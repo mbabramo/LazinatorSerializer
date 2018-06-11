@@ -778,7 +778,14 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
-            string incomingValue = Autoclone && IsSerialized ? "clone" : "value";
+            bool autocloning = (ContainingObjectDescription?.Compilation?.Config?.DefaultAutoclone ?? false)
+                || Autoclone
+                || PropertyType == LazinatorPropertyType.LazinatorStruct;
+            string incomingValue;
+            if (autocloning && IsSerialized)
+                incomingValue = PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ? "selfOrClone" : "clone";
+            else
+                incomingValue = "value";
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
@@ -808,13 +815,10 @@ namespace Lazinator.CodeDescription
                         ";
                 }
             }
-            else if ((ContainingObjectDescription?.Compilation?.Config?.DefaultAutoclone ?? false) 
-                || Autoclone 
-                || PropertyType == LazinatorPropertyType.LazinatorStruct)
+            else if (autocloning)
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
                 {
-                    incomingValue = "selfOrClone";
                     parentRelationship = $@"{AppropriatelyQualifiedTypeName} selfOrClone = (value?.LazinatorParentClass == null) ? ({AppropriatelyQualifiedTypeName}) value : ({AppropriatelyQualifiedTypeName}) value.CloneLazinatorTyped();
                             if (selfOrClone != null)
                             {{{parentSet}
