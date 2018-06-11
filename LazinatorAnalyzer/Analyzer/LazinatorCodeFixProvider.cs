@@ -44,7 +44,11 @@ namespace LazinatorAnalyzer.Analyzer
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-            var diagnostic = context.Diagnostics.First();
+            var diagnostic = context.Diagnostics
+                .Where(x => FixableDiagnosticIds.Contains(x.Id))
+                .FirstOrDefault();
+            if (diagnostic == null)
+                return;
             LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation(
                 await context.Document.GetSemanticModelAsync(), diagnostic.Properties, diagnostic.AdditionalLocations);
             
