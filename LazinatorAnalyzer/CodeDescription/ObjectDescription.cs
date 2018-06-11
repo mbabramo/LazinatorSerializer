@@ -52,7 +52,7 @@ namespace Lazinator.CodeDescription
         public bool HasNonexclusiveInterfaces => NonexclusiveInterfaces != null && NonexclusiveInterfaces.Any();
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         internal bool AutocloneAllThisLevel => ExclusiveInterface?.AutocloneAll ?? false;
-        public bool AutocloneAll => ExclusiveInterface.AutocloneAll || GetBaseObjectDescriptions().Any(x => x.AutocloneAllThisLevel);
+        public bool AutocloneAll => AutocloneAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutocloneAllThisLevel);
  
         /* Implementations */
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
