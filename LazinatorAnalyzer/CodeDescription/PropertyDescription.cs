@@ -808,12 +808,15 @@ namespace Lazinator.CodeDescription
                         ";
                 }
             }
-            else if (Autoclone || PropertyType == LazinatorPropertyType.LazinatorStruct)
+            else if ((ContainingObjectDescription?.Compilation?.Config?.DefaultAutoclone ?? false) 
+                || Autoclone 
+                || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
                 {
-                    parentRelationship = $@"{AppropriatelyQualifiedTypeName} clone = (value?.LazinatorParentClass == null) ? ({AppropriatelyQualifiedTypeName}) value : ({AppropriatelyQualifiedTypeName}) value.CloneLazinatorTyped();
-                            if (clone != null)
+                    incomingValue = "selfOrClone";
+                    parentRelationship = $@"{AppropriatelyQualifiedTypeName} selfOrClone = (value?.LazinatorParentClass == null) ? ({AppropriatelyQualifiedTypeName}) value : ({AppropriatelyQualifiedTypeName}) value.CloneLazinatorTyped();
+                            if (selfOrClone != null)
                             {{{parentSet}
                             }}
                         ";
