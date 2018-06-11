@@ -125,13 +125,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             [DebuggerStepThrough]
             set
             {
-                ExampleChild clone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value.CloneLazinatorTyped();
-                if (clone != null)
+                ExampleChild selfOrClone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value.CloneLazinatorTyped();
+                if (selfOrClone != null)
                 {
                     clone.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _MyT = clone;
+                _MyT = selfOrClone;
                 if (_MyT != null)
                 {
                     _MyT.IsDirty = true;

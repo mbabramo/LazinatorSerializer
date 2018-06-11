@@ -509,13 +509,13 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                ExampleChild clone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value.CloneLazinatorTyped();
-                if (clone != null)
+                ExampleChild selfOrClone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value.CloneLazinatorTyped();
+                if (selfOrClone != null)
                 {
                     clone.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _MyAutocloneChild = clone;
+                _MyAutocloneChild = selfOrClone;
                 if (_MyAutocloneChild != null)
                 {
                     _MyAutocloneChild.IsDirty = true;
