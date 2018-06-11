@@ -291,9 +291,10 @@ namespace LazinatorAnalyzer.Analyzer
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind != null
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                 {
-                    var diagnostic = GetDiagnosticToReport(lazinatorPairInfo);
-                    if (diagnostic != null)
-                        diagnostics.Add(diagnostic);
+                    var diagnosticsToAdd = GetDiagnosticsToReport(lazinatorPairInfo);
+                    if (diagnosticsToAdd != null)
+                        foreach (var diagnostic in diagnosticsToAdd)
+                            diagnostics.Add(diagnostic);
                 }
             }
 
@@ -307,7 +308,7 @@ namespace LazinatorAnalyzer.Analyzer
 
 
 
-        public Diagnostic GetDiagnosticToReport(LazinatorPairInformation lazinatorPairInfo)
+        public List<Diagnostic> GetDiagnosticsToReport(LazinatorPairInformation lazinatorPairInfo)
         {
             bool couldBeGenerated, needsGeneration;
             AssessGenerationFeasibility(lazinatorPairInfo, out couldBeGenerated, out needsGeneration);
@@ -330,22 +331,32 @@ namespace LazinatorAnalyzer.Analyzer
                     return null;
                 }
                 else
-                {
-                    Location interfaceSpecificationLocation = Location.Create(
-                        locationOfImplementingType.SourceTree,
-                        textSpan.Value);
-                    var additionalLocations = new List<Location>();
-                    if (lazinatorPairInfo.CodeBehindLocation != null)
-                        additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
-                    additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
-                    var diagnostic = Diagnostic.Create(needsGeneration ? LazinatorCodeAnalyzer.OutOfDateRule : LazinatorCodeAnalyzer.OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
-                    return diagnostic;
+                { 
+                    if (UnaccountedForFieldExists(lazinatorPairInfo, out var problemFields))
+                    {
+                        return problemFields.Select(x => Diagnostic.Create(LazinatorCodeAnalyzer.UnaccountedForFieldRule, x.GetLocation())).ToList();
+                    }
+                    else
+                        return new List<Diagnostic>() { GetDiagnosticForGeneratable(lazinatorPairInfo, needsGeneration, locationOfImplementingType, textSpan) };
                 }
             }
             else
             {
                 return null;
             }
+        }
+
+        private Diagnostic GetDiagnosticForGeneratable(LazinatorPairInformation lazinatorPairInfo, bool needsGeneration, Location locationOfImplementingType, Microsoft.CodeAnalysis.Text.TextSpan? textSpan)
+        {
+            Location interfaceSpecificationLocation = Location.Create(
+                locationOfImplementingType.SourceTree,
+                textSpan.Value);
+            var additionalLocations = new List<Location>();
+            if (lazinatorPairInfo.CodeBehindLocation != null)
+                additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
+            additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
+            var diagnostic = Diagnostic.Create(needsGeneration ? LazinatorCodeAnalyzer.OutOfDateRule : LazinatorCodeAnalyzer.OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
+            return diagnostic;
         }
 
         private static void AssessGenerationFeasibility(LazinatorPairInformation lazinatorPairInfo, out bool couldBeGenerated, out bool needsGeneration)
@@ -386,6 +397,36 @@ namespace LazinatorAnalyzer.Analyzer
                 else
                     needsGeneration = true;
             }
+        }
+
+        private static bool UnaccountedForFieldExists(LazinatorPairInformation lazinatorPairInformation, out List<FieldDeclarationSyntax> problemFields)
+        {
+            var fields = lazinatorPairInformation.LazinatorObjectLocationsExcludingCodeBehind.Select(x =>
+                {
+                    bool success = x.SourceTree.TryGetRoot(out SyntaxNode root);
+                    if (success)
+                        return root;
+                    return null;
+                }
+                )
+                .Where(x => x != null)
+                .SelectMany(x => x.DescendantNodes().OfType<FieldDeclarationSyntax>());
+            var fieldsWithoutNonserializedAttribute = fields
+                .Where(x => !x.Modifiers.Any(y => y.Kind() == SyntaxKind.StaticKeyword || y.Kind() == SyntaxKind.ConstKeyword))
+                .Where(x => !x.AttributeLists.Any(
+                    y => y.Attributes.Any(
+                        z => (z.Name as IdentifierNameSyntax)?.Identifier.Text == "NonSerialized"
+                        )
+                    )
+                    )
+                .ToList();
+            if (fieldsWithoutNonserializedAttribute.Any())
+            {
+                problemFields = fieldsWithoutNonserializedAttribute;
+                return true;
+            }
+            problemFields = null;
+            return false;
         }
 
         #endregion
