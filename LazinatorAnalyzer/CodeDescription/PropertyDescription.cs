@@ -778,7 +778,7 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
-            string incomingValue = Autoclone ? "clone" : "value";
+            string incomingValue = Autoclone && IsSerialized ? "clone" : "value";
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
