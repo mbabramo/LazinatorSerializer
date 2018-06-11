@@ -187,7 +187,7 @@ namespace Lazinator.CodeDescription
         {
             CloneAllowMovedAttribute allowMoved = UserAttributes.OfType<CloneAllowMovedAttribute>().FirstOrDefault();
             CloneAutocloneAttribute autoclone = UserAttributes.OfType<CloneAutocloneAttribute>().FirstOrDefault();
-            Autoclone = autoclone != null;
+            Autoclone = autoclone != null || ContainingObjectDescription.AutocloneAll;
             MovesFromOtherHierarchiesAllowed = !Autoclone && allowMoved != null;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;

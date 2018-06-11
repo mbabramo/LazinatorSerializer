@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Lazinator.Attributes
 {
+    [AttributeUsage(AttributeTargets.Interface, AllowMultiple = true)]
     public class UnofficiallyIncorporateInterfaceAttribute : Attribute
     {
         public string OtherInterfaceFullyQualifiedTypeName { get; private set; }

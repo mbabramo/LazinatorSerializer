@@ -228,12 +228,12 @@ namespace Lazinator.Collections
             set
             {
                 var clone = (T) value.CloneLazinatorTyped();
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(clone, default(T)))
+                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    clone.LazinatorParentClass = this;
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _Item1 = clone;
+                _Item1 = value;
                 _Item1_Accessed = true;
             }
         }
@@ -271,12 +271,12 @@ namespace Lazinator.Collections
             set
             {
                 var clone = (U) value.CloneLazinatorTyped();
-                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(clone, default(U)))
+                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
                 {
-                    clone.LazinatorParentClass = this;
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _Item2 = clone;
+                _Item2 = value;
                 _Item2_Accessed = true;
             }
         }

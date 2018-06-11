@@ -18,6 +18,7 @@ namespace Lazinator.CodeDescription
         public List<PropertyDescription> PropertiesToDefineThisLevel;
         public List<string> GenericArgumentNames;
         public int TotalNumProperties;
+        public bool AutocloneAll;
 
         public ExclusiveInterfaceDescription()
         {
@@ -31,6 +32,9 @@ namespace Lazinator.CodeDescription
             var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
                 throw new LazinatorCodeGenException("Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
+            var autocloneAllAttribute = Container.Compilation.GetFirstAttributeOfType<CloneAutocloneAllAttribute>(t);
+            if (autocloneAllAttribute != null)
+                AutocloneAll = true;
             UniqueID = lazinatorAttribute.UniqueID;
             Version = lazinatorAttribute.Version;
 

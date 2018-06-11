@@ -264,12 +264,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             set
             {
                 var clone = (T) value.CloneLazinatorTyped();
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(clone, default(T)))
+                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    clone.LazinatorParentClass = this;
+                    value.LazinatorParentClass = this;
                 }
                 IsDirty = true;
-                _MyT = clone;
+                _MyT = value;
                 _MyT_Accessed = true;
             }
         }
