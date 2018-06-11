@@ -45,9 +45,9 @@ namespace LazinatorAnalyzer.Analyzer
         // 3. If fields exist in main code without ILazinator, report an error.
         public const string Lazin003 = "Lazin003";
         private static readonly string LazinatorUnaccountedForFieldTitle = "Lazinator Field Problem";
-        private static readonly string LazinatorUnaccountedForFieldMessageFormat = "Mark field as NonSerializable or remove";
+        private static readonly string LazinatorUnaccountedForFieldMessageFormat = "Mark field as NonSerialized or remove";
         private static readonly string LazinatorUnaccountedForFieldDescription =
-            "A field in an object implementing a Lazinator interface must be marked NonSerialable. Consider marking as [NonSerializable].";
+            "A field in an object implementing a Lazinator interface must be marked NonSerialable. Consider marking as [NonSerialized].";
         private static readonly DiagnosticDescriptor LazinatorUnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle, LazinatorUnaccountedForFieldMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
         internal static DiagnosticDescriptor UnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle.ToString(), LazinatorUnaccountedForFieldMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
         
