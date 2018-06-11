@@ -340,6 +340,7 @@ namespace LazinatorAnalyzer.Analyzer
                     else
                         diagnosticsToReturn = new List<Diagnostic>();
                     diagnosticsToReturn.Add(GetDiagnosticForGeneratable(lazinatorPairInfo, needsGeneration, locationOfImplementingType, textSpan));
+                    return diagnosticsToReturn;
                 }
             }
             else
