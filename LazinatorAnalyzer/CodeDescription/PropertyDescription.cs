@@ -778,9 +778,12 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
-            bool autocloning = (ContainingObjectDescription?.Compilation?.Config?.DefaultAutoclone ?? false)
-                || Autoclone
-                || PropertyType == LazinatorPropertyType.LazinatorStruct;
+            bool autocloning = !MovesFromOtherHierarchiesAllowed && 
+                (
+                    (ContainingObjectDescription?.Compilation?.Config?.DefaultAutoclone ?? false)
+                    || Autoclone
+                    || PropertyType == LazinatorPropertyType.LazinatorStruct
+                );
             string incomingValue;
             if (autocloning && IsSerialized)
                 incomingValue = PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ? "selfOrClone" : "clone";
