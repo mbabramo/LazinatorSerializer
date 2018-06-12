@@ -5,9 +5,12 @@ namespace Lazinator.Attributes
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
     public class NonexclusiveLazinatorAttribute : Attribute
     {
-        public NonexclusiveLazinatorAttribute()
+        public int UniqueID { get; private set; }
+
+        public NonexclusiveLazinatorAttribute(int uniqueID)
         {
+            UniqueID = uniqueID;
         }
-        
+
     }
 }

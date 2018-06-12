@@ -1861,6 +1861,33 @@ namespace LazinatorTests.Tests
             };
             var c = x.CloneLazinatorTyped();
             ((ExampleChild)c.ClosedGenericInterface.MyT).MyShort.Should().Be(45);
+
+            x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericInterface = new OpenGeneric<IExampleChild>()
+                {
+                    MyT = new ExampleChildInherited() { MyShort = 45, MyInt = -75 }
+                }
+            };
+            c = x.CloneLazinatorTyped();
+            ((ExampleChildInherited)c.ClosedGenericInterface.MyT).MyShort.Should().Be(45);
+            ((ExampleChildInherited)c.ClosedGenericInterface.MyT).MyInt.Should().Be(-75);
+        }
+
+        [Fact]
+        public void OpenGenericWithNonexclusiveInterfaceTypeSerializes()
+        {
+            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericNonexclusiveInterface = new OpenGeneric<IExampleNonexclusiveInterface>()
+                {
+                    MyT = new ExampleNonexclusiveInterfaceImplementer() { MyInt = 45 }
+                }
+            };
+            var c = x.CloneLazinatorTyped();
+            ((IExampleNonexclusiveInterface)c.ClosedGenericNonexclusiveInterface.MyT).MyInt.Should().Be(45);
+            ((ExampleNonexclusiveInterfaceImplementer)c.ClosedGenericNonexclusiveInterface.MyT).MyInt.Should().Be(45);
+
         }
 
         [Fact]

@@ -6,7 +6,7 @@ using static Lazinator.Core.LazinatorUtilities;
 
 namespace LazinatorTests.Examples
 {
-    [NonexclusiveLazinator]
+    [NonexclusiveLazinator((int)ExampleUniqueIDs.NonexclusiveLazinatorAttribute)]
     public interface IExampleNonexclusiveInterface : ILazinator
     {
         int MyInt { get; set; }

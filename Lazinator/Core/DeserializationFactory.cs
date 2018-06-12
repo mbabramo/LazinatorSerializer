@@ -319,9 +319,12 @@ namespace Lazinator.Core
                         if (type.IsInterface)
                         {
                             var nonexclusiveAttribute = LazinatorReflection.GetNonexclusiveLazinatorAttributeForInterface(type);
-                            //throw new NotImplementedException(); // DEBUG
+                            if (nonexclusiveAttribute == null)
+                                continue;
+                            uniqueID = nonexclusiveAttribute.UniqueID;
                         }
-                        continue;
+                        else
+                            continue;
                     }
                     else
                         uniqueID = attribute.UniqueID + AddThisWhenSerializingExclusiveInterface;

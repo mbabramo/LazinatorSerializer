@@ -72,6 +72,7 @@
         DerivedGenericContainer,
         Base,
         GenericFromBase,
-        BaseContainer
+        BaseContainer,
+        NonexclusiveLazinatorAttribute
     }
 }
