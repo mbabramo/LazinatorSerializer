@@ -200,7 +200,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected virtual int _ClosedGeneric_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGeneric_ByteIndex;
         
         private OpenGeneric<WFloat> _ClosedGeneric;
-        public OpenGeneric<WFloat> ClosedGeneric
+        public OpenGeneric<WFloat> ClosedGenericFloat
         {
             [DebuggerStepThrough]
             get
@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ClosedGeneric_Accessed && ClosedGeneric != null && (ClosedGeneric.IsDirty || ClosedGeneric.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ClosedGeneric_Accessed && ClosedGenericFloat != null && (ClosedGenericFloat.IsDirty || ClosedGenericFloat.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

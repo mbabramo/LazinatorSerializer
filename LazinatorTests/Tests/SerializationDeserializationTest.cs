@@ -1840,13 +1840,13 @@ namespace LazinatorTests.Tests
         {
             OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
             {
-                ClosedGeneric = new OpenGeneric<WFloat>()
+                ClosedGenericFloat = new OpenGeneric<WFloat>()
                 {
                     MyT = new WFloat(3.4F)
                 }
             };
             var c = x.CloneLazinatorTyped();
-            c.ClosedGeneric.MyT.WrappedValue.Should().Be(3.4F);
+            c.ClosedGenericFloat.MyT.WrappedValue.Should().Be(3.4F);
         }
 
         [Fact]
