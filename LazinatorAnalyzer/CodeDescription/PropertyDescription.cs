@@ -747,9 +747,9 @@ namespace Lazinator.CodeDescription
             }
 
             string assignment;
+            string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : "";
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
-                string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : "";
                 if (IsInterface)
                     assignment =
                     $@"
@@ -763,6 +763,12 @@ namespace Lazinator.CodeDescription
                         $@"
                         _{PropertyName} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(), childData{selfReference}); ";
             }
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            {
+                assignment =
+                    $@"
+                        _{PropertyName} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+            }
             else
             {
                 bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
@@ -770,10 +776,18 @@ namespace Lazinator.CodeDescription
             }
 
             string creation;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && ContainingObjectDescription.IsSealed) || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct 
+                || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && ContainingObjectDescription.IsSealed))
             {
                 // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
                 creation = GetManualObjectCreation();
+            }
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            {
+                if (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasConstructorConstraint)
+                    creation = GetManualObjectCreation();
+                else
+                    creation = $@"{assignment}";
             }
             else
                 creation = $@"{assignment}";

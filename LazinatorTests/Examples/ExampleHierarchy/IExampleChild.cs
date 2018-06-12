@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using Lazinator.Core;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System;
@@ -6,7 +7,7 @@ using System;
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.ExampleChild)]
-    public interface IExampleChild
+    public interface IExampleChild : ILazinator
     {
         long MyLong { get; set; }
         short MyShort { get; set; }

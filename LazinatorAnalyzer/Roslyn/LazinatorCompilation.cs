@@ -354,7 +354,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private static bool RequiresParameterlessConstructor(INamedTypeSymbol implementingType, IEnumerable<TypeDeclarationSyntax> typeDeclarations)
         {
-            return implementingType.Constructors.Any() && implementingType.TypeKind == TypeKind.Class && !implementingType.IsAbstract && !typeDeclarations.Any(x => x.TypeDeclarationIncludesParameterlessConstructor());
+            return implementingType.IsNonAbstractTypeWithConstructor() && !typeDeclarations.Any(x => x.TypeDeclarationIncludesParameterlessConstructor());
         }
 
         public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)

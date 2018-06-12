@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     [Lazinator((int) ExampleUniqueIDs.OpenGeneric)]
-    public interface IOpenGeneric<T> where T : ILazinator, new()
+    public interface IOpenGeneric<T> where T : ILazinator
     {
         [Autoclone]
         T MyT { get; set; }

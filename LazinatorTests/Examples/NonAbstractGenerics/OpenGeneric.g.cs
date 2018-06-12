@@ -251,11 +251,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         {
                             _MyT = default;
                         }
-                        else _MyT = new T()
-                        {
-                            LazinatorParentClass = this,
-                            LazinatorObjectBytes = childData,
-                        };
+                        else _MyT = default; // DEBUG
                     }
                     _MyT_Accessed = true;
                 }

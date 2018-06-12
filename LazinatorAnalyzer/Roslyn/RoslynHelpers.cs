@@ -431,6 +431,11 @@ namespace LazinatorCodeGen.Roslyn
             return isReadOnly;
         }
 
+        public static bool IsNonAbstractTypeWithConstructor(this INamedTypeSymbol type)
+        {
+            return type.Constructors.Any() && type.TypeKind == TypeKind.Class && !type.IsAbstract;
+        }
+
         #endregion
 
         #region Compilation
