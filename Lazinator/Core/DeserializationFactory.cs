@@ -284,7 +284,7 @@ namespace Lazinator.Core
             Type[] types = GetLoadableTypes(assembly)
                 .Select(x => x.GetTypeInfo())
                 .Where(x => x.ImplementedInterfaces.Contains(typeof(ILazinator)))
-                .Where(x => !x.IsInterface && !x.IsAbstract)
+                //.Where(x => !x.IsInterface && !x.IsAbstract)
                 .Select(x => x.AsType())
                 .ToArray();
             SetTypes(types);
@@ -319,7 +319,7 @@ namespace Lazinator.Core
                         if (type.IsInterface)
                         {
                             var nonexclusiveAttribute = LazinatorReflection.GetNonexclusiveLazinatorAttributeForInterface(type);
-                            throw new NotImplementedException(); // DEBUG
+                            //throw new NotImplementedException(); // DEBUG
                         }
                         continue;
                     }
@@ -347,7 +347,7 @@ namespace Lazinator.Core
                 else
                 {
                     UniqueIDToTypeMap[uniqueID] = (type, 0);
-                    if (!type.IsInterface)
+                    if (!type.IsInterface && !type.IsAbstract)
                     {
                         FactoriesByID[uniqueID] = GetFactoryForType(type);
                         int? fixedUniqueID = GetFixedUniqueIDOrNull(type);

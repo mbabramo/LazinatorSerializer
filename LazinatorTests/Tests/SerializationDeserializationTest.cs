@@ -1836,7 +1836,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void OpenGenericContainerSerializes()
+        public void OpenGenericWithConcreteTypeSerializes()
         {
             OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
             {
@@ -1847,6 +1847,20 @@ namespace LazinatorTests.Tests
             };
             var c = x.CloneLazinatorTyped();
             c.ClosedGenericFloat.MyT.WrappedValue.Should().Be(3.4F);
+        }
+
+        [Fact]
+        public void OpenGenericWithInterfaceTypeSerializes()
+        {
+            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericInterface = new OpenGeneric<IExampleChild>()
+                {
+                    MyT = new ExampleChild() { MyShort = 45 }
+                }
+            };
+            var c = x.CloneLazinatorTyped();
+            ((ExampleChild)c.ClosedGenericInterface.MyT).MyShort.Should().Be(45);
         }
 
         [Fact]
