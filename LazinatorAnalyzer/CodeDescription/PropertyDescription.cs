@@ -1319,8 +1319,8 @@ namespace Lazinator.CodeDescription
                 forStatement =
                     $@"int itemToConvertCount = itemToConvert.{lengthWord};
                         for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
-                itemStringSetup = $@"var dequeuedItem = itemToConvert.Dequeue();
-                                    ";
+                itemStringSetup = $@"
+                                        var dequeuedItem = itemToConvert.Dequeue();";
                 itemString =
                     "dequeuedItem";
             }

@@ -359,14 +359,15 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert.Dequeue() == default(ExampleChild))
+                var dequeuedItem = itemToConvert.Dequeue();
+                if (dequeuedItem == default(ExampleChild))
                 {
                     writer.Write((uint)0);
                 }
                 else 
                 {
                     
-                    void action(BinaryBufferWriter w) => itemToConvert.Dequeue().SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(BinaryBufferWriter w) => dequeuedItem.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
                 

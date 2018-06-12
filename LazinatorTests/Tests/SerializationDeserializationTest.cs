@@ -906,11 +906,27 @@ namespace LazinatorTests.Tests
 
             var original = GetObject();
             var copy = GetObject();
-
-            var copyWithGoal = GetObject();
-            copyWithGoal.MyQueueSerialized.Enqueue(new ExampleChild() { MyLong = 6 });
+            
             var result = original.CloneLazinatorTyped();
             copy.MyQueueSerialized.Select(x => x.MyLong).SequenceEqual(result.MyQueueSerialized.Select(x => x.MyLong)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LazinatorDotNetQueueSelfSerializedEmpty()
+        {
+            DotNetQueue_SelfSerialized GetObject()
+            {
+                return new DotNetQueue_SelfSerialized()
+                {
+                    MyQueueSerialized = new Queue<ExampleChild>()
+                };
+            }
+
+            var original = GetObject();
+            var copy = GetObject();
+            
+            var result = original.CloneLazinatorTyped();
+            copy.MyQueueSerialized.Count().Should().Be(0);
         }
 
         [Fact]

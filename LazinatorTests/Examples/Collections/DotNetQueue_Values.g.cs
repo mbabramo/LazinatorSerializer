@@ -364,7 +364,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Dequeue());
+                var dequeuedItem = itemToConvert.Dequeue();
+                CompressedIntegralTypes.WriteCompressedInt(writer, dequeuedItem);
             }
         }
         
