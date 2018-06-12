@@ -893,6 +893,25 @@ namespace LazinatorTests.Tests
             attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
         }
 
+        [Fact]
+        public void LazinatorDotNetQueueSelfSerialized()
+        {
+            DotNetQueue_SelfSerialized GetObject()
+            {
+                return new DotNetQueue_SelfSerialized()
+                {
+                    MyQueueSerialized = new Queue<ExampleChild>(new[] { new ExampleChild() { MyLong = 3 }, new ExampleChild() { MyLong = 4 }, new ExampleChild() { MyLong = 5 } })
+                };
+            }
+
+            var original = GetObject();
+            var copy = GetObject();
+
+            var copyWithGoal = GetObject();
+            copyWithGoal.MyQueueSerialized.Enqueue(new ExampleChild() { MyLong = 6 });
+            var result = original.CloneLazinatorTyped();
+            copy.MyQueueSerialized.Select(x => x.MyLong).SequenceEqual(result.MyQueueSerialized.Select(x => x.MyLong)).Should().BeTrue();
+        }
 
         [Fact]
         public void LazinatorDotNetStackInt()

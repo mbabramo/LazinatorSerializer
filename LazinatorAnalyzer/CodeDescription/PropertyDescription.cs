@@ -1278,7 +1278,7 @@ namespace Lazinator.CodeDescription
                 throw new NotImplementedException();
 
 
-            string itemString, forStatement;
+            string itemString, itemStringSetup = "", forStatement;
             if (SupportedCollectionType == LazinatorSupportedCollectionType.HashSet || SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
                 forStatement = $@"foreach (var item in itemToConvert)";
@@ -1319,8 +1319,10 @@ namespace Lazinator.CodeDescription
                 forStatement =
                     $@"int itemToConvertCount = itemToConvert.{lengthWord};
                         for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                itemStringSetup = $@"var dequeuedItem = itemToConvert.Dequeue();
+                                    ";
                 itemString =
-                    "itemToConvert.Dequeue()";
+                    "dequeuedItem";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
@@ -1332,7 +1334,6 @@ namespace Lazinator.CodeDescription
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
-
                 forStatement =
                     $@"int itemToConvertCount = itemToConvert.{lengthWord};
                         var stackReversed = System.Linq.Enumerable.ToList(itemToConvert);
@@ -1407,7 +1408,7 @@ namespace Lazinator.CodeDescription
                         }}
                         ")}{writeCollectionLengthCommand}
                         {forStatement}
-                        {{{writeCommand}
+                        {{{itemStringSetup}{writeCommand}
                         }}
                     }}
 ");
