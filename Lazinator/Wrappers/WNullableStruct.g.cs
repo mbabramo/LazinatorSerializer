@@ -224,14 +224,8 @@ namespace Lazinator.Wrappers
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
-                        if (childData.Length == 0)
-                        {
-                            _NonNullValue = default;
-                        }
-                        else _NonNullValue = new T()
-                        {
-                            LazinatorObjectBytes = childData,
-                        };
+                        
+                        _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
                     }
                     _NonNullValue_Accessed = true;
                 }
