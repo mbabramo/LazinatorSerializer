@@ -275,7 +275,7 @@ namespace LazinatorTests.Examples
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _IsNull = span.ToBoolean(ref bytesSoFar);
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
-            _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _MyString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
         }
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -309,7 +309,7 @@ namespace LazinatorTests.Examples
             // write properties
             WriteUncompressedPrimitives.WriteBool(writer, _IsNull);
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _MyString);
         }
         
     }

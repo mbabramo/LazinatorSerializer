@@ -444,9 +444,9 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _String1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-            _String2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-            _String3 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _String1 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _String2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _String3 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _Example2_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -503,9 +503,9 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String1);
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String2);
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _String3);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _String1);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _String2);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _String3);
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

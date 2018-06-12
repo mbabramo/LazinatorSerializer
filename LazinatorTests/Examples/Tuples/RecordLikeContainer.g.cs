@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             
             var tupleType = new MismatchedRecordLikeType(item1, item2);
             
@@ -435,7 +435,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
             
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Name);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, itemToConvert.Name);
         }
         
         private static RecordLikeClass ConvertFromBytes_RecordLikeClass(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
@@ -492,7 +492,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             
             var tupleType = new RecordLikeType(item1, item2);
             
@@ -504,7 +504,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Age);
             
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Name);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, itemToConvert.Name);
         }
         
     }

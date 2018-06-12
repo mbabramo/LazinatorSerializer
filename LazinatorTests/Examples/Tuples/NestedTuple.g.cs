@@ -494,7 +494,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             
             var tupleType = (item1, item2);
             
@@ -510,7 +510,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Value.Item1);
             
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, itemToConvert.Value.Item2);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, itemToConvert.Value.Item2);
         }
         
         private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)

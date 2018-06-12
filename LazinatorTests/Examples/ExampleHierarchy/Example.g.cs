@@ -897,16 +897,16 @@ namespace LazinatorTests.Examples
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
             if (serializedVersionNumber >= 3) 
             {
-                _MyNewString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+                _MyNewString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             }
             _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
             _MyNullableDouble = span.ToNullableDouble(ref bytesSoFar);
             _MyNullableTimeSpan = span.ToDecompressedNullableTimeSpan(ref bytesSoFar);
             if (serializedVersionNumber < 3) 
             {
-                _MyOldString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+                _MyOldString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             }
-            _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _MyString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _MyTestEnum = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
@@ -1002,16 +1002,16 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedDateTime(writer, _MyDateTime);
             if (LazinatorObjectVersion >= 3) 
             {
-                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyNewString);
+                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _MyNewString);
             }
             CompressedDecimal.WriteCompressedNullableDecimal(writer, _MyNullableDecimal);
             WriteUncompressedPrimitives.WriteNullableDouble(writer, _MyNullableDouble);
             CompressedIntegralTypes.WriteCompressedNullableTimeSpan(writer, _MyNullableTimeSpan);
             if (LazinatorObjectVersion < 3) 
             {
-                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyOldString);
+                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _MyOldString);
             }
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyString);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _MyString);
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyTestEnum);
             CompressedIntegralTypes.WriteCompressedNullableByte(writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUint(writer, _MyUint);

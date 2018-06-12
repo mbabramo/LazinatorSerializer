@@ -2535,7 +2535,8 @@ namespace LazinatorTests.Tests
             clone2.GetBinaryHashCode32().Should().Be(hash32b);
             clone2.GetBinaryHashCode64().Should().Be(hash64b);
 
-            example.MyChild1.MyShort = (short) 999;
+            example.MyChild1.MyShort = (short) 9999;
+            example.MyChild1.MyLong = 987654987654; // TODO: this doesn't seem to work if long isn't changed. 
             var hash32c = example.GetBinaryHashCode32();
             var hash64c = example.GetBinaryHashCode64();
             hash32c.Should().NotBe(hash32);
