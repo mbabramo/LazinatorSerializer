@@ -510,7 +510,7 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                ExampleChild selfOrClone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value.CloneLazinatorTyped();
+                ExampleChild selfOrClone = (value?.LazinatorParentClass == null) ? (ExampleChild) value : (ExampleChild) value/* DEBUG .CloneLazinatorTyped() */;
                 if (selfOrClone != null)
                 {
                     selfOrClone.LazinatorParentClass = this;

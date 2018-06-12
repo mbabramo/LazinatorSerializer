@@ -836,7 +836,7 @@ namespace Lazinator.CodeDescription
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
                 {
-                    parentRelationship = $@"{AppropriatelyQualifiedTypeName} selfOrClone = (value?.LazinatorParentClass == null) ? ({AppropriatelyQualifiedTypeName}) value : ({AppropriatelyQualifiedTypeName}) value.CloneLazinatorTyped();
+                    parentRelationship = $@"{AppropriatelyQualifiedTypeName} selfOrClone = (value?.LazinatorParentClass == null) ? ({AppropriatelyQualifiedTypeName}) value : ({AppropriatelyQualifiedTypeName}) value/* DEBUG .CloneLazinatorTyped() */;
                             if (selfOrClone != null)
                             {{{parentSet}
                             }}
@@ -844,7 +844,7 @@ namespace Lazinator.CodeDescription
                 }
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 {
-                    parentRelationship = $@"var clone = ({AppropriatelyQualifiedTypeName}) value.CloneLazinatorTyped();
+                    parentRelationship = $@"var clone = ({AppropriatelyQualifiedTypeName}) value/* DEBUG .CloneLazinatorTyped() */;
                             if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
                             {{{parentSet}
                             }}

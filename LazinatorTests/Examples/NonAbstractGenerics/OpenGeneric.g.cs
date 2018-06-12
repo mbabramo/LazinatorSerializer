@@ -257,7 +257,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             [DebuggerStepThrough]
             set
             {
-                var clone = (T) value.CloneLazinatorTyped();
+                var clone = (T) value/* DEBUG .CloneLazinatorTyped() */;
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
                     value.LazinatorParentClass = this;
