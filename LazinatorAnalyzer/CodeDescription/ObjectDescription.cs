@@ -51,8 +51,8 @@ namespace Lazinator.CodeDescription
         public List<NonexclusiveInterfaceDescription> NonexclusiveInterfaces { get; set; }
         public bool HasNonexclusiveInterfaces => NonexclusiveInterfaces != null && NonexclusiveInterfaces.Any();
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
-        internal bool AutocloneAllThisLevel => ExclusiveInterface?.AutocloneAll ?? false;
-        public bool AutocloneAll => AutocloneAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutocloneAllThisLevel);
+        internal bool AutoChangeParentAllThisLevel => ExclusiveInterface?.AutoChangeParentAll ?? false;
+        public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutoChangeParentAllThisLevel);
  
         /* Implementations */
         public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }

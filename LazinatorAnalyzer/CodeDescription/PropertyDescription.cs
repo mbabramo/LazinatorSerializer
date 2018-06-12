@@ -93,7 +93,7 @@ namespace Lazinator.CodeDescription
         internal bool TrackDirtinessNonSerialized { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
-        private bool Autoclone { get; set; }
+        private bool AutoChangeParent { get; set; }
         private bool MovesFromOtherHierarchiesAllowed { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
@@ -186,9 +186,9 @@ namespace Lazinator.CodeDescription
         private void ParseOtherPropertyAttributes()
         {
             CloneAllowMovedAttribute allowMoved = UserAttributes.OfType<CloneAllowMovedAttribute>().FirstOrDefault();
-            CloneAutocloneAttribute autoclone = UserAttributes.OfType<CloneAutocloneAttribute>().FirstOrDefault();
-            Autoclone = autoclone != null || ContainingObjectDescription.AutocloneAll;
-            MovesFromOtherHierarchiesAllowed = !Autoclone && allowMoved != null;
+            CloneAutoChangeParentAttribute autoChangeParent = UserAttributes.OfType<CloneAutoChangeParentAttribute>().FirstOrDefault();
+            AutoChangeParent = autoChangeParent != null || ContainingObjectDescription.AutoChangeParentAll;
+            MovesFromOtherHierarchiesAllowed = !AutoChangeParent && allowMoved != null;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
@@ -794,8 +794,8 @@ namespace Lazinator.CodeDescription
 
             bool autocloning = !MovesFromOtherHierarchiesAllowed && 
                 (
-                    (ContainingObjectDescription?.Compilation?.Config?.DefaultAutoclone ?? false)
-                    || Autoclone
+                    (ContainingObjectDescription?.Compilation?.Config?.DefaultAutoChangeParent ?? false)
+                    || AutoChangeParent
                     || PropertyType == LazinatorPropertyType.LazinatorStruct
                 );
             string incomingValue;
@@ -865,7 +865,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 if ({incomingValue}.LazinatorParentClass != null)
                                 {{
-                                    throw new MovedLazinatorException($""The property {PropertyName} cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute."");
+                                    throw new MovedLazinatorException($""The property {PropertyName} cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutoChangeParentAttribute or the AllowMovedAttribute."");
                                 }}{parentSet}
                             }}
                         ";
@@ -876,7 +876,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 if ({incomingValue}.LazinatorParentClass != null)
                                 {{
-                                    throw new MovedLazinatorException($""The property {PropertyName} cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutocloneAttribute or the AllowMovedAttribute."");
+                                    throw new MovedLazinatorException($""The property {PropertyName} cannot be set to a Lazinator object with a defined LazinatorParentClass. Set the LazinatorParentClass to null, clone the object, or use the AutoChangeParentAttribute or the AllowMovedAttribute."");
                                 }}{parentSet}
                             }}
                         ";

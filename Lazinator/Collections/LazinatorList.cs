@@ -154,8 +154,9 @@ namespace Lazinator.Collections
         public void Add(T item)
         {
             // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize
-            if (item?.LazinatorParentClass != null)
-                item = item.CloneLazinatorTyped();
+            //DEBUG
+            //if (item?.LazinatorParentClass != null)
+            //    item = item.CloneLazinatorTyped();
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Add(item);
             if (!FullyDeserialized)
@@ -202,8 +203,9 @@ namespace Lazinator.Collections
 
         public void Insert(int index, T item)
         {
-            if (item?.LazinatorParentClass != null)
-                item = item.CloneLazinatorTyped();
+            //DEBUG
+            //if (item?.LazinatorParentClass != null)
+            //    item = item.CloneLazinatorTyped();
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Insert(index, item);
             if (!FullyDeserialized)

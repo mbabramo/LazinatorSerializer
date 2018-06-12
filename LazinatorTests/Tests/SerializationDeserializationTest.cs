@@ -2641,24 +2641,24 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void AutocloneWorks()
+        public void AutoChangeParentWorks()
         {
             var original = GetHierarchy(1, 1, 1, 1, 0);
             var another = GetHierarchy(1, 1, 1, 1, 0);
-            original.MyAutocloneChild = new ExampleChild();
-            original.MyAutocloneChild.LazinatorParentClass.Should().Be(original);
-            another.MyAutocloneChild = original.MyAutocloneChild;
-            // DEBUG original.MyAutocloneChild.LazinatorParentClass.Should().Be(original);
-            another.MyAutocloneChild.LazinatorParentClass.Should().Be(another);
+            original.MyAutoChangeParentChild = new ExampleChild();
+            original.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(original);
+            another.MyAutoChangeParentChild = original.MyAutoChangeParentChild;
+            // DEBUG original.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(original);
+            another.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(another);
 
-            original.MyAutocloneChildStruct = new ExampleStruct();
-            original.MyAutocloneChildStruct.LazinatorParentClass.Should().Be(original);
-            another.MyAutocloneChildStruct = original.MyAutocloneChildStruct;
-            // DEBUG original.MyAutocloneChildStruct.LazinatorParentClass.Should().Be(original);
-            another.MyAutocloneChildStruct.LazinatorParentClass.Should().Be(another);
+            original.MyAutoChangeParentChildStruct = new ExampleStruct();
+            original.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(original);
+            another.MyAutoChangeParentChildStruct = original.MyAutoChangeParentChildStruct;
+            // DEBUG original.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(original);
+            another.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(another);
 
-            original.MyAutocloneChild = null;
-            original.MyAutocloneChild.Should().BeNull();
+            original.MyAutoChangeParentChild = null;
+            original.MyAutoChangeParentChild.Should().BeNull();
         }
 
         [Fact]

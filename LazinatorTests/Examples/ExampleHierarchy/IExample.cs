@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
         WInt WrappedInt { get; set; }
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }
-        [Autoclone] ExampleChild MyAutocloneChild { get; set; }
-        ExampleStruct MyAutocloneChildStruct { get; set; } // autoclone is automatic for structs
+        [AutoChangeParent] ExampleChild MyAutoChangeParentChild { get; set; }
+        ExampleStruct MyAutoChangeParentChildStruct { get; set; } // autoChangeParent is automatic for structs
     }
 }

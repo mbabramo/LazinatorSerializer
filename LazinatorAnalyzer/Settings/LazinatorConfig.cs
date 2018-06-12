@@ -18,7 +18,7 @@ namespace LazinatorAnalyzer.Settings
         private const string IgnoreRecordLikeTypesString = "IgnoreRecordLikeTypes";
         private const string IncludeRecordLikeTypesString = "IncludeRecordLikeTypes";
         private const string IncludeTracingCodeString = "IncludeTracingCode";
-        private const string DefaultAutocloneString = "DefaultAutoclone";
+        private const string DefaultAutoChangeParentString = "DefaultAutoChangeParent";
         private const string DefaultAllowRecordLikeClassesString = "DefaultAllowRecordLikeClasses";
         private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
@@ -26,7 +26,7 @@ namespace LazinatorAnalyzer.Settings
         public bool UseFullyQualifiedNames;
         public Dictionary<string, string> InterchangeConverters;
         public Dictionary<string, string> DirectConverters;
-        public bool DefaultAutoclone, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
+        public bool DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
         public List<string> IgnoreRecordLikeTypes;
         public List<string> IncludeRecordLikeTypes;
         public string ConfigFilePath;
@@ -57,7 +57,7 @@ namespace LazinatorAnalyzer.Settings
                     LoadIgnoreRecordLikeTypes(json);
                     LoadIncludeRecordLikeTypes(json);
                     DefaultAllowRecordLikeClasses = json.ContainsKey(DefaultAllowRecordLikeClassesString) ? json[DefaultAllowRecordLikeClassesString].AsBoolean : false;
-                    DefaultAutoclone = json.ContainsKey(DefaultAutocloneString) ? json[DefaultAutocloneString].AsBoolean : false;
+                    DefaultAutoChangeParent = json.ContainsKey(DefaultAutoChangeParentString) ? json[DefaultAutoChangeParentString].AsBoolean : false;
                     DefaultAllowRecordLikeRegularStructs = json.ContainsKey(DefaultAllowRecordLikeRegularStructsString) ? json[DefaultAllowRecordLikeRegularStructsString].AsBoolean : false;
                     DefaultAllowRecordLikeReadOnlyStructs = json.ContainsKey(DefaultAllowRecordLikeReadOnlyStructsString) ? json[DefaultAllowRecordLikeReadOnlyStructsString].AsBoolean : true;
                     ConfigFilePath = configPath;

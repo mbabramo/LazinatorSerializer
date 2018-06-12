@@ -9,9 +9,9 @@ namespace Lazinator.Collections
     [Lazinator((int) LazinatorCollectionUniqueIDs.LazinatorTuple)]
     interface ILazinatorTuple<T, U> : ILazinator where T : ILazinator, new() where U : ILazinator, new()
     {
-        [Autoclone]
+        [AutoChangeParent]
         T Item1 { get; set; }
-        [Autoclone]
+        [AutoChangeParent]
         U Item2 { get; set; }
     }
 }
