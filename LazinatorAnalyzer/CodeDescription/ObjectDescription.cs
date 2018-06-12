@@ -369,10 +369,11 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
+                                LazinatorParentClass = LazinatorParentClass,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
                                 HierarchyBytes = bytes,
                             }};
+                            clone.LazinatorParentClass = null;
                             return clone;
                         }}
 
@@ -509,10 +510,11 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                InformParentOfDirtinessDelegate = InformParentOfDirtinessDelegate,
+                                LazinatorParentClass = LazinatorParentClass,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
                                 HierarchyBytes = bytes
                             }};
+                            clone.LazinatorParentClass = null;
                             return clone;
                         }}
 
