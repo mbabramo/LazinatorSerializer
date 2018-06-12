@@ -9,7 +9,7 @@ namespace Lazinator.Support
 {
     public static class LazinatorReflection
     {
-        public static LazinatorAttribute GetLazinatorAttributeForILazinator(Type type)
+        public static LazinatorAttribute GetLazinatorAttributeForLazinatorMainType(Type type)
         {
             var correspondingInterface = GetCorrespondingExclusiveInterface(type);
             if (correspondingInterface == null)
@@ -26,6 +26,17 @@ namespace Lazinator.Support
             if (selfSerializeAttributes.Skip(1).Any())
                 throw new LazinatorDeserializationException(
                     $"The interface {correspondingInterface} should include only a single {nameof(LazinatorAttribute)}, apart from attributes in derived classes.");
+            return attribute;
+        }
+
+        public static NonexclusiveLazinatorAttribute GetNonexclusiveLazinatorAttributeForInterface(Type @interface)
+        {
+            var nonexclusiveAttributes = @interface.GetCustomAttributes(typeof(NonexclusiveLazinatorAttribute), false)
+                .Select(x => (NonexclusiveLazinatorAttribute)x).ToList();
+            NonexclusiveLazinatorAttribute attribute = nonexclusiveAttributes.FirstOrDefault();
+            if (nonexclusiveAttributes.Skip(1).Any())
+                throw new LazinatorDeserializationException(
+                    $"The interface {@interface} should include at most one {nameof(NonexclusiveLazinatorAttribute)}, apart from attributes in derived classes.");
             return attribute;
         }
 

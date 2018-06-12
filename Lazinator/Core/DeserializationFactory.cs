@@ -303,15 +303,36 @@ namespace Lazinator.Core
             }
         }
 
+        const int AddThisWhenSerializingExclusiveInterface = 1000000000;
+
         private void SetTypes(Type[] typesImplementingILazinator)
         {
             typesImplementingILazinator = typesImplementingILazinator.Distinct().ToArray();
             foreach (Type type in typesImplementingILazinator)
             {
-                var attribute = LazinatorReflection.GetLazinatorAttributeForILazinator(type);
-                if (attribute == null)
-                    continue;
-                int uniqueID = attribute.UniqueID;
+                int uniqueID;
+                if (type.IsInterface)
+                {
+                    var attribute = LazinatorReflection.GetLazinatorAttributeForInterface(type);
+                    if (attribute == null)
+                    {
+                        if (type.IsInterface)
+                        {
+                            var nonexclusiveAttribute = LazinatorReflection.GetNonexclusiveLazinatorAttributeForInterface(type);
+                            throw new NotImplementedException(); // DEBUG
+                        }
+                        continue;
+                    }
+                    else
+                        uniqueID = attribute.UniqueID + AddThisWhenSerializingExclusiveInterface;
+                }
+                else
+                {
+                    var attribute = LazinatorReflection.GetLazinatorAttributeForLazinatorMainType(type);
+                    if (attribute == null)
+                        continue;
+                    uniqueID = attribute.UniqueID;
+                }
                 TypeToUniqueIDMap[type] = uniqueID;
                 if (FactoriesByID.ContainsKey(uniqueID))
                     throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
@@ -326,14 +347,17 @@ namespace Lazinator.Core
                 else
                 {
                     UniqueIDToTypeMap[uniqueID] = (type, 0);
-                    FactoriesByID[uniqueID] = GetFactoryForType(type);
-                    int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
-                    if (fixedUniqueID != null)
+                    if (!type.IsInterface)
                     {
-                        FixedUniqueIDs[type] = (int)fixedUniqueID;
-                        Type exclusiveInterface = LazinatorReflection.GetCorrespondingExclusiveInterface(type);
-                        if (exclusiveInterface != null)
-                            FixedUniqueIDs[exclusiveInterface] = (int)fixedUniqueID;
+                        FactoriesByID[uniqueID] = GetFactoryForType(type);
+                        int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
+                        if (fixedUniqueID != null)
+                        {
+                            FixedUniqueIDs[type] = (int)fixedUniqueID;
+                            Type exclusiveInterface = LazinatorReflection.GetCorrespondingExclusiveInterface(type);
+                            if (exclusiveInterface != null)
+                                FixedUniqueIDs[exclusiveInterface] = (int)fixedUniqueID;
+                        }
                     }
                 }
             }
@@ -441,8 +465,6 @@ namespace Lazinator.Core
             else
                 l.Add(TypeToUniqueIDMap[t]);
         }
-
-
 
         // TODO: Cache this
         public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(List<int> typeAndGenericTypeArgumentIDs, int index = 0)
