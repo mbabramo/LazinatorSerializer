@@ -316,7 +316,19 @@ namespace Lazinator.CodeDescription
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {constructor}public {DerivationKeyword}ILazinator LazinatorParentClass {{ get; set; }}
+                        {ProtectedIfApplicable}ILazinator _LazinatorParentClass;
+                        {constructor}public {DerivationKeyword}ILazinator LazinatorParentClass 
+                        {{ 
+                            get => _LazinatorParentClass;
+                            set
+                            {{
+                                _LazinatorParentClass = value;
+                                if (value != null && (value.IsDirty || value.DescendantIsDirty))
+                                {{
+                                    DescendantIsDirty = true;
+                                }}
+                            }}
+                        }}
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
