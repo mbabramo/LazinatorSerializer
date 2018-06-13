@@ -1158,8 +1158,8 @@ namespace Lazinator.CodeDescription
             else
             { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
                 string binaryWriterAction;
-                if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.Memory))
-                    binaryWriterAction = $"copy_Value.Write(w)";
+                if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory))
+                    binaryWriterAction = $"copy_{PropertyName}.Write(w)";
                 else
                     binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
                 sb.AppendLine(
