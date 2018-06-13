@@ -72,6 +72,7 @@ namespace Lazinator.CodeDescription
         public bool SuppressDate { get; set; }
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public bool IncludeTracingCode => Compilation.Config?.IncludeTracingCode ?? false;
+        public bool StepThroughProperties => Compilation.Config?.StepThroughProperties ?? true;
 
         public ObjectDescription()
         {

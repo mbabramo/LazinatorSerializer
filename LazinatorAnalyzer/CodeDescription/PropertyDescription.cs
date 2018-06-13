@@ -111,6 +111,11 @@ namespace Lazinator.CodeDescription
         private bool IncludableWhenExcludingMostChildren { get; set; }
         private bool ExcludableWhenIncludingMostChildren { get; set; }
 
+        /* Output customization */
+        private bool Tracing => ContainingObjectDescription.Compilation?.Config?.IncludeTracingCode ?? false;
+        private string StepThroughPropertiesString => ContainingObjectDescription.StepThroughProperties ? "" : $@"
+                        [DebuggerStepThrough]";
+
         #endregion
 
         #region Constructors
@@ -715,13 +720,11 @@ namespace Lazinator.CodeDescription
         {
             string propertyString = $@"        private {AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{
-            [DebuggerStepThrough]
+        {{{StepThroughPropertiesString}
             get
             {{
                 return _{PropertyName};
-            }}
-            [DebuggerStepThrough]
+            }}{StepThroughPropertiesString}
             {SetterAccessibilityString}set
             {{
                 IsDirty = true;
@@ -880,8 +883,7 @@ namespace Lazinator.CodeDescription
 
             sb.Append($@"private {AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{
-            [DebuggerStepThrough]
+        {{{StepThroughPropertiesString}
             get
             {{
                 if (!_{PropertyName}_Accessed)
@@ -900,8 +902,7 @@ namespace Lazinator.CodeDescription
                 }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
                     IsDirty = true;" : "")}
                 return _{PropertyName};
-            }}
-            [DebuggerStepThrough]
+            }}{StepThroughPropertiesString}
             set
             {{
                 {parentRelationship}IsDirty = true;
@@ -920,8 +921,7 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
                 sb.Append($@"{GetAttributesToInsert()}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
-                            {{
-                                [DebuggerStepThrough]
+                            {{{StepThroughPropertiesString}
                                 get
                                 {{
                                     if (!_{PropertyName}_Accessed)
@@ -982,8 +982,7 @@ namespace Lazinator.CodeDescription
             else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}{spanAccessor})";
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{
-            [DebuggerStepThrough]
+        {{{StepThroughPropertiesString}
             get
             {{
                 if (!_{PropertyName}_Accessed)
@@ -993,8 +992,7 @@ namespace Lazinator.CodeDescription
                     _{PropertyName}_Accessed = true;
                 }}
                 return {castToSpanOfCorrectType};
-            }}
-            [DebuggerStepThrough]
+            }}{StepThroughPropertiesString}
             set
             {{
                 
@@ -1012,10 +1010,8 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
         private bool _{PropertyName}_Dirty;
         public bool {PropertyName}_Dirty
-        {{
-            [DebuggerStepThrough]
-            get => _{PropertyName}_Dirty;
-            [DebuggerStepThrough]
+        {{{StepThroughPropertiesString}
+            get => _{PropertyName}_Dirty;{StepThroughPropertiesString}
             set
             {{
                 if (_{PropertyName}_Dirty != value)
