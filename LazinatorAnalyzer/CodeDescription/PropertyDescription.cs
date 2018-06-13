@@ -88,6 +88,7 @@ namespace Lazinator.CodeDescription
         private string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         private CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
         private string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
+        private string CustomNonlazinatorWrite { get; set; }
         private int? IntroducedWithVersion { get; set; }
         private int? EliminatedWithVersion { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
@@ -193,6 +194,9 @@ namespace Lazinator.CodeDescription
 
         private void ParseOtherPropertyAttributes()
         {
+            CloneCustomNonlazinatorWriteAttribute nonlazinatorWrite = UserAttributes.OfType<CloneCustomNonlazinatorWriteAttribute>().FirstOrDefault();
+            if (nonlazinatorWrite != null)
+                CustomNonlazinatorWrite = nonlazinatorWrite.WriteMethod;
             CloneAllowMovedAttribute allowMoved = UserAttributes.OfType<CloneAllowMovedAttribute>().FirstOrDefault();
             CloneAutoChangeParentAttribute autoChangeParent = UserAttributes.OfType<CloneAutoChangeParentAttribute>().FirstOrDefault();
             AutoChangeParent = autoChangeParent != null || ContainingObjectDescription.AutoChangeParentAll;
@@ -1140,6 +1144,7 @@ namespace Lazinator.CodeDescription
         private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)
         {
             string omitLengthSuffix = OmitLength ? "_WithoutLengthPrefix" : "";
+            string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 sb.AppendLine(
                     $@"WriteNonLazinatorObject{omitLengthSuffix}(
@@ -1148,15 +1153,15 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => {ChildSliceString},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (w, v) =>
-                            {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(w, {PropertyName},
+                            {DirectConverterTypeNamePrefix}{writeMethodName}(w, {PropertyName},
                                 includeChildrenMode, v, updateStoredBuffer));");
             else
             { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
                 string binaryWriterAction;
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
+                if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.Memory))
                     binaryWriterAction = $"copy_Value.Write(w)";
                 else
-                    binaryWriterAction = $"{DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
+                    binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
                 sb.AppendLine(
                     $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;

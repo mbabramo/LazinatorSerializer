@@ -38,6 +38,11 @@ namespace LazinatorCodeGen.Roslyn
                     else
                         return new CloneLazinatorAttribute((int)uniqueID);
 
+                case "CustomNonlazinatorWriteAttribute":
+                    var writeMethod = attributeData.GetAttributeConstructorValueByParameterName("writeMethod");
+                    if (writeMethod != null && !(writeMethod is string))
+                        return null;
+                    return new CloneCustomNonlazinatorWriteAttribute((string)writeMethod);
                 case "InsertAttributeAttribute":
                     var attributeText = attributeData.GetAttributeConstructorValueByParameterName("attributeText");
                     if (!(attributeText is string ))

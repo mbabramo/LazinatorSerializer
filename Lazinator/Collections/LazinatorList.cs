@@ -233,7 +233,7 @@ namespace Lazinator.Collections
 
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
-            // TODO: This creates a new buffer to write in, which is inefficient. 
+            // DEBUG TODO: This creates a new buffer to write in, which is inefficient. 
             // Instead, we should add a feature to specify a method name for writing a nonlazinator object.
 
             if (IsDirty || DescendantIsDirty)
