@@ -157,6 +157,8 @@ namespace Lazinator.Collections
             //DEBUG
             //if (item?.LazinatorParentClass != null)
             //    item = item.CloneLazinatorTyped();
+            if (item != null)
+                item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Add(item);
             if (!FullyDeserialized)
@@ -203,9 +205,8 @@ namespace Lazinator.Collections
 
         public void Insert(int index, T item)
         {
-            //DEBUG
-            //if (item?.LazinatorParentClass != null)
-            //    item = item.CloneLazinatorTyped();
+            if (item != null)
+                item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Insert(index, item);
             if (!FullyDeserialized)
