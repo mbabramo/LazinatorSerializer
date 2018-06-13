@@ -2398,6 +2398,18 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListWorksWithPartialAccessAfterChange()
+        {
+            LazinatorList<WInt> l = new LazinatorList<WInt>();
+            l.Add(3);
+            l.Add(4);
+            var c = l.CloneLazinatorTyped();
+            c[0] = 999999;
+            var c2 = c.CloneLazinatorTyped();
+            c2[1].WrappedValue.Should().Be(4);
+        }
+
+        [Fact]
         public void LazinatorListEmptyWorks()
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()

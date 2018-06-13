@@ -8,5 +8,6 @@ namespace LazinatorTests.Examples.Collections
         public LazinatorListContainer()
         {
         }
+        
     }
 }

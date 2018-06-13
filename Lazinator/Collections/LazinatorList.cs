@@ -234,7 +234,9 @@ namespace Lazinator.Collections
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
             if (IsDirty || DescendantIsDirty)
-                _MainListSerialized_Accessed = true; // make sure we call WriteMainList
+            {
+                var mainListSerialized = MainListSerialized; // has side effect of making sure we call WriteMainList
+            }
         }
 
         private void WriteMainList(BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -242,6 +244,7 @@ namespace Lazinator.Collections
             if (IsDirty || DescendantIsDirty)
             {
                 var offsetList = new LazinatorOffsetList();
+                int originalStartingPosition = writer.Position;
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, w =>
                 {
                     int startingPosition = w.Position;
@@ -253,7 +256,7 @@ namespace Lazinator.Collections
                         offsetList.AddOffset(offset);
                     }
                 });
-                MainListSerialized = writer.MemoryInBuffer.FilledMemory;
+                MainListSerialized = writer.MemoryInBuffer.FilledMemory.Slice(originalStartingPosition);
                 _Offsets_Accessed = true;
                 _Offsets = offsetList;
                 _Offsets.IsDirty = true;

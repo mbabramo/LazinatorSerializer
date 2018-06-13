@@ -211,9 +211,9 @@ namespace Lazinator.Collections
         private ReadOnlyMemory<byte> _MainListSerialized;
         public ReadOnlyMemory<byte> MainListSerialized
         {
-            [DebuggerStepThrough]
             get
             {
+                Debug.WriteLine($"DEBUG accessed {_MainListSerialized_Accessed} length {_MainListSerialized.Length}");
                 if (!_MainListSerialized_Accessed)
                 {
                     ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
@@ -222,12 +222,12 @@ namespace Lazinator.Collections
                 }
                 return _MainListSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 
                 IsDirty = true;
                 _MainListSerialized = value;
+                Debug.WriteLine($"DEBUG set length {_MainListSerialized.Length}");
                 _MainListSerialized_Accessed = true;
             }
         }
