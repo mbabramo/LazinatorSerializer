@@ -113,8 +113,11 @@ namespace Lazinator.CodeDescription
 
         /* Output customization */
         private bool Tracing => ContainingObjectDescription.Compilation?.Config?.IncludeTracingCode ?? false;
-        private string StepThroughPropertiesString => ContainingObjectDescription.StepThroughProperties ? "" : $@"
-                        [DebuggerStepThrough]";
+        private string StepThroughPropertiesString => ContainingObjectDescription.StepThroughProperties ?  $@"
+                        [DebuggerStepThrough]" : "";
+        private string ConfirmDirtinessConsistencyCheck => $@"
+                            LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
+        private string CheckAtEndOfSet => ConfirmDirtinessConsistencyCheck; // DEBUG
 
         #endregion
 
@@ -728,7 +731,7 @@ namespace Lazinator.CodeDescription
             {SetterAccessibilityString}set
             {{
                 IsDirty = true;
-                _{PropertyName} = value;
+                _{PropertyName} = value;{CheckAtEndOfSet}
             }}
         }}
 ";
@@ -912,7 +915,7 @@ namespace Lazinator.CodeDescription
                     _{PropertyName}.IsDirty = true;
                 }}" : "")}{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
                 _{PropertyName}_Dirty = true;" : "")}
-                _{PropertyName}_Accessed = true;
+                _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
@@ -998,7 +1001,7 @@ namespace Lazinator.CodeDescription
                 
                 IsDirty = true;
                 _{PropertyName} = {(isSpan ? $"new ReadOnlyMemory<byte>(MemoryMarshal.Cast<{innerFullType}, byte>(value).ToArray());" : "value;")}
-                _{PropertyName}_Accessed = true;
+                _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
             }}
         }}
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
@@ -1021,7 +1024,7 @@ namespace Lazinator.CodeDescription
                     {{
                         IsDirty = true;
                     }}
-                }}
+                }}{CheckAtEndOfSet}
             }}
         }}
 ");

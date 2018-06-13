@@ -417,6 +417,22 @@ namespace Lazinator.Core
             return MemoryPool<byte>.Shared.Rent(minimumSize);
         }
 
+        public static void ConfirmDescendantDirtinessConsistency(ILazinator startPoint)
+        {
+            if (startPoint.IsDirty)
+            {
+                ILazinator parent = startPoint.LazinatorParentClass;
+                while (parent != null)
+                {
+                    if (!parent.DescendantIsDirty && !parent.IsDirty)
+                    {
+                        throw new Exception("Internal Lazinator error. Ancestor dirtiness set incorrectly.");
+                    }
+                    parent = startPoint.LazinatorParentClass;
+                }
+            }
+        }
+
 
     }
 }
