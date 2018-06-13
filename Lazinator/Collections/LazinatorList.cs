@@ -86,7 +86,11 @@ namespace Lazinator.Collections
         private ReadOnlyMemory<byte> GetListMemberSlice(int index)
         {
             // The 1st item (# 0) has index 0 always, so it's not stored in Offsets.
-            // If we have three items, we store the offset of the first, the second, and after the third.
+            // If we have three items, we store the offset of the second and the third,
+            // plus the location AFTER the third.
+            // The offset of the first is then 0 and the next offset is Offsets[0].
+            // The offset of the second is then Offsets[0] and next offset is Offsets[1].
+            // The offste of the third is Offsets[1] and the next offset is Offsets[2], the position at the end of the third item.
             if (Offsets == null || index >= Offsets.Count)
                 return new ReadOnlyMemory<byte>();
             int offset;
@@ -235,9 +239,7 @@ namespace Lazinator.Collections
             if (IsDirty || DescendantIsDirty)
             {
                 BinaryBufferWriter writer = new BinaryBufferWriter(Math.Max(100, (int)(SerializedMainList.Length * 1.2))); // try to allocate enough space initially to minimize the risk of buffer recopies, but don't go overboard.
-                _Offsets_Accessed = true;
-                _Offsets = new LazinatorOffsetList();
-                _Offsets.IsDirty = true;
+                var offsetList = new LazinatorOffsetList();
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, w =>
                 {
                     int startingPosition = w.Position;
@@ -246,10 +248,13 @@ namespace Lazinator.Collections
                         var item = i; // avoid closure problem
                         WriteChild(w, UnderlyingList[item], IncludeChildrenMode.IncludeAllChildren, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         var offset = (int)(w.Position - startingPosition);
-                        _Offsets.AddOffset(offset);
+                        offsetList.AddOffset(offset);
                     }
                 });
                 SerializedMainList = writer.MemoryInBuffer.FilledMemory;
+                _Offsets_Accessed = true;
+                _Offsets = offsetList;
+                _Offsets.IsDirty = true;
             }
         }
         
