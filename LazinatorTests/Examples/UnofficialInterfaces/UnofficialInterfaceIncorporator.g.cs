@@ -198,31 +198,29 @@ namespace LazinatorTests.Examples
         private long _MyLong;
         public long MyLong
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyLong;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyLong = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyInt;
         private int MyInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyInt = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

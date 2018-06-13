@@ -200,37 +200,34 @@ namespace LazinatorTests.Examples
         private long _MyLong;
         public long MyLong
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyLong;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyLong = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private short _MyShort;
         public short MyShort
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyShort;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyShort = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ReadOnlyMemory<byte> _ByteSpan;
         public ReadOnlySpan<byte> ByteSpan
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ByteSpan_Accessed)
@@ -241,20 +238,19 @@ namespace LazinatorTests.Examples
                 }
                 return _ByteSpan.Span;
             }
-            [DebuggerStepThrough]
             set
             {
                 
                 IsDirty = true;
                 _ByteSpan = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _ByteSpan_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ByteSpan_Accessed;
         private WrapperContainer _MyWrapperContainer;
         public WrapperContainer MyWrapperContainer
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyWrapperContainer_Accessed)
@@ -273,7 +269,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyWrapperContainer;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -291,6 +286,7 @@ namespace LazinatorTests.Examples
                     _MyWrapperContainer.IsDirty = true;
                 }
                 _MyWrapperContainer_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyWrapperContainer_Accessed;

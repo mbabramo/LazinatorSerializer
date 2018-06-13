@@ -198,7 +198,6 @@ namespace LazinatorTests.Examples.Collections
         private Queue<int> _MyQueueInt;
         public Queue<int> MyQueueInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyQueueInt_Accessed)
@@ -217,13 +216,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyQueueInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyQueueInt = value;
                 _MyQueueInt_Dirty = true;
                 _MyQueueInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyQueueInt_Accessed;
@@ -231,9 +230,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyQueueInt_Dirty;
         public bool MyQueueInt_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyQueueInt_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyQueueInt_Dirty != value)
@@ -244,6 +241,7 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

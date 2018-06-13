@@ -203,52 +203,48 @@ namespace LazinatorTests.Examples.Abstract
         private string _String1;
         public override string String1
         {
-            [DebuggerStepThrough]
             get
             {
                 return _String1;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _String1 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String2;
         public override string String2
         {
-            [DebuggerStepThrough]
             get
             {
                 return _String2;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _String2 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String3;
         public string String3
         {
-            [DebuggerStepThrough]
             get
             {
                 return _String3;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _String3 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _Example2;
         public override Example Example2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Example2_Accessed)
@@ -267,7 +263,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _Example2;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -285,12 +280,12 @@ namespace LazinatorTests.Examples.Abstract
                     _Example2.IsDirty = true;
                 }
                 _Example2_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _Example3;
         public override Example Example3
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Example3_Accessed)
@@ -309,7 +304,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _Example3;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -327,12 +321,12 @@ namespace LazinatorTests.Examples.Abstract
                     _Example3.IsDirty = true;
                 }
                 _Example3_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList1;
         public override List<int> IntList1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList1_Accessed)
@@ -351,18 +345,17 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 return _IntList1;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntList1 = value;
                 _IntList1_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList2;
         public override List<int> IntList2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList2_Accessed)
@@ -381,18 +374,17 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 return _IntList2;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntList2 = value;
                 _IntList2_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList3;
         public List<int> IntList3
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList3_Accessed)
@@ -411,12 +403,12 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 return _IntList3;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntList3 = value;
                 _IntList3_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList3_Accessed;

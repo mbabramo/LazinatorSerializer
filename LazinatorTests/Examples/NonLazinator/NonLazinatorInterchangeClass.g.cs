@@ -198,46 +198,43 @@ namespace LazinatorTests.Examples
         private bool _IsNull;
         public bool IsNull
         {
-            [DebuggerStepThrough]
             get
             {
                 return _IsNull;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IsNull = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyInt;
         public int MyInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyInt = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _MyString;
         public string MyString
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyString;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyString = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

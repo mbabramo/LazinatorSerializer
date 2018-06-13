@@ -201,7 +201,6 @@ namespace LazinatorTests.Examples.Structs
         private ExampleStructWithoutClass _ExampleStructWithoutClass;
         public ExampleStructWithoutClass ExampleStructWithoutClass
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ExampleStructWithoutClass_Accessed)
@@ -223,7 +222,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _ExampleStructWithoutClass;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -231,12 +229,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;
                 _ExampleStructWithoutClass_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleStructWithoutClass_Accessed;
         public ExampleStructWithoutClass ExampleStructWithoutClass_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ExampleStructWithoutClass_Accessed)

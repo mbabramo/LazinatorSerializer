@@ -201,7 +201,6 @@ namespace LazinatorTests.Examples.Abstract
         private AbstractGeneric1<T> _Item;
         public virtual AbstractGeneric1<T> Item
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Item_Accessed)
@@ -220,7 +219,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _Item;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -238,6 +236,7 @@ namespace LazinatorTests.Examples.Abstract
                     _Item.IsDirty = true;
                 }
                 _Item_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Item_Accessed;

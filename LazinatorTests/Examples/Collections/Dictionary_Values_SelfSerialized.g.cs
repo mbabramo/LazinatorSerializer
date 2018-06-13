@@ -203,7 +203,6 @@ namespace LazinatorTests.Examples.Collections
         private Dictionary<int, ExampleChild> _MyDictionary;
         public Dictionary<int, ExampleChild> MyDictionary
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyDictionary_Accessed)
@@ -222,19 +221,18 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyDictionary;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyDictionary = value;
                 _MyDictionary_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyDictionary_Accessed;
         private SortedDictionary<int, ExampleChild> _MySortedDictionary;
         public SortedDictionary<int, ExampleChild> MySortedDictionary
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MySortedDictionary_Accessed)
@@ -253,19 +251,18 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MySortedDictionary;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MySortedDictionary = value;
                 _MySortedDictionary_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MySortedDictionary_Accessed;
         private SortedList<int, ExampleChild> _MySortedList;
         public SortedList<int, ExampleChild> MySortedList
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MySortedList_Accessed)
@@ -284,12 +281,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MySortedList;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MySortedList = value;
                 _MySortedList_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MySortedList_Accessed;

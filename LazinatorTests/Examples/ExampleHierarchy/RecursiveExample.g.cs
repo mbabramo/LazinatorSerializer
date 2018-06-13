@@ -203,7 +203,6 @@ namespace LazinatorTests.Examples.Hierarchy
         private RecursiveExample _RecursiveClass;
         public RecursiveExample RecursiveClass
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_RecursiveClass_Accessed)
@@ -222,7 +221,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 return _RecursiveClass;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -240,13 +238,13 @@ namespace LazinatorTests.Examples.Hierarchy
                     _RecursiveClass.IsDirty = true;
                 }
                 _RecursiveClass_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _RecursiveClass_Accessed;
         private IRecursiveExample _RecursiveInterface;
         public IRecursiveExample RecursiveInterface
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_RecursiveInterface_Accessed)
@@ -265,7 +263,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 return _RecursiveInterface;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -283,6 +280,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     _RecursiveInterface.IsDirty = true;
                 }
                 _RecursiveInterface_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _RecursiveInterface_Accessed;

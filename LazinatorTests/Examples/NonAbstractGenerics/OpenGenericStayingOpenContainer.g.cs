@@ -207,7 +207,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private OpenGeneric<WFloat> _ClosedGenericFloat;
         public OpenGeneric<WFloat> ClosedGenericFloat
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ClosedGenericFloat_Accessed)
@@ -226,7 +225,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 return _ClosedGenericFloat;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -244,13 +242,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _ClosedGenericFloat.IsDirty = true;
                 }
                 _ClosedGenericFloat_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ClosedGenericFloat_Accessed;
         private OpenGeneric<IExampleChild> _ClosedGenericInterface;
         public OpenGeneric<IExampleChild> ClosedGenericInterface
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ClosedGenericInterface_Accessed)
@@ -269,7 +267,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 return _ClosedGenericInterface;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -287,13 +284,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _ClosedGenericInterface.IsDirty = true;
                 }
                 _ClosedGenericInterface_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ClosedGenericInterface_Accessed;
         private OpenGeneric<IExampleNonexclusiveInterface> _ClosedGenericNonexclusiveInterface;
         public OpenGeneric<IExampleNonexclusiveInterface> ClosedGenericNonexclusiveInterface
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ClosedGenericNonexclusiveInterface_Accessed)
@@ -312,7 +309,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 return _ClosedGenericNonexclusiveInterface;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -330,6 +326,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _ClosedGenericNonexclusiveInterface.IsDirty = true;
                 }
                 _ClosedGenericNonexclusiveInterface_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;

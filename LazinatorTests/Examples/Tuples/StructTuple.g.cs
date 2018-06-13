@@ -204,7 +204,6 @@ namespace LazinatorTests.Examples.Tuples
         private (TestEnum firstEnum, TestEnum anotherEnum) _EnumTuple;
         public (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_EnumTuple_Accessed)
@@ -223,19 +222,18 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _EnumTuple;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _EnumTuple = value;
                 _EnumTuple_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _EnumTuple_Accessed;
         private (int MyFirstItem, double MySecondItem) _MyNamedTuple;
         public (int MyFirstItem, double MySecondItem) MyNamedTuple
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyNamedTuple_Accessed)
@@ -254,19 +252,18 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _MyNamedTuple;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNamedTuple = value;
                 _MyNamedTuple_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNamedTuple_Accessed;
         private (int, double)? _MyNullableTuple;
         public (int, double)? MyNullableTuple
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyNullableTuple_Accessed)
@@ -285,19 +282,18 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _MyNullableTuple;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNullableTuple = value;
                 _MyNullableTuple_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNullableTuple_Accessed;
         private (uint, ExampleChild, NonLazinatorClass) _MyValueTupleSerialized;
         public (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyValueTupleSerialized_Accessed)
@@ -316,12 +312,12 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _MyValueTupleSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyValueTupleSerialized = value;
                 _MyValueTupleSerialized_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyValueTupleSerialized_Accessed;

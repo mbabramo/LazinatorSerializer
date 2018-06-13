@@ -206,7 +206,6 @@ namespace LazinatorTests.Examples.Tuples
         private MismatchedRecordLikeType _MyMismatchedRecordLikeType;
         public MismatchedRecordLikeType MyMismatchedRecordLikeType
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyMismatchedRecordLikeType_Accessed)
@@ -224,19 +223,18 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyMismatchedRecordLikeType;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyMismatchedRecordLikeType = value;
                 _MyMismatchedRecordLikeType_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyMismatchedRecordLikeType_Accessed;
         private RecordLikeClass _MyRecordLikeClass;
         public RecordLikeClass MyRecordLikeClass
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyRecordLikeClass_Accessed)
@@ -255,19 +253,18 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _MyRecordLikeClass;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyRecordLikeClass = value;
                 _MyRecordLikeClass_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyRecordLikeClass_Accessed;
         private RecordLikeType _MyRecordLikeType;
         public RecordLikeType MyRecordLikeType
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyRecordLikeType_Accessed)
@@ -285,12 +282,12 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 return _MyRecordLikeType;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyRecordLikeType = value;
                 _MyRecordLikeType_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyRecordLikeType_Accessed;

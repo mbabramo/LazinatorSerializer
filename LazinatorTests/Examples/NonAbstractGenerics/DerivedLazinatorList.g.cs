@@ -55,16 +55,15 @@ namespace LazinatorTests.Examples
         private string _MyListName;
         public string MyListName
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyListName;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListName = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

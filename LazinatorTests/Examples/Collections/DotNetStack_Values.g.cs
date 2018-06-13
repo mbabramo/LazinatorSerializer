@@ -198,7 +198,6 @@ namespace LazinatorTests.Examples.Collections
         private Stack<int> _MyStackInt;
         public Stack<int> MyStackInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyStackInt_Accessed)
@@ -217,13 +216,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyStackInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyStackInt = value;
                 _MyStackInt_Dirty = true;
                 _MyStackInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyStackInt_Accessed;
@@ -231,9 +230,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyStackInt_Dirty;
         public bool MyStackInt_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyStackInt_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyStackInt_Dirty != value)
@@ -244,6 +241,7 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

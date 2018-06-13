@@ -201,7 +201,6 @@ namespace LazinatorTests.Examples.Collections
         private List<NonLazinatorClass> _MyListNonLazinatorType;
         public List<NonLazinatorClass> MyListNonLazinatorType
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNonLazinatorType_Accessed)
@@ -220,13 +219,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListNonLazinatorType;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListNonLazinatorType = value;
                 _MyListNonLazinatorType_Dirty = true;
                 _MyListNonLazinatorType_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNonLazinatorType_Accessed;
@@ -234,9 +233,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyListNonLazinatorType_Dirty;
         public bool MyListNonLazinatorType_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyListNonLazinatorType_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyListNonLazinatorType_Dirty != value)
@@ -247,12 +244,12 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<NonLazinatorClass> _MyListNonLazinatorType2;
         public List<NonLazinatorClass> MyListNonLazinatorType2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNonLazinatorType2_Accessed)
@@ -271,12 +268,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyListNonLazinatorType2;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListNonLazinatorType2 = value;
                 _MyListNonLazinatorType2_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNonLazinatorType2_Accessed;

@@ -27,7 +27,11 @@ namespace Lazinator.Collections.Avl
 
                 return _Parent;
             }
-            set { _Parent = value; }
+            set
+            {
+                _Parent = value;
+                LazinatorParentClass = value;
+            }
         }
 
         public AvlNode<TKey, TValue> GetNextNode()

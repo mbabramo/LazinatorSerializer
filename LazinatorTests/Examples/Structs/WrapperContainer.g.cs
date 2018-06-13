@@ -202,7 +202,6 @@ namespace LazinatorTests.Examples.Structs
         private WInt _WrappedInt;
         public WInt WrappedInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)
@@ -224,7 +223,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -232,12 +230,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedInt_Accessed;
         public WInt WrappedInt_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)

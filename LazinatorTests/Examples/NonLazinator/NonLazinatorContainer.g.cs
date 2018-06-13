@@ -205,7 +205,6 @@ namespace LazinatorTests.Examples
         private NonLazinatorClass _NonLazinatorClass;
         public NonLazinatorClass NonLazinatorClass
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_NonLazinatorClass_Accessed)
@@ -224,19 +223,18 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _NonLazinatorClass;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _NonLazinatorClass = value;
                 _NonLazinatorClass_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonLazinatorClass_Accessed;
         private NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
         public NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_NonLazinatorInterchangeableClass_Accessed)
@@ -255,19 +253,18 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _NonLazinatorInterchangeableClass;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _NonLazinatorInterchangeableClass = value;
                 _NonLazinatorInterchangeableClass_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonLazinatorInterchangeableClass_Accessed;
         private NonLazinatorStruct _NonLazinatorStruct;
         public NonLazinatorStruct NonLazinatorStruct
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_NonLazinatorStruct_Accessed)
@@ -286,12 +283,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _NonLazinatorStruct;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _NonLazinatorStruct = value;
                 _NonLazinatorStruct_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonLazinatorStruct_Accessed;

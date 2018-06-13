@@ -209,7 +209,6 @@ namespace LazinatorTests.Examples
         private WInt _IntWrapper;
         public WInt IntWrapper
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntWrapper_Accessed)
@@ -231,7 +230,6 @@ namespace LazinatorTests.Examples
                 }
                 return _IntWrapper;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -239,12 +237,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntWrapper_Accessed;
         public WInt IntWrapper_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntWrapper_Accessed)
@@ -268,7 +266,6 @@ namespace LazinatorTests.Examples
         private ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyExampleStruct_Accessed)
@@ -290,7 +287,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyExampleStruct;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -298,12 +294,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyExampleStruct_Accessed;
         public ExampleStruct MyExampleStruct_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyExampleStruct_Accessed)
@@ -327,7 +323,6 @@ namespace LazinatorTests.Examples
         private List<ExampleStruct> _MyListExampleStruct;
         public List<ExampleStruct> MyListExampleStruct
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListExampleStruct_Accessed)
@@ -346,19 +341,18 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _MyListExampleStruct;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListExampleStruct = value;
                 _MyListExampleStruct_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListExampleStruct_Accessed;
         private List<WNullableStruct<ExampleStruct>> _MyListNullableExampleStruct;
         public List<WNullableStruct<ExampleStruct>> MyListNullableExampleStruct
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNullableExampleStruct_Accessed)
@@ -377,12 +371,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _MyListNullableExampleStruct;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListNullableExampleStruct = value;
                 _MyListNullableExampleStruct_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableExampleStruct_Accessed;

@@ -221,188 +221,175 @@ namespace LazinatorTests.Examples
         private bool _MyBool;
         public bool MyBool
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyBool;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyBool = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private char _MyChar;
         public char MyChar
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyChar;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyChar = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private DateTime _MyDateTime;
         [Newtonsoft.Json.JsonProperty("MyDT")]
         public DateTime MyDateTime
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyDateTime;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyDateTime = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _MyNewString;
         public string MyNewString
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyNewString;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNewString = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private decimal? _MyNullableDecimal;
         public decimal? MyNullableDecimal
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyNullableDecimal;
             }
-            [DebuggerStepThrough]
             internal set
             {
                 IsDirty = true;
                 _MyNullableDecimal = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private double? _MyNullableDouble;
         public virtual double? MyNullableDouble
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyNullableDouble;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNullableDouble = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private TimeSpan? _MyNullableTimeSpan;
         public TimeSpan? MyNullableTimeSpan
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyNullableTimeSpan;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNullableTimeSpan = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _MyOldString;
         public string MyOldString
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyOldString;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyOldString = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _MyString;
         public string MyString
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyString;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyString = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private TestEnum _MyTestEnum;
         public TestEnum MyTestEnum
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyTestEnum;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyTestEnum = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private TestEnumByte? _MyTestEnumByteNullable;
         public TestEnumByte? MyTestEnumByteNullable
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyTestEnumByteNullable;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyTestEnumByteNullable = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private uint _MyUint;
         public uint MyUint
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyUint;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyUint = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _ExcludableChild;
         public ExampleChild ExcludableChild
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ExcludableChild_Accessed)
@@ -421,7 +408,6 @@ namespace LazinatorTests.Examples
                 }
                 return _ExcludableChild;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -439,13 +425,13 @@ namespace LazinatorTests.Examples
                     _ExcludableChild.IsDirty = true;
                 }
                 _ExcludableChild_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExcludableChild_Accessed;
         private ExampleChild _IncludableChild;
         public ExampleChild IncludableChild
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IncludableChild_Accessed)
@@ -464,7 +450,6 @@ namespace LazinatorTests.Examples
                 }
                 return _IncludableChild;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -482,13 +467,13 @@ namespace LazinatorTests.Examples
                     _IncludableChild.IsDirty = true;
                 }
                 _IncludableChild_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IncludableChild_Accessed;
         private ExampleChild _MyAutoChangeParentChild;
         public ExampleChild MyAutoChangeParentChild
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyAutoChangeParentChild_Accessed)
@@ -507,7 +492,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyAutoChangeParentChild;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -521,13 +505,13 @@ namespace LazinatorTests.Examples
                     _MyAutoChangeParentChild.IsDirty = true;
                 }
                 _MyAutoChangeParentChild_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyAutoChangeParentChild_Accessed;
         private ExampleStruct _MyAutoChangeParentChildStruct;
         public ExampleStruct MyAutoChangeParentChildStruct
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyAutoChangeParentChildStruct_Accessed)
@@ -549,7 +533,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyAutoChangeParentChildStruct;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -557,12 +540,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyAutoChangeParentChildStruct = value;
                 _MyAutoChangeParentChildStruct_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyAutoChangeParentChildStruct_Accessed;
         public ExampleStruct MyAutoChangeParentChildStruct_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyAutoChangeParentChildStruct_Accessed)
@@ -586,7 +569,6 @@ namespace LazinatorTests.Examples
         private ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild1_Accessed)
@@ -605,7 +587,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild1;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -623,13 +604,13 @@ namespace LazinatorTests.Examples
                     _MyChild1.IsDirty = true;
                 }
                 _MyChild1_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyChild1_Accessed;
         private ExampleChild _MyChild2;
         public ExampleChild MyChild2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild2_Accessed)
@@ -648,7 +629,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild2;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -666,13 +646,13 @@ namespace LazinatorTests.Examples
                     _MyChild2.IsDirty = true;
                 }
                 _MyChild2_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyChild2_Accessed;
         private ExampleChild _MyChild2Previous;
         public ExampleChild MyChild2Previous
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild2Previous_Accessed)
@@ -691,7 +671,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild2Previous;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -709,13 +688,13 @@ namespace LazinatorTests.Examples
                     _MyChild2Previous.IsDirty = true;
                 }
                 _MyChild2Previous_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyChild2Previous_Accessed;
         private IExampleNonexclusiveInterface _MyInterfaceImplementer;
         public IExampleNonexclusiveInterface MyInterfaceImplementer
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyInterfaceImplementer_Accessed)
@@ -734,7 +713,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyInterfaceImplementer;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -752,13 +730,13 @@ namespace LazinatorTests.Examples
                     _MyInterfaceImplementer.IsDirty = true;
                 }
                 _MyInterfaceImplementer_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyInterfaceImplementer_Accessed;
         private NonLazinatorClass _MyNonLazinatorChild;
         public NonLazinatorClass MyNonLazinatorChild
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyNonLazinatorChild_Accessed)
@@ -777,13 +755,13 @@ namespace LazinatorTests.Examples
                 }
                 return _MyNonLazinatorChild;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNonLazinatorChild = value;
                 _MyNonLazinatorChild_Dirty = true;
                 _MyNonLazinatorChild_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNonLazinatorChild_Accessed;
@@ -791,9 +769,7 @@ namespace LazinatorTests.Examples
         private bool _MyNonLazinatorChild_Dirty;
         public bool MyNonLazinatorChild_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyNonLazinatorChild_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyNonLazinatorChild_Dirty != value)
@@ -804,12 +780,12 @@ namespace LazinatorTests.Examples
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private WInt _WrappedInt;
         public WInt WrappedInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)
@@ -831,7 +807,6 @@ namespace LazinatorTests.Examples
                 }
                 return _WrappedInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -839,12 +814,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedInt_Accessed;
         public WInt WrappedInt_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedInt_Accessed)

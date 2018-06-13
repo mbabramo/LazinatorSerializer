@@ -203,7 +203,6 @@ namespace LazinatorTests.Examples.Collections
         private Queue<ExampleChild> _MyQueueSerialized;
         public Queue<ExampleChild> MyQueueSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyQueueSerialized_Accessed)
@@ -222,12 +221,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyQueueSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyQueueSerialized = value;
                 _MyQueueSerialized_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyQueueSerialized_Accessed;

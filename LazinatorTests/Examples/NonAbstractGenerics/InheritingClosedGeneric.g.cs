@@ -55,16 +55,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _YetAnotherInt;
         public int YetAnotherInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _YetAnotherInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _YetAnotherInt = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

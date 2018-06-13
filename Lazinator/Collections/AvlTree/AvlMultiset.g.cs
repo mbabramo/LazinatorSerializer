@@ -209,6 +209,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 IsDirty = true;
                 _NumItemsAdded = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private AvlSet<LazinatorTuple<T, WInt>> _UnderlyingSet;
@@ -247,6 +248,7 @@ namespace Lazinator.Collections.AvlTree
                     _UnderlyingSet.IsDirty = true;
                 }
                 _UnderlyingSet_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _UnderlyingSet_Accessed;

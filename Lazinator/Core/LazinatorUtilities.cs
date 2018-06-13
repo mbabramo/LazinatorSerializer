@@ -422,13 +422,18 @@ namespace Lazinator.Core
             if (startPoint.IsDirty)
             {
                 ILazinator parent = startPoint.LazinatorParentClass;
+                int levels = 0;
+                const int maxLevels = 1000;
                 while (parent != null)
                 {
                     if (!parent.DescendantIsDirty && !parent.IsDirty)
                     {
                         throw new Exception("Internal Lazinator error. Ancestor dirtiness set incorrectly.");
                     }
-                    parent = startPoint.LazinatorParentClass;
+                    parent = parent.LazinatorParentClass;
+                    levels++;
+                    if (levels > maxLevels)
+                        throw new Exception("Hierarchy inconsistency error. The hierarchy appears to be circular. The root of the hierarchy should have LazinatorParentClass set to null.");
                 }
             }
         }

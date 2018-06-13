@@ -205,7 +205,6 @@ namespace LazinatorTests.Examples.Hierarchy
         private IExample _ExampleByInterface;
         public IExample ExampleByInterface
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ExampleByInterface_Accessed)
@@ -224,7 +223,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 return _ExampleByInterface;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -242,13 +240,13 @@ namespace LazinatorTests.Examples.Hierarchy
                     _ExampleByInterface.IsDirty = true;
                 }
                 _ExampleByInterface_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleByInterface_Accessed;
         private List<IExample> _ExampleListByInterface;
         public List<IExample> ExampleListByInterface
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ExampleListByInterface_Accessed)
@@ -267,12 +265,12 @@ namespace LazinatorTests.Examples.Hierarchy
                 IsDirty = true;
                 return _ExampleListByInterface;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _ExampleListByInterface = value;
                 _ExampleListByInterface_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleListByInterface_Accessed;

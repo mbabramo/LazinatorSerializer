@@ -209,6 +209,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 IsDirty = true;
                 _Count = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private AvlTree<TKey, WByte> _UnderlyingTree;
@@ -247,6 +248,7 @@ namespace Lazinator.Collections.AvlTree
                     _UnderlyingTree.IsDirty = true;
                 }
                 _UnderlyingTree_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _UnderlyingTree_Accessed;

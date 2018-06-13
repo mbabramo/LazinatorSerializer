@@ -198,7 +198,6 @@ namespace LazinatorTests.Examples.Collections
         private LazinatorList<T> _MyList;
         public virtual LazinatorList<T> MyList
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyList_Accessed)
@@ -217,7 +216,6 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyList;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -235,6 +233,7 @@ namespace LazinatorTests.Examples.Collections
                     _MyList.IsDirty = true;
                 }
                 _MyList_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyList_Accessed;

@@ -59,22 +59,20 @@ namespace LazinatorTests.Examples.Collections
         private int _MyLevel2Int;
         public int MyLevel2Int
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyLevel2Int;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyLevel2Int = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<List<NonLazinatorClass>> _MyLevel2ListNestedNonLazinatorType;
         public List<List<NonLazinatorClass>> MyLevel2ListNestedNonLazinatorType
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyLevel2ListNestedNonLazinatorType_Accessed)
@@ -93,12 +91,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyLevel2ListNestedNonLazinatorType;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyLevel2ListNestedNonLazinatorType = value;
                 _MyLevel2ListNestedNonLazinatorType_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;

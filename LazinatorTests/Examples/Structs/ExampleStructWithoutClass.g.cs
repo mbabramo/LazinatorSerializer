@@ -198,16 +198,15 @@ namespace LazinatorTests.Examples.Structs
         private int _MyInt;
         public int MyInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyInt = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

@@ -57,7 +57,6 @@ namespace LazinatorTests.Examples.Abstract
         private T _MyT;
         public virtual T MyT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyT_Accessed)
@@ -83,7 +82,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _MyT;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
@@ -97,6 +95,7 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyT_Accessed;

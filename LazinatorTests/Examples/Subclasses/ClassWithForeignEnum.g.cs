@@ -198,16 +198,15 @@ namespace LazinatorTests.Examples.Subclasses
         private global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
         public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnum;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnum = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

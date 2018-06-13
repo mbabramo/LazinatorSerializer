@@ -203,22 +203,20 @@ namespace LazinatorTests.Examples.Subclasses
         private int _IntWithinSuperclass;
         public int IntWithinSuperclass
         {
-            [DebuggerStepThrough]
             get
             {
                 return _IntWithinSuperclass;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntWithinSuperclass = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance1;
         public global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass SubclassInstance1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_SubclassInstance1_Accessed)
@@ -237,7 +235,6 @@ namespace LazinatorTests.Examples.Subclasses
                 }
                 return _SubclassInstance1;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -255,13 +252,13 @@ namespace LazinatorTests.Examples.Subclasses
                     _SubclassInstance1.IsDirty = true;
                 }
                 _SubclassInstance1_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _SubclassInstance1_Accessed;
         private global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance2;
         public global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass SubclassInstance2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_SubclassInstance2_Accessed)
@@ -280,7 +277,6 @@ namespace LazinatorTests.Examples.Subclasses
                 }
                 return _SubclassInstance2;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -298,6 +294,7 @@ namespace LazinatorTests.Examples.Subclasses
                     _SubclassInstance2.IsDirty = true;
                 }
                 _SubclassInstance2_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _SubclassInstance2_Accessed;

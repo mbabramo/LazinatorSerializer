@@ -59,22 +59,20 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _AnotherPropertyAdded;
         public int AnotherPropertyAdded
         {
-            [DebuggerStepThrough]
             get
             {
                 return _AnotherPropertyAdded;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _AnotherPropertyAdded = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<ExampleChild> _MyListT;
         public override List<ExampleChild> MyListT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListT_Accessed)
@@ -93,18 +91,17 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 IsDirty = true;
                 return _MyListT;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListT = value;
                 _MyListT_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _MyT;
         public override ExampleChild MyT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyT_Accessed)
@@ -123,7 +120,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 return _MyT;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -137,6 +133,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _MyT.IsDirty = true;
                 }
                 _MyT_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

@@ -200,16 +200,15 @@ namespace LazinatorTests.Examples.Subclasses
             private string _StringWithinSubclass;
             public string StringWithinSubclass
             {
-                [DebuggerStepThrough]
                 get
                 {
                     return _StringWithinSubclass;
                 }
-                [DebuggerStepThrough]
                 set
                 {
                     IsDirty = true;
                     _StringWithinSubclass = value;
+                    LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
                 }
             }
             

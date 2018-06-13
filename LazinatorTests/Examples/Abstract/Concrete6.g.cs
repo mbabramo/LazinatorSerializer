@@ -58,7 +58,6 @@ namespace LazinatorTests.Examples.Abstract
         private List<int> _IntList6;
         public List<int> IntList6
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList6_Accessed)
@@ -77,12 +76,12 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 return _IntList6;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntList6 = value;
                 _IntList6_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList6_Accessed;

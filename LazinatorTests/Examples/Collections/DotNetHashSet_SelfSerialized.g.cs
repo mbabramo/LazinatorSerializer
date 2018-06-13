@@ -199,7 +199,6 @@ namespace LazinatorTests.Examples.Collections
         private HashSet<ExampleChild> _MyHashSetSerialized;
         public HashSet<ExampleChild> MyHashSetSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyHashSetSerialized_Accessed)
@@ -218,12 +217,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyHashSetSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyHashSetSerialized = value;
                 _MyHashSetSerialized_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyHashSetSerialized_Accessed;

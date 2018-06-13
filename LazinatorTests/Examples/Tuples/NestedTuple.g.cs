@@ -198,7 +198,6 @@ namespace LazinatorTests.Examples.Tuples
         private Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> _MyNestedTuple;
         public Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> MyNestedTuple
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyNestedTuple_Accessed)
@@ -217,12 +216,12 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _MyNestedTuple;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyNestedTuple = value;
                 _MyNestedTuple_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNestedTuple_Accessed;

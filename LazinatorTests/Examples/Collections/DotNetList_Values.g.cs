@@ -202,7 +202,6 @@ namespace LazinatorTests.Examples.Collections
         private LinkedList<int> _MyLinkedListInt;
         public LinkedList<int> MyLinkedListInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyLinkedListInt_Accessed)
@@ -221,13 +220,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyLinkedListInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyLinkedListInt = value;
                 _MyLinkedListInt_Dirty = true;
                 _MyLinkedListInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyLinkedListInt_Accessed;
@@ -235,9 +234,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyLinkedListInt_Dirty;
         public bool MyLinkedListInt_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyLinkedListInt_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyLinkedListInt_Dirty != value)
@@ -248,12 +245,12 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _MyListInt;
         public List<int> MyListInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListInt_Accessed)
@@ -272,13 +269,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListInt = value;
                 _MyListInt_Dirty = true;
                 _MyListInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListInt_Accessed;
@@ -286,9 +283,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyListInt_Dirty;
         public bool MyListInt_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyListInt_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyListInt_Dirty != value)
@@ -299,12 +294,12 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private SortedSet<int> _MySortedSetInt;
         public SortedSet<int> MySortedSetInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MySortedSetInt_Accessed)
@@ -323,13 +318,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MySortedSetInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MySortedSetInt = value;
                 _MySortedSetInt_Dirty = true;
                 _MySortedSetInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MySortedSetInt_Accessed;
@@ -337,9 +332,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MySortedSetInt_Dirty;
         public bool MySortedSetInt_Dirty
         {
-            [DebuggerStepThrough]
             get => _MySortedSetInt_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MySortedSetInt_Dirty != value)
@@ -350,6 +343,7 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

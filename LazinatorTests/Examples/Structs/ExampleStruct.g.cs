@@ -215,37 +215,34 @@ namespace LazinatorTests.Examples
         private bool _MyBool;
         public bool MyBool
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyBool;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyBool = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private char _MyChar;
         public char MyChar
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyChar;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyChar = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild1_Accessed)
@@ -264,7 +261,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild1;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -282,13 +278,13 @@ namespace LazinatorTests.Examples
                     _MyChild1.IsDirty = true;
                 }
                 _MyChild1_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyChild1_Accessed;
         private ExampleChild _MyChild2;
         public ExampleChild MyChild2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyChild2_Accessed)
@@ -307,7 +303,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyChild2;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -325,13 +320,13 @@ namespace LazinatorTests.Examples
                     _MyChild2.IsDirty = true;
                 }
                 _MyChild2_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyChild2_Accessed;
         private List<Example> _MyLazinatorList;
         public List<Example> MyLazinatorList
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyLazinatorList_Accessed)
@@ -350,13 +345,13 @@ namespace LazinatorTests.Examples
                 }
                 return _MyLazinatorList;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyLazinatorList = value;
                 _MyLazinatorList_Dirty = true;
                 _MyLazinatorList_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyLazinatorList_Accessed;
@@ -364,9 +359,7 @@ namespace LazinatorTests.Examples
         private bool _MyLazinatorList_Dirty;
         public bool MyLazinatorList_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyLazinatorList_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyLazinatorList_Dirty != value)
@@ -377,12 +370,12 @@ namespace LazinatorTests.Examples
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _MyListValues;
         public List<int> MyListValues
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListValues_Accessed)
@@ -401,19 +394,18 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _MyListValues;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListValues = value;
                 _MyListValues_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyListValues_Accessed;
         private (NonLazinatorClass myitem1, int? myitem2) _MyTuple;
         public (NonLazinatorClass myitem1, int? myitem2) MyTuple
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyTuple_Accessed)
@@ -432,12 +424,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 return _MyTuple;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyTuple = value;
                 _MyTuple_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyTuple_Accessed;

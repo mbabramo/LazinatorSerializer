@@ -200,37 +200,34 @@ namespace LazinatorTests.Examples.Abstract
         private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnumWithinAbstractGeneric;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnumWithinAbstractGeneric = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnumWithinAbstractGeneric2;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnumWithinAbstractGeneric2 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private T _MyT;
         public override T MyT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyT_Accessed)
@@ -256,7 +253,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _MyT;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
@@ -270,6 +266,7 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

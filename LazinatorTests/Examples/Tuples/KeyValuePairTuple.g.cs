@@ -199,7 +199,6 @@ namespace LazinatorTests.Examples.Tuples
         private KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
         public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyKeyValuePairSerialized_Accessed)
@@ -218,12 +217,12 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 return _MyKeyValuePairSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyKeyValuePairSerialized = value;
                 _MyKeyValuePairSerialized_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyKeyValuePairSerialized_Accessed;

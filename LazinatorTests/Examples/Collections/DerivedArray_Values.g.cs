@@ -57,7 +57,6 @@ namespace LazinatorTests.Examples.Collections
         private int[] _MyArrayInt_DerivedLevel;
         public int[] MyArrayInt_DerivedLevel
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyArrayInt_DerivedLevel_Accessed)
@@ -76,13 +75,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyArrayInt_DerivedLevel;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyArrayInt_DerivedLevel = value;
                 _MyArrayInt_DerivedLevel_Dirty = true;
                 _MyArrayInt_DerivedLevel_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyArrayInt_DerivedLevel_Accessed;
@@ -90,9 +89,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyArrayInt_DerivedLevel_Dirty;
         public bool MyArrayInt_DerivedLevel_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyArrayInt_DerivedLevel_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyArrayInt_DerivedLevel_Dirty != value)
@@ -103,6 +100,7 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

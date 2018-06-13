@@ -199,7 +199,6 @@ namespace LazinatorTests.Examples.Collections
         private List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
         public List<List<NonLazinatorClass>> MyListNestedNonLazinatorType
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNestedNonLazinatorType_Accessed)
@@ -218,12 +217,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyListNestedNonLazinatorType;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListNestedNonLazinatorType = value;
                 _MyListNestedNonLazinatorType_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNestedNonLazinatorType_Accessed;

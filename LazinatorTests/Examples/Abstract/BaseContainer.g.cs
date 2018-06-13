@@ -201,7 +201,6 @@ namespace LazinatorTests.Examples.Abstract
         private Base _MyBase;
         public Base MyBase
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyBase_Accessed)
@@ -220,7 +219,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _MyBase;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -238,6 +236,7 @@ namespace LazinatorTests.Examples.Abstract
                     _MyBase.IsDirty = true;
                 }
                 _MyBase_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyBase_Accessed;

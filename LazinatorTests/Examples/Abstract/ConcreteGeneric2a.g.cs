@@ -202,67 +202,62 @@ namespace LazinatorTests.Examples.Abstract
         private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnumWithinAbstractGeneric;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnumWithinAbstractGeneric = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnumWithinAbstractGeneric2;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnumWithinAbstractGeneric2 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyT;
         public override int MyT
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyT;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyT = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _AnotherProperty;
         public string AnotherProperty
         {
-            [DebuggerStepThrough]
             get
             {
                 return _AnotherProperty;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _AnotherProperty = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _LazinatorExample;
         public Example LazinatorExample
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_LazinatorExample_Accessed)
@@ -281,7 +276,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _LazinatorExample;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -299,6 +293,7 @@ namespace LazinatorTests.Examples.Abstract
                     _LazinatorExample.IsDirty = true;
                 }
                 _LazinatorExample_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _LazinatorExample_Accessed;

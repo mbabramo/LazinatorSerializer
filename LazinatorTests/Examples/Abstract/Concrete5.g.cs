@@ -59,37 +59,34 @@ namespace LazinatorTests.Examples.Abstract
         private string _String4;
         public override string String4
         {
-            [DebuggerStepThrough]
             get
             {
                 return _String4;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _String4 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String5;
         public string String5
         {
-            [DebuggerStepThrough]
             get
             {
                 return _String5;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _String5 = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList4;
         public override List<int> IntList4
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList4_Accessed)
@@ -108,18 +105,17 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 return _IntList4;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntList4 = value;
                 _IntList4_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList5;
         public List<int> IntList5
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList5_Accessed)
@@ -138,12 +134,12 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 return _IntList5;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _IntList5 = value;
                 _IntList5_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList5_Accessed;

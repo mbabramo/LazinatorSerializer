@@ -202,22 +202,20 @@ namespace LazinatorTests.Examples.Subclasses
         private global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
         public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnum;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnum = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<EnumWithinClass> _MyEnumList;
         public List<EnumWithinClass> MyEnumList
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyEnumList_Accessed)
@@ -236,12 +234,12 @@ namespace LazinatorTests.Examples.Subclasses
                 IsDirty = true;
                 return _MyEnumList;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyEnumList = value;
                 _MyEnumList_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyEnumList_Accessed;

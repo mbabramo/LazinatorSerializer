@@ -199,7 +199,6 @@ namespace LazinatorTests.Examples.Collections
         private List<ExampleChild> _MyListSerialized;
         public List<ExampleChild> MyListSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListSerialized_Accessed)
@@ -218,13 +217,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListSerialized = value;
                 _MyListSerialized_Dirty = true;
                 _MyListSerialized_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListSerialized_Accessed;
@@ -232,9 +231,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyListSerialized_Dirty;
         public bool MyListSerialized_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyListSerialized_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyListSerialized_Dirty != value)
@@ -245,6 +242,7 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

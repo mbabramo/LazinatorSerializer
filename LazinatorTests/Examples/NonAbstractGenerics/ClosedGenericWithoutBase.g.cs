@@ -201,22 +201,20 @@ namespace LazinatorTests.Examples
         private int _ItemT;
         public int ItemT
         {
-            [DebuggerStepThrough]
             get
             {
                 return _ItemT;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _ItemT = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _ItemU;
         public ExampleChild ItemU
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ItemU_Accessed)
@@ -235,7 +233,6 @@ namespace LazinatorTests.Examples
                 }
                 return _ItemU;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -253,6 +250,7 @@ namespace LazinatorTests.Examples
                     _ItemU.IsDirty = true;
                 }
                 _ItemU_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ItemU_Accessed;

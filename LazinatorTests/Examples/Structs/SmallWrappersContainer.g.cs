@@ -219,7 +219,6 @@ namespace LazinatorTests.Examples.Structs
         private LazinatorList<WByte> _ListWrappedBytes;
         public LazinatorList<WByte> ListWrappedBytes
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ListWrappedBytes_Accessed)
@@ -238,7 +237,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _ListWrappedBytes;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -256,13 +254,13 @@ namespace LazinatorTests.Examples.Structs
                     _ListWrappedBytes.IsDirty = true;
                 }
                 _ListWrappedBytes_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ListWrappedBytes_Accessed;
         private WBool _WrappedBool;
         public WBool WrappedBool
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedBool_Accessed)
@@ -284,7 +282,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedBool;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -292,12 +289,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedBool = value;
                 _WrappedBool_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedBool_Accessed;
         public WBool WrappedBool_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedBool_Accessed)
@@ -321,7 +318,6 @@ namespace LazinatorTests.Examples.Structs
         private WByte _WrappedByte;
         public WByte WrappedByte
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedByte_Accessed)
@@ -343,7 +339,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedByte;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -351,12 +346,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedByte = value;
                 _WrappedByte_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedByte_Accessed;
         public WByte WrappedByte_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedByte_Accessed)
@@ -380,7 +375,6 @@ namespace LazinatorTests.Examples.Structs
         private WChar _WrappedChar;
         public WChar WrappedChar
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedChar_Accessed)
@@ -402,7 +396,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedChar;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -410,12 +403,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedChar = value;
                 _WrappedChar_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedChar_Accessed;
         public WChar WrappedChar_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedChar_Accessed)
@@ -439,7 +432,6 @@ namespace LazinatorTests.Examples.Structs
         private WNullableBool _WrappedNullableBool;
         public WNullableBool WrappedNullableBool
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableBool_Accessed)
@@ -461,7 +453,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedNullableBool;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -469,12 +460,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableBool = value;
                 _WrappedNullableBool_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableBool_Accessed;
         public WNullableBool WrappedNullableBool_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableBool_Accessed)
@@ -498,7 +489,6 @@ namespace LazinatorTests.Examples.Structs
         private WNullableByte _WrappedNullableByte;
         public WNullableByte WrappedNullableByte
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableByte_Accessed)
@@ -520,7 +510,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedNullableByte;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -528,12 +517,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableByte = value;
                 _WrappedNullableByte_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableByte_Accessed;
         public WNullableByte WrappedNullableByte_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableByte_Accessed)
@@ -557,7 +546,6 @@ namespace LazinatorTests.Examples.Structs
         private WNullableChar _WrappedNullableChar;
         public WNullableChar WrappedNullableChar
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableChar_Accessed)
@@ -579,7 +567,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedNullableChar;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -587,12 +574,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableChar = value;
                 _WrappedNullableChar_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableChar_Accessed;
         public WNullableChar WrappedNullableChar_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableChar_Accessed)
@@ -616,7 +603,6 @@ namespace LazinatorTests.Examples.Structs
         private WNullableSByte _WrappedNullableSByte;
         public WNullableSByte WrappedNullableSByte
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableSByte_Accessed)
@@ -638,7 +624,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedNullableSByte;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -646,12 +631,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableSByte = value;
                 _WrappedNullableSByte_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableSByte_Accessed;
         public WNullableSByte WrappedNullableSByte_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedNullableSByte_Accessed)
@@ -675,7 +660,6 @@ namespace LazinatorTests.Examples.Structs
         private WSByte _WrappedSByte;
         public WSByte WrappedSByte
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedSByte_Accessed)
@@ -697,7 +681,6 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedSByte;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -705,12 +688,12 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedSByte = value;
                 _WrappedSByte_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedSByte_Accessed;
         public WSByte WrappedSByte_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedSByte_Accessed)

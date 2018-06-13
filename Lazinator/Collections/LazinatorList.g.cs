@@ -232,6 +232,7 @@ namespace Lazinator.Collections
                     _Offsets.IsDirty = true;
                 }
                 _Offsets_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Offsets_Accessed;
@@ -256,6 +257,7 @@ namespace Lazinator.Collections
                 IsDirty = true;
                 _SerializedMainList = value;
                 _SerializedMainList_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _SerializedMainList_Accessed;

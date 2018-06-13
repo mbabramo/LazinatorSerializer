@@ -213,6 +213,7 @@ namespace Lazinator.Wrappers
                 IsDirty = true;
                 _Value = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<char, byte>(value).ToArray());
                 _Value_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Value_Accessed;

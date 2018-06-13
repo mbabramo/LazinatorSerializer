@@ -207,7 +207,6 @@ namespace LazinatorTests.Examples.Collections
         private List<WInt> _MyListInt;
         public List<WInt> MyListInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListInt_Accessed)
@@ -226,13 +225,13 @@ namespace LazinatorTests.Examples.Collections
                 }
                 return _MyListInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListInt = value;
                 _MyListInt_Dirty = true;
                 _MyListInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListInt_Accessed;
@@ -240,9 +239,7 @@ namespace LazinatorTests.Examples.Collections
         private bool _MyListInt_Dirty;
         public bool MyListInt_Dirty
         {
-            [DebuggerStepThrough]
             get => _MyListInt_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MyListInt_Dirty != value)
@@ -253,12 +250,12 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<WNullableByte> _MyListNullableByte;
         public List<WNullableByte> MyListNullableByte
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNullableByte_Accessed)
@@ -277,19 +274,18 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyListNullableByte;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListNullableByte = value;
                 _MyListNullableByte_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableByte_Accessed;
         private List<WNullableInt> _MyListNullableInt;
         public List<WNullableInt> MyListNullableInt
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListNullableInt_Accessed)
@@ -308,12 +304,12 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 return _MyListNullableInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListNullableInt = value;
                 _MyListNullableInt_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableInt_Accessed;

@@ -201,7 +201,6 @@ namespace LazinatorTests.Examples
         private ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyExampleStruct_Accessed)
@@ -222,7 +221,6 @@ namespace LazinatorTests.Examples
                 }
                 return _MyExampleStruct;
             }
-            [DebuggerStepThrough]
             set
             {
                 
@@ -230,12 +228,12 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyExampleStruct_Accessed;
         public ExampleStruct MyExampleStruct_Copy
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyExampleStruct_Accessed)

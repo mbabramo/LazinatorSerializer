@@ -198,16 +198,15 @@ namespace LazinatorTests.Examples.NonLazinator
         private int _MyInt;
         public override int MyInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyInt = value;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

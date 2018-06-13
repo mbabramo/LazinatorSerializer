@@ -201,7 +201,6 @@ namespace LazinatorTests.Examples.Abstract
         private Abstract1 _AbstractProperty;
         public Abstract1 AbstractProperty
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_AbstractProperty_Accessed)
@@ -220,7 +219,6 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 return _AbstractProperty;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -238,6 +236,7 @@ namespace LazinatorTests.Examples.Abstract
                     _AbstractProperty.IsDirty = true;
                 }
                 _AbstractProperty_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _AbstractProperty_Accessed;

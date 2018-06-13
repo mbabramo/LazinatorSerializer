@@ -204,7 +204,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private List<T> _MyListT;
         public virtual List<T> MyListT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyListT_Accessed)
@@ -223,19 +222,18 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 IsDirty = true;
                 return _MyListT;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
                 _MyListT = value;
                 _MyListT_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListT_Accessed;
         private T _MyT;
         public virtual T MyT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyT_Accessed)
@@ -254,7 +252,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 return _MyT;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
@@ -264,6 +261,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 IsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyT_Accessed;
