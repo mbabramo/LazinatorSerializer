@@ -229,7 +229,6 @@ namespace Lazinator.Collections.Avl
             {
                 IsDirty = true;
                 _Balance = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _Count;
@@ -245,7 +244,6 @@ namespace Lazinator.Collections.Avl
             {
                 IsDirty = true;
                 _Count = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private TKey _Key;
@@ -287,7 +285,6 @@ namespace Lazinator.Collections.Avl
                 IsDirty = true;
                 _Key = value;
                 _Key_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Key_Accessed;
@@ -334,7 +331,6 @@ namespace Lazinator.Collections.Avl
                     _Left.IsDirty = true;
                 }
                 _Left_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Left_Accessed;
@@ -381,7 +377,6 @@ namespace Lazinator.Collections.Avl
                     _Right.IsDirty = true;
                 }
                 _Right_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Right_Accessed;
@@ -424,7 +419,6 @@ namespace Lazinator.Collections.Avl
                 IsDirty = true;
                 _Value = value;
                 _Value_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Value_Accessed;

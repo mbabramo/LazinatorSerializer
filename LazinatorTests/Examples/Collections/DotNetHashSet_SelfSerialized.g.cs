@@ -234,7 +234,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyHashSetSerialized = value;
                 _MyHashSetSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyHashSetSerialized_Accessed;

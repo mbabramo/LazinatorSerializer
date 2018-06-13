@@ -238,7 +238,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyDictionary = value;
                 _MyDictionary_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyDictionary_Accessed;
@@ -268,7 +267,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MySortedDictionary = value;
                 _MySortedDictionary_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MySortedDictionary_Accessed;
@@ -298,7 +296,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MySortedList = value;
                 _MySortedList_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MySortedList_Accessed;

@@ -81,7 +81,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyArrayInt_DerivedLevel = value;
                 _MyArrayInt_DerivedLevel_Dirty = true;
                 _MyArrayInt_DerivedLevel_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyArrayInt_DerivedLevel_Accessed;
@@ -100,7 +99,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

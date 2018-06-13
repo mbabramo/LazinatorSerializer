@@ -67,7 +67,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 IsDirty = true;
                 _MyLevel2Int = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<List<NonLazinatorClass>> _MyLevel2ListNestedNonLazinatorType;
@@ -96,7 +95,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyLevel2ListNestedNonLazinatorType = value;
                 _MyLevel2ListNestedNonLazinatorType_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;

@@ -95,7 +95,6 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyT_Accessed;

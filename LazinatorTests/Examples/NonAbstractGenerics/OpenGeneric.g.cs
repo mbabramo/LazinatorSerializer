@@ -239,7 +239,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 IsDirty = true;
                 _MyListT = value;
                 _MyListT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListT_Accessed;
@@ -273,7 +272,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 IsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyT_Accessed;

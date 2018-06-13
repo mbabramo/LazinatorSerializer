@@ -223,7 +223,6 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 IsDirty = true;
                 _IntWithinSuperclass = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance1;
@@ -264,7 +263,6 @@ namespace LazinatorTests.Examples.Subclasses
                     _SubclassInstance1.IsDirty = true;
                 }
                 _SubclassInstance1_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _SubclassInstance1_Accessed;
@@ -306,7 +304,6 @@ namespace LazinatorTests.Examples.Subclasses
                     _SubclassInstance2.IsDirty = true;
                 }
                 _SubclassInstance2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _SubclassInstance2_Accessed;

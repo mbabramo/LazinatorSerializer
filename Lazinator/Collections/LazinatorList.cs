@@ -99,7 +99,7 @@ namespace Lazinator.Collections
             else
                 offset = Offsets[index - 1];
             int nextOffset = Offsets[index];
-            var byteSpan = SerializedMainList.Slice(offset, nextOffset - offset);
+            var byteSpan = MainListSerialized.Slice(offset, nextOffset - offset);
             return byteSpan;
         }
 
@@ -158,9 +158,6 @@ namespace Lazinator.Collections
         public void Add(T item)
         {
             // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize
-            //DEBUG
-            //if (item?.LazinatorParentClass != null)
-            //    item = item.CloneLazinatorTyped();
             if (item != null)
                 item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
@@ -236,9 +233,12 @@ namespace Lazinator.Collections
 
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
+            // TODO: This creates a new buffer to write in, which is inefficient. 
+            // Instead, we should add a feature to specify a method name for writing a nonlazinator object.
+
             if (IsDirty || DescendantIsDirty)
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(Math.Max(100, (int)(SerializedMainList.Length * 1.2))); // try to allocate enough space initially to minimize the risk of buffer recopies, but don't go overboard.
+                BinaryBufferWriter writer = new BinaryBufferWriter(Math.Max(100, (int)(MainListSerialized.Length * 1.2))); // try to allocate enough space initially to minimize the risk of buffer recopies, but don't go overboard.
                 var offsetList = new LazinatorOffsetList();
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, w =>
                 {
@@ -251,7 +251,7 @@ namespace Lazinator.Collections
                         offsetList.AddOffset(offset);
                     }
                 });
-                SerializedMainList = writer.MemoryInBuffer.FilledMemory;
+                MainListSerialized = writer.MemoryInBuffer.FilledMemory;
                 _Offsets_Accessed = true;
                 _Offsets = offsetList;
                 _Offsets.IsDirty = true;

@@ -2648,13 +2648,11 @@ namespace LazinatorTests.Tests
             original.MyAutoChangeParentChild = new ExampleChild();
             original.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(original);
             another.MyAutoChangeParentChild = original.MyAutoChangeParentChild;
-            // DEBUG original.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(original);
             another.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(another);
 
             original.MyAutoChangeParentChildStruct = new ExampleStruct();
             original.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(original);
             another.MyAutoChangeParentChildStruct = original.MyAutoChangeParentChildStruct;
-            // DEBUG original.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(original);
             another.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(another);
 
             original.MyAutoChangeParentChild = null;

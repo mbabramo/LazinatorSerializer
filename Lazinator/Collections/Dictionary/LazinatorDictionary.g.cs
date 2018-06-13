@@ -220,7 +220,6 @@ namespace Lazinator.Collections.Dictionary
             {
                 IsDirty = true;
                 _Count = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private LazinatorList<DictionaryBucket<TKey, TValue>> _Buckets;
@@ -259,7 +258,6 @@ namespace Lazinator.Collections.Dictionary
                     _Buckets.IsDirty = true;
                 }
                 _Buckets_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Buckets_Accessed;

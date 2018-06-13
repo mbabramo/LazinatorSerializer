@@ -243,7 +243,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyListInt = value;
                 _MyListInt_Dirty = true;
                 _MyListInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListInt_Accessed;
@@ -262,7 +261,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<WNullableByte> _MyListNullableByte;
@@ -291,7 +289,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyListNullableByte = value;
                 _MyListNullableByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableByte_Accessed;
@@ -321,7 +318,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyListNullableInt = value;
                 _MyListNullableInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableInt_Accessed;

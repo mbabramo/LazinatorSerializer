@@ -218,7 +218,6 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 IsDirty = true;
                 _MyEnum = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

@@ -9,7 +9,7 @@ namespace Lazinator.Collections
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorList)]
     interface ILazinatorList<T> where T : ILazinator
     {
-        ReadOnlyMemory<byte> SerializedMainList { get; set; }
+        ReadOnlyMemory<byte> MainListSerialized { get; set; }
         LazinatorOffsetList Offsets { get; set; }
     }
 }

@@ -218,7 +218,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyLong = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyInt;
@@ -232,7 +231,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyInt = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

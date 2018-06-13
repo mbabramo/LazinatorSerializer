@@ -237,7 +237,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyListNonLazinatorType = value;
                 _MyListNonLazinatorType_Dirty = true;
                 _MyListNonLazinatorType_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNonLazinatorType_Accessed;
@@ -256,7 +255,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<NonLazinatorClass> _MyListNonLazinatorType2;
@@ -285,7 +283,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyListNonLazinatorType2 = value;
                 _MyListNonLazinatorType2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNonLazinatorType2_Accessed;

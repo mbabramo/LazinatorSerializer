@@ -235,7 +235,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyBool = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private char _MyChar;
@@ -249,7 +248,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyChar = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _MyChild1;
@@ -290,7 +288,6 @@ namespace LazinatorTests.Examples
                     _MyChild1.IsDirty = true;
                 }
                 _MyChild1_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyChild1_Accessed;
@@ -332,7 +329,6 @@ namespace LazinatorTests.Examples
                     _MyChild2.IsDirty = true;
                 }
                 _MyChild2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyChild2_Accessed;
@@ -363,7 +359,6 @@ namespace LazinatorTests.Examples
                 _MyLazinatorList = value;
                 _MyLazinatorList_Dirty = true;
                 _MyLazinatorList_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyLazinatorList_Accessed;
@@ -382,7 +377,6 @@ namespace LazinatorTests.Examples
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _MyListValues;
@@ -411,7 +405,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyListValues = value;
                 _MyListValues_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyListValues_Accessed;
@@ -441,7 +434,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyTuple = value;
                 _MyTuple_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyTuple_Accessed;

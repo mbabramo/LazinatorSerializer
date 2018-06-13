@@ -260,7 +260,6 @@ namespace Lazinator.Collections
                     _FourByteItems.IsDirty = true;
                 }
                 _FourByteItems_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _FourByteItems_Accessed;
@@ -307,7 +306,6 @@ namespace Lazinator.Collections
                     _TwoByteItems.IsDirty = true;
                 }
                 _TwoByteItems_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _TwoByteItems_Accessed;

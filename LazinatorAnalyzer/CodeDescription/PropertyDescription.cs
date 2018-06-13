@@ -117,7 +117,7 @@ namespace Lazinator.CodeDescription
                         [DebuggerStepThrough]" : "";
         private string ConfirmDirtinessConsistencyCheck => $@"
                             LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
-        private string CheckAtEndOfSet => ConfirmDirtinessConsistencyCheck; // DEBUG
+        private string CheckAtEndOfSet => ""; // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
 
         #endregion
 

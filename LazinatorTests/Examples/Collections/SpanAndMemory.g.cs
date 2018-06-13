@@ -248,7 +248,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyMemoryInt = value;
                 _MyMemoryInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyMemoryInt_Accessed;
@@ -278,7 +277,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyNullableMemoryInt = value;
                 _MyNullableMemoryInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNullableMemoryInt_Accessed;
@@ -301,7 +299,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlyMemoryByte = value;
                 _MyReadOnlyMemoryByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyReadOnlyMemoryByte_Accessed;
@@ -324,7 +321,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanByte = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _MyReadOnlySpanByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyReadOnlySpanByte_Accessed;
@@ -347,7 +343,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanChar = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<char, byte>(value).ToArray());
                 _MyReadOnlySpanChar_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyReadOnlySpanChar_Accessed;
@@ -370,7 +365,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanDateTime = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<DateTime, byte>(value).ToArray());
                 _MyReadOnlySpanDateTime_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyReadOnlySpanDateTime_Accessed;
@@ -393,7 +387,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanLong = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<long, byte>(value).ToArray());
                 _MyReadOnlySpanLong_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyReadOnlySpanLong_Accessed;

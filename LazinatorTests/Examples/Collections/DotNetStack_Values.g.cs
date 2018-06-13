@@ -234,7 +234,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyStackInt = value;
                 _MyStackInt_Dirty = true;
                 _MyStackInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyStackInt_Accessed;
@@ -253,7 +252,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

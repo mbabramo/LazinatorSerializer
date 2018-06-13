@@ -234,7 +234,6 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 _MyKeyValuePairSerialized = value;
                 _MyKeyValuePairSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyKeyValuePairSerialized_Accessed;

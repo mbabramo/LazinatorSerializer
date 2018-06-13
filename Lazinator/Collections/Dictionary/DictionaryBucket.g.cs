@@ -249,7 +249,6 @@ namespace Lazinator.Collections.Dictionary
                     _Keys.IsDirty = true;
                 }
                 _Keys_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Keys_Accessed;
@@ -289,7 +288,6 @@ namespace Lazinator.Collections.Dictionary
                     _Values.IsDirty = true;
                 }
                 _Values_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Values_Accessed;

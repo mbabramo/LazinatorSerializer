@@ -235,7 +235,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyListSerialized = value;
                 _MyListSerialized_Dirty = true;
                 _MyListSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListSerialized_Accessed;
@@ -254,7 +253,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

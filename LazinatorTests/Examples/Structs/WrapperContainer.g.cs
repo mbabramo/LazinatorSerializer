@@ -242,7 +242,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedInt_Accessed;

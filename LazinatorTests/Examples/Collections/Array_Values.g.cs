@@ -235,7 +235,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyArrayInt = value;
                 _MyArrayInt_Dirty = true;
                 _MyArrayInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyArrayInt_Accessed;
@@ -254,7 +253,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int[][] _MyJaggedArrayInt;
@@ -283,7 +281,6 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyJaggedArrayInt = value;
                 _MyJaggedArrayInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyJaggedArrayInt_Accessed;

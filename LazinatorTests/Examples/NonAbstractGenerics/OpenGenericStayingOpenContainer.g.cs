@@ -254,7 +254,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _ClosedGenericFloat.IsDirty = true;
                 }
                 _ClosedGenericFloat_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ClosedGenericFloat_Accessed;
@@ -296,7 +295,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _ClosedGenericInterface.IsDirty = true;
                 }
                 _ClosedGenericInterface_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ClosedGenericInterface_Accessed;
@@ -338,7 +336,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _ClosedGenericNonexclusiveInterface.IsDirty = true;
                 }
                 _ClosedGenericNonexclusiveInterface_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;

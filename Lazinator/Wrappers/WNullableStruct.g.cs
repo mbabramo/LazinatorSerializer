@@ -219,7 +219,6 @@ namespace Lazinator.Wrappers
             {
                 IsDirty = true;
                 _HasValue = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private T _NonNullValue;
@@ -254,7 +253,6 @@ namespace Lazinator.Wrappers
                 IsDirty = true;
                 _NonNullValue = value;
                 _NonNullValue_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonNullValue_Accessed;

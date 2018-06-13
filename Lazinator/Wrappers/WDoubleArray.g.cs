@@ -232,7 +232,6 @@ namespace Lazinator.Wrappers
                 IsDirty = true;
                 _WrappedValue = value;
                 _WrappedValue_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _WrappedValue_Accessed;

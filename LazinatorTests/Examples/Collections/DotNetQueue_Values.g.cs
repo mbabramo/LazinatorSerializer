@@ -234,7 +234,6 @@ namespace LazinatorTests.Examples.Collections
                 _MyQueueInt = value;
                 _MyQueueInt_Dirty = true;
                 _MyQueueInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyQueueInt_Accessed;
@@ -253,7 +252,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

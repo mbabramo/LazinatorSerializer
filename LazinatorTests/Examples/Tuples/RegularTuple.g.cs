@@ -239,7 +239,6 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 _MyTupleSerialized = value;
                 _MyTupleSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized_Accessed;
@@ -269,7 +268,6 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 _MyTupleSerialized2 = value;
                 _MyTupleSerialized2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
@@ -299,7 +297,6 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 _MyTupleSerialized3 = value;
                 _MyTupleSerialized3_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
@@ -329,7 +326,6 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 _MyTupleSerialized4 = value;
                 _MyTupleSerialized4_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized4_Accessed;

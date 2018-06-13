@@ -250,7 +250,6 @@ namespace LazinatorTests.Examples.Hierarchy
                     _RecursiveClass.IsDirty = true;
                 }
                 _RecursiveClass_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _RecursiveClass_Accessed;
@@ -292,7 +291,6 @@ namespace LazinatorTests.Examples.Hierarchy
                     _RecursiveInterface.IsDirty = true;
                 }
                 _RecursiveInterface_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _RecursiveInterface_Accessed;

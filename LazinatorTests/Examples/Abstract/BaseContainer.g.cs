@@ -248,7 +248,6 @@ namespace LazinatorTests.Examples.Abstract
                     _MyBase.IsDirty = true;
                 }
                 _MyBase_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyBase_Accessed;

@@ -241,7 +241,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;
                 _ExampleStructWithoutClass_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleStructWithoutClass_Accessed;

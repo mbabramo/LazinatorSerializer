@@ -249,7 +249,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntWrapper_Accessed;
@@ -306,7 +305,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyExampleStruct_Accessed;
@@ -358,7 +356,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyListExampleStruct = value;
                 _MyListExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListExampleStruct_Accessed;
@@ -388,7 +385,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyListNullableExampleStruct = value;
                 _MyListNullableExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableExampleStruct_Accessed;

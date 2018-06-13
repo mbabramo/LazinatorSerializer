@@ -266,7 +266,6 @@ namespace LazinatorTests.Examples.Structs
                     _ListWrappedBytes.IsDirty = true;
                 }
                 _ListWrappedBytes_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ListWrappedBytes_Accessed;
@@ -301,7 +300,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedBool = value;
                 _WrappedBool_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedBool_Accessed;
@@ -358,7 +356,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedByte = value;
                 _WrappedByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedByte_Accessed;
@@ -415,7 +412,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedChar = value;
                 _WrappedChar_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedChar_Accessed;
@@ -472,7 +468,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableBool = value;
                 _WrappedNullableBool_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableBool_Accessed;
@@ -529,7 +524,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableByte = value;
                 _WrappedNullableByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableByte_Accessed;
@@ -586,7 +580,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableChar = value;
                 _WrappedNullableChar_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableChar_Accessed;
@@ -643,7 +636,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedNullableSByte = value;
                 _WrappedNullableSByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableSByte_Accessed;
@@ -700,7 +692,6 @@ namespace LazinatorTests.Examples.Structs
                 IsDirty = true;
                 _WrappedSByte = value;
                 _WrappedSByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedSByte_Accessed;

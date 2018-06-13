@@ -240,7 +240,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyExampleStruct_Accessed;

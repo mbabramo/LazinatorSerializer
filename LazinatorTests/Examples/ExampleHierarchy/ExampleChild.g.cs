@@ -220,7 +220,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyLong = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private short _MyShort;
@@ -234,7 +233,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyShort = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ReadOnlyMemory<byte> _ByteSpan;
@@ -256,7 +254,6 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _ByteSpan = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _ByteSpan_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ByteSpan_Accessed;
@@ -298,7 +295,6 @@ namespace LazinatorTests.Examples
                     _MyWrapperContainer.IsDirty = true;
                 }
                 _MyWrapperContainer_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyWrapperContainer_Accessed;

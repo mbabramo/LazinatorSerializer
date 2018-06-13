@@ -242,7 +242,6 @@ namespace Lazinator.Collections.Avl
                     _Root.IsDirty = true;
                 }
                 _Root_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Root_Accessed;

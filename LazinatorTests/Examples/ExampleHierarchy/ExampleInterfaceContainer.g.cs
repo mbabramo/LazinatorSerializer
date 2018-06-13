@@ -252,7 +252,6 @@ namespace LazinatorTests.Examples.Hierarchy
                     _ExampleByInterface.IsDirty = true;
                 }
                 _ExampleByInterface_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleByInterface_Accessed;
@@ -282,7 +281,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 IsDirty = true;
                 _ExampleListByInterface = value;
                 _ExampleListByInterface_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleListByInterface_Accessed;

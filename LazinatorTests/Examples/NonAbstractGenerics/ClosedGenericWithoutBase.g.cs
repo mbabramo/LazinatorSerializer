@@ -221,7 +221,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _ItemT = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _ItemU;
@@ -262,7 +261,6 @@ namespace LazinatorTests.Examples
                     _ItemU.IsDirty = true;
                 }
                 _ItemU_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ItemU_Accessed;

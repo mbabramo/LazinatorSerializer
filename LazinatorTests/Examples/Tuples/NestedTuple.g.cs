@@ -233,7 +233,6 @@ namespace LazinatorTests.Examples.Tuples
                 IsDirty = true;
                 _MyNestedTuple = value;
                 _MyNestedTuple_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNestedTuple_Accessed;

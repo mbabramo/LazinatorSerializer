@@ -67,7 +67,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 IsDirty = true;
                 _AnotherPropertyAdded = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<ExampleChild> _MyListT;
@@ -96,7 +95,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 IsDirty = true;
                 _MyListT = value;
                 _MyListT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private ExampleChild _MyT;
@@ -133,7 +131,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _MyT.IsDirty = true;
                 }
                 _MyT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

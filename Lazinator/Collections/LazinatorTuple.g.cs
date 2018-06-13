@@ -247,7 +247,6 @@ namespace Lazinator.Collections
                 IsDirty = true;
                 _Item1 = value;
                 _Item1_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Item1_Accessed;
@@ -290,7 +289,6 @@ namespace Lazinator.Collections
                 IsDirty = true;
                 _Item2 = value;
                 _Item2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Item2_Accessed;
