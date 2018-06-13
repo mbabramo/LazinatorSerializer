@@ -233,12 +233,14 @@ namespace Lazinator.Collections
 
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
-            // DEBUG TODO: This creates a new buffer to write in, which is inefficient. 
-            // Instead, we should add a feature to specify a method name for writing a nonlazinator object.
+            if (IsDirty || DescendantIsDirty)
+                _MainListSerialized_Accessed = true; // make sure we call WriteMainList
+        }
 
+        private void WriteMainList(BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
             if (IsDirty || DescendantIsDirty)
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(Math.Max(100, (int)(MainListSerialized.Length * 1.2))); // try to allocate enough space initially to minimize the risk of buffer recopies, but don't go overboard.
                 var offsetList = new LazinatorOffsetList();
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, w =>
                 {
@@ -256,7 +258,9 @@ namespace Lazinator.Collections
                 _Offsets = offsetList;
                 _Offsets.IsDirty = true;
             }
+            else
+                ConvertToBytes_ReadOnlyMemory_Gbyte_g(writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
-        
+
     }
 }
