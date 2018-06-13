@@ -2055,7 +2055,7 @@ namespace LazinatorTests.Tests
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.MyShort = 5234; 
-            hierarchy.DescendantIsDirty.Should().BeFalse(); // not affected by change to new child when the child was already marked as dirty
+            hierarchy.DescendantIsDirty.Should().BeTrue(); 
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyShort.Should().Be(5234);
@@ -2087,10 +2087,10 @@ namespace LazinatorTests.Tests
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse(); // false because MyWrapperContainer is dirty and thus doesn't notify new parent
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.LazinatorConvertToBytes();
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantIsDirty.Should().BeFalse();
+            hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeTrue(); 

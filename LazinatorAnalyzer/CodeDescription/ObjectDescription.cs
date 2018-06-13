@@ -824,18 +824,18 @@ namespace Lazinator.CodeDescription
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStruct && property.Nullable))
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (backing var null? {{_{property.PropertyName} == null}}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
                     else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) "");");
                     }
                     else if (property.TrackDirtinessNonSerialized)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
                     else if (property.PropertyType == LazinatorPropertyType.NonSelfSerializingType || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
                     else
-                        sb.AppendLine($@"TabbedText.WriteLine($""Now at {{writer.Position}}, before {property.PropertyName} value {{_{property.PropertyName}}}"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{_{property.PropertyName}}}"");");
                     sb.AppendLine($@"TabbedText.Tabs++;");
                 }
                 property.AppendPropertyWriteString(sb);
@@ -845,7 +845,11 @@ namespace Lazinator.CodeDescription
                 }
             }
             AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition", true);
-            sb.Append($@"}}
+            if (IncludeTracingCode)
+            {
+                sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}} (end of {NameIncludingGenerics}) "");");
+            }
+                sb.Append($@"}}
 ");
         }
 
