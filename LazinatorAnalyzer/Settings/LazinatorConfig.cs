@@ -25,11 +25,11 @@ namespace LazinatorAnalyzer.Settings
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
         public string GeneratedCodeFileExtension;
         public bool UseFullyQualifiedNames;
-        public Dictionary<string, string> InterchangeConverters;
-        public Dictionary<string, string> DirectConverters;
+        public Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
+        public Dictionary<string, string> DirectConverters = new Dictionary<string, string>();
         public bool DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
-        public List<string> IgnoreRecordLikeTypes;
-        public List<string> IncludeRecordLikeTypes;
+        public List<string> IgnoreRecordLikeTypes = new List<string>();
+        public List<string> IncludeRecordLikeTypes = new List<string>();
         public string ConfigFilePath;
         public string RelativeGeneratedCodePath, GeneratedCodePath;
         public bool IncludeTracingCode, StepThroughProperties;
