@@ -164,7 +164,8 @@ namespace Lazinator.Collections
 
         public void Add(T item)
         {
-            // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize
+            // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize,
+            // because it doesn't change anything up to this point
             if (item != null)
                 item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
@@ -211,14 +212,15 @@ namespace Lazinator.Collections
             return ((IList<T>)UnderlyingList).IndexOf(item);
         }
 
+        // TODO: Instead of fully deserializing on inserts and removes, we might keep track of what has been inserted and what has been removed.
+
         public void Insert(int index, T item)
         {
+            FullyDeserializeIfNecessary();
             if (item != null)
                 item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Insert(index, item);
-            if (!FullyDeserialized)
-                ItemsAccessedBeforeFullyDeserialized.Insert(index, true);
             MarkDirty();
         }
 

@@ -1789,6 +1789,36 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListWithStructsWorks()
+        {
+            LazinatorList<WInt> l = new LazinatorList<WInt>() { 3 };
+
+            var c = l.CloneLazinatorTyped();
+            c[0].WrappedValue.Should().Be(3);
+
+            c = l.CloneLazinatorTyped();
+            c.Insert(0, 2);
+            var c2 = c.CloneLazinatorTyped();
+            c2[0].WrappedValue.Should().Be(2);
+            c2[1].WrappedValue.Should().Be(3);
+
+            c = l.CloneLazinatorTyped();
+            c.Add(4);
+            var c3 = c.CloneLazinatorTyped();
+            c3[0].WrappedValue.Should().Be(3);
+            c3[1].WrappedValue.Should().Be(4);
+            c3.Add(5);
+            c3[2].Should().Be(5);
+
+            c = c2.CloneLazinatorTyped();
+            var accessed = c[1];
+            var c2b = c.CloneLazinatorTyped();
+            c2b[0].WrappedValue.Should().Be(2);
+            c2b[1].WrappedValue.Should().Be(3);
+
+        }
+
+        [Fact]
         public void DerivedLazinatorListWithObjectsWorks()
         {
             var original = new LazinatorListContainer()
@@ -2442,6 +2472,14 @@ namespace LazinatorTests.Tests
             clone = nonGenericContainer.CloneLazinatorTyped();
             listInClone = clone.MyList;
             listInClone.Should().BeNull();
+        }
+
+        [Fact]
+        public void EmptyLazinatorListWorks()
+        {
+            LazinatorList<WInt> l = new LazinatorList<WInt>();
+            var c = l.CloneLazinatorTyped();
+            c.Count().Should().Be(0);
         }
 
         [Fact]
