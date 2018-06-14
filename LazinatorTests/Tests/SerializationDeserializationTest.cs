@@ -2498,6 +2498,34 @@ namespace LazinatorTests.Tests
             v5.MyList.DescendantIsDirty.Should().BeTrue();
             v5.IsDirty.Should().BeFalse();
             v5.DescendantIsDirty.Should().BeTrue();
+
+            // attaching dirty item
+            var v6 = v5.CloneLazinatorTyped();
+            var v7 = v5.CloneLazinatorTyped();
+            var v6item = v6.MyList[0];
+            v6item.MyLong = 987654321;
+            v6.DescendantIsDirty.Should().BeTrue();
+            v6item.IsDirty.Should().BeTrue();
+            v7.MyList[1] = v6item;
+            v7.MyList.IsDirty.Should().BeTrue();
+            v7.MyList.DescendantIsDirty.Should().BeTrue();
+            v7.DescendantIsDirty.Should().BeTrue();
+
+            // attaching item with dirty descendant
+            v5.MyList[0].MyWrapperContainer = new WrapperContainer() { WrappedInt = 4 };
+            v6 = v5.CloneLazinatorTyped();
+            v7 = v5.CloneLazinatorTyped();
+            v6item = v6.MyList[0];
+            v6item.MyWrapperContainer.WrappedInt = 5;
+            v6item.IsDirty.Should().BeFalse();
+            v6item.DescendantIsDirty.Should().BeTrue();
+            v6.DescendantIsDirty.Should().BeTrue();
+            v7.MyList[1] = v6item;
+            v7.MyList[1].IsDirty.Should().BeFalse();
+            v7.MyList[1].DescendantIsDirty.Should().BeTrue();
+            v7.MyList.IsDirty.Should().BeTrue();
+            v7.MyList.DescendantIsDirty.Should().BeTrue();
+            v7.DescendantIsDirty.Should().BeTrue();
         }
 
         private void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)

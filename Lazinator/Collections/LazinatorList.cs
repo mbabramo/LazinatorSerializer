@@ -235,8 +235,13 @@ namespace Lazinator.Collections
         {
             if (IsDirty || DescendantIsDirty)
             {
-                var mainListSerialized = MainListSerialized; // has side effect of making sure we call WriteMainList
+                var mainListSerialized = MainListSerialized; // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
             }
+        }
+
+        private bool ItemHasBeenAccessed(int index)
+        {
+            return FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index];
         }
 
         private void WriteMainList(BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -250,8 +255,8 @@ namespace Lazinator.Collections
                     int startingPosition = w.Position;
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
-                        var item = i; // avoid closure problem
-                        WriteChild(w, UnderlyingList[item], IncludeChildrenMode.IncludeAllChildren, FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[item], () => GetListMemberSlice(item), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        var itemIndex = i; // avoid closure problem
+                        WriteChild(w, UnderlyingList[itemIndex], IncludeChildrenMode.IncludeAllChildren, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         var offset = (int)(w.Position - startingPosition);
                         offsetList.AddOffset(offset);
                     }
