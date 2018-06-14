@@ -204,14 +204,24 @@ namespace Lazinator.Core
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
             ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
+            bool childCouldHaveChanged = childHasBeenAccessed;
             ReadOnlyMemory<byte> childStorage = default;
             if (!childHasBeenAccessed && child != null)
             {
                 childStorage = getChildSliceFn();
                 if (childStorage.Length == 0)
-                    childHasBeenAccessed = true; // child is an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been accessed, so that we can serialize it. Note that if the object has been previously deserialize,d
+                    childCouldHaveChanged = true; // child is an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
             }
-            if (!childHasBeenAccessed && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            else
+            {
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty)
+                {
+                    childStorage = getChildSliceFn();
+                    if (childStorage.Length != 0)
+                        childCouldHaveChanged = false;
+                }
+            }
+            if (!childCouldHaveChanged && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
                 if (childStorage.Length == 0)

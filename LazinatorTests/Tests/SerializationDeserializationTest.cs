@@ -2345,10 +2345,11 @@ namespace LazinatorTests.Tests
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    if (GetList()[i] == null)
+                    var currentListItem = GetList()[i];
+                    if (currentListItem == null)
                         list[i].Should().Be(null);
                     else
-                        ExampleChildEqual(GetList()[i], list[i]).Should().BeTrue();
+                        ExampleChildEqual(currentListItem, list[i]).Should().BeTrue();
                 }
                 // now check another way, using enumerables
                 var zipped = GetList().Zip(list, (a, b) => (a, b));

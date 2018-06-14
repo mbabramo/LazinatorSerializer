@@ -85,6 +85,13 @@ namespace Lazinator.Collections
 
         private ReadOnlyMemory<byte> GetListMemberSlice(int index)
         {
+            if (FullyDeserialized)
+            { // we can't rely on original offsets, because an insertion/removal may have occurred
+                T underlyingItem = UnderlyingList[index];
+                if (underlyingItem == null)
+                    return new ReadOnlyMemory<byte>();
+                return underlyingItem.LazinatorObjectBytes;
+            }
             // The 1st item (# 0) has index 0 always, so it's not stored in Offsets.
             // If we have three items, we store the offset of the second and the third,
             // plus the location AFTER the third.
