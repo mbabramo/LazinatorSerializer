@@ -50,6 +50,9 @@ namespace Lazinator.Core
 
         private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
 
+        private Dictionary<LazinatorGenericIDType, (Type type, int numberTypeArgumentsConsumed)> GenericIDTypeToType = new Dictionary<LazinatorGenericIDType, (Type type, int numberTypeArgumentsConsumed)>();
+
+
         public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
         {
 
@@ -475,6 +478,15 @@ namespace Lazinator.Core
         }
 
         public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
+        {
+            if (GenericIDTypeToType.ContainsKey(typeAndGenericTypeArgumentIDs))
+                return GenericIDTypeToType[typeAndGenericTypeArgumentIDs];
+            var calculatedResult = GetTypeBasedOnTypeAndGenericTypeArgumentIDsHelper(typeAndGenericTypeArgumentIDs);
+            GenericIDTypeToType[typeAndGenericTypeArgumentIDs] = calculatedResult;
+            return calculatedResult;
+        }
+
+        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDsHelper(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
         {
             if (index >= typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count)
                 throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count} integer IDs, but more than that was needed.");
