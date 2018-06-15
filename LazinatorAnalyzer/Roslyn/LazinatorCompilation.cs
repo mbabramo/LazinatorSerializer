@@ -139,7 +139,11 @@ namespace LazinatorCodeGen.Roslyn
 
         public IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(INamedTypeSymbol namedTypeSymbol)
         {
-            // check whether there are lower level abstract types 
+            if (namedTypeSymbol.ToString().Contains("ConcreteFromGenericFrom"))
+            {
+                var DEBUG = 0;
+            }
+            // check whether there are lower level abstract or open generic types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
             if (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
             {
@@ -153,7 +157,7 @@ namespace LazinatorCodeGen.Roslyn
                 yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
             {
-                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Equals(p))))
+                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Name == p.Name)))
                     yield return
                         new PropertyWithDefinitionInfo(p,
                             PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface);

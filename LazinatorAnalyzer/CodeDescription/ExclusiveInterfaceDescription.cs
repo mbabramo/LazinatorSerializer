@@ -29,6 +29,10 @@ namespace Lazinator.CodeDescription
         public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container, bool isUnofficialInterface = false)
         {
             NamedTypeSymbol = t;
+            if (t.ToString().Contains("ConcreteFromGenericFrom"))
+            {
+                var DEBUG = 0;
+            }
             IsUnofficialInterface = isUnofficialInterface;
             Container = container;
             var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
