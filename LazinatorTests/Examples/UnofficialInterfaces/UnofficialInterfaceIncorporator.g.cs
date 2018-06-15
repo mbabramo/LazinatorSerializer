@@ -247,7 +247,7 @@ namespace LazinatorTests.Examples
         protected virtual LazinatorGenericIDType _LazinatorGenericID { get; set; }
         public virtual LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID == null)
+                if (LazinatorGenericID.IsEmpty)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                 }

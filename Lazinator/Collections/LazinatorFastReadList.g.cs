@@ -233,7 +233,7 @@ namespace Lazinator.Collections
         bool ContainsOpenGenericParameters => false;
         public System.Collections.Generic.List<int> LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         

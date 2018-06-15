@@ -352,7 +352,7 @@ namespace Lazinator.Collections
         {
             get
             {
-                if (_LazinatorGenericID == null)
+                if (_LazinatorGenericID.IsEmpty)
                 {
                     _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(106, new Type[] { typeof(T), typeof(U), typeof(V) });
                 }
@@ -412,7 +412,7 @@ namespace Lazinator.Collections
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID == null)
+                if (LazinatorGenericID.IsEmpty)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                 }

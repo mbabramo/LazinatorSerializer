@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lazinator.Core
 {
-    public class LazinatorGenericIDType
+    public readonly struct LazinatorGenericIDType
     {
         public LazinatorGenericIDType(List<int> typeAndInnerTypeIDs)
         {
             TypeAndInnerTypeIDs = typeAndInnerTypeIDs;
         }
 
-        public List<int> TypeAndInnerTypeIDs;
+        public bool IsEmpty => TypeAndInnerTypeIDs == null || !TypeAndInnerTypeIDs.Any();
+
+        public readonly List<int> TypeAndInnerTypeIDs;
 
         public override int GetHashCode()
         {

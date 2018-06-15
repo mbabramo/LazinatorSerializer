@@ -450,7 +450,7 @@ namespace LazinatorTests.Examples
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         

@@ -299,7 +299,7 @@ namespace Lazinator.Spans
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         

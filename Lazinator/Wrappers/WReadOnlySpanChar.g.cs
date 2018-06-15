@@ -241,7 +241,7 @@ namespace Lazinator.Wrappers
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         

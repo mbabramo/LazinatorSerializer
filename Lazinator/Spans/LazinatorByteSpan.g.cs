@@ -278,7 +278,7 @@ namespace Lazinator.Spans
         protected virtual LazinatorGenericIDType _LazinatorGenericID { get; set; }
         public virtual LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         
@@ -320,7 +320,7 @@ namespace Lazinator.Spans
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID == null)
+                if (LazinatorGenericID.IsEmpty)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                 }

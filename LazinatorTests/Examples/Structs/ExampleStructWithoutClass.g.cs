@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Structs
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         

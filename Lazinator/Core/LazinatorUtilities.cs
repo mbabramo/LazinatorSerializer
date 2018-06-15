@@ -284,7 +284,7 @@ namespace Lazinator.Core
                 {
                     throw new FormatException("Wrong self-serialized type initialized.");
                 }
-                return null;
+                return default;
             }
         }
 

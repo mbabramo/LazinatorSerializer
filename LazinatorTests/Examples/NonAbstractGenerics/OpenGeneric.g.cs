@@ -291,7 +291,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             get
             {
-                if (_LazinatorGenericID == null)
+                if (_LazinatorGenericID.IsEmpty)
                 {
                     _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
                 }
@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID == null)
+                if (LazinatorGenericID.IsEmpty)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                 }

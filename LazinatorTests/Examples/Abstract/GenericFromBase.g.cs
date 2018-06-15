@@ -114,7 +114,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             get
             {
-                if (_LazinatorGenericID == null)
+                if (_LazinatorGenericID.IsEmpty)
                 {
                     _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(267, new Type[] { typeof(T) });
                 }

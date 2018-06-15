@@ -98,7 +98,7 @@ namespace LazinatorTests.Examples.Abstract
         protected override bool ContainsOpenGenericParameters => false;
         public override LazinatorGenericIDType LazinatorGenericID
         {
-            get => null;
+            get => default;
             set { }
         }
         

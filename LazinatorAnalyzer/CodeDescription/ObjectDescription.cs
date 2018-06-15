@@ -647,7 +647,7 @@ namespace Lazinator.CodeDescription
                         {{
                             get
                             {{
-                                if (_LazinatorGenericID == null)
+                                if (_LazinatorGenericID.IsEmpty)
                                 {{
                                     _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
                                 }}
@@ -662,7 +662,7 @@ namespace Lazinator.CodeDescription
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
                         {lazinatorGenericBackingID}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
                         {{
-                            get => null;
+                            get => default;
                             set {{ }}
                         }}";
 
@@ -798,14 +798,14 @@ namespace Lazinator.CodeDescription
                 if (IncludeTracingCode)
                 {
                     sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
-                    sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID == null ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
                     sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass != null}}"");");
                 }
 
                 if (IsGeneric || !IsSealedOrStruct)
                     sb.AppendLine($@"if (includeUniqueID)
                             {{
-                                if (LazinatorGenericID == null)
+                                if (LazinatorGenericID.IsEmpty)
                                 {{
                                     CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                                 }}
