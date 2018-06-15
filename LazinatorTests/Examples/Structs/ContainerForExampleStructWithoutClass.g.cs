@@ -38,9 +38,9 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 _LazinatorParentClass = value;
-                if (value != null && (value.IsDirty || value.DescendantIsDirty))
+                if (value != null && (IsDirty || DescendantIsDirty))
                 {
-                    DescendantIsDirty = true;
+                    value.DescendantIsDirty = true;
                 }
             }
         }
