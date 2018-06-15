@@ -20,7 +20,7 @@ namespace Lazinator.CodeDescription
         private ObjectDescription ContainingObjectDescription { get; set; }
         private PropertyDescription ContainingPropertyDescription { get; set; }
         private int UniqueIDForLazinatorType { get; set; }
-        private IPropertySymbol PropertySymbol { get; set; }
+        internal IPropertySymbol PropertySymbol { get; set; }
         private ITypeSymbol TypeSymbolIfNoProperty { get; set; }
         private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
         internal string DerivationKeyword { get; set; }

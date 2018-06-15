@@ -166,6 +166,18 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        public IEnumerable<ObjectDescription> GetAbstractBaseObjectDescriptions(INamedTypeSymbol belowThisLevel)
+        {
+            bool found = false;
+            foreach (ObjectDescription o in GetAbstractBaseObjectDescriptions())
+            {
+                if (found)
+                    yield return o;
+                else
+                    found = o.ILazinatorTypeSymbol == belowThisLevel;
+            }
+        }
+
         public string GetCodeBehind()
         {
             CodeStringBuilder sb = new CodeStringBuilder();

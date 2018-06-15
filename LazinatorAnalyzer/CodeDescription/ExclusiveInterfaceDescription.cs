@@ -19,15 +19,17 @@ namespace Lazinator.CodeDescription
         public List<string> GenericArgumentNames;
         public int TotalNumProperties;
         public bool AutoChangeParentAll;
+        public bool IsUnofficialInterface;
 
         public ExclusiveInterfaceDescription()
         {
 
         }
 
-        public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container)
+        public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container, bool isUnofficialInterface = false)
         {
             NamedTypeSymbol = t;
+            IsUnofficialInterface = isUnofficialInterface;
             Container = container;
             var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
@@ -50,22 +52,34 @@ namespace Lazinator.CodeDescription
 
         private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
         {
-            NamedTypeSymbol = t;
+            List<PropertyDescription> propertiesToPossiblyUnofficiallyIncorporate = GetUnofficialProperties(t);
+            foreach (var p in propertiesToPossiblyUnofficiallyIncorporate)
+                if (!PropertiesToDefineThisLevel.Any(x => x.PropertyName == p.PropertyName))
+                    PropertiesToDefineThisLevel.Add(p);
+
+        }
+
+        private List<PropertyDescription> GetUnofficialProperties(INamedTypeSymbol t)
+        {
+            if (IsUnofficialInterface)
+                return new List<PropertyDescription>(); // unofficial interfaces can't incorporate other unofficial interfaces
             var attributes = Container.Compilation.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
+            List<PropertyDescription> propertiesToPossiblyUnofficiallyIncorporate = new List<PropertyDescription>();
             foreach (var a in attributes)
             {
                 INamedTypeSymbol namedInterfaceType = Container.Compilation.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);
                 if (namedInterfaceType == null)
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
-                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, Container);
-                foreach (var p in d.PropertiesToDefineThisLevel)
-                    if (!PropertiesToDefineThisLevel.Any(x => x.PropertyName == p.PropertyName))
-                    {
-                        p.PropertyAccessibility = a.Accessibility;
-                        PropertiesToDefineThisLevel.Add(p);
-                    }
+                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, Container, true);
+                foreach (var property in d.PropertiesToDefineThisLevel)
+                {
+                    property.PropertyAccessibility = a.Accessibility;
+                    propertiesToPossiblyUnofficiallyIncorporate.Add(property);
+                }
             }
+
+            return propertiesToPossiblyUnofficiallyIncorporate;
         }
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
@@ -73,15 +87,20 @@ namespace Lazinator.CodeDescription
             var propertiesWithLevel = Container.Compilation.PropertiesForType[interfaceSymbol];
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
-                if (Container.Compilation.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol))
+                List<IPropertySymbol> additionalProperties;
+                bool baseTypeIsIndexed = Container.Compilation.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol);
+                if (baseTypeIsIndexed)
                 {
                     var baseExclusiveInterface = Container.Compilation.TypeToExclusiveInterface[baseType.ILazinatorTypeSymbol];
-                    var additionalPropertiesWithLevel = Container.Compilation.PropertiesForType[baseExclusiveInterface];
-                    foreach (var basePropertyWithLevel in additionalPropertiesWithLevel)
-                    {
-                        if (!propertiesWithLevel.Any(x => x.Property.MetadataName == basePropertyWithLevel.Property.MetadataName))
-                            propertiesWithLevel.Add(new PropertyWithDefinitionInfo(basePropertyWithLevel.Property, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override " });
-                    }
+                    additionalProperties = Container.Compilation.PropertiesForType[baseExclusiveInterface].Select(x => x.Property).ToList();
+                }
+                else
+                    additionalProperties = new List<IPropertySymbol>();
+                additionalProperties.AddRange(GetUnofficialProperties(baseType.InterfaceTypeSymbol).Select(x => x.PropertySymbol));
+                foreach (var baseProperty in additionalProperties)
+                {
+                    if (!propertiesWithLevel.Any(x => x.Property.MetadataName == baseProperty.MetadataName))
+                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(baseProperty, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override " });
                 }
             }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, false) })

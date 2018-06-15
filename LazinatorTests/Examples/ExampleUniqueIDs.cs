@@ -74,6 +74,7 @@
         GenericFromBase,
         BaseContainer,
         NonexclusiveLazinatorAttribute,
-        DotNetQueue_SelfSerialized
+        DotNetQueue_SelfSerialized,
+        AbstractGeneric1Unofficial
     }
 }
