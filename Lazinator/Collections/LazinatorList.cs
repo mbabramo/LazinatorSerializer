@@ -56,16 +56,9 @@ namespace Lazinator.Collections
                 {
                     if (!ItemsAccessedBeforeFullyDeserialized[i])
                         UnderlyingList[i] = GetSerializedContents(i);
-                    DEBUGCheck();
                 }
                 FullyDeserialized = true;
             }
-        }
-
-        private void DEBUGCheck()
-        {
-            if (UnderlyingList != null && UnderlyingList.Any(x => x != null && x.LazinatorParentClass == null))
-                throw new Exception();
         }
 
         private T GetSerializedContents(int index)
@@ -170,7 +163,6 @@ namespace Lazinator.Collections
                     CountWhenDeserialized = Offsets?.Count ?? 0;
                     return CountWhenDeserialized;
                 }
-                DEBUGCheck();
                 return ((IList<T>) UnderlyingList).Count; 
             }
         }
@@ -185,7 +177,6 @@ namespace Lazinator.Collections
                 item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Add(item);
-            DEBUGCheck();
             if (!FullyDeserialized)
                 ItemsAccessedBeforeFullyDeserialized.Add(true);
             MarkDirty();
@@ -237,7 +228,6 @@ namespace Lazinator.Collections
                 item.LazinatorParentClass = this;
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Insert(index, item);
-            DEBUGCheck();
             MarkDirty();
         }
 
@@ -246,7 +236,6 @@ namespace Lazinator.Collections
             FullyDeserializeIfNecessary();
             MarkDirty();
             var success = ((IList<T>)UnderlyingList).Remove(item);
-            DEBUGCheck();
             return success;
         }
 
@@ -254,7 +243,6 @@ namespace Lazinator.Collections
         {
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).RemoveAt(index);
-            DEBUGCheck();
             if (!FullyDeserialized)
                 ItemsAccessedBeforeFullyDeserialized.RemoveAt(index);
             MarkDirty();
