@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -41,6 +42,8 @@ namespace Lazinator.Core
         private Dictionary<int, Func<ILazinator>> FactoriesByID =
             new Dictionary<int, Func<ILazinator>>();
 
+        private ConcurrentDictionary<LazinatorGenericIDType, Func<ILazinator>> GenericFactories = new ConcurrentDictionary<LazinatorGenericIDType, Func<ILazinator>>();
+
         /// <summary>
         /// A dictionary with a key equal to a unique ID of a Lazinator type and a value recording the type and the number of generic parameters.
         /// </summary>
@@ -49,9 +52,6 @@ namespace Lazinator.Core
         private Dictionary<Type, int> TypeToUniqueIDMap = new Dictionary<Type, int>();
 
         private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
-
-        private Dictionary<LazinatorGenericIDType, (Type type, int numberTypeArgumentsConsumed)> GenericIDTypeToType = new Dictionary<LazinatorGenericIDType, (Type type, int numberTypeArgumentsConsumed)>();
-
 
         public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
         {
@@ -70,6 +70,16 @@ namespace Lazinator.Core
         #endregion
 
         #region Factory creation
+
+        private static Func<ILazinator> GetCompiledFunctionForType(Type t)
+        {
+            var exnew = Expression.New(t);
+            var exconv = Expression.Convert(exnew, typeof(ILazinator));
+            var lambda = Expression.Lambda(exconv);
+            Delegate compiled = lambda.Compile();
+            var result = (Func<ILazinator>)compiled;
+            return result;
+        }
 
         /// <summary>
         /// Create a typed Lazinator object of a certain concrete type. If the object if of that exact type rather than of a subtype, performance will be better than if the factory creation methods are used. This method should not be used for deserializing a struct or sealed class, since the serialized bytes may not contain object IDs.
@@ -94,7 +104,7 @@ namespace Lazinator.Core
             {
                 bytesSoFar = 0;
                 LazinatorGenericIDType genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                itemToReturn = (T)CreateGenericItemUsingReflection(genericID);
+                itemToReturn = (T)CreateGenericKnownID(genericID);
             }
             else
             {
@@ -156,7 +166,7 @@ namespace Lazinator.Core
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                    selfSerialized = CreateGenericItemUsingReflection(storage.Span);
+                    selfSerialized = CreateGenericFromBytesIncludingID(storage.Span);
             }
             if (selfSerialized == null)
                 throw new UnknownSerializedTypeException(uniqueID);
@@ -234,7 +244,7 @@ namespace Lazinator.Core
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                    selfSerialized = CreateGenericItemUsingReflection(storage.Span);
+                    selfSerialized = CreateGenericFromBytesIncludingID(storage.Span);
             }
             if (selfSerialized == null)
                 throw new UnknownSerializedTypeException(uniqueID);
@@ -360,7 +370,7 @@ namespace Lazinator.Core
                     UniqueIDToTypeMap[uniqueID] = (type, 0);
                     if (!type.IsInterface && !type.IsAbstract)
                     {
-                        FactoriesByID[uniqueID] = GetFactoryForType(type);
+                        FactoriesByID[uniqueID] = GetCompiledFunctionForType(type);
                         int? fixedUniqueID = GetFixedUniqueIDOrNull(type);
                         if (fixedUniqueID != null)
                         {
@@ -379,16 +389,6 @@ namespace Lazinator.Core
             if (FixedUniqueIDs.ContainsKey(type))
                 return FixedUniqueIDs[type];
             return null;
-        }
-
-        private Func<ILazinator> GetFactoryForType(Type type)
-        {
-            NewExpression newMyClass = System.Linq.Expressions.Expression.New(type);
-            var converted = Expression.Convert(newMyClass, typeof(ILazinator));
-
-            var lambda = Expression.Lambda<Func<ILazinator>>(converted);
-            Func<ILazinator> compiledLambda = lambda.Compile();
-            return compiledLambda;
         }
 
         private static int? GetFixedUniqueIDOrNull(Type t)
@@ -429,18 +429,17 @@ namespace Lazinator.Core
 
         #region Generic composition
 
-        private ILazinator CreateGenericItemUsingReflection(ReadOnlySpan<byte> span)
+        private ILazinator CreateGenericFromBytesIncludingID(ReadOnlySpan<byte> span)
         {
             int index = 0;
             LazinatorGenericIDType id = ReadLazinatorGenericID(span, ref index);
-            return CreateGenericItemUsingReflection(id);
+            return CreateGenericKnownID(id);
         }
 
-        private ILazinator CreateGenericItemUsingReflection(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
+        private ILazinator CreateGenericKnownID(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
-            (Type type, _) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs);
-            var result = (ILazinator)Activator.CreateInstance(type);
-            return result;
+            Func<ILazinator> func = GetGenericFactoryBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
+            return func();
         }
 
         public LazinatorGenericIDType GetUniqueIDListForGenericType(int outerTypeUniqueID, IEnumerable<Type> innerTypes)
@@ -477,16 +476,18 @@ namespace Lazinator.Core
                 l.Add(TypeToUniqueIDMap[t]);
         }
 
-        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
+
+        public Func<ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
-            if (GenericIDTypeToType.ContainsKey(typeAndGenericTypeArgumentIDs))
-                return GenericIDTypeToType[typeAndGenericTypeArgumentIDs];
-            var calculatedResult = GetTypeBasedOnTypeAndGenericTypeArgumentIDsHelper(typeAndGenericTypeArgumentIDs);
-            GenericIDTypeToType[typeAndGenericTypeArgumentIDs] = calculatedResult;
-            return calculatedResult;
+            if (GenericFactories.ContainsKey(typeAndGenericTypeArgumentIDs))
+                return GenericFactories[typeAndGenericTypeArgumentIDs];
+            (Type type, int numberTypeArgumentsConsumed) = GetTypeBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
+            var factory = GetCompiledFunctionForType(type);
+            GenericFactories[typeAndGenericTypeArgumentIDs] = factory;
+            return factory;
         }
 
-        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDsHelper(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
+        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
         {
             if (index >= typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count)
                 throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count} integer IDs, but more than that was needed.");
@@ -500,7 +501,7 @@ namespace Lazinator.Core
                 Type[] typeParameters = new Type[numberGenericParameters];
                 for (int gp = 0; gp < numberGenericParameters; gp++)
                 {
-                    (Type genericParameterType, int moreTypeArgumentsConsumed) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs, index + numberTypeArgumentsConsumed);
+                    (Type genericParameterType, int moreTypeArgumentsConsumed) = GetTypeBasedOnGenericIDType(typeAndGenericTypeArgumentIDs, index + numberTypeArgumentsConsumed);
                     numberTypeArgumentsConsumed += moreTypeArgumentsConsumed;
                     typeParameters[gp] = genericParameterType;
                 }
