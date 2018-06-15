@@ -266,7 +266,7 @@ namespace Lazinator.Core
                 child.LazinatorParentClass = parent; // set the parent so that this object can be used like a deserialized object
         }
 
-        public static List<int> GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
+        public static LazinatorGenericIDType GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
         {
             if (containsOpenGenericParameters)
             {
@@ -275,7 +275,7 @@ namespace Lazinator.Core
                 {
                     throw new FormatException("Wrong self-serialized type initialized.");
                 }
-                return lazinatorGenericID;
+                return new LazinatorGenericIDType(lazinatorGenericID);
             }
             else
             {
@@ -288,15 +288,15 @@ namespace Lazinator.Core
             }
         }
 
-        public static void WriteLazinatorGenericID(BinaryBufferWriter writer, List<int> lazinatorGenericID)
+        public static void WriteLazinatorGenericID(BinaryBufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
         {
             // We write the first component before the total count to be consistent with non-generic items.
-            CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID[0]);
-            int numItems = lazinatorGenericID.Count;
+            CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID.TypeAndInnerTypeIDs[0]);
+            int numItems = lazinatorGenericID.TypeAndInnerTypeIDs.Count;
             writer.Write((byte)numItems);
             for (int i = 1; i < numItems; i++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID[i]);
+                CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID.TypeAndInnerTypeIDs[i]);
             }
         }
 

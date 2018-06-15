@@ -110,7 +110,7 @@ namespace LazinatorTests.Examples.Abstract
         public override int LazinatorUniqueID => 267;
         
         protected override bool ContainsOpenGenericParameters => true;
-        public override System.Collections.Generic.List<int> LazinatorGenericID
+        public override LazinatorGenericIDType LazinatorGenericID
         {
             get
             {

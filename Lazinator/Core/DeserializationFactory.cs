@@ -440,12 +440,12 @@ namespace Lazinator.Core
             return result;
         }
 
-        public List<int> GetUniqueIDListForGenericType(int outerTypeUniqueID, IEnumerable<Type> innerTypes)
+        public LazinatorGenericIDType GetUniqueIDListForGenericType(int outerTypeUniqueID, IEnumerable<Type> innerTypes)
         {
             List<int> l = new List<int>() { outerTypeUniqueID };
             foreach (Type t in innerTypes)
                 AddToUniqueIDListForGenericType(t, l);
-            return new LazinatorGenericIDType(l).TypeAndInnerTypeIDs;
+            return new LazinatorGenericIDType(l);
         }
 
         public List<int> GetUniqueIDListForGenericType(Type t)

@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Abstract
         public override int LazinatorUniqueID => 239;
         
         protected override bool ContainsOpenGenericParameters => false;
-        public override System.Collections.Generic.List<int> LazinatorGenericID
+        public override LazinatorGenericIDType LazinatorGenericID
         {
             get => null;
             set { }

@@ -265,8 +265,8 @@ namespace LazinatorTests.Examples.Collections
         public virtual int LazinatorUniqueID => 210;
         
         protected virtual bool ContainsOpenGenericParameters => false;
-        protected virtual System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
-        public virtual System.Collections.Generic.List<int> LazinatorGenericID
+        protected virtual LazinatorGenericIDType _LazinatorGenericID { get; set; }
+        public virtual LazinatorGenericIDType LazinatorGenericID
         {
             get => null;
             set { }

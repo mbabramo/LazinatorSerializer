@@ -448,7 +448,7 @@ namespace LazinatorTests.Examples
         public int LazinatorUniqueID => 216;
         
         bool ContainsOpenGenericParameters => false;
-        public System.Collections.Generic.List<int> LazinatorGenericID
+        public LazinatorGenericIDType LazinatorGenericID
         {
             get => null;
             set { }

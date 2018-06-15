@@ -227,7 +227,7 @@ namespace Lazinator.Wrappers
         public int LazinatorUniqueID => 54;
         
         bool ContainsOpenGenericParameters => false;
-        public System.Collections.Generic.List<int> LazinatorGenericID
+        public LazinatorGenericIDType LazinatorGenericID
         {
             get => null;
             set { }

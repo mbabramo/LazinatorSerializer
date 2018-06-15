@@ -297,7 +297,7 @@ namespace Lazinator.Spans
         public int LazinatorUniqueID => 91;
         
         bool ContainsOpenGenericParameters => false;
-        public System.Collections.Generic.List<int> LazinatorGenericID
+        public LazinatorGenericIDType LazinatorGenericID
         {
             get => null;
             set { }

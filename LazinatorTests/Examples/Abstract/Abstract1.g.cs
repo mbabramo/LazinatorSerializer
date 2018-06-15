@@ -98,9 +98,9 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         public abstract int LazinatorUniqueID { get; }
-        protected abstract System.Collections.Generic.List<int> _LazinatorGenericID { get; set; }
+        protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
         protected virtual bool ContainsOpenGenericParameters => false;
-        public abstract System.Collections.Generic.List<int> LazinatorGenericID { get; set; }
+        public abstract LazinatorGenericIDType LazinatorGenericID { get; set; }
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
