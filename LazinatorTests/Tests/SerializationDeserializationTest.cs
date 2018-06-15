@@ -1819,6 +1819,23 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListEnumeratorWorks()
+        {
+            LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
+            var results = l.ToList();
+            results[0].LazinatorParentClass.Should().Be(l);
+            results[1].LazinatorParentClass.Should().Be(l);
+            var c = l.CloneLazinatorTyped();
+            results = c.ToList();
+            results[0].LazinatorParentClass.Should().Be(c);
+            results[1].LazinatorParentClass.Should().Be(c);
+            c = l.CloneLazinatorTyped();
+            foreach (var result in c)
+                result.LazinatorParentClass.Should().Be(c);
+
+        }
+
+        [Fact]
         public void DerivedLazinatorListWithObjectsWorks()
         {
             var original = new LazinatorListContainer()

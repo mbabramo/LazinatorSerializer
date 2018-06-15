@@ -429,7 +429,7 @@ namespace Lazinator.Core
 
         public static void ConfirmDescendantDirtinessConsistency(ILazinator startPoint)
         {
-            if (startPoint.IsDirty)
+            if (startPoint != null && startPoint.IsDirty)
             {
                 ILazinator parent = startPoint.LazinatorParentClass;
                 int levels = 0;

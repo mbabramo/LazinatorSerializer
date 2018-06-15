@@ -833,7 +833,7 @@ namespace Lazinator.CodeDescription
                     else if (property.TrackDirtinessNonSerialized)
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
                     else if (property.PropertyType == LazinatorPropertyType.NonSelfSerializingType || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}})"");");
                     else
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{_{property.PropertyName}}}"");");
                     sb.AppendLine($@"TabbedText.Tabs++;");

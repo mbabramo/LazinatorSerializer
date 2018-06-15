@@ -8,7 +8,6 @@ namespace Lazinator.Collections.Dictionary
 {
     internal partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        private bool Initialized;
         private void Initialize()
         {
             Keys = new LazinatorList<TKey>();
@@ -17,7 +16,7 @@ namespace Lazinator.Collections.Dictionary
         }
 
         public int Count => Initialized ? Keys.Count : 0;
-
+        
         public bool ContainsKey(TKey key, uint? binaryHashOfKey = null)
         {
             int index = GetKeyIndex(key, binaryHashOfKey);

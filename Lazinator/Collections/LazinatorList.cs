@@ -155,7 +155,10 @@ namespace Lazinator.Collections
             get
             {
                 if (UnderlyingList == null)
+                {
+                    CountWhenDeserialized = Offsets?.Count ?? 0;
                     return CountWhenDeserialized;
+                }
                 return ((IList<T>) UnderlyingList).Count; 
             }
         }

@@ -6,12 +6,37 @@ using Xunit;
 using FluentAssertions;
 using Lazinator.Collections.Dictionary;
 using Lazinator.Wrappers;
+using Lazinator.Core;
 
 namespace LazinatorTests.Tests
 {
 
     public class DictionaryTests
     {
+        [Fact]
+        public void DictionaryEnumerableWorks()
+        {
+            LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
+            d.Add(1, "one");
+            d.Add(2, "two");
+            ConfirmDictionary(d);
+
+            var c = d.CloneLazinatorTyped();
+            ConfirmDictionary(c);
+        }
+
+        private static void ConfirmDictionary(LazinatorDictionary<WLong, WString> d)
+        {
+            d[new WLong(1)].Should().Be("one");
+            d[new WLong(2)].Should().Be("two");
+            var results = d.ToList().Select(x => x.Key).OrderBy(x => x).ToList();
+            results[0].WrappedValue.Should().Be(1);
+            results[1].WrappedValue.Should().Be(2);
+            var results2 = d.AsEnumerable().Select(x => x.Key).OrderBy(x => x).ToList();
+            results2[0].WrappedValue.Should().Be(1);
+            results2[1].WrappedValue.Should().Be(2);
+        }
+
         [Fact]
         public void DictionaryLongStringWorks()
         {
