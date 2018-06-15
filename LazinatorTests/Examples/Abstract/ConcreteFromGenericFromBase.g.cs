@@ -51,69 +51,12 @@ namespace LazinatorTests.Examples.Abstract
         }
         
         /* Properties */
-        private int _ConcreteFromGenericFromBase_EndByteIndex = 0;
-        protected override int _MyT_ByteLength => _ConcreteFromGenericFromBase_EndByteIndex - _MyT_ByteIndex;
         
-        private WNullableDecimal _MyT;
-        public override WNullableDecimal MyT
-        {
-            get
-            {
-                if (!_MyT_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyT = default(WNullableDecimal);
-                    }
-                    else
-                    {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, true, null);
-                        _MyT = new WNullableDecimal()
-                        {
-                            LazinatorParentClass = this,
-                            LazinatorObjectBytes = childData,
-                        };
-                    }
-                    _MyT_Accessed = true;
-                }
-                return _MyT;
-            }
-            set
-            {
-                
-                value.LazinatorParentClass = this;
-                IsDirty = true;
-                _MyT = value;
-                _MyT_Accessed = true;
-            }
-        }
-        public WNullableDecimal MyT_Copy
-        {
-            get
-            {
-                if (!_MyT_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        return default(WNullableDecimal);
-                    }
-                    else
-                    {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, true, null);
-                        return new WNullableDecimal()
-                        {
-                            LazinatorObjectBytes = childData,
-                        };
-                    }
-                }
-                return _MyT;
-            }
-        }
         
         protected override void ResetAccessedProperties()
         {
             base.ResetAccessedProperties();
-            _MyT_Accessed = false;
+            
         }
         
         /* Conversion */
@@ -134,12 +77,6 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyT_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
-            }
-            _ConcreteFromGenericFromBase_EndByteIndex = bytesSoFar;
         }
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -154,7 +91,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyT_Accessed && (MyT.IsDirty || MyT.DescendantIsDirty)));
+                _DescendantIsDirty = false;
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }
@@ -162,23 +99,8 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                WriteChild(writer, _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyT_ByteIndex, _MyT_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
-            }
-            if (updateStoredBuffer)
-            {
-                _MyT_ByteIndex = startOfObjectPosition - startPosition;
-            }
-            if (updateStoredBuffer)
-            {
-                _ConcreteFromGenericFromBase_EndByteIndex = writer.Position - startPosition;
-            }
         }
         
     }

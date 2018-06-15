@@ -1973,6 +1973,27 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ClosedGenericSerializes()
+        {
+            ClosedGeneric g = new ClosedGeneric() { MyT = new ExampleChild() { MyLong = 1 }, MyListT = new List<ExampleChild> { new ExampleChild() { MyLong = 2 }, new ExampleChild() { MyLong = 3 } } };
+            var c = g.CloneLazinatorTyped();
+            c.MyT.MyLong.Should().Be(1);
+            c.MyListT[0].MyLong.Should().Be(2);
+            c.MyListT[1].MyLong.Should().Be(3);
+        }
+
+        [Fact]
+        public void ConcreteFromGenericFromBaseSerializes()
+        {
+            ConcreteFromGenericFromBase f = new ConcreteFromGenericFromBase()
+            {
+                MyT = 3.4M
+            };
+            var c = f.CloneLazinatorTyped();
+            c.MyT.Should().Be(3.4M);
+        }
+
+        [Fact]
         public void ConcreteGenericClassesSerialize()
         {
             ConcreteGeneric2a cg2a = new ConcreteGeneric2a()
