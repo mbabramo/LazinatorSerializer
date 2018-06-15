@@ -2531,6 +2531,30 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListItemParentSet()
+        {
+            LazinatorList<ExampleChild> l = new LazinatorList<ExampleChild>()
+            {
+                new ExampleChild(),
+                new ExampleChild()
+            };
+            l[0].LazinatorParentClass.Should().Be(l);
+            l[1].LazinatorParentClass.Should().Be(l);
+            var c = l.CloneLazinatorTyped();
+            c[0].LazinatorParentClass.Should().Be(c);
+            c[1].LazinatorParentClass.Should().Be(c);
+            var c2 = l.CloneLazinatorTyped();
+            c2.Insert(0, new ExampleChild());
+            c2[1].LazinatorParentClass.Should().Be(c2);
+            var c3 = l.CloneLazinatorTyped();
+            var lc3 = c3.ToList();
+            lc3[1].LazinatorParentClass.Should().Be(c3);
+            var c4 = l.CloneLazinatorTyped();
+            var lc4 = c3.AsEnumerable().ToList();
+            lc4[1].LazinatorParentClass.Should().Be(c4);
+        }
+
+        [Fact]
         public void LazinatorListDirtinessWorks()
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()

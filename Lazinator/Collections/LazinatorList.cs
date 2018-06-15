@@ -231,7 +231,8 @@ namespace Lazinator.Collections
         {
             FullyDeserializeIfNecessary();
             MarkDirty();
-            return ((IList<T>)UnderlyingList).Remove(item);
+            var success = ((IList<T>)UnderlyingList).Remove(item);
+            return success;
         }
 
         public void RemoveAt(int index)
