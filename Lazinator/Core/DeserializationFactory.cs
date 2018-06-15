@@ -47,7 +47,7 @@ namespace Lazinator.Core
         private Dictionary<int, (Type type, byte numberGenericParameters)> UniqueIDToTypeMap = new Dictionary<int, (Type type, byte numberGenericParameters)>();
 
         private Dictionary<Type, int> TypeToUniqueIDMap = new Dictionary<Type, int>();
-        
+
         private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
 
         public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
@@ -90,8 +90,8 @@ namespace Lazinator.Core
             if (typeInfo.numberGenericParameters > 0)
             {
                 bytesSoFar = 0;
-                List<int> genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                itemToReturn = (T) CreateGenericItemUsingReflection(genericID);
+                LazinatorGenericIDType genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+                itemToReturn = (T)CreateGenericItemUsingReflection(genericID);
             }
             else
             {
@@ -103,7 +103,7 @@ namespace Lazinator.Core
                 {
                     if (FactoriesByID.ContainsKey(uniqueID))
                     {
-                        itemToReturn = (T) FactoriesByID[uniqueID]();
+                        itemToReturn = (T)FactoriesByID[uniqueID]();
                     }
                     else
                         throw new UnknownSerializedTypeException(uniqueID);
@@ -120,7 +120,7 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public T CreateAbstractType<T>(ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator => (T)CreateFromBytesIncludingID(storage, parent);
-        
+
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List. This assumes that the serialized bytes contain type information.
         /// </summary>
@@ -136,7 +136,7 @@ namespace Lazinator.Core
             InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
         }
-        
+
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. The ID is passed as a parameter and need not be contained within the bytes themselves.
         /// </summary>
@@ -178,9 +178,9 @@ namespace Lazinator.Core
             Type t = typeof(T);
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
-                return (T) CreateKnownID((int)fixedUniqueID, storage, parent);
+                return (T)CreateKnownID((int)fixedUniqueID, storage, parent);
             else
-                return (T) CreateFromBytesIncludingID(storage, parent);
+                return (T)CreateFromBytesIncludingID(storage, parent);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace Lazinator.Core
             else
                 return (T)CreateFromBytesIncludingIDSpecifyingDelegate(storage, informParentOfDirtinessDelegate);
         }
-        
+
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
         /// </summary>
@@ -349,7 +349,7 @@ namespace Lazinator.Core
                     var genericArguments = type.GetGenericArguments().ToList();
                     var genericArgumentsConstrained = genericArguments.Where(x => x.GetGenericParameterConstraints().Any(y => y.Equals(typeof(Lazinator.Core.ILazinator)))).ToList();
                     if (genericArguments.Count() == genericArgumentsConstrained.Count())
-                        UniqueIDToTypeMap[uniqueID] = (type, (byte) genericArguments.Count());
+                        UniqueIDToTypeMap[uniqueID] = (type, (byte)genericArguments.Count());
                     // otherwise, we have non-Lazinator type arguments, which we can't handle, and thus we can't add this to the dictionary. 
                 }
                 else
@@ -429,11 +429,11 @@ namespace Lazinator.Core
         private ILazinator CreateGenericItemUsingReflection(ReadOnlySpan<byte> span)
         {
             int index = 0;
-            List<int> id = ReadLazinatorGenericID(span, ref index);
+            LazinatorGenericIDType id = ReadLazinatorGenericID(span, ref index);
             return CreateGenericItemUsingReflection(id);
         }
 
-        private ILazinator CreateGenericItemUsingReflection(List<int> typeAndGenericTypeArgumentIDs)
+        private ILazinator CreateGenericItemUsingReflection(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
             (Type type, _) = GetTypeBasedOnTypeAndGenericTypeArgumentIDs(typeAndGenericTypeArgumentIDs);
             var result = (ILazinator)Activator.CreateInstance(type);
@@ -445,7 +445,7 @@ namespace Lazinator.Core
             List<int> l = new List<int>() { outerTypeUniqueID };
             foreach (Type t in innerTypes)
                 AddToUniqueIDListForGenericType(t, l);
-            return l;
+            return new LazinatorGenericIDType(l).TypeAndInnerTypeIDs;
         }
 
         public List<int> GetUniqueIDListForGenericType(Type t)
@@ -474,12 +474,11 @@ namespace Lazinator.Core
                 l.Add(TypeToUniqueIDMap[t]);
         }
 
-        // TODO: Cache this
-        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(List<int> typeAndGenericTypeArgumentIDs, int index = 0)
+        public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnTypeAndGenericTypeArgumentIDs(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
         {
-            if (index >= typeAndGenericTypeArgumentIDs.Count)
-                throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count} integer IDs, but more than that was needed.");
-            int uniqueIDOfMainType = typeAndGenericTypeArgumentIDs[index];
+            if (index >= typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count)
+                throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count} integer IDs, but more than that was needed.");
+            int uniqueIDOfMainType = typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[index];
             if (UniqueIDToTypeMap.ContainsKey(uniqueIDOfMainType))
             {
                 (Type t, byte numberGenericParameters) = UniqueIDToTypeMap[uniqueIDOfMainType];
@@ -494,8 +493,8 @@ namespace Lazinator.Core
                     typeParameters[gp] = genericParameterType;
                 }
                 Type result = t.MakeGenericType(typeParameters);
-                if (index == 0 && numberTypeArgumentsConsumed != typeAndGenericTypeArgumentIDs.Count())
-                    throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count} integer IDs, but only {numberTypeArgumentsConsumed} were needed.");
+                if (index == 0 && numberTypeArgumentsConsumed != typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count())
+                    throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count} integer IDs, but only {numberTypeArgumentsConsumed} were needed.");
                 return (result, numberTypeArgumentsConsumed);
             }
             else

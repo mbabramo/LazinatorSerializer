@@ -602,9 +602,9 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractConversions(CodeStringBuilder sb)
         {
             sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
-                        {ProtectedIfApplicable}abstract System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
+                        {ProtectedIfApplicable}abstract LazinatorGenericTypeID _LazinatorGenericID {{ get; set; }}
                         {ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};
-                        public abstract System.Collections.Generic.List<int> LazinatorGenericID {{ get; set; }}
+                        public abstract LazinatorGenericTypeID LazinatorGenericID {{ get; set; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
@@ -637,13 +637,13 @@ namespace Lazinator.CodeDescription
 
             string lazinatorGenericBackingID = "";
             if (!IsDerivedFromNonAbstractLazinator && (IsGeneric || !IsSealedOrStruct))
-                lazinatorGenericBackingID = $@"{ProtectedIfApplicable}{DerivationKeyword}System.Collections.Generic.List<int> _LazinatorGenericID {{ get; set; }}
+                lazinatorGenericBackingID = $@"{ProtectedIfApplicable}{DerivationKeyword}LazinatorGenericTypeID _LazinatorGenericID {{ get; set; }}
                         ";
 
             string lazinatorGenericID;
             if (IsGeneric)
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                        {lazinatorGenericBackingID}public {DerivationKeyword}LazinatorGenericTypeID LazinatorGenericID
                         {{
                             get
                             {{
@@ -660,7 +660,7 @@ namespace Lazinator.CodeDescription
                         }}";
             else
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {lazinatorGenericBackingID}public {DerivationKeyword}System.Collections.Generic.List<int> LazinatorGenericID
+                        {lazinatorGenericBackingID}public {DerivationKeyword}LazinatorGenericTypeID LazinatorGenericID
                         {{
                             get => null;
                             set {{ }}

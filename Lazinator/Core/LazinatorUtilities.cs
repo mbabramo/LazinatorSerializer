@@ -270,12 +270,12 @@ namespace Lazinator.Core
         {
             if (containsOpenGenericParameters)
             {
-                List<int> LazinatorGenericID = ReadLazinatorGenericID(span, ref index);
-                if (LazinatorGenericID[0] != uniqueID)
+                List<int> lazinatorGenericID = ReadLazinatorGenericID(span, ref index).TypeAndInnerTypeIDs;
+                if (lazinatorGenericID[0] != uniqueID)
                 {
                     throw new FormatException("Wrong self-serialized type initialized.");
                 }
-                return LazinatorGenericID;
+                return lazinatorGenericID;
             }
             else
             {
@@ -300,7 +300,7 @@ namespace Lazinator.Core
             }
         }
 
-        public static List<int> ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
+        public static LazinatorGenericIDType ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
         {
             int mainID = span.ToDecompressedInt(ref index);
             List<int> l = new List<int>() { mainID };
@@ -309,7 +309,7 @@ namespace Lazinator.Core
             {
                 l.Add(span.ToDecompressedInt(ref index));
             }
-            return l;
+            return new LazinatorGenericIDType(l);
         }
 
         /// <summary>
