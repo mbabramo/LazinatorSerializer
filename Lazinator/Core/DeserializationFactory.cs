@@ -222,16 +222,21 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="informParentOfDirtinessDelegate">A delegate to be called when the item has changed.</param>
         /// <returns>The deserialized Lazinator object</returns>
-        private ILazinator CreateKnownIDSpecifyingDelegate(int uniqueID, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private ILazinator CreateKnownIDSpecifyingDelegate(int uniqueID, ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
+            ILazinator selfSerialized = null;
             if (FactoriesByID.ContainsKey(uniqueID))
-            {
-                ILazinator selfSerialized = FactoriesByID[uniqueID]();
-                InitializeDeserialized(selfSerialized, serializedBytes, informParentOfDirtinessDelegate);
-                return selfSerialized;
-            }
+                selfSerialized = FactoriesByID[uniqueID]();
             else
+            {
+                (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
+                if (numGenericParameters > 0)
+                    selfSerialized = CreateGenericItemUsingReflection(storage.Span);
+            }
+            if (selfSerialized == null)
                 throw new UnknownSerializedTypeException(uniqueID);
+            InitializeDeserialized(selfSerialized, storage, informParentOfDirtinessDelegate);
+            return selfSerialized;
         }
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
