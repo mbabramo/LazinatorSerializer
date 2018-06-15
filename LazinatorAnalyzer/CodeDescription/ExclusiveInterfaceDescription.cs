@@ -138,7 +138,7 @@ namespace Lazinator.CodeDescription
                             (
                              !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
                              &&
-                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName && y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable)))
+                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName /* DEBUG && y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable */)))
                         )
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
