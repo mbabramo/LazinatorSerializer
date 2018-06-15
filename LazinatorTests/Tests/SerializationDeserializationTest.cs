@@ -2550,8 +2550,11 @@ namespace LazinatorTests.Tests
             var lc3 = c3.ToList();
             lc3[1].LazinatorParentClass.Should().Be(c3);
             var c4 = l.CloneLazinatorTyped();
-            var lc4 = c3.AsEnumerable().ToList();
+            var lc4 = c4.AsEnumerable().ToList();
             lc4[1].LazinatorParentClass.Should().Be(c4);
+            var c5 = l.CloneLazinatorTyped();
+            c5[0] = new ExampleChild();
+            c5[0].LazinatorParentClass.Should().Be(c5);
         }
 
         [Fact]
