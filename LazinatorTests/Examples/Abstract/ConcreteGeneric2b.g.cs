@@ -238,6 +238,19 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric2 = value;
             }
         }
+        private int _MyUnofficialInt;
+        public override int MyUnofficialInt
+        {
+            get
+            {
+                return _MyUnofficialInt;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyUnofficialInt = value;
+            }
+        }
         private string _AnotherProperty;
         public string AnotherProperty
         {
@@ -358,6 +371,7 @@ namespace LazinatorTests.Examples.Abstract
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyEnumWithinAbstractGeneric = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
+            _MyUnofficialInt = span.ToDecompressedInt(ref bytesSoFar);
             _AnotherProperty = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
@@ -411,6 +425,7 @@ namespace LazinatorTests.Examples.Abstract
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinAbstractGeneric);
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinAbstractGeneric2);
+            CompressedIntegralTypes.WriteCompressedInt(writer, _MyUnofficialInt);
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _AnotherProperty);
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
