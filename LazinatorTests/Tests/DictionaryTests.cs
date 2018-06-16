@@ -113,5 +113,23 @@ namespace LazinatorTests.Tests
             }
             d.Count().Should().Be(0);
         }
+
+        [Fact]
+        public void SingleItemDictionary()
+        {
+            // we have some optimizations for a single-item dictionary, so this tests them
+            LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
+            d[234] = "something";
+            d.ContainsKey(123).Should().BeFalse();
+            d.ContainsKey(234).Should().BeTrue();
+            d[234].WrappedValue.Should().Be("something");
+
+            // try with a zero key
+            d = new LazinatorDictionary<WLong, WString>();
+            d[0] = "something";
+            d.ContainsKey(123).Should().BeFalse();
+            d.ContainsKey(0).Should().BeTrue();
+            d[0].WrappedValue.Should().Be("something");
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Lazinator.Collections.Dictionary
 {
     public partial class LazinatorDictionary<TKey, TValue> : ILazinatorDictionary<TKey, TValue>, IDictionary<TKey, TValue> where TKey : ILazinator, new() where TValue : ILazinator
     {
-        private const int InitialNumBuckets = 10;
+        private const int InitialNumBuckets = 1;
         private int NumBuckets => Buckets.Count;
 
         public bool IsReadOnly => false;
@@ -42,6 +42,19 @@ namespace Lazinator.Collections.Dictionary
             bucket = GetBucketAtIndex(bucketIndex, buckets);
         }
 
+        // optimization for single-item dictionary
+        private TKey GetSingleKey()
+        {
+            var bucket = Buckets[0];
+            return bucket.Keys[0];
+        }
+
+        private TValue GetSingleValue()
+        {
+            var bucket = Buckets[0];
+            return bucket.Values[0];
+        }
+
         public LazinatorDictionary()
         {
             Clear();
@@ -51,6 +64,8 @@ namespace Lazinator.Collections.Dictionary
         {
             get
             {
+                if (Count == 1 && GetSingleKey().Equals(key))
+                    return GetSingleValue();
                 GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
                 bool contained = bucket.ContainsKey(key, hash);
                 if (!contained)
@@ -83,6 +98,8 @@ namespace Lazinator.Collections.Dictionary
 
         public bool ContainsKey(TKey key)
         {
+            if (Count == 1)
+                return GetSingleKey().Equals(key);
             GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
             return bucket.ContainsKey(key, hash);
         }
@@ -269,7 +286,7 @@ namespace Lazinator.Collections.Dictionary
             // It does, however, enumerate, so all items need not be deserialized at once.
             // We might be able to reconstitute the dictionary in binary fashion.
 
-            int numBuckets = Count * 3;
+            int numBuckets = Count == 1 ? 1 : Count * 3;
             if (numBuckets < InitialNumBuckets)
                 numBuckets = InitialNumBuckets;
             var results = GetKeysAndValues();
