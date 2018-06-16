@@ -154,7 +154,7 @@ namespace Lazinator.Support
             int s_index = 0;
             do
             {
-                uint a = Fetch(s);
+                uint a = Fetch(s.Slice((int)(0 + s_index)));
                 uint b = Fetch(s.Slice((int)(4 + s_index)));
                 uint c = Fetch(s.Slice((int)(8 + s_index)));
                 uint d = Fetch(s.Slice((int)(12 + s_index)));
@@ -426,7 +426,7 @@ namespace Lazinator.Support
             x ^= w_second * 9;
             y += v_first + Fetch64(s.Slice((int)(s_index + 40)));
             z = Rotate64(z + w_first, 33) * mul;
-            uint128_t v = WeakHashLen32WithSeeds(s, v_second * mul, x + w_first);
+            uint128_t v = WeakHashLen32WithSeeds(s.Slice(0 + (int)s_index), v_second * mul, x + w_first);
             uint128_t w = WeakHashLen32WithSeeds(s.Slice(32 + (int) s_index), z + w_second, y + Fetch64(s.Slice(16 + (int) s_index)));
             return H(HashLen16(v.first + x, w.first ^ y, mul) + z - u,
                     H(v.second + y, w.second + z, k2, 30) ^ x,
@@ -498,6 +498,9 @@ namespace Lazinator.Support
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Hash64(ReadOnlySpan<byte> s) => Hash64(s, (uint) s.Length);
+
+        // alternative would be to use an algorithm like MD5.
+        // static System.Security.Cryptography.MD5 MD5Algorithm = System.Security.Cryptography.MD5.Create();
 
         public static Guid Hash128(ReadOnlySpan<byte> s)
         {
