@@ -18,10 +18,12 @@ namespace Lazinator.Collections
         [NonSerialized] private List<T> UnderlyingList;
         [NonSerialized] private List<bool> ItemsAccessedBeforeFullyDeserialized;
         [NonSerialized] private int? FixedID;
+        [NonSerialized] private bool TypeRequiresNonBinaryHashing;
 
         public LazinatorList()
         {
             FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
+            TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
         }
 
         public LazinatorList(IEnumerable<T> items)
@@ -76,7 +78,8 @@ namespace Lazinator.Collections
 
         public uint GetListMemberHash32(int index)
         {
-            debug; // if the type is one where we don't use binary hashing, then we need to make sure to access the item here, so that we don't use the list member slice
+            if (TypeRequiresNonBinaryHashing)
+                return (uint) this[index].GetHashCode();
 
             if (FullyDeserialized || (UnderlyingList != null && ItemsAccessedBeforeFullyDeserialized[index]))
                 return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();

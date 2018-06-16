@@ -29,6 +29,22 @@ namespace Lazinator.Support
             return attribute;
         }
 
+        public static bool InterfaceHasUseNonbinaryHashAttribute(Type correspondingInterface)
+        {
+            return correspondingInterface.GetCustomAttributes(typeof(NonbinaryHashAttribute), false)
+                .Select(x => (NonbinaryHashAttribute)x).Any();
+        }
+
+        public static bool CorrespondingInterfaceHasUseNonbinaryHashAttribute(Type mainType)
+        {
+            var correspondingInterface = GetCorrespondingExclusiveInterface(mainType);
+            if (correspondingInterface == null)
+                return false;
+            return correspondingInterface.GetCustomAttributes(typeof(NonbinaryHashAttribute), false)
+                .Select(x => (NonbinaryHashAttribute)x).Any();
+        }
+
+
         public static NonexclusiveLazinatorAttribute GetNonexclusiveLazinatorAttributeForInterface(Type @interface)
         {
             var nonexclusiveAttributes = @interface.GetCustomAttributes(typeof(NonexclusiveLazinatorAttribute), false)

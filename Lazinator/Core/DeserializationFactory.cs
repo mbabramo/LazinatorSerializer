@@ -53,6 +53,8 @@ namespace Lazinator.Core
 
         private Dictionary<Type, int?> FixedUniqueIDs = new Dictionary<Type, int?>();
 
+        private ConcurrentDictionary<Type, bool> NonBinaryHashing = new ConcurrentDictionary<Type, bool>();
+
         public DeserializationFactory() : this(AppDomain.CurrentDomain.GetAssemblies().ToArray())
         {
 
@@ -345,13 +347,17 @@ namespace Lazinator.Core
                             continue;
                     }
                     else
+                    {
                         uniqueID = attribute.UniqueID + AddThisWhenSerializingExclusiveInterface;
+                        NonBinaryHashing[type] = LazinatorReflection.InterfaceHasUseNonbinaryHashAttribute(type);
+                    }
                 }
                 else
                 {
                     var attribute = LazinatorReflection.GetLazinatorAttributeForLazinatorMainType(type);
                     if (attribute == null)
                         continue;
+                    NonBinaryHashing[type] = LazinatorReflection.CorrespondingInterfaceHasUseNonbinaryHashAttribute(type);
                     uniqueID = attribute.UniqueID;
                 }
                 TypeToUniqueIDMap[type] = uniqueID;
@@ -423,6 +429,16 @@ namespace Lazinator.Core
             }
 
             return fixedUniqueID;
+        }
+
+        public bool HasNonBinaryHashAttribute(Type t)
+        {
+            Type declaringType = t.DeclaringType ?? t;
+            if (NonBinaryHashing.ContainsKey(declaringType))
+                return NonBinaryHashing[declaringType];
+            bool result = t.IsInterface ? LazinatorReflection.InterfaceHasUseNonbinaryHashAttribute(declaringType) : LazinatorReflection.CorrespondingInterfaceHasUseNonbinaryHashAttribute(declaringType);
+            NonBinaryHashing[declaringType] = result;
+            return result;
         }
 
         #endregion
