@@ -17,7 +17,14 @@ namespace Lazinator.Collections.Dictionary
         private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
         {
             hash = key.GetBinaryHashCode32();
-            bucket = Buckets[(int)(hash % InitialNumBuckets)];
+            bucket = Buckets[(int)(hash % NumBuckets)];
+        }
+
+        private void GetHashAndBucket(TKey key, LazinatorList<DictionaryBucket<TKey, TValue>> buckets, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
+        {
+            // This method is for use when using a replacement set of buckets.
+            hash = key.GetBinaryHashCode32();
+            bucket = buckets[(int)(hash % buckets.Count)];
         }
 
         public LazinatorDictionary()
@@ -89,7 +96,12 @@ namespace Lazinator.Collections.Dictionary
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            Add(item, Buckets);
+        }
+
+        private void Add(KeyValuePair<TKey, TValue> item, LazinatorList<DictionaryBucket<TKey, TValue>> buckets)
+        {
+            GetHashAndBucket(item.Key, buckets, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
             bool contained = bucket.ContainsKey(item.Key, hash);
             if (contained)
                 throw new ArgumentException();
@@ -234,18 +246,20 @@ namespace Lazinator.Collections.Dictionary
         private void CompleteResize()
         {
             // Note: This is a bit inefficient because it deserializes everything.
+            // It does, however, enumerate, so all items need not be deserialized at once.
             // We might be able to reconstitute the dictionary in binary fashion.
+
             int numBuckets = Count * 3;
             if (numBuckets < InitialNumBuckets)
                 numBuckets = InitialNumBuckets;
-            var results = GetKeysAndValues().ToList();
+            var results = GetKeysAndValues();
 
-            Buckets = new LazinatorList<DictionaryBucket<TKey, TValue>>();
+            var replacementBuckets = new LazinatorList<DictionaryBucket<TKey, TValue>>();
             for (int i = 0; i < numBuckets; i++)
-                Buckets.Add(new DictionaryBucket<TKey, TValue>());
+                replacementBuckets.Add(new DictionaryBucket<TKey, TValue>());
 
             foreach (var item in results)
-                Add(item);
+                Add(item, replacementBuckets);
 
             Count = results.Count();
         }
