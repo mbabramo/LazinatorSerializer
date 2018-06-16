@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class CloneSetterAccessibilityAttribute : Attribute

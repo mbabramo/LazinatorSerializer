@@ -52,7 +52,7 @@ namespace LazinatorTests.Tests
             ImmutableArray<AttributeData> attributes = exampleInterface.GetAttributes();
             attributes.Count().Should().Be(1);
             Attribute converted = AttributeConverter.ConvertAttribute(attributes[0]);
-            LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute cloneLazinatorAttribute = converted as LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute;
+            LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute cloneLazinatorAttribute = converted as LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute;
             cloneLazinatorAttribute.UniqueID.Should().NotBe(0);
         }
 

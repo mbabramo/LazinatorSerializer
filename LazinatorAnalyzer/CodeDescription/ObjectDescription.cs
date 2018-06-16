@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.AttributeClones;
 using LazinatorCodeGen.Roslyn;
 using LazinatorCodeGen.Support;
 using Microsoft.CodeAnalysis;
@@ -73,6 +73,7 @@ namespace Lazinator.CodeDescription
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public bool IncludeTracingCode => Compilation.Config?.IncludeTracingCode ?? false;
         public bool StepThroughProperties => Compilation.Config?.StepThroughProperties ?? true;
+        public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
 
         public ObjectDescription()
         {
@@ -325,6 +326,9 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
+                    string hash32 = NonbinaryHash ? "return (uint) GetHashCode();" :
+                            $@"LazinatorConvertToBytes();
+                            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);";
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
@@ -497,8 +501,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}uint GetBinaryHashCode32()
                         {{
-                            LazinatorConvertToBytes();
-                            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
+                            {hash32}
                         }}
 
                         public {DerivationKeyword}ulong GetBinaryHashCode64()

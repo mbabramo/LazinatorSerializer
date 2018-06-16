@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class CloneEliminatedWithVersionAttribute : Attribute

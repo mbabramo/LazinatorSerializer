@@ -1,4 +1,4 @@
-﻿using LazinatorCodeGen.AttributeClones;
+﻿using LazinatorAnalyzer.AttributeClones;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
@@ -99,6 +99,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneIncludableChildAttribute();
                 case "NonexclusiveLazinatorAttribute":
                     return new CloneNonexclusiveLazinatorAttribute();
+                case "NonbinaryHashAttribute":
+                    return new CloneNonbinaryHashAttribute();
                 case "SmallLazinatorAttribute":
                     return new CloneSmallLazinatorAttribute();
                 case "ExcludeLazinatorVersionByteAttribute":

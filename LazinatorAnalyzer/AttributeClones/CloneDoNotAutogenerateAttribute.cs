@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Used to indicate that a property in a Lazinator interface should not be automatically be generated in the code behind, leaving the responsibility for generating the code to the user.

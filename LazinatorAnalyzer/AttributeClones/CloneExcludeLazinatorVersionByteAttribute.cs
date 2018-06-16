@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Indicates that information on the Lazinator version should not be included with a serialized item. This is recommended only for built-in Lazinator wrapper classes. Use of this on other classes may lead to incompatibility with later versions of Lazinator.

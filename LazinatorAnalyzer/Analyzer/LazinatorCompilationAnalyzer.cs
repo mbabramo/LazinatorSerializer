@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LazinatorAnalyzer.Settings;
-using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.AttributeClones;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Indicates that this property's type should be fully qualified in the generated code-behind. Useful when a type has a name that otherwise would conflict.

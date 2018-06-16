@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Indicates that all Lazinator properties in a class implementing this interface should be treated as AutoChangeParent properties.    /// </summary>

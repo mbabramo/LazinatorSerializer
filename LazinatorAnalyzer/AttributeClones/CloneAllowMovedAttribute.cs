@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Indicates that this property can be set to a Lazinator object that already has a parent. This parent will be replaced. 

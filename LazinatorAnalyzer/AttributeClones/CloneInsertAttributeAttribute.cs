@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LazinatorCodeGen.AttributeClones
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Provides text that should be added to the code-behind for the definition of the property.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LazinatorAnalyzer.Roslyn;
-using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.AttributeClones;
 using Microsoft.CodeAnalysis;
 
 namespace Lazinator.CodeDescription

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Immutable;
 using Lazinator.CodeDescription;
-using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
 using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
@@ -213,7 +213,7 @@ namespace LazinatorCodeGen.Roslyn
                 {
                     foreach (var @interface in allInterfaces)
                     {
-                        LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute>(@interface);
+                        LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute>(@interface);
                         if (attribute != null)
                         {
                             AddLinkFromTypeToInterface(namedTypeSymbol, @interface);
@@ -226,12 +226,12 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 else if (namedTypeSymbol.TypeKind == TypeKind.Interface)
                 {
-                    if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.CloneLazinatorAttribute>(type) != null)
+                    if (GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute>(type) != null)
                     {
                         ExclusiveInterfaces.Add(namedTypeSymbol);
                         RecordPropertiesForInterface(namedTypeSymbol);
                     }
-                    else if (GetFirstAttributeOfType<LazinatorCodeGen.AttributeClones.CloneNonexclusiveLazinatorAttribute>(type) != null)
+                    else if (GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneNonexclusiveLazinatorAttribute>(type) != null)
                         NonexclusiveInterfaces.Add(namedTypeSymbol);
                 }
             }

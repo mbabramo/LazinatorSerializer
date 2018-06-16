@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Threading.Tasks;
 using Lazinator.CodeDescription;
-using LazinatorCodeGen.AttributeClones;
+using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Roslyn;
 using Microsoft.CodeAnalysis.CSharp;
 
