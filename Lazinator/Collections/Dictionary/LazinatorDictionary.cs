@@ -96,16 +96,20 @@ namespace Lazinator.Collections.Dictionary
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            Add(item, Buckets);
+            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
+            bool contained = bucket.ContainsKey(item.Key, hash);
+            if (contained)
+                throw new ArgumentException();
+            this[item.Key] = item.Value;
         }
 
-        private void Add(KeyValuePair<TKey, TValue> item, LazinatorList<DictionaryBucket<TKey, TValue>> buckets)
+        private void AddToReplacementBucket(KeyValuePair<TKey, TValue> item, LazinatorList<DictionaryBucket<TKey, TValue>> buckets)
         {
             GetHashAndBucket(item.Key, buckets, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
             bool contained = bucket.ContainsKey(item.Key, hash);
             if (contained)
                 throw new ArgumentException();
-            this[item.Key] = item.Value;
+            bucket.InsertItemAtKey(item.Key, item.Value, hash);
         }
 
         public bool Remove(TKey key)
@@ -258,10 +262,16 @@ namespace Lazinator.Collections.Dictionary
             for (int i = 0; i < numBuckets; i++)
                 replacementBuckets.Add(new DictionaryBucket<TKey, TValue>());
 
-            foreach (var item in results)
-                Add(item, replacementBuckets);
+            int count = 0;
 
-            Count = results.Count();
+            foreach (var item in results)
+            {
+                AddToReplacementBucket(item, replacementBuckets);
+                count++;
+            }
+
+            Buckets = replacementBuckets;
+            Count = count;
         }
     }
 }

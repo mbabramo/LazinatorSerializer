@@ -106,6 +106,7 @@ namespace LazinatorTests.Tests
             {
                 d[i] = i.ToString();
             }
+            d.Count.Should().Be(numItems);
             for (long i = 0; i < numItems; i++)
             {
                 d.Remove(i);
