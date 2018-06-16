@@ -76,6 +76,8 @@ namespace Lazinator.Collections
 
         public uint GetListMemberHash32(int index)
         {
+            debug; // if the type is one where we don't use binary hashing, then we need to make sure to access the item here, so that we don't use the list member slice
+
             if (FullyDeserialized || (UnderlyingList != null && ItemsAccessedBeforeFullyDeserialized[index]))
                 return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();
             
