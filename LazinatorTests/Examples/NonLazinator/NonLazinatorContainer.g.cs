@@ -303,6 +303,7 @@ namespace LazinatorTests.Examples
         }
         bool _NonLazinatorStruct_Accessed;
         
+        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
         
         public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {

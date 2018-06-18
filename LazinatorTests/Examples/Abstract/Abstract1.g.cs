@@ -55,6 +55,7 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
+        public abstract IEnumerable<ILazinator> GetDirtyNodes();
         public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
         protected abstract IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
         

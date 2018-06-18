@@ -266,6 +266,7 @@ namespace Lazinator.Spans
         }
         protected bool _ReadOrWrite_Accessed;
         
+        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
         
         public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {

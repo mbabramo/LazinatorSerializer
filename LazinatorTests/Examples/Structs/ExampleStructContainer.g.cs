@@ -391,6 +391,7 @@ namespace LazinatorTests.Examples
         }
         protected bool _MyListNullableExampleStruct_Accessed;
         
+        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
         
         public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {

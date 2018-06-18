@@ -341,6 +341,7 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected bool _LazinatorExample_Accessed;
         
+        public override IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
         
         public override IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {

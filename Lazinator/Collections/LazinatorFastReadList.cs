@@ -84,5 +84,10 @@ namespace Lazinator.Collections
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<ILazinator> GetDirtyNodes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

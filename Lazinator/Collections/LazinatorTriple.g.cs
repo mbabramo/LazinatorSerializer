@@ -341,6 +341,7 @@ namespace Lazinator.Collections
         }
         protected bool _Item3_Accessed;
         
+        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
         
         public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
