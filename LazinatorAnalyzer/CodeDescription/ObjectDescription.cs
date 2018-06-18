@@ -293,6 +293,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
+                        {ProtectedIfApplicable}abstract IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
