@@ -436,11 +436,6 @@ namespace LazinatorTests.Examples
         
         public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
-            if (!explore)
-            {
-                yield break;
-            }
             if (IsDirty)
             {
                 bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
@@ -453,13 +448,13 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
-            if (!DescendantIsDirty)
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (explore && DescendantIsDirty)
             {
-                yield break;
-            }
-            foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
-            {
-                yield return dirty;
+                foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                {
+                    yield return dirty;
+                }
             }
         }
         
