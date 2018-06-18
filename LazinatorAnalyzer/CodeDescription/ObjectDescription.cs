@@ -659,7 +659,9 @@ namespace Lazinator.CodeDescription
                             {{
                                 bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
                                 if (!explore)
+                                {{
                                     yield break;
+                                }}
                                 if (IsDirty)
                                 {{
                                     bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
@@ -667,12 +669,19 @@ namespace Lazinator.CodeDescription
                                     {{
                                         yield return this;
                                         if (onlyHighestDirty)
+                                        {{
                                             yield break;
+                                        }}
                                     }}
                                 }}
                                 if (!DescendantIsDirty)
+                                {{
                                     yield break;
-                                GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+                                }}
+                                foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                                {{
+                                    yield return dirty;
+                                }}
                             }}
 
                         {ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
