@@ -619,7 +619,7 @@ namespace Lazinator.CodeDescription
         private void AppendResetProperties(CodeStringBuilder sb)
         {
             string resetAccessed = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType != LazinatorPropertyType.OpenGenericParameter && x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNotPrimitiveOrOpenGeneric))
             {
                 resetAccessed += $"_{property.PropertyName}_Accessed = ";
             }
@@ -987,12 +987,19 @@ namespace Lazinator.CodeDescription
         {
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
             string manualDescendantDirtinessChecks = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
                 else
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName} != null && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                {
+                    string nonNullCheck;
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct || property.PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                        nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{property.AppropriatelyQualifiedTypeName}>.Default.Equals({property.PropertyName}, default({property.AppropriatelyQualifiedTypeName}))";
+                    else
+                        nonNullCheck = $"{property.PropertyName} != null";
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {nonNullCheck} && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                }
             }
             // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
             //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
