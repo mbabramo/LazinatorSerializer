@@ -274,7 +274,9 @@ namespace LazinatorTests.Examples.Structs
         {
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (!explore)
-            yield break;
+            {
+                yield break;
+            }
             if (IsDirty)
             {
                 bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
@@ -282,12 +284,19 @@ namespace LazinatorTests.Examples.Structs
                 {
                     yield return this;
                     if (onlyHighestDirty)
-                    yield break;
+                    {
+                        yield break;
+                    }
                 }
             }
             if (!DescendantIsDirty)
-            yield break;
-            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+            {
+                yield break;
+            }
+            foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+            {
+                yield return dirty;
+            }
         }
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
