@@ -292,5 +292,25 @@ namespace Lazinator.Collections
                 ConvertToBytes_ReadOnlyMemory_Gbyte_g(writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
 
+
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            // Do not report Offsets' dirtiness. Just report items' dirtiness
+            for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
+            {
+                if (ItemHasBeenAccessed(i))
+                {
+                    var item = ((IList<T>)UnderlyingList)[i];
+                    if (item != null && !(item.Equals(default(T))))
+                    {
+                        foreach (ILazinator toYield in item.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                        {
+                            yield return toYield;
+                        }
+                    }
+                }
+            }
+            yield break;
+        }
     }
 }
