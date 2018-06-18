@@ -209,6 +209,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
+                AppendDirtyEnumeration(sb);
                 AppendResetProperties(sb);
                 AppendConversionSectionStart(sb);
                 AppendConvertFromBytesAfterHeader(sb);
@@ -290,6 +291,8 @@ namespace Lazinator.CodeDescription
 			                get;
 			                set;
                         }}
+
+                        public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -632,41 +635,60 @@ namespace Lazinator.CodeDescription
         private void AppendDirtyEnumeration(CodeStringBuilder sb)
         {
             if (IsAbstract)
-                sb.AppendLine("public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);");
+                return;
             else
             {
-                sb.AppendLine($@"public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
-                        {{
-                            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
-                            if (!explore)
-                                yield break;
-                            if (IsDirty)
-                            {{
-                                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
-                                if (yield)
-                                {{
-                                    yield return this;
-                                    if (onlyHighestDirty)
-                                        yield break;
-                                }}
-                            }}
-                            if (!DescendantIsDirty)
-                                yield break;
-                            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
-                        }}");
-                foreach (var property in PropertiesToDefineThisLevel)
+                if (IsDerivedFromNonAbstractLazinator)
                 {
+                    // we've already defined GetDirtyNodes, so we just need to override the Helper function, calling the base function
                     sb.Append($@"
-                        protected IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+
+                        {ProtectedIfApplicable}override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                         {{
-                            if (_MyChild1_Accessed && _MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
-                            {{
-                                foreach (ILazinator toYield in _MyChild1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                                    yield return toYield;
-                            }}");
+                            base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+                        ");
                 }
-                sb.Append($@"
-                        }}");
+                else
+                {
+                    // we need to function GetDirtyNodes, plus GetDirtyNodes_Helper but without a call to a base function
+                    sb.AppendLine($@"
+
+                            public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            {{
+                                bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+                                if (!explore)
+                                    yield break;
+                                if (IsDirty)
+                                {{
+                                    bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                                    if (yield)
+                                    {{
+                                        yield return this;
+                                        if (onlyHighestDirty)
+                                            yield break;
+                                    }}
+                                }}
+                                if (!DescendantIsDirty)
+                                    yield break;
+                                GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+                            }}
+
+                        {ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                        {{");
+                }
+
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
+                {
+                    sb.Append($@"if (_{property.PropertyName}_Accessed && {property.GetNonNullCheck()} && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                            {{
+                                foreach (ILazinator toYield in _{property.PropertyName}.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                                    yield return toYield;
+                            }}
+");
+                }
+                sb.Append($@"yield break;
+                        }}
+                    ");
             }
         }
 
@@ -1038,7 +1060,7 @@ namespace Lazinator.CodeDescription
 
         private string GetFileHeader(string hash, string primaryNamespace, List<string> otherNamespaces)
         {
-            otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Diagnostics", "System.IO", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support" });
+            otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Collections.Generic", "System.Diagnostics", "System.IO", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support" });
             otherNamespaces.RemoveAll(x => x == primaryNamespace);
             otherNamespaces = otherNamespaces.Where(x => x != null && x != "").OrderBy(x => x).Distinct().ToList();
             CodeStringBuilder header = new CodeStringBuilder();
