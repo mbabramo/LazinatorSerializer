@@ -993,11 +993,7 @@ namespace Lazinator.CodeDescription
                     manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
                 else
                 {
-                    string nonNullCheck;
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorStruct || property.PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                        nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{property.AppropriatelyQualifiedTypeName}>.Default.Equals({property.PropertyName}, default({property.AppropriatelyQualifiedTypeName}))";
-                    else
-                        nonNullCheck = $"{property.PropertyName} != null";
+                    string nonNullCheck = property.GetNonNullCheck();
                     manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {nonNullCheck} && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
                 }
             }

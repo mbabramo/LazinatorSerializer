@@ -356,6 +356,16 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        public string GetNonNullCheck()
+        {
+            string nonNullCheck;
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+            else
+                nonNullCheck = $"{PropertyName} != null";
+            return nonNullCheck;
+        }
+
         private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
         {
             if (t.TupleUnderlyingType != null)
