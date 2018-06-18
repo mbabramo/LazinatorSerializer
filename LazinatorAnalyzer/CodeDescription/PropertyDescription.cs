@@ -812,10 +812,12 @@ namespace Lazinator.CodeDescription
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
-                            {incomingValue}.LazinatorParentClass = this;";
+                            {incomingValue}.LazinatorParentClass = this;
+                            {incomingValue}.IsDirty = true;";
             else
                 parentSet = $@"
-                            {incomingValue}.LazinatorParentClass = null;";
+                            {incomingValue}.LazinatorParentClass = null;
+                            {incomingValue}.IsDirty = true;";
             if (MovesFromOtherHierarchiesAllowed)
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
@@ -913,11 +915,7 @@ namespace Lazinator.CodeDescription
             set
             {{
                 {parentRelationship}IsDirty = true;
-                _{PropertyName} = {incomingValue};{(IsSerialized && PropertyType != LazinatorPropertyType.LazinatorStruct ? $@"
-                if (_{PropertyName} != null)
-                {{
-                    _{PropertyName}.IsDirty = true;
-                }}" : "")}{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
+                _{PropertyName} = {incomingValue};{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
                 _{PropertyName}_Dirty = true;" : "")}
                 _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
             }}
