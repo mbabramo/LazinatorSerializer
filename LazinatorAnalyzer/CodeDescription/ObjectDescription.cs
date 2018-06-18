@@ -292,6 +292,7 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
+                        public abstract IEnumerable<ILazinator> GetDirtyNodes();
                         public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
                         {ProtectedIfApplicable}abstract IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
 		                
@@ -654,6 +655,7 @@ namespace Lazinator.CodeDescription
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
                     // we need to function GetDirtyNodes, plus GetDirtyNodes_Helper but without a call to a base function
                     sb.AppendLine($@"
+                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
 
                             public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                             {{
