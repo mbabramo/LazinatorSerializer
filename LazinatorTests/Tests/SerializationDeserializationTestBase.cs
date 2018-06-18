@@ -10,7 +10,27 @@ namespace LazinatorTests.Tests
 {
     public class SerializationDeserializationTestBase
     {
+        internal T CloneWithOptionalVerification<T>(T original, bool includeChildren, bool verifyCleanness) where T : ILazinator, new()
+        {
+            var bytes = original.SerializeNewBuffer(includeChildren ? IncludeChildrenMode.IncludeAllChildren : IncludeChildrenMode.ExcludeAllChildren, verifyCleanness);
+            var result = new T
+            {
+                HierarchyBytes = bytes,
+            };
 
+            return result;
+        }
+        
+        internal Example GetHierarchy(int indexUpTo2, int indexUpTo3a, int indexUpTo3b, int indexUpTo3c, int indexUpTo2b)
+        {
+            var parent = GetExample(indexUpTo2);
+            parent.MyChild1 = GetExampleChild(indexUpTo3a);
+            parent.MyChild2 = GetExampleChild(indexUpTo3b);
+            parent.MyNonLazinatorChild = GetNonLazinatorType(indexUpTo3c);
+            parent.MyInterfaceImplementer = GetExampleInterfaceImplementer(indexUpTo2b);
+            return parent;
+        }
+        
         internal void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)
         {
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
@@ -35,28 +55,6 @@ namespace LazinatorTests.Tests
                 bool shouldBeEqual = !serializeAndDeserializeFirst || setDirtyFlag; // if we don't set dirty flag, then either we get an exception or we get the wrong data, unless the data has never been serialized and deserialized
                 ExampleEqual(hierarchy, goal).Should().Be(shouldBeEqual);
             }
-        }
-
-        internal T CloneWithOptionalVerification<T>(T original, bool includeChildren, bool verifyCleanness) where T : ILazinator, new()
-        {
-            var bytes = original.SerializeNewBuffer(includeChildren ? IncludeChildrenMode.IncludeAllChildren : IncludeChildrenMode.ExcludeAllChildren, verifyCleanness);
-            var result = new T
-            {
-                HierarchyBytes = bytes,
-            };
-
-            return result;
-        }
-
-
-        internal Example GetHierarchy(int indexUpTo2, int indexUpTo3a, int indexUpTo3b, int indexUpTo3c, int indexUpTo2b)
-        {
-            var parent = GetExample(indexUpTo2);
-            parent.MyChild1 = GetExampleChild(indexUpTo3a);
-            parent.MyChild2 = GetExampleChild(indexUpTo3b);
-            parent.MyNonLazinatorChild = GetNonLazinatorType(indexUpTo3c);
-            parent.MyInterfaceImplementer = GetExampleInterfaceImplementer(indexUpTo2b);
-            return parent;
         }
 
         internal Example GetExample(int index)
@@ -143,7 +141,6 @@ namespace LazinatorTests.Tests
                 return new NonLazinatorClass() {MyInt = 876, MyString = "dokey\r\n"};
             throw new NotImplementedException();
         }
-
 
         internal bool ExampleEqual(Example example1, Example example2)
         {
