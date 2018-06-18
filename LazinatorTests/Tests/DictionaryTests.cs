@@ -149,8 +149,9 @@ namespace LazinatorTests.Tests
             }
             RemoveItemsFromDictionary(d, 24);
             d.ContainsKey(123).Should().BeFalse();
-            d.ContainsKey(0).Should().BeTrue();
-            d[0].WrappedValue.Should().Be("0");
+            var key = d.Keys.First();
+            d.ContainsKey(key).Should().BeTrue();
+            d[key].WrappedValue.Should().Be(key.ToString());
         }
     }
 }

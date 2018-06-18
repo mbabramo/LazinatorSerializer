@@ -274,7 +274,9 @@ namespace Lazinator.Collections.Dictionary
         {
             const double sizeDownThreshold = 0.1; // size down rarely
             const double sizeUpThreshold = 0.8;
-            if (Count < (int) NumBuckets * sizeDownThreshold && NumBuckets > InitialNumBuckets)
+            if (Count == 1)
+                CompleteResize(); // ensure that single-item optimization will work
+            else if (Count < (int) NumBuckets * sizeDownThreshold && NumBuckets > InitialNumBuckets)
                 CompleteResize();
             else if (Count > (int) NumBuckets * sizeUpThreshold)
                 CompleteResize();
