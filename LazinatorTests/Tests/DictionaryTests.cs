@@ -106,11 +106,22 @@ namespace LazinatorTests.Tests
                 d[i] = i.ToString();
             }
             d.Count.Should().Be(numItems);
+            RemoveAllItemsFromDictionary(d);
+            d.Count().Should().Be(0);
+        }
+
+        private static void RemoveAllItemsFromDictionary(LazinatorDictionary<WLong, WString> d)
+        {
+            int numItems = d.Count;
+            RemoveItemsFromDictionary(d, numItems);
+        }
+
+        private static void RemoveItemsFromDictionary(LazinatorDictionary<WLong, WString> d, int numItems)
+        {
             for (long i = 0; i < numItems; i++)
             {
                 d.Remove(i);
             }
-            d.Count().Should().Be(0);
         }
 
         [Fact]
@@ -129,6 +140,17 @@ namespace LazinatorTests.Tests
             d.ContainsKey(123).Should().BeFalse();
             d.ContainsKey(0).Should().BeTrue();
             d[0].WrappedValue.Should().Be("something");
+
+            // try after initially adding items
+            d = new LazinatorDictionary<WLong, WString>();
+            for (long i = 0; i < 25; i++)
+            {
+                d[i] = i.ToString();
+            }
+            RemoveItemsFromDictionary(d, 24);
+            d.ContainsKey(123).Should().BeFalse();
+            d.ContainsKey(0).Should().BeTrue();
+            d[0].WrappedValue.Should().Be("0");
         }
     }
 }
