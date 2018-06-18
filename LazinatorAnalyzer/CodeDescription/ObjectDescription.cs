@@ -634,6 +634,47 @@ namespace Lazinator.CodeDescription
                 }}");
         }
 
+        private void AppendDirtyEnumeration(CodeStringBuilder sb)
+        {
+            if (IsAbstract)
+                sb.AppendLine("public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);");
+            else
+            {
+                sb.AppendLine($@"public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                        {{
+                            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+                            if (!explore)
+                                yield break;
+                            if (IsDirty)
+                            {{
+                                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                                if (yield)
+                                {{
+                                    yield return this;
+                                    if (onlyHighestDirty)
+                                        yield break;
+                                }}
+                            }}
+                            if (!DescendantIsDirty)
+                                yield break;
+                            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+                        }}");
+                foreach (var property in PropertiesToDefineThisLevel)
+                {
+                    sb.Append($@"
+                        protected IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                        {{
+                            if (_MyChild1_Accessed && _MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
+                            {{
+                                foreach (ILazinator toYield in _MyChild1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                                    yield return toYield;
+                            }}");
+                }
+                sb.Append($@"
+                        }}");
+            }
+        }
+
         private void AppendConversionSectionStart(CodeStringBuilder sb)
         {
             string containsOpenGenericParametersString = $@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};";

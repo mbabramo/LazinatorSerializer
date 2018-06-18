@@ -40,7 +40,7 @@ namespace Lazinator.CodeDescription
         private LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
-        internal bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct;
+        internal bool IsSerialized => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
