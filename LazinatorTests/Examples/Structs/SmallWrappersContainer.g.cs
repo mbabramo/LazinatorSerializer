@@ -755,47 +755,65 @@ namespace LazinatorTests.Examples.Structs
             if (_ListWrappedBytes_Accessed && ListWrappedBytes != null && (_ListWrappedBytes.IsDirty || _ListWrappedBytes.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ListWrappedBytes.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool)) && (_WrappedBool.IsDirty || _WrappedBool.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedBool.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte)) && (_WrappedByte.IsDirty || _WrappedByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar)) && (_WrappedChar.IsDirty || _WrappedChar.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedChar.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool)) && (_WrappedNullableBool.IsDirty || _WrappedNullableBool.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableBool.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte)) && (_WrappedNullableByte.IsDirty || _WrappedNullableByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar)) && (_WrappedNullableChar.IsDirty || _WrappedNullableChar.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableChar.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte)) && (_WrappedNullableSByte.IsDirty || _WrappedNullableSByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableSByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte)) && (_WrappedSByte.IsDirty || _WrappedSByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedSByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

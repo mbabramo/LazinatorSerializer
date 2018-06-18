@@ -281,7 +281,9 @@ namespace LazinatorTests.Examples.Abstract
             if (_AbstractProperty_Accessed && AbstractProperty != null && (_AbstractProperty.IsDirty || _AbstractProperty.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _AbstractProperty.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

@@ -363,17 +363,23 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (_ClosedGenericFloat_Accessed && ClosedGenericFloat != null && (_ClosedGenericFloat.IsDirty || _ClosedGenericFloat.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ClosedGenericFloat.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_ClosedGenericInterface_Accessed && ClosedGenericInterface != null && (_ClosedGenericInterface.IsDirty || _ClosedGenericInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ClosedGenericInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_ClosedGenericNonexclusiveInterface_Accessed && ClosedGenericNonexclusiveInterface != null && (_ClosedGenericNonexclusiveInterface.IsDirty || _ClosedGenericNonexclusiveInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ClosedGenericNonexclusiveInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

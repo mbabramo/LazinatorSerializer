@@ -80,7 +80,6 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected bool _IntList6_Accessed;
         
-        
         protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);

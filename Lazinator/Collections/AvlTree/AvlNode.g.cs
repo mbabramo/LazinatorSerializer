@@ -451,22 +451,30 @@ namespace Lazinator.Collections.Avl
             if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && (_Key.IsDirty || _Key.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Key.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_Left_Accessed && Left != null && (_Left.IsDirty || _Left.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Left.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_Right_Accessed && Right != null && (_Right.IsDirty || _Right.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Right.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && (_Value.IsDirty || _Value.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Value.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

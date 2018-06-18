@@ -321,12 +321,16 @@ namespace LazinatorTests.Examples.Hierarchy
             if (_RecursiveClass_Accessed && RecursiveClass != null && (_RecursiveClass.IsDirty || _RecursiveClass.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _RecursiveClass.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_RecursiveInterface_Accessed && RecursiveInterface != null && (_RecursiveInterface.IsDirty || _RecursiveInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _RecursiveInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

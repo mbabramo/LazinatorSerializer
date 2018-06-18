@@ -290,7 +290,9 @@ namespace Lazinator.Wrappers
             if (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T)) && (_NonNullValue.IsDirty || _NonNullValue.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _NonNullValue.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

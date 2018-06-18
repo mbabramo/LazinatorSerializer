@@ -301,7 +301,9 @@ namespace LazinatorTests.Examples.Structs
             if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt)) && (_WrappedInt.IsDirty || _WrappedInt.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedInt.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

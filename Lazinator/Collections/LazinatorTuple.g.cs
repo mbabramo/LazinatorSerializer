@@ -327,12 +327,16 @@ namespace Lazinator.Collections
             if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T)) && (_Item1.IsDirty || _Item1.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Item1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U)) && (_Item2.IsDirty || _Item2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Item2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

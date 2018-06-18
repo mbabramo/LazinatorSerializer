@@ -316,7 +316,9 @@ namespace Lazinator.Spans
             if (_ByteSpan_Accessed && ByteSpan != null && (_ByteSpan.IsDirty || _ByteSpan.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ByteSpan.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

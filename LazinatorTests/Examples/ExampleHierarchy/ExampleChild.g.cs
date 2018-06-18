@@ -328,7 +328,9 @@ namespace LazinatorTests.Examples
             if (_MyWrapperContainer_Accessed && MyWrapperContainer != null && (_MyWrapperContainer.IsDirty || _MyWrapperContainer.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyWrapperContainer.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

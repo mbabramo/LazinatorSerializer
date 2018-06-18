@@ -334,12 +334,16 @@ namespace LazinatorTests.Examples.Subclasses
             if (_SubclassInstance1_Accessed && SubclassInstance1 != null && (_SubclassInstance1.IsDirty || _SubclassInstance1.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _SubclassInstance1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_SubclassInstance2_Accessed && SubclassInstance2 != null && (_SubclassInstance2.IsDirty || _SubclassInstance2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _SubclassInstance2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

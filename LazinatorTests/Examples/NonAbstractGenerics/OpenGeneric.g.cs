@@ -308,7 +308,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T)) && (_MyT.IsDirty || _MyT.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyT.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

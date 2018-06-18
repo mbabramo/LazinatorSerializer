@@ -422,12 +422,16 @@ namespace LazinatorTests.Examples
             if (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt)) && (_IntWrapper.IsDirty || _IntWrapper.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _IntWrapper.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct)) && (_MyExampleStruct.IsDirty || _MyExampleStruct.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyExampleStruct.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

@@ -333,12 +333,16 @@ namespace Lazinator.Collections.Dictionary
             if (_Keys_Accessed && Keys != null && (_Keys.IsDirty || _Keys.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Keys.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_Values_Accessed && Values != null && (_Values.IsDirty || _Values.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Values.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

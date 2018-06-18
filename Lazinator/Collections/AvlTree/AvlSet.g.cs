@@ -292,7 +292,9 @@ namespace Lazinator.Collections.AvlTree
             if (_UnderlyingTree_Accessed && UnderlyingTree != null && (_UnderlyingTree.IsDirty || _UnderlyingTree.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _UnderlyingTree.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

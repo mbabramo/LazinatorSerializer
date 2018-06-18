@@ -336,12 +336,16 @@ namespace Lazinator.Collections
             if (_FourByteItems_Accessed && FourByteItems != null && (_FourByteItems.IsDirty || _FourByteItems.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _FourByteItems.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_TwoByteItems_Accessed && TwoByteItems != null && (_TwoByteItems.IsDirty || _TwoByteItems.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _TwoByteItems.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

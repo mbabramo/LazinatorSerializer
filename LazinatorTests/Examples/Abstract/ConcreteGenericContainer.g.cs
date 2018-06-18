@@ -279,7 +279,9 @@ namespace LazinatorTests.Examples.Abstract
             if (_Item_Accessed && Item != null && (_Item.IsDirty || _Item.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Item.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

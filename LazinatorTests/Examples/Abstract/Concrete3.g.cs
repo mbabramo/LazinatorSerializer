@@ -442,12 +442,16 @@ namespace LazinatorTests.Examples.Abstract
             if (_Example2_Accessed && Example2 != null && (_Example2.IsDirty || _Example2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Example2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             if (_Example3_Accessed && Example3 != null && (_Example3.IsDirty || _Example3.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Example3.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

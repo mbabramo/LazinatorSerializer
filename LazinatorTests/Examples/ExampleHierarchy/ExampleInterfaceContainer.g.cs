@@ -313,7 +313,9 @@ namespace LazinatorTests.Examples.Hierarchy
             if (_ExampleByInterface_Accessed && ExampleByInterface != null && (_ExampleByInterface.IsDirty || _ExampleByInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ExampleByInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

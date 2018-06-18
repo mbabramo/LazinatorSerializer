@@ -275,7 +275,9 @@ namespace Lazinator.Collections.Avl
             if (_Root_Accessed && Root != null && (_Root.IsDirty || _Root.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Root.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

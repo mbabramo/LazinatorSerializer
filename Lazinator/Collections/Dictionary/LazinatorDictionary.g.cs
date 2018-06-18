@@ -291,7 +291,9 @@ namespace Lazinator.Collections.Dictionary
             if (_Buckets_Accessed && Buckets != null && (_Buckets.IsDirty || _Buckets.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Buckets.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }

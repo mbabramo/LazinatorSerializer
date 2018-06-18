@@ -301,7 +301,9 @@ namespace Lazinator.Collections
             if (_Offsets_Accessed && Offsets != null && (_Offsets.IsDirty || _Offsets.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Offsets.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                yield return toYield;
+                {
+                    yield return toYield;
+                }
             }
             yield break;
         }
