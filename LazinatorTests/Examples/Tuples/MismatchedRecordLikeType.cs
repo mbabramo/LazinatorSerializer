@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     /// <summary>
     /// A record-like type with fewer parameters than properties. This would ordinarily be ignored, but the config file says to use it.

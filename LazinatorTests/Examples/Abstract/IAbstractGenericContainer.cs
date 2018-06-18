@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Lazinator.Attributes;
-using Lazinator.Collections;
-using Lazinator.Core;
+﻿using Lazinator.Attributes;
 
 namespace LazinatorTests.Examples.Abstract
 {

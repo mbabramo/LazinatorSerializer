@@ -1,9 +1,7 @@
 ﻿using Xunit;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using Lazinator.Collections.Avl;
 using Lazinator.Core;
@@ -11,7 +9,7 @@ using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
-	public class AvlTreeInsertTests
+    public class AvlTreeInsertTests
 	{
 		[Fact]
 		public void Empty()

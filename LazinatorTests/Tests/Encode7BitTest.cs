@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
 using FluentAssertions;
-using Lazinator.Support;
-using Lazinator.Buffers; 
-using Lazinator.Core; 
-using static Lazinator.Core.LazinatorUtilities;
+using Lazinator.Buffers;
 using Xunit;
 
 namespace LazinatorTests.Tests

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections;
 using Lazinator.Collections.Avl;
 using Lazinator.Wrappers;
 using Xunit;
 
 namespace LazinatorTests.AVL
 {
-	public class AvlEnumeratorTests
+    public class AvlEnumeratorTests
 	{
 		[Fact]
 		public void Sorting()

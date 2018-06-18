@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Lazinator.Support;
-using Lazinator.Buffers; 
-using Lazinator.Core;
-using LazinatorTests.Examples;
-using static Lazinator.Core.LazinatorUtilities;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     public partial struct NonLazinatorContainer : INonLazinatorContainer
     {

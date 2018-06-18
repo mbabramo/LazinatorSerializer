@@ -1,28 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Lazinator.Collections;
 using LazinatorTests.Examples;
-using LazinatorTests.Examples.Collections;
-using Lazinator.Exceptions;
-using Lazinator.Support;
-using Lazinator.Buffers;
 using Lazinator.Core;
-using LazinatorTests.Examples.Tuples;
 using Xunit;
-using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleNonexclusiveInterfaceImplementer;
 using Lazinator.Wrappers;
-using System.Buffers;
-using System.Reflection;
-using Lazinator.Spans;
-using System.Collections;
-using LazinatorTests.Examples.Abstract;
-using LazinatorTests.Examples.Hierarchy;
-using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
-using LazinatorTests.Examples.Subclasses;
-using LazinatorTests.Examples.NonAbstractGenerics;
 
 namespace LazinatorTests.Tests
 {

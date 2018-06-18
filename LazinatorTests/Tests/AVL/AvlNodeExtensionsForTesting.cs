@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lazinator.Collections.Avl;
+﻿using Lazinator.Collections.Avl;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
-	public static class AvlNodeExtensionsForTesting
+    public static class AvlNodeExtensionsForTesting
 	{
 		public static int CountByEnumerating<TKey>(this AvlNode<TKey, WByte> source) where TKey : ILazinator, new()
 		{

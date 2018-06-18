@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Lazinator.Core;
+﻿using Lazinator.Core;
 
 namespace LazinatorTests.Examples.NonAbstractGenerics
 {

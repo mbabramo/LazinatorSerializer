@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using FluentAssertions;
-using Lazinator.Collections;
-using LazinatorTests.Examples;
-using LazinatorTests.Examples.Collections;
-using Lazinator.Buffers; 
-using Lazinator.Core; 
-using static Lazinator.Core.LazinatorUtilities;
-using Lazinator.Support;
+using Lazinator.Buffers;
 using Xunit;
 
 namespace LazinatorTests.Tests

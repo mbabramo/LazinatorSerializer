@@ -1,10 +1,4 @@
-﻿using System;
-using Lazinator.Buffers;
-using Lazinator.Core;
-using Lazinator.Wrappers;
-using static Lazinator.Core.LazinatorUtilities;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     public partial class Example : IExample
     {

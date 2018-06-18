@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Lazinator.Attributes;
+﻿using Lazinator.Attributes;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.Structs

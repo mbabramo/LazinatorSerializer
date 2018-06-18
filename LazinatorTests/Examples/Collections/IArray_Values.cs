@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Lazinator.Attributes;
+﻿using Lazinator.Attributes;
 
 namespace LazinatorTests.Examples.Collections
 {

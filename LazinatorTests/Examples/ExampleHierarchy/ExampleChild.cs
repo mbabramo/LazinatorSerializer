@@ -1,9 +1,4 @@
-﻿using System;
-using Lazinator.Attributes;
-using Lazinator.Wrappers;
-using LazinatorTests.Examples.Structs;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     public partial class ExampleChild : IExampleChild
     {

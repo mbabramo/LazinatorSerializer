@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xunit;
 using Lazinator.Collections.Avl;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
 {
-	public class AvlTreeDeleteTests
+    public class AvlTreeDeleteTests
 	{
 		[Fact]
 		public void ParentNullAndReplaceWithRight()

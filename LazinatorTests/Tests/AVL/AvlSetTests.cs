@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using Lazinator.Collections.Avl;
 using Lazinator.Collections.AvlTree;

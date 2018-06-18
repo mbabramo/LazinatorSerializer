@@ -2,7 +2,6 @@
 using Lazinator.Attributes;
 using Lazinator.Core;
 using Lazinator.Wrappers;
-using LazinatorTests.Examples;
 
 namespace LazinatorTests.Examples
 {
