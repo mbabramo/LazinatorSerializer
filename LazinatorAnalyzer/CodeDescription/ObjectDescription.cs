@@ -388,12 +388,12 @@ namespace Lazinator.CodeDescription
 
                         {ProtectedIfApplicable}{DerivationKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
 
-                        public {DerivationKeyword}ILazinator CloneLazinator()
+                        {(IsDerivedFromNonAbstractLazinator ? "" : $@"public {DerivationKeyword}ILazinator CloneLazinator()
                         {{
                             return CloneLazinator(OriginalIncludeChildrenMode);
                         }}
 
-                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        ")}public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
