@@ -517,5 +517,28 @@ namespace LazinatorTests.Tests
             v7.DescendantIsDirty.Should().BeTrue();
         }
 
+
+
+        [Fact]
+        public void LazinatorListDirtinessEnumerationWorks()
+        {
+            LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
+            {
+            };
+            nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
+
+            var v2 = nonGenericContainer.CloneLazinatorTyped();
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+
+            var results = v2.GetDirtyNodes();
+            results.Count().Should().Be(4);
+
+            var v5 = v2.CloneLazinatorTyped();
+            v5.MyList[1].MyLong = -98765;
+            results = v5.GetDirtyNodes();
+            results.Count().Should().Be(1);
+        }
     }
 }
