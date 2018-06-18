@@ -107,5 +107,12 @@ namespace LazinatorTests.Tests
             c.MyHashSetSerialized.First().MyLong.Should().Be(54321);
         }
 
+        [Fact]
+        public void DirtinessEnumerationWorks()
+        {
+            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
+            var results = hierarchy.GetDirtyNodes(null, null, false).ToList();
+        }
+
     }
 }
