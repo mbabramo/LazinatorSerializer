@@ -650,10 +650,11 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
+                    string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
                     // we need to function GetDirtyNodes, plus GetDirtyNodes_Helper but without a call to a base function
                     sb.AppendLine($@"
 
-                            public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                             {{
                                 bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
                                 if (!explore)
