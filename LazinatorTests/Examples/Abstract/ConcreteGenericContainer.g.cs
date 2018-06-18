@@ -239,13 +239,10 @@ namespace LazinatorTests.Examples.Abstract
                         throw new MovedLazinatorException($"The property Item cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Item = value;
-                if (_Item != null)
-                {
-                    _Item.IsDirty = true;
-                }
                 _Item_Accessed = true;
             }
         }

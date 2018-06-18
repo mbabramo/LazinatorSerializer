@@ -255,13 +255,10 @@ namespace LazinatorTests.Examples.Subclasses
                         throw new MovedLazinatorException($"The property SubclassInstance1 cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _SubclassInstance1 = value;
-                if (_SubclassInstance1 != null)
-                {
-                    _SubclassInstance1.IsDirty = true;
-                }
                 _SubclassInstance1_Accessed = true;
             }
         }
@@ -296,13 +293,10 @@ namespace LazinatorTests.Examples.Subclasses
                         throw new MovedLazinatorException($"The property SubclassInstance2 cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _SubclassInstance2 = value;
-                if (_SubclassInstance2 != null)
-                {
-                    _SubclassInstance2.IsDirty = true;
-                }
                 _SubclassInstance2_Accessed = true;
             }
         }

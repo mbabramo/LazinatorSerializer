@@ -243,6 +243,7 @@ namespace Lazinator.Collections
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Item1 = value;
@@ -285,6 +286,7 @@ namespace Lazinator.Collections
                 if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Item2 = value;

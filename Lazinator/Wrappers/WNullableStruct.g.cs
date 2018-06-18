@@ -249,6 +249,7 @@ namespace Lazinator.Wrappers
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
                     value.LazinatorParentClass = null;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _NonNullValue = value;

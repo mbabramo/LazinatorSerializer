@@ -240,13 +240,10 @@ namespace LazinatorTests.Examples.Abstract
                         throw new MovedLazinatorException($"The property AbstractProperty cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _AbstractProperty = value;
-                if (_AbstractProperty != null)
-                {
-                    _AbstractProperty.IsDirty = true;
-                }
                 _AbstractProperty_Accessed = true;
             }
         }

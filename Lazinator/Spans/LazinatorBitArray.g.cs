@@ -275,13 +275,10 @@ namespace Lazinator.Spans
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _ByteSpan = value;
-                if (_ByteSpan != null)
-                {
-                    _ByteSpan.IsDirty = true;
-                }
                 _ByteSpan_Accessed = true;
             }
         }

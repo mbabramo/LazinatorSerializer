@@ -246,13 +246,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         throw new MovedLazinatorException($"The property ClosedGenericFloat cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _ClosedGenericFloat = value;
-                if (_ClosedGenericFloat != null)
-                {
-                    _ClosedGenericFloat.IsDirty = true;
-                }
                 _ClosedGenericFloat_Accessed = true;
             }
         }
@@ -287,13 +284,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         throw new MovedLazinatorException($"The property ClosedGenericInterface cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _ClosedGenericInterface = value;
-                if (_ClosedGenericInterface != null)
-                {
-                    _ClosedGenericInterface.IsDirty = true;
-                }
                 _ClosedGenericInterface_Accessed = true;
             }
         }
@@ -328,13 +322,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         throw new MovedLazinatorException($"The property ClosedGenericNonexclusiveInterface cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _ClosedGenericNonexclusiveInterface = value;
-                if (_ClosedGenericNonexclusiveInterface != null)
-                {
-                    _ClosedGenericNonexclusiveInterface.IsDirty = true;
-                }
                 _ClosedGenericNonexclusiveInterface_Accessed = true;
             }
         }

@@ -258,13 +258,10 @@ namespace LazinatorTests.Examples.Structs
                         throw new MovedLazinatorException($"The property ListWrappedBytes cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _ListWrappedBytes = value;
-                if (_ListWrappedBytes != null)
-                {
-                    _ListWrappedBytes.IsDirty = true;
-                }
                 _ListWrappedBytes_Accessed = true;
             }
         }
@@ -297,6 +294,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedBool = value;
                 _WrappedBool_Accessed = true;
@@ -353,6 +351,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedByte = value;
                 _WrappedByte_Accessed = true;
@@ -409,6 +408,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedChar = value;
                 _WrappedChar_Accessed = true;
@@ -465,6 +465,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableBool = value;
                 _WrappedNullableBool_Accessed = true;
@@ -521,6 +522,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableByte = value;
                 _WrappedNullableByte_Accessed = true;
@@ -577,6 +579,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableChar = value;
                 _WrappedNullableChar_Accessed = true;
@@ -633,6 +636,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableSByte = value;
                 _WrappedNullableSByte_Accessed = true;
@@ -689,6 +693,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedSByte = value;
                 _WrappedSByte_Accessed = true;

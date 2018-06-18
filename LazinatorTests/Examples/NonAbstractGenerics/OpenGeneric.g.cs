@@ -268,6 +268,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _MyT = value;

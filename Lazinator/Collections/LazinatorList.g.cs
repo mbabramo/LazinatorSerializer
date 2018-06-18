@@ -260,13 +260,10 @@ namespace Lazinator.Collections
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Offsets = value;
-                if (_Offsets != null)
-                {
-                    _Offsets.IsDirty = true;
-                }
                 _Offsets_Accessed = true;
             }
         }

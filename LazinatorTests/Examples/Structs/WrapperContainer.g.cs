@@ -239,6 +239,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;

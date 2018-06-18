@@ -256,13 +256,10 @@ namespace Lazinator.Collections.Dictionary
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Keys = value;
-                if (_Keys != null)
-                {
-                    _Keys.IsDirty = true;
-                }
                 _Keys_Accessed = true;
             }
         }
@@ -295,13 +292,10 @@ namespace Lazinator.Collections.Dictionary
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Values = value;
-                if (_Values != null)
-                {
-                    _Values.IsDirty = true;
-                }
                 _Values_Accessed = true;
             }
         }

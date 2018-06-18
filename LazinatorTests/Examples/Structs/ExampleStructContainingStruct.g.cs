@@ -237,6 +237,7 @@ namespace LazinatorTests.Examples
             {
                 
                 value.LazinatorParentClass = null;
+                value.IsDirty = true;
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;

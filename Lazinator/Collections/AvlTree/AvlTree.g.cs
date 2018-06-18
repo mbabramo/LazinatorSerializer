@@ -234,13 +234,10 @@ namespace Lazinator.Collections.Avl
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Root = value;
-                if (_Root != null)
-                {
-                    _Root.IsDirty = true;
-                }
                 _Root_Accessed = true;
             }
         }

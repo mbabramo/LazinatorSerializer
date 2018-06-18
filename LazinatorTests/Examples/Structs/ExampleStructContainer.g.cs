@@ -246,6 +246,7 @@ namespace LazinatorTests.Examples
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
@@ -302,6 +303,7 @@ namespace LazinatorTests.Examples
             {
                 
                 value.LazinatorParentClass = this;
+                value.IsDirty = true;
                 IsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;

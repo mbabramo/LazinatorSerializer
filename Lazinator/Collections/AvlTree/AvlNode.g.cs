@@ -281,6 +281,7 @@ namespace Lazinator.Collections.Avl
                 if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Key = value;
@@ -323,13 +324,10 @@ namespace Lazinator.Collections.Avl
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Left = value;
-                if (_Left != null)
-                {
-                    _Left.IsDirty = true;
-                }
                 _Left_Accessed = true;
             }
         }
@@ -369,13 +367,10 @@ namespace Lazinator.Collections.Avl
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Right = value;
-                if (_Right != null)
-                {
-                    _Right.IsDirty = true;
-                }
                 _Right_Accessed = true;
             }
         }
@@ -415,6 +410,7 @@ namespace Lazinator.Collections.Avl
                 if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Value = value;

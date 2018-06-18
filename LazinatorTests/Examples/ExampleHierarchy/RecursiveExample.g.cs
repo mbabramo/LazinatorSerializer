@@ -242,13 +242,10 @@ namespace LazinatorTests.Examples.Hierarchy
                         throw new MovedLazinatorException($"The property RecursiveClass cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _RecursiveClass = value;
-                if (_RecursiveClass != null)
-                {
-                    _RecursiveClass.IsDirty = true;
-                }
                 _RecursiveClass_Accessed = true;
             }
         }
@@ -283,13 +280,10 @@ namespace LazinatorTests.Examples.Hierarchy
                         throw new MovedLazinatorException($"The property RecursiveInterface cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _RecursiveInterface = value;
-                if (_RecursiveInterface != null)
-                {
-                    _RecursiveInterface.IsDirty = true;
-                }
                 _RecursiveInterface_Accessed = true;
             }
         }

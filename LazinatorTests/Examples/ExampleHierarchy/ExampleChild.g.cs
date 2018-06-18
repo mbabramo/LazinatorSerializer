@@ -287,13 +287,10 @@ namespace LazinatorTests.Examples
                         throw new MovedLazinatorException($"The property MyWrapperContainer cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _MyWrapperContainer = value;
-                if (_MyWrapperContainer != null)
-                {
-                    _MyWrapperContainer.IsDirty = true;
-                }
                 _MyWrapperContainer_Accessed = true;
             }
         }

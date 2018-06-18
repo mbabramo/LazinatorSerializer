@@ -251,13 +251,10 @@ namespace Lazinator.Collections.AvlTree
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _UnderlyingTree = value;
-                if (_UnderlyingTree != null)
-                {
-                    _UnderlyingTree.IsDirty = true;
-                }
                 _UnderlyingTree_Accessed = true;
             }
         }

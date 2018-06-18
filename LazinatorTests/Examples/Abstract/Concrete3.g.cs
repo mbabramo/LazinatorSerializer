@@ -281,13 +281,10 @@ namespace LazinatorTests.Examples.Abstract
                         throw new MovedLazinatorException($"The property Example2 cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Example2 = value;
-                if (_Example2 != null)
-                {
-                    _Example2.IsDirty = true;
-                }
                 _Example2_Accessed = true;
             }
         }
@@ -321,13 +318,10 @@ namespace LazinatorTests.Examples.Abstract
                         throw new MovedLazinatorException($"The property Example3 cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
                     }
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Example3 = value;
-                if (_Example3 != null)
-                {
-                    _Example3.IsDirty = true;
-                }
                 _Example3_Accessed = true;
             }
         }

@@ -252,13 +252,10 @@ namespace Lazinator.Collections
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _FourByteItems = value;
-                if (_FourByteItems != null)
-                {
-                    _FourByteItems.IsDirty = true;
-                }
                 _FourByteItems_Accessed = true;
             }
         }
@@ -298,13 +295,10 @@ namespace Lazinator.Collections
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _TwoByteItems = value;
-                if (_TwoByteItems != null)
-                {
-                    _TwoByteItems.IsDirty = true;
-                }
                 _TwoByteItems_Accessed = true;
             }
         }

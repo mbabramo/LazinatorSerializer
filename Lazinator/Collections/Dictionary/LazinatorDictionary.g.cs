@@ -250,13 +250,10 @@ namespace Lazinator.Collections.Dictionary
                 if (value != null)
                 {
                     value.LazinatorParentClass = this;
+                    value.IsDirty = true;
                 }
                 IsDirty = true;
                 _Buckets = value;
-                if (_Buckets != null)
-                {
-                    _Buckets.IsDirty = true;
-                }
                 _Buckets_Accessed = true;
             }
         }
