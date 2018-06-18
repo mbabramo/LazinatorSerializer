@@ -129,7 +129,7 @@ namespace Lazinator.Wrappers
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty;
+            get => _DescendantIsDirty || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -313,7 +313,7 @@ namespace Lazinator.Wrappers
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

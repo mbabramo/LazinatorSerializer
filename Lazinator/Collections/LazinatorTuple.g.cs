@@ -353,7 +353,7 @@ namespace Lazinator.Collections
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T)) && (Item1.IsDirty || Item1.DescendantIsDirty)) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U)) && (Item2.IsDirty || Item2.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

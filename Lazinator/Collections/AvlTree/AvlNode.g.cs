@@ -489,7 +489,7 @@ namespace Lazinator.Collections.Avl
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Left_Accessed && Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && Right != null && (Right.IsDirty || Right.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && (Key.IsDirty || Key.DescendantIsDirty)) || (_Left_Accessed && Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && Right != null && (Right.IsDirty || Right.DescendantIsDirty)) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && (Value.IsDirty || Value.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }
