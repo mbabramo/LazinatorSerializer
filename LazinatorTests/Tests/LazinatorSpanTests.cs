@@ -1,0 +1,264 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Lazinator.Collections;
+using LazinatorTests.Examples;
+using LazinatorTests.Examples.Collections;
+using Lazinator.Exceptions;
+using Lazinator.Support;
+using Lazinator.Buffers;
+using Lazinator.Core;
+using LazinatorTests.Examples.Tuples;
+using Xunit;
+using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleNonexclusiveInterfaceImplementer;
+using Lazinator.Wrappers;
+using System.Buffers;
+using System.Reflection;
+using Lazinator.Spans;
+using System.Collections;
+using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.Hierarchy;
+using LazinatorTests.Examples.NonLazinator;
+using LazinatorTests.Examples.Structs;
+using LazinatorTests.Examples.Subclasses;
+using LazinatorTests.Examples.NonAbstractGenerics;
+
+namespace LazinatorTests.Tests
+{
+    public class LazinatorSpanTests
+    {
+
+        [Fact]
+        public void LazinatorReadOnlySpans()
+        {
+            var chars = "Hello, world".ToCharArray();
+
+            var now = DateTime.Now;
+            SpanAndMemory GetObject(bool emptySpans)
+            {
+                if (emptySpans)
+                    return new SpanAndMemory
+                    {
+                        MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
+                        MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { }),
+                        MyReadOnlySpanDateTime = new Span<DateTime>(), // should also work with no array
+                        MyReadOnlySpanLong = new Span<long>(new long[] { }),
+
+                    };
+                return new SpanAndMemory
+                {
+                    MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
+                    MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                    MyReadOnlySpanDateTime = new Span<DateTime>(new DateTime[] { now }),
+                    MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue }),
+                    MyReadOnlySpanChar = new ReadOnlySpan<char>(chars)
+                };
+            }
+
+            var original = GetObject(false);
+            var copy = GetObject(false);
+            for (int i = 0; i < 3; i++)
+            {
+                var result = copy.CloneLazinatorTyped();
+                result.MyReadOnlySpanByte.Length.Should().Be(3);
+                result.MyReadOnlySpanByte[1].Should().Be(4);
+                result.MyReadOnlyMemoryByte.Span[1].Should().Be(4);
+                result.MyReadOnlyMemoryByte.Length.Should().Be(3);
+                result.MyReadOnlySpanDateTime.Length.Should().Be(1);
+                result.MyReadOnlySpanDateTime[0].Should().Be(now);
+                result.MyReadOnlySpanLong.Length.Should().Be(2);
+                result.MyReadOnlySpanLong[1].Should().Be(long.MaxValue);
+                new string(result.MyReadOnlySpanChar).Equals("Hello, world").Should().BeTrue();
+                new string(result.MyReadOnlySpanChar.Slice(0, 5)).Equals("Hello").Should().BeTrue();
+                copy = result;
+            }
+
+            original = GetObject(true);
+            copy = GetObject(true);
+            for (int i = 0; i < 3; i++)
+            {
+                var result = copy.CloneLazinatorTyped();
+                result.MyReadOnlySpanByte.Length.Should().Be(0);
+                result.MyReadOnlyMemoryByte.Length.Should().Be(0);
+                result.MyReadOnlySpanDateTime.Length.Should().Be(0);
+                result.MyReadOnlySpanLong.Length.Should().Be(0);
+                copy = result;
+            }
+        }
+
+        [Fact]
+        public void LazinatorByteSpan()
+        {
+            byte[] originalBytes = new byte[] { 1, 2, 3 };
+            LazinatorByteSpan lazinatorBytes = new LazinatorByteSpan(originalBytes);
+            lazinatorBytes.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone = lazinatorBytes.CloneLazinatorTyped();
+            byte[] bytesConverted = clone.GetSpanToReadOnly().ToArray();
+            clone.GetIsReadOnlyMode().Should().BeTrue();
+            bytesConverted.SequenceEqual(originalBytes).Should().BeTrue();
+            clone.GetSpanToReadOrWrite()[0] = 4;
+            clone.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone2 = clone.CloneLazinatorTyped();
+            clone2.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted2 = clone2.GetSpanToReadOnly().ToArray();
+            clone2.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] expectedBytes = new byte[] { 4, 2, 3 };
+            bytesConverted2.SequenceEqual(expectedBytes).Should().BeTrue();
+
+            byte[] anotherSequence = new byte[] { 10, 11, 12, 13 };
+            clone2.SetMemory(anotherSequence);
+            clone2.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone3 = clone2.CloneLazinatorTyped();
+            clone3.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted3 = clone3.GetSpanToReadOnly().ToArray();
+            bytesConverted3.SequenceEqual(anotherSequence).Should().BeTrue();
+
+            byte[] lastSequence = new byte[] { 20, 21, 22, 23, 24, 25 };
+            clone3.SetReadOnlySpan(lastSequence);
+            clone3.GetIsReadOnlyMode().Should().BeTrue();
+            LazinatorByteSpan clone4 = clone3.CloneLazinatorTyped();
+            clone4.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted4 = clone4.GetSpanToReadOnly().ToArray();
+            bytesConverted4.SequenceEqual(lastSequence).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LazinatorBitArrayWorks()
+        {
+            LazinatorBitArray reservedArray = new LazinatorBitArray(100);
+            reservedArray.Length.Should().Be(100);
+
+            bool[] values1 = new bool[]
+                {true, false, true, false, true, false, true, false, true};
+            bool[] values2 = new bool[]
+                {true, true, true, true, true, false, false, false, false};
+            LazinatorBitArray bits1 = new LazinatorBitArray(values1);
+            LazinatorBitArray bits2 = new LazinatorBitArray(values2);
+            bits1 = bits1.CloneLazinatorTyped();
+            bits2 = bits2.CloneLazinatorTyped();
+            bits1.Count.Should().Be(9);
+            bits2.Count.Should().Be(9);
+            var not = new LazinatorBitArray(bits1).Not();
+            for (int i = 0; i < values1.Length; i++)
+                not[i].Should().Be(!values1[i]);
+            var cleared = new LazinatorBitArray(bits1);
+            cleared.SetAll(false);
+            for (int i = 0; i < values1.Length; i++)
+                cleared[i].Should().Be(false);
+            cleared.SetAll(true);
+            for (int i = 0; i < values1.Length; i++)
+                cleared[i].Should().Be(true);
+            var and = new LazinatorBitArray(bits1).And(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                and[i].Should().Be(values1[i] & values2[i]);
+            var or = new LazinatorBitArray(bits1).Or(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                or[i].Should().Be(values1[i] | values2[i]);
+            var xor = new LazinatorBitArray(bits1).Xor(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                xor[i].Should().Be(values1[i] ^ values2[i]);
+        }
+
+        [Fact]
+        public void LazinatorMemoryInt()
+        {
+            SpanAndMemory GetObject(int thirdItem)
+            {
+                return new SpanAndMemory
+                {
+                    MyMemoryInt = new int[] { 3, 4, thirdItem }
+                };
+            }
+
+            void SetIndex(Memory<int> source, int index, int value)
+            {
+                // note: this seems to be a way to write into Memory<T>. I think that since Span lives only on the stack, the memory is guaranteed not to move. So, this works. I'm not clear why there isn't a direct way to index into Memory<T>, without getting a span. Maybe the reason is that they want to encourage you to get a Span if you are going to do a large number of writes. It's awkward that you can't say source.Span[index] = value; 
+                var sourceSpan = source.Span;
+                sourceSpan[index] = value;
+            }
+            bool SequenceEqual(Memory<int> a, Memory<int> b)
+            {
+                if (a.Length != b.Length)
+                    return false;
+                Span<int> aSpan = a.Span;
+                Span<int> bSpan = b.Span;
+                for (int i = 0; i < a.Length; i++)
+                    if (aSpan[i] != bSpan[i])
+                        return false;
+                return true;
+            }
+
+            var original = GetObject(5);
+            var copy = GetObject(5);
+            SetIndex(copy.MyMemoryInt, 2, 6);
+            var span = copy.MyMemoryInt.Span;
+            span[2].Should().Be(6);
+            var result = copy.CloneLazinatorTyped();
+            SequenceEqual(copy.MyMemoryInt, result.MyMemoryInt).Should().BeTrue();
+        }
+
+
+        [Fact]
+        public void LazinatorNullableMemoryInt()
+        {
+            SpanAndMemory GetObject()
+            {
+                return new SpanAndMemory
+                {
+                    MyNullableMemoryInt = new int[] { 3, 4, 5 }
+                };
+            }
+
+            SpanAndMemory GetEmptyMemoryObject()
+            {
+                return new SpanAndMemory
+                {
+                    MyNullableMemoryInt = new int[] { }
+                };
+            }
+
+            void SetIndex(Memory<int> source, int index, int value)
+            {
+                // note: this seems to be a way to write into Memory<T>. I think that since Span lives only on the stack, the memory is guaranteed not to move. So, this works. I'm not clear why there isn't a direct way to index into Memory<T>, without getting a span. Maybe the reason is that they want to encourage you to get a Span if you are going to do a large number of writes. It's awkward that you can't say source.Span[index] = value; 
+                var sourceSpan = source.Span;
+                sourceSpan[index] = value;
+            }
+            bool SequenceEqual(Memory<int> a, Memory<int> b)
+            {
+                if (a.Length != b.Length)
+                    return false;
+                Span<int> aSpan = a.Span;
+                Span<int> bSpan = b.Span;
+                for (int i = 0; i < a.Length; i++)
+                    if (aSpan[i] != bSpan[i])
+                        return false;
+                return true;
+            }
+
+            // first, we'll do the same thing we did for the non-nullable field
+
+            var original = GetObject();
+            var copy = GetObject();
+            SetIndex(copy.MyNullableMemoryInt.Value, 2, 6);
+            var span = copy.MyNullableMemoryInt.Value.Span;
+            span[2].Should().Be(6);
+            var result = copy.CloneLazinatorTyped();
+            SequenceEqual(copy.MyNullableMemoryInt.Value, result.MyNullableMemoryInt.Value).Should().BeTrue();
+            result.MyMemoryInt.Length.Should().Be(0);
+
+            // now, let's make sure that null serializes correctly
+            original = new SpanAndMemory();
+            result = original.CloneLazinatorTyped();
+            result.MyNullableMemoryInt.Should().Be(null);
+            result.MyMemoryInt.Length.Should().Be(0);
+
+            // and empty list must serialize correctly too
+            original = GetEmptyMemoryObject();
+            result = original.CloneLazinatorTyped();
+            result.MyNullableMemoryInt.Should().NotBeNull();
+            result.MyNullableMemoryInt.Value.Length.Should().Be(0);
+            result.MyMemoryInt.Length.Should().Be(0);
+        }
+    }
+}

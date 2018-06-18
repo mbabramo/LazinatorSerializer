@@ -1,11 +1,33 @@
-﻿using Lazinator.Support;
-using System;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Lazinator.Collections;
+using LazinatorTests.Examples;
+using LazinatorTests.Examples.Collections;
+using Lazinator.Exceptions;
+using Lazinator.Support;
+using Lazinator.Buffers;
+using Lazinator.Core;
+using LazinatorTests.Examples.Tuples;
 using Xunit;
+using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleNonexclusiveInterfaceImplementer;
+using Lazinator.Wrappers;
+using System.Buffers;
+using System.Reflection;
+using Lazinator.Spans;
+using System.Collections;
+using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.Hierarchy;
+using LazinatorTests.Examples.NonLazinator;
+using LazinatorTests.Examples.Structs;
+using LazinatorTests.Examples.Subclasses;
+using LazinatorTests.Examples.NonAbstractGenerics;
+using System.Text;
 
 namespace LazinatorTests.Tests
 {
-    public class HashTests
+    public class HashTests : SerializationDeserializationTestBase
     {
         [Theory]
         [InlineData("", 0xdc56d17au)]
@@ -95,6 +117,73 @@ namespace LazinatorTests.Tests
             var bytes = Encoding.ASCII.GetBytes(str);
             Span<byte> sp = bytes;
             Assert.Equal(FarmhashByteSpans.Hash64(sp), expected);
+        }
+
+        [Fact]
+        public void BinaryHashCodesWork()
+        {
+            var example = GetHierarchy(1, 1, 1, 1, 0);
+            var hash32 = example.GetBinaryHashCode32();
+            var hash64 = example.GetBinaryHashCode64();
+            var clone = example.CloneLazinatorTyped();
+            clone.GetBinaryHashCode32().Should().Be(hash32);
+            clone.GetBinaryHashCode64().Should().Be(hash64);
+            var anotherExample = GetHierarchy(1, 1, 1, 1, 0);
+            anotherExample.GetBinaryHashCode64().Should().Be(hash64);
+
+            example.MyBool = !example.MyBool;
+            var hash32b = example.GetBinaryHashCode32();
+            var hash64b = example.GetBinaryHashCode64();
+            hash32b.Should().NotBe(hash32);
+            hash64b.Should().NotBe(hash64);
+            var clone2 = example.CloneLazinatorTyped();
+            clone2.GetBinaryHashCode32().Should().Be(hash32b);
+            clone2.GetBinaryHashCode64().Should().Be(hash64b);
+
+            example.MyChild1.MyShort = (short)9999;
+            example.MyChild1.MyLong = 987654987654; // TODO: this doesn't seem to work if long isn't changed. 
+            var hash32c = example.GetBinaryHashCode32();
+            var hash64c = example.GetBinaryHashCode64();
+            hash32c.Should().NotBe(hash32);
+            hash64c.Should().NotBe(hash64);
+            hash32c.Should().NotBe(hash32b);
+            hash64c.Should().NotBe(hash64b);
+            var clone3 = example.CloneLazinatorTyped();
+            clone3.GetBinaryHashCode32().Should().Be(hash32c);
+            clone3.GetBinaryHashCode64().Should().Be(hash64c);
+        }
+
+        [Fact]
+        void BinaryHashInList()
+        {
+            var wrapped = new WInt(1);
+            var wrapped2 = new WInt(1);
+            LazinatorList<WInt> x = new LazinatorList<WInt>();
+            x.Add(wrapped2);
+            x.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
+            var clone = x.CloneLazinatorTyped();
+            clone.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
+        }
+
+        [Fact]
+        void BinaryHashCanBeAssignedToPropertyOfItem()
+        {
+            // the challenge here is that the call to GetBinaryHashCode results in a ConvertToBytes. Meanwhile, the object may have been accessed already on the left side of the assignment. We want to make sure this doesn't cause any problems.
+            Example e = GetHierarchy(1, 1, 1, 1, 0);
+            e.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
+            e.MyChild1.Should().NotBeNull();
+            e.MyChild1.MyLong.Should().NotBe(0);
+            var c = e.CloneLazinatorTyped();
+            c.MyChild1.MyLong = 0;
+            c.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
+            c.MyChild1.Should().NotBeNull();
+            c.MyChild1.MyLong.Should().NotBe(0);
+            Example e2 = GetHierarchy(1, 1, 1, 1, 0);
+            e2.MyChild1 = new ExampleChild();
+            e2.MyChild1.MyLong = 0;
+            e2.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
+            e2.MyChild1.Should().NotBeNull();
+            e2.MyChild1.MyLong.Should().NotBe(0);
         }
     }
 }
