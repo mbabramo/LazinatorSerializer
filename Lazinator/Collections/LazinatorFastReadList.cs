@@ -78,5 +78,11 @@ namespace Lazinator.Collections
                 span[i] = _AsList[i];
             ReadOnly = span;
         }
+
+        // DEBUG
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
