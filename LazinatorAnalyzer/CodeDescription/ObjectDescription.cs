@@ -255,8 +255,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendGeneralDefinitions(CodeStringBuilder sb)
         {
-            string additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
-            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
+            string additionalDescendantDirtinessChecks, postEncodingDirtinessReset;
+            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessReset);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
 
@@ -831,11 +831,12 @@ namespace Lazinator.CodeDescription
                             " : "")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
-            string additionalDescendantDirtinessChecks, postEncodingDirtinessCheck;
-            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessCheck);
+            string additionalDescendantDirtinessChecks, postEncodingDirtinessReset;
+            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessReset);
+            sb.AppendLine("if (!updateStoredBuffer) throw new Exception();"); // DEBUG -- remove.
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{");
-            sb.AppendLine(postEncodingDirtinessCheck);
+            sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
                 _LazinatorObjectBytes = writer.Slice(startPosition);");
             sb.Append($@"}}
@@ -1019,7 +1020,7 @@ namespace Lazinator.CodeDescription
             return classContainingStructContainingClassError;
         }
 
-        private void GetDescendantDirtinessChecks(out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessCheck)
+        private void GetDescendantDirtinessChecks(out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessReset)
         {
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
             string manualDescendantDirtinessChecks = "";
@@ -1048,12 +1049,12 @@ namespace Lazinator.CodeDescription
             // After encoding in a mode in which we don't encode all children, we will need to do a check.
             
             if (manualDescendantDirtinessChecks == "")
-                postEncodingDirtinessCheck =
+                postEncodingDirtinessReset =
                     $@"
                         _IsDirty = false;
                         _DescendantIsDirty = false;";
             else
-                postEncodingDirtinessCheck =
+                postEncodingDirtinessReset =
                     $@"
                         _IsDirty = false;
                         _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
