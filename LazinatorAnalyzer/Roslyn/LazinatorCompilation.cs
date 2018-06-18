@@ -19,7 +19,7 @@ namespace LazinatorCodeGen.Roslyn
     {
 
         // We must be able to determine whether a type implements various methods, but we want to exclude methods implemented in code behind
-        static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization", "OnDirty", "ConvertFromBytesAfterHeader", "WritePropertiesIntoBuffer" };
+        static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization", "OnDirty", "ConvertFromBytesAfterHeader", "WritePropertiesIntoBuffer", "GetDirtyNodes_Helper" };
 
         public Compilation Compilation;
         public LazinatorConfig Config { get; private set; }
@@ -139,10 +139,6 @@ namespace LazinatorCodeGen.Roslyn
 
         public IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(INamedTypeSymbol namedTypeSymbol)
         {
-            if (namedTypeSymbol.ToString().Contains("ConcreteFromGenericFrom"))
-            {
-                var DEBUG = 0;
-            }
             // check whether there are lower level abstract or open generic types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
             if (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())

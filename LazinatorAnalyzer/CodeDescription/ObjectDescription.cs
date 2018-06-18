@@ -61,6 +61,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsOnDirty { get; set; }
         public bool ImplementsConvertFromBytesAfterHeader { get; set; }
         public bool ImplementsWritePropertiesIntoBuffer { get; set; }
+        public bool ImplementsGetDirtyNodes_Helper { get; set; }
 
         /* Complications */
         public List<string> GenericArgumentNames { get; set; }
@@ -141,6 +142,7 @@ namespace Lazinator.CodeDescription
             ImplementsOnDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDirty"));
             ImplementsConvertFromBytesAfterHeader = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "ConvertFromBytesAfterHeader"));
             ImplementsWritePropertiesIntoBuffer = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "WritePropertiesIntoBuffer"));
+            ImplementsGetDirtyNodes_Helper = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "GetDirtyNodes_Helper"));
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
@@ -643,12 +645,15 @@ namespace Lazinator.CodeDescription
                 if (IsDerivedFromNonAbstractLazinator)
                 {
                     // we've already defined GetDirtyNodes, so we just need to override the Helper function, calling the base function
-                    sb.Append($@"
+                    if (!ImplementsGetDirtyNodes_Helper)
+                    {
+                        sb.Append($@"
 
-                        {ProtectedIfApplicable}override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
-                        {{
-                            base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
-                        ");
+                            {ProtectedIfApplicable}override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            {{
+                                base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+                            ");
+                    }
                 }
                 else
                 {
@@ -681,22 +686,30 @@ namespace Lazinator.CodeDescription
                                 }}
                             }}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
-                        {{");
+                        ");
+                    if (!ImplementsGetDirtyNodes_Helper)
+                        sb.AppendLine(
+                            $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            {{");
                 }
 
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
+                if (!ImplementsGetDirtyNodes_Helper)
                 {
-                    sb.Append($@"if (_{property.PropertyName}_Accessed && {property.GetNonNullCheck()} && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
-                            {{
-                                foreach (ILazinator toYield in _{property.PropertyName}.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
-                                    yield return toYield;
+                    foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
+                    {
+                        sb.Append($@"if (_{property.PropertyName}_Accessed && {property.GetNonNullCheck()} && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                                {{
+                                    foreach (ILazinator toYield in _{property.PropertyName}.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                                    {{
+                                        yield return toYield;
+                                    }}
+                                }}
+    ");
+                    }
+                    sb.Append($@"yield break;
                             }}
-");
+                        ");
                 }
-                sb.Append($@"yield break;
-                        }}
-                    ");
             }
         }
 
