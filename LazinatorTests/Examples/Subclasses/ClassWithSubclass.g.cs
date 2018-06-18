@@ -17,6 +17,7 @@ namespace LazinatorTests.Examples.Subclasses
     using Lazinator.Support;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -301,6 +302,42 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance2_Accessed;
+        
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_SubclassInstance1_Accessed && SubclassInstance1 != null && (_SubclassInstance1.IsDirty || _SubclassInstance1.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _SubclassInstance1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_SubclassInstance2_Accessed && SubclassInstance2 != null && (_SubclassInstance2.IsDirty || _SubclassInstance2.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _SubclassInstance2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
+        }
         
         protected virtual void ResetAccessedProperties()
         {

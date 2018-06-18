@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Lazinator.Buffers; 
 using Lazinator.Core;
@@ -65,6 +66,14 @@ namespace Lazinator.Core
         /// Indicates whether a descendant of a self-serialized object is dirty. A change in a field of the self-serialized object does not change this field.
         /// </summary>
         bool DescendantIsDirty { get; set; }
+        /// <summary>
+        /// Enumerates all nodes in the hierarchy that are dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.
+        /// </summary>
+        /// <param name="exploreCriterion">If non-null, then a node's children will be explored only if this function returns true.</param>
+        /// <param name="yieldCriterion">If non-null, then a dirty node will be yielded only if this function returns true.</param>
+        /// <param name="onlyHighestDirty">If true, then once a dirty node is found, it will be enumerated, but its dirty descendants will not be separately enumerated.</param>
+        /// <returns></returns>
+        IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
 
         /// <summary>
         /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.

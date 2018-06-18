@@ -18,6 +18,7 @@ namespace LazinatorTests.Examples
     using Lazinator.Wrappers;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -809,6 +810,77 @@ namespace LazinatorTests.Examples
                 }
                 return _WrappedInt;
             }
+        }
+        
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_ExcludableChild_Accessed && ExcludableChild != null && (_ExcludableChild.IsDirty || _ExcludableChild.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _ExcludableChild.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_IncludableChild_Accessed && IncludableChild != null && (_IncludableChild.IsDirty || _IncludableChild.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _IncludableChild.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_MyAutoChangeParentChild_Accessed && MyAutoChangeParentChild != null && (_MyAutoChangeParentChild.IsDirty || _MyAutoChangeParentChild.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyAutoChangeParentChild.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_MyAutoChangeParentChildStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyAutoChangeParentChildStruct, default(ExampleStruct)) && (_MyAutoChangeParentChildStruct.IsDirty || _MyAutoChangeParentChildStruct.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyAutoChangeParentChildStruct.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_MyChild1_Accessed && MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyChild1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_MyChild2_Accessed && MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyChild2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_MyChild2Previous_Accessed && MyChild2Previous != null && (_MyChild2Previous.IsDirty || _MyChild2Previous.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyChild2Previous.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (_MyInterfaceImplementer.IsDirty || _MyInterfaceImplementer.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyInterfaceImplementer.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt)) && (_WrappedInt.IsDirty || _WrappedInt.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedInt.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
         }
         
         protected virtual void ResetAccessedProperties()

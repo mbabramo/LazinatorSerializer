@@ -17,6 +17,7 @@ namespace LazinatorTests.Examples.Abstract
     using Lazinator.Support;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -94,6 +95,18 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _MyT_Accessed;
+        
+        
+        protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+            if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T)) && (_MyT.IsDirty || _MyT.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _MyT.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
+        }
         
         protected override void ResetAccessedProperties()
         {

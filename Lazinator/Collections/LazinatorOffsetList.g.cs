@@ -17,6 +17,7 @@ namespace Lazinator.Collections
     using Lazinator.Support;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -303,6 +304,42 @@ namespace Lazinator.Collections
             }
         }
         bool _TwoByteItems_Accessed;
+        
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_FourByteItems_Accessed && FourByteItems != null && (_FourByteItems.IsDirty || _FourByteItems.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _FourByteItems.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_TwoByteItems_Accessed && TwoByteItems != null && (_TwoByteItems.IsDirty || _TwoByteItems.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _TwoByteItems.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
+        }
         
         void ResetAccessedProperties()
         {

@@ -19,6 +19,7 @@ namespace LazinatorTests.Examples.Structs
     using Lazinator.Wrappers;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -721,6 +722,77 @@ namespace LazinatorTests.Examples.Structs
                 }
                 return _WrappedSByte;
             }
+        }
+        
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_ListWrappedBytes_Accessed && ListWrappedBytes != null && (_ListWrappedBytes.IsDirty || _ListWrappedBytes.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _ListWrappedBytes.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool)) && (_WrappedBool.IsDirty || _WrappedBool.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedBool.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte)) && (_WrappedByte.IsDirty || _WrappedByte.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar)) && (_WrappedChar.IsDirty || _WrappedChar.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedChar.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool)) && (_WrappedNullableBool.IsDirty || _WrappedNullableBool.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedNullableBool.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte)) && (_WrappedNullableByte.IsDirty || _WrappedNullableByte.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedNullableByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar)) && (_WrappedNullableChar.IsDirty || _WrappedNullableChar.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedNullableChar.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte)) && (_WrappedNullableSByte.IsDirty || _WrappedNullableSByte.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedNullableSByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte)) && (_WrappedSByte.IsDirty || _WrappedSByte.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _WrappedSByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
         }
         
         protected virtual void ResetAccessedProperties()

@@ -19,6 +19,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     using LazinatorTests.Examples;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -330,6 +331,47 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;
+        
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_ClosedGenericFloat_Accessed && ClosedGenericFloat != null && (_ClosedGenericFloat.IsDirty || _ClosedGenericFloat.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _ClosedGenericFloat.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_ClosedGenericInterface_Accessed && ClosedGenericInterface != null && (_ClosedGenericInterface.IsDirty || _ClosedGenericInterface.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _ClosedGenericInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_ClosedGenericNonexclusiveInterface_Accessed && ClosedGenericNonexclusiveInterface != null && (_ClosedGenericNonexclusiveInterface.IsDirty || _ClosedGenericNonexclusiveInterface.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _ClosedGenericNonexclusiveInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
+        }
         
         protected virtual void ResetAccessedProperties()
         {

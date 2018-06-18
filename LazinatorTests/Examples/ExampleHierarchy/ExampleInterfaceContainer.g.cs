@@ -282,6 +282,37 @@ namespace LazinatorTests.Examples.Hierarchy
         }
         protected bool _ExampleListByInterface_Accessed;
         
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_ExampleByInterface_Accessed && ExampleByInterface != null && (_ExampleByInterface.IsDirty || _ExampleByInterface.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _ExampleByInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;

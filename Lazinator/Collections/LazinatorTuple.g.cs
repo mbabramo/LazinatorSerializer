@@ -17,6 +17,7 @@ namespace Lazinator.Collections
     using Lazinator.Support;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -294,6 +295,42 @@ namespace Lazinator.Collections
             }
         }
         protected bool _Item2_Accessed;
+        
+        
+        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
+            if (!explore)
+            yield break;
+            if (IsDirty)
+            {
+                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                if (yield)
+                {
+                    yield return this;
+                    if (onlyHighestDirty)
+                    yield break;
+                }
+            }
+            if (!DescendantIsDirty)
+            yield break;
+            GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+        }
+        
+        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T)) && (_Item1.IsDirty || _Item1.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _Item1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U)) && (_Item2.IsDirty || _Item2.DescendantIsDirty))
+            {
+                foreach (ILazinator toYield in _Item2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                yield return toYield;
+            }
+            yield break;
+        }
         
         protected virtual void ResetAccessedProperties()
         {

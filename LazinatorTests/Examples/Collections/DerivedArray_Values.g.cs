@@ -17,6 +17,7 @@ namespace LazinatorTests.Examples.Collections
     using Lazinator.Support;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -95,6 +96,13 @@ namespace LazinatorTests.Examples.Collections
                     }
                 }
             }
+        }
+        
+        
+        protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        {
+            base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+            yield break;
         }
         
         protected override void ResetAccessedProperties()

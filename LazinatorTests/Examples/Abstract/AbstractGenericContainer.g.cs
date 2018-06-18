@@ -17,6 +17,7 @@ namespace LazinatorTests.Examples.Abstract
     using Lazinator.Support;
     using System;
     using System.Buffers;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -52,6 +53,8 @@ namespace LazinatorTests.Examples.Abstract
             get;
             set;
         }
+        
+        public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
         
         public abstract MemoryInBuffer HierarchyBytes
         {

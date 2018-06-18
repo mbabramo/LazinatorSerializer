@@ -55,6 +55,8 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
+        public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
+        
         public abstract MemoryInBuffer HierarchyBytes
         {
             set;
