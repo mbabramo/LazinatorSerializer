@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Abstract
             GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
         }
         
-        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (_Item_Accessed && Item != null && (_Item.IsDirty || _Item.DescendantIsDirty))
             {
