@@ -79,17 +79,31 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
+            hierarchy.MyChild1.HasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.LazinatorConvertToBytes();
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
+            hierarchy.MyChild1.HasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeFalse();
+            hierarchy.MyChild1.MyWrapperContainer.HasBeenDirty.Should().BeTrue(); // here is the key difference
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeTrue();
+            hierarchy.MyChild1.MyWrapperContainer.HasBeenDirty.Should().BeTrue();
             hierarchy.MyChild1.IsDirty.Should().BeTrue(); // hasn't changed
+            hierarchy.MyChild1.HasBeenDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue(); // this time, wrapper's dirtiness change, so MyChild1 is notified
+            hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
+            
             var clone = hierarchy.CloneLazinatorTyped();
             // The following is the tricky part. We must make sure that LazinatorConvertToBytes doesn't cause MyChild1 to think that no serialization is necessary.
             clone.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(18);
+            clone.MyChild1.IsDirty.Should().BeFalse();
+            clone.MyChild1.HasBeenDirty.Should().BeFalse();
+            clone.MyChild1.DescendantIsDirty.Should().BeFalse();
+            clone.MyChild1.DescendantHasBeenDirty.Should().BeFalse();
+
         }
 
         [Fact]
