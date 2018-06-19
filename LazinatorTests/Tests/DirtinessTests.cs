@@ -104,6 +104,13 @@ namespace LazinatorTests.Tests
             clone.MyChild1.DescendantIsDirty.Should().BeFalse();
             clone.MyChild1.DescendantHasBeenDirty.Should().BeFalse();
 
+            clone.MyChild1.MyWrapperContainer.WrappedInt = 16;
+            clone.DescendantHasBeenDirty.Should().BeTrue();
+            clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeTrue();
+            clone.MarkHierarchyClean();
+            clone.DescendantHasBeenDirty.Should().BeFalse();
+            clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeFalse();
+
         }
 
         [Fact]
