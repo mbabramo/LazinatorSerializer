@@ -718,7 +718,7 @@ namespace Lazinator.CodeDescription
                     {
                         sb.Append($@"if (!exploreOnlyDeserializedChildren || ({property.GetNonNullCheck(true)}))
                                 {{
-                                    foreach (ILazinator toYield in _{property.PropertyName}.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                                    foreach (ILazinator toYield in {property.PropertyName}.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                                     {{
                                         yield return toYield;
                                     }}
