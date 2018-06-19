@@ -695,7 +695,7 @@ namespace Lazinator.CodeDescription
                 {
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
-                        sb.Append($@"if (_{property.PropertyName}_Accessed && {property.GetNonNullCheck()} && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                        sb.Append($@"if ({property.GetNonNullCheck(true)} && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                                 {{
                                     foreach (ILazinator toYield in _{property.PropertyName}.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                                     {{
@@ -1029,8 +1029,8 @@ namespace Lazinator.CodeDescription
                     manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
                 else
                 {
-                    string nonNullCheck = property.GetNonNullCheck();
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {nonNullCheck} && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                    string nonNullCheck = property.GetNonNullCheck(true);
+                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
                 }
             }
             // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.

@@ -356,13 +356,23 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public string GetNonNullCheck()
+        public string GetNonNullCheck(bool includeAccessedCheck)
         {
             string nonNullCheck;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+            if (includeAccessedCheck)
+            {
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                    nonNullCheck = $"_{PropertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                else
+                    nonNullCheck = $"_{PropertyName}_Accessed && _{PropertyName} != null";
+            }
             else
-                nonNullCheck = $"{PropertyName} != null";
+            {
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                    nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                else
+                    nonNullCheck = $"{PropertyName} != null";
+            }
             return nonNullCheck;
         }
 
