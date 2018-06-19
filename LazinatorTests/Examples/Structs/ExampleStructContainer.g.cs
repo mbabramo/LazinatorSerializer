@@ -393,7 +393,7 @@ namespace LazinatorTests.Examples
         
         public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
         {
             bool match = (matchCriterion == null) ? true : matchCriterion(this);
             if (match)
@@ -403,25 +403,25 @@ namespace LazinatorTests.Examples
             bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
         {
             if (!exploreOnlyDeserializedChildren || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
             {
-                foreach (ILazinator toYield in _IntWrapper.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _IntWrapper.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
             {
-                foreach (ILazinator toYield in _MyExampleStruct.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _MyExampleStruct.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }

@@ -726,7 +726,7 @@ namespace LazinatorTests.Examples.Structs
         
         public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
         {
             bool match = (matchCriterion == null) ? true : matchCriterion(this);
             if (match)
@@ -736,74 +736,74 @@ namespace LazinatorTests.Examples.Structs
             bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
         {
             if (!exploreOnlyDeserializedChildren || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
-                foreach (ILazinator toYield in _ListWrappedBytes.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _ListWrappedBytes.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool))))
             {
-                foreach (ILazinator toYield in _WrappedBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte))))
             {
-                foreach (ILazinator toYield in _WrappedByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar))))
             {
-                foreach (ILazinator toYield in _WrappedChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool))))
             {
-                foreach (ILazinator toYield in _WrappedNullableBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedNullableBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte))))
             {
-                foreach (ILazinator toYield in _WrappedNullableByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedNullableByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar))))
             {
-                foreach (ILazinator toYield in _WrappedNullableChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedNullableChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte))))
             {
-                foreach (ILazinator toYield in _WrappedNullableSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedNullableSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte))))
             {
-                foreach (ILazinator toYield in _WrappedSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _WrappedSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
