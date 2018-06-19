@@ -726,7 +726,7 @@ namespace LazinatorTests.Examples.Structs
         
         public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
         {
             if (IsDirty)
             {
@@ -734,7 +734,7 @@ namespace LazinatorTests.Examples.Structs
                 if (yield)
                 {
                     yield return this;
-                    if (onlyHighestDirty)
+                    if (onlyHighestMatch)
                     {
                         yield break;
                     }
@@ -743,74 +743,74 @@ namespace LazinatorTests.Examples.Structs
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (explore && DescendantIsDirty)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
         {
             if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null && (_ListWrappedBytes.IsDirty || _ListWrappedBytes.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _ListWrappedBytes.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _ListWrappedBytes.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool)) && (_WrappedBool.IsDirty || _WrappedBool.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte)) && (_WrappedByte.IsDirty || _WrappedByte.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar)) && (_WrappedChar.IsDirty || _WrappedChar.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool)) && (_WrappedNullableBool.IsDirty || _WrappedNullableBool.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedNullableBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedNullableBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte)) && (_WrappedNullableByte.IsDirty || _WrappedNullableByte.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedNullableByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedNullableByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar)) && (_WrappedNullableChar.IsDirty || _WrappedNullableChar.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedNullableChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedNullableChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte)) && (_WrappedNullableSByte.IsDirty || _WrappedNullableSByte.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedNullableSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedNullableSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte)) && (_WrappedSByte.IsDirty || _WrappedSByte.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _WrappedSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _WrappedSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }

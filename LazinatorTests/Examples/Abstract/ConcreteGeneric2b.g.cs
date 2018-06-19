@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
         
-        public override IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        public override IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
         {
             if (IsDirty)
             {
@@ -351,7 +351,7 @@ namespace LazinatorTests.Examples.Abstract
                 if (yield)
                 {
                     yield return this;
-                    if (onlyHighestDirty)
+                    if (onlyHighestMatch)
                     {
                         yield break;
                     }
@@ -360,25 +360,25 @@ namespace LazinatorTests.Examples.Abstract
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (explore && DescendantIsDirty)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        protected override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
         {
             if (_MyT_Accessed && _MyT != null && (_MyT.IsDirty || _MyT.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _MyT.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _MyT.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
             }
             if (_LazinatorExample_Accessed && _LazinatorExample != null && (_LazinatorExample.IsDirty || _LazinatorExample.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _LazinatorExample.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _LazinatorExample.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
                 {
                     yield return toYield;
                 }
