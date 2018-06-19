@@ -66,7 +66,7 @@ namespace Lazinator.Core
         /// </summary>
         bool DescendantHasBeenDirty { get; set; }
         /// <summary>
-        /// Indicates whether a Lazinator object is dirty, meaning that one of its fields has changed since it was last serialized.
+        /// Indicates whether a Lazinator object is dirty, meaning that one of its fields has changed since it was last serialized, which may occur if it or a portion of the hierarchy containing it is cloned.
         /// </summary>
         bool IsDirty { get; set; }
         /// <summary>

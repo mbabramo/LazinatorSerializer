@@ -532,12 +532,12 @@ namespace LazinatorTests.Tests
             v2.MyList.Add(GetExampleChild(1));
             v2.MyList.Add(GetExampleChild(1));
 
-            var results = v2.GetDirtyNodes();
+            var results = v2.GetDirtyNodes(true);
             results.Count().Should().Be(4);
 
             var v5 = v2.CloneLazinatorTyped();
             v5.MyList[1].MyLong = -98765;
-            results = v5.GetDirtyNodes();
+            results = v5.GetDirtyNodes(true);
             results.Count().Should().Be(1);
         }
     }

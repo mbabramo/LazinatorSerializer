@@ -406,25 +406,28 @@ namespace Lazinator.Core
 
 
         /// <summary>
-        /// Enumerates all nodes in the hierarchy that are dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.
+        /// Enumerates all nodes in the hierarchy that are or have been dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.
         /// </summary>
         /// <returns>The dirty nodes</returns>
-        public static IEnumerable<ILazinator> GetDirtyNodes(this ILazinator startNode)
+        public static IEnumerable<ILazinator> GetDirtyNodes(this ILazinator startNode, bool restrictToCurrentlyDirty)
         {
-            return startNode.EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
+            if (restrictToCurrentlyDirty)
+                return startNode.EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
+            return startNode.EnumerateLazinatorNodes(x => x.HasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true);
         }
 
         /// <summary>
-        /// Marks all nodes in a hierarchy clean. This might be called after the hierarchy is converted to bytes. 
+        /// Marks all nodes in a hierarchy as clean, so that IsDirty and HasBeenDirty will be false for every node in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory.
         /// </summary>
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClean(this ILazinator hierarchy)
         {
-            // DEBUG -- this really makes sense only for HasBeenDirty. 
-            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.IsDirty || x.DescendantIsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true))
+            if (hierarchy.IsDirty || hierarchy.DescendantIsDirty)
+                hierarchy.LazinatorConvertToBytes(); // make them no longer dirty
+            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasBeenDirty || x.DescendantHasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true))
             {
-                node.IsDirty = false;
-                node.DescendantIsDirty = false;
+                node.HasBeenDirty = false;
+                node.DescendantHasBeenDirty = false;
             }
         }
 
