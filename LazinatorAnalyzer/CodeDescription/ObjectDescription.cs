@@ -255,8 +255,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendGeneralDefinitions(CodeStringBuilder sb)
         {
-            string additionalDescendantDirtinessChecks, postEncodingDirtinessReset;
-            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessReset);
+            string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false, false);
+            string additionalDescendantHasBeenDirtyChecks = GetDescendantDirtinessChecks(false, true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
 
@@ -279,6 +279,12 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
                         
+                        public abstract bool HasBeenDirty
+                        {{
+			                get;
+			                set;
+                        }}
+
                         public abstract bool IsDirty
                         {{
 			                get;
@@ -288,6 +294,12 @@ namespace Lazinator.CodeDescription
                         public abstract InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
                         public abstract void InformParentOfDirtiness();
                         
+                        public abstract bool DescendantHasBeenDirty
+                        {{
+			                get;
+			                set;
+                        }}
+
                         public abstract bool DescendantIsDirty
                         {{
 			                get;
@@ -412,6 +424,8 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}
 
+                        public {DerivationKeyword}bool HasBeenDirty {{ get; set; }}
+
                         {ProtectedIfApplicable}bool _IsDirty;
                         public {DerivationKeyword}bool IsDirty
                         {{
@@ -427,6 +441,7 @@ namespace Lazinator.CodeDescription
                                     {{
                                         InformParentOfDirtiness();{(ImplementsOnDirty ? $@"
                                         OnDirty();" : "")}
+                                        HasBeenDirty = true;
                                     }}
                                 }}
                             }}
@@ -445,6 +460,18 @@ namespace Lazinator.CodeDescription
                             else
                             {{
                                 InformParentOfDirtinessDelegate();
+                            }}
+                        }}
+
+                        {ProtectedIfApplicable}bool _DescendantHasBeenDirty;
+                        public {DerivationKeyword}bool DescendantHasBeenDirty
+                        {{
+                            [DebuggerStepThrough]
+                            get => _DescendantHasBeenDirty{additionalDescendantHasBeenDirtyChecks};
+                            [DebuggerStepThrough]
+                            set
+                            {{
+                                _DescendantHasBeenDirty = value;
                             }}
                         }}
 
@@ -820,9 +847,8 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"{ (ImplementsPreSerialization ? $@"PreSerialization(verifyCleanness, updateStoredBuffer);
                             " : "")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
-
-            string additionalDescendantDirtinessChecks, postEncodingDirtinessReset;
-            GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessReset);
+            
+            string postEncodingDirtinessReset = GetDescendantDirtinessChecks(true, false);
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
@@ -1009,18 +1035,20 @@ namespace Lazinator.CodeDescription
             return classContainingStructContainingClassError;
         }
 
-        private void GetDescendantDirtinessChecks(out string additionalDescendantDirtinessChecks, out string postEncodingDirtinessReset)
+        private string GetDescendantDirtinessChecks(bool postEncodingResetCheck, bool usePastTense)
         {
+            string additionalDescendantDirtinessChecks;
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
             string manualDescendantDirtinessChecks = "";
+            string tense = usePastTense ? "HasBeen" : "Is";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.IsDirty || {property.PropertyName}{property.NullableStructValueAccessor}.DescendantIsDirty))";
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.{tense}Dirty || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}Dirty))";
                 else
                 {
                     string nonNullCheck = property.GetNonNullCheck(true);
-                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}.IsDirty || {property.PropertyName}.DescendantIsDirty))";
+                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}.{tense}Dirty || {property.PropertyName}.Descendant{tense}Dirty))";
                 }
             }
             // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
@@ -1035,8 +1063,15 @@ namespace Lazinator.CodeDescription
                 additionalDescendantDirtinessChecks = manualDescendantDirtinessChecks;
             }
 
+            if (!postEncodingResetCheck)
+                return additionalDescendantDirtinessChecks;
+
             // After encoding in a mode in which we don't encode all children, we will need to do a check.
-            
+
+            if (usePastTense)
+                throw new NotImplementedException();
+
+            string postEncodingDirtinessReset;
             if (manualDescendantDirtinessChecks == "")
                 postEncodingDirtinessReset =
                     $@"
@@ -1047,6 +1082,8 @@ namespace Lazinator.CodeDescription
                     $@"
                         _IsDirty = false;
                         _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
+
+            return postEncodingDirtinessReset;
         }
 
         private static void GetSupportedConversions(CodeStringBuilder sb, List<PropertyDescription> propertiesSupportedCollections, List<PropertyDescription> propertiesSupportedTuples, List<PropertyDescription> propertiesNonSerialized)

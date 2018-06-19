@@ -415,6 +415,20 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Marks all nodes in a hierarchy clean. This might be called after the hierarchy is converted to bytes. 
+        /// </summary>
+        /// <param name="hierarchy"></param>
+        public static void MarkHierarchyClean(this ILazinator hierarchy)
+        {
+            // DEBUG -- this really makes sense only for HasBeenDirty. 
+            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.IsDirty || x.DescendantIsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true))
+            {
+                node.IsDirty = false;
+                node.DescendantIsDirty = false;
+            }
+        }
+
+        /// <summary>
         /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
