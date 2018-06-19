@@ -100,6 +100,8 @@ namespace Lazinator.Collections
             return clone;
         }
         
+        public bool HasBeenDirty { get; set; }
+        
         bool _IsDirty;
         public bool IsDirty
         {
@@ -114,6 +116,7 @@ namespace Lazinator.Collections
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        HasBeenDirty = true;
                     }
                 }
             }
@@ -132,6 +135,18 @@ namespace Lazinator.Collections
             else
             {
                 InformParentOfDirtinessDelegate();
+            }
+        }
+        
+        bool _DescendantHasBeenDirty;
+        public bool DescendantHasBeenDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasBeenDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasBeenDirty = value;
             }
         }
         

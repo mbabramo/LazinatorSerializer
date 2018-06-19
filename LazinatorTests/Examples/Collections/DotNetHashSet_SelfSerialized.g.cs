@@ -92,6 +92,8 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
+        public virtual bool HasBeenDirty { get; set; }
+        
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
@@ -106,6 +108,7 @@ namespace LazinatorTests.Examples.Collections
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        HasBeenDirty = true;
                     }
                 }
             }
@@ -124,6 +127,18 @@ namespace LazinatorTests.Examples.Collections
             else
             {
                 InformParentOfDirtinessDelegate();
+            }
+        }
+        
+        protected bool _DescendantHasBeenDirty;
+        public virtual bool DescendantHasBeenDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasBeenDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasBeenDirty = value;
             }
         }
         

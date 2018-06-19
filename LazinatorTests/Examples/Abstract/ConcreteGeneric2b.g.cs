@@ -96,6 +96,8 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
+        public override bool HasBeenDirty { get; set; }
+        
         protected bool _IsDirty;
         public override bool IsDirty
         {
@@ -110,6 +112,7 @@ namespace LazinatorTests.Examples.Abstract
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        HasBeenDirty = true;
                     }
                 }
             }
@@ -128,6 +131,18 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 InformParentOfDirtinessDelegate();
+            }
+        }
+        
+        protected bool _DescendantHasBeenDirty;
+        public override bool DescendantHasBeenDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasBeenDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasBeenDirty = value;
             }
         }
         

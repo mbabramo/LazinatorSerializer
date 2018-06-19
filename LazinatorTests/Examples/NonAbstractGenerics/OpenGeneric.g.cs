@@ -95,6 +95,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return clone;
         }
         
+        public virtual bool HasBeenDirty { get; set; }
+        
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
@@ -109,6 +111,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        HasBeenDirty = true;
                     }
                 }
             }
@@ -127,6 +130,18 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 InformParentOfDirtinessDelegate();
+            }
+        }
+        
+        protected bool _DescendantHasBeenDirty;
+        public virtual bool DescendantHasBeenDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasBeenDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasBeenDirty = value;
             }
         }
         

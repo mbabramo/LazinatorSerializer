@@ -57,13 +57,20 @@ namespace Lazinator.Core
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
         /// <returns>A cloned copy of the class/struct</returns>
         ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
-
         /// <summary>
-        /// Indicates whether a self-serialized object is dirty, meaning that one of its fields has changed. A change in a child of the self-serialized object does not change this field.
+        /// Indicates whether a Lazinator object has been or is dirty, meaning that one of its fields has changed since it was last deserialized.
+        /// </summary>
+        bool HasBeenDirty { get; set; }
+        /// <summary>
+        /// Indicates whether a descendant of a Lazinator object has been or is dirty.
+        /// </summary>
+        bool DescendantHasBeenDirty { get; set; }
+        /// <summary>
+        /// Indicates whether a Lazinator object is dirty, meaning that one of its fields has changed since it was last serialized.
         /// </summary>
         bool IsDirty { get; set; }
         /// <summary>
-        /// Indicates whether a descendant of a self-serialized object is dirty. A change in a field of the self-serialized object does not change this field.
+        /// Indicates whether a descendant of a self-serialized object is dirty.
         /// </summary>
         bool DescendantIsDirty { get; set; }
         /// <summary>

@@ -95,6 +95,8 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
+        public bool HasBeenDirty { get; set; }
+        
         bool _IsDirty;
         public bool IsDirty
         {
@@ -109,6 +111,7 @@ namespace LazinatorTests.Examples.Structs
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        HasBeenDirty = true;
                     }
                 }
             }
@@ -127,6 +130,18 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 InformParentOfDirtinessDelegate();
+            }
+        }
+        
+        bool _DescendantHasBeenDirty;
+        public bool DescendantHasBeenDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasBeenDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasBeenDirty = value;
             }
         }
         

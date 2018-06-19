@@ -39,6 +39,12 @@ namespace Lazinator.Wrappers
         
         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
         
+        public abstract bool HasBeenDirty
+        {
+            get;
+            set;
+        }
+        
         public abstract bool IsDirty
         {
             get;
@@ -47,6 +53,12 @@ namespace Lazinator.Wrappers
         
         public abstract InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
         public abstract void InformParentOfDirtiness();
+        
+        public abstract bool DescendantHasBeenDirty
+        {
+            get;
+            set;
+        }
         
         public abstract bool DescendantIsDirty
         {

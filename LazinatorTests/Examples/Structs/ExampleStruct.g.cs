@@ -100,6 +100,8 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
+        public bool HasBeenDirty { get; set; }
+        
         bool _IsDirty;
         public bool IsDirty
         {
@@ -114,6 +116,7 @@ namespace LazinatorTests.Examples
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
+                        HasBeenDirty = true;
                     }
                 }
             }
@@ -132,6 +135,18 @@ namespace LazinatorTests.Examples
             else
             {
                 InformParentOfDirtinessDelegate();
+            }
+        }
+        
+        bool _DescendantHasBeenDirty;
+        public bool DescendantHasBeenDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasBeenDirty || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.HasBeenDirty || MyChild1.DescendantHasBeenDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.HasBeenDirty || MyChild2.DescendantHasBeenDirty));
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasBeenDirty = value;
             }
         }
         
