@@ -49,9 +49,9 @@ namespace LazinatorTests.Examples.Abstract
         /* Properties */
         
         
-        protected override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        protected override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            base.EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch);
+            base.EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch);
             yield break;
         }
         

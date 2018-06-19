@@ -293,7 +293,7 @@ namespace Lazinator.Collections
         }
 
 
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
             // Do not report Offsets' dirtiness. Just report items' dirtiness
             for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
@@ -303,7 +303,7 @@ namespace Lazinator.Collections
                     var item = ((IList<T>)UnderlyingList)[i];
                     if (item != null && !(item.Equals(default(T))))
                     {
-                        foreach (ILazinator toYield in item.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                        foreach (ILazinator toYield in item.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                         {
                             yield return toYield;
                         }

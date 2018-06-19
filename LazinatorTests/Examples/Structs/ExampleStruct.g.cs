@@ -432,44 +432,37 @@ namespace LazinatorTests.Examples
         }
         bool _MyTuple_Accessed;
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
+        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            if (IsDirty)
+            bool shouldYield = (matchCriterion == null) ? true : matchCriterion(this);
+            if (shouldYield)
             {
-                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
-                if (yield)
-                {
-                    yield return this;
-                    if (onlyHighestMatch)
-                    {
-                        yield break;
-                    }
-                }
+                yield return this;
             }
-            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
-            if (explore && DescendantIsDirty)
+            bool explore = (!shouldYield || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
+            if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            if (_MyChild1_Accessed && _MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_MyChild1_Accessed && _MyChild1 != null))
             {
-                foreach (ILazinator toYield in _MyChild1.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _MyChild1.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyChild2_Accessed && _MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_MyChild2_Accessed && _MyChild2 != null))
             {
-                foreach (ILazinator toYield in _MyChild2.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _MyChild2.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }

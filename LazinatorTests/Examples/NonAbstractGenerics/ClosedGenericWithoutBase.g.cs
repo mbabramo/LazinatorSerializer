@@ -263,37 +263,30 @@ namespace LazinatorTests.Examples
         }
         protected bool _ItemU_Accessed;
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
+        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            if (IsDirty)
+            bool shouldYield = (matchCriterion == null) ? true : matchCriterion(this);
+            if (shouldYield)
             {
-                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
-                if (yield)
-                {
-                    yield return this;
-                    if (onlyHighestMatch)
-                    {
-                        yield break;
-                    }
-                }
+                yield return this;
             }
-            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
-            if (explore && DescendantIsDirty)
+            bool explore = (!shouldYield || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
+            if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            if (_ItemU_Accessed && _ItemU != null && (_ItemU.IsDirty || _ItemU.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_ItemU_Accessed && _ItemU != null))
             {
-                foreach (ILazinator toYield in _ItemU.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _ItemU.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }

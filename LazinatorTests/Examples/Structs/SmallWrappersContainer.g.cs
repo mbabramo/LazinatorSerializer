@@ -724,93 +724,86 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
+        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            if (IsDirty)
+            bool shouldYield = (matchCriterion == null) ? true : matchCriterion(this);
+            if (shouldYield)
             {
-                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
-                if (yield)
-                {
-                    yield return this;
-                    if (onlyHighestMatch)
-                    {
-                        yield break;
-                    }
-                }
+                yield return this;
             }
-            bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
-            if (explore && DescendantIsDirty)
+            bool explore = (!shouldYield || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
+            if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null && (_ListWrappedBytes.IsDirty || _ListWrappedBytes.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
-                foreach (ILazinator toYield in _ListWrappedBytes.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _ListWrappedBytes.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool)) && (_WrappedBool.IsDirty || _WrappedBool.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool))))
             {
-                foreach (ILazinator toYield in _WrappedBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte)) && (_WrappedByte.IsDirty || _WrappedByte.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte))))
             {
-                foreach (ILazinator toYield in _WrappedByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar)) && (_WrappedChar.IsDirty || _WrappedChar.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar))))
             {
-                foreach (ILazinator toYield in _WrappedChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool)) && (_WrappedNullableBool.IsDirty || _WrappedNullableBool.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool))))
             {
-                foreach (ILazinator toYield in _WrappedNullableBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedNullableBool.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte)) && (_WrappedNullableByte.IsDirty || _WrappedNullableByte.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte))))
             {
-                foreach (ILazinator toYield in _WrappedNullableByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedNullableByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar)) && (_WrappedNullableChar.IsDirty || _WrappedNullableChar.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar))))
             {
-                foreach (ILazinator toYield in _WrappedNullableChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedNullableChar.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte)) && (_WrappedNullableSByte.IsDirty || _WrappedNullableSByte.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte))))
             {
-                foreach (ILazinator toYield in _WrappedNullableSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedNullableSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte)) && (_WrappedSByte.IsDirty || _WrappedSByte.DescendantIsDirty))
+            if (!exploreOnlyDeserializedChildren || (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte))))
             {
-                foreach (ILazinator toYield in _WrappedSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator toYield in _WrappedSByte.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return toYield;
                 }

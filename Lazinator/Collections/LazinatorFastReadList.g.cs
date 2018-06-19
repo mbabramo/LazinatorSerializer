@@ -236,15 +236,15 @@ namespace Lazinator.Collections
         
         public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
             if (IsDirty)
             {
-                bool yield = (yieldCriterion == null) ? true : yieldCriterion(this);
+                bool yield = (matchCriterion == null) ? true : matchCriterion(this);
                 if (yield)
                 {
                     yield return this;
-                    if (onlyHighestMatch)
+                    if (stopExploringBelowMatch)
                     {
                         yield break;
                     }
@@ -253,14 +253,14 @@ namespace Lazinator.Collections
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (explore && DescendantIsDirty)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestMatch))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestMatch)
+        IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
             yield break;
         }
