@@ -417,15 +417,15 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Marks all nodes in a hierarchy as clean, so that IsDirty and HasBeenDirty will be false for every node in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory.
+        /// Marks all classes in a hierarchy as clean, so that IsDirty and HasBeenDirty will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
         /// </summary>
         /// <param name="hierarchy"></param>
-        public static void MarkHierarchyClean(this ILazinator hierarchy)
+        public static void MarkHierarchyClassesClean(this ILazinator hierarchy)
         {
-            if (hierarchy.IsDirty || hierarchy.DescendantIsDirty)
-                hierarchy.LazinatorConvertToBytes(); // make them no longer dirty
             foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasBeenDirty || x.DescendantHasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true))
             {
+                node.IsDirty = false;
+                node.HasBeenDirty = false;
                 node.HasBeenDirty = false;
                 node.DescendantHasBeenDirty = false;
             }

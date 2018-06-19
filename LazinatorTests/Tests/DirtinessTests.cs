@@ -106,10 +106,12 @@ namespace LazinatorTests.Tests
 
             clone.MyChild1.MyWrapperContainer.WrappedInt = 16;
             clone.DescendantHasBeenDirty.Should().BeTrue();
+            clone.MyChild1.MyWrapperContainer.DescendantHasBeenDirty.Should().BeTrue();
             clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeTrue();
-            clone.MarkHierarchyClean();
+            clone.MarkHierarchyClassesClean();
             clone.DescendantHasBeenDirty.Should().BeFalse();
-            clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeFalse();
+            clone.MyChild1.MyWrapperContainer.DescendantHasBeenDirty.Should().BeFalse();
+            clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeTrue(); // because it's a struct, it doesn't change
 
         }
 
