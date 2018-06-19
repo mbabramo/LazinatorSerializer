@@ -153,9 +153,13 @@ namespace LazinatorTests.Examples.Tuples
                 if (_DescendantIsDirty != value)
                 {
                     _DescendantIsDirty = value;
-                    if (_DescendantIsDirty && LazinatorParentClass != null)
+                    if (_DescendantIsDirty)
                     {
-                        LazinatorParentClass.DescendantIsDirty = true;
+                        _DescendantHasBeenDirty = true;
+                        if (LazinatorParentClass != null)
+                        {
+                            LazinatorParentClass.DescendantIsDirty = true;
+                        }
                     }
                 }
             }
