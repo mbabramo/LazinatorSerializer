@@ -295,8 +295,8 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract IEnumerable<ILazinator> GetDirtyNodes();
-                        public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch);
-                        {ProtectedIfApplicable}abstract IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch);
+                        public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
+                        {ProtectedIfApplicable}abstract IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -659,9 +659,9 @@ namespace Lazinator.CodeDescription
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
                     // we need to function GetDirtyNodes, plus EnumerateLazinatorNodes_Helper but without a call to a base function
                     sb.AppendLine($@"
-                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
+                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
 
-                            public {derivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
+                            public {derivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{
                                 bool match = (matchCriterion == null) ? true : matchCriterion(this);
                                 if (match)
@@ -671,7 +671,7 @@ namespace Lazinator.CodeDescription
                                 bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
                                 if (explore)
                                 {{
-                                    foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
+                                    foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                                     {{
                                         yield return dirty;
                                     }}
@@ -680,7 +680,7 @@ namespace Lazinator.CodeDescription
                         ");
                     if (!ImplementsEnumerateLazinatorNodes_Helper)
                         sb.AppendLine(
-                            $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
+                            $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{");
                 }
 
@@ -690,7 +690,7 @@ namespace Lazinator.CodeDescription
                     {
                         sb.Append($@"if (!exploreOnlyDeserializedChildren || ({property.GetNonNullCheck(true)}))
                                 {{
-                                    foreach (ILazinator toYield in _{property.PropertyName}.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
+                                    foreach (ILazinator toYield in _{property.PropertyName}.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                                     {{
                                         yield return toYield;
                                     }}
