@@ -69,15 +69,16 @@ namespace Lazinator.Core
         /// <summary>
         /// Enumerates all nodes in the hierarchy that are dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The dirty nodes</returns>
         IEnumerable<ILazinator> GetDirtyNodes();
         /// <summary>
-        /// Enumerates all nodes in the hierarchy that are dirty, walking through the hierarchy based on specified parameters.
+        /// Enumerates nodes in the hierarchy based on specified parameters.
         /// </summary>
-        /// <param name="exploreCriterion">If non-null, then a node's children will be explored only if this function returns true.</param>
         /// <param name="matchCriterion">If non-null, then a dirty node will be yielded only if this function returns true.</param>
         /// <param name="stopExploringBelowMatch">If true, then once a dirty node is found, it will be enumerated, but its dirty descendants will not be separately enumerated.</param>
-        /// <returns></returns>
+        /// <param name="exploreCriterion">If non-null, then a node's children will be explored only if this function returns true.</param>
+        /// <param name="exploreOnlyDeserializedChildren">If true, then children are enumerated only if they have been deserialized (and are thus not stored solely in bytes).</param>
+        /// <returns>The matched nodes</returns>
         IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
 
         /// <summary>
