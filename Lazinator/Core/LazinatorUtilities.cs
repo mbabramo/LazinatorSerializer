@@ -425,7 +425,7 @@ namespace Lazinator.Core
             foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasBeenDirty || x.DescendantHasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true))
             {
                 node.IsDirty = false;
-                node.HasBeenDirty = false;
+                node.DescendantIsDirty = false;
                 node.HasBeenDirty = false;
                 node.DescendantHasBeenDirty = false;
             }

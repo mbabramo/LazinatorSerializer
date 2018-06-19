@@ -88,6 +88,7 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeFalse();
             hierarchy.MyChild1.MyWrapperContainer.HasBeenDirty.Should().BeTrue(); // here is the key difference
+            hierarchy.DescendantHasBeenDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.HasBeenDirty.Should().BeTrue();
@@ -103,6 +104,7 @@ namespace LazinatorTests.Tests
             clone.MyChild1.HasBeenDirty.Should().BeFalse();
             clone.MyChild1.DescendantIsDirty.Should().BeFalse();
             clone.MyChild1.DescendantHasBeenDirty.Should().BeFalse();
+            clone.DescendantHasBeenDirty.Should().BeFalse();
 
             clone.MyChild1.MyWrapperContainer.WrappedInt = 16;
             clone.DescendantHasBeenDirty.Should().BeTrue();
