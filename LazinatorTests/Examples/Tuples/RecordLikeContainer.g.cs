@@ -306,12 +306,12 @@ namespace LazinatorTests.Examples.Tuples
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch)
         {
-            bool shouldYield = (matchCriterion == null) ? true : matchCriterion(this);
-            if (shouldYield)
+            bool match = (matchCriterion == null) ? true : matchCriterion(this);
+            if (match)
             {
                 yield return this;
             }
-            bool explore = (!shouldYield || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
+            bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
             if (explore)
             {
                 foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, matchCriterion, stopExploringBelowMatch))
