@@ -294,7 +294,6 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
-                        public abstract IEnumerable<ILazinator> GetDirtyNodes();
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
                         {ProtectedIfApplicable}abstract IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
 		                
@@ -644,7 +643,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IsDerivedFromNonAbstractLazinator)
                 {
-                    // we've already defined GetDirtyNodes, so we just need to override the Helper function, calling the base function
+                    // we've already defined EnumerateLazinatorNodes, so we just need to override the Helper function, calling the base function
                     if (!ImplementsEnumerateLazinatorNodes_Helper)
                     {
                         sb.Append($@"
@@ -657,10 +656,8 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
-                    // we need to function GetDirtyNodes, plus EnumerateLazinatorNodes_Helper but without a call to a base function
+                    // we need EnumerateLazinatorNodes, plus EnumerateLazinatorNodes_Helper but without a call to a base function
                     sb.AppendLine($@"
-                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
-
                             public {derivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{
                                 bool match = (matchCriterion == null) ? true : matchCriterion(this);
