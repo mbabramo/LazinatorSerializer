@@ -432,9 +432,9 @@ namespace LazinatorTests.Examples
         }
         bool _MyTuple_Accessed;
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
+        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
         
-        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (IsDirty)
             {
@@ -451,25 +451,25 @@ namespace LazinatorTests.Examples
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (explore && DescendantIsDirty)
             {
-                foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (_MyChild1_Accessed && _MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _MyChild1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _MyChild1.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
             if (_MyChild2_Accessed && _MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _MyChild2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _MyChild2.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }

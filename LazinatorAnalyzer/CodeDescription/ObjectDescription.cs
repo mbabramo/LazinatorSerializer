@@ -295,8 +295,8 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract IEnumerable<ILazinator> GetDirtyNodes();
-                        public abstract IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
-                        {ProtectedIfApplicable}abstract IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
+                        public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
+                        {ProtectedIfApplicable}abstract IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty);
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -648,9 +648,9 @@ namespace Lazinator.CodeDescription
                     if (!ImplementsGetDirtyNodes_Helper)
                     {
                         sb.Append($@"
-                            {ProtectedIfApplicable}override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            {ProtectedIfApplicable}override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                             {{
-                                base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
+                                base.EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty);
                             ");
                     }
                 }
@@ -659,9 +659,9 @@ namespace Lazinator.CodeDescription
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
                     // we need to function GetDirtyNodes, plus GetDirtyNodes_Helper but without a call to a base function
                     sb.AppendLine($@"
-                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
+                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
 
-                            public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            public {derivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                             {{
                                 if (IsDirty)
                                 {{
@@ -678,7 +678,7 @@ namespace Lazinator.CodeDescription
                                 bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
                                 if (explore && DescendantIsDirty)
                                 {{
-                                    foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                                    foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                                     {{
                                         yield return dirty;
                                     }}
@@ -687,7 +687,7 @@ namespace Lazinator.CodeDescription
                         ");
                     if (!ImplementsGetDirtyNodes_Helper)
                         sb.AppendLine(
-                            $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+                            $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                             {{");
                 }
 
@@ -697,7 +697,7 @@ namespace Lazinator.CodeDescription
                     {
                         sb.Append($@"if ({property.GetNonNullCheck(true)} && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                                 {{
-                                    foreach (ILazinator toYield in _{property.PropertyName}.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                                    foreach (ILazinator toYield in _{property.PropertyName}.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                                     {{
                                         yield return toYield;
                                     }}

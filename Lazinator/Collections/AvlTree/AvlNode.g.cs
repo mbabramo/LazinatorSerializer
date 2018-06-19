@@ -420,9 +420,9 @@ namespace Lazinator.Collections.Avl
         }
         bool _Value_Accessed;
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
+        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
         
-        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (IsDirty)
             {
@@ -439,39 +439,39 @@ namespace Lazinator.Collections.Avl
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (explore && DescendantIsDirty)
             {
-                foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)) && (_Key.IsDirty || _Key.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _Key.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _Key.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
             if (_Left_Accessed && _Left != null && (_Left.IsDirty || _Left.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _Left.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _Left.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
             if (_Right_Accessed && _Right != null && (_Right.IsDirty || _Right.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _Right.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _Right.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
             if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)) && (_Value.IsDirty || _Value.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _Value.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _Value.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }

@@ -332,9 +332,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => GetDirtyNodes(null, null, false);
+        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
         
-        public IEnumerable<ILazinator> GetDirtyNodes(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (IsDirty)
             {
@@ -351,32 +351,32 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             bool explore = (exploreCriterion == null) ? true : exploreCriterion(this);
             if (explore && DescendantIsDirty)
             {
-                foreach (ILazinator dirty in GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return dirty;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             if (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null && (_ClosedGenericFloat.IsDirty || _ClosedGenericFloat.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _ClosedGenericFloat.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _ClosedGenericFloat.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
             if (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null && (_ClosedGenericInterface.IsDirty || _ClosedGenericInterface.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _ClosedGenericInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _ClosedGenericInterface.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
             if (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null && (_ClosedGenericNonexclusiveInterface.IsDirty || _ClosedGenericNonexclusiveInterface.DescendantIsDirty))
             {
-                foreach (ILazinator toYield in _ClosedGenericNonexclusiveInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                foreach (ILazinator toYield in _ClosedGenericNonexclusiveInterface.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }

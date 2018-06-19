@@ -293,7 +293,7 @@ namespace Lazinator.Collections
         }
 
 
-        protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             // Do not report Offsets' dirtiness. Just report items' dirtiness
             for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
@@ -303,7 +303,7 @@ namespace Lazinator.Collections
                     var item = ((IList<T>)UnderlyingList)[i];
                     if (item != null && !(item.Equals(default(T))))
                     {
-                        foreach (ILazinator toYield in item.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
+                        foreach (ILazinator toYield in item.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, exploreCriterion, yieldCriterion, onlyHighestDirty))
                         {
                             yield return toYield;
                         }
