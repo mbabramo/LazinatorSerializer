@@ -716,7 +716,7 @@ namespace Lazinator.CodeDescription
                 {
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
-                        sb.Append($@"if (!exploreOnlyDeserializedChildren || ({property.GetNonNullCheck(true)}))
+                        sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{
                                     foreach (ILazinator toYield in {property.PropertyName}.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                                     {{
