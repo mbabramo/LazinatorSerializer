@@ -67,11 +67,6 @@ namespace Lazinator.Core
         /// </summary>
         bool DescendantIsDirty { get; set; }
         /// <summary>
-        /// Enumerates all nodes in the hierarchy that are dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.
-        /// </summary>
-        /// <returns>The dirty nodes</returns>
-        IEnumerable<ILazinator> GetDirtyNodes();
-        /// <summary>
         /// Enumerates nodes in the hierarchy based on specified parameters.
         /// </summary>
         /// <param name="matchCriterion">If non-null, then a dirty node will be yielded only if this function returns true.</param>

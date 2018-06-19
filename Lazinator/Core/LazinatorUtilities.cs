@@ -404,6 +404,16 @@ namespace Lazinator.Core
             return (T) lazinator.CloneLazinator();
         }
 
+
+        /// <summary>
+        /// Enumerates all nodes in the hierarchy that are dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.
+        /// </summary>
+        /// <returns>The dirty nodes</returns>
+        public static IEnumerable<ILazinator> GetDirtyNodesX(this ILazinator startNode)
+        {
+            return startNode.EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
+        }
+
         /// <summary>
         /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.
         /// </summary>
