@@ -752,63 +752,63 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_ListWrappedBytes_Accessed && ListWrappedBytes != null && (_ListWrappedBytes.IsDirty || _ListWrappedBytes.DescendantIsDirty))
+            if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null && (_ListWrappedBytes.IsDirty || _ListWrappedBytes.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ListWrappedBytes.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool)) && (_WrappedBool.IsDirty || _WrappedBool.DescendantIsDirty))
+            if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool)) && (_WrappedBool.IsDirty || _WrappedBool.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedBool.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte)) && (_WrappedByte.IsDirty || _WrappedByte.DescendantIsDirty))
+            if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte)) && (_WrappedByte.IsDirty || _WrappedByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar)) && (_WrappedChar.IsDirty || _WrappedChar.DescendantIsDirty))
+            if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar)) && (_WrappedChar.IsDirty || _WrappedChar.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedChar.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool)) && (_WrappedNullableBool.IsDirty || _WrappedNullableBool.DescendantIsDirty))
+            if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool)) && (_WrappedNullableBool.IsDirty || _WrappedNullableBool.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableBool.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte)) && (_WrappedNullableByte.IsDirty || _WrappedNullableByte.DescendantIsDirty))
+            if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte)) && (_WrappedNullableByte.IsDirty || _WrappedNullableByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar)) && (_WrappedNullableChar.IsDirty || _WrappedNullableChar.DescendantIsDirty))
+            if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar)) && (_WrappedNullableChar.IsDirty || _WrappedNullableChar.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableChar.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte)) && (_WrappedNullableSByte.IsDirty || _WrappedNullableSByte.DescendantIsDirty))
+            if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte)) && (_WrappedNullableSByte.IsDirty || _WrappedNullableSByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedNullableSByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte)) && (_WrappedSByte.IsDirty || _WrappedSByte.DescendantIsDirty))
+            if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte)) && (_WrappedSByte.IsDirty || _WrappedSByte.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedSByte.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -882,7 +882,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ListWrappedBytes_Accessed && ListWrappedBytes != null && (ListWrappedBytes.IsDirty || ListWrappedBytes.DescendantIsDirty)) || (_WrappedBool_Accessed && (WrappedBool.IsDirty || WrappedBool.DescendantIsDirty)) || (_WrappedByte_Accessed && (WrappedByte.IsDirty || WrappedByte.DescendantIsDirty)) || (_WrappedChar_Accessed && (WrappedChar.IsDirty || WrappedChar.DescendantIsDirty)) || (_WrappedNullableBool_Accessed && (WrappedNullableBool.IsDirty || WrappedNullableBool.DescendantIsDirty)) || (_WrappedNullableByte_Accessed && (WrappedNullableByte.IsDirty || WrappedNullableByte.DescendantIsDirty)) || (_WrappedNullableChar_Accessed && (WrappedNullableChar.IsDirty || WrappedNullableChar.DescendantIsDirty)) || (_WrappedNullableSByte_Accessed && (WrappedNullableSByte.IsDirty || WrappedNullableSByte.DescendantIsDirty)) || (_WrappedSByte_Accessed && (WrappedSByte.IsDirty || WrappedSByte.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ListWrappedBytes_Accessed && _ListWrappedBytes != null && (ListWrappedBytes.IsDirty || ListWrappedBytes.DescendantIsDirty)) || (_WrappedBool_Accessed && (WrappedBool.IsDirty || WrappedBool.DescendantIsDirty)) || (_WrappedByte_Accessed && (WrappedByte.IsDirty || WrappedByte.DescendantIsDirty)) || (_WrappedChar_Accessed && (WrappedChar.IsDirty || WrappedChar.DescendantIsDirty)) || (_WrappedNullableBool_Accessed && (WrappedNullableBool.IsDirty || WrappedNullableBool.DescendantIsDirty)) || (_WrappedNullableByte_Accessed && (WrappedNullableByte.IsDirty || WrappedNullableByte.DescendantIsDirty)) || (_WrappedNullableChar_Accessed && (WrappedNullableChar.IsDirty || WrappedNullableChar.DescendantIsDirty)) || (_WrappedNullableSByte_Accessed && (WrappedNullableSByte.IsDirty || WrappedNullableSByte.DescendantIsDirty)) || (_WrappedSByte_Accessed && (WrappedSByte.IsDirty || WrappedSByte.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

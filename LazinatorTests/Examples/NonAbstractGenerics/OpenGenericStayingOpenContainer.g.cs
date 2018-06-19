@@ -360,21 +360,21 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_ClosedGenericFloat_Accessed && ClosedGenericFloat != null && (_ClosedGenericFloat.IsDirty || _ClosedGenericFloat.DescendantIsDirty))
+            if (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null && (_ClosedGenericFloat.IsDirty || _ClosedGenericFloat.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ClosedGenericFloat.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_ClosedGenericInterface_Accessed && ClosedGenericInterface != null && (_ClosedGenericInterface.IsDirty || _ClosedGenericInterface.DescendantIsDirty))
+            if (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null && (_ClosedGenericInterface.IsDirty || _ClosedGenericInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ClosedGenericInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_ClosedGenericNonexclusiveInterface_Accessed && ClosedGenericNonexclusiveInterface != null && (_ClosedGenericNonexclusiveInterface.IsDirty || _ClosedGenericNonexclusiveInterface.DescendantIsDirty))
+            if (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null && (_ClosedGenericNonexclusiveInterface.IsDirty || _ClosedGenericNonexclusiveInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ClosedGenericNonexclusiveInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -437,7 +437,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ClosedGenericFloat_Accessed && ClosedGenericFloat != null && (ClosedGenericFloat.IsDirty || ClosedGenericFloat.DescendantIsDirty)) || (_ClosedGenericInterface_Accessed && ClosedGenericInterface != null && (ClosedGenericInterface.IsDirty || ClosedGenericInterface.DescendantIsDirty)) || (_ClosedGenericNonexclusiveInterface_Accessed && ClosedGenericNonexclusiveInterface != null && (ClosedGenericNonexclusiveInterface.IsDirty || ClosedGenericNonexclusiveInterface.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null && (ClosedGenericFloat.IsDirty || ClosedGenericFloat.DescendantIsDirty)) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null && (ClosedGenericInterface.IsDirty || ClosedGenericInterface.DescendantIsDirty)) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null && (ClosedGenericNonexclusiveInterface.IsDirty || ClosedGenericNonexclusiveInterface.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

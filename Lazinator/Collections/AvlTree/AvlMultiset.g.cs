@@ -289,7 +289,7 @@ namespace Lazinator.Collections.AvlTree
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_UnderlyingSet_Accessed && UnderlyingSet != null && (_UnderlyingSet.IsDirty || _UnderlyingSet.DescendantIsDirty))
+            if (_UnderlyingSet_Accessed && _UnderlyingSet != null && (_UnderlyingSet.IsDirty || _UnderlyingSet.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _UnderlyingSet.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -353,7 +353,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_UnderlyingSet_Accessed && UnderlyingSet != null && (UnderlyingSet.IsDirty || UnderlyingSet.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_UnderlyingSet_Accessed && _UnderlyingSet != null && (UnderlyingSet.IsDirty || UnderlyingSet.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

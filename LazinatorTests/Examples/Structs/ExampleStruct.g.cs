@@ -139,7 +139,7 @@ namespace LazinatorTests.Examples
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
+            get => _DescendantIsDirty || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -460,14 +460,14 @@ namespace LazinatorTests.Examples
         
         IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_MyChild1_Accessed && MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
+            if (_MyChild1_Accessed && _MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyChild1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyChild2_Accessed && MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
+            if (_MyChild2_Accessed && _MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyChild2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -542,7 +542,7 @@ namespace LazinatorTests.Examples
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

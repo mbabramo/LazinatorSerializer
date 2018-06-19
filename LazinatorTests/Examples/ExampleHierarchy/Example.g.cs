@@ -840,63 +840,63 @@ namespace LazinatorTests.Examples
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_ExcludableChild_Accessed && ExcludableChild != null && (_ExcludableChild.IsDirty || _ExcludableChild.DescendantIsDirty))
+            if (_ExcludableChild_Accessed && _ExcludableChild != null && (_ExcludableChild.IsDirty || _ExcludableChild.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ExcludableChild.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_IncludableChild_Accessed && IncludableChild != null && (_IncludableChild.IsDirty || _IncludableChild.DescendantIsDirty))
+            if (_IncludableChild_Accessed && _IncludableChild != null && (_IncludableChild.IsDirty || _IncludableChild.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _IncludableChild.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyAutoChangeParentChild_Accessed && MyAutoChangeParentChild != null && (_MyAutoChangeParentChild.IsDirty || _MyAutoChangeParentChild.DescendantIsDirty))
+            if (_MyAutoChangeParentChild_Accessed && _MyAutoChangeParentChild != null && (_MyAutoChangeParentChild.IsDirty || _MyAutoChangeParentChild.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyAutoChangeParentChild.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyAutoChangeParentChildStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyAutoChangeParentChildStruct, default(ExampleStruct)) && (_MyAutoChangeParentChildStruct.IsDirty || _MyAutoChangeParentChildStruct.DescendantIsDirty))
+            if (_MyAutoChangeParentChildStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyAutoChangeParentChildStruct, default(ExampleStruct)) && (_MyAutoChangeParentChildStruct.IsDirty || _MyAutoChangeParentChildStruct.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyAutoChangeParentChildStruct.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyChild1_Accessed && MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
+            if (_MyChild1_Accessed && _MyChild1 != null && (_MyChild1.IsDirty || _MyChild1.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyChild1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyChild2_Accessed && MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
+            if (_MyChild2_Accessed && _MyChild2 != null && (_MyChild2.IsDirty || _MyChild2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyChild2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyChild2Previous_Accessed && MyChild2Previous != null && (_MyChild2Previous.IsDirty || _MyChild2Previous.DescendantIsDirty))
+            if (_MyChild2Previous_Accessed && _MyChild2Previous != null && (_MyChild2Previous.IsDirty || _MyChild2Previous.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyChild2Previous.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (_MyInterfaceImplementer.IsDirty || _MyInterfaceImplementer.DescendantIsDirty))
+            if (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null && (_MyInterfaceImplementer.IsDirty || _MyInterfaceImplementer.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyInterfaceImplementer.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt)) && (_WrappedInt.IsDirty || _WrappedInt.DescendantIsDirty))
+            if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)) && (_WrappedInt.IsDirty || _WrappedInt.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _WrappedInt.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -1009,7 +1009,7 @@ namespace LazinatorTests.Examples
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyAutoChangeParentChild_Accessed && MyAutoChangeParentChild != null && (MyAutoChangeParentChild.IsDirty || MyAutoChangeParentChild.DescendantIsDirty)) || (_MyAutoChangeParentChildStruct_Accessed && (MyAutoChangeParentChildStruct.IsDirty || MyAutoChangeParentChildStruct.DescendantIsDirty)) || (_MyChild1_Accessed && MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExcludableChild_Accessed && _ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)) || (_IncludableChild_Accessed && _IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyAutoChangeParentChild_Accessed && _MyAutoChangeParentChild != null && (MyAutoChangeParentChild.IsDirty || MyAutoChangeParentChild.DescendantIsDirty)) || (_MyAutoChangeParentChildStruct_Accessed && (MyAutoChangeParentChildStruct.IsDirty || MyAutoChangeParentChildStruct.DescendantIsDirty)) || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && _MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

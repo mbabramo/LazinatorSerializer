@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_ExampleStructWithoutClass_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(ExampleStructWithoutClass, default(ExampleStructWithoutClass)) && (_ExampleStructWithoutClass.IsDirty || _ExampleStructWithoutClass.DescendantIsDirty))
+            if (_ExampleStructWithoutClass_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(_ExampleStructWithoutClass, default(ExampleStructWithoutClass)) && (_ExampleStructWithoutClass.IsDirty || _ExampleStructWithoutClass.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ExampleStructWithoutClass.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {

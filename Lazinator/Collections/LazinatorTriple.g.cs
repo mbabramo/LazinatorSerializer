@@ -369,21 +369,21 @@ namespace Lazinator.Collections
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T)) && (_Item1.IsDirty || _Item1.DescendantIsDirty))
+            if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)) && (_Item1.IsDirty || _Item1.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Item1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U)) && (_Item2.IsDirty || _Item2.DescendantIsDirty))
+            if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)) && (_Item2.IsDirty || _Item2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Item2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V)) && (_Item3.IsDirty || _Item3.DescendantIsDirty))
+            if (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)) && (_Item3.IsDirty || _Item3.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Item3.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -456,7 +456,7 @@ namespace Lazinator.Collections
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T)) && (Item1.IsDirty || Item1.DescendantIsDirty)) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U)) && (Item2.IsDirty || Item2.DescendantIsDirty)) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V)) && (Item3.IsDirty || Item3.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)) && (Item1.IsDirty || Item1.DescendantIsDirty)) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)) && (Item2.IsDirty || Item2.DescendantIsDirty)) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)) && (Item3.IsDirty || Item3.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

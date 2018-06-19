@@ -130,7 +130,7 @@ namespace Lazinator.Wrappers
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty));
+            get => _DescendantIsDirty || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -287,7 +287,7 @@ namespace Lazinator.Wrappers
         
         IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T)) && (_NonNullValue.IsDirty || _NonNullValue.DescendantIsDirty))
+            if (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)) && (_NonNullValue.IsDirty || _NonNullValue.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _NonNullValue.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -352,7 +352,7 @@ namespace Lazinator.Wrappers
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

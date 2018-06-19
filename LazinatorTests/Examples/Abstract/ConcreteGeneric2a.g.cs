@@ -344,7 +344,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_LazinatorExample_Accessed && LazinatorExample != null && (_LazinatorExample.IsDirty || _LazinatorExample.DescendantIsDirty))
+            if (_LazinatorExample_Accessed && _LazinatorExample != null && (_LazinatorExample.IsDirty || _LazinatorExample.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _LazinatorExample.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -402,7 +402,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_LazinatorExample_Accessed && LazinatorExample != null && (LazinatorExample.IsDirty || LazinatorExample.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_LazinatorExample_Accessed && _LazinatorExample != null && (LazinatorExample.IsDirty || LazinatorExample.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

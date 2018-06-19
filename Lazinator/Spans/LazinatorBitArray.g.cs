@@ -313,7 +313,7 @@ namespace Lazinator.Spans
         
         IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_ByteSpan_Accessed && ByteSpan != null && (_ByteSpan.IsDirty || _ByteSpan.DescendantIsDirty))
+            if (_ByteSpan_Accessed && _ByteSpan != null && (_ByteSpan.IsDirty || _ByteSpan.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _ByteSpan.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -367,7 +367,7 @@ namespace Lazinator.Spans
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ByteSpan_Accessed && ByteSpan != null && (ByteSpan.IsDirty || ByteSpan.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ByteSpan_Accessed && _ByteSpan != null && (ByteSpan.IsDirty || ByteSpan.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

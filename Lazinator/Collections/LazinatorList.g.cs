@@ -353,7 +353,7 @@ namespace Lazinator.Collections
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Offsets_Accessed && Offsets != null && (Offsets.IsDirty || Offsets.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Offsets_Accessed && _Offsets != null && (Offsets.IsDirty || Offsets.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

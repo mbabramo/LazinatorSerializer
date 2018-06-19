@@ -439,14 +439,14 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_Example2_Accessed && Example2 != null && (_Example2.IsDirty || _Example2.DescendantIsDirty))
+            if (_Example2_Accessed && _Example2 != null && (_Example2.IsDirty || _Example2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Example2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_Example3_Accessed && Example3 != null && (_Example3.IsDirty || _Example3.DescendantIsDirty))
+            if (_Example3_Accessed && _Example3 != null && (_Example3.IsDirty || _Example3.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Example3.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -513,7 +513,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Example2_Accessed && Example2 != null && (Example2.IsDirty || Example2.DescendantIsDirty)) || (_Example3_Accessed && Example3 != null && (Example3.IsDirty || Example3.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Example2_Accessed && _Example2 != null && (Example2.IsDirty || Example2.DescendantIsDirty)) || (_Example3_Accessed && _Example3 != null && (Example3.IsDirty || Example3.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

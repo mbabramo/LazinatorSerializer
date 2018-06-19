@@ -288,7 +288,7 @@ namespace Lazinator.Collections.Dictionary
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_Buckets_Accessed && Buckets != null && (_Buckets.IsDirty || _Buckets.DescendantIsDirty))
+            if (_Buckets_Accessed && _Buckets != null && (_Buckets.IsDirty || _Buckets.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Buckets.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -352,7 +352,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Buckets_Accessed && Buckets != null && (Buckets.IsDirty || Buckets.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Buckets_Accessed && _Buckets != null && (Buckets.IsDirty || Buckets.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

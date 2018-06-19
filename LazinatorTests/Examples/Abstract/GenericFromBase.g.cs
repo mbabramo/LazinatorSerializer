@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples.Abstract
         protected override IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
             base.GetDirtyNodes_Helper(exploreCriterion, yieldCriterion, onlyHighestDirty);
-            if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T)) && (_MyT.IsDirty || _MyT.DescendantIsDirty))
+            if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)) && (_MyT.IsDirty || _MyT.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _MyT.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -163,7 +163,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T)) && (MyT.IsDirty || MyT.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)) && (MyT.IsDirty || MyT.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

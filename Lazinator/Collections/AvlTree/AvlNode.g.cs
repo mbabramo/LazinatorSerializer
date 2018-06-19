@@ -448,28 +448,28 @@ namespace Lazinator.Collections.Avl
         
         IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && (_Key.IsDirty || _Key.DescendantIsDirty))
+            if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)) && (_Key.IsDirty || _Key.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Key.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_Left_Accessed && Left != null && (_Left.IsDirty || _Left.DescendantIsDirty))
+            if (_Left_Accessed && _Left != null && (_Left.IsDirty || _Left.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Left.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_Right_Accessed && Right != null && (_Right.IsDirty || _Right.DescendantIsDirty))
+            if (_Right_Accessed && _Right != null && (_Right.IsDirty || _Right.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Right.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && (_Value.IsDirty || _Value.DescendantIsDirty))
+            if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)) && (_Value.IsDirty || _Value.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _Value.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -549,7 +549,7 @@ namespace Lazinator.Collections.Avl
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey)) && (Key.IsDirty || Key.DescendantIsDirty)) || (_Left_Accessed && Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && Right != null && (Right.IsDirty || Right.DescendantIsDirty)) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue)) && (Value.IsDirty || Value.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)) && (Key.IsDirty || Key.DescendantIsDirty)) || (_Left_Accessed && _Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && _Right != null && (Right.IsDirty || Right.DescendantIsDirty)) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)) && (Value.IsDirty || Value.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

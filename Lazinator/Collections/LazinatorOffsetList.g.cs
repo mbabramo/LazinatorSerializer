@@ -333,14 +333,14 @@ namespace Lazinator.Collections
         
         IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_FourByteItems_Accessed && FourByteItems != null && (_FourByteItems.IsDirty || _FourByteItems.DescendantIsDirty))
+            if (_FourByteItems_Accessed && _FourByteItems != null && (_FourByteItems.IsDirty || _FourByteItems.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _FourByteItems.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_TwoByteItems_Accessed && TwoByteItems != null && (_TwoByteItems.IsDirty || _TwoByteItems.DescendantIsDirty))
+            if (_TwoByteItems_Accessed && _TwoByteItems != null && (_TwoByteItems.IsDirty || _TwoByteItems.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _TwoByteItems.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -397,7 +397,7 @@ namespace Lazinator.Collections
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_FourByteItems_Accessed && FourByteItems != null && (FourByteItems.IsDirty || FourByteItems.DescendantIsDirty)) || (_TwoByteItems_Accessed && TwoByteItems != null && (TwoByteItems.IsDirty || TwoByteItems.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_FourByteItems_Accessed && _FourByteItems != null && (FourByteItems.IsDirty || FourByteItems.DescendantIsDirty)) || (_TwoByteItems_Accessed && _TwoByteItems != null && (TwoByteItems.IsDirty || TwoByteItems.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

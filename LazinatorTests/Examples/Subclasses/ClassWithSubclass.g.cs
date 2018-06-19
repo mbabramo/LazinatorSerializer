@@ -331,14 +331,14 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_SubclassInstance1_Accessed && SubclassInstance1 != null && (_SubclassInstance1.IsDirty || _SubclassInstance1.DescendantIsDirty))
+            if (_SubclassInstance1_Accessed && _SubclassInstance1 != null && (_SubclassInstance1.IsDirty || _SubclassInstance1.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _SubclassInstance1.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_SubclassInstance2_Accessed && SubclassInstance2 != null && (_SubclassInstance2.IsDirty || _SubclassInstance2.DescendantIsDirty))
+            if (_SubclassInstance2_Accessed && _SubclassInstance2 != null && (_SubclassInstance2.IsDirty || _SubclassInstance2.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _SubclassInstance2.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -397,7 +397,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_SubclassInstance1_Accessed && SubclassInstance1 != null && (SubclassInstance1.IsDirty || SubclassInstance1.DescendantIsDirty)) || (_SubclassInstance2_Accessed && SubclassInstance2 != null && (SubclassInstance2.IsDirty || SubclassInstance2.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_SubclassInstance1_Accessed && _SubclassInstance1 != null && (SubclassInstance1.IsDirty || SubclassInstance1.DescendantIsDirty)) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null && (SubclassInstance2.IsDirty || SubclassInstance2.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

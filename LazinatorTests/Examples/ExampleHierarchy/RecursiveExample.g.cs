@@ -318,14 +318,14 @@ namespace LazinatorTests.Examples.Hierarchy
         
         protected virtual IEnumerable<ILazinator> GetDirtyNodes_Helper(Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
         {
-            if (_RecursiveClass_Accessed && RecursiveClass != null && (_RecursiveClass.IsDirty || _RecursiveClass.DescendantIsDirty))
+            if (_RecursiveClass_Accessed && _RecursiveClass != null && (_RecursiveClass.IsDirty || _RecursiveClass.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _RecursiveClass.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
                     yield return toYield;
                 }
             }
-            if (_RecursiveInterface_Accessed && RecursiveInterface != null && (_RecursiveInterface.IsDirty || _RecursiveInterface.DescendantIsDirty))
+            if (_RecursiveInterface_Accessed && _RecursiveInterface != null && (_RecursiveInterface.IsDirty || _RecursiveInterface.DescendantIsDirty))
             {
                 foreach (ILazinator toYield in _RecursiveInterface.GetDirtyNodes(exploreCriterion, yieldCriterion, onlyHighestDirty))
                 {
@@ -383,7 +383,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_RecursiveClass_Accessed && RecursiveClass != null && (RecursiveClass.IsDirty || RecursiveClass.DescendantIsDirty)) || (_RecursiveInterface_Accessed && RecursiveInterface != null && (RecursiveInterface.IsDirty || RecursiveInterface.DescendantIsDirty)));
+                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_RecursiveClass_Accessed && _RecursiveClass != null && (RecursiveClass.IsDirty || RecursiveClass.DescendantIsDirty)) || (_RecursiveInterface_Accessed && _RecursiveInterface != null && (RecursiveInterface.IsDirty || RecursiveInterface.DescendantIsDirty)));
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }
