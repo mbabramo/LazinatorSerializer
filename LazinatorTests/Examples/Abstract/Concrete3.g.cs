@@ -411,8 +411,6 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected bool _IntList3_Accessed;
         
-        public override IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
-        
         public override IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             bool match = (matchCriterion == null) ? true : matchCriterion(this);

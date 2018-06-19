@@ -259,8 +259,6 @@ namespace Lazinator.Wrappers
         }
         bool _NonNullValue_Accessed;
         
-        public IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
-        
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             bool match = (matchCriterion == null) ? true : matchCriterion(this);
