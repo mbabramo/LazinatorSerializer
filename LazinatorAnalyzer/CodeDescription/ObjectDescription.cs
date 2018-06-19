@@ -61,7 +61,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsOnDirty { get; set; }
         public bool ImplementsConvertFromBytesAfterHeader { get; set; }
         public bool ImplementsWritePropertiesIntoBuffer { get; set; }
-        public bool ImplementsGetDirtyNodes_Helper { get; set; }
+        public bool ImplementsEnumerateLazinatorNodes_Helper { get; set; }
 
         /* Complications */
         public List<string> GenericArgumentNames { get; set; }
@@ -142,7 +142,7 @@ namespace Lazinator.CodeDescription
             ImplementsOnDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDirty"));
             ImplementsConvertFromBytesAfterHeader = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "ConvertFromBytesAfterHeader"));
             ImplementsWritePropertiesIntoBuffer = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "WritePropertiesIntoBuffer"));
-            ImplementsGetDirtyNodes_Helper = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "GetDirtyNodes_Helper"));
+            ImplementsEnumerateLazinatorNodes_Helper = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "EnumerateLazinatorNodes_Helper"));
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
@@ -645,7 +645,7 @@ namespace Lazinator.CodeDescription
                 if (IsDerivedFromNonAbstractLazinator)
                 {
                     // we've already defined GetDirtyNodes, so we just need to override the Helper function, calling the base function
-                    if (!ImplementsGetDirtyNodes_Helper)
+                    if (!ImplementsEnumerateLazinatorNodes_Helper)
                     {
                         sb.Append($@"
                             {ProtectedIfApplicable}override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
@@ -657,7 +657,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
-                    // we need to function GetDirtyNodes, plus GetDirtyNodes_Helper but without a call to a base function
+                    // we need to function GetDirtyNodes, plus EnumerateLazinatorNodes_Helper but without a call to a base function
                     sb.AppendLine($@"
                             public {derivationKeyword}IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, null, null, false);
 
@@ -685,13 +685,13 @@ namespace Lazinator.CodeDescription
                                 }}
                             }}
                         ");
-                    if (!ImplementsGetDirtyNodes_Helper)
+                    if (!ImplementsEnumerateLazinatorNodes_Helper)
                         sb.AppendLine(
                             $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> exploreCriterion, Func<ILazinator, bool> yieldCriterion, bool onlyHighestDirty)
                             {{");
                 }
 
-                if (!ImplementsGetDirtyNodes_Helper)
+                if (!ImplementsEnumerateLazinatorNodes_Helper)
                 {
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
