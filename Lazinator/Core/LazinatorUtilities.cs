@@ -29,14 +29,13 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="includeChildrenMode">Includes children (and thus descendants) when converting to bytes.</param>
         /// <param name="originalIncludeChildrenMode">The original mode used to serialize this object.</param>
-        /// <param name="allowRecycleOfOriginalStorage">If true, the original storage may be returned when the object is cleaned.</param>
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development. Set this to false if you may wish to dispose of the memory backing the original while still using the new deserialized bytes.</param>
         /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, i.e. has had its dirty flag set.</param>
         /// <param name="isDefinitelyClean">An indication whether any storage, if it exists, is definitely clean. If the storage has never been converted into bytes, then it is definitely clean. If the storage does not exist (it hasn't been serialized yet), then this is irrelevant, because there is no need to verify cleanliness.</param>
         /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
         /// <param name="streamManually_Fn">The function that completes the conversion to bytes, without considering using the original storage for the item as a whole.</param>
         /// <returns></returns>
-        public static MemoryInBuffer EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool allowRecycleOfOriginalStorage, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, ReadOnlyMemory<byte> originalStorage, StreamManuallyDelegate streamManually_Fn)
+        public static MemoryInBuffer EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, ReadOnlyMemory<byte> originalStorage, StreamManuallyDelegate streamManually_Fn)
         {
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
