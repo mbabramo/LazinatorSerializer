@@ -341,9 +341,9 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected bool _LazinatorExample_Accessed;
         
-        public override IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(true, x => x.IsDirty, x => x.IsDirty || x.DescendantIsDirty, false);
+        public override IEnumerable<ILazinator> GetDirtyNodes() => EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
         
-        public override IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch)
+        public override IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             bool match = (matchCriterion == null) ? true : matchCriterion(this);
             if (match)
@@ -364,14 +364,14 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (!exploreOnlyDeserializedChildren || (_MyT_Accessed && _MyT != null))
             {
-                foreach (ILazinator toYield in _MyT.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _MyT.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
                     yield return toYield;
                 }
             }
             if (!exploreOnlyDeserializedChildren || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
-                foreach (ILazinator toYield in _LazinatorExample.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
+                foreach (ILazinator toYield in _LazinatorExample.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
                     yield return toYield;
                 }

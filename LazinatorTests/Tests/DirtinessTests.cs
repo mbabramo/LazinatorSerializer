@@ -171,14 +171,14 @@ namespace LazinatorTests.Tests
             results = c.GetDirtyNodes().ToList();
             results.Count().Should().Be(4); // no change
 
-            results = c.EnumerateLazinatorNodes(true, null, null, true).ToList();
+            results = c.EnumerateLazinatorNodes(null, true, null, true).ToList();
             results.Count().Should().Be(1); // only highest dirty returned 
             (results[0] is Example).Should().BeTrue();
 
-            results = c.EnumerateLazinatorNodes(true, x => !(x is WrapperContainer), null, false).ToList();
+            results = c.EnumerateLazinatorNodes(x => !(x is WrapperContainer), false, null, true).ToList();
             results.Count().Should().Be(3); // WrapperContainer is yielded but not further explored 
             
-            results = c.EnumerateLazinatorNodes(true, null, x => x is WInt, false).ToList();
+            results = c.EnumerateLazinatorNodes(null, false, x => x is WInt, true).ToList();
             results.Count().Should().Be(1); // full exploration, but only WInt returned 
             (results[0] is WInt).Should().BeTrue();
         }

@@ -303,7 +303,7 @@ namespace Lazinator.Collections
                     var item = ((IList<T>)UnderlyingList)[i];
                     if (item != null && !(item.Equals(default(T))))
                     {
-                        foreach (ILazinator toYield in item.EnumerateLazinatorNodes(exploreOnlyDeserializedChildren, matchCriterion, exploreCriterion, stopExploringBelowMatch))
+                        foreach (ILazinator toYield in item.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                         {
                             yield return toYield;
                         }

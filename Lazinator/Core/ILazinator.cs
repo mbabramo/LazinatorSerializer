@@ -78,7 +78,7 @@ namespace Lazinator.Core
         /// <param name="matchCriterion">If non-null, then a dirty node will be yielded only if this function returns true.</param>
         /// <param name="stopExploringBelowMatch">If true, then once a dirty node is found, it will be enumerated, but its dirty descendants will not be separately enumerated.</param>
         /// <returns></returns>
-        IEnumerable<ILazinator> EnumerateLazinatorNodes(bool exploreOnlyDeserializedChildren, Func<ILazinator, bool> matchCriterion, Func<ILazinator, bool> exploreCriterion, bool stopExploringBelowMatch);
+        IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
 
         /// <summary>
         /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.
