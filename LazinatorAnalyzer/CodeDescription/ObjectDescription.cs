@@ -390,7 +390,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
-                            return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, true, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
+                            return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
                         }}
 
                         {ProtectedIfApplicable}{DerivationKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
@@ -402,7 +402,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
-                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParentClass = LazinatorParentClass,
@@ -496,7 +496,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return;
                             }}
-                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             _LazinatorObjectBytes = bytes.FilledMemory;
                         }}
 
@@ -537,7 +537,7 @@ namespace Lazinator.CodeDescription
 
                         {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
-                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParentClass = LazinatorParentClass,
@@ -833,7 +833,6 @@ namespace Lazinator.CodeDescription
 
             string additionalDescendantDirtinessChecks, postEncodingDirtinessReset;
             GetDescendantDirtinessChecks(out additionalDescendantDirtinessChecks, out postEncodingDirtinessReset);
-            sb.AppendLine("if (!updateStoredBuffer) throw new Exception();"); // DEBUG -- remove.
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
