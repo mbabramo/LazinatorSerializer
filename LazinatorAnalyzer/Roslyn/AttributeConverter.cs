@@ -48,6 +48,19 @@ namespace LazinatorCodeGen.Roslyn
                     if (!(attributeText is string ))
                         return null;
                     return new CloneInsertAttributeAttribute((string)attributeText);
+                case "SkipIfAttribute":
+                    var skipCondition = attributeData.GetAttributeConstructorValueByParameterName("skipCondition");
+                    if (!(skipCondition is string))
+                        return null;
+                    var initializeWhenSkipped = attributeData.GetAttributeConstructorValueByParameterName("initializeWhenSkipped");
+                    if (initializeWhenSkipped != null && !(initializeWhenSkipped is string))
+                        return null;
+                    return new CloneSkipIfAttribute((string)skipCondition, (string)initializeWhenSkipped);
+                case "RelativeOrderAttribute":
+                    var relativeOrder = attributeData.GetAttributeConstructorValueByParameterName("relativeOrder");
+                    if (!(relativeOrder is int))
+                        return null;
+                    return new CloneRelativeOrderAttribute((int)relativeOrder);
                 case "FixedLengthLazinatorAttribute":
                     var fixedLength = attributeData.GetAttributeConstructorValueByParameterName("fixedLength");
                     if (!(fixedLength is int))
@@ -83,6 +96,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneUnofficiallyIncorporateInterfaceAttribute((string) otherInterfaceFullyQualifiedTypeName, (string)accessibility2);
                 case "AllowMovedAttribute":
                     return new CloneAllowMovedAttribute();
+                case "AllowNonlazinatorOpenGenericsAttribute":
+                    return new CloneAllowNonlazinatorOpenGenericsAttribute();
                 case "AutoChangeParentAttribute":
                     return new CloneAutoChangeParentAttribute();
                 case "AutoChangeParentAllAttribute":

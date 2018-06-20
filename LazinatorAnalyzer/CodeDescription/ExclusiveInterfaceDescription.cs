@@ -109,7 +109,8 @@ namespace Lazinator.CodeDescription
             }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
-                .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) // defined this level later
+                .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
+                .ThenBy(x => x.description.RelativeOrder)
                 .ThenBy(x => x.description.PropertyName).ToList();
             var last = orderedPropertiesWithLevel.LastOrDefault();
             if (last != null)

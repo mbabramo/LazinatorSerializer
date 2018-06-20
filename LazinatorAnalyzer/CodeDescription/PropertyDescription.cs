@@ -83,6 +83,7 @@ namespace Lazinator.CodeDescription
 
         /* Attributes */
         private IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
+        internal int RelativeOrder { get; set; }
         private bool HasFullyQualifyAttribute => UserAttributes.OfType<CloneFullyQualifyAttribute>().Any();
         private IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
         internal string PropertyAccessibility { get; set; }
@@ -206,6 +207,8 @@ namespace Lazinator.CodeDescription
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
             ExcludableWhenIncludingMostChildren = excludable != null;
+            CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
+            RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
         }
 
         private string GetAttributesToInsert()

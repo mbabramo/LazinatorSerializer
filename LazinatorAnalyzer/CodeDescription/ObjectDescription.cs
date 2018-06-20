@@ -67,10 +67,13 @@ namespace Lazinator.CodeDescription
         public List<string> GenericArgumentNames { get; set; }
         public string GenericArgumentNameTypes => String.Join(", ", GenericArgumentNames.Select(x => "typeof(" + x + ")"));
         public bool IsGeneric => GenericArgumentNames != null && GenericArgumentNames.Any();
+        public bool AllGenericsAreNonlazinator { get; set; }
+        public bool ContainsOpenGenericParameters => IsGeneric && !AllGenericsAreNonlazinator;
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
-        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !IsGeneric;
+        public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
+        public bool AllowNonlazinatorGenerics => InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public bool IncludeTracingCode => Compilation.Config?.IncludeTracingCode ?? false;
         public bool StepThroughProperties => Compilation.Config?.StepThroughProperties ?? true;
@@ -332,7 +335,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string readUniqueID;
-                    if (!IsGeneric && IsSealedOrStruct)
+                    if (!ContainsOpenGenericParameters && IsSealedOrStruct)
                         readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
@@ -645,7 +648,7 @@ namespace Lazinator.CodeDescription
         {
             sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
                         {ProtectedIfApplicable}abstract LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
-                        {ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};
+                        {ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
                         public abstract LazinatorGenericIDType LazinatorGenericID {{ get; set; }}
                         public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
@@ -741,15 +744,15 @@ namespace Lazinator.CodeDescription
 
         private void AppendConversionSectionStart(CodeStringBuilder sb)
         {
-            string containsOpenGenericParametersString = $@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(IsGeneric ? "true" : "false")};";
+            string containsOpenGenericParametersString = $@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};";
 
             string lazinatorGenericBackingID = "";
-            if (!IsDerivedFromNonAbstractLazinator && (IsGeneric || !IsSealedOrStruct))
+            if (!IsDerivedFromNonAbstractLazinator && (ContainsOpenGenericParameters || !IsSealedOrStruct))
                 lazinatorGenericBackingID = $@"{ProtectedIfApplicable}{DerivationKeyword}LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
                         ";
 
             string lazinatorGenericID;
-            if (IsGeneric)
+            if (ContainsOpenGenericParameters)
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
                         {lazinatorGenericBackingID}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
                         {{
@@ -909,7 +912,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass != null}}"");");
                 }
 
-                if (IsGeneric || !IsSealedOrStruct)
+                if (ContainsOpenGenericParameters || !IsSealedOrStruct)
                     sb.AppendLine($@"if (includeUniqueID)
                             {{
                                 if (LazinatorGenericID.IsEmpty)
@@ -1158,25 +1161,37 @@ namespace Lazinator.CodeDescription
         public void HandleGenerics(INamedTypeSymbol iLazinatorType)
         {
             var genericArguments = iLazinatorType.TypeArguments;
-            if (!iLazinatorType.IsAbstract && genericArguments.Any(x => 
-                    !(
-                        ( // each generic argument must implement ILazinator or be constrained to ILazinator
-                            x.Interfaces.Any(y => y.Name == "ILazinator") 
-                            ||
-                            (((x as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false))
-                        )
-                    )
-                    && // but if this is a Lazinator interface type, that's fine too.
-                    !Compilation.ContainsAttributeOfType<CloneLazinatorAttribute>(x)
-                    )
+            if (!iLazinatorType.IsAbstract
+                && genericArguments.Any(x => IsNonlazinatorGeneric(x))
                 )
-                throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator and should generally implement new() if not a struct. Add a clause like 'where T : ILazinator, new()'");
+            {
+                if (AllowNonlazinatorGenerics)
+                {
+                    if (genericArguments.All(x => IsNonlazinatorGeneric(x)))
+                        AllGenericsAreNonlazinator = true;
+                }
+                else
+                    throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator. Add a clause like 'where T : ILazinator, new()' to both the main class and the interface definition");
+            }
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
             if (GenericArgumentNames.Any())
                 NameIncludingGenerics = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";
             else
                 NameIncludingGenerics = iLazinatorType.Name;
             FullyQualifiedObjectName = iLazinatorType.GetFullNamespace() + "." + NameIncludingGenerics;
+        }
+
+        private bool IsNonlazinatorGeneric(ITypeSymbol typeSymbol)
+        {
+            return !(
+                        ( // each generic argument must implement ILazinator or be constrained to ILazinator
+                            typeSymbol.Interfaces.Any(y => y.Name == "ILazinator")
+                            ||
+                            (((typeSymbol as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator") ?? false))
+                        )
+                    )
+                    && // but if this is a Lazinator interface type, that's fine too.
+                    !Compilation.ContainsAttributeOfType<CloneLazinatorAttribute>(typeSymbol);
         }
     }
 }
