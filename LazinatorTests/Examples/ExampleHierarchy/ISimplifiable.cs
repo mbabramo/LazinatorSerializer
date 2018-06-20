@@ -14,5 +14,8 @@ namespace LazinatorTests.Examples
         bool MyIntsAre3 { get; set; }
         [SkipIf("ExampleHasDefaultValue", "SetExampleToDefaultValue();")]
         Example Example { get; set; }
+        [SkipIf("ExampleHasDefaultValue", "SetExampleToDefaultValue();")]
+        [IntroducedWithVersion(4)]
+        Example Example2 { get; set; }
     }
 }

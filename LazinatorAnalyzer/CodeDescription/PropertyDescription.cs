@@ -31,9 +31,9 @@ namespace Lazinator.CodeDescription
         private int? ArrayRank { get; set; }
         internal bool IsDefinedInLowerLevelInterface { get; set; }
         internal bool IsLast { get; set; }
-        private bool OmitLength => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
+        private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
         private string ChildSliceString => $"GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
-        private string ChildSliceEndString => $", {(OmitLength ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
+        private string ChildSliceEndString => $", {(OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
 
         /* Property type */
         internal LazinatorPropertyType PropertyType { get; set; }
@@ -1104,36 +1104,40 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyReadString(CodeStringBuilder sb)
         {
-
-            if (SkipCondition != null)
-                sb.AppendLine($@"if (!{SkipCondition})
-                            {{");
+            string skipCheckString = SkipCondition == null ? "" : $@"
+                            if (!{SkipCondition})
+                            {{";
             if (IsPrimitive)
+            {
+                if (SkipCondition != null)
+                    sb.AppendLine(skipCheckString);
                 sb.AppendLine(
                         CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
+            }
             else
             {
-                if (OmitLength)
+                if (OmitLengthBecauseDefinitelyLast)
                 {
-                    sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;
+                    sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
                                         bytesSoFar = span.Length;");
                 }
                 else if (IsGuaranteedFixedLength)
                 {
                     if (FixedLength == 1)
-                        sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar++;");
+                        sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
+                                            bytesSoFar++;");
                     else
-                        sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;
+                        sb.AppendLine($@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
                                         bytesSoFar += {FixedLength};");
                 }
                 else if (IsGuaranteedSmall)
                     sb.AppendLine(
-                        $@"_{PropertyName}_ByteIndex = bytesSoFar;
+                        $@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
                             " + CreateConditionalForSingleLine(ReadInclusionConditional,
                             "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
                 else
                     sb.AppendLine(
-                        $@"_{PropertyName}_ByteIndex = bytesSoFar;
+                        $@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
                             " + CreateConditionalForSingleLine(ReadInclusionConditional,
                             "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
             }
@@ -1141,6 +1145,13 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine($@"}}");
                 if (InitializeWhenSkipped != null)
+                {
+                    sb.AppendLine($@"else
+                                {{
+                                    {InitializeWhenSkipped}
+                                }}");
+                }
+                else
                     sb.AppendLine($@"else
                                 {{
                                     {InitializeWhenSkipped}
@@ -1192,7 +1203,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)
         {
-            string omitLengthSuffix = OmitLength ? "_WithoutLengthPrefix" : "";
+            string omitLengthSuffix = OmitLengthBecauseDefinitelyLast ? "_WithoutLengthPrefix" : "";
             string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 sb.AppendLine(
@@ -1232,7 +1243,7 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 sb.AppendLine(
-                    CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, this);"));
+                    CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
             }
             else
             {
@@ -1243,7 +1254,7 @@ namespace Lazinator.CodeDescription
                             var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
-                            WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLength ? "true" : "false")}, null);
+                            WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);
                         }}");
             }
         }

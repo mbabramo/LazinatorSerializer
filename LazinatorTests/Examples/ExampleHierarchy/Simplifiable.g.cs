@@ -383,12 +383,29 @@ namespace LazinatorTests.Examples
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyIntsAre3 = span.ToBoolean(ref bytesSoFar);
             _ExampleHasDefaultValue = span.ToBoolean(ref bytesSoFar);
-            _MyInt = span.ToDecompressedInt(ref bytesSoFar);
-            _MyOtherInt = span.ToDecompressedInt(ref bytesSoFar);
-            _Example_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (!MyIntsAre3)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                _MyInt = span.ToDecompressedInt(ref bytesSoFar);
+            }
+            else
+            {
+                SetMyIntsTo3();
+            }
+            if (!MyIntsAre3)
+            {
+                _MyOtherInt = span.ToDecompressedInt(ref bytesSoFar);
+            }
+            if (!ExampleHasDefaultValue)
+            {
+                _Example_ByteIndex = bytesSoFar;
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+                {
+                    bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                }
+            }
+            else
+            {
+                SetExampleToDefaultValue();
             }
             _Simplifiable_EndByteIndex = bytesSoFar;
         }
@@ -433,16 +450,28 @@ namespace LazinatorTests.Examples
             // write properties
             WriteUncompressedPrimitives.WriteBool(writer, _MyIntsAre3);
             WriteUncompressedPrimitives.WriteBool(writer, _ExampleHasDefaultValue);
-            CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
-            CompressedIntegralTypes.WriteCompressedInt(writer, _MyOtherInt);
-            startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (!MyIntsAre3)
             {
-                WriteChild(writer, _Example, includeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example_ByteIndex, _Example_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
+                
             }
-            if (updateStoredBuffer)
+            if (!MyIntsAre3)
             {
-                _Example_ByteIndex = startOfObjectPosition - startPosition;
+                CompressedIntegralTypes.WriteCompressedInt(writer, _MyOtherInt);
+                
+            }
+            if (!ExampleHasDefaultValue)
+            {
+                startOfObjectPosition = writer.Position;
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+                {
+                    WriteChild(writer, _Example, includeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example_ByteIndex, _Example_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                }
+                if (updateStoredBuffer)
+                {
+                    _Example_ByteIndex = startOfObjectPosition - startPosition;
+                }
+                
             }
             if (updateStoredBuffer)
             {
