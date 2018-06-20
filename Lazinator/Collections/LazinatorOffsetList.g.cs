@@ -117,8 +117,11 @@ namespace Lazinator.Collections
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
-                        HasBeenDirty = true;
                     }
+                }
+                if (_IsDirty)
+                {
+                    HasBeenDirty = true;
                 }
             }
         }
@@ -170,6 +173,10 @@ namespace Lazinator.Collections
                             LazinatorParentClass.DescendantIsDirty = true;
                         }
                     }
+                }
+                if (_DescendantIsDirty)
+                {
+                    _DescendantHasBeenDirty = true;
                 }
             }
         }

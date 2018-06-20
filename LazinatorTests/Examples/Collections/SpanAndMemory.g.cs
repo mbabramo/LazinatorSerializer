@@ -112,8 +112,11 @@ namespace LazinatorTests.Examples.Collections
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
-                        HasBeenDirty = true;
                     }
+                }
+                if (_IsDirty)
+                {
+                    HasBeenDirty = true;
                 }
             }
         }
@@ -165,6 +168,10 @@ namespace LazinatorTests.Examples.Collections
                             LazinatorParentClass.DescendantIsDirty = true;
                         }
                     }
+                }
+                if (_DescendantIsDirty)
+                {
+                    _DescendantHasBeenDirty = true;
                 }
             }
         }

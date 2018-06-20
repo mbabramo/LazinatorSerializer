@@ -110,8 +110,11 @@ namespace Lazinator.Collections.AvlTree
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
-                        HasBeenDirty = true;
                     }
+                }
+                if (_IsDirty)
+                {
+                    HasBeenDirty = true;
                 }
             }
         }
@@ -163,6 +166,10 @@ namespace Lazinator.Collections.AvlTree
                             LazinatorParentClass.DescendantIsDirty = true;
                         }
                     }
+                }
+                if (_DescendantIsDirty)
+                {
+                    _DescendantHasBeenDirty = true;
                 }
             }
         }

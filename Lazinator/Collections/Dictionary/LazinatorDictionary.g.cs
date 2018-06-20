@@ -109,8 +109,11 @@ namespace Lazinator.Collections.Dictionary
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
-                        HasBeenDirty = true;
                     }
+                }
+                if (_IsDirty)
+                {
+                    HasBeenDirty = true;
                 }
             }
         }
@@ -162,6 +165,10 @@ namespace Lazinator.Collections.Dictionary
                             LazinatorParentClass.DescendantIsDirty = true;
                         }
                     }
+                }
+                if (_DescendantIsDirty)
+                {
+                    _DescendantHasBeenDirty = true;
                 }
             }
         }

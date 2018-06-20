@@ -1051,15 +1051,15 @@ namespace Lazinator.CodeDescription
             string additionalDescendantDirtinessChecks;
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
             string manualDescendantDirtinessChecks = "";
-            string tense = usePastTense ? "HasBeen" : "Is";
+            string tense = usePastTense ? "HasBeenDirty" : "IsDirty";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.{tense}Dirty || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}Dirty))";
+                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}))";
                 else
                 {
                     string nonNullCheck = property.GetNonNullCheck(true);
-                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}.{tense}Dirty || {property.PropertyName}.Descendant{tense}Dirty))";
+                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}.{tense} || {property.PropertyName}.Descendant{tense}))";
                 }
             }
             // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
