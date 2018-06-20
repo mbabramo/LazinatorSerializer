@@ -305,7 +305,7 @@ namespace LazinatorCodeGen.Roslyn
             return symbol.GetAttributes().Select(x => AttributeConverter.ConvertAttribute(x)).OfType<T>();
         }
 
-        public static T GetKnownAttribute<T>(ISymbol symbol) where T : Attribute
+        public static T GetKnownAttribute<T>(this ISymbol symbol) where T : Attribute
         {
             return GetKnownAttributes<T>(symbol).SingleOrDefault();
         }

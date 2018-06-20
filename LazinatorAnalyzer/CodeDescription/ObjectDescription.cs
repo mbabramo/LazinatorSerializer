@@ -55,13 +55,14 @@ namespace Lazinator.CodeDescription
         public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutoChangeParentAllThisLevel);
  
         /* Implementations */
-        public bool ImplementsLazinatorObjectVersionUpgrade { get; set; }
-        public bool ImplementsPreSerialization { get; set; }
-        public bool ImplementsPostDeserialization { get; set; }
-        public bool ImplementsOnDirty { get; set; }
-        public bool ImplementsConvertFromBytesAfterHeader { get; set; }
-        public bool ImplementsWritePropertiesIntoBuffer { get; set; }
-        public bool ImplementsEnumerateLazinatorNodes_Helper { get; set; }
+        public string[] ImplementedMethods { get; set; }
+        public bool ImplementsLazinatorObjectVersionUpgrade => ImplementedMethods.Contains("LazinatorObjectVersionUpgrade");
+        public bool ImplementsPreSerialization => ImplementedMethods.Contains("PreSerialization");
+        public bool ImplementsPostDeserialization => ImplementedMethods.Contains("PostDeserialization");
+        public bool ImplementsOnDirty => ImplementedMethods.Contains("OnDirty");
+        public bool ImplementsConvertFromBytesAfterHeader => ImplementedMethods.Contains("ConvertFromBytesAfterHeader");
+        public bool ImplementsWritePropertiesIntoBuffer => ImplementedMethods.Contains("WritePropertiesIntoBuffer");
+        public bool ImplementsEnumerateLazinatorNodes_Helper => ImplementedMethods.Contains("EnumerateLazinatorNodes_Helper");
 
         /* Complications */
         public List<string> GenericArgumentNames { get; set; }
@@ -87,6 +88,7 @@ namespace Lazinator.CodeDescription
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, bool suppressDate = false)
         {
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
+            ImplementedMethods = iLazinatorTypeSymbol.GetKnownAttribute<CloneImplementsAttribute>()?.Implemented ?? new string[] { };
             Compilation = compilation;
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
@@ -138,14 +140,6 @@ namespace Lazinator.CodeDescription
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
                 .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, this)).ToList();
-
-            ImplementsLazinatorObjectVersionUpgrade = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "LazinatorObjectVersionUpgrade"));
-            ImplementsPreSerialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PreSerialization"));
-            ImplementsPostDeserialization = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "PostDeserialization"));
-            ImplementsOnDirty = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "OnDirty"));
-            ImplementsConvertFromBytesAfterHeader = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "ConvertFromBytesAfterHeader"));
-            ImplementsWritePropertiesIntoBuffer = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "WritePropertiesIntoBuffer"));
-            ImplementsEnumerateLazinatorNodes_Helper = Compilation.TypeImplementsMethod.Contains((iLazinatorTypeSymbol, "EnumerateLazinatorNodes_Helper"));
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
