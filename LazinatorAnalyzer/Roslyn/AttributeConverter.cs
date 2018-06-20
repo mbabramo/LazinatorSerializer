@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LazinatorCodeGen.Roslyn
@@ -44,10 +45,10 @@ namespace LazinatorCodeGen.Roslyn
                         return null;
                     return new CloneCustomNonlazinatorWriteAttribute((string)writeMethod);
                 case "ImplementsAttribute":
-                    var implemented = attributeData.GetAttributeConstructorValueByParameterName("implemented");
-                    if (implemented != null && !(implemented is string[]))
+                    var implemented = attributeData.GetAttributeConstructorValuesByParameterName("implemented");
+                    if (implemented != null && implemented.Any(x => !(x is string)))
                         return null;
-                    return new CloneImplementsAttribute((string[])implemented);
+                    return new CloneImplementsAttribute(implemented.Select(x => (string) x).ToArray());
                 case "InsertAttributeAttribute":
                     var attributeText = attributeData.GetAttributeConstructorValueByParameterName("attributeText");
                     if (!(attributeText is string ))

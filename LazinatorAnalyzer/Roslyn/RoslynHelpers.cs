@@ -309,6 +309,15 @@ namespace LazinatorCodeGen.Roslyn
         {
             return GetKnownAttributes<T>(symbol).SingleOrDefault();
         }
+
+        public static IEnumerable<T> GetAttributesIncludingBase<T>(this INamedTypeSymbol symbol) where T : Attribute
+        {
+            foreach (T t in GetKnownAttributes<T>(symbol))
+                yield return t;
+            if (symbol.BaseType != null)
+                foreach (T t in symbol.BaseType.GetAttributesIncludingBase<T>())
+                    yield return t;
+        }
         
         public static bool HasAttributeOfType<T>(this ISymbol symbol) where T : Attribute
         {
@@ -370,6 +379,33 @@ namespace LazinatorCodeGen.Roslyn
 
             // return the value passed to the attribute
             return constructorArg.Value;
+        }
+
+        public static object[] GetAttributeConstructorValuesByParameterName
+        (
+            this AttributeData attributeData,
+            string argName
+        )
+        {
+
+            if (attributeData.AttributeConstructor == null)
+                return null; // attribute is not fully formed yet
+
+            // Get the parameter
+            IParameterSymbol parameterSymbol = attributeData.AttributeConstructor
+                .Parameters
+                .Where((constructorParam) => constructorParam.Name == argName).FirstOrDefault();
+
+            // get the index of the parameter
+            int parameterIdx = attributeData.AttributeConstructor.Parameters.IndexOf(parameterSymbol);
+            if (parameterIdx == -1)
+                return null;
+
+            // get the construct argument corresponding to this parameter
+            TypedConstant constructorArg = attributeData.ConstructorArguments[parameterIdx];
+
+            // return the value passed to the attribute
+            return constructorArg.Values.Select(x => x.Value).ToArray();
         }
 
         #endregion

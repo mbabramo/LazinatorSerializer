@@ -88,7 +88,8 @@ namespace Lazinator.CodeDescription
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, bool suppressDate = false)
         {
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
-            ImplementedMethods = iLazinatorTypeSymbol.GetKnownAttribute<CloneImplementsAttribute>()?.Implemented ?? new string[] { };
+            var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
+            ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
             Compilation = compilation;
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;

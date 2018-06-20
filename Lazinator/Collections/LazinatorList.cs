@@ -8,9 +8,11 @@ using Lazinator.Buffers;
 using Lazinator.Core;
 using static Lazinator.Core.LazinatorUtilities;
 using System.Linq;
+using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
+    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorNodes_Helper" })]
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T> where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;

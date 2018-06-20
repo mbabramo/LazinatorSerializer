@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Lazinator.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LazinatorTests.Examples
 {
+    [Implements(new string[] { "PreSerialization" })]
     public partial class Simplifiable : ISimplifiable
     {
         public const string LongString = "The quick brown fox jumps over the lazy dog.";

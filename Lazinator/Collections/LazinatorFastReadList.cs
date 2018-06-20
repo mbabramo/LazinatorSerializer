@@ -5,6 +5,7 @@ using System.Text;
 using Lazinator.Support;
 using Lazinator.Core;
 using System.Runtime.InteropServices;
+using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
@@ -12,6 +13,7 @@ namespace Lazinator.Collections
     /// A list of primitive values that can be indexed without deserialization if the list is not changed. The AsList property provides an underlying List, which can be mutated. 
     /// </summary>
     /// <typeparam name="T">A primitive value type (such as int, float, char, etc.) Note that using numeric types will work only on little endian processors. </typeparam>
+    [Implements(new string[] { "PreSerialization" })]
     public sealed partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
     {
         //TODO: Do conversions if necessary in the ReadOnly property and in ConvertFromList if on a big-endian processor.

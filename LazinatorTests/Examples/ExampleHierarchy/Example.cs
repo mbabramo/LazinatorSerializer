@@ -1,5 +1,8 @@
-﻿namespace LazinatorTests.Examples
+﻿using Lazinator.Attributes;
+
+namespace LazinatorTests.Examples
 {
+    [Implements(new string[] { "LazinatorObjectVersionUpgrade", "OnDirty" })]
     public partial class Example : IExample
     {
         public Example()
