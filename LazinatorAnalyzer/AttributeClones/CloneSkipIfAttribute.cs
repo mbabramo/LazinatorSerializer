@@ -13,11 +13,6 @@ namespace LazinatorAnalyzer.AttributeClones
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
 
-        public CloneSkipIfAttribute(string skipCondition)
-        {
-            SkipCondition = skipCondition;
-        }
-
         public CloneSkipIfAttribute(string skipCondition, string initializeWhenSkipped)
         {
             SkipCondition = skipCondition;

@@ -6,18 +6,17 @@ namespace LazinatorTests.Examples
 {
     public partial class Simplifiable : ISimplifiable
     {
-        public Example Example2 { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
             MyIntsAre3 = MyInt == 3 && MyOtherInt == 3;
-            ExampleHasDefaultValue = Example != null && Example.MyChar == 'X' && Example2 != null && Example.MyChar == 'X';
+            ExampleHasDefaultValue = Example != null && Example.MyChar == 'X';
+            Example2Char = Example2?.MyChar;
+            Example3IsNull = Example3 == null;
         }
 
         private void SetExampleToDefaultValue()
         {
             Example = new Example() { MyChar = 'X' };
-            Example2 = new Example() { MyChar = 'X' };
         }
 
         private void SetMyIntsTo3()

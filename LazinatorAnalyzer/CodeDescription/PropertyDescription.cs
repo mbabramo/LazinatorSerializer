@@ -1105,7 +1105,7 @@ namespace Lazinator.CodeDescription
         public void AppendPropertyReadString(CodeStringBuilder sb)
         {
             string skipCheckString = SkipCondition == null ? "" : $@"
-                            if (!{SkipCondition})
+                            if (!({SkipCondition}))
                             {{";
             if (IsPrimitive)
             {
@@ -1144,18 +1144,10 @@ namespace Lazinator.CodeDescription
             if (SkipCondition != null)
             {
                 sb.AppendLine($@"}}");
-                if (InitializeWhenSkipped != null)
-                {
-                    sb.AppendLine($@"else
-                                {{
-                                    {InitializeWhenSkipped}
-                                }}");
-                }
-                else
-                    sb.AppendLine($@"else
-                                {{
-                                    {InitializeWhenSkipped}
-                                }}");
+                sb.AppendLine($@"else
+                            {{
+                                {InitializeWhenSkipped}
+                            }}");
             }
         }
 
@@ -1179,7 +1171,7 @@ namespace Lazinator.CodeDescription
         public void AppendPropertyWriteString(CodeStringBuilder sb)
         {
             if (SkipCondition != null)
-                sb.AppendLine($@"if (!{SkipCondition})
+                sb.AppendLine($@"if (!({SkipCondition}))
                             {{");
             if (IsPrimitive)
                 sb.AppendLine(
@@ -1197,8 +1189,7 @@ namespace Lazinator.CodeDescription
                                 }}");
             }
             if (SkipCondition != null)
-                sb.AppendLine($@"
-                            }}");
+                sb.AppendLine($@"}}");
         }
 
         private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)

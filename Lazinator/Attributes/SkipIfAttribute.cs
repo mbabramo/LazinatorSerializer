@@ -13,11 +13,6 @@ namespace Lazinator.Attributes
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
 
-        public SkipIfAttribute(string skipCondition)
-        {
-            SkipCondition = skipCondition;
-        }
-
         public SkipIfAttribute(string skipCondition, string initializeWhenSkipped)
         {
             SkipCondition = skipCondition;
