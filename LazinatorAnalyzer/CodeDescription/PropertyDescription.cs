@@ -1105,7 +1105,11 @@ namespace Lazinator.CodeDescription
         public void AppendPropertyReadString(CodeStringBuilder sb)
         {
             string skipCheckString = SkipCondition == null ? "" : $@"
-                            if (!({SkipCondition}))
+                            if ({SkipCondition})
+                            {{
+                                {InitializeWhenSkipped}
+                            }}
+                            else
                             {{";
             if (IsPrimitive)
             {
@@ -1144,10 +1148,6 @@ namespace Lazinator.CodeDescription
             if (SkipCondition != null)
             {
                 sb.AppendLine($@"}}");
-                sb.AppendLine($@"else
-                            {{
-                                {InitializeWhenSkipped}
-                            }}");
             }
         }
 
