@@ -188,7 +188,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Initiates a binary write to a child of a self-serialized object, optionally including a length prefix
+        /// Initiates a binary write to a child of a Lazinator object, optionally including a length prefix
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child</param>
@@ -272,7 +272,7 @@ namespace Lazinator.Core
                 List<int> lazinatorGenericID = ReadLazinatorGenericID(span, ref index).TypeAndInnerTypeIDs;
                 if (lazinatorGenericID[0] != uniqueID)
                 {
-                    throw new FormatException("Wrong self-serialized type initialized.");
+                    throw new FormatException("Wrong Lazinator type initialized.");
                 }
                 return new LazinatorGenericIDType(lazinatorGenericID);
             }
@@ -281,7 +281,7 @@ namespace Lazinator.Core
                 int readUniqueID = span.ToDecompressedInt(ref index);
                 if (readUniqueID != uniqueID)
                 {
-                    throw new FormatException("Wrong self-serialized type initialized.");
+                    throw new FormatException("Wrong Lazinator type initialized.");
                 }
                 return default;
             }
@@ -316,7 +316,7 @@ namespace Lazinator.Core
         /// This is used when it is necessary to verify the cleanness of a non-Lazinator property.
         /// </summary>
         /// <param name="nonLazinatorObject">The object to be converted</param>
-        /// <param name="binaryWriterAction">The method that uses a binary writer to write the bytes for the non self-serialized fields. The second parameter will be ignored.</param>
+        /// <param name="binaryWriterAction">The method that uses a binary writer to write the bytes for the non Lazinator fields. The second parameter will be ignored.</param>
         /// <returns></returns>
         public static ReadOnlyMemory<byte> CreateStreamForNonLazinatorObject(object nonLazinatorObject, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
@@ -413,11 +413,11 @@ namespace Lazinator.Core
         {
             if (restrictToCurrentlyDirty)
                 return startNode.EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
-            return startNode.EnumerateLazinatorNodes(x => x.HasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true);
+            return startNode.EnumerateLazinatorNodes(x => x.HasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true);
         }
 
         /// <summary>
-        /// Marks all classes in a hierarchy as clean, so that IsDirty and HasBeenDirty will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
+        /// Marks all classes in a hierarchy as clean, so that IsDirty and HasChanged will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
         /// </summary>
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClassesClean(this ILazinator hierarchy)
@@ -432,10 +432,10 @@ namespace Lazinator.Core
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClassesUnchanged(this ILazinator hierarchy)
         {
-            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasBeenDirty || x.DescendantHasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true))
+            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true))
             {
-                node.HasBeenDirty = false;
-                node.DescendantHasBeenDirty = false;
+                node.HasChanged = false;
+                node.DescendantHasChanged = false;
             }
         }
 

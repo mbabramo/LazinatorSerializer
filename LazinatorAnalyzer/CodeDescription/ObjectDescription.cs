@@ -256,7 +256,7 @@ namespace Lazinator.CodeDescription
         private void AppendGeneralDefinitions(CodeStringBuilder sb)
         {
             string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false, false);
-            string additionalDescendantHasBeenDirtyChecks = GetDescendantDirtinessChecks(false, true);
+            string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(false, true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
 
@@ -279,7 +279,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
                         
-                        public abstract bool HasBeenDirty
+                        public abstract bool HasChanged
                         {{
 			                get;
 			                set;
@@ -294,7 +294,7 @@ namespace Lazinator.CodeDescription
                         public abstract InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
                         public abstract void InformParentOfDirtiness();
                         
-                        public abstract bool DescendantHasBeenDirty
+                        public abstract bool DescendantHasChanged
                         {{
 			                get;
 			                set;
@@ -336,7 +336,7 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
-                                throw new FormatException(""Wrong self-serialized type initialized."");
+                                throw new FormatException(""Wrong Lazinator type initialized."");
                             }}
 
                             ")}";
@@ -424,7 +424,7 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}
 
-                        public {DerivationKeyword}bool HasBeenDirty {{ get; set; }}
+                        public {DerivationKeyword}bool HasChanged {{ get; set; }}
 
                         {ProtectedIfApplicable}bool _IsDirty;
                         public {DerivationKeyword}bool IsDirty
@@ -445,7 +445,7 @@ namespace Lazinator.CodeDescription
                                 }}
                                 if (_IsDirty)
                                 {{
-                                    HasBeenDirty = true;
+                                    HasChanged = true;
                                 }}
                             }}
                         }}
@@ -466,15 +466,15 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicable}bool _DescendantHasBeenDirty;
-                        public {DerivationKeyword}bool DescendantHasBeenDirty
+                        {ProtectedIfApplicable}bool _DescendantHasChanged;
+                        public {DerivationKeyword}bool DescendantHasChanged
                         {{
                             [DebuggerStepThrough]
-                            get => _DescendantHasBeenDirty{additionalDescendantHasBeenDirtyChecks};
+                            get => _DescendantHasChanged{additionalDescendantHasChangedChecks};
                             [DebuggerStepThrough]
                             set
                             {{
-                                _DescendantHasBeenDirty = value;
+                                _DescendantHasChanged = value;
                             }}
                         }}
 
@@ -491,7 +491,7 @@ namespace Lazinator.CodeDescription
                                     _DescendantIsDirty = value;
                                     if (_DescendantIsDirty)
                                     {{
-                                        _DescendantHasBeenDirty = true;
+                                        _DescendantHasChanged = true;
                                         if (LazinatorParentClass != null)
                                         {{
                                             LazinatorParentClass.DescendantIsDirty = true;
@@ -500,7 +500,7 @@ namespace Lazinator.CodeDescription
                                 }}
                                 if (_DescendantIsDirty)
                                 {{
-                                    _DescendantHasBeenDirty = true;
+                                    _DescendantHasChanged = true;
                                 }}
                             }}
                         }}
@@ -1051,7 +1051,7 @@ namespace Lazinator.CodeDescription
             string additionalDescendantDirtinessChecks;
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
             string manualDescendantDirtinessChecks = "";
-            string tense = usePastTense ? "HasBeenDirty" : "IsDirty";
+            string tense = usePastTense ? "HasChanged" : "IsDirty";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
@@ -1067,7 +1067,7 @@ namespace Lazinator.CodeDescription
             //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
 
             // For a class, we don't need to use the manual descendant dirtiness checks routinely, since DescendantIsDirty will automatically be sent.
-            // But a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child self-serialized property.
+            // But a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child Lazinator property.
             additionalDescendantDirtinessChecks = "";
             if (ObjectType == LazinatorObjectType.Struct)
             {

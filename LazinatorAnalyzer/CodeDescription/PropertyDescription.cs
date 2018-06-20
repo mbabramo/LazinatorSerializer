@@ -447,7 +447,7 @@ namespace Lazinator.CodeDescription
 
             if (t.IsGenericType)
             {
-                // This is a generic self-serialized type, e.g., MySelfSerializingDictionary<int, long> or MyType<T,U> where T,U : ILazinator
+                // This is a generic Lazinator type, e.g., MySelfSerializingDictionary<int, long> or MyType<T,U> where T,U : ILazinator
                 SetInnerProperties(t);
                 return;
             }

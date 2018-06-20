@@ -93,7 +93,7 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        public bool HasBeenDirty { get; set; }
+        public bool HasChanged { get; set; }
         
         bool _IsDirty;
         public bool IsDirty
@@ -109,7 +109,7 @@ namespace Lazinator.Collections
                     if (_IsDirty)
                     {
                         InformParentOfDirtiness();
-                        HasBeenDirty = true;
+                        HasChanged = true;
                     }
                 }
             }
@@ -131,15 +131,15 @@ namespace Lazinator.Collections
             }
         }
         
-        bool _DescendantHasBeenDirty;
-        public bool DescendantHasBeenDirty
+        bool _DescendantHasChanged;
+        public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
-            get => _DescendantHasBeenDirty;
+            get => _DescendantHasChanged;
             [DebuggerStepThrough]
             set
             {
-                _DescendantHasBeenDirty = value;
+                _DescendantHasChanged = value;
             }
         }
         
@@ -156,7 +156,7 @@ namespace Lazinator.Collections
                     _DescendantIsDirty = value;
                     if (_DescendantIsDirty)
                     {
-                        _DescendantHasBeenDirty = true;
+                        _DescendantHasChanged = true;
                         if (LazinatorParentClass != null)
                         {
                             LazinatorParentClass.DescendantIsDirty = true;

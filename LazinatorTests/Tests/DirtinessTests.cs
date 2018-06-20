@@ -79,41 +79,41 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
-            hierarchy.MyChild1.HasBeenDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.HasChanged.Should().BeTrue();
+            hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.LazinatorConvertToBytes();
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
-            hierarchy.MyChild1.HasBeenDirty.Should().BeTrue();
-            hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.HasChanged.Should().BeTrue();
+            hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeFalse();
-            hierarchy.MyChild1.MyWrapperContainer.HasBeenDirty.Should().BeTrue(); // here is the key difference
-            hierarchy.DescendantHasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.MyWrapperContainer.HasChanged.Should().BeTrue(); // here is the key difference
+            hierarchy.DescendantHasChanged.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeTrue();
-            hierarchy.MyChild1.MyWrapperContainer.HasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.MyWrapperContainer.HasChanged.Should().BeTrue();
             hierarchy.MyChild1.IsDirty.Should().BeTrue(); // hasn't changed
-            hierarchy.MyChild1.HasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.HasChanged.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue(); // this time, wrapper's dirtiness change, so MyChild1 is notified
-            hierarchy.MyChild1.DescendantHasBeenDirty.Should().BeTrue();
+            hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
             
             var clone = hierarchy.CloneLazinatorTyped();
             // The following is the tricky part. We must make sure that LazinatorConvertToBytes doesn't cause MyChild1 to think that no serialization is necessary.
             clone.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(18);
             clone.MyChild1.IsDirty.Should().BeFalse();
-            clone.MyChild1.HasBeenDirty.Should().BeFalse();
+            clone.MyChild1.HasChanged.Should().BeFalse();
             clone.MyChild1.DescendantIsDirty.Should().BeFalse();
-            clone.MyChild1.DescendantHasBeenDirty.Should().BeFalse();
-            clone.DescendantHasBeenDirty.Should().BeFalse();
+            clone.MyChild1.DescendantHasChanged.Should().BeFalse();
+            clone.DescendantHasChanged.Should().BeFalse();
 
             clone.MyChild1.MyWrapperContainer.WrappedInt = 16;
-            clone.DescendantHasBeenDirty.Should().BeTrue();
-            clone.MyChild1.MyWrapperContainer.DescendantHasBeenDirty.Should().BeTrue();
-            clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeTrue();
+            clone.DescendantHasChanged.Should().BeTrue();
+            clone.MyChild1.MyWrapperContainer.DescendantHasChanged.Should().BeTrue();
+            clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeTrue();
             clone.MarkHierarchyClassesClean();
-            clone.DescendantHasBeenDirty.Should().BeFalse();
-            clone.MyChild1.MyWrapperContainer.DescendantHasBeenDirty.Should().BeFalse();
-            clone.MyChild1.MyWrapperContainer.WrappedInt.HasBeenDirty.Should().BeTrue(); // because it's a struct, it doesn't change
+            clone.DescendantHasChanged.Should().BeFalse();
+            clone.MyChild1.MyWrapperContainer.DescendantHasChanged.Should().BeFalse();
+            clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeTrue(); // because it's a struct, it doesn't change
 
         }
 

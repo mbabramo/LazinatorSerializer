@@ -10,15 +10,15 @@ namespace Lazinator.Core
     public interface ILazinator
     {
         /// <summary>
-        /// The memory (generally rented from a memory pool) used to initialize a self-serialized class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
+        /// The memory (generally rented from a memory pool) used to initialize a Lazinator class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
         /// </summary>
         MemoryInBuffer HierarchyBytes { set; }
         /// <summary>
-        /// The bytes used to initialize a self-serialized class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyBytes or from the parent's LazinatorObjectBytes.
+        /// The bytes used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyBytes or from the parent's LazinatorObjectBytes.
         /// </summary>
         ReadOnlyMemory<byte> LazinatorObjectBytes { get; set; }
         /// <summary>
-        /// The parent (container) of the self-serialized class/struct, or null if there is none (because this is the top of the hierarchy or the parent is a struct or a class that doesn't implement ILazinator).
+        /// The parent (container) of the Lazinator class/struct, or null if there is none (because this is the top of the hierarchy or the parent is a struct or a class that doesn't implement ILazinator).
         /// </summary>
         ILazinator LazinatorParentClass { get; set; }
         /// <summary>
@@ -58,19 +58,20 @@ namespace Lazinator.Core
         /// <returns>A cloned copy of the class/struct</returns>
         ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
         /// <summary>
-        /// Indicates whether a Lazinator object has been or is dirty, meaning that one of its fields has changed since it was last deserialized.
+        /// Indicates whether a Lazinator object has changed since it was last deserialized (or since the last call to MarkHierarchyClassesUnchanged).
         /// </summary>
-        bool HasBeenDirty { get; set; }
+        bool HasChanged { get; set; }
         /// <summary>
-        /// Indicates whether a descendant of a Lazinator object has been or is dirty.
+        /// Indicates whether a descendant of a Lazinator object has changed since the object was last deserialized (or since the last call to MarkHierarchyClassesUnchanged).
         /// </summary>
-        bool DescendantHasBeenDirty { get; set; }
+        bool DescendantHasChanged { get; set; }
         /// <summary>
-        /// Indicates whether a Lazinator object is dirty, meaning that one of its fields has changed since it was last serialized, which may occur if it or a portion of the hierarchy containing it is cloned.
+        /// Indicates whether a Lazinator object is dirty, meaning that one of its fields has changed since it was last serialized. 
+        /// This may differ from HasChanged either if HasChanged is manually reset or if IsDirty is reset when the corresponding Lazinator object is serialized, for example during cloning.
         /// </summary>
         bool IsDirty { get; set; }
         /// <summary>
-        /// Indicates whether a descendant of a self-serialized object is dirty.
+        /// Indicates whether a descendant of a Lazinator object is dirty.
         /// </summary>
         bool DescendantIsDirty { get; set; }
         /// <summary>
