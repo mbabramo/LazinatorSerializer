@@ -506,58 +506,58 @@ namespace LazinatorTests.Examples
             _Example3IsNull = span.ToBoolean(ref bytesSoFar);
             _ExampleHasDefaultValue = span.ToBoolean(ref bytesSoFar);
             
-            if (!(MyIntsAre3))
-            {
-                _MyInt = span.ToDecompressedInt(ref bytesSoFar);
-            }
-            else
+            if (MyIntsAre3)
             {
                 SetMyIntsTo3();
             }
-            
-            if (!(MyIntsAre3))
-            {
-                _MyOtherInt = span.ToDecompressedInt(ref bytesSoFar);
-            }
             else
+            {
+                _MyInt = span.ToDecompressedInt(ref bytesSoFar);
+            }
+            
+            if (MyIntsAre3)
             {
                 // is set above
             }
+            else
+            {
+                _MyOtherInt = span.ToDecompressedInt(ref bytesSoFar);
+            }
             _Example_ByteIndex = bytesSoFar;
-            if (!(ExampleHasDefaultValue))
+            if (ExampleHasDefaultValue)
+            {
+                SetExampleToDefaultValue();
+            }
+            else
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
                 {
                     bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
                 }
             }
-            else
-            {
-                SetExampleToDefaultValue();
-            }
             _Example2_ByteIndex = bytesSoFar;
-            if (!(Example2Char != null))
+            if (Example2Char != null)
+            {
+                Example2 = new Example() { MyChar = (char)Example2Char };
+            }
+            else
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber >= 4) 
                 {
                     bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
                 }
             }
-            else
-            {
-                Example2 = new Example() { MyChar = (char)Example2Char };
-            }
             _Example3_ByteIndex = bytesSoFar;
-            if (!(Example3IsNull))
+            if (Example3IsNull)
+            {
+                Example3 = null;
+            }
+            else
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
                 {
                     bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
                 }
-            }
-            else
-            {
-                Example3 = null;
             }
             _Simplifiable_EndByteIndex = bytesSoFar;
         }
