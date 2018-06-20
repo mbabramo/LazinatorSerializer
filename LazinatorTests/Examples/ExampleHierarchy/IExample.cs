@@ -19,6 +19,7 @@ namespace LazinatorTests.Examples
         NonLazinatorClass MyNonLazinatorChild { get; set; }
         bool MyNonLazinatorChild_Dirty { get; set; }
         [SetterAccessibility("internal")] decimal? MyNullableDecimal { get; }
+        [RelativeOrder(-1)] // not necessary, but can confirm that it works
         [DerivationKeyword("virtual")] double? MyNullableDouble { get; set; }
         TimeSpan? MyNullableTimeSpan { get; set; }
         [EliminatedWithVersion(3)] string MyOldString { get; set; }
@@ -27,6 +28,7 @@ namespace LazinatorTests.Examples
         TestEnum MyTestEnum { get; set; }
         TestEnumByte? MyTestEnumByteNullable { get; set; }
         WInt WrappedInt { get; set; }
+        [RelativeOrder(2)] // not necessary, but can confirm that it works
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }
         [AutoChangeParent] ExampleChild MyAutoChangeParentChild { get; set; }
