@@ -422,10 +422,9 @@ namespace Lazinator.Core
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClassesClean(this ILazinator hierarchy)
         {
+            hierarchy.LazinatorConvertToBytes(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
             foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasBeenDirty || x.DescendantHasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true))
             {
-                node.IsDirty = false;
-                node.DescendantIsDirty = false;
                 node.HasBeenDirty = false;
                 node.DescendantHasBeenDirty = false;
             }
@@ -453,7 +452,7 @@ namespace Lazinator.Core
             return MemoryPool<byte>.Shared.Rent(minimumSize);
         }
 
-        public static void ConfirmDescendantDirtinessConsistency(ILazinator startPoint)
+        public static void ConfirmDescendantDirtinessConsistency(this ILazinator startPoint)
         {
             if (startPoint != null && startPoint.IsDirty)
             {

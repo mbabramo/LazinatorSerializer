@@ -441,8 +441,11 @@ namespace Lazinator.CodeDescription
                                     {{
                                         InformParentOfDirtiness();{(ImplementsOnDirty ? $@"
                                         OnDirty();" : "")}
-                                        HasBeenDirty = true;
                                     }}
+                                }}
+                                if (_IsDirty)
+                                {{
+                                    HasBeenDirty = true;
                                 }}
                             }}
                         }}
@@ -494,6 +497,10 @@ namespace Lazinator.CodeDescription
                                             LazinatorParentClass.DescendantIsDirty = true;
                                         }}
                                     }}
+                                }}
+                                if (_DescendantIsDirty)
+                                {{
+                                    _DescendantHasBeenDirty = true;
                                 }}
                             }}
                         }}
@@ -898,7 +905,7 @@ namespace Lazinator.CodeDescription
                 if (IncludeTracingCode)
                 {
                     sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
-                    sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
                     sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass != null}}"");");
                 }
 
@@ -1110,7 +1117,7 @@ namespace Lazinator.CodeDescription
 
         private string GetFileHeader(string hash, string primaryNamespace, List<string> otherNamespaces)
         {
-            otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Collections.Generic", "System.Diagnostics", "System.IO", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support" });
+            otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Collections.Generic", "System.Diagnostics", "System.IO", "System.Linq", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support" });
             otherNamespaces.RemoveAll(x => x == primaryNamespace);
             otherNamespaces = otherNamespaces.Where(x => x != null && x != "").OrderBy(x => x).Distinct().ToList();
             CodeStringBuilder header = new CodeStringBuilder();
