@@ -93,6 +93,8 @@ namespace Lazinator.CodeDescription
         private string CustomNonlazinatorWrite { get; set; }
         private int? IntroducedWithVersion { get; set; }
         private int? EliminatedWithVersion { get; set; }
+        public string SkipCondition { get; set; }
+        public string InitializeWhenSkipped { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
@@ -209,6 +211,12 @@ namespace Lazinator.CodeDescription
             ExcludableWhenIncludingMostChildren = excludable != null;
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
+            CloneSkipIfAttribute skipIf = UserAttributes.OfType<CloneSkipIfAttribute>().FirstOrDefault(); 
+            if (skipIf != null)
+            {
+                SkipCondition = skipIf.SkipCondition;
+                InitializeWhenSkipped = skipIf.InitializeWhenSkipped;
+            }
         }
 
         private string GetAttributesToInsert()
@@ -1096,6 +1104,10 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyReadString(CodeStringBuilder sb)
         {
+
+            if (SkipCondition != null)
+                sb.AppendLine($@"if (!{SkipCondition})
+                            {{");
             if (IsPrimitive)
                 sb.AppendLine(
                         CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
@@ -1125,6 +1137,15 @@ namespace Lazinator.CodeDescription
                             " + CreateConditionalForSingleLine(ReadInclusionConditional,
                             "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
             }
+            if (SkipCondition != null)
+            {
+                sb.AppendLine($@"}}");
+                if (InitializeWhenSkipped != null)
+                    sb.AppendLine($@"else
+                                {{
+                                    {InitializeWhenSkipped}
+                                }}");
+            }
         }
 
         private string CreateConditionalForSingleLine(string conditional, string consequent, string elseConsequent = null)
@@ -1146,6 +1167,9 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)
         {
+            if (SkipCondition != null)
+                sb.AppendLine($@"if (!{SkipCondition})
+                            {{");
             if (IsPrimitive)
                 sb.AppendLine(
                         CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
@@ -1161,6 +1185,9 @@ namespace Lazinator.CodeDescription
                                     _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;
                                 }}");
             }
+            if (SkipCondition != null)
+                sb.AppendLine($@"
+                            }}");
         }
 
         private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)

@@ -76,6 +76,7 @@
         NonexclusiveLazinatorAttribute,
         DotNetQueue_SelfSerialized,
         AbstractGeneric1Unofficial,
-        ConcreteFromGenericFromBase
+        ConcreteFromGenericFromBase,
+        IncludesSkippable
     }
 }
