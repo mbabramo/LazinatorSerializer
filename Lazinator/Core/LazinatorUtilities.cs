@@ -423,12 +423,23 @@ namespace Lazinator.Core
         public static void MarkHierarchyClassesClean(this ILazinator hierarchy)
         {
             hierarchy.LazinatorConvertToBytes(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
+            MarkHierarchyClassesUnchanged(hierarchy);
+        }
+
+        /// <summary>
+        /// Marks all classes in a hierarchy as having not been changed. This has no effect on whether the classes are marked as currently dirty.
+        /// </summary>
+        /// <param name="hierarchy"></param>
+        public static void MarkHierarchyClassesUnchanged(this ILazinator hierarchy)
+        {
             foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasBeenDirty || x.DescendantHasBeenDirty, false, x => x.HasBeenDirty || x.DescendantHasBeenDirty, true))
             {
                 node.HasBeenDirty = false;
                 node.DescendantHasBeenDirty = false;
             }
         }
+
+
 
         /// <summary>
         /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.
