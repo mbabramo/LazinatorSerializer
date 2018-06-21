@@ -577,7 +577,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ReadOnlySpan_Gchar_g(w, MyReadOnlySpanChar,
+            ConvertToBytes_ReadOnlySpan_Gchar_g(w, MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -590,7 +590,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyReadOnlySpanDateTime_ByteIndex, _MyReadOnlySpanDateTime_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ReadOnlySpan_GDateTime_g(w, MyReadOnlySpanDateTime,
+            ConvertToBytes_ReadOnlySpan_GDateTime_g(w, MemoryMarshal.Cast<byte, DateTime>(_MyReadOnlySpanDateTime.Span),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -603,7 +603,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ReadOnlySpan_Glong_g(w, MyReadOnlySpanLong,
+            ConvertToBytes_ReadOnlySpan_Glong_g(w, MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
