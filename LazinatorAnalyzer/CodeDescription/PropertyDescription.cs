@@ -64,6 +64,8 @@ namespace Lazinator.CodeDescription
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
+        internal string BackingFieldString => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory) ?
+                    GetReadOnlySpanBackingFieldCast() : $"_{PropertyName}";
 
         /* Enums */
         private string EnumEquivalentType { get; set; }
@@ -1206,13 +1208,6 @@ namespace Lazinator.CodeDescription
             string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
-                string propertyBackingField;
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
-                {
-                    propertyBackingField = GetReadOnlySpanBackingFieldCast();
-                }
-                else
-                    propertyBackingField = $"_{PropertyName}";
                 sb.AppendLine(
                     $@"WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
@@ -1220,7 +1215,7 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => {ChildSliceString},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (w, v) =>
-                            {DirectConverterTypeNamePrefix}{writeMethodName}(w, {propertyBackingField},
+                            {DirectConverterTypeNamePrefix}{writeMethodName}(w, {BackingFieldString},
                                 includeChildrenMode, v, updateStoredBuffer));");
             }
             else
