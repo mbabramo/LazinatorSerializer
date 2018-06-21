@@ -63,5 +63,7 @@ namespace Lazinator.Collections
         WIntArray,
         WLongArray,
         LazinatorTriple,
+        LazinatorQueue,
+        LazinatorStack,
     }
 }

@@ -379,8 +379,6 @@ namespace LazinatorTests.Tests
             l.RemoveAll(x => x <= 6);
             results = l.ToList().Select(x => x.WrappedValue);
             results.SequenceEqual(new int[] { }).Should().BeTrue();
-
-
         }
 
         [Fact]
@@ -571,6 +569,58 @@ namespace LazinatorTests.Tests
             v5.MyList[1].MyLong = -98765;
             results = v5.GetDirtyNodes(true);
             results.Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void LazinatorStackWorks()
+        {
+            LazinatorStack<WInt> s = new LazinatorStack<WInt>();
+            s.Push(3);
+            s.Any().Should().BeTrue();
+            var r = s.Pop();
+            r.WrappedValue.Should().Be(3);
+            s.Any().Should().BeFalse();
+            s.Push(3);
+            s.Push(4);
+            r = s.Peek();
+            r.WrappedValue.Should().Be(4);
+            r = s.Pop();
+            r.WrappedValue.Should().Be(4);
+            s.Push(4);
+            s.Push(5);
+            r = s.Pop();
+            r.WrappedValue.Should().Be(5);
+            r = s.Pop();
+            r.WrappedValue.Should().Be(4);
+            r = s.Pop();
+            r.WrappedValue.Should().Be(3);
+            s.Any().Should().BeFalse();
+        }
+
+        [Fact]
+        public void LazinatorQueueWorks()
+        {
+            LazinatorQueue<WInt> s = new LazinatorQueue<WInt>();
+            s.Enqueue(3);
+            s.Any().Should().BeTrue();
+            var r = s.Dequeue();
+            r.WrappedValue.Should().Be(3);
+            s.Any().Should().BeFalse();
+            s.Enqueue(3);
+            s.Enqueue(4);
+            r = s.Peek();
+            r.WrappedValue.Should().Be(3);
+            r = s.Dequeue();
+            r.WrappedValue.Should().Be(3);
+            s.Enqueue(3);
+            s.Enqueue(5);
+            r = s.Dequeue();
+            r.WrappedValue.Should().Be(4);
+            r = s.Dequeue();
+            r.WrappedValue.Should().Be(3);
+            r = s.Dequeue();
+            r.WrappedValue.Should().Be(5);
+            s.Any().Should().BeFalse();
         }
     }
 }
