@@ -1204,10 +1204,11 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => {ChildSliceString},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (w, v) =>
-                            {DirectConverterTypeNamePrefix}{writeMethodName}(w, {PropertyName},
+                            {DirectConverterTypeNamePrefix}{writeMethodName}(w, _{PropertyName},
                                 includeChildrenMode, v, updateStoredBuffer));");
             else
-            { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
+            { // as above, must copy local struct variables for anon lambda. But there is a further complication if we're dealing with a ReadOnlySpan -- 
+                // we can't capture the local struct, so in this case, we copy the local property (ReadOnlyMemory<byte> type) and then we use a different conversion method
                 string binaryWriterAction;
                 if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory))
                     binaryWriterAction = $"copy_{PropertyName}.Write(w)";
@@ -1217,7 +1218,7 @@ namespace Lazinator.CodeDescription
                     $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
                         var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
-                        var copy_{PropertyName} = {(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "_" : "")}{PropertyName};
+                        var copy_{PropertyName} = {(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "_" : "_")}{PropertyName};
                         WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
                         isAccessed: _{PropertyName}_Accessed, writer: writer,
