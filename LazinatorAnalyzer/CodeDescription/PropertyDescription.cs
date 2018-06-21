@@ -1183,13 +1183,14 @@ namespace Lazinator.CodeDescription
                     AppendPropertyWriteString_SelfSerialized(sb);
                 else
                     AppendPropertyWriteString_NonSelfSerialized(sb);
+            }
+            if (SkipCondition != null)
+                sb.AppendLine($@"}}");
+            if (!IsPrimitive)
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{
                                     _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;
                                 }}");
-            }
-            if (SkipCondition != null)
-                sb.AppendLine($@"}}");
         }
 
         private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)
