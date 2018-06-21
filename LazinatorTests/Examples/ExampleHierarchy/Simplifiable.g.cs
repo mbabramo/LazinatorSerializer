@@ -619,10 +619,10 @@ namespace LazinatorTests.Examples
                 {
                     WriteChild(writer, _Example, includeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example_ByteIndex, _Example_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 }
-                if (updateStoredBuffer)
-                {
-                    _Example_ByteIndex = startOfObjectPosition - startPosition;
-                }
+            }
+            if (updateStoredBuffer)
+            {
+                _Example_ByteIndex = startOfObjectPosition - startPosition;
             }
             if (!(Example2Char != null))
             {
@@ -631,10 +631,10 @@ namespace LazinatorTests.Examples
                 {
                     WriteChild(writer, _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 }
-                if (updateStoredBuffer)
-                {
-                    _Example2_ByteIndex = startOfObjectPosition - startPosition;
-                }
+            }
+            if (updateStoredBuffer)
+            {
+                _Example2_ByteIndex = startOfObjectPosition - startPosition;
             }
             if (!(Example3IsNull))
             {
@@ -643,10 +643,10 @@ namespace LazinatorTests.Examples
                 {
                     WriteChild(writer, _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 }
-                if (updateStoredBuffer)
-                {
-                    _Example3_ByteIndex = startOfObjectPosition - startPosition;
-                }
+            }
+            if (updateStoredBuffer)
+            {
+                _Example3_ByteIndex = startOfObjectPosition - startPosition;
             }
             if (updateStoredBuffer)
             {
