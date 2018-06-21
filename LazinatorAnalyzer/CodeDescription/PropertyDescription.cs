@@ -1012,10 +1012,7 @@ namespace Lazinator.CodeDescription
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string castToSpanOfCorrectType;
-            string spanAccessor = isSpan ? ".Span" : "";
-            if (innerFullType == "byte")
-                castToSpanOfCorrectType = $"_{PropertyName}{spanAccessor}";
-            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}{spanAccessor})";
+            castToSpanOfCorrectType = GetReadOnlySpanBackingFieldCast();
             sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
@@ -1039,6 +1036,17 @@ namespace Lazinator.CodeDescription
         }}
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
 ");
+        }
+
+        private string GetReadOnlySpanBackingFieldCast()
+        {
+            var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
+            string spanAccessor = SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? ".Span" : "";
+            string castToSpanOfCorrectType;
+            if (innerFullType == "byte")
+                castToSpanOfCorrectType = $"_{PropertyName}{spanAccessor}";
+            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}{spanAccessor})";
+            return castToSpanOfCorrectType;
         }
 
         private void AppendDirtinessTracking(CodeStringBuilder sb)
@@ -1201,7 +1209,7 @@ namespace Lazinator.CodeDescription
                 string propertyBackingField;
                 if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
                 {
-                    propertyBackingField = $"_{PropertyName}.Span";
+                    propertyBackingField = GetReadOnlySpanBackingFieldCast();
                 }
                 else
                     propertyBackingField = $"_{PropertyName}";
