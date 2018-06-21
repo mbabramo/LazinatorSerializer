@@ -1140,7 +1140,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, MyNonLazinatorChild,
+            NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, _MyNonLazinatorChild,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

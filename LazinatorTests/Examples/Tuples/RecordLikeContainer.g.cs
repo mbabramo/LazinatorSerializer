@@ -427,7 +427,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_MismatchedRecordLikeType(w, MyMismatchedRecordLikeType,
+            ConvertToBytes_MismatchedRecordLikeType(w, _MyMismatchedRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -440,7 +440,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_RecordLikeClass(w, MyRecordLikeClass,
+            ConvertToBytes_RecordLikeClass(w, _MyRecordLikeClass,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_RecordLikeType(w, MyRecordLikeType,
+            ConvertToBytes_RecordLikeType(w, _MyRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

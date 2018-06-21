@@ -377,7 +377,7 @@ namespace LazinatorTests.Examples.Subclasses
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GEnumWithinClass_g(w, MyEnumList,
+            ConvertToBytes_List_GEnumWithinClass_g(w, _MyEnumList,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

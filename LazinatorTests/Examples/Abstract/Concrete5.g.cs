@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Abstract
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _IntList4_ByteIndex, _IntList4_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_Gint_g(w, IntList4,
+            ConvertToBytes_List_Gint_g(w, _IntList4,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples.Abstract
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _IntList5_ByteIndex, _IntList5_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_Gint_g(w, IntList5,
+            ConvertToBytes_List_Gint_g(w, _IntList5,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

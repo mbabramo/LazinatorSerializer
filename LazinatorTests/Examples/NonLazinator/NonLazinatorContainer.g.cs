@@ -428,7 +428,7 @@ namespace LazinatorTests.Examples
             var serializedBytesCopy_NonLazinatorClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorClass = _NonLazinatorClass_ByteIndex;
             var byteLengthCopy_NonLazinatorClass = _NonLazinatorClass_ByteLength;
-            var copy_NonLazinatorClass = NonLazinatorClass;
+            var copy_NonLazinatorClass = _NonLazinatorClass;
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonLazinatorClass, isBelievedDirty: _NonLazinatorClass_Accessed,
             isAccessed: _NonLazinatorClass_Accessed, writer: writer,
@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
-            var copy_NonLazinatorInterchangeableClass = NonLazinatorInterchangeableClass;
+            var copy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass;
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonLazinatorInterchangeableClass, isBelievedDirty: _NonLazinatorInterchangeableClass_Accessed,
             isAccessed: _NonLazinatorInterchangeableClass_Accessed, writer: writer,
@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
-            var copy_NonLazinatorStruct = NonLazinatorStruct;
+            var copy_NonLazinatorStruct = _NonLazinatorStruct;
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonLazinatorStruct, isBelievedDirty: _NonLazinatorStruct_Accessed,
             isAccessed: _NonLazinatorStruct_Accessed, writer: writer,

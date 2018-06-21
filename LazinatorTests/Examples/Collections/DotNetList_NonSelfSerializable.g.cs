@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType,
+            ConvertToBytes_List_GNonLazinatorClass_g(w, _MyListNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GNonLazinatorClass_g(w, MyListNonLazinatorType2,
+            ConvertToBytes_List_GNonLazinatorClass_g(w, _MyListNonLazinatorType2,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

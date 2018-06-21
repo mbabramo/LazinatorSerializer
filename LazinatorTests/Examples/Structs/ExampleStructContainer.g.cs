@@ -556,7 +556,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GExampleStruct_g(w, MyListExampleStruct,
+            ConvertToBytes_List_GExampleStruct_g(w, _MyListExampleStruct,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -569,7 +569,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(w, MyListNullableExampleStruct,
+            ConvertToBytes_List_GWNullableStruct_GExampleStruct_g_g(w, _MyListNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

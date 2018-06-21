@@ -434,7 +434,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ByteSpan,
+            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, _ByteSpan.Span,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

@@ -165,7 +165,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_int_B_b(w, MyArrayInt_DerivedLevel,
+            ConvertToBytes_int_B_b(w, _MyArrayInt_DerivedLevel,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

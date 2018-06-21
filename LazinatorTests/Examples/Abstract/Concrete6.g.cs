@@ -147,7 +147,7 @@ namespace LazinatorTests.Examples.Abstract
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_Gint_g(w, IntList6,
+            ConvertToBytes_List_Gint_g(w, _IntList6,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

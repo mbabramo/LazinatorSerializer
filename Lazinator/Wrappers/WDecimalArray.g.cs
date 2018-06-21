@@ -351,7 +351,7 @@ namespace Lazinator.Wrappers
             var serializedBytesCopy_WrappedValue = LazinatorObjectBytes;
             var byteIndexCopy_WrappedValue = _WrappedValue_ByteIndex;
             var byteLengthCopy_WrappedValue = _WrappedValue_ByteLength;
-            var copy_WrappedValue = WrappedValue;
+            var copy_WrappedValue = _WrappedValue;
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _WrappedValue, isBelievedDirty: _WrappedValue_Accessed,
             isAccessed: _WrappedValue_Accessed, writer: writer,

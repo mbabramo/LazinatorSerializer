@@ -403,7 +403,7 @@ namespace Lazinator.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            WriteMainList(w, MainListSerialized,
+            WriteMainList(w, _MainListSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

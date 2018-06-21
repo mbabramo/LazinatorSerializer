@@ -425,7 +425,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Dictionary_Gint_c_C32ExampleChild_g(w, MyDictionary,
+            ConvertToBytes_Dictionary_Gint_c_C32ExampleChild_g(w, _MyDictionary,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -438,7 +438,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_SortedDictionary_Gint_c_C32ExampleChild_g(w, MySortedDictionary,
+            ConvertToBytes_SortedDictionary_Gint_c_C32ExampleChild_g(w, _MySortedDictionary,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -451,7 +451,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(w, MySortedList,
+            ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(w, _MySortedList,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

@@ -420,7 +420,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GT_g(w, MyListT,
+            ConvertToBytes_List_GT_g(w, _MyListT,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

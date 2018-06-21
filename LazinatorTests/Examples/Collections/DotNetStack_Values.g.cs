@@ -376,7 +376,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Stack_Gint_g(w, MyStackInt,
+            ConvertToBytes_Stack_Gint_g(w, _MyStackInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

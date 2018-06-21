@@ -390,7 +390,7 @@ namespace Lazinator.Spans
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnly,
+            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, _ReadOnly.Span,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -403,7 +403,7 @@ namespace Lazinator.Spans
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Memory_Gbyte_g(w, ReadOrWrite,
+            ConvertToBytes_Memory_Gbyte_g(w, _ReadOrWrite,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

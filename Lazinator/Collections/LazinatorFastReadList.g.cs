@@ -352,7 +352,7 @@ namespace Lazinator.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, true, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, ReadOnlyBytes,
+            ConvertToBytes_ReadOnlySpan_Gbyte_g(w, _ReadOnlyBytes.Span,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

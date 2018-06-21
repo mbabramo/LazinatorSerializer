@@ -363,7 +363,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_Queue_GExampleChild_g(w, MyQueueSerialized,
+            ConvertToBytes_Queue_GExampleChild_g(w, _MyQueueSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

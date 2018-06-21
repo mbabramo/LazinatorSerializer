@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Hierarchy
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (w, v) =>
-            ConvertToBytes_List_GIExample_g(w, ExampleListByInterface,
+            ConvertToBytes_List_GIExample_g(w, _ExampleListByInterface,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {

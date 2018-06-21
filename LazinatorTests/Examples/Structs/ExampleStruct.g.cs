@@ -609,7 +609,7 @@ namespace LazinatorTests.Examples
             var serializedBytesCopy_MyLazinatorList = LazinatorObjectBytes;
             var byteIndexCopy_MyLazinatorList = _MyLazinatorList_ByteIndex;
             var byteLengthCopy_MyLazinatorList = _MyLazinatorList_ByteLength;
-            var copy_MyLazinatorList = MyLazinatorList;
+            var copy_MyLazinatorList = _MyLazinatorList;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLazinatorList, isBelievedDirty: MyLazinatorList_Dirty,
             isAccessed: _MyLazinatorList_Accessed, writer: writer,
@@ -625,7 +625,7 @@ namespace LazinatorTests.Examples
             var serializedBytesCopy_MyListValues = LazinatorObjectBytes;
             var byteIndexCopy_MyListValues = _MyListValues_ByteIndex;
             var byteLengthCopy_MyListValues = _MyListValues_ByteLength;
-            var copy_MyListValues = MyListValues;
+            var copy_MyListValues = _MyListValues;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListValues, isBelievedDirty: _MyListValues_Accessed,
             isAccessed: _MyListValues_Accessed, writer: writer,
@@ -641,7 +641,7 @@ namespace LazinatorTests.Examples
             var serializedBytesCopy_MyTuple = LazinatorObjectBytes;
             var byteIndexCopy_MyTuple = _MyTuple_ByteIndex;
             var byteLengthCopy_MyTuple = _MyTuple_ByteLength;
-            var copy_MyTuple = MyTuple;
+            var copy_MyTuple = _MyTuple;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTuple, isBelievedDirty: _MyTuple_Accessed,
             isAccessed: _MyTuple_Accessed, writer: writer,
