@@ -921,7 +921,6 @@ namespace Lazinator.CodeDescription
                 }
             }
 
-
             sb.Append($@"private {AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
@@ -941,7 +940,7 @@ namespace Lazinator.CodeDescription
                     }}
                     _{PropertyName}_Accessed = true;
                 }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
-                    IsDirty = true;" : "")}
+                    IsDirty = true;" : "")} // DEBUG {TypeSymbolIfNoProperty} {!RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty)} 
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set
