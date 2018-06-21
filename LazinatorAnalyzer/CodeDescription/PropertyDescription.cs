@@ -939,8 +939,8 @@ namespace Lazinator.CodeDescription
                         {creation}
                     }}
                     _{PropertyName}_Accessed = true;
-                }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty) ? $@"
-                    IsDirty = true;" : "")} // DEBUG {TypeSymbolIfNoProperty} {!RoslynHelpers.IsReadOnlyStruct(TypeSymbolIfNoProperty)} 
+                }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol) ? $@"
+                    IsDirty = true;" : "")} 
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set

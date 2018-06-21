@@ -12,5 +12,6 @@ namespace LazinatorTests.Examples.Collections
         bool MyLinkedListInt_Dirty { get; set; }
         SortedSet<int> MySortedSetInt { get; set; }
         bool MySortedSetInt_Dirty { get; set; }
+        List<int> MyListInt2 { get; set; }
     }
 }

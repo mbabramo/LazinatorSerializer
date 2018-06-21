@@ -462,8 +462,8 @@ namespace LazinatorCodeGen.Roslyn
                 return false;
             // It does not appear to be possible to determine this only through the semantic model, as DeclarationModifiers is not in the public API of Roslyn. Thus, we look at the Syntax tree.
             bool isReadOnly = (type.DeclaringSyntaxReferences
-                    .Any(x => ((StructDeclarationSyntax)x.SyntaxTree.GetRoot().FindNode(x.Span))
-                        .Modifiers.Any(y => y.Text == "readonly")));
+                    .Any(x => (x.SyntaxTree.GetRoot().FindNode(x.Span) as StructDeclarationSyntax)?
+                        .Modifiers.Any(y => y.Text == "readonly") ?? false));
             return isReadOnly;
         }
 

@@ -53,6 +53,29 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void CloningShouldntMakeDirtyOrChanged()
+        {
+            DotNetList_Values v = new DotNetList_Values() { MyListInt2 = new List<int>() { 3, 4 } };
+            var c = v.CloneLazinatorTyped();
+            c.IsDirty.Should().BeFalse();
+            var list = c.MyListInt2; // note that this doesn't have a _Dirty property
+            c.IsDirty.Should().BeTrue(); // as a result of access of nonlazinator
+            c.HasChanged.Should().BeTrue();
+            var c2 = c.CloneLazinatorTyped();
+            c.IsDirty.Should().BeFalse();
+            c.HasChanged.Should().BeTrue();
+            c2.IsDirty.Should().BeFalse();
+
+            c.MarkHierarchyClassesUnchanged(); // reset HasChanged to false
+            c.HasChanged.Should().BeFalse();
+            c.DescendantIsDirty = true; // force serialization to test whether the serialization itself causes dirtiness
+            var c3 = c.CloneLazinatorTyped();
+            c.IsDirty.Should().BeFalse(); // this is easy because SerializeExistingBuffer resets Dirty
+            c.HasChanged.Should().BeFalse(); // this is harder -- for it to work, CloneLazinatorTyped must not temporarily cause c to become dirty
+            c3.IsDirty.Should().BeFalse();
+        }
+
+        [Fact]
         public void DescendantDirtinessSetsCorrectly()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
