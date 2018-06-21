@@ -352,6 +352,38 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListRemoveAllWorks()
+        {
+
+            LazinatorList<WInt> l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l.RemoveAll(x => x % 2 == 0);
+            var results = l.ToList().Select(x => x.WrappedValue);
+            results.SequenceEqual(new int[] { 3, 5 }).Should().BeTrue();
+
+            l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l.RemoveAll(x => x % 2 == 1);
+            results = l.ToList().Select(x => x.WrappedValue);
+            results.SequenceEqual(new int[] { 2, 4, 6 }).Should().BeTrue();
+
+            l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l.RemoveAll(x => x > 6);
+            results = l.ToList().Select(x => x.WrappedValue);
+            results.SequenceEqual(new int[] { 2, 3, 4, 5, 6 }).Should().BeTrue();
+
+            l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l.RemoveAll(x => x <= 6);
+            results = l.ToList().Select(x => x.WrappedValue);
+            results.SequenceEqual(new int[] { }).Should().BeTrue();
+
+            l = new LazinatorList<WInt>() { };
+            l.RemoveAll(x => x <= 6);
+            results = l.ToList().Select(x => x.WrappedValue);
+            results.SequenceEqual(new int[] { }).Should().BeTrue();
+
+
+        }
+
+        [Fact]
         public void LazinatorListWorksWithPartialAccessAfterChange()
         {
             LazinatorList<WInt> l = new LazinatorList<WInt>();

@@ -246,6 +246,23 @@ namespace Lazinator.Collections
             return success;
         }
 
+        public int RemoveAll(Predicate<T> match)
+        {
+            FullyDeserializeIfNecessary();
+            MarkDirty();
+            int matches = 0;
+            for (int i = Count - 1; i >= 0; i--) // iterate backwards so that indices stay same during loop
+            { 
+                var item = UnderlyingList[i];
+                if (match(item))
+                {
+                    UnderlyingList.RemoveAt(i);
+                    matches++;
+                }
+            }
+            return matches;
+        }
+
         public void RemoveAt(int index)
         {
             CreateUnderlyingListIfNecessary();
