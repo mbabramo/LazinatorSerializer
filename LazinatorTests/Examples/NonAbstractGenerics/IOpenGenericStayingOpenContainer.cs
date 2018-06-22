@@ -1,5 +1,6 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Wrappers;
+using LazinatorTests.Examples.Abstract;
 
 namespace LazinatorTests.Examples.NonAbstractGenerics
 {
@@ -10,5 +11,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         OpenGeneric<WFloat> ClosedGenericFloat { get; set; }
         OpenGeneric<IExampleChild> ClosedGenericInterface { get; set; }
         OpenGeneric<IExampleNonexclusiveInterface> ClosedGenericNonexclusiveInterface { get; set; }
+        OpenGeneric<Base> ClosedGenericBase { get; set; }
     }
 }

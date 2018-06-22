@@ -77,6 +77,7 @@
         DotNetQueue_SelfSerialized,
         AbstractGeneric1Unofficial,
         ConcreteFromGenericFromBase,
-        IncludesSkippable
+        IncludesSkippable,
+        ConcreteFromBase
     }
 }
