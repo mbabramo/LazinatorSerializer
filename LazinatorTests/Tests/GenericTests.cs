@@ -76,10 +76,15 @@ namespace LazinatorTests.Tests
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
                     MyT = new Base()
+                },
+                ClosedGenericFromBaseWithBase = new GenericFromBase<Base>()
+                {
+                    MyT = new Base()
                 }
             };
             var c = x.CloneLazinatorTyped();
             c.ClosedGenericBase.MyT.Should().NotBeNull();
+            c.ClosedGenericFromBaseWithBase.MyT.Should().NotBeNull();
         }
 
         [Fact]
@@ -90,10 +95,15 @@ namespace LazinatorTests.Tests
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
                     MyT = new ConcreteFromBase()
+                },
+                ClosedGenericFromBaseWithBase = new GenericFromBase<Base>()
+                {
+                    MyT = new ConcreteFromBase()
                 }
             };
             var c = x.CloneLazinatorTyped();
             c.ClosedGenericBase.MyT.Should().NotBeNull();
+            c.ClosedGenericFromBaseWithBase.MyT.Should().NotBeNull();
         }
 
         [Fact]
@@ -104,10 +114,15 @@ namespace LazinatorTests.Tests
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
                     MyT = new GenericFromBase<WInt>()
+                },
+                ClosedGenericFromBaseWithBase = new GenericFromBase<Base>()
+                {
+                    MyT = new GenericFromBase<WInt>()
                 }
             };
             var c = x.CloneLazinatorTyped();
             c.ClosedGenericBase.MyT.Should().NotBeNull();
+            c.ClosedGenericFromBaseWithBase.MyT.Should().NotBeNull();
         }
 
         [Fact]
