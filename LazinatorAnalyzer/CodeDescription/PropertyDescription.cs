@@ -720,6 +720,11 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyDefinitionString(CodeStringBuilder sb)
         {
+
+            if (PropertyName == "MyT" && ContainingObjectDescription.NameIncludingGenerics.Contains("GenericFromBase"))
+            {
+                var DEBUG = 0;
+            }
             if (ContainingObjectDescription.IsAbstract)
                 AppendAbstractPropertyDefinitionString(sb);
             else if (PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
@@ -828,10 +833,13 @@ namespace Lazinator.CodeDescription
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                if (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasConstructorConstraint)
-                    creation = GetManualObjectCreation();
-                else
-                    creation = $@"{assignment}";
+                // NOTE: If we new for sure that the open generic type would not be a derived type, we could use GetManualObjectCreation.
+                // But if we have code that says _MyT = new T() { ... }, then that won't work if this property is instantiated with an
+                // open generic type of U : T.
+                //if (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasConstructorConstraint)
+                //    creation = GetManualObjectCreation();
+                //else
+                creation = $@"{assignment}";
             }
             else
                 creation = $@"{assignment}";
