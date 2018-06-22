@@ -69,6 +69,48 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void OpenGenericWithBaseTypeSerializes()
+        {
+            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericBase = new OpenGeneric<Base>()
+                {
+                    MyT = new Base()
+                }
+            };
+            var c = x.CloneLazinatorTyped();
+            c.ClosedGenericBase.MyT.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void OpenGenericWithDerivedTypeSerializes()
+        {
+            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericBase = new OpenGeneric<Base>()
+                {
+                    MyT = new ConcreteFromBase()
+                }
+            };
+            var c = x.CloneLazinatorTyped();
+            c.ClosedGenericBase.MyT.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void OpenGenericWithDerivedGenericTypeSerializes()
+        {
+            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericBase = new OpenGeneric<Base>()
+                {
+                    MyT = new GenericFromBase<WInt>()
+                }
+            };
+            var c = x.CloneLazinatorTyped();
+            c.ClosedGenericBase.MyT.Should().NotBeNull();
+        }
+
+        [Fact]
         public void ClosedGenericSerializes()
         {
             ClosedGeneric g = new ClosedGeneric() { MyT = new ExampleChild() { MyLong = 1 }, MyListT = new List<ExampleChild> { new ExampleChild() { MyLong = 2 }, new ExampleChild() { MyLong = 3 } } };
