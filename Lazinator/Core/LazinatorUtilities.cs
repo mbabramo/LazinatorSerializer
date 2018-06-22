@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Lazinator.Buffers; 
 using Lazinator.Core;
@@ -404,6 +405,35 @@ namespace Lazinator.Core
             return (T) lazinator.CloneLazinator();
         }
 
+        /// <summary>
+        /// Enumerates all nodes in the hierarchy.
+        /// </summary>
+        /// <returns>The dirty nodes</returns>
+        public static IEnumerable<ILazinator> GetAllNodes(this ILazinator startNode)
+        {
+            return startNode.EnumerateLazinatorNodes(x => true, false, x => true, false);
+        }
+
+        /// <summary>
+        /// Verifies that the 64-bit hashes of each node in two hierarchies match, indicating likely equality.
+        /// This can be useful for determining where two hierarchies expected to be equal differ.
+        /// </summary>
+        /// <param name="firstHierarchy">The first Lazinator hierarchy</param>
+        /// <param name="secondHierarchy">The second Lazinator hierarchy</param>
+        /// <returns>True if the hashes match</returns>
+        public static void VerifyHierarchyHashesMatch(ILazinator firstHierarchy, ILazinator secondHierarchy)
+        {
+            var firstHierarchyNodes = firstHierarchy.GetAllNodes();
+            var secondHierarchyNodes = secondHierarchy.GetAllNodes();
+
+            var zipped = firstHierarchyNodes.Zip(secondHierarchyNodes, (x, y) => (x, y));
+            foreach (var pair in zipped)
+                if (pair.x.GetBinaryHashCode64() != pair.y.GetBinaryHashCode64())
+                    throw new Exception($"VerifyHierarchyHashesMatch failed. Node {pair.x} differed from {pair.y}");
+
+            if (firstHierarchyNodes.Count() != secondHierarchyNodes.Count())
+                throw new Exception("VerifyHierarchyHashesMatch failed. Hierarchies have different numbers of nodes.");
+        }
 
         /// <summary>
         /// Enumerates all nodes in the hierarchy that are or have been dirty, walking through the parts of the hierarchy that are dirty or have dirty descendants.

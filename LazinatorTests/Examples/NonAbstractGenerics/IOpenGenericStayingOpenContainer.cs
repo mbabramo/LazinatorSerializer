@@ -11,7 +11,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         OpenGeneric<WFloat> ClosedGenericFloat { get; set; }
         OpenGeneric<IExampleChild> ClosedGenericInterface { get; set; }
         OpenGeneric<IExampleNonexclusiveInterface> ClosedGenericNonexclusiveInterface { get; set; }
-        OpenGeneric<Base> ClosedGenericBase { get; set; }
+        OpenGeneric<Base> ClosedGenericBase { get; set; } 
         GenericFromBase<Base> ClosedGenericFromBaseWithBase { get; set; }
     }
 }
