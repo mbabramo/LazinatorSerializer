@@ -445,6 +445,19 @@ namespace LazinatorTests.Tests
             result.Should().Be(3);
         }
 
+
+        [Fact]
+        public void LazinatorArrayWorks()
+        {
+            LazinatorArray<WInt> l = new LazinatorArray<WInt>(3);
+            l[0] = 10;
+            l[2] = 12;
+            var c = l.CloneLazinatorTyped();
+            c[0].WrappedValue.Should().Be(10);
+            c[1].WrappedValue.Should().Be(0); // Default value
+            c[2].WrappedValue.Should().Be(12);
+        }
+
         [Fact]
         public void LazinatorListItemParentSet()
         {

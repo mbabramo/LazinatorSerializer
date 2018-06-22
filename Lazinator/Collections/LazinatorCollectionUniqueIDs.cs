@@ -65,5 +65,6 @@ namespace Lazinator.Collections
         LazinatorTriple,
         LazinatorQueue,
         LazinatorStack,
+        LazinatorArray,
     }
 }

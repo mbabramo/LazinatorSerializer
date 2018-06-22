@@ -182,7 +182,7 @@ namespace Lazinator.Collections
 
         public bool IsReadOnly => false;
 
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize,
             // because it doesn't change anything up to this point
@@ -195,7 +195,7 @@ namespace Lazinator.Collections
             MarkDirty();
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             FullyDeserializeIfNecessary();
             ((IList<T>)UnderlyingList).Clear();
@@ -234,7 +234,7 @@ namespace Lazinator.Collections
 
         // TODO: Instead of fully deserializing on inserts and removes, we might keep track of what has been inserted and what has been removed.
 
-        public void Insert(int index, T item)
+        public virtual void Insert(int index, T item)
         {
             FullyDeserializeIfNecessary();
             if (item != null)
@@ -244,7 +244,7 @@ namespace Lazinator.Collections
             MarkDirty();
         }
 
-        public bool Remove(T item)
+        public virtual bool Remove(T item)
         {
             FullyDeserializeIfNecessary();
             MarkDirty();
@@ -252,7 +252,7 @@ namespace Lazinator.Collections
             return success;
         }
 
-        public int RemoveAll(Predicate<T> match)
+        public virtual int RemoveAll(Predicate<T> match)
         {
             FullyDeserializeIfNecessary();
             MarkDirty();
@@ -269,7 +269,7 @@ namespace Lazinator.Collections
             return matches;
         }
 
-        public void RemoveAt(int index)
+        public virtual void RemoveAt(int index)
         {
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).RemoveAt(index);

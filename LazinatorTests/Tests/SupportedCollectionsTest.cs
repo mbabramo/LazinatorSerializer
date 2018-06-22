@@ -444,7 +444,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorArrayInt()
+        public void ArrayInt()
         {
             Array_Values GetObject(int thirdItem)
             {

@@ -127,6 +127,9 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorArray<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorStack<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);

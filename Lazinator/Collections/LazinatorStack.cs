@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public class LazinatorStack<T> : LazinatorList<T>, ILazinatorStack<T> where T : ILazinator
+    public partial class LazinatorStack<T> : LazinatorList<T>, ILazinatorStack<T> where T : ILazinator
     {
         public void Push(T item)
         {
