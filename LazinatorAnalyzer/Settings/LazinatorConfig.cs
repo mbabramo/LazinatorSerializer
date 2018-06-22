@@ -23,6 +23,7 @@ namespace LazinatorAnalyzer.Settings
         private const string DefaultAllowRecordLikeClassesString = "DefaultAllowRecordLikeClasses";
         private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
+        private const string ProhibitLazinatorInNonLazinatorString = "ProhibitLazinatorInNonLazinator";
         public string GeneratedCodeFileExtension;
         public bool UseFullyQualifiedNames;
         public Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
@@ -33,6 +34,7 @@ namespace LazinatorAnalyzer.Settings
         public string ConfigFilePath;
         public string RelativeGeneratedCodePath, GeneratedCodePath;
         public bool IncludeTracingCode, StepThroughProperties;
+        public bool ProhibitLazinatorInNonLazinator;
 
         public LazinatorConfig()
         {
@@ -51,6 +53,7 @@ namespace LazinatorAnalyzer.Settings
                 {
                     JsonObject json = JsonValue.Parse(configString).AsJsonObject;
                     IncludeTracingCode = json.ContainsKey(IncludeTracingCodeString) ? json[IncludeTracingCodeString].AsBoolean : false;
+                    ProhibitLazinatorInNonLazinator = json.ContainsKey(ProhibitLazinatorInNonLazinatorString) ? json[ProhibitLazinatorInNonLazinatorString].AsBoolean : false;
                     StepThroughProperties = json.ContainsKey(StepThroughPropertiesString) ? json[StepThroughPropertiesString].AsBoolean : true;
 
                     UseFullyQualifiedNames = json.ContainsKey(UseFullyQualifiedNamesString) ? json[UseFullyQualifiedNamesString].AsBoolean : false;

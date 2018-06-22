@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using LazinatorAnalyzer.AttributeClones;
+using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using static LazinatorCodeGen.Roslyn.RoslynHelpers;
@@ -19,6 +20,7 @@ namespace Lazinator.CodeDescription
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
         private PropertyDescription ContainingPropertyDescription { get; set; }
+        public PropertyDescription OutmostPropertyDescription => ContainingPropertyDescription?.OutmostPropertyDescription ?? this;
         private int UniqueIDForLazinatorType { get; set; }
         internal IPropertySymbol PropertySymbol { get; set; }
         private ITypeSymbol TypeSymbolIfNoProperty { get; set; }
@@ -117,9 +119,11 @@ namespace Lazinator.CodeDescription
                     
         private bool IncludableWhenExcludingMostChildren { get; set; }
         private bool ExcludableWhenIncludingMostChildren { get; set; }
+        private bool AllowLazinatorInNonLazinator { get; set; }
 
         /* Output customization */
-        private bool Tracing => ContainingObjectDescription.Compilation?.Config?.IncludeTracingCode ?? false;
+        public LazinatorConfig Config => ContainingObjectDescription.Compilation?.Config;
+        private bool Tracing => Config?.IncludeTracingCode ?? false;
         private string StepThroughPropertiesString => ContainingObjectDescription.StepThroughProperties ?  $@"
                         [DebuggerStepThrough]" : "";
         private string ConfirmDirtinessConsistencyCheck => $@"
@@ -211,6 +215,8 @@ namespace Lazinator.CodeDescription
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
             ExcludableWhenIncludingMostChildren = excludable != null;
+            CloneAllowLazinatorInNonLazinatorAttribute allowLazinatorInNonLazinator = UserAttributes.OfType<CloneAllowLazinatorInNonLazinatorAttribute>().FirstOrDefault();
+            AllowLazinatorInNonLazinator = allowLazinatorInNonLazinator != null;
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
             CloneSkipIfAttribute skipIf = UserAttributes.OfType<CloneSkipIfAttribute>().FirstOrDefault(); 
@@ -1554,7 +1560,10 @@ namespace Lazinator.CodeDescription
                 readCollectionLengthCommand = $"int collectionLength = span.ToDecompressedInt(ref bytesSoFar);";
                 forStatementCommand = $"for (int i = 0; i < collectionLength; i++)";
             }
-            string readCommand = InnerProperties[0].GetSupportedCollectionReadCommands(this);
+
+            PropertyDescription innerProperty = InnerProperties[0];
+            CheckForLazinatorInNonLazinator(innerProperty);
+            string readCommand = innerProperty.GetSupportedCollectionReadCommands(this);
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
                     {{
@@ -1574,6 +1583,12 @@ namespace Lazinator.CodeDescription
 
                         return collection;
                     }}");
+        }
+
+        private void CheckForLazinatorInNonLazinator(PropertyDescription innerProperty)
+        {
+            if (innerProperty.IsLazinator && (Config?.ProhibitLazinatorInNonLazinator ?? false) && !OutmostPropertyDescription.AllowLazinatorInNonLazinator)
+                throw new LazinatorCodeGenException($"Property {PropertyName} includes a Lazinator generic type in a non-Lazinator collection, but this is prohibited in a configuration setting. Consider using the AllowLazinatorInNonLazinator attribute.");
         }
 
         private void RecursivelyAppendConversionMethods(CodeStringBuilder sb, HashSet<string> alreadyGenerated)
@@ -1846,6 +1861,7 @@ namespace Lazinator.CodeDescription
                         bytesSoFar += lengthCollectionMember_{itemName};");
             else
             {
+                CheckForLazinatorInNonLazinator(this);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
                     return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = default;

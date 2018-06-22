@@ -28,6 +28,12 @@ namespace Lazinator.Collections
             TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
         }
 
+        public LazinatorList(int numItems)
+        {
+            for (int i = 0; i < numItems; i++)
+                Add(default);
+        }
+
         public LazinatorList(IEnumerable<T> items)
         {
             foreach (T item in items)
