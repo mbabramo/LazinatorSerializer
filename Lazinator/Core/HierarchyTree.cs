@@ -19,7 +19,15 @@ namespace Lazinator.Core
         {
             Node = node;
             NonLazinatorProperties = node.EnumerateNonLazinatorProperties().ToList();
-            Children = node.GetLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
+            try
+            {
+                Children = node.GetLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
+            }
+            catch
+            { // DEBUG -- keep this for now to resolve problems deserializing.
+                Children = null;
+            }
+
         }
 
         public string ToString(Func<ILazinator, string> stringProducer = null)

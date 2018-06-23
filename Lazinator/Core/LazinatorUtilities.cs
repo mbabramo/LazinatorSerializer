@@ -411,7 +411,7 @@ namespace Lazinator.Core
         /// <returns>The dirty nodes</returns>
         public static IEnumerable<ILazinator> GetAllNodes(this ILazinator startNode)
         {
-            return startNode.EnumerateLazinatorNodes(x => true, false, x => true, false);
+            return startNode.EnumerateLazinatorNodes(x => true, false, x => true, false, false);
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace Lazinator.Core
         /// <returns>The Lazinator children of the node along with their property names</returns>
         public static IEnumerable<(string propertyName, ILazinator descendant)> GetLazinatorChildren(this ILazinator node)
         {
-            return node.EnumerateLazinatorDescendants(x => true, true, x => false, false);
+            return node.EnumerateLazinatorDescendants(x => true, true, x => false, false, true);
         }
 
         /// <summary>
@@ -452,8 +452,8 @@ namespace Lazinator.Core
         public static IEnumerable<ILazinator> GetDirtyNodes(this ILazinator startNode, bool restrictToCurrentlyDirty)
         {
             if (restrictToCurrentlyDirty)
-                return startNode.EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true);
-            return startNode.EnumerateLazinatorNodes(x => x.HasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true);
+                return startNode.EnumerateLazinatorNodes(x => x.IsDirty, false, x => x.IsDirty || x.DescendantIsDirty, true, false);
+            return startNode.EnumerateLazinatorNodes(x => x.HasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true, false);
         }
 
         /// <summary>
@@ -502,7 +502,7 @@ namespace Lazinator.Core
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClassesUnchanged(this ILazinator hierarchy)
         {
-            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true))
+            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true, false))
             {
                 node.HasChanged = false;
                 node.DescendantHasChanged = false;

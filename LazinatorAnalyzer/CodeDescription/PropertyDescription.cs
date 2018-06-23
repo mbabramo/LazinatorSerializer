@@ -375,6 +375,16 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        public string GetNullCheck()
+        {
+            string nullCheck;
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+            else
+                nullCheck = $"{PropertyName} == null";
+            return nullCheck;
+        }
+
         public string GetNonNullCheck(bool includeAccessedCheck)
         {
             string nonNullCheck;
