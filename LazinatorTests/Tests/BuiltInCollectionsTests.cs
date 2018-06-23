@@ -113,7 +113,17 @@ namespace LazinatorTests.Tests
             c = l.CloneLazinatorTyped();
             foreach (var result in c)
                 result.LazinatorParentClass.Should().Be(c);
+        }
 
+        [Fact]
+        public void LazinatorListEnumerateNodesWorks()
+        {
+            LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
+            var c = l.CloneLazinatorTyped();
+            var results2 = c.GetAllNodes().ToList();
+            results2[0].Should().Be(c);
+            results2[1].LazinatorParentClass.Should().Be(c);
+            results2[2].LazinatorParentClass.Should().Be(c);
         }
 
         [Fact]
