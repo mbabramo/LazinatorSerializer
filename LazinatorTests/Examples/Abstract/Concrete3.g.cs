@@ -448,27 +448,27 @@ namespace LazinatorTests.Examples.Abstract
             }
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return dirty;
+                    yield return item.descendant;
                 }
             }
         }
         
-        protected override IEnumerable<ILazinator> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+        public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
                 foreach (ILazinator toYield in Example2.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("Example2", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
                 foreach (ILazinator toYield in Example3.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("Example3", toYield);
                 }
             }
             yield break;

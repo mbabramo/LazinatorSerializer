@@ -307,9 +307,9 @@ namespace Lazinator.Collections
             }
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return dirty;
+                    yield return item.descendant;
                 }
             }
         }

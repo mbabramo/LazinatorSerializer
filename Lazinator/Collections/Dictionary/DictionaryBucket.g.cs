@@ -341,27 +341,27 @@ namespace Lazinator.Collections.Dictionary
             }
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return dirty;
+                    yield return item.descendant;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+        public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
             {
                 foreach (ILazinator toYield in Keys.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("Keys", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
             {
                 foreach (ILazinator toYield in Values.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("Values", toYield);
                 }
             }
             yield break;

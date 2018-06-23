@@ -287,20 +287,20 @@ namespace LazinatorTests.Examples.Abstract
             }
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return dirty;
+                    yield return item.descendant;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+        public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
             {
                 foreach (ILazinator toYield in MyBase.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("MyBase", toYield);
                 }
             }
             yield break;

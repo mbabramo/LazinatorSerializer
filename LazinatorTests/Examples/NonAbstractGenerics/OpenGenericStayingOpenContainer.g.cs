@@ -450,48 +450,48 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return dirty;
+                    yield return item.descendant;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+        public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             if ((!exploreOnlyDeserializedChildren && ClosedGenericBase != null) || (_ClosedGenericBase_Accessed && _ClosedGenericBase != null))
             {
                 foreach (ILazinator toYield in ClosedGenericBase.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("ClosedGenericBase", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericFloat != null) || (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null))
             {
                 foreach (ILazinator toYield in ClosedGenericFloat.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("ClosedGenericFloat", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericFromBaseWithBase != null) || (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null))
             {
                 foreach (ILazinator toYield in ClosedGenericFromBaseWithBase.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("ClosedGenericFromBaseWithBase", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericInterface != null) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null))
             {
                 foreach (ILazinator toYield in ClosedGenericInterface.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("ClosedGenericInterface", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericNonexclusiveInterface != null) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null))
             {
                 foreach (ILazinator toYield in ClosedGenericNonexclusiveInterface.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("ClosedGenericNonexclusiveInterface", toYield);
                 }
             }
             yield break;

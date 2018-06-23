@@ -790,69 +790,69 @@ namespace LazinatorTests.Examples
             }
             if (explore)
             {
-                foreach (ILazinator dirty in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return dirty;
+                    yield return item.descendant;
                 }
             }
         }
         
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+        public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
             {
                 foreach (ILazinator toYield in IncludableChild.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("IncludableChild", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && MyAutoChangeParentChild != null) || (_MyAutoChangeParentChild_Accessed && _MyAutoChangeParentChild != null))
             {
                 foreach (ILazinator toYield in MyAutoChangeParentChild.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("MyAutoChangeParentChild", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
             {
                 foreach (ILazinator toYield in MyChild1.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("MyChild1", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
             {
                 foreach (ILazinator toYield in MyChild2.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("MyChild2", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || (_MyChild2Previous_Accessed && _MyChild2Previous != null))
             {
                 foreach (ILazinator toYield in MyChild2Previous.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("MyChild2Previous", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
             {
                 foreach (ILazinator toYield in MyInterfaceImplementer.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("MyInterfaceImplementer", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
             {
                 foreach (ILazinator toYield in WrappedInt.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("WrappedInt", toYield);
                 }
             }
             if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || (_ExcludableChild_Accessed && _ExcludableChild != null))
             {
                 foreach (ILazinator toYield in ExcludableChild.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return toYield;
+                    yield return ("ExcludableChild", toYield);
                 }
             }
             yield break;
