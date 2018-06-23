@@ -1,4 +1,6 @@
-﻿namespace LazinatorTests.Examples
+﻿using LazinatorTests.Examples.Abstract;
+
+namespace LazinatorTests.Examples
 {
     public partial class UnofficialInterfaceIncorporator : IUnofficialInterfaceIncorporator
     {

@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using LazinatorTests.Examples.Abstract;
 
 namespace LazinatorTests.Examples
 {
@@ -7,5 +8,6 @@ namespace LazinatorTests.Examples
     public interface IUnofficialInterfaceIncorporator
     {
         long MyLong { get; set; }
+        Concrete5 MyConcrete5 { get; set; }
     }
 }
