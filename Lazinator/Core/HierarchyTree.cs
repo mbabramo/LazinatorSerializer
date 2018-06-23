@@ -12,11 +12,13 @@ namespace Lazinator.Core
     public class HierarchyTree
     {
         public ILazinator Node;
+        public List<(string propertyName, object propertyValue)> NonLazinatorProperties;
         public List<(string childName, HierarchyTree subtree)> Children;
 
         public HierarchyTree(ILazinator node)
         {
             Node = node;
+            NonLazinatorProperties = node.EnumerateNonLazinatorProperties().ToList();
             Children = node.GetLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
         }
 
@@ -40,11 +42,16 @@ namespace Lazinator.Core
                 sb.Append(": ");
             }
             sb.AppendLine(textToAppend);
-            if (Children != null)
+            foreach (var property in NonLazinatorProperties)
             {
-                foreach (var child in Children)
-                    child.subtree.BuildString(sb, child.childName, stringProducer, tabs + 1);
+                for (int i = 0; i < (tabs + 1) * 4; i++)
+                    sb.Append(" ");
+                sb.Append(property.propertyName);
+                sb.Append(": ");
+                sb.AppendLine(property.propertyValue == null ? "NULL" : property.propertyValue.ToString());
             }
+            foreach (var child in Children)
+                child.subtree.BuildString(sb, child.childName, stringProducer, tabs + 1);
             
         }
     }

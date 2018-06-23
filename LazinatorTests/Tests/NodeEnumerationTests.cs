@@ -131,10 +131,31 @@ namespace LazinatorTests.Tests
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
             HierarchyTree tree = new HierarchyTree(hierarchy);
             string result = tree.ToString();
-            string expected = $@"LazinatorTests.Examples.Example
+            string expected = 
+$@"LazinatorTests.Examples.Example
+    MyNullableDouble: 4.2
+    MyBool: False
+    MyChar: ⍂
+    MyDateTime: 10/22/1972 5:36:00 PM
+    MyNewString: NULL
+    MyNullableDecimal: NULL
+    MyNullableTimeSpan: 4.00:00:00
+    MyOldString: NULL
+    MyString: 
+    MyTestEnum: MyTestValue3
+    MyTestEnumByteNullable: MyTestValue
+    MyUint: 1235
+    MyNonLazinatorChild: LazinatorTests.Examples.NonLazinatorClass
     MyChild1: LazinatorTests.Examples.ExampleChild
+        MyLong: 123123
+        MyShort: 543
+        ByteSpan: System.ReadOnlySpan<Byte>[0]
     MyChild2: LazinatorTests.Examples.ExampleChild
+        MyLong: 123123
+        MyShort: 543
+        ByteSpan: System.ReadOnlySpan<Byte>[0]
     WrappedInt: 2
+        WrappedValue: 2
 ";
             result.Should().Be(expected);
         }
@@ -148,11 +169,32 @@ namespace LazinatorTests.Tests
             string result = tree.ToString();
             string expected = 
 $@"LazinatorTests.Examples.Example
+    MyNullableDouble: 3.5
+    MyBool: True
+    MyChar: b
+    MyDateTime: 1/1/2000 12:00:00 AM
+    MyNewString: NULL
+    MyNullableDecimal: -2341.5212352
+    MyNullableTimeSpan: 03:00:00
+    MyOldString: NULL
+    MyString: hello, world
+    MyTestEnum: MyTestValue2
+    MyTestEnumByteNullable: NULL
+    MyUint: 2342343242
+    MyNonLazinatorChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild
+        MyLong: 123123
+        MyShort: 543
+        ByteSpan: System.ReadOnlySpan<Byte>[0]
         MyWrapperContainer: LazinatorTests.Examples.Structs.WrapperContainer
             WrappedInt: 17
+                WrappedValue: 17
     MyChild2: LazinatorTests.Examples.ExampleChild
+        MyLong: 999888
+        MyShort: -23
+        ByteSpan: System.ReadOnlySpan<Byte>[0]
     WrappedInt: 5
+        WrappedValue: 5
 ";
             result.Should().Be(expected);
         }
