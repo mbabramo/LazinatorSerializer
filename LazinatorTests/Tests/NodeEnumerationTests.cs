@@ -130,14 +130,12 @@ namespace LazinatorTests.Tests
         {
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
             HierarchyTree tree = hierarchy.GetAllNodesAsHierarchy();
-            TabbedText.ResetAccumulated();
-            tree.AppendToTabbedText();
+            string result = tree.ToString();
             string expected = $@"LazinatorTests.Examples.Example
-     LazinatorTests.Examples.ExampleChild     
-     LazinatorTests.Examples.ExampleChild     
-     2     
+    LazinatorTests.Examples.ExampleChild
+    LazinatorTests.Examples.ExampleChild
+    2
 ";
-            string result = TabbedText.AccumulatedText.ToString();
             result.Should().Be(expected);
         }
 
@@ -147,17 +145,15 @@ namespace LazinatorTests.Tests
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
             HierarchyTree tree = hierarchy.GetAllNodesAsHierarchy();
-            TabbedText.ResetAccumulated();
-            tree.AppendToTabbedText();
+            string result = tree.ToString();
             string expected = 
 $@"LazinatorTests.Examples.Example
-     LazinatorTests.Examples.ExampleChild     
-          LazinatorTests.Examples.Structs.WrapperContainer          
-               17               
-     LazinatorTests.Examples.ExampleChild     
-     5     
+    LazinatorTests.Examples.ExampleChild
+        LazinatorTests.Examples.Structs.WrapperContainer
+            17
+    LazinatorTests.Examples.ExampleChild
+    5
 ";
-            string result = TabbedText.AccumulatedText.ToString();
             result.Should().Be(expected);
         }
     }

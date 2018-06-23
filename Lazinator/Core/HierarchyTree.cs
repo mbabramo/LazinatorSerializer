@@ -65,18 +65,25 @@ namespace Lazinator.Core
                 childTree.AddToHere(hierarchyFromHere, nodeToAdd);
         }
 
-        public void AppendToTabbedText(Func<ILazinator, string> stringProducer = null)
+        public string ToString(Func<ILazinator, string> stringProducer = null)
+        {
+            StringBuilder sb = new StringBuilder();
+            BuildString(sb, stringProducer, 0);
+            return sb.ToString();
+        }
+
+        private void BuildString(StringBuilder sb, Func<ILazinator, string> stringProducer = null, int tabs = 0)
         {
             if (stringProducer == null)
                 stringProducer = x => x.ToString();
             string textToAppend = stringProducer(Node);
-            TabbedText.WriteLine(textToAppend);
+            for (int i = 0; i < tabs * 4; i++)
+                sb.Append(" ");
+            sb.AppendLine(textToAppend);
             if (Children != null)
             {
-                TabbedText.Tabs++;
                 foreach (var child in Children)
-                    child.AppendToTabbedText(stringProducer);
-                TabbedText.Tabs--;
+                    child.BuildString(sb, stringProducer, tabs + 1);
             }
             
         }
