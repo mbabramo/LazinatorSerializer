@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using LazinatorTests.Examples.Abstract;
 
 namespace LazinatorTests.Examples
 {
@@ -8,5 +9,6 @@ namespace LazinatorTests.Examples
     public interface IUnofficialInterface
     {
         int MyInt {get; set;}
+        Concrete3 MyConcrete3 { get; set; }
     }
 }

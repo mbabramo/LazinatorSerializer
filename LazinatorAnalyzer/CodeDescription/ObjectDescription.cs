@@ -726,9 +726,9 @@ namespace Lazinator.CodeDescription
                 {
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
-                        sb.Append($@"if (enumerateNullItems && ({property.GetNullCheck()}))
+                        sb.Append($@"if (enumerateNulls && ({property.GetNullCheck()}))
                                 {{
-                                    yield return default;
+                                    yield return (""{property.PropertyName}"", default);
                                 }}
                                 else if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{

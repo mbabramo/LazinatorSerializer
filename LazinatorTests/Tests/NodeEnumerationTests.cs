@@ -146,16 +146,23 @@ $@"LazinatorTests.Examples.Example
     MyTestEnumByteNullable: MyTestValue
     MyUint: 1235
     MyNonLazinatorChild: LazinatorTests.Examples.NonLazinatorClass
+    IncludableChild: NULL
+    MyAutoChangeParentChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyWrapperContainer: NULL
     MyChild2: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyWrapperContainer: NULL
+    MyChild2Previous: NULL
+    MyInterfaceImplementer: NULL
     WrappedInt: 2
         WrappedValue: 2
+    ExcludableChild: NULL
 ";
             result.Should().Be(expected);
         }
@@ -182,6 +189,8 @@ $@"LazinatorTests.Examples.Example
     MyTestEnumByteNullable: NULL
     MyUint: 2342343242
     MyNonLazinatorChild: NULL
+    IncludableChild: NULL
+    MyAutoChangeParentChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
@@ -193,8 +202,12 @@ $@"LazinatorTests.Examples.Example
         MyLong: 999888
         MyShort: -23
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyWrapperContainer: NULL
+    MyChild2Previous: NULL
+    MyInterfaceImplementer: NULL
     WrappedInt: 5
         WrappedValue: 5
+    ExcludableChild: NULL
 ";
             result.Should().Be(expected);
         }

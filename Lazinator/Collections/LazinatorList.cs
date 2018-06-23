@@ -327,7 +327,11 @@ namespace Lazinator.Collections
                 if (!exploreOnlyDeserializedChildren || ItemHasBeenAccessed(i))
                 {
                     var item = this[i];
-                    if (item != null && !(item.Equals(default(T))))
+                    if (enumerateNulls && (item == null || item.Equals(default(T))))
+                    {
+                        yield return (i.ToString(), null);
+                    }
+                    else if (item != null && !(item.Equals(default(T))))
                     {
                         foreach (ILazinator toYield in item.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {

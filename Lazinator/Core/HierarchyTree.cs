@@ -18,6 +18,8 @@ namespace Lazinator.Core
         public HierarchyTree(ILazinator node)
         {
             Node = node;
+            if (node == null)
+                return;
             NonLazinatorProperties = node.EnumerateNonLazinatorProperties().ToList();
             try
             {
@@ -40,7 +42,7 @@ namespace Lazinator.Core
         private void BuildString(StringBuilder sb, string prefix, Func<ILazinator, string> stringProducer = null, int tabs = 0)
         {
             if (stringProducer == null)
-                stringProducer = x => x.ToString();
+                stringProducer = x => x == null ? "NULL" : x.ToString();
             string textToAppend = stringProducer(Node);
             for (int i = 0; i < tabs * 4; i++)
                 sb.Append(" ");
@@ -50,6 +52,8 @@ namespace Lazinator.Core
                 sb.Append(": ");
             }
             sb.AppendLine(textToAppend);
+            if (Node == null)
+                return;
             foreach (var property in NonLazinatorProperties)
             {
                 for (int i = 0; i < (tabs + 1) * 4; i++)
