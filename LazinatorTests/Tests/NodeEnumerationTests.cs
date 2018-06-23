@@ -129,12 +129,12 @@ namespace LazinatorTests.Tests
         public void HierarchyTreeWorks_TwoLevel()
         {
             var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
-            HierarchyTree tree = hierarchy.GetAllNodesAsHierarchy();
+            HierarchyTree tree = new HierarchyTree(hierarchy);
             string result = tree.ToString();
             string expected = $@"LazinatorTests.Examples.Example
-    LazinatorTests.Examples.ExampleChild
-    LazinatorTests.Examples.ExampleChild
-    2
+    MyChild1: LazinatorTests.Examples.ExampleChild
+    MyChild2: LazinatorTests.Examples.ExampleChild
+    WrappedInt: 2
 ";
             result.Should().Be(expected);
         }
@@ -144,15 +144,15 @@ namespace LazinatorTests.Tests
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };
-            HierarchyTree tree = hierarchy.GetAllNodesAsHierarchy();
+            HierarchyTree tree = new HierarchyTree(hierarchy);
             string result = tree.ToString();
             string expected = 
 $@"LazinatorTests.Examples.Example
-    LazinatorTests.Examples.ExampleChild
-        LazinatorTests.Examples.Structs.WrapperContainer
-            17
-    LazinatorTests.Examples.ExampleChild
-    5
+    MyChild1: LazinatorTests.Examples.ExampleChild
+        MyWrapperContainer: LazinatorTests.Examples.Structs.WrapperContainer
+            WrappedInt: 17
+    MyChild2: LazinatorTests.Examples.ExampleChild
+    WrappedInt: 5
 ";
             result.Should().Be(expected);
         }

@@ -415,13 +415,13 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Represent the nodes of the hierarchy in a hierarchical form.
+        /// Enumerates the Lazinator children of a node, along with their names
         /// </summary>
-        /// <param name="startNode"></param>
-        /// <returns></returns>
-        public static HierarchyTree GetAllNodesAsHierarchy(this ILazinator startNode)
+        /// <param name="node">The node</param>
+        /// <returns>The Lazinator children of the node along with their property names</returns>
+        public static IEnumerable<(string propertyName, ILazinator descendant)> GetLazinatorChildren(this ILazinator node)
         {
-            return new HierarchyTree(GetAllNodes(startNode));
+            return node.EnumerateLazinatorDescendants(x => true, true, x => false, false);
         }
 
         /// <summary>

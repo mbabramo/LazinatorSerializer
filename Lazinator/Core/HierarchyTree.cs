@@ -12,78 +12,38 @@ namespace Lazinator.Core
     public class HierarchyTree
     {
         public ILazinator Node;
-        public List<HierarchyTree> Children;
+        public List<(string childName, HierarchyTree subtree)> Children;
 
         public HierarchyTree(ILazinator node)
         {
             Node = node;
-        }
-
-        public HierarchyTree(IEnumerable<ILazinator> enumerationOfTree)
-        {
-            if (!enumerationOfTree.Any())
-                return;
-            bool first = true;
-            foreach (var node in enumerationOfTree)
-            {
-                if (first)
-                {
-                    Node = node;
-                    first = false;
-                }
-                else
-                    Add(node);
-            }
-        }
-
-        public void Add(ILazinator node)
-        {
-            List<ILazinator> hierarchyFromTop = LazinatorUtilities.GetClassAncestorsFromTop(node);
-            var enumerator = hierarchyFromTop.GetEnumerator();
-            bool more = enumerator.MoveNext();
-            if (!more || enumerator.Current != Node)
-                throw new Exception("Attempted adding a node that does not belong in this hierarchy.");
-            AddToHere(enumerator, node);
-        }
-
-        public void AddToHere(IEnumerator<ILazinator> hierarchyFromHere, ILazinator nodeToAdd)
-        {
-            if (Children == null)
-                Children = new List<HierarchyTree>();
-            ILazinator childNode;
-            if (hierarchyFromHere.MoveNext())
-                childNode = hierarchyFromHere.Current;
-            else
-                childNode = nodeToAdd;
-            HierarchyTree childTree = Children.FirstOrDefault(x => x.Node == childNode);
-            if (childTree == null)
-            {
-                childTree = new HierarchyTree(childNode);
-                Children.Add(childTree);
-            }
-            else
-                childTree.AddToHere(hierarchyFromHere, nodeToAdd);
+            Children = node.GetLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
         }
 
         public string ToString(Func<ILazinator, string> stringProducer = null)
         {
             StringBuilder sb = new StringBuilder();
-            BuildString(sb, stringProducer, 0);
+            BuildString(sb, "", stringProducer, 0);
             return sb.ToString();
         }
 
-        private void BuildString(StringBuilder sb, Func<ILazinator, string> stringProducer = null, int tabs = 0)
+        private void BuildString(StringBuilder sb, string prefix, Func<ILazinator, string> stringProducer = null, int tabs = 0)
         {
             if (stringProducer == null)
                 stringProducer = x => x.ToString();
             string textToAppend = stringProducer(Node);
             for (int i = 0; i < tabs * 4; i++)
                 sb.Append(" ");
+            if (prefix != null && prefix != "")
+            {
+                sb.Append(prefix);
+                sb.Append(": ");
+            }
             sb.AppendLine(textToAppend);
             if (Children != null)
             {
                 foreach (var child in Children)
-                    child.BuildString(sb, stringProducer, tabs + 1);
+                    child.subtree.BuildString(sb, child.childName, stringProducer, tabs + 1);
             }
             
         }
