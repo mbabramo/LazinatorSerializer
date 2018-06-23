@@ -288,6 +288,7 @@ namespace Lazinator.Collections
 
         private bool ItemHasBeenAccessed(int index)
         {
+            CreateUnderlyingListIfNecessary();
             return FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index];
         }
 
@@ -320,12 +321,12 @@ namespace Lazinator.Collections
 
         protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
-            // Do not report Offsets' dirtiness. Just report items' dirtiness
-            for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
+            // Do not enumerate offsets. Just enumerate items.
+            for (int i = 0; i < Count; i++)
             {
-                if (ItemHasBeenAccessed(i))
+                if (!exploreOnlyDeserializedChildren || ItemHasBeenAccessed(i))
                 {
-                    var item = ((IList<T>)UnderlyingList)[i];
+                    var item = this[i];
                     if (item != null && !(item.Equals(default(T))))
                     {
                         foreach (ILazinator toYield in item.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))

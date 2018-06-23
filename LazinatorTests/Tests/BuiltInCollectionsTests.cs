@@ -123,7 +123,25 @@ namespace LazinatorTests.Tests
             var results2 = c.GetAllNodes().ToList();
             results2[0].Should().Be(c);
             results2[1].LazinatorParentClass.Should().Be(c);
-            results2[2].LazinatorParentClass.Should().Be(c);
+        }
+
+        [Fact]
+        public void LazinatorListCountWorks()
+        {
+            LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
+            l.Count.Should().Be(2);
+            l.Add(null);
+            l.Count.Should().Be(3);
+            l.RemoveAt(1);
+            l.Count.Should().Be(2);
+            var c = l.CloneLazinatorTyped();
+            c.Count.Should().Be(2);
+            c.Insert(0, GetExample(1));
+            c.Count.Should().Be(3);
+            c.Add(GetExample(2));
+            c.Count.Should().Be(4);
+            c.RemoveAll(x => true);
+            c.Count.Should().Be(0);
         }
 
         [Fact]
