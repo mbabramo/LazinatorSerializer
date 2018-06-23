@@ -12,7 +12,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorNodes_Helper" })]
+    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants" })]
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T> where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;
@@ -319,7 +319,7 @@ namespace Lazinator.Collections
         }
 
 
-        protected virtual IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+        protected virtual IEnumerable<ILazinator> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
             // Do not enumerate offsets. Just enumerate items.
             for (int i = 0; i < Count; i++)

@@ -62,7 +62,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsOnDirty => ImplementedMethods.Contains("OnDirty");
         public bool ImplementsConvertFromBytesAfterHeader => ImplementedMethods.Contains("ConvertFromBytesAfterHeader");
         public bool ImplementsWritePropertiesIntoBuffer => ImplementedMethods.Contains("WritePropertiesIntoBuffer");
-        public bool ImplementsEnumerateLazinatorNodes_Helper => ImplementedMethods.Contains("EnumerateLazinatorNodes_Helper");
+        public bool ImplementsEnumerateLazinatorDescendants => ImplementedMethods.Contains("EnumerateLazinatorDescendants");
 
         /* Complications */
         public List<string> GenericArgumentNames { get; set; }
@@ -305,7 +305,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
-                        {ProtectedIfApplicable}abstract IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
+                        public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -680,19 +680,19 @@ namespace Lazinator.CodeDescription
                 if (IsDerivedFromNonAbstractLazinator)
                 {
                     // we've already defined EnumerateLazinatorNodes, so we just need to override the Helper function, calling the base function
-                    if (!ImplementsEnumerateLazinatorNodes_Helper)
+                    if (!ImplementsEnumerateLazinatorDescendants)
                     {
                         sb.Append($@"
-                            {ProtectedIfApplicable}override IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+                            public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{
-                                base.EnumerateLazinatorNodes_Helper(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren);
+                                base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren);
                             ");
                     }
                 }
                 else
                 {
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
-                    // we need EnumerateLazinatorNodes, plus EnumerateLazinatorNodes_Helper but without a call to a base function
+                    // we need EnumerateLazinatorNodes, plus EnumerateLazinatorDescendants but without a call to a base function
                     sb.AppendLine($@"
                             public {derivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{
@@ -704,20 +704,20 @@ namespace Lazinator.CodeDescription
                                 }}
                                 if (explore)
                                 {{
-                                    foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                                    foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                                     {{
-                                        yield return dirty;
+                                        yield return item.descendant;
                                     }}
                                 }}
                             }}
                         ");
-                    if (!ImplementsEnumerateLazinatorNodes_Helper)
+                    if (!ImplementsEnumerateLazinatorDescendants)
                         sb.AppendLine(
-                            $@"{ProtectedIfApplicable}{DerivationKeyword}IEnumerable<ILazinator> EnumerateLazinatorNodes_Helper(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
+                            $@"public {DerivationKeyword}IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{");
                 }
 
-                if (!ImplementsEnumerateLazinatorNodes_Helper)
+                if (!ImplementsEnumerateLazinatorDescendants)
                 {
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
@@ -725,7 +725,7 @@ namespace Lazinator.CodeDescription
                                 {{
                                     foreach (ILazinator toYield in {property.PropertyName}.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                                     {{
-                                        yield return toYield;
+                                        yield return (""{property.PropertyName}"", toYield);
                                     }}
                                 }}
     ");
