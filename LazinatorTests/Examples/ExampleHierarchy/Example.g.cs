@@ -790,9 +790,9 @@ namespace LazinatorTests.Examples
             }
             if (explore)
             {
-                foreach (ILazinator matchedBelow in EnumerateLazinatorNodes_Helper(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                foreach (ILazinator dirty in EnumerateLazinatorNodes_Helper(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
                 {
-                    yield return matchedBelow;
+                    yield return dirty;
                 }
             }
         }
