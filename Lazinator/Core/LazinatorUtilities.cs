@@ -411,7 +411,7 @@ namespace Lazinator.Core
         /// <returns>The dirty nodes</returns>
         public static IEnumerable<ILazinator> GetAllNodes(this ILazinator startNode)
         {
-            return startNode.EnumerateLazinatorNodes(x => true, false, x => true, false);
+            return startNode.EnumerateLazinatorNodes(x => true, false, x => true, false).ToList();
         }
 
         /// <summary>

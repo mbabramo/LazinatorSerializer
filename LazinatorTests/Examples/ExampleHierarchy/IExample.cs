@@ -32,6 +32,5 @@ namespace LazinatorTests.Examples
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }
         [AutoChangeParent] ExampleChild MyAutoChangeParentChild { get; set; }
-        ExampleStruct MyAutoChangeParentChildStruct { get; set; } // autoChangeParent is automatic for structs
     }
 }

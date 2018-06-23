@@ -205,13 +205,18 @@ namespace LazinatorTests.Tests
             another.MyAutoChangeParentChild = original.MyAutoChangeParentChild;
             another.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(another);
 
-            original.MyAutoChangeParentChildStruct = new ExampleStruct();
-            original.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(original);
-            another.MyAutoChangeParentChildStruct = original.MyAutoChangeParentChildStruct;
-            another.MyAutoChangeParentChildStruct.LazinatorParentClass.Should().Be(another);
-
             original.MyAutoChangeParentChild = null;
             original.MyAutoChangeParentChild.Should().BeNull();
+        }
+
+        [Fact]
+        public void VerifyHierarchyWorks()
+        {
+            var original = GetHierarchy(1, 1, 1, 1, 0);
+            var another = GetHierarchy(1, 1, 1, 1, 0);
+            LazinatorUtilities.VerifyHierarchyHashesMatch(original, another);
+            var clone = original.CloneLazinatorTyped();
+            LazinatorUtilities.VerifyHierarchyHashesMatch(original, clone);
         }
 
         [Fact]
