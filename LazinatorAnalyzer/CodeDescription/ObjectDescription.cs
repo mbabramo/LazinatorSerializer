@@ -209,7 +209,8 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                AppendDirtyEnumeration(sb);
+                AppendEnumerateLazinatorDescendants(sb);
+                AppendEnumerateNonLazinatorDescendants(sb);
                 AppendResetProperties(sb);
                 AppendConversionSectionStart(sb);
                 AppendConvertFromBytesAfterHeader(sb);
@@ -671,7 +672,7 @@ namespace Lazinator.CodeDescription
                 }}");
         }
 
-        private void AppendDirtyEnumeration(CodeStringBuilder sb)
+        private void AppendEnumerateLazinatorDescendants(CodeStringBuilder sb)
         {
             if (IsAbstract)
                 return;
@@ -685,7 +686,10 @@ namespace Lazinator.CodeDescription
                         sb.Append($@"
                             public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{
-                                base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren);
+                                foreach (var inheritedYield in base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                                {{
+                                    yield return inheritedYield;
+                                }}
                             ");
                     }
                 }
@@ -734,6 +738,43 @@ namespace Lazinator.CodeDescription
                             }}
                         ");
                 }
+            }
+        }
+
+
+        private void AppendEnumerateNonLazinatorDescendants(CodeStringBuilder sb)
+        {
+            if (IsAbstract)
+                return;
+            else
+            {
+                if (IsDerivedFromNonAbstractLazinator)
+                {
+                    sb.Append($@"
+                        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorDescendants()
+                        {{
+                                foreach (var inheritedYield in base.EnumerateNonLazinatorDescendants())
+                                {{
+                                    yield return inheritedYield;
+                                }}
+                        ");
+                }
+                else
+                {
+                    string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
+                    sb.AppendLine(
+                        $@"public {DerivationKeyword}IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorDescendants()
+                        {{");
+                }
+
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsLazinator))
+                {
+                    sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName});
+                                ");
+                }
+                sb.Append($@"yield break;
+                        }}
+                    ");
             }
         }
 
