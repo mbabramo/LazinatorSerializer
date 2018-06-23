@@ -415,6 +415,16 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Represent the nodes of the hierarchy in a hierarchical form.
+        /// </summary>
+        /// <param name="startNode"></param>
+        /// <returns></returns>
+        public static HierarchyTree GetAllNodesAsHierarchy(this ILazinator startNode)
+        {
+            return new HierarchyTree(GetAllNodes(startNode));
+        }
+
+        /// <summary>
         /// Verifies that the 64-bit hashes of each node in two hierarchies match, indicating likely equality.
         /// This can be useful for determining where two hierarchies expected to be equal differ.
         /// </summary>
@@ -447,6 +457,36 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Gets a hierarchy of ancestors of this node, excluding this node, to the highest reachable point in the hierarchy.
+        /// Because descendants of structs do not contain references to those structs, if a struct is reached, that will always
+        /// count as the top of the hierarchy, even where a struct may be a child of another node.
+        /// </summary>
+        /// <param name="startNode">The starting point, which is not included in the hierarchy.</param>
+        /// <returns>The chain of nodes from the starting point to the top</returns>
+        public static List<ILazinator> GetClassAncestorsToTop(this ILazinator startNode)
+        {
+            List<ILazinator> currentList = new List<ILazinator>();
+            while (startNode.LazinatorParentClass != null)
+            {
+                startNode = startNode.LazinatorParentClass;
+                currentList.Add(startNode);
+            }
+            return currentList;
+        }
+
+        /// <summary>
+        /// Gets a list of nodes from the highest reachable point in the hierarchy to but excluding this node.
+        /// </summary>
+        /// <param name="destinationNode">The node that is below the hierarchy to be returned</param>
+        /// <returns>The chain of nodes from the top to this node</returns>
+        public static List<ILazinator> GetClassAncestorsFromTop(this ILazinator destinationNode)
+        {
+            var l = GetClassAncestorsToTop(destinationNode);
+            l.Reverse();
+            return l;
+        }
+
+        /// <summary>
         /// Marks all classes in a hierarchy as clean, so that IsDirty and HasChanged will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
         /// </summary>
         /// <param name="hierarchy"></param>
@@ -468,8 +508,7 @@ namespace Lazinator.Core
                 node.DescendantHasChanged = false;
             }
         }
-
-
+        
 
         /// <summary>
         /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.

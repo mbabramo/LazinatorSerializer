@@ -116,16 +116,6 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorListEnumerateNodesWorks()
-        {
-            LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
-            var c = l.CloneLazinatorTyped();
-            var results2 = c.GetAllNodes().ToList();
-            results2[0].Should().Be(c);
-            results2[1].LazinatorParentClass.Should().Be(c);
-        }
-
-        [Fact]
         public void LazinatorListCountWorks()
         {
             LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
@@ -587,30 +577,9 @@ namespace LazinatorTests.Tests
             v7.MyList.DescendantIsDirty.Should().BeTrue();
             v7.DescendantIsDirty.Should().BeTrue();
         }
+        
 
-
-
-        [Fact]
-        public void LazinatorListDirtinessEnumerationWorks()
-        {
-            LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
-            {
-            };
-            nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
-
-            var v2 = nonGenericContainer.CloneLazinatorTyped();
-            v2.MyList.Add(GetExampleChild(1));
-            v2.MyList.Add(GetExampleChild(1));
-            v2.MyList.Add(GetExampleChild(1));
-
-            var results = v2.GetDirtyNodes(true);
-            results.Count().Should().Be(4);
-
-            var v5 = v2.CloneLazinatorTyped();
-            v5.MyList[1].MyLong = -98765;
-            results = v5.GetDirtyNodes(true);
-            results.Count().Should().Be(1);
-        }
+        
 
         [Fact]
         public void LazinatorStackWorks()
