@@ -287,6 +287,13 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyHashSetSerialized", (object)MyHashSetSerialized);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyHashSetSerialized_Accessed = false;

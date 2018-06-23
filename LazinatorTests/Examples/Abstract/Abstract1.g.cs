@@ -70,6 +70,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
+        public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         
         public abstract MemoryInBuffer HierarchyBytes
         {

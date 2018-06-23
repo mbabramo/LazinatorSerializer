@@ -304,6 +304,13 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyStackInt", (object)MyStackInt);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyStackInt_Accessed = false;

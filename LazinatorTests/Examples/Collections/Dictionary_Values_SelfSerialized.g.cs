@@ -349,6 +349,15 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyDictionary", (object)MyDictionary);
+            yield return ("MySortedDictionary", (object)MySortedDictionary);
+            yield return ("MySortedList", (object)MySortedList);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyDictionary_Accessed = _MySortedDictionary_Accessed = _MySortedList_Accessed = false;

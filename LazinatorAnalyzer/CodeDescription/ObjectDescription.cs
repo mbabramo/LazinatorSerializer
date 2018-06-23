@@ -752,6 +752,7 @@ namespace Lazinator.CodeDescription
                 if (IsDerivedFromNonAbstractLazinator)
                 {
                     sb.Append($@"
+
                         public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
                         {{
                                 foreach (var inheritedYield in base.EnumerateNonLazinatorProperties())
@@ -764,7 +765,9 @@ namespace Lazinator.CodeDescription
                 {
                     string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
                     sb.AppendLine(
-                        $@"public {DerivationKeyword}IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+                        $@"
+
+                        public {DerivationKeyword}IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
                         {{");
                 }
 

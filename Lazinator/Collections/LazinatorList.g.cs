@@ -315,6 +315,13 @@ namespace Lazinator.Collections
         }
         
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MainListSerialized", (object)MainListSerialized);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MainListSerialized_Accessed = _Offsets_Accessed = false;

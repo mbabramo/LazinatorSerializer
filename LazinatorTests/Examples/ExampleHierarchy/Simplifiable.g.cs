@@ -478,6 +478,18 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyIntsAre3", (object)MyIntsAre3);
+            yield return ("Example2Char", (object)Example2Char);
+            yield return ("Example3IsNull", (object)Example3IsNull);
+            yield return ("ExampleHasDefaultValue", (object)ExampleHasDefaultValue);
+            yield return ("MyInt", (object)MyInt);
+            yield return ("MyOtherInt", (object)MyOtherInt);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _Example_Accessed = _Example2_Accessed = _Example3_Accessed = false;

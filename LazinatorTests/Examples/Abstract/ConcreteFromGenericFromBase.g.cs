@@ -52,7 +52,20 @@ namespace LazinatorTests.Examples.Abstract
         
         public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
         {
-            base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren);
+            foreach (var inheritedYield in base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+            {
+                yield return inheritedYield;
+            }
+            yield break;
+        }
+        
+        
+        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            foreach (var inheritedYield in base.EnumerateNonLazinatorProperties())
+            {
+                yield return inheritedYield;
+            }
             yield break;
         }
         

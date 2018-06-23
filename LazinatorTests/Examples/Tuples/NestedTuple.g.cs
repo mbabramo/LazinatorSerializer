@@ -287,6 +287,13 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyNestedTuple", (object)MyNestedTuple);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyNestedTuple_Accessed = false;

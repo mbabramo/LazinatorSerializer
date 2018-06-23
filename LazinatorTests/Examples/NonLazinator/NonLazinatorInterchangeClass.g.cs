@@ -297,6 +297,15 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("IsNull", (object)IsNull);
+            yield return ("MyInt", (object)MyInt);
+            yield return ("MyString", (object)MyString);
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             

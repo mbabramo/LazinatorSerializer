@@ -339,6 +339,14 @@ namespace Lazinator.Spans
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("_version", (object)_version);
+            yield return ("m_length", (object)m_length);
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _ByteSpan_Accessed = false;

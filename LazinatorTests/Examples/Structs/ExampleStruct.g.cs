@@ -495,6 +495,17 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyBool", (object)MyBool);
+            yield return ("MyChar", (object)MyChar);
+            yield return ("MyLazinatorList", (object)MyLazinatorList);
+            yield return ("MyListValues", (object)MyListValues);
+            yield return ("MyTuple", (object)MyTuple);
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _MyChild1_Accessed = _MyChild2_Accessed = _MyLazinatorList_Accessed = _MyListValues_Accessed = _MyTuple_Accessed = false;

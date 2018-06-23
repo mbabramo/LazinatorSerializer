@@ -858,6 +858,25 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyNullableDouble", (object)MyNullableDouble);
+            yield return ("MyBool", (object)MyBool);
+            yield return ("MyChar", (object)MyChar);
+            yield return ("MyDateTime", (object)MyDateTime);
+            yield return ("MyNewString", (object)MyNewString);
+            yield return ("MyNullableDecimal", (object)MyNullableDecimal);
+            yield return ("MyNullableTimeSpan", (object)MyNullableTimeSpan);
+            yield return ("MyOldString", (object)MyOldString);
+            yield return ("MyString", (object)MyString);
+            yield return ("MyTestEnum", (object)MyTestEnum);
+            yield return ("MyTestEnumByteNullable", (object)MyTestEnumByteNullable);
+            yield return ("MyUint", (object)MyUint);
+            yield return ("MyNonLazinatorChild", (object)MyNonLazinatorChild);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _IncludableChild_Accessed = _MyAutoChangeParentChild_Accessed = _MyChild1_Accessed = _MyChild2_Accessed = _MyChild2Previous_Accessed = _MyInterfaceImplementer_Accessed = _MyNonLazinatorChild_Accessed = _WrappedInt_Accessed = _ExcludableChild_Accessed = false;

@@ -441,6 +441,19 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyMemoryInt", (object)MyMemoryInt);
+            yield return ("MyNullableMemoryInt", (object)MyNullableMemoryInt);
+            yield return ("MyReadOnlyMemoryByte", (object)MyReadOnlyMemoryByte);
+            yield return ("MyReadOnlySpanByte", (object)MyReadOnlySpanByte.ToString());
+            yield return ("MyReadOnlySpanChar", (object)MyReadOnlySpanChar.ToString());
+            yield return ("MyReadOnlySpanDateTime", (object)MyReadOnlySpanDateTime.ToString());
+            yield return ("MyReadOnlySpanLong", (object)MyReadOnlySpanLong.ToString());
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyMemoryInt_Accessed = _MyNullableMemoryInt_Accessed = _MyReadOnlyMemoryByte_Accessed = _MyReadOnlySpanByte_Accessed = _MyReadOnlySpanChar_Accessed = _MyReadOnlySpanDateTime_Accessed = _MyReadOnlySpanLong_Accessed = false;

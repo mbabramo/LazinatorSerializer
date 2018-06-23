@@ -298,6 +298,12 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _Root_Accessed = false;

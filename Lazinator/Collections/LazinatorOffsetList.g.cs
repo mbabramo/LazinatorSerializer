@@ -372,6 +372,12 @@ namespace Lazinator.Collections
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _FourByteItems_Accessed = _TwoByteItems_Accessed = false;

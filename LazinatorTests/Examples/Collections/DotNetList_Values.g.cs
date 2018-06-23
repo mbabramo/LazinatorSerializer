@@ -433,6 +433,16 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyLinkedListInt", (object)MyLinkedListInt);
+            yield return ("MyListInt", (object)MyListInt);
+            yield return ("MyListInt2", (object)MyListInt2);
+            yield return ("MySortedSetInt", (object)MySortedSetInt);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyLinkedListInt_Accessed = _MyListInt_Accessed = _MyListInt2_Accessed = _MySortedSetInt_Accessed = false;

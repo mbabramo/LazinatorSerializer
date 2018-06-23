@@ -338,6 +338,13 @@ namespace LazinatorTests.Examples.Hierarchy
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("ExampleListByInterface", (object)ExampleListByInterface);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;

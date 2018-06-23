@@ -271,6 +271,13 @@ namespace LazinatorTests.Examples.Structs
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyInt", (object)MyInt);
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             

@@ -454,6 +454,14 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyListExampleStruct", (object)MyListExampleStruct);
+            yield return ("MyListNullableExampleStruct", (object)MyListNullableExampleStruct);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _IntWrapper_Accessed = _MyExampleStruct_Accessed = _MyListExampleStruct_Accessed = _MyListNullableExampleStruct_Accessed = false;

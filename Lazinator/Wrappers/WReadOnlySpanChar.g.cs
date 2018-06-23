@@ -277,6 +277,13 @@ namespace Lazinator.Wrappers
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("Value", (object)Value.ToString());
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _Value_Accessed = false;

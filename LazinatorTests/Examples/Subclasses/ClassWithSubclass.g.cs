@@ -366,6 +366,13 @@ namespace LazinatorTests.Examples.Subclasses
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("IntWithinSuperclass", (object)IntWithinSuperclass);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _SubclassInstance1_Accessed = _SubclassInstance2_Accessed = false;

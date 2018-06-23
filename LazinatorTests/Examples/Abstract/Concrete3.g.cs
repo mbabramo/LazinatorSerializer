@@ -474,6 +474,18 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
+        
+        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("String1", (object)String1);
+            yield return ("String2", (object)String2);
+            yield return ("String3", (object)String3);
+            yield return ("IntList1", (object)IntList1);
+            yield return ("IntList2", (object)IntList2);
+            yield return ("IntList3", (object)IntList3);
+            yield break;
+        }
+        
         protected override void ResetAccessedProperties()
         {
             _Example2_Accessed = _Example3_Accessed = _IntList1_Accessed = _IntList2_Accessed = _IntList3_Accessed = false;

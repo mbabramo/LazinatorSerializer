@@ -351,6 +351,15 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyMismatchedRecordLikeType", (object)MyMismatchedRecordLikeType);
+            yield return ("MyRecordLikeClass", (object)MyRecordLikeClass);
+            yield return ("MyRecordLikeType", (object)MyRecordLikeType);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;

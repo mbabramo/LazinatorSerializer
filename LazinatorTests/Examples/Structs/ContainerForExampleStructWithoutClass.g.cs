@@ -325,6 +325,12 @@ namespace LazinatorTests.Examples.Structs
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ExampleStructWithoutClass_Accessed = false;

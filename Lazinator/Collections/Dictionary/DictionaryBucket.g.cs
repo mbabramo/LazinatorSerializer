@@ -367,6 +367,13 @@ namespace Lazinator.Collections.Dictionary
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("Initialized", (object)Initialized);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _Keys_Accessed = _Values_Accessed = false;

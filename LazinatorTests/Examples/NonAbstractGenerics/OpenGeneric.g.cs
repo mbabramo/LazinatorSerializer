@@ -333,6 +333,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyListT", (object)MyListT);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyListT_Accessed = false;

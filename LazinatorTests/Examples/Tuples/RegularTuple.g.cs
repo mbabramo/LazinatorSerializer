@@ -380,6 +380,16 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyTupleSerialized", (object)MyTupleSerialized);
+            yield return ("MyTupleSerialized2", (object)MyTupleSerialized2);
+            yield return ("MyTupleSerialized3", (object)MyTupleSerialized3);
+            yield return ("MyTupleSerialized4", (object)MyTupleSerialized4);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyTupleSerialized_Accessed = _MyTupleSerialized2_Accessed = _MyTupleSerialized3_Accessed = _MyTupleSerialized4_Accessed = false;

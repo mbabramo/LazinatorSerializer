@@ -291,6 +291,13 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyQueueSerialized", (object)MyQueueSerialized);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyQueueSerialized_Accessed = false;

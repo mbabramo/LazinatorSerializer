@@ -479,6 +479,14 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("Balance", (object)Balance);
+            yield return ("Count", (object)Count);
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _Left_Accessed = _Right_Accessed = false;

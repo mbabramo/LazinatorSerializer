@@ -91,6 +91,11 @@ namespace Lazinator.Core
         /// <param name="exploreCriterion">If non-null, then a node's children will be explored only if this function returns true.</param>
         /// <param name="exploreOnlyDeserializedChildren">If true, then children are enumerated only if they have been deserialized (and are thus not stored solely in bytes).</param>
         IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
+        /// <summary>
+        /// Enumerates the primitive and other non-Lazinator properties in the Lazinator object, including inherited properties but not including descendants' properties.
+        /// </summary>
+        /// <returns>The names of properties along with the property values converted to object</returns>
+        IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
 
         /// <summary>
         /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.

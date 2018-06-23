@@ -352,6 +352,15 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("NonLazinatorClass", (object)NonLazinatorClass);
+            yield return ("NonLazinatorInterchangeableClass", (object)NonLazinatorInterchangeableClass);
+            yield return ("NonLazinatorStruct", (object)NonLazinatorStruct);
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _NonLazinatorClass_Accessed = _NonLazinatorInterchangeableClass_Accessed = _NonLazinatorStruct_Accessed = false;

@@ -63,6 +63,17 @@ namespace LazinatorTests.Examples
             }
         }
         
+        
+        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            foreach (var inheritedYield in base.EnumerateNonLazinatorProperties())
+            {
+                yield return inheritedYield;
+            }
+            yield return ("MyListName", (object)MyListName);
+            yield break;
+        }
+        
         protected override void ResetAccessedProperties()
         {
             base.ResetAccessedProperties();

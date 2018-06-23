@@ -335,6 +335,14 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyArrayInt", (object)MyArrayInt);
+            yield return ("MyJaggedArrayInt", (object)MyJaggedArrayInt);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyArrayInt_Accessed = _MyJaggedArrayInt_Accessed = false;

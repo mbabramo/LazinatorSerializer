@@ -343,6 +343,15 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
+        
+        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyEnumWithinAbstractGeneric", (object)MyEnumWithinAbstractGeneric);
+            yield return ("MyEnumWithinAbstractGeneric2", (object)MyEnumWithinAbstractGeneric2);
+            yield return ("MyUnofficialInt", (object)MyUnofficialInt);
+            yield break;
+        }
+        
         protected override void ResetAccessedProperties()
         {
             

@@ -316,6 +316,13 @@ namespace Lazinator.Collections.Dictionary
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("Count", (object)Count);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _Buckets_Accessed = false;

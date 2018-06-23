@@ -45,6 +45,16 @@ namespace Lazinator.Collections
         /* Properties */
         
         
+        
+        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            foreach (var inheritedYield in base.EnumerateNonLazinatorProperties())
+            {
+                yield return inheritedYield;
+            }
+            yield break;
+        }
+        
         protected override void ResetAccessedProperties()
         {
             base.ResetAccessedProperties();

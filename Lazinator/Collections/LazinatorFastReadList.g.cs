@@ -281,6 +281,13 @@ namespace Lazinator.Collections
             yield break;
         }
         
+        
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("ReadOnlyBytes", (object)ReadOnlyBytes.ToString());
+            yield break;
+        }
+        
         void ResetAccessedProperties()
         {
             _ReadOnlyBytes_Accessed = false;

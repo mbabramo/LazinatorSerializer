@@ -311,6 +311,14 @@ namespace Lazinator.Spans
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("ReadOnly", (object)ReadOnly.ToString());
+            yield return ("ReadOrWrite", (object)ReadOrWrite);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;

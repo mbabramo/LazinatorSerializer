@@ -353,6 +353,15 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyLong", (object)MyLong);
+            yield return ("MyShort", (object)MyShort);
+            yield return ("ByteSpan", (object)ByteSpan.ToString());
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ByteSpan_Accessed = _MyWrapperContainer_Accessed = false;

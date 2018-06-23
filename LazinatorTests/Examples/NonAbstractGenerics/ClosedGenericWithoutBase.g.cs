@@ -319,6 +319,13 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("ItemT", (object)ItemT);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ItemU_Accessed = false;

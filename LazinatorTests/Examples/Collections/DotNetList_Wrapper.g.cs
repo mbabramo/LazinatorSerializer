@@ -371,6 +371,15 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyListInt", (object)MyListInt);
+            yield return ("MyListNullableByte", (object)MyListNullableByte);
+            yield return ("MyListNullableInt", (object)MyListNullableInt);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyListInt_Accessed = _MyListNullableByte_Accessed = _MyListNullableInt_Accessed = false;

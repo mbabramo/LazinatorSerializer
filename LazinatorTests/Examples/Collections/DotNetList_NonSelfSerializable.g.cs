@@ -336,6 +336,14 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("MyListNonLazinatorType", (object)MyListNonLazinatorType);
+            yield return ("MyListNonLazinatorType2", (object)MyListNonLazinatorType2);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _MyListNonLazinatorType_Accessed = _MyListNonLazinatorType2_Accessed = false;

@@ -317,6 +317,13 @@ namespace Lazinator.Collections.AvlTree
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield return ("Count", (object)Count);
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _UnderlyingTree_Accessed = false;

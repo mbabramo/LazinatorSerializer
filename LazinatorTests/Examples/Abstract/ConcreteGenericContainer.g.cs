@@ -304,6 +304,12 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
+        
+        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield break;
+        }
+        
         protected override void ResetAccessedProperties()
         {
             _Item_Accessed = false;

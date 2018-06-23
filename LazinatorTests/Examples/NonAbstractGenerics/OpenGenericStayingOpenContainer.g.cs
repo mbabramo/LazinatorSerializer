@@ -497,6 +497,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             yield break;
         }
         
+        
+        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            yield break;
+        }
+        
         protected virtual void ResetAccessedProperties()
         {
             _ClosedGenericBase_Accessed = _ClosedGenericFloat_Accessed = _ClosedGenericFromBaseWithBase_Accessed = _ClosedGenericInterface_Accessed = _ClosedGenericNonexclusiveInterface_Accessed = false;
