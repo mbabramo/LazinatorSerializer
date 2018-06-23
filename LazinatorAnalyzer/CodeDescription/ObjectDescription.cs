@@ -209,7 +209,8 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                AppendDirtyEnumeration(sb);
+                AppendEnumerateLazinatorDescendants(sb);
+                AppendEnumerateNonLazinatorProperties(sb);
                 AppendResetProperties(sb);
                 AppendConversionSectionStart(sb);
                 AppendConvertFromBytesAfterHeader(sb);
@@ -306,6 +307,7 @@ namespace Lazinator.CodeDescription
 
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren);
+                        public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
 		                
                         public abstract MemoryInBuffer HierarchyBytes
                         {{
@@ -671,7 +673,7 @@ namespace Lazinator.CodeDescription
                 }}");
         }
 
-        private void AppendDirtyEnumeration(CodeStringBuilder sb)
+        private void AppendEnumerateLazinatorDescendants(CodeStringBuilder sb)
         {
             if (IsAbstract)
                 return;
@@ -685,7 +687,10 @@ namespace Lazinator.CodeDescription
                         sb.Append($@"
                             public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren)
                             {{
-                                base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren);
+                                foreach (var inheritedYield in base.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren))
+                                {{
+                                    yield return inheritedYield;
+                                }}
                             ");
                     }
                 }
@@ -734,6 +739,50 @@ namespace Lazinator.CodeDescription
                             }}
                         ");
                 }
+            }
+        }
+
+
+        private void AppendEnumerateNonLazinatorProperties(CodeStringBuilder sb)
+        {
+            if (IsAbstract)
+                return;
+            else
+            {
+                if (IsDerivedFromNonAbstractLazinator)
+                {
+                    sb.Append($@"
+                        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+                        {{
+                                foreach (var inheritedYield in base.EnumerateNonLazinatorProperties())
+                                {{
+                                    yield return inheritedYield;
+                                }}
+                        ");
+                }
+                else
+                {
+                    string derivationKeyword = IsDerivedFromAbstractLazinator ? "override " : "";
+                    sb.AppendLine(
+                        $@"public {DerivationKeyword}IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+                        {{");
+                }
+
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsLazinator))
+                {
+                    if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                    {
+                        // because ReadOnlySpan is a ref struct, we can't enumerate it.
+                        sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName}.ToString());
+                                ");
+                    }
+                    else
+                        sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName});
+                                ");
+                }
+                sb.Append($@"yield break;
+                        }}
+                    ");
             }
         }
 

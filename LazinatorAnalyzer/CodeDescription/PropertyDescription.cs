@@ -39,7 +39,7 @@ namespace Lazinator.CodeDescription
 
         /* Property type */
         internal LazinatorPropertyType PropertyType { get; set; }
-        private LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
+        internal LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
