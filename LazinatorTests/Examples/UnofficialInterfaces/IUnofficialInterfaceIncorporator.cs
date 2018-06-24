@@ -7,7 +7,7 @@ namespace LazinatorTests.Examples
     [Lazinator((int) ExampleUniqueIDs.UnofficialInterfaceIncorporator)]
     public interface IUnofficialInterfaceIncorporator
     {
-        long MyLong { get; set; }
-        Concrete5 MyConcrete5 { get; set; }
+        Concrete5 MyOfficialObject { get; set; }
+        long MyOfficialLong { get; set; }
     }
 }

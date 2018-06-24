@@ -105,14 +105,14 @@ namespace LazinatorTests.Examples.Abstract
             get;
             set;
         }
-        protected bool _MyT_Accessed = false;
-        public virtual T MyT
+        protected bool _MyUnofficialInt_Accessed = false;
+        public abstract int MyUnofficialInt
         {
             get;
             set;
         }
-        protected bool _MyUnofficialInt_Accessed = false;
-        public abstract int MyUnofficialInt
+        protected bool _MyT_Accessed = false;
+        public virtual T MyT
         {
             get;
             set;

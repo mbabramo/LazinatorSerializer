@@ -8,7 +8,7 @@ namespace LazinatorTests.Examples
     [Lazinator((int)ExampleUniqueIDs.UnofficialInterface)]
     public interface IUnofficialInterface
     {
-        int MyInt {get; set;}
-        Concrete3 MyConcrete3 { get; set; }
+        int MyUnofficialInt {get; set;}
+        Concrete3 MyUnofficialObject { get; set; }
     }
 }
