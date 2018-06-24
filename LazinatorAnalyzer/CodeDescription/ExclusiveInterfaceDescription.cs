@@ -87,7 +87,7 @@ namespace Lazinator.CodeDescription
             foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol))
             {
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
-                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) { AccessibilityOverride = unofficialProperty.PropertyAccessibility });
+                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) { PropertyAccessibility = unofficialProperty.PropertyAccessibility });
             }
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
@@ -110,14 +110,14 @@ namespace Lazinator.CodeDescription
                 foreach (var unofficialProperty in baseUnofficialProperties)
                 {
                     if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
-                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", AccessibilityOverride = unofficialProperty.PropertyAccessibility });
+                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
             if (interfaceSymbol.ToString().Contains("UnofficialInterface"))
             {
                 var DEBUG = 0;
             }
-            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, false) })
+            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
                 .ThenBy(x => x.description.RelativeOrder)

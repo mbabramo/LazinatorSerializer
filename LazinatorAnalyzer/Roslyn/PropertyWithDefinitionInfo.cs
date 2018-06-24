@@ -16,7 +16,7 @@ namespace LazinatorAnalyzer.Roslyn
 
         public IPropertySymbol Property;
         public Level LevelInfo;
-        public string AccessibilityOverride;
+        public string PropertyAccessibility;
         public string DerivationKeyword;
 
         public override string ToString()

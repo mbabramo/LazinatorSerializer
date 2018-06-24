@@ -139,13 +139,14 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, string derivationKeyword, bool isLast)
+        public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, string derivationKeyword, string propertyAccessibility, bool isLast)
         {
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
+            PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
             
             ParseAccessibilityAttribute();
