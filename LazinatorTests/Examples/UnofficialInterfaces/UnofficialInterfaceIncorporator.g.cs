@@ -255,7 +255,7 @@ namespace LazinatorTests.Examples
             }
         }
         private int _MyUnofficialInt;
-        public int MyUnofficialInt
+        private int MyUnofficialInt
         {
             get
             {
@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples
         }
         protected bool _MyOfficialObject_Accessed;
         private Concrete3 _MyUnofficialObject;
-        public Concrete3 MyUnofficialObject
+        private Concrete3 MyUnofficialObject
         {
             get
             {
