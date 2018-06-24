@@ -29,10 +29,6 @@ namespace Lazinator.CodeDescription
         public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container, bool isUnofficialInterface = false)
         {
             NamedTypeSymbol = t;
-            if (t.ToString().Contains("ConcreteFromGenericFrom"))
-            {
-                var DEBUG = 0;
-            }
             IsUnofficialInterface = isUnofficialInterface;
             Container = container;
             var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
@@ -49,19 +45,18 @@ namespace Lazinator.CodeDescription
 
             SetPropertiesIncludingInherited(t);
 
-            UnofficiallyIncorporateOtherProperties(t);
-
             TotalNumProperties = PropertiesIncludingInherited.Count();
         }
 
-        private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
-        {
-            List<PropertyDescription> propertiesToPossiblyUnofficiallyIncorporate = GetUnofficialProperties(t);
-            foreach (var p in propertiesToPossiblyUnofficiallyIncorporate)
-                if (!PropertiesToDefineThisLevel.Any(x => x.PropertyName == p.PropertyName))
-                    PropertiesToDefineThisLevel.Add(p);
+        // DEBUG -- not needed?
+        //private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
+        //{
+        //    List<PropertyDescription> propertiesToPossiblyUnofficiallyIncorporate = GetUnofficialProperties(t);
+        //    foreach (var p in propertiesToPossiblyUnofficiallyIncorporate)
+        //        if (!PropertiesToDefineThisLevel.Any(x => x.PropertyName == p.PropertyName))
+        //            PropertiesToDefineThisLevel.Add(p);
 
-        }
+        //}
 
         private List<PropertyDescription> GetUnofficialProperties(INamedTypeSymbol t)
         {
@@ -89,6 +84,11 @@ namespace Lazinator.CodeDescription
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
             var propertiesWithLevel = Container.Compilation.PropertiesForType[interfaceSymbol];
+            foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol).Select(x => x.PropertySymbol))
+            {
+                if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.MetadataName))
+                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel));
+            }
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
                 List<IPropertySymbol> additionalProperties;
@@ -106,6 +106,10 @@ namespace Lazinator.CodeDescription
                     if (!propertiesWithLevel.Any(x => x.Property.MetadataName == baseProperty.MetadataName))
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(baseProperty, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override " });
                 }
+            }
+            if (interfaceSymbol.ToString().Contains("UnofficialInterface"))
+            {
+                var DEBUG = 0;
             }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
