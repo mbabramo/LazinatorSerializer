@@ -84,10 +84,10 @@ namespace Lazinator.CodeDescription
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
             var propertiesWithLevel = Container.Compilation.PropertiesForType[interfaceSymbol];
-            foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol).Select(x => x.PropertySymbol))
+            foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol))
             {
-                if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.MetadataName))
-                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel));
+                if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
+                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) { AccessibilityOverride = unofficialProperty.PropertyAccessibility });
             }
             foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
             {
@@ -100,11 +100,17 @@ namespace Lazinator.CodeDescription
                 }
                 else
                     additionalProperties = new List<IPropertySymbol>();
-                additionalProperties.AddRange(GetUnofficialProperties(baseType.InterfaceTypeSymbol).Select(x => x.PropertySymbol));
                 foreach (var baseProperty in additionalProperties)
                 {
                     if (!propertiesWithLevel.Any(x => x.Property.MetadataName == baseProperty.MetadataName))
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(baseProperty, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override " });
+                }
+                // now, unofficial properties
+                var baseUnofficialProperties = GetUnofficialProperties(baseType.InterfaceTypeSymbol);
+                foreach (var unofficialProperty in baseUnofficialProperties)
+                {
+                    if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
+                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", AccessibilityOverride = unofficialProperty.PropertyAccessibility });
                 }
             }
             if (interfaceSymbol.ToString().Contains("UnofficialInterface"))
