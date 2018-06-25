@@ -290,7 +290,6 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
                         
-                        public abstract InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
                         public abstract void InformParentOfDirtiness();
                         
                         public abstract bool DescendantHasChanged
@@ -450,19 +449,11 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {DerivationKeyword}InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate {{ get; set; }}
                         public {DerivationKeyword}void InformParentOfDirtiness()
                         {{
-                            if (InformParentOfDirtinessDelegate == null)
+                            if (LazinatorParentClass != null)
                             {{
-                                if (LazinatorParentClass != null)
-                                {{
-                                    LazinatorParentClass.DescendantIsDirty = true;
-                                }}
-                            }}
-                            else
-                            {{
-                                InformParentOfDirtinessDelegate();
+                                LazinatorParentClass.DescendantIsDirty = true;
                             }}
                         }}
 
