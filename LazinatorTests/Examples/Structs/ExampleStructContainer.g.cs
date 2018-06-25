@@ -30,23 +30,11 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        protected ILazinator _LazinatorParentClass;
         public ExampleStructContainer() : base()
         {
         }
         
-        public virtual ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -93,7 +81,7 @@ namespace LazinatorTests.Examples
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -112,21 +100,13 @@ namespace LazinatorTests.Examples
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public virtual void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -156,10 +136,7 @@ namespace LazinatorTests.Examples
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -253,7 +230,7 @@ namespace LazinatorTests.Examples
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
                         _IntWrapper = new WInt()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -264,7 +241,7 @@ namespace LazinatorTests.Examples
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _IntWrapper = value;
@@ -310,7 +287,7 @@ namespace LazinatorTests.Examples
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
                         _MyExampleStruct = new ExampleStruct()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -321,7 +298,7 @@ namespace LazinatorTests.Examples
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _MyExampleStruct = value;

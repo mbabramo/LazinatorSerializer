@@ -28,7 +28,7 @@ namespace LazinatorTests.Examples.Abstract
     public partial class AbstractGeneric1<T> : ILazinator
     {
         /* Abstract declarations */
-        public abstract ILazinator LazinatorParentClass { get; set; }
+        public abstract LazinatorParentsReference LazinatorParentClass { get; set; }
         
         public abstract int Deserialize();
         
@@ -51,8 +51,6 @@ namespace LazinatorTests.Examples.Abstract
             get;
             set;
         }
-        
-        public abstract void InformParentOfDirtiness();
         
         public abstract bool DescendantHasChanged
         {

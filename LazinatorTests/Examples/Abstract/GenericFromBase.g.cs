@@ -42,7 +42,7 @@ namespace LazinatorTests.Examples.Abstract
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -76,11 +76,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyT cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

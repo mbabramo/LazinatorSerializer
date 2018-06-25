@@ -29,19 +29,7 @@ namespace Lazinator.Wrappers
     {
         /* Serialization, deserialization, and object relationships */
         
-        ILazinator _LazinatorParentClass;
-        public ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public LazinatorParentsReference LazinatorParentClass { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -84,7 +72,7 @@ namespace Lazinator.Wrappers
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -103,21 +91,13 @@ namespace Lazinator.Wrappers
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -147,10 +127,7 @@ namespace Lazinator.Wrappers
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)

@@ -29,23 +29,11 @@ namespace Lazinator.Collections.Avl
     {
         /* Serialization, deserialization, and object relationships */
         
-        ILazinator _LazinatorParentClass;
         public AvlNode() : base()
         {
         }
         
-        public ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public LazinatorParentsReference LazinatorParentClass { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -92,7 +80,7 @@ namespace Lazinator.Collections.Avl
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -111,21 +99,13 @@ namespace Lazinator.Collections.Avl
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -155,10 +135,7 @@ namespace Lazinator.Collections.Avl
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -293,7 +270,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
                 {
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -323,7 +300,7 @@ namespace Lazinator.Collections.Avl
                         }
                         else _Left = new AvlNode<TKey, TValue>()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -336,7 +313,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -366,7 +343,7 @@ namespace Lazinator.Collections.Avl
                         }
                         else _Right = new AvlNode<TKey, TValue>()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -379,7 +356,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -415,7 +392,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
                 {
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

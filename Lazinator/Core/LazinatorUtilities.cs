@@ -260,8 +260,8 @@ namespace Lazinator.Core
                         LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
             }
-            if (child != null && child.LazinatorParentClass == null)
-                child.LazinatorParentClass = parent; // set the parent so that this object can be used like a deserialized object
+            if (child != null && !child.LazinatorParentClass.Any())
+                child.LazinatorParentClass.Add(parent); // set the parent so that this object can be used like a deserialized object
         }
 
         public static LazinatorGenericIDType GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
@@ -458,15 +458,18 @@ namespace Lazinator.Core
         /// Gets a hierarchy of ancestors of this node, excluding this node, to the highest reachable point in the hierarchy.
         /// Because descendants of structs do not contain references to those structs, if a struct is reached, that will always
         /// count as the top of the hierarchy, even where a struct may be a child of another node.
+        /// If the node is part of multiple hierarchies
         /// </summary>
         /// <param name="startNode">The starting point, which is not included in the hierarchy.</param>
         /// <returns>The chain of nodes from the starting point to the top</returns>
         public static List<ILazinator> GetClassAncestorsToTop(this ILazinator startNode)
         {
             List<ILazinator> currentList = new List<ILazinator>();
-            while (startNode.LazinatorParentClass != null)
+            while (startNode.LazinatorParentClass.Any())
             {
-                startNode = startNode.LazinatorParentClass;
+                if (startNode.LazinatorParentClass.Count > 1)
+                    throw new Exception("Cannot get ancestors when node or ancestor has multiple parents.");
+                startNode = startNode.LazinatorParentClass.FirstOrDefault();
                 currentList.Add(startNode);
             }
             return currentList;
@@ -534,7 +537,7 @@ namespace Lazinator.Core
         {
             if (startPoint != null && startPoint.IsDirty)
             {
-                ILazinator parent = startPoint.LazinatorParentClass;
+                ILazinator parent = startPoint.LazinatorParentClass.FirstOrDefault();
                 int levels = 0;
                 const int maxLevels = 1000;
                 while (parent != null)
@@ -543,7 +546,7 @@ namespace Lazinator.Core
                     {
                         throw new Exception("Internal Lazinator error. Ancestor dirtiness set incorrectly.");
                     }
-                    parent = parent.LazinatorParentClass;
+                    parent = parent.LazinatorParentClass.FirstOrDefault();
                     levels++;
                     if (levels > maxLevels)
                         throw new Exception("Hierarchy inconsistency error. The hierarchy appears to be circular. The root of the hierarchy should have LazinatorParentClass set to null.");

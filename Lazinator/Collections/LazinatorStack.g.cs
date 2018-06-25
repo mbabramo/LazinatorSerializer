@@ -42,7 +42,7 @@ namespace Lazinator.Collections
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         

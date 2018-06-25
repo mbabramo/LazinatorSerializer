@@ -29,19 +29,7 @@ namespace Lazinator.Spans
     {
         /* Serialization, deserialization, and object relationships */
         
-        ILazinator _LazinatorParentClass;
-        public ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public LazinatorParentsReference LazinatorParentClass { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -92,7 +80,7 @@ namespace Lazinator.Spans
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -111,21 +99,13 @@ namespace Lazinator.Spans
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -155,10 +135,7 @@ namespace Lazinator.Spans
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -281,7 +258,7 @@ namespace Lazinator.Spans
                         }
                         else _ByteSpan = new LazinatorByteSpan()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -294,7 +271,7 @@ namespace Lazinator.Spans
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

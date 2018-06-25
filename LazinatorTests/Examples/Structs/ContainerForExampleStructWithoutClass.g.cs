@@ -29,23 +29,11 @@ namespace LazinatorTests.Examples.Structs
     {
         /* Serialization, deserialization, and object relationships */
         
-        protected ILazinator _LazinatorParentClass;
         public ContainerForExampleStructWithoutClass() : base()
         {
         }
         
-        public virtual ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -92,7 +80,7 @@ namespace LazinatorTests.Examples.Structs
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -111,21 +99,13 @@ namespace LazinatorTests.Examples.Structs
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public virtual void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -155,10 +135,7 @@ namespace LazinatorTests.Examples.Structs
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -246,7 +223,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
                         _ExampleStructWithoutClass = new ExampleStructWithoutClass()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -257,7 +234,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;

@@ -31,23 +31,11 @@ namespace LazinatorTests.Examples.Structs
     {
         /* Serialization, deserialization, and object relationships */
         
-        protected ILazinator _LazinatorParentClass;
         public SmallWrappersContainer() : base()
         {
         }
         
-        public virtual ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -94,7 +82,7 @@ namespace LazinatorTests.Examples.Structs
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -113,21 +101,13 @@ namespace LazinatorTests.Examples.Structs
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public virtual void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -157,10 +137,7 @@ namespace LazinatorTests.Examples.Structs
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -273,11 +250,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property ListWrappedBytes cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -302,7 +275,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1);
                         _WrappedBool = new WBool()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -313,7 +286,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedBool = value;
@@ -359,7 +332,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1);
                         _WrappedByte = new WByte()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -370,7 +343,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedByte = value;
@@ -416,7 +389,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2);
                         _WrappedChar = new WChar()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -427,7 +400,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedChar = value;
@@ -473,7 +446,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1);
                         _WrappedNullableBool = new WNullableBool()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -484,7 +457,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableBool = value;
@@ -530,7 +503,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null);
                         _WrappedNullableByte = new WNullableByte()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -541,7 +514,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableByte = value;
@@ -587,7 +560,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null);
                         _WrappedNullableChar = new WNullableChar()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -598,7 +571,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableChar = value;
@@ -644,7 +617,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null);
                         _WrappedNullableSByte = new WNullableSByte()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -655,7 +628,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableSByte = value;
@@ -701,7 +674,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1);
                         _WrappedSByte = new WSByte()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -712,7 +685,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedSByte = value;

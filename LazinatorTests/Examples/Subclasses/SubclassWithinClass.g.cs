@@ -31,23 +31,11 @@ namespace LazinatorTests.Examples.Subclasses
         {
             /* Serialization, deserialization, and object relationships */
             
-            protected ILazinator _LazinatorParentClass;
             public SubclassWithinClass() : base()
             {
             }
             
-            public virtual ILazinator LazinatorParentClass 
-            { 
-                get => _LazinatorParentClass;
-                set
-                {
-                    _LazinatorParentClass = value;
-                    if (value != null && (IsDirty || DescendantIsDirty))
-                    {
-                        value.DescendantIsDirty = true;
-                    }
-                }
-            }
+            public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
             
             protected IncludeChildrenMode OriginalIncludeChildrenMode;
             
@@ -94,7 +82,7 @@ namespace LazinatorTests.Examples.Subclasses
                     OriginalIncludeChildrenMode = includeChildrenMode,
                     HierarchyBytes = bytes,
                 };
-                clone.LazinatorParentClass = null;
+                clone.LazinatorParentClass = default;
                 return clone;
             }
             
@@ -113,21 +101,13 @@ namespace LazinatorTests.Examples.Subclasses
                         _IsDirty = value;
                         if (_IsDirty)
                         {
-                            InformParentOfDirtiness();
+                            LazinatorParentClass.InformParentsOfDirtiness();
                         }
                     }
                     if (_IsDirty)
                     {
                         HasChanged = true;
                     }
-                }
-            }
-            
-            public virtual void InformParentOfDirtiness()
-            {
-                if (LazinatorParentClass != null)
-                {
-                    LazinatorParentClass.DescendantIsDirty = true;
                 }
             }
             
@@ -157,10 +137,7 @@ namespace LazinatorTests.Examples.Subclasses
                         if (_DescendantIsDirty)
                         {
                             _DescendantHasChanged = true;
-                            if (LazinatorParentClass != null)
-                            {
-                                LazinatorParentClass.DescendantIsDirty = true;
-                            }
+                            LazinatorParentClass.InformParentsOfDirtiness();
                         }
                     }
                     if (_DescendantIsDirty)

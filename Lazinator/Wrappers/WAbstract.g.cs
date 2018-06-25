@@ -28,7 +28,7 @@ namespace Lazinator.Wrappers
     public partial class WAbstract<T> : ILazinator
     {
         /* Abstract declarations */
-        public abstract ILazinator LazinatorParentClass { get; set; }
+        public abstract LazinatorParentsReference LazinatorParentClass { get; set; }
         
         public abstract int Deserialize();
         
@@ -51,8 +51,6 @@ namespace Lazinator.Wrappers
             get;
             set;
         }
-        
-        public abstract void InformParentOfDirtiness();
         
         public abstract bool DescendantHasChanged
         {

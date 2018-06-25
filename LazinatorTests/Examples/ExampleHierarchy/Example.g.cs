@@ -30,19 +30,7 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        protected ILazinator _LazinatorParentClass;
-        public virtual ILazinator LazinatorParentClass 
-        { 
-            get => _LazinatorParentClass;
-            set
-            {
-                _LazinatorParentClass = value;
-                if (value != null && (IsDirty || DescendantIsDirty))
-                {
-                    value.DescendantIsDirty = true;
-                }
-            }
-        }
+        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -93,7 +81,7 @@ namespace LazinatorTests.Examples
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = null;
+            clone.LazinatorParentClass = default;
             return clone;
         }
         
@@ -112,7 +100,7 @@ namespace LazinatorTests.Examples
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        InformParentOfDirtiness();
+                        LazinatorParentClass.InformParentsOfDirtiness();
                         OnDirty();
                     }
                 }
@@ -120,14 +108,6 @@ namespace LazinatorTests.Examples
                 {
                     HasChanged = true;
                 }
-            }
-        }
-        
-        public virtual void InformParentOfDirtiness()
-        {
-            if (LazinatorParentClass != null)
-            {
-                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
@@ -157,10 +137,7 @@ namespace LazinatorTests.Examples
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        if (LazinatorParentClass != null)
-                        {
-                            LazinatorParentClass.DescendantIsDirty = true;
-                        }
+                        LazinatorParentClass.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -430,11 +407,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property IncludableChild cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -468,7 +441,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -502,11 +475,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyChild1 cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -540,11 +509,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyChild2 cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -578,11 +543,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyChild2Previous cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -616,11 +577,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property MyInterfaceImplementer cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -692,7 +649,7 @@ namespace LazinatorTests.Examples
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
                         _WrappedInt = new WInt()
                         {
-                            LazinatorParentClass = this,
+                            LazinatorParentClass = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -703,7 +660,7 @@ namespace LazinatorTests.Examples
             set
             {
                 
-                value.LazinatorParentClass = this;
+                value.LazinatorParentClass.Add(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedInt = value;
@@ -758,11 +715,7 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property ExcludableChild cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
-                    value.LazinatorParentClass = this;
+                    value.LazinatorParentClass.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

@@ -972,7 +972,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
-                            LazinatorParentClass = this,";
+                            LazinatorParentClass = new LazinatorParentsReference(this),";
             string creation = $@"{nullItemCheck}_{PropertyName} = new {AppropriatelyQualifiedTypeName}()
                     {{{lazinatorParentClassSet}
                         LazinatorObjectBytes = childData,

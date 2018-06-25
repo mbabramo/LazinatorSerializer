@@ -13,8 +13,8 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static ILazinator GetRoot(this ILazinator node)
         {
-            while (node.LazinatorParentClass != null)
-                node = node.LazinatorParentClass;
+            while (node.LazinatorParentClass.FirstOrDefault() != null)
+                node = node.LazinatorParentClass.FirstOrDefault();
             return node;
         }
     }
