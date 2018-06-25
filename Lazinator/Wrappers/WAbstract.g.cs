@@ -52,7 +52,6 @@ namespace Lazinator.Wrappers
             set;
         }
         
-        public abstract InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
         public abstract void InformParentOfDirtiness();
         
         public abstract bool DescendantHasChanged

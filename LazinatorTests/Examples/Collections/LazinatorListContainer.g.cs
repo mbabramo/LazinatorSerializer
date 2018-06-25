@@ -119,19 +119,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        public virtual InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
         public virtual void InformParentOfDirtiness()
         {
-            if (InformParentOfDirtinessDelegate == null)
+            if (LazinatorParentClass != null)
             {
-                if (LazinatorParentClass != null)
-                {
-                    LazinatorParentClass.DescendantIsDirty = true;
-                }
-            }
-            else
-            {
-                InformParentOfDirtinessDelegate();
+                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         

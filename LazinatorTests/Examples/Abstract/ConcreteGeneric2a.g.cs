@@ -122,19 +122,11 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        public override InformParentOfDirtinessDelegate InformParentOfDirtinessDelegate { get; set; }
         public override void InformParentOfDirtiness()
         {
-            if (InformParentOfDirtinessDelegate == null)
+            if (LazinatorParentClass != null)
             {
-                if (LazinatorParentClass != null)
-                {
-                    LazinatorParentClass.DescendantIsDirty = true;
-                }
-            }
-            else
-            {
-                InformParentOfDirtinessDelegate();
+                LazinatorParentClass.DescendantIsDirty = true;
             }
         }
         
