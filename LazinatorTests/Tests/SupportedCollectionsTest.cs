@@ -655,11 +655,6 @@ namespace LazinatorTests.Tests
             // make sure that error is thrown if we do verify cleanliness
             Action attemptToVerifyCleanlinessWithoutSettingDirtyFlag = () => CloneWithOptionalVerification(result2, true, true); // now, verifying cleanliness
             attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().Throw<UnexpectedDirtinessException>();
-            // DEBUG
-            //// also make sure that no error is thrown if we verify cleanliness when change is to individual item in list, because the parent will know that it's dirty
-            //result2.MyListSerialized[2] = itemRemoved;
-            //itemRemoved.MyShort = -987;
-            //attemptToVerifyCleanlinessWithoutSettingDirtyFlag.Should().NotThrow();
         }
 
         [Fact]
