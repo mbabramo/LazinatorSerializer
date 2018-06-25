@@ -15,8 +15,6 @@ namespace Lazinator.Core
     {
         // Delegate types. Methods matching these types must be passed into some of the methods below.
 
-        public delegate void InformParentOfDirtinessDelegate();
-
         public delegate MemoryInBuffer StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
 
         public delegate ReadOnlyMemory<byte> ReturnReadOnlyMemoryDelegate();
@@ -216,7 +214,7 @@ namespace Lazinator.Core
             {
                 if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty)
                 {
-                    childStorage = getChildSliceFn();
+                    childStorage = child.LazinatorObjectBytes; // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
                     if (childStorage.Length != 0)
                         childCouldHaveChanged = false;
                 }
