@@ -249,7 +249,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
-                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData, () => { MyStackInt_Dirty = true; });
+                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
                     }
                     _MyStackInt_Accessed = true;
                 } 
@@ -341,7 +341,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.DotNetStack_Values ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -362,9 +361,6 @@ namespace LazinatorTests.Examples.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.DotNetStack_Values starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -380,8 +376,6 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyStackInt (accessed? {_MyStackInt_Accessed}) (dirty? {_MyStackInt_Dirty})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyStackInt, isBelievedDirty: MyStackInt_Dirty,
@@ -395,17 +389,15 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyStackInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _DotNetStack_Values_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of DotNetStack_Values) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static Stack<int> ConvertFromBytes_Stack_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Stack<int> ConvertFromBytes_Stack_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {

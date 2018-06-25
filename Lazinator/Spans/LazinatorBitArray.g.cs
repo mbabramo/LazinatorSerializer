@@ -241,10 +241,12 @@ namespace Lazinator.Spans
         private int __version;
         private int _version
         {
+            [DebuggerStepThrough]
             get
             {
                 return __version;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -254,10 +256,12 @@ namespace Lazinator.Spans
         private int _m_length;
         private int m_length
         {
+            [DebuggerStepThrough]
             get
             {
                 return _m_length;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -267,6 +271,7 @@ namespace Lazinator.Spans
         private LazinatorByteSpan _ByteSpan;
         private LazinatorByteSpan ByteSpan
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_ByteSpan_Accessed)
@@ -292,14 +297,11 @@ namespace Lazinator.Spans
                 } 
                 return _ByteSpan;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property ByteSpan cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
                     value.LazinatorParentClass = this;
                     value.IsDirty = true;
                 }
@@ -385,7 +387,6 @@ namespace Lazinator.Spans
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Spans.LazinatorBitArray ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -406,9 +407,6 @@ namespace Lazinator.Spans
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Spans.LazinatorBitArray starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
@@ -418,16 +416,8 @@ namespace Lazinator.Spans
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, _version value {__version}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, __version);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, m_length value {_m_length}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _m_length);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, ByteSpan (accessed? {_ByteSpan_Accessed}) (backing var null? {_ByteSpan == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -437,12 +427,10 @@ namespace Lazinator.Spans
             {
                 _ByteSpan_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _LazinatorBitArray_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorBitArray) ");
         }
         
     }

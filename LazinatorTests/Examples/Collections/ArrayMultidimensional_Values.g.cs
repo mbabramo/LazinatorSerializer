@@ -253,7 +253,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
-                        _MyArrayInt = ConvertFromBytes_int_B_c_b(childData, () => { MyArrayInt_Dirty = true; });
+                        _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
                     }
                     _MyArrayInt_Accessed = true;
                 } 
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null);
-                        _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData, null);
+                        _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
                     }
                     _MyCrazyJaggedArray_Accessed = true;
                 }
@@ -328,7 +328,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null);
-                        _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData, null);
+                        _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
                     }
                     _MyThreeDimArrayInt_Accessed = true;
                 }
@@ -409,7 +409,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.ArrayMultidimensional_Values ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -430,9 +429,6 @@ namespace LazinatorTests.Examples.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.ArrayMultidimensional_Values starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -448,8 +444,6 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt (accessed? {_MyArrayInt_Accessed}) (dirty? {_MyArrayInt_Dirty})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
@@ -463,9 +457,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyCrazyJaggedArray (accessed? {_MyCrazyJaggedArray_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed,
@@ -479,9 +470,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyCrazyJaggedArray_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyThreeDimArrayInt (accessed? {_MyThreeDimArrayInt_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed,
@@ -495,17 +483,15 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyThreeDimArrayInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _ArrayMultidimensional_Values_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ArrayMultidimensional_Values) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static int[,] ConvertFromBytes_int_B_c_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[,] ConvertFromBytes_int_B_c_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -545,7 +531,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][,,][,,,] ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[][,,][,,,] ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -567,7 +553,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(childData, informParentOfDirtinessDelegate);
+                    var item = ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(childData);
                     collection[i] = item;
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -600,7 +586,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,][,,,] ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[,,][,,,] ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -626,7 +612,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = ConvertFromBytes_int_B_c_c_c_b(childData, informParentOfDirtinessDelegate);
+                    var item = ConvertFromBytes_int_B_c_c_c_b(childData);
                     collection[i0, i1, i2] = item;
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -665,7 +651,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,,] ConvertFromBytes_int_B_c_c_c_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[,,,] ConvertFromBytes_int_B_c_c_c_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -715,7 +701,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,] ConvertFromBytes_int_B_c_c_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[,,] ConvertFromBytes_int_B_c_c_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {

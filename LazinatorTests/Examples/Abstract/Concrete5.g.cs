@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList4_ByteIndex, _IntList4_ByteLength, false, false, null);
-                        _IntList4 = ConvertFromBytes_List_Gint_g(childData, null);
+                        _IntList4 = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _IntList4_Accessed = true;
                 }
@@ -120,7 +120,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList5_ByteIndex, _IntList5_ByteLength, false, false, null);
-                        _IntList5 = ConvertFromBytes_List_Gint_g(childData, null);
+                        _IntList5 = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _IntList5_Accessed = true;
                 }
@@ -194,7 +194,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete5 ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -217,16 +216,8 @@ namespace LazinatorTests.Examples.Abstract
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, String4 value {_String4}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _String4);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, String5 value {_String5}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _String5);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, IntList4 (accessed? {_IntList4_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList4, isBelievedDirty: _IntList4_Accessed,
@@ -240,9 +231,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList4_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, IntList5 (accessed? {_IntList5_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
@@ -256,17 +244,15 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList5_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Concrete5_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Concrete5) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {

@@ -253,7 +253,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null);
-                        _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData, null);
+                        _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
                     }
                     _MyQueueSerialized_Accessed = true;
                 }
@@ -328,7 +328,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.DotNetQueue_SelfSerialized ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -349,9 +348,6 @@ namespace LazinatorTests.Examples.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.DotNetQueue_SelfSerialized starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -367,8 +363,6 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyQueueSerialized (accessed? {_MyQueueSerialized_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyQueueSerialized, isBelievedDirty: _MyQueueSerialized_Accessed,
@@ -382,17 +376,15 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyQueueSerialized_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _DotNetQueue_SelfSerialized_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of DotNetQueue_SelfSerialized) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static Queue<ExampleChild> ConvertFromBytes_Queue_GExampleChild_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Queue<ExampleChild> ConvertFromBytes_Queue_GExampleChild_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -414,7 +406,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                    var item = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
                     collection.Enqueue(item);
                 }
                 bytesSoFar += lengthCollectionMember;

@@ -255,7 +255,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null);
-                        _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData, () => { MyLinkedListInt_Dirty = true; });
+                        _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData);
                     }
                     _MyLinkedListInt_Accessed = true;
                 } 
@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List_Gint_g(childData, () => { MyListInt_Dirty = true; });
+                        _MyListInt = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _MyListInt_Accessed = true;
                 } 
@@ -348,7 +348,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, false, false, null);
-                        _MyListInt2 = ConvertFromBytes_List_Gint_g(childData, null);
+                        _MyListInt2 = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _MyListInt2_Accessed = true;
                 }
@@ -378,7 +378,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null);
-                        _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData, () => { MySortedSetInt_Dirty = true; });
+                        _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData);
                     }
                     _MySortedSetInt_Accessed = true;
                 } 
@@ -479,7 +479,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.DotNetList_Values ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -500,9 +499,6 @@ namespace LazinatorTests.Examples.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.DotNetList_Values starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -518,8 +514,6 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyLinkedListInt (accessed? {_MyLinkedListInt_Accessed}) (dirty? {_MyLinkedListInt_Dirty})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLinkedListInt, isBelievedDirty: MyLinkedListInt_Dirty,
@@ -533,9 +527,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyLinkedListInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyListInt (accessed? {_MyListInt_Accessed}) (dirty? {_MyListInt_Dirty})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
@@ -549,9 +540,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyListInt2 (accessed? {_MyListInt2_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt2, isBelievedDirty: _MyListInt2_Accessed,
@@ -565,9 +553,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt2_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MySortedSetInt (accessed? {_MySortedSetInt_Accessed}) (dirty? {_MySortedSetInt_Dirty})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty,
@@ -581,17 +566,15 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MySortedSetInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _DotNetList_Values_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of DotNetList_Values) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static LinkedList<int> ConvertFromBytes_LinkedList_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static LinkedList<int> ConvertFromBytes_LinkedList_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -626,7 +609,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -661,7 +644,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedSet<int> ConvertFromBytes_SortedSet_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static SortedSet<int> ConvertFromBytes_SortedSet_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {

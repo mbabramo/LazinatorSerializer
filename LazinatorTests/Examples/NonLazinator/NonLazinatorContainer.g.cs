@@ -256,7 +256,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, false, false, null);
-                        _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData, null);
+                        _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                     }
                     _NonLazinatorClass_Accessed = true;
                 }
@@ -285,7 +285,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, false, false, null);
-                        _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData, null);
+                        _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData);
                     }
                     _NonLazinatorInterchangeableClass_Accessed = true;
                 }
@@ -314,7 +314,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
-                        _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData, null);
+                        _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);
                     }
                     _NonLazinatorStruct_Accessed = true;
                 }
@@ -404,7 +404,6 @@ namespace LazinatorTests.Examples
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonLazinatorContainer ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -425,9 +424,6 @@ namespace LazinatorTests.Examples
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.NonLazinatorContainer starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
@@ -437,8 +433,6 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorClass (accessed? {_NonLazinatorClass_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             var serializedBytesCopy_NonLazinatorClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorClass = _NonLazinatorClass_ByteIndex;
@@ -455,9 +449,6 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorClass_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableClass (accessed? {_NonLazinatorInterchangeableClass_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
@@ -474,9 +465,6 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorInterchangeableClass_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorStruct (accessed? {_NonLazinatorStruct_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
@@ -493,15 +481,13 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorStruct_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _NonLazinatorContainer_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of NonLazinatorContainer) ");
         }
         
-        private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage, LazinatorUtilities.InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage)
         {
             NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass()
             {

@@ -253,7 +253,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null);
-                        _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData, null);
+                        _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
                     }
                     _MyDictionary_Accessed = true;
                 }
@@ -282,7 +282,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null);
-                        _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData, null);
+                        _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
                     }
                     _MySortedDictionary_Accessed = true;
                 }
@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null);
-                        _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData, null);
+                        _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
                     }
                     _MySortedList_Accessed = true;
                 }
@@ -392,7 +392,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.Dictionary_Values_SelfSerialized ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -413,9 +412,6 @@ namespace LazinatorTests.Examples.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.Dictionary_Values_SelfSerialized starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -431,8 +427,6 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyDictionary (accessed? {_MyDictionary_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyDictionary, isBelievedDirty: _MyDictionary_Accessed,
@@ -446,9 +440,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyDictionary_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MySortedDictionary (accessed? {_MySortedDictionary_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed,
@@ -462,9 +453,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MySortedDictionary_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MySortedList (accessed? {_MySortedList_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed,
@@ -478,17 +466,15 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MySortedList_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Dictionary_Values_SelfSerialized_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Dictionary_Values_SelfSerialized) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static Dictionary<int, ExampleChild> ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static Dictionary<int, ExampleChild> ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -504,7 +490,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData, informParentOfDirtinessDelegate);
+                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -526,7 +512,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static KeyValuePair<int, ExampleChild> ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static KeyValuePair<int, ExampleChild> ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -543,7 +529,7 @@ namespace LazinatorTests.Examples.Collections
             if (lengthCollectionMember_item2 != 0)
             {
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = DeserializationFactory.Instance.CreateBasedOnTypeSpecifyingDelegate<ExampleChild>(childData, informParentOfDirtinessDelegate);
+                item2 = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
             }
             bytesSoFar += lengthCollectionMember_item2;
             
@@ -568,7 +554,7 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
-        private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -584,7 +570,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData, informParentOfDirtinessDelegate);
+                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -606,7 +592,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedList<int, ExampleChild> ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static SortedList<int, ExampleChild> ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -622,7 +608,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData, informParentOfDirtinessDelegate);
+                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }

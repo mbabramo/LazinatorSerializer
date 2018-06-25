@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
-                        _MyArrayInt = ConvertFromBytes_int_B_b(childData, () => { MyArrayInt_Dirty = true; });
+                        _MyArrayInt = ConvertFromBytes_int_B_b(childData);
                     }
                     _MyArrayInt_Accessed = true;
                 } 
@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, false, false, null);
-                        _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData, null);
+                        _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData);
                     }
                     _MyJaggedArrayInt_Accessed = true;
                 }
@@ -375,7 +375,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.Array_Values ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -396,9 +395,6 @@ namespace LazinatorTests.Examples.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.Array_Values starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -414,8 +410,6 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt (accessed? {_MyArrayInt_Accessed}) (dirty? {_MyArrayInt_Dirty})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
@@ -429,9 +423,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyJaggedArrayInt (accessed? {_MyJaggedArrayInt_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyJaggedArrayInt, isBelievedDirty: _MyJaggedArrayInt_Accessed,
@@ -445,17 +436,15 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyJaggedArrayInt_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Array_Values_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Array_Values) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static int[] ConvertFromBytes_int_B_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[] ConvertFromBytes_int_B_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -490,7 +479,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][] ConvertFromBytes_int_B_b_B_b(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static int[][] ConvertFromBytes_int_B_b_B_b(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
@@ -512,7 +501,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = ConvertFromBytes_int_B_b(childData, informParentOfDirtinessDelegate);
+                    var item = ConvertFromBytes_int_B_b(childData);
                     collection[i] = item;
                 }
                 bytesSoFar += lengthCollectionMember;

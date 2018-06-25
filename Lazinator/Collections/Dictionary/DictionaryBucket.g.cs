@@ -244,10 +244,12 @@ namespace Lazinator.Collections.Dictionary
         private bool _Initialized;
         public bool Initialized
         {
+            [DebuggerStepThrough]
             get
             {
                 return _Initialized;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -257,6 +259,7 @@ namespace Lazinator.Collections.Dictionary
         private LazinatorList<TKey> _Keys;
         public virtual LazinatorList<TKey> Keys
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Keys_Accessed)
@@ -275,14 +278,11 @@ namespace Lazinator.Collections.Dictionary
                 } 
                 return _Keys;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property Keys cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
                     value.LazinatorParentClass = this;
                     value.IsDirty = true;
                 }
@@ -295,6 +295,7 @@ namespace Lazinator.Collections.Dictionary
         private LazinatorList<TValue> _Values;
         public virtual LazinatorList<TValue> Values
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Values_Accessed)
@@ -313,14 +314,11 @@ namespace Lazinator.Collections.Dictionary
                 } 
                 return _Values;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (value != null)
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property Values cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
                     value.LazinatorParentClass = this;
                     value.IsDirty = true;
                 }
@@ -431,7 +429,6 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -452,9 +449,6 @@ namespace Lazinator.Collections.Dictionary
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Dictionary.DictionaryBucket<TKey, TValue> starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -470,12 +464,7 @@ namespace Lazinator.Collections.Dictionary
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, Initialized value {_Initialized}");
-            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(writer, _Initialized);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Keys (accessed? {_Keys_Accessed}) (backing var null? {_Keys == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -485,9 +474,6 @@ namespace Lazinator.Collections.Dictionary
             {
                 _Keys_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Values (accessed? {_Values_Accessed}) (backing var null? {_Values == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -497,12 +483,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 _Values_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _DictionaryBucket_TKey_TValue_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of DictionaryBucket<TKey, TValue>) ");
         }
         
     }

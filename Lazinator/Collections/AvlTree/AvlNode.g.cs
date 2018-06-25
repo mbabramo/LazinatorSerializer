@@ -247,10 +247,12 @@ namespace Lazinator.Collections.Avl
         private int _Balance;
         public int Balance
         {
+            [DebuggerStepThrough]
             get
             {
                 return _Balance;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -260,10 +262,12 @@ namespace Lazinator.Collections.Avl
         private int _Count;
         public int Count
         {
+            [DebuggerStepThrough]
             get
             {
                 return _Count;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -273,6 +277,7 @@ namespace Lazinator.Collections.Avl
         private TKey _Key;
         public TKey Key
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Key_Accessed)
@@ -291,14 +296,11 @@ namespace Lazinator.Collections.Avl
                 } 
                 return _Key;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property Key cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
                     value.LazinatorParentClass = this;
                     value.IsDirty = true;
                 }
@@ -311,6 +313,7 @@ namespace Lazinator.Collections.Avl
         private AvlNode<TKey, TValue> _Left;
         public AvlNode<TKey, TValue> Left
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Left_Accessed)
@@ -336,6 +339,7 @@ namespace Lazinator.Collections.Avl
                 } 
                 return _Left;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -352,6 +356,7 @@ namespace Lazinator.Collections.Avl
         private AvlNode<TKey, TValue> _Right;
         public AvlNode<TKey, TValue> Right
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Right_Accessed)
@@ -377,6 +382,7 @@ namespace Lazinator.Collections.Avl
                 } 
                 return _Right;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (value != null)
@@ -393,6 +399,7 @@ namespace Lazinator.Collections.Avl
         private TValue _Value;
         public TValue Value
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Value_Accessed)
@@ -411,14 +418,11 @@ namespace Lazinator.Collections.Avl
                 } 
                 return _Value;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property Value cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
                     value.LazinatorParentClass = this;
                     value.IsDirty = true;
                 }
@@ -563,7 +567,6 @@ namespace Lazinator.Collections.Avl
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Avl.AvlNode<TKey, TValue> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -584,9 +587,6 @@ namespace Lazinator.Collections.Avl
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Avl.AvlNode<TKey, TValue> starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -602,16 +602,8 @@ namespace Lazinator.Collections.Avl
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, Balance value {_Balance}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _Balance);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Count value {_Count}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _Count);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Key value {_Key}");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -621,9 +613,6 @@ namespace Lazinator.Collections.Avl
             {
                 _Key_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Left (accessed? {_Left_Accessed}) (backing var null? {_Left == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -633,9 +622,6 @@ namespace Lazinator.Collections.Avl
             {
                 _Left_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Right (accessed? {_Right_Accessed}) (backing var null? {_Right == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -645,9 +631,6 @@ namespace Lazinator.Collections.Avl
             {
                 _Right_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, Value value {_Value}");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -657,12 +640,10 @@ namespace Lazinator.Collections.Avl
             {
                 _Value_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _AvlNode_TKey_TValue_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of AvlNode<TKey, TValue>) ");
         }
         
     }

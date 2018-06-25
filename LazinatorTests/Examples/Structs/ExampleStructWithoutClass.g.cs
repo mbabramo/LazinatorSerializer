@@ -315,7 +315,6 @@ namespace LazinatorTests.Examples.Structs
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Structs.ExampleStructWithoutClass ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -334,9 +333,6 @@ namespace LazinatorTests.Examples.Structs
         void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Structs.ExampleStructWithoutClass starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
@@ -346,11 +342,7 @@ namespace LazinatorTests.Examples.Structs
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyInt value {_MyInt}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleStructWithoutClass) ");
         }
         
     }

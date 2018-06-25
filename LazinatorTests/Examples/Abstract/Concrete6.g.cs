@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null);
-                        _IntList6 = ConvertFromBytes_List_Gint_g(childData, null);
+                        _IntList6 = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _IntList6_Accessed = true;
                 }
@@ -132,7 +132,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete6 ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -155,8 +154,6 @@ namespace LazinatorTests.Examples.Abstract
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, IntList6 (accessed? {_IntList6_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed,
@@ -170,17 +167,15 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList6_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Concrete6_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Concrete6) ");
         }
         
         /* Conversion of supported collections and tuples */
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
+        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {

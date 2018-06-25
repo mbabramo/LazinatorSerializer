@@ -425,7 +425,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.ConcreteGeneric2a ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -446,9 +445,6 @@ namespace LazinatorTests.Examples.Abstract
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Abstract.ConcreteGeneric2a starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -464,28 +460,11 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyEnumWithinAbstractGeneric value {_MyEnumWithinAbstractGeneric}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinAbstractGeneric);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyEnumWithinAbstractGeneric2 value {_MyEnumWithinAbstractGeneric2}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, (int) _MyEnumWithinAbstractGeneric2);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyT value {_MyT}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyT);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyUnofficialInt value {_MyUnofficialInt}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyUnofficialInt);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, AnotherProperty value {_AnotherProperty}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, _AnotherProperty);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, LazinatorExample (accessed? {_LazinatorExample_Accessed}) (backing var null? {_LazinatorExample == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -495,12 +474,10 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _LazinatorExample_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _ConcreteGeneric2a_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ConcreteGeneric2a) ");
         }
         
     }

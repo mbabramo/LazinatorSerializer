@@ -111,7 +111,6 @@ namespace LazinatorTests.Examples
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.ExampleChildInherited ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -132,11 +131,7 @@ namespace LazinatorTests.Examples
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyInt value {_MyInt}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _MyInt);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleChildInherited) ");
         }
         
     }

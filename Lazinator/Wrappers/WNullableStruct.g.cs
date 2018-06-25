@@ -237,10 +237,12 @@ namespace Lazinator.Wrappers
         private bool _HasValue;
         public bool HasValue
         {
+            [DebuggerStepThrough]
             get
             {
                 return _HasValue;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -250,6 +252,7 @@ namespace Lazinator.Wrappers
         private T _NonNullValue;
         public T NonNullValue
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_NonNullValue_Accessed)
@@ -268,14 +271,11 @@ namespace Lazinator.Wrappers
                 } 
                 return _NonNullValue;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    if (value.LazinatorParentClass != null)
-                    {
-                        throw new MovedLazinatorException($"The property NonNullValue cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.");
-                    }
                     value.LazinatorParentClass = null;
                     value.IsDirty = true;
                 }
@@ -371,7 +371,6 @@ namespace Lazinator.Wrappers
         
         public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Wrappers.WNullableStruct<T> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -392,9 +391,6 @@ namespace Lazinator.Wrappers
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.WNullableStruct<T> starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParentClass != null}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -409,12 +405,7 @@ namespace Lazinator.Wrappers
             CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, HasValue value {_HasValue}");
-            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(writer, _HasValue);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonNullValue value {_NonNullValue}");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
@@ -427,12 +418,10 @@ namespace Lazinator.Wrappers
             {
                 _NonNullValue_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _WNullableStruct_T_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of WNullableStruct<T>) ");
         }
         
     }

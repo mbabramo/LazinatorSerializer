@@ -112,7 +112,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonAbstractGenerics.InheritingClosedGeneric ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -133,11 +132,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, YetAnotherInt value {_YetAnotherInt}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(writer, _YetAnotherInt);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position} (end of InheritingClosedGeneric) ");
         }
         
     }
