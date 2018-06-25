@@ -266,7 +266,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@""; // everything is inherited from parent abstract class
                 else if (IsAbstract)
                     boilerplate = $@"        /* Abstract declarations */
-			            public abstract ILazinator LazinatorParentClass {{ get; set; }}
+			            public abstract LazinatorParentsReference LazinatorParentClass {{ get; set; }}
                     
                         public abstract int Deserialize();
                         
@@ -289,8 +289,6 @@ namespace Lazinator.CodeDescription
 			                get;
 			                set;
                         }}
-                        
-                        public abstract void InformParentOfDirtiness();
                         
                         public abstract bool DescendantHasChanged
                         {{
@@ -349,19 +347,7 @@ namespace Lazinator.CodeDescription
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {ProtectedIfApplicable}ILazinator _LazinatorParentClass;
-                        {constructor}public {DerivationKeyword}ILazinator LazinatorParentClass 
-                        {{ 
-                            get => _LazinatorParentClass;
-                            set
-                            {{
-                                _LazinatorParentClass = value;
-                                if (value != null && (IsDirty || DescendantIsDirty))
-                                {{
-                                    value.DescendantIsDirty = true;
-                                }}
-                            }}
-                        }}
+                        {constructor}public {DerivationKeyword}LazinatorParentsReference LazinatorParentClass {{ get; set; }}
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
@@ -419,7 +405,7 @@ namespace Lazinator.CodeDescription
                                 OriginalIncludeChildrenMode = includeChildrenMode,
                                 HierarchyBytes = bytes,
                             }};
-                            clone.LazinatorParentClass = null;
+                            clone.LazinatorParentClass = default;
                             return clone;
                         }}
 
@@ -438,7 +424,7 @@ namespace Lazinator.CodeDescription
                                     _IsDirty = value;
                                     if (_IsDirty)
                                     {{
-                                        InformParentOfDirtiness();{(ImplementsOnDirty ? $@"
+                                        LazinatorParentClass.InformParentsOfDirtiness();{(ImplementsOnDirty ? $@"
                                         OnDirty();" : "")}
                                     }}
                                 }}
@@ -446,14 +432,6 @@ namespace Lazinator.CodeDescription
                                 {{
                                     HasChanged = true;
                                 }}
-                            }}
-                        }}
-
-                        public {DerivationKeyword}void InformParentOfDirtiness()
-                        {{
-                            if (LazinatorParentClass != null)
-                            {{
-                                LazinatorParentClass.DescendantIsDirty = true;
                             }}
                         }}
 
@@ -483,10 +461,7 @@ namespace Lazinator.CodeDescription
                                     if (_DescendantIsDirty)
                                     {{
                                         _DescendantHasChanged = true;
-                                        if (LazinatorParentClass != null)
-                                        {{
-                                            LazinatorParentClass.DescendantIsDirty = true;
-                                        }}
+                                        LazinatorParentClass.InformParentsOfDirtiness();
                                     }}
                                 }}
                                 if (_DescendantIsDirty)
@@ -572,7 +547,7 @@ namespace Lazinator.CodeDescription
                                 OriginalIncludeChildrenMode = includeChildrenMode,
                                 HierarchyBytes = bytes
                             }};
-                            clone.LazinatorParentClass = null;
+                            clone.LazinatorParentClass = default;
                             return clone;
                         }}
 
@@ -951,7 +926,7 @@ namespace Lazinator.CodeDescription
                 {
                     sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
                     sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
-                    sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass != null}}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass.Any()}}"");");
                 }
 
                 if (ContainsOpenGenericParameters || !IsSealedOrStruct)
@@ -1082,7 +1057,7 @@ namespace Lazinator.CodeDescription
                 if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface))
                     classContainingStructContainingClassError = $@"
 
-                        if (LazinatorParentClass != null)
+                        if (LazinatorParentClass.Any())
                         {{
                             throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class."");
                         }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 

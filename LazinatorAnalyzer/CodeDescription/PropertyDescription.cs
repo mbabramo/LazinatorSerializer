@@ -210,8 +210,9 @@ namespace Lazinator.CodeDescription
                 CustomNonlazinatorWrite = nonlazinatorWrite.WriteMethod;
             CloneAllowMovedAttribute allowMoved = UserAttributes.OfType<CloneAllowMovedAttribute>().FirstOrDefault();
             CloneAutoChangeParentAttribute autoChangeParent = UserAttributes.OfType<CloneAutoChangeParentAttribute>().FirstOrDefault();
-            AutoChangeParent = autoChangeParent != null || ContainingObjectDescription.AutoChangeParentAll;
-            MovesFromOtherHierarchiesAllowed = !AutoChangeParent && allowMoved != null;
+            // DEBUG -- delete the auto change and moves stuff
+            AutoChangeParent = true; // DEBUG autoChangeParent != null || ContainingObjectDescription.AutoChangeParentAll;
+            MovesFromOtherHierarchiesAllowed = false; // DEBUG !AutoChangeParent && allowMoved != null;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
@@ -871,81 +872,29 @@ namespace Lazinator.CodeDescription
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
-                            {incomingValue}.LazinatorParentClass = this;
+                            {incomingValue}.LazinatorParentClass.Add(this);
                             {incomingValue}.IsDirty = true;";
             else
                 parentSet = $@"
-                            {incomingValue}.LazinatorParentClass = null;
                             {incomingValue}.IsDirty = true;";
-            if (MovesFromOtherHierarchiesAllowed)
+            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
-                {
-                    parentRelationship = $@"if (value != null)
-                            {{{parentSet}
-                            }}
-                        ";
-                }
-                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                {
-                    parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(value, default({AppropriatelyQualifiedTypeName})))
-                            {{{parentSet}
-                            }}
-                        ";
-                }
-                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                {
-                    parentRelationship = $@"{parentSet}
-                        ";
-                }
+                parentRelationship = $@"if (value != null)
+                        {{{parentSet}
+                        }}
+                    ";
             }
-            else if (autoChangingParent)
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
-                {
-                    parentRelationship = $@"if (value != null)
-                            {{{parentSet}
-                            }}
-                        ";
-                }
-                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                {
-                    parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
-                            {{{parentSet}
-                            }}
-                        ";
-                }
-                else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                {
-                    parentRelationship = $@"{parentSet}
-                        ";
-                }
+                parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
+                        {{{parentSet}
+                        }}
+                    ";
             }
-            else 
+            else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
-                string movedLazinatorExceptionString = $"The property {PropertyName} cannot be set to a Lazinator object with a defined LazinatorParentClass, because AutoChangeParent is set to false in the configuration file and no attribute providing an exception is present.";
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
-                {
-                    parentRelationship = $@"if ({incomingValue} != null)
-                            {{
-                                if ({incomingValue}.LazinatorParentClass != null)
-                                {{
-                                    throw new MovedLazinatorException($""{movedLazinatorExceptionString}"");
-                                }}{parentSet}
-                            }}
-                        ";
-                }
-                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                {
-                    parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
-                            {{
-                                if ({incomingValue}.LazinatorParentClass != null)
-                                {{
-                                    throw new MovedLazinatorException($""{movedLazinatorExceptionString}"");
-                                }}{parentSet}
-                            }}
-                        ";
-                }
+                parentRelationship = $@"{parentSet}
+                    ";
             }
 
             sb.Append($@"private {AppropriatelyQualifiedTypeName} _{PropertyName};

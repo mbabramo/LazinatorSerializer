@@ -577,9 +577,23 @@ namespace LazinatorTests.Tests
             v7.MyList.DescendantIsDirty.Should().BeTrue();
             v7.DescendantIsDirty.Should().BeTrue();
         }
-        
 
-        
+
+        [Fact]
+        public void ChangeToObjectAppearingTwiceInLazinatorListAffectsBoth()
+        {
+            LazinatorList<ExampleChild> e = new LazinatorList<ExampleChild>()
+            {
+                new ExampleChild(),
+                new ExampleChild() { MyLong = -123456 }
+            };
+            var c = e.CloneLazinatorTyped();
+            c[0] = c[1];
+            c[0].MyLong = -987;
+            var c2 = c.CloneLazinatorTyped();
+            c2[0].MyLong.Should().Be(-987);
+            c2[1].MyLong.Should().Be(-987);
+        }
 
         [Fact]
         public void LazinatorStackWorks()
