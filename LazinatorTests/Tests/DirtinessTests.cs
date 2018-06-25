@@ -156,5 +156,18 @@ namespace LazinatorTests.Tests
             c.MyHashSetSerialized.First().MyLong.Should().Be(54321);
         }
 
+        [Fact]
+        public void DirtinessWorksForClassInStruct()
+        {
+            ExampleStruct s = new ExampleStruct()
+            {
+                MyChild1 = new ExampleChild()
+            };
+            var c = s.CloneLazinatorTyped();
+            c.DescendantIsDirty.Should().BeFalse();
+            c.MyChild1.MyLong = 23451243;
+            c.DescendantIsDirty.Should().BeTrue();
+        }
+
     }
 }

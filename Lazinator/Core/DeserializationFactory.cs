@@ -206,6 +206,7 @@ namespace Lazinator.Core
         /// <returns>The deserialized Lazinator object</returns>
         public T CreateBasedOnTypeSpecifyingDelegate<T>(ReadOnlyMemory<byte> storage, InformParentOfDirtinessDelegate informParentOfDirtinessDelegate)
         {
+            informParentOfDirtinessDelegate = null; // DEBUG
             Type t = typeof(T);
             int? fixedUniqueID = GetFixedUniqueID(t);
             if (fixedUniqueID != null)
