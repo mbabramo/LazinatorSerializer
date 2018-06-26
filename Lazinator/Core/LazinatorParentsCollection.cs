@@ -7,8 +7,10 @@ using static Lazinator.Core.LazinatorUtilities;
 namespace Lazinator.Core
 {
     /// <summary>
-    /// This tracks the classes (but by necessity not structs) that are parents of a Lazinator object.
+    /// This tracks the classes that are parents of a Lazinator class.
     /// It can be used to add or remove a parent, or to notify all parents when the child becomes dirty.
+    /// When the parent is a struct, the parent is not tracked. The parent struct's value can be changed only 
+    /// when setting the value of the struct, so that will generate the notification of dirtiness.
     /// </summary>
     public readonly struct LazinatorParentsCollection
     {
