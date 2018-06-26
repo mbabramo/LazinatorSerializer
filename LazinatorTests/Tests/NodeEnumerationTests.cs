@@ -147,7 +147,6 @@ $@"LazinatorTests.Examples.Example
     MyUint: 1235
     MyNonLazinatorChild: LazinatorTests.Examples.NonLazinatorClass
     IncludableChild: NULL
-    MyAutoChangeParentChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
@@ -190,7 +189,6 @@ $@"LazinatorTests.Examples.Example
     MyUint: 2342343242
     MyNonLazinatorChild: NULL
     IncludableChild: NULL
-    MyAutoChangeParentChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
