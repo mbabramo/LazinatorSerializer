@@ -29,7 +29,7 @@ namespace Lazinator.Spans
     {
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -252,7 +252,7 @@ namespace Lazinator.Spans
                         }
                         else _ByteSpan = new LazinatorByteSpan()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }

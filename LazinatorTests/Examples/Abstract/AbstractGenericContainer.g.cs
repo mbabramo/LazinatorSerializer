@@ -28,7 +28,7 @@ namespace LazinatorTests.Examples.Abstract
     public partial class AbstractGenericContainer<T> : ILazinator
     {
         /* Abstract declarations */
-        public abstract LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public abstract LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         public abstract int Deserialize();
         

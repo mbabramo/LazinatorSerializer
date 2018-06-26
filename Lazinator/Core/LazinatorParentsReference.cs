@@ -6,10 +6,12 @@ using static Lazinator.Core.LazinatorUtilities;
 
 namespace Lazinator.Core
 {
-    public readonly struct LazinatorParentsReference
+    /// <summary>
+    /// This tracks the classes (but by necessity not structs) that are parents of a Lazinator object.
+    /// It can be used to add or remove a parent, or to notify all parents when the child becomes dirty.
+    /// </summary>
+    public readonly struct LazinatorParentsCollection
     {
-        // This class allows a single Lazinator object to be present in multiple hierarchies or in multiple parts of a single hierarchy.
-        // It does this by keeping track of the object's parents (assuming they are classes).
         // A complication is that an object can have the same parent more than once (that is, two childs of an
         // object can be the same), so we have to keep track of the number of times a parent is a parent.
 
@@ -21,17 +23,17 @@ namespace Lazinator.Core
 
         public int Count => LastAdded == null ? 0 : 1 + (OtherParents?.Sum(x => x.Value) ?? 0);
 
-        public LazinatorParentsReference(ILazinator lastAdded, Dictionary<ILazinator, byte> otherParents = null)
+        public LazinatorParentsCollection(ILazinator lastAdded, Dictionary<ILazinator, byte> otherParents = null)
         {
             LastAdded = lastAdded;
             OtherParents = otherParents;
         }
 
-        public LazinatorParentsReference WithAdded(ILazinator parent)
+        public LazinatorParentsCollection WithAdded(ILazinator parent)
         {
             if (LastAdded == null)
             {
-                return new LazinatorParentsReference(parent, OtherParents);
+                return new LazinatorParentsCollection(parent, OtherParents);
             }
             var otherParents = OtherParents;
             if (otherParents == null)
@@ -40,26 +42,26 @@ namespace Lazinator.Core
                 otherParents[parent]++;
             else
                 otherParents[parent] = 1;
-            return new LazinatorParentsReference(LastAdded, otherParents);
+            return new LazinatorParentsCollection(LastAdded, otherParents);
         }
 
-        public LazinatorParentsReference WithRemoved(ILazinator parent)
+        public LazinatorParentsCollection WithRemoved(ILazinator parent)
         {
             if (LastAdded == parent)
             {
                 if (Count == 1)
                 {
-                    return new LazinatorParentsReference();
+                    return new LazinatorParentsCollection();
                 }
                 else
-                    return new LazinatorParentsReference(null, OtherParents);
+                    return new LazinatorParentsCollection(null, OtherParents);
             }
             var otherParents = OtherParents;
             if (otherParents[parent] == 1)
                 otherParents.Remove(parent);
             else
                 otherParents[parent]--;
-            return new LazinatorParentsReference(LastAdded, otherParents);
+            return new LazinatorParentsCollection(LastAdded, otherParents);
         }
 
         public void InformParentsOfDirtiness()

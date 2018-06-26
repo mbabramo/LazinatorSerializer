@@ -29,7 +29,7 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         

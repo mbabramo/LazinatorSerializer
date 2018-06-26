@@ -33,7 +33,7 @@ namespace Lazinator.Collections
         {
         }
         
-        public LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -229,7 +229,7 @@ namespace Lazinator.Collections
                         }
                         else _FourByteItems = new LazinatorFastReadList<int>()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -272,7 +272,7 @@ namespace Lazinator.Collections
                         }
                         else _TwoByteItems = new LazinatorFastReadList<short>()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }

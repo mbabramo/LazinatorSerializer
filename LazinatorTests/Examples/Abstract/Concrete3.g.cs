@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Abstract
     {
         /* Serialization, deserialization, and object relationships */
         
-        public override LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public override LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         

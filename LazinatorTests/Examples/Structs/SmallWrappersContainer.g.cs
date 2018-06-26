@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Structs
         {
         }
         
-        public virtual LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public virtual LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1);
                         _WrappedBool = new WBool()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1);
                         _WrappedByte = new WByte()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -383,7 +383,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2);
                         _WrappedChar = new WChar()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -440,7 +440,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1);
                         _WrappedNullableBool = new WNullableBool()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -497,7 +497,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null);
                         _WrappedNullableByte = new WNullableByte()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -554,7 +554,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null);
                         _WrappedNullableChar = new WNullableChar()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -611,7 +611,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null);
                         _WrappedNullableSByte = new WNullableSByte()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -668,7 +668,7 @@ namespace LazinatorTests.Examples.Structs
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1);
                         _WrappedSByte = new WSByte()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }

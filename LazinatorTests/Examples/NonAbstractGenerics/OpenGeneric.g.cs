@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public virtual LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public virtual LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         

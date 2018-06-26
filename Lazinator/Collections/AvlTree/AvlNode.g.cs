@@ -33,7 +33,7 @@ namespace Lazinator.Collections.Avl
         {
         }
         
-        public LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -294,7 +294,7 @@ namespace Lazinator.Collections.Avl
                         }
                         else _Left = new AvlNode<TKey, TValue>()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -337,7 +337,7 @@ namespace Lazinator.Collections.Avl
                         }
                         else _Right = new AvlNode<TKey, TValue>()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }

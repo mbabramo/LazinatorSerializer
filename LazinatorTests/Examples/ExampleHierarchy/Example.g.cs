@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public virtual LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public virtual LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -607,7 +607,7 @@ namespace LazinatorTests.Examples
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
                         _WrappedInt = new WInt()
                         {
-                            LazinatorParentsReference = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }

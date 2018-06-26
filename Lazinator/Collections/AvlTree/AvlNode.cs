@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Avl
             set
             {
                 _Parent = value;
-                LazinatorParentsReference = new LazinatorParentsReference(value);
+                LazinatorParentsReference = new LazinatorParentsCollection(value);
             }
         }
 

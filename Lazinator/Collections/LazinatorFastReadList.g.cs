@@ -33,7 +33,7 @@ namespace Lazinator.Collections
         {
         }
         
-        public LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         

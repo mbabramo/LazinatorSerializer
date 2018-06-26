@@ -178,7 +178,7 @@ namespace Lazinator.Core
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
         {
-            lazinatorType.LazinatorParentsReference = new LazinatorParentsReference(parent);
+            lazinatorType.LazinatorParentsReference = new LazinatorParentsCollection(parent);
             lazinatorType.LazinatorObjectBytes = serializedBytes;
         }
 

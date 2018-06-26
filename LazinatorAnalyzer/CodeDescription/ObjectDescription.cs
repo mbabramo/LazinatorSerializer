@@ -266,7 +266,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@""; // everything is inherited from parent abstract class
                 else if (IsAbstract)
                     boilerplate = $@"        /* Abstract declarations */
-			            public abstract LazinatorParentsReference LazinatorParentsReference {{ get; set; }}
+			            public abstract LazinatorParentsCollection LazinatorParentsReference {{ get; set; }}
                     
                         public abstract int Deserialize();
                         
@@ -347,7 +347,7 @@ namespace Lazinator.CodeDescription
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {constructor}public {DerivationKeyword}LazinatorParentsReference LazinatorParentsReference {{ get; set; }}
+                        {constructor}public {DerivationKeyword}LazinatorParentsCollection LazinatorParentsReference {{ get; set; }}
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 

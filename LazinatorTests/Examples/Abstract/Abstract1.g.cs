@@ -29,7 +29,7 @@ namespace LazinatorTests.Examples.Abstract
     public partial class Abstract1 : ILazinator
     {
         /* Abstract declarations */
-        public abstract LazinatorParentsReference LazinatorParentsReference { get; set; }
+        public abstract LazinatorParentsCollection LazinatorParentsReference { get; set; }
         
         public abstract int Deserialize();
         
