@@ -92,16 +92,10 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (_IsDirty != value)
-                {
-                    _IsDirty = value;
-                    if (_IsDirty)
-                    {
-                        LazinatorParentsReference.InformParentsOfDirtiness();
-                    }
-                }
+                _IsDirty = value;
                 if (_IsDirty)
                 {
+                    LazinatorParentsReference.InformParentsOfDirtiness();
                     HasChanged = true;
                 }
             }

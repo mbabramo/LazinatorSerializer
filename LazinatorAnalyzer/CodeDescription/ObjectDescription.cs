@@ -419,17 +419,11 @@ namespace Lazinator.CodeDescription
                             [DebuggerStepThrough]
                             set
                             {{
-                                if (_IsDirty != value)
-                                {{
-                                    _IsDirty = value;
-                                    if (_IsDirty)
-                                    {{
-                                        LazinatorParentsReference.InformParentsOfDirtiness();{(ImplementsOnDirty ? $@"
-                                        OnDirty();" : "")}
-                                    }}
-                                }}
+                                _IsDirty = value;
                                 if (_IsDirty)
                                 {{
+                                    LazinatorParentsReference.InformParentsOfDirtiness();{(ImplementsOnDirty ? $@"
+                                    OnDirty();" : "")}
                                     HasChanged = true;
                                 }}
                             }}

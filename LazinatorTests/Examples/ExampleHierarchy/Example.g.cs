@@ -95,17 +95,11 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                if (_IsDirty != value)
-                {
-                    _IsDirty = value;
-                    if (_IsDirty)
-                    {
-                        LazinatorParentsReference.InformParentsOfDirtiness();
-                        OnDirty();
-                    }
-                }
+                _IsDirty = value;
                 if (_IsDirty)
                 {
+                    LazinatorParentsReference.InformParentsOfDirtiness();
+                    OnDirty();
                     HasChanged = true;
                 }
             }
