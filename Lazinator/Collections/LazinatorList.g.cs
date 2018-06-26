@@ -250,6 +250,10 @@ namespace Lazinator.Collections
             {
                 if (value != null)
                 {
+                    if (_Offsets != null)
+                    {
+                        _Offsets.LazinatorParents = _Offsets.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

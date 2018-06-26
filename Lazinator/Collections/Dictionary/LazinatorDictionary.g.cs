@@ -240,6 +240,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (value != null)
                 {
+                    if (_Buckets != null)
+                    {
+                        _Buckets.LazinatorParents = _Buckets.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

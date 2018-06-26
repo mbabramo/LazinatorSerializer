@@ -223,6 +223,10 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (value != null)
                 {
+                    if (_MyList != null)
+                    {
+                        _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

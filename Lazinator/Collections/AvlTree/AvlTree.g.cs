@@ -224,6 +224,10 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
+                    if (_Root != null)
+                    {
+                        _Root.LazinatorParents = _Root.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

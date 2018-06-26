@@ -202,6 +202,7 @@ namespace Lazinator.Collections
         private T _Item1;
         public virtual T Item1
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Item1_Accessed)
@@ -220,10 +221,14 @@ namespace Lazinator.Collections
                 } 
                 return _Item1;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {
+                {if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                    {
+                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -259,7 +264,10 @@ namespace Lazinator.Collections
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
-                {
+                {if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                    {
+                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

@@ -255,6 +255,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (_MyOfficialObject != null)
+                    {
+                        _MyOfficialObject.LazinatorParents = _MyOfficialObject.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -289,6 +293,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (_MyUnofficialObject != null)
+                    {
+                        _MyUnofficialObject.LazinatorParents = _MyUnofficialObject.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

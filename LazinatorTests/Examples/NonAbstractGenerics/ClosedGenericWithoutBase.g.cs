@@ -239,6 +239,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (_ItemU != null)
+                    {
+                        _ItemU.LazinatorParents = _ItemU.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

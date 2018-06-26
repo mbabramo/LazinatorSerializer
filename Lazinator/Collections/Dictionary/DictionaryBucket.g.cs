@@ -246,6 +246,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (value != null)
                 {
+                    if (_Keys != null)
+                    {
+                        _Keys.LazinatorParents = _Keys.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -282,6 +286,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (value != null)
                 {
+                    if (_Values != null)
+                    {
+                        _Values.LazinatorParents = _Values.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

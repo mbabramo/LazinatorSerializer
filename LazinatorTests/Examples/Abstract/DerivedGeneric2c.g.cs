@@ -263,7 +263,10 @@ namespace LazinatorTests.Examples.Abstract
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {
+                {if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)))
+                    {
+                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

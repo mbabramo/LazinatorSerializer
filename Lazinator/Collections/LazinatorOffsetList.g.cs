@@ -242,6 +242,10 @@ namespace Lazinator.Collections
             {
                 if (value != null)
                 {
+                    if (_FourByteItems != null)
+                    {
+                        _FourByteItems.LazinatorParents = _FourByteItems.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -285,6 +289,10 @@ namespace Lazinator.Collections
             {
                 if (value != null)
                 {
+                    if (_TwoByteItems != null)
+                    {
+                        _TwoByteItems.LazinatorParents = _TwoByteItems.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

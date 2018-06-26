@@ -86,7 +86,9 @@ namespace LazinatorTests.Examples
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
+            [DebuggerStepThrough]
             get => _IsDirty;
+            [DebuggerStepThrough]
             set
             {
                 _IsDirty = value;
@@ -271,6 +273,10 @@ namespace LazinatorTests.Examples
             {
                 if (value != null)
                 {
+                    if (_MyWrapperContainer != null)
+                    {
+                        _MyWrapperContainer.LazinatorParents = _MyWrapperContainer.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

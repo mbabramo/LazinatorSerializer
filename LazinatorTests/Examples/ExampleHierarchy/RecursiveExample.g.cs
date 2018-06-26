@@ -228,6 +228,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (value != null)
                 {
+                    if (_RecursiveClass != null)
+                    {
+                        _RecursiveClass.LazinatorParents = _RecursiveClass.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -262,6 +266,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (value != null)
                 {
+                    if (_RecursiveInterface != null)
+                    {
+                        _RecursiveInterface.LazinatorParents = _RecursiveInterface.LazinatorParents.WithRemoved(this);
+                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
