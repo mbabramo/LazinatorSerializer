@@ -596,6 +596,28 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListParentItemsWorks()
+        {
+            LazinatorList<ExampleChild> e = new LazinatorList<ExampleChild>();
+            var child = new ExampleChild();
+            e.Add(child);
+            child.LazinatorParents.LastAdded.Should().Be(e);
+            e.Add(child);
+            child.LazinatorParents.LastAdded.Should().Be(e);
+            e[0] = null;
+            child.LazinatorParents.LastAdded.Should().Be(e);
+            e[1] = null;
+            child.LazinatorParents.Count.Should().Be(0);
+
+            LazinatorList<ExampleChild> e2 = new LazinatorList<ExampleChild>();
+            e.Add(child);
+            e2.Add(child);
+            child.LazinatorParents.Count.Should().Be(2);
+            e2[0] = null;
+            child.LazinatorParents.Count.Should().Be(1);
+        }
+
+        [Fact]
         public void LazinatorStackWorks()
         {
             LazinatorStack<WInt> s = new LazinatorStack<WInt>();
