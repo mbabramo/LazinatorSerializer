@@ -226,8 +226,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyQueueSerialized;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyQueueSerialized = value;
                 _MyQueueSerialized_Accessed = true;
             }

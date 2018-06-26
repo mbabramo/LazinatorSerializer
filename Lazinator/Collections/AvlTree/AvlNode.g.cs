@@ -264,7 +264,6 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -283,6 +282,7 @@ namespace Lazinator.Collections.Avl
                     }
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Key = value;
                 _Key_Accessed = true;
             }
@@ -320,7 +320,6 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                
                 if (_Left != null)
                 {
                     _Left.LazinatorParents = _Left.LazinatorParents.WithRemoved(this);
@@ -331,6 +330,7 @@ namespace Lazinator.Collections.Avl
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Left = value;
                 _Left_Accessed = true;
             }
@@ -368,7 +368,6 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                
                 if (_Right != null)
                 {
                     _Right.LazinatorParents = _Right.LazinatorParents.WithRemoved(this);
@@ -379,6 +378,7 @@ namespace Lazinator.Collections.Avl
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Right = value;
                 _Right_Accessed = true;
             }
@@ -409,7 +409,6 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -428,6 +427,7 @@ namespace Lazinator.Collections.Avl
                     }
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Value = value;
                 _Value_Accessed = true;
             }

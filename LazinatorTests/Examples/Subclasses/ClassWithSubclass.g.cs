@@ -241,7 +241,6 @@ namespace LazinatorTests.Examples.Subclasses
             }
             set
             {
-                
                 if (_SubclassInstance1 != null)
                 {
                     _SubclassInstance1.LazinatorParents = _SubclassInstance1.LazinatorParents.WithRemoved(this);
@@ -252,6 +251,7 @@ namespace LazinatorTests.Examples.Subclasses
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _SubclassInstance1 = value;
                 _SubclassInstance1_Accessed = true;
             }
@@ -280,7 +280,6 @@ namespace LazinatorTests.Examples.Subclasses
             }
             set
             {
-                
                 if (_SubclassInstance2 != null)
                 {
                     _SubclassInstance2.LazinatorParents = _SubclassInstance2.LazinatorParents.WithRemoved(this);
@@ -291,6 +290,7 @@ namespace LazinatorTests.Examples.Subclasses
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _SubclassInstance2 = value;
                 _SubclassInstance2_Accessed = true;
             }

@@ -228,8 +228,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyTupleSerialized = value;
                 _MyTupleSerialized_Accessed = true;
             }
@@ -257,8 +257,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized2;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyTupleSerialized2 = value;
                 _MyTupleSerialized2_Accessed = true;
             }
@@ -286,8 +286,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized3;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyTupleSerialized3 = value;
                 _MyTupleSerialized3_Accessed = true;
             }
@@ -315,8 +315,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized4;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyTupleSerialized4 = value;
                 _MyTupleSerialized4_Accessed = true;
             }

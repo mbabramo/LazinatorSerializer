@@ -222,8 +222,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyHashSetSerialized;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyHashSetSerialized = value;
                 _MyHashSetSerialized_Accessed = true;
             }

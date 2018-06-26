@@ -100,8 +100,8 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList4;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _IntList4 = value;
                 _IntList4_Accessed = true;
             }
@@ -128,8 +128,8 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList5;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _IntList5 = value;
                 _IntList5_Accessed = true;
             }

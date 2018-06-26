@@ -238,8 +238,8 @@ namespace LazinatorTests.Examples.Subclasses
                 return _MyEnumList;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyEnumList = value;
                 _MyEnumList_Accessed = true;
             }

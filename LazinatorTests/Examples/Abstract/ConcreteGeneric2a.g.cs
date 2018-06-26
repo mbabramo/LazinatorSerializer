@@ -290,7 +290,6 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                
                 if (_LazinatorExample != null)
                 {
                     _LazinatorExample.LazinatorParents = _LazinatorExample.LazinatorParents.WithRemoved(this);
@@ -301,6 +300,7 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _LazinatorExample = value;
                 _LazinatorExample_Accessed = true;
             }

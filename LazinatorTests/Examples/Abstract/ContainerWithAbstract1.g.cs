@@ -226,7 +226,6 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                
                 if (_AbstractProperty != null)
                 {
                     _AbstractProperty.LazinatorParents = _AbstractProperty.LazinatorParents.WithRemoved(this);
@@ -237,6 +236,7 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _AbstractProperty = value;
                 _AbstractProperty_Accessed = true;
             }

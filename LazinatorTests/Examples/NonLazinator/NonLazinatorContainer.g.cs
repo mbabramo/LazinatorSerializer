@@ -229,8 +229,8 @@ namespace LazinatorTests.Examples
                 return _NonLazinatorClass;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _NonLazinatorClass = value;
                 _NonLazinatorClass_Accessed = true;
             }
@@ -258,8 +258,8 @@ namespace LazinatorTests.Examples
                 return _NonLazinatorInterchangeableClass;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _NonLazinatorInterchangeableClass = value;
                 _NonLazinatorInterchangeableClass_Accessed = true;
             }
@@ -287,8 +287,8 @@ namespace LazinatorTests.Examples
                 return _NonLazinatorStruct;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _NonLazinatorStruct = value;
                 _NonLazinatorStruct_Accessed = true;
             }

@@ -229,8 +229,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyMismatchedRecordLikeType;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyMismatchedRecordLikeType = value;
                 _MyMismatchedRecordLikeType_Accessed = true;
             }
@@ -258,8 +258,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyRecordLikeClass;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyRecordLikeClass = value;
                 _MyRecordLikeClass_Accessed = true;
             }
@@ -286,8 +286,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyRecordLikeType;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyRecordLikeType = value;
                 _MyRecordLikeType_Accessed = true;
             }

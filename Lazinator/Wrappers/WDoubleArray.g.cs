@@ -221,8 +221,8 @@ namespace Lazinator.Wrappers
             }
             [DebuggerStepThrough]
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedValue = value;
                 _WrappedValue_Accessed = true;
             }

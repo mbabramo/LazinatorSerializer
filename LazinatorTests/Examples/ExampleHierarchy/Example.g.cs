@@ -399,7 +399,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_IncludableChild != null)
                 {
                     _IncludableChild.LazinatorParents = _IncludableChild.LazinatorParents.WithRemoved(this);
@@ -410,6 +409,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _IncludableChild = value;
                 _IncludableChild_Accessed = true;
             }
@@ -438,7 +438,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyChild1 != null)
                 {
                     _MyChild1.LazinatorParents = _MyChild1.LazinatorParents.WithRemoved(this);
@@ -449,6 +448,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyChild1 = value;
                 _MyChild1_Accessed = true;
             }
@@ -477,7 +477,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyChild2 != null)
                 {
                     _MyChild2.LazinatorParents = _MyChild2.LazinatorParents.WithRemoved(this);
@@ -488,6 +487,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyChild2 = value;
                 _MyChild2_Accessed = true;
             }
@@ -516,7 +516,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyChild2Previous != null)
                 {
                     _MyChild2Previous.LazinatorParents = _MyChild2Previous.LazinatorParents.WithRemoved(this);
@@ -527,6 +526,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyChild2Previous = value;
                 _MyChild2Previous_Accessed = true;
             }
@@ -555,7 +555,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyInterfaceImplementer != null)
                 {
                     _MyInterfaceImplementer.LazinatorParents = _MyInterfaceImplementer.LazinatorParents.WithRemoved(this);
@@ -566,6 +565,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyInterfaceImplementer = value;
                 _MyInterfaceImplementer_Accessed = true;
             }
@@ -593,8 +593,8 @@ namespace LazinatorTests.Examples
                 return _MyNonLazinatorChild;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyNonLazinatorChild = value;
                 _MyNonLazinatorChild_Dirty = true;
                 _MyNonLazinatorChild_Accessed = true;
@@ -644,10 +644,10 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
             }
@@ -698,7 +698,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_ExcludableChild != null)
                 {
                     _ExcludableChild.LazinatorParents = _ExcludableChild.LazinatorParents.WithRemoved(this);
@@ -709,6 +708,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _ExcludableChild = value;
                 _ExcludableChild_Accessed = true;
             }

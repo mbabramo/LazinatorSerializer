@@ -222,8 +222,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListSerialized;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListSerialized = value;
                 _MyListSerialized_Dirty = true;
                 _MyListSerialized_Accessed = true;

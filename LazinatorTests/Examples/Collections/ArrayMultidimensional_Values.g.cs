@@ -225,8 +225,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyArrayInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyArrayInt = value;
                 _MyArrayInt_Dirty = true;
                 _MyArrayInt_Accessed = true;
@@ -272,8 +272,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyCrazyJaggedArray;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyCrazyJaggedArray = value;
                 _MyCrazyJaggedArray_Accessed = true;
             }
@@ -301,8 +301,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyThreeDimArrayInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyThreeDimArrayInt = value;
                 _MyThreeDimArrayInt_Accessed = true;
             }

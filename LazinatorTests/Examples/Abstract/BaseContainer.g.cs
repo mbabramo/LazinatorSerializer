@@ -226,7 +226,6 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                
                 if (_MyBase != null)
                 {
                     _MyBase.LazinatorParents = _MyBase.LazinatorParents.WithRemoved(this);
@@ -237,6 +236,7 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyBase = value;
                 _MyBase_Accessed = true;
             }

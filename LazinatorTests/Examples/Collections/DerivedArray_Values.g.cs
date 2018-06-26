@@ -73,8 +73,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyArrayInt_DerivedLevel;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyArrayInt_DerivedLevel = value;
                 _MyArrayInt_DerivedLevel_Dirty = true;
                 _MyArrayInt_DerivedLevel_Accessed = true;

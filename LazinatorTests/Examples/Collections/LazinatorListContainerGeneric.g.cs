@@ -223,7 +223,6 @@ namespace LazinatorTests.Examples.Collections
             }
             set
             {
-                
                 if (_MyList != null)
                 {
                     _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
@@ -234,6 +233,7 @@ namespace LazinatorTests.Examples.Collections
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyList = value;
                 _MyList_Accessed = true;
             }

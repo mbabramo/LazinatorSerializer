@@ -237,8 +237,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyMemoryInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyMemoryInt = value;
                 _MyMemoryInt_Accessed = true;
             }
@@ -266,8 +266,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyNullableMemoryInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyNullableMemoryInt = value;
                 _MyNullableMemoryInt_Accessed = true;
             }

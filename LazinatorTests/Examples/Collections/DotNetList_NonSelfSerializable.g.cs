@@ -224,8 +224,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNonLazinatorType;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListNonLazinatorType = value;
                 _MyListNonLazinatorType_Dirty = true;
                 _MyListNonLazinatorType_Accessed = true;
@@ -271,8 +271,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNonLazinatorType2;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListNonLazinatorType2 = value;
                 _MyListNonLazinatorType2_Accessed = true;
             }

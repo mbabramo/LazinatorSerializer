@@ -74,7 +74,6 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -93,6 +92,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
             }

@@ -221,8 +221,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyStackInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyStackInt = value;
                 _MyStackInt_Dirty = true;
                 _MyStackInt_Accessed = true;

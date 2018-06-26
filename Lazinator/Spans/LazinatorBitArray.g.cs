@@ -265,7 +265,6 @@ namespace Lazinator.Spans
             [DebuggerStepThrough]
             set
             {
-                
                 if (_ByteSpan != null)
                 {
                     _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
@@ -276,6 +275,7 @@ namespace Lazinator.Spans
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _ByteSpan = value;
                 _ByteSpan_Accessed = true;
             }

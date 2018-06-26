@@ -222,8 +222,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNestedNonLazinatorType;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListNestedNonLazinatorType = value;
                 _MyListNestedNonLazinatorType_Accessed = true;
             }

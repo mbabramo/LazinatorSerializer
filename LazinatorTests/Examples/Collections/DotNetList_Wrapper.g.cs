@@ -230,8 +230,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListInt = value;
                 _MyListInt_Dirty = true;
                 _MyListInt_Accessed = true;
@@ -277,8 +277,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNullableByte;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListNullableByte = value;
                 _MyListNullableByte_Accessed = true;
             }
@@ -306,8 +306,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNullableInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListNullableInt = value;
                 _MyListNullableInt_Accessed = true;
             }

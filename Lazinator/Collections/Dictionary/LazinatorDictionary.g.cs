@@ -240,7 +240,6 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
-                
                 if (_Buckets != null)
                 {
                     _Buckets.LazinatorParents = _Buckets.LazinatorParents.WithRemoved(this);
@@ -251,6 +250,7 @@ namespace Lazinator.Collections.Dictionary
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Buckets = value;
                 _Buckets_Accessed = true;
             }

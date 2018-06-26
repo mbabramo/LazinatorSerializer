@@ -273,7 +273,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyWrapperContainer != null)
                 {
                     _MyWrapperContainer.LazinatorParents = _MyWrapperContainer.LazinatorParents.WithRemoved(this);
@@ -284,6 +283,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyWrapperContainer = value;
                 _MyWrapperContainer_Accessed = true;
             }

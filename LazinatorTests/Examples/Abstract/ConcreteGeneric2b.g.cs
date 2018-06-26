@@ -278,7 +278,6 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                
                 if (_MyT != null)
                 {
                     _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
@@ -289,6 +288,7 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
             }
@@ -316,7 +316,6 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                
                 if (_LazinatorExample != null)
                 {
                     _LazinatorExample.LazinatorParents = _LazinatorExample.LazinatorParents.WithRemoved(this);
@@ -327,6 +326,7 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _LazinatorExample = value;
                 _LazinatorExample_Accessed = true;
             }

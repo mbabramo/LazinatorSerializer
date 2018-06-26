@@ -239,7 +239,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_ItemU != null)
                 {
                     _ItemU.LazinatorParents = _ItemU.LazinatorParents.WithRemoved(this);
@@ -250,6 +249,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _ItemU = value;
                 _ItemU_Accessed = true;
             }

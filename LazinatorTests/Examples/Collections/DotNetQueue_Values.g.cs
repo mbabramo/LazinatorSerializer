@@ -221,8 +221,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyQueueInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyQueueInt = value;
                 _MyQueueInt_Dirty = true;
                 _MyQueueInt_Accessed = true;

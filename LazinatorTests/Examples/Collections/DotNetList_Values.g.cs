@@ -227,8 +227,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyLinkedListInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyLinkedListInt = value;
                 _MyLinkedListInt_Dirty = true;
                 _MyLinkedListInt_Accessed = true;
@@ -274,8 +274,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListInt = value;
                 _MyListInt_Dirty = true;
                 _MyListInt_Accessed = true;
@@ -321,8 +321,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListInt2;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListInt2 = value;
                 _MyListInt2_Accessed = true;
             }
@@ -350,8 +350,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MySortedSetInt;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MySortedSetInt = value;
                 _MySortedSetInt_Dirty = true;
                 _MySortedSetInt_Accessed = true;

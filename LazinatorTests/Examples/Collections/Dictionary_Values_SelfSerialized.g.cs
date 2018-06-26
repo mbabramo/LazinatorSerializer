@@ -226,8 +226,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MyDictionary;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyDictionary = value;
                 _MyDictionary_Accessed = true;
             }
@@ -255,8 +255,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MySortedDictionary;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MySortedDictionary = value;
                 _MySortedDictionary_Accessed = true;
             }
@@ -284,8 +284,8 @@ namespace LazinatorTests.Examples.Collections
                 return _MySortedList;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MySortedList = value;
                 _MySortedList_Accessed = true;
             }

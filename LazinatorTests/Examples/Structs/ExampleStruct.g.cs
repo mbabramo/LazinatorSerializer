@@ -265,7 +265,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyChild1 != null)
                 {
                     _MyChild1.LazinatorParents = _MyChild1.LazinatorParents.WithRemoved(this);
@@ -276,6 +275,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyChild1 = value;
                 _MyChild1_Accessed = true;
             }
@@ -304,7 +304,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 if (_MyChild2 != null)
                 {
                     _MyChild2.LazinatorParents = _MyChild2.LazinatorParents.WithRemoved(this);
@@ -315,6 +314,7 @@ namespace LazinatorTests.Examples
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyChild2 = value;
                 _MyChild2_Accessed = true;
             }
@@ -342,8 +342,8 @@ namespace LazinatorTests.Examples
                 return _MyLazinatorList;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyLazinatorList = value;
                 _MyLazinatorList_Dirty = true;
                 _MyLazinatorList_Accessed = true;
@@ -389,8 +389,8 @@ namespace LazinatorTests.Examples
                 return _MyListValues;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListValues = value;
                 _MyListValues_Accessed = true;
             }
@@ -418,8 +418,8 @@ namespace LazinatorTests.Examples
                 return _MyTuple;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyTuple = value;
                 _MyTuple_Accessed = true;
             }

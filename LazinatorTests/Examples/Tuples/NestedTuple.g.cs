@@ -222,8 +222,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyNestedTuple;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyNestedTuple = value;
                 _MyNestedTuple_Accessed = true;
             }

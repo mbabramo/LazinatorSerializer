@@ -230,10 +230,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
             }

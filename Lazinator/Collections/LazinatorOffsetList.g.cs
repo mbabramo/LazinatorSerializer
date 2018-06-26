@@ -242,7 +242,6 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                
                 if (_FourByteItems != null)
                 {
                     _FourByteItems.LazinatorParents = _FourByteItems.LazinatorParents.WithRemoved(this);
@@ -253,6 +252,7 @@ namespace Lazinator.Collections
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _FourByteItems = value;
                 _FourByteItems_Accessed = true;
             }
@@ -290,7 +290,6 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                
                 if (_TwoByteItems != null)
                 {
                     _TwoByteItems.LazinatorParents = _TwoByteItems.LazinatorParents.WithRemoved(this);
@@ -301,6 +300,7 @@ namespace Lazinator.Collections
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _TwoByteItems = value;
                 _TwoByteItems_Accessed = true;
             }

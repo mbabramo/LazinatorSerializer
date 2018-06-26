@@ -239,9 +239,13 @@ namespace Lazinator.Wrappers
             [DebuggerStepThrough]
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
-                value.IsDirty = true;
+                if (value.IsStruct)
+                {
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.IsDirty = true;
+                }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _NonNullValue = value;
                 _NonNullValue_Accessed = true;
             }

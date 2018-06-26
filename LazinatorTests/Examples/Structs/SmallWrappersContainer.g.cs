@@ -244,7 +244,6 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 if (_ListWrappedBytes != null)
                 {
                     _ListWrappedBytes.LazinatorParents = _ListWrappedBytes.LazinatorParents.WithRemoved(this);
@@ -255,6 +254,7 @@ namespace LazinatorTests.Examples.Structs
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _ListWrappedBytes = value;
                 _ListWrappedBytes_Accessed = true;
             }
@@ -286,10 +286,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedBool = value;
                 _WrappedBool_Accessed = true;
             }
@@ -343,10 +343,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedByte = value;
                 _WrappedByte_Accessed = true;
             }
@@ -400,10 +400,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedChar = value;
                 _WrappedChar_Accessed = true;
             }
@@ -457,10 +457,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedNullableBool = value;
                 _WrappedNullableBool_Accessed = true;
             }
@@ -514,10 +514,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedNullableByte = value;
                 _WrappedNullableByte_Accessed = true;
             }
@@ -571,10 +571,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedNullableChar = value;
                 _WrappedNullableChar_Accessed = true;
             }
@@ -628,10 +628,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedNullableSByte = value;
                 _WrappedNullableSByte_Accessed = true;
             }
@@ -685,10 +685,10 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _WrappedSByte = value;
                 _WrappedSByte_Accessed = true;
             }

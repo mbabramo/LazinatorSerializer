@@ -250,8 +250,8 @@ namespace Lazinator.Spans
             }
             [DebuggerStepThrough]
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _ReadOrWrite = value;
                 _ReadOrWrite_Accessed = true;
             }

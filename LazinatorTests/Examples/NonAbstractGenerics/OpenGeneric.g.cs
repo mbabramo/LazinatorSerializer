@@ -227,8 +227,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 return _MyListT;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListT = value;
                 _MyListT_Accessed = true;
             }
@@ -257,7 +257,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
-                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -276,6 +275,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     }
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
             }

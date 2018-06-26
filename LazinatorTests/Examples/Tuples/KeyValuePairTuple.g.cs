@@ -222,8 +222,8 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyKeyValuePairSerialized;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyKeyValuePairSerialized = value;
                 _MyKeyValuePairSerialized_Accessed = true;
             }

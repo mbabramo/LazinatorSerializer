@@ -228,10 +228,10 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
             }

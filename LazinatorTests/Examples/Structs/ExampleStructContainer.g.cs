@@ -236,10 +236,10 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
             }
@@ -293,10 +293,10 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
             }
@@ -346,8 +346,8 @@ namespace LazinatorTests.Examples
                 return _MyListExampleStruct;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListExampleStruct = value;
                 _MyListExampleStruct_Accessed = true;
             }
@@ -375,8 +375,8 @@ namespace LazinatorTests.Examples
                 return _MyListNullableExampleStruct;
             }
             set
-            {
-                IsDirty = true;
+            {IsDirty = true;
+                DescendantIsDirty = true;
                 _MyListNullableExampleStruct = value;
                 _MyListNullableExampleStruct_Accessed = true;
             }

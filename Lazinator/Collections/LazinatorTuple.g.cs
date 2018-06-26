@@ -226,7 +226,6 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -245,6 +244,7 @@ namespace Lazinator.Collections
                     }
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Item1 = value;
                 _Item1_Accessed = true;
             }
@@ -275,7 +275,6 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -294,6 +293,7 @@ namespace Lazinator.Collections
                     }
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _Item2 = value;
                 _Item2_Accessed = true;
             }

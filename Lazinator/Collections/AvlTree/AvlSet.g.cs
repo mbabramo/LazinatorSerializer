@@ -241,7 +241,6 @@ namespace Lazinator.Collections.AvlTree
             [DebuggerStepThrough]
             set
             {
-                
                 if (_UnderlyingTree != null)
                 {
                     _UnderlyingTree.LazinatorParents = _UnderlyingTree.LazinatorParents.WithRemoved(this);
@@ -252,6 +251,7 @@ namespace Lazinator.Collections.AvlTree
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _UnderlyingTree = value;
                 _UnderlyingTree_Accessed = true;
             }
