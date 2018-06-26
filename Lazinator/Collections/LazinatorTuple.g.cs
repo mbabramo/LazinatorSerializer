@@ -226,17 +226,26 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                if (value.IsStruct)
                 {
-                    _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                    _Item1 = value;
+                }
+                else
+                {
+                    if (_Item1 != null)
+                    {
+                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
+                    _Item1 = value;
                 }
                 IsDirty = true;
-                _Item1 = value;
                 _Item1_Accessed = true;
             }
         }

@@ -18,6 +18,10 @@ namespace Lazinator.Core
         /// </summary>
         ReadOnlyMemory<byte> LazinatorObjectBytes { get; set; }
         /// <summary>
+        /// Returns true if the Lazinator object is a struct. This is used internally by Lazinator.
+        /// </summary>
+        bool IsStruct { get; }
+        /// <summary>
         /// The parent (container) of the Lazinator class/struct, or null if there is none (because this is the top of the hierarchy or the parent is a struct or a class that doesn't implement ILazinator).
         /// </summary>
         LazinatorParentsCollection LazinatorParents { get; set; }

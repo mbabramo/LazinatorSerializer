@@ -855,46 +855,49 @@ namespace Lazinator.CodeDescription
             else
                 creation = $@"{assignment}";
 
-            const string incomingValue = "value"; // if we want to clone (as in previous version), change this string
-            string removeContainerAsParent = "", parentSet = "", parentRelationship = "";
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
-            {
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
-                    removeContainerAsParent = $@"if (_{PropertyName} != null)
-                            {{
-                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                            }}
-                            ";
-                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                    removeContainerAsParent = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName})))
-                            {{
-                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                            }}
-                            ";
-                parentSet = $@"
-                            {incomingValue}.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                            {incomingValue}.IsDirty = true;";
-            }
-            else
-                parentSet = $@"
-                            {incomingValue}.IsDirty = true;";
+
+            string propertyTypeDependentSet = "";
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
             {
-                parentRelationship = $@"{removeContainerAsParent}if (value != null)
-                        {{{parentSet}
-                        }}
+                propertyTypeDependentSet = $@"
+                    if (_{PropertyName} != null)
+                    {{
+                        _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                    }}
+                    if (value != null)
+                    {{
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }}
                     ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                parentRelationship = $@"{removeContainerAsParent}if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
-                        {{{parentSet}
-                        }}
+                propertyTypeDependentSet = $@"
+                if (value.IsStruct)
+                {{
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.IsDirty = true;
+                }}
+                else
+                {{
+                    if (_{PropertyName} != null)
+                    {{
+                        _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                    }}
+                    if (value != null)
+                    {{
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }}
+                }}
                     ";
             }
             else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
-                parentRelationship = $@"{parentSet}
+                propertyTypeDependentSet = $@"
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.IsDirty = true;
                     ";
             }
 
@@ -922,8 +925,8 @@ namespace Lazinator.CodeDescription
             }}{StepThroughPropertiesString}
             set
             {{
-                {parentRelationship}IsDirty = true;
-                _{PropertyName} = {incomingValue};{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
+                {propertyTypeDependentSet}IsDirty = true;
+                _{PropertyName} = value;{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
                 _{PropertyName}_Dirty = true;" : "")}
                 _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
             }}
