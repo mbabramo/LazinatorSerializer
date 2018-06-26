@@ -29,7 +29,7 @@ namespace Lazinator.Spans
     {
         /* Serialization, deserialization, and object relationships */
         
-        public virtual LazinatorParentsCollection LazinatorParentsReference { get; set; }
+        public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -73,11 +73,11 @@ namespace Lazinator.Spans
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorByteSpan()
             {
-                LazinatorParentsReference = LazinatorParentsReference,
+                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentsReference = default;
+            clone.LazinatorParents = default;
             return clone;
         }
         
@@ -94,7 +94,7 @@ namespace Lazinator.Spans
                 _IsDirty = value;
                 if (_IsDirty)
                 {
-                    LazinatorParentsReference.InformParentsOfDirtiness();
+                    LazinatorParents.InformParentsOfDirtiness();
                     HasChanged = true;
                 }
             }
@@ -126,7 +126,7 @@ namespace Lazinator.Spans
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentsReference.InformParentsOfDirtiness();
+                        LazinatorParents.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)

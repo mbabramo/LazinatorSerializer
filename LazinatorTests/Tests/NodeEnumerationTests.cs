@@ -122,7 +122,7 @@ namespace LazinatorTests.Tests
             var c = l.CloneLazinatorTyped();
             var results2 = c.GetAllNodes().ToList();
             results2[0].Should().Be(c);
-            results2[1].LazinatorParentsReference.Should().Be(c);
+            results2[1].LazinatorParents.Should().Be(c);
         }
 
         [Fact]

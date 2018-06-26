@@ -31,7 +31,7 @@ namespace LazinatorTests.Examples.Collections
     {
         /* Serialization, deserialization, and object relationships */
         
-        public virtual LazinatorParentsCollection LazinatorParentsReference { get; set; }
+        public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -74,11 +74,11 @@ namespace LazinatorTests.Examples.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorListContainer()
             {
-                LazinatorParentsReference = LazinatorParentsReference,
+                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentsReference = default;
+            clone.LazinatorParents = default;
             return clone;
         }
         
@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.Collections
                 _IsDirty = value;
                 if (_IsDirty)
                 {
-                    LazinatorParentsReference.InformParentsOfDirtiness();
+                    LazinatorParents.InformParentsOfDirtiness();
                     HasChanged = true;
                 }
             }
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Collections
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentsReference.InformParentsOfDirtiness();
+                        LazinatorParents.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

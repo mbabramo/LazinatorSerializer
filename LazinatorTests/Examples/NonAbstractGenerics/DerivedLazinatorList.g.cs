@@ -39,11 +39,11 @@ namespace LazinatorTests.Examples
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DerivedLazinatorList<T>()
             {
-                LazinatorParentsReference = LazinatorParentsReference,
+                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes
             };
-            clone.LazinatorParentsReference = default;
+            clone.LazinatorParents = default;
             return clone;
         }
         

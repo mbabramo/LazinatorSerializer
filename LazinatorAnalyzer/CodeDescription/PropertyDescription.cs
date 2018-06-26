@@ -859,7 +859,7 @@ namespace Lazinator.CodeDescription
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
-                            {incomingValue}.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
+                            {incomingValue}.LazinatorParents = value.LazinatorParents.WithAdded(this);
                             {incomingValue}.IsDirty = true;";
             else
                 parentSet = $@"
@@ -950,7 +950,7 @@ namespace Lazinator.CodeDescription
 
         private string GetManualObjectCreation()
         {
-            // if the container object containing this property is a struct, then we can't set LazinatorParentsReference. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
+            // if the container object containing this property is a struct, then we can't set LazinatorParents. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
             string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct
                 ? ""
                 : $@"if (childData.Length == 0)
@@ -959,7 +959,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
-                            LazinatorParentsReference = new LazinatorParentsCollection(this),";
+                            LazinatorParents = new LazinatorParentsCollection(this),";
             string creation = $@"{nullItemCheck}_{PropertyName} = new {AppropriatelyQualifiedTypeName}()
                     {{{lazinatorParentClassSet}
                         LazinatorObjectBytes = childData,

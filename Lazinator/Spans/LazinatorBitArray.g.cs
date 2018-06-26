@@ -29,7 +29,7 @@ namespace Lazinator.Spans
     {
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParents { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -76,11 +76,11 @@ namespace Lazinator.Spans
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorBitArray()
             {
-                LazinatorParentsReference = LazinatorParentsReference,
+                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentsReference = default;
+            clone.LazinatorParents = default;
             return clone;
         }
         
@@ -97,7 +97,7 @@ namespace Lazinator.Spans
                 _IsDirty = value;
                 if (_IsDirty)
                 {
-                    LazinatorParentsReference.InformParentsOfDirtiness();
+                    LazinatorParents.InformParentsOfDirtiness();
                     HasChanged = true;
                 }
             }
@@ -129,7 +129,7 @@ namespace Lazinator.Spans
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentsReference.InformParentsOfDirtiness();
+                        LazinatorParents.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -252,7 +252,7 @@ namespace Lazinator.Spans
                         }
                         else _ByteSpan = new LazinatorByteSpan()
                         {
-                            LazinatorParentsReference = new LazinatorParentsCollection(this),
+                            LazinatorParents = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -265,7 +265,7 @@ namespace Lazinator.Spans
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

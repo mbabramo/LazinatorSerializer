@@ -19,10 +19,10 @@ namespace Lazinator.Collections.Avl
             {
                 if (_Parent == null)
                 {
-                    if (LazinatorParentsReference.LastAdded is AvlTree<TKey, TValue> p)
+                    if (LazinatorParents.LastAdded is AvlTree<TKey, TValue> p)
                         _Parent = null;
                     else
-                        _Parent = (AvlNode<TKey, TValue>) LazinatorParentsReference.LastAdded;
+                        _Parent = (AvlNode<TKey, TValue>) LazinatorParents.LastAdded;
                 }
 
                 return _Parent;
@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Avl
             set
             {
                 _Parent = value;
-                LazinatorParentsReference = new LazinatorParentsCollection(value);
+                LazinatorParents = new LazinatorParentsCollection(value);
             }
         }
 

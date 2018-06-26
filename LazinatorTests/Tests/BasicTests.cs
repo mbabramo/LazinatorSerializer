@@ -276,8 +276,8 @@ namespace LazinatorTests.Tests
             // do an initial serialization / deserialization cycle
             var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
-            result.MyChild1?.LazinatorParentsReference.Should().Be(result);
-            result.MyChild2?.LazinatorParentsReference.Should().Be(result);
+            result.MyChild1?.LazinatorParents.Should().Be(result);
+            result.MyChild2?.LazinatorParents.Should().Be(result);
             // repeat the cycle
             var result2 = result.CloneLazinatorTyped();
             ExampleEqual(copy, result2).Should().BeTrue();

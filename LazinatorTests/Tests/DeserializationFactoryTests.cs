@@ -23,7 +23,7 @@ namespace LazinatorTests.Tests
                     parent);
             selfSerialized.Should().NotBeNull();
             selfSerialized.LazinatorObjectBytes.Should().Be(serializedBytes);
-            selfSerialized.LazinatorParentsReference.Should().Be(parent);
+            selfSerialized.LazinatorParents.Should().Be(parent);
         }
 
         [Fact]

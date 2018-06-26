@@ -33,7 +33,7 @@ namespace Lazinator.Collections
         {
         }
         
-        public LazinatorParentsCollection LazinatorParentsReference { get; set; }
+        public LazinatorParentsCollection LazinatorParents { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -81,11 +81,11 @@ namespace Lazinator.Collections
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorOffsetList()
             {
-                LazinatorParentsReference = LazinatorParentsReference,
+                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentsReference = default;
+            clone.LazinatorParents = default;
             return clone;
         }
         
@@ -102,7 +102,7 @@ namespace Lazinator.Collections
                 _IsDirty = value;
                 if (_IsDirty)
                 {
-                    LazinatorParentsReference.InformParentsOfDirtiness();
+                    LazinatorParents.InformParentsOfDirtiness();
                     HasChanged = true;
                 }
             }
@@ -134,7 +134,7 @@ namespace Lazinator.Collections
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentsReference.InformParentsOfDirtiness();
+                        LazinatorParents.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -229,7 +229,7 @@ namespace Lazinator.Collections
                         }
                         else _FourByteItems = new LazinatorFastReadList<int>()
                         {
-                            LazinatorParentsReference = new LazinatorParentsCollection(this),
+                            LazinatorParents = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -242,7 +242,7 @@ namespace Lazinator.Collections
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -272,7 +272,7 @@ namespace Lazinator.Collections
                         }
                         else _TwoByteItems = new LazinatorFastReadList<short>()
                         {
-                            LazinatorParentsReference = new LazinatorParentsCollection(this),
+                            LazinatorParents = new LazinatorParentsCollection(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -285,7 +285,7 @@ namespace Lazinator.Collections
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

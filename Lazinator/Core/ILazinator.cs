@@ -20,7 +20,7 @@ namespace Lazinator.Core
         /// <summary>
         /// The parent (container) of the Lazinator class/struct, or null if there is none (because this is the top of the hierarchy or the parent is a struct or a class that doesn't implement ILazinator).
         /// </summary>
-        LazinatorParentsCollection LazinatorParentsReference { get; set; }
+        LazinatorParentsCollection LazinatorParents { get; set; }
 
         /// <summary>
         /// Deserializes the class/struct and any serialized descendants from the object's serialized bytes. This is automatically called the first time there is an attempt to read a field or child, or when LazinatorObjectBytes is set. This reads data in the header and then calls ConvertFromBytesAfterHeader.

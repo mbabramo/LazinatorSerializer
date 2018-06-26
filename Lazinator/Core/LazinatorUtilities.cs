@@ -260,8 +260,8 @@ namespace Lazinator.Core
                         LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, action);
                 }
             }
-            if (child != null && !child.LazinatorParentsReference.Any())
-                child.LazinatorParentsReference = child.LazinatorParentsReference.WithAdded(parent); // set the parent so that this object can be used like a deserialized object
+            if (child != null && !child.LazinatorParents.Any())
+                child.LazinatorParents = child.LazinatorParents.WithAdded(parent); // set the parent so that this object can be used like a deserialized object
         }
 
         public static LazinatorGenericIDType GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
@@ -465,9 +465,9 @@ namespace Lazinator.Core
         public static List<ILazinator> GetClassAncestorsToTop(this ILazinator startNode)
         {
             List<ILazinator> currentList = new List<ILazinator>();
-            while (startNode.LazinatorParentsReference.Any())
+            while (startNode.LazinatorParents.Any())
             {
-                startNode = startNode.LazinatorParentsReference.LastAdded;
+                startNode = startNode.LazinatorParents.LastAdded;
                 currentList.Add(startNode);
             }
             return currentList;
@@ -535,7 +535,7 @@ namespace Lazinator.Core
         {
             if (startPoint != null && startPoint.IsDirty)
             {
-                ILazinator parent = startPoint.LazinatorParentsReference.LastAdded;
+                ILazinator parent = startPoint.LazinatorParents.LastAdded;
                 int levels = 0;
                 const int maxLevels = 1000;
                 while (parent != null)
@@ -544,10 +544,10 @@ namespace Lazinator.Core
                     {
                         throw new Exception("Internal Lazinator error. Ancestor dirtiness set incorrectly.");
                     }
-                    parent = parent.LazinatorParentsReference.LastAdded;
+                    parent = parent.LazinatorParents.LastAdded;
                     levels++;
                     if (levels > maxLevels)
-                        throw new Exception("Hierarchy inconsistency error. The hierarchy appears to be circular. The root of the hierarchy should have LazinatorParentsReference set to null.");
+                        throw new Exception("Hierarchy inconsistency error. The hierarchy appears to be circular. The root of the hierarchy should have LazinatorParents set to null.");
                 }
             }
         }
