@@ -143,6 +143,9 @@ namespace Lazinator.Collections
             }
             set
             {
+                var currentOccupant = this[index];
+                if (currentOccupant != null)
+                    currentOccupant.LazinatorParents = currentOccupant.LazinatorParents.WithRemoved(this);
                 if (FullyDeserialized)
                 {
                     ((IList<T>)UnderlyingList)[index] = value;
