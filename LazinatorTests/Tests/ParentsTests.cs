@@ -197,6 +197,17 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ParentSetForDefaultItem()
+        {
+            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>()
+            {
+                Item1 = 0
+            };
+            e.Item1.LazinatorParents.LastAdded.Should().Be(e);
+            e.Item2.LazinatorParents.LastAdded.Should().Be(e);
+        }
+
+        [Fact]
         public void ChangeAfterCopyingAffectsSource()
         {
             LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()

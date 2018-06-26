@@ -938,6 +938,19 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
 ");
 
+            string createDefault = $"return null;";
+            if (IsStruct)
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
+                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
+                                _{PropertyName}_Accessed = true;";
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
+                                if (_{PropertyName} != null)
+                                {{ // {PropertyName} is a struct
+                                    _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
+                                    _{PropertyName}_Accessed = true;
+                                }}";
+
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
                 sb.Append($@"{GetAttributesToInsert()}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
@@ -948,15 +961,17 @@ namespace Lazinator.CodeDescription
                                     {{
                                         if (LazinatorObjectBytes.Length == 0)
                                         {{
-                                            return default({AppropriatelyQualifiedTypeName});
+                                            {createDefault}
                                         }}
                                         else
                                         {{
                                             ReadOnlyMemory<byte> childData = {ChildSliceString};
-                                            return new {AppropriatelyQualifiedTypeName}()
+                                            _{PropertyName} = new {AppropriatelyQualifiedTypeName}()
                                             {{
                                                 LazinatorObjectBytes = childData,
                                             }};
+                                            _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
+                                            _{PropertyName}_Accessed = true;
                                         }}
                                     }}
                                     return _{PropertyName};

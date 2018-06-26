@@ -204,7 +204,6 @@ namespace Lazinator.Collections
         private T _Item1;
         public virtual T Item1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Item1_Accessed)
@@ -212,6 +211,10 @@ namespace Lazinator.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Item1 = default(T);
+                        if (_Item1 != null)
+                        {
+                            var DEBUG = 0;
+                        }
                     }
                     else
                     {
@@ -253,7 +256,6 @@ namespace Lazinator.Collections
         private U _Item2;
         public virtual U Item2
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Item2_Accessed)
@@ -261,6 +263,10 @@ namespace Lazinator.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Item2 = default(U);
+                        if (_Item2 != null)
+                        {
+                            var DEBUG = 0;
+                        }
                     }
                     else
                     {
