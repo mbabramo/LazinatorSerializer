@@ -27,6 +27,8 @@ namespace Lazinator.CodeDescription
         private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
         private bool GenericConstrainedToClass => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasReferenceTypeConstraint;
         private bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
+        private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
+        private bool IsStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
         internal bool Nullable { get; set; }
@@ -859,7 +861,7 @@ namespace Lazinator.CodeDescription
 
 
             string propertyTypeDependentSet = "";
-            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass))
+            if (IsClassOrInterface)
             {
                 propertyTypeDependentSet = $@"
                     if (_{PropertyName} != null)
@@ -873,7 +875,7 @@ namespace Lazinator.CodeDescription
                     }}
                     ";
             }
-            else if (PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct))
+            else if (IsStruct)
             {
                 propertyTypeDependentSet = $@"
                     value.LazinatorParents = new LazinatorParentsCollection(this);
