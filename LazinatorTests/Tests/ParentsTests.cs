@@ -146,6 +146,57 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ChangeToObjectInTwoHierarchiesAffectsBoth()
+        {
+            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = new ExampleChild(),
+                Item2 = new ExampleChild() { MyLong = -123456 }
+            };
+            var c = e.CloneLazinatorTyped();
+            c.Item1 = e.Item1;
+            c.Item1.LazinatorParents.Count.Should().Be(2);
+            c.Item1.MyLong = 101;
+            var c2 = c.CloneLazinatorTyped();
+            var c3 = e.CloneLazinatorTyped();
+            c2.Item1.MyLong.Should().Be(101);
+            c3.Item1.MyLong.Should().Be(101);
+        }
+
+        [Fact]
+        public void ParentRemovedWhenObjectDetached()
+        {
+            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = new ExampleChild(),
+                Item2 = new ExampleChild() { MyLong = -123456 }
+            };
+            var c = e.CloneLazinatorTyped();
+            var item1Orig = c.Item1;
+            item1Orig.LazinatorParents.Count.Should().Be(1);
+            c.Item1 = new ExampleChild();
+            item1Orig.LazinatorParents.Count.Should().Be(0);
+
+            // same thing, but going from two parents to 1
+            e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = new ExampleChild(),
+                Item2 = new ExampleChild() { MyLong = -123456 }
+            };
+            var e2 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = new ExampleChild(),
+                Item2 = new ExampleChild() { MyLong = -123456 }
+            };
+            c = e.CloneLazinatorTyped();
+            e2.Item1 = c.Item1;
+            item1Orig = c.Item1;
+            item1Orig.LazinatorParents.Count.Should().Be(2);
+            c.Item1 = new ExampleChild();
+            item1Orig.LazinatorParents.Count.Should().Be(1);
+        }
+
+        [Fact]
         public void ChangeAfterCopyingAffectsSource()
         {
             LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()

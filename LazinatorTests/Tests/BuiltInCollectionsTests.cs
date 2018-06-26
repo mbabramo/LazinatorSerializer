@@ -104,15 +104,15 @@ namespace LazinatorTests.Tests
         {
             LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
             var results = l.ToList();
-            results[0].LazinatorParents.Should().Be(l);
-            results[1].LazinatorParents.Should().Be(l);
+            results[0].LazinatorParents.LastAdded.Should().Be(l);
+            results[1].LazinatorParents.LastAdded.Should().Be(l);
             var c = l.CloneLazinatorTyped();
             results = c.ToList();
-            results[0].LazinatorParents.Should().Be(c);
-            results[1].LazinatorParents.Should().Be(c);
+            results[0].LazinatorParents.LastAdded.Should().Be(c);
+            results[1].LazinatorParents.LastAdded.Should().Be(c);
             c = l.CloneLazinatorTyped();
             foreach (var result in c)
-                result.LazinatorParents.Should().Be(c);
+                result.LazinatorParents.LastAdded.Should().Be(c);
         }
 
         [Fact]
