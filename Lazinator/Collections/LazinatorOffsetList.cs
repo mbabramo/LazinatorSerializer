@@ -14,7 +14,6 @@ namespace Lazinator.Collections
     /// <summary>
     /// A list of progressively increasing integral values, used to store offsets into a stream. 
     /// </summary>
-    [Implements(new string[] { "PostDeserialization" })]
     public sealed partial class LazinatorOffsetList : ILazinator, ILazinatorOffsetList
     {
         //For space efficiency, we store these in two lists, one containing two-byte values and one containing four-byte values. (Adding one- and three-byte values would contain extra overhead.) More importantly, we don't want to deserialize these lists unnecessarily (that is, if we're not changing them). Thus, we deserialize the two lists into ReadOnlyMemory where we can access the offsets directly. We then create in-memory lists only if necessary.
@@ -22,10 +21,6 @@ namespace Lazinator.Collections
         private int NumTwoByteItems => TwoByteItems?.Length ?? 0;
         private int NumFourByteItems => FourByteItems?.Length ?? 0;
         public int Count => NumTwoByteItems + NumFourByteItems;
-
-        public void PostDeserialization()
-        {
-        } // DEBUG: Delete
 
         public void AddOffset(int offset)
         {

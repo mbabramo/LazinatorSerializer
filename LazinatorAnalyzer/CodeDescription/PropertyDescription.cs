@@ -735,11 +735,6 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyDefinitionString(CodeStringBuilder sb)
         {
-
-            if (PropertyName == "MyT" && ContainingObjectDescription.NameIncludingGenerics.Contains("GenericFromBase"))
-            {
-                var DEBUG = 0;
-            }
             if (ContainingObjectDescription.IsAbstract)
                 AppendAbstractPropertyDefinitionString(sb);
             else if (PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)

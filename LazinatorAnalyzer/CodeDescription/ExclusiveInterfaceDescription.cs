@@ -45,16 +45,6 @@ namespace Lazinator.CodeDescription
             TotalNumProperties = PropertiesIncludingInherited.Count();
         }
 
-        // DEBUG -- not needed?
-        //private void UnofficiallyIncorporateOtherProperties(INamedTypeSymbol t)
-        //{
-        //    List<PropertyDescription> propertiesToPossiblyUnofficiallyIncorporate = GetUnofficialProperties(t);
-        //    foreach (var p in propertiesToPossiblyUnofficiallyIncorporate)
-        //        if (!PropertiesToDefineThisLevel.Any(x => x.PropertyName == p.PropertyName))
-        //            PropertiesToDefineThisLevel.Add(p);
-
-        //}
-
         private List<PropertyDescription> GetUnofficialProperties(INamedTypeSymbol t)
         {
             if (IsUnofficialInterface)
@@ -110,10 +100,6 @@ namespace Lazinator.CodeDescription
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
-            if (interfaceSymbol.ToString().Contains("UnofficialInterface"))
-            {
-                var DEBUG = 0;
-            }
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
@@ -146,7 +132,7 @@ namespace Lazinator.CodeDescription
                             (
                              !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
                              &&
-                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName /* DEBUG && y.FullyQualifiedTypeNameEncodable == orderedProperty.description.FullyQualifiedTypeNameEncodable */)))
+                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName )))
                         )
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
