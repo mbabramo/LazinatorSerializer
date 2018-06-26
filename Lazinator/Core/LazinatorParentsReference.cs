@@ -19,7 +19,7 @@ namespace Lazinator.Core
 
         public bool Any() => LastAdded != null;
 
-        public int Count => LastAdded == null ? 0 : OtherParents.Sum(x => x.Value);
+        public int Count => LastAdded == null ? 0 : 1 + (OtherParents?.Sum(x => x.Value) ?? 0);
 
         public LazinatorParentsReference(ILazinator lastAdded, Dictionary<ILazinator, byte> otherParents = null)
         {

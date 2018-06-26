@@ -242,7 +242,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void ChangeAfterAutoChangeParentIgnoredInSourceHierarchy()
+        public void ChangeAfterAutoChangeParentIgnoredAffectsSourceHierarchy()
         {
             LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
             {
@@ -254,10 +254,7 @@ namespace LazinatorTests.Tests
             c.Item1 = c2.Item2;
             c2.Item2.MyLong = 543;
             var c3 = c2.CloneLazinatorTyped();
-            c3.Item2.MyLong.Should().Be(-123456);
-            // This is counterintuitive -- we changed something in c2, but it's not reflected in the serialization.
-            // This is because the parent of the item was moved to the c hierarchy, and so changes no longer
-            // propagate upwards.
+            c3.Item2.MyLong.Should().Be(543);
             
         }
 

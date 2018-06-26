@@ -86,9 +86,7 @@ namespace LazinatorTests.Examples
         protected bool _IsDirty;
         public virtual bool IsDirty
         {
-            [DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
