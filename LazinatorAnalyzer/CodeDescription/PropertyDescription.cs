@@ -860,17 +860,18 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
-                    removeContainerAsParent = $@"
-                            if (_{PropertyName} != null)
+                    removeContainerAsParent = $@"if (_{PropertyName} != null)
                             {{
                                 _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                            }}";
+                            }}
+                            ";
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     removeContainerAsParent = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName})))
                             {{
                                 _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                            }}";
-                parentSet = $@"{removeContainerAsParent}
+                            }}
+                            ";
+                parentSet = $@"
                             {incomingValue}.LazinatorParents = value.LazinatorParents.WithAdded(this);
                             {incomingValue}.IsDirty = true;";
             }
@@ -879,14 +880,14 @@ namespace Lazinator.CodeDescription
                             {incomingValue}.IsDirty = true;";
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
             {
-                parentRelationship = $@"if (value != null)
+                parentRelationship = $@"{removeContainerAsParent}if (value != null)
                         {{{parentSet}
                         }}
                     ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                parentRelationship = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
+                parentRelationship = $@"{removeContainerAsParent}if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({incomingValue}, default({AppropriatelyQualifiedTypeName})))
                         {{{parentSet}
                         }}
                     ";
