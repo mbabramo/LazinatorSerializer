@@ -875,17 +875,26 @@ namespace Lazinator.CodeDescription
             string propertyTypeDependentSet = "";
             if (IsClassOrInterface)
             {
-                propertyTypeDependentSet = $@"
-                    if (_{PropertyName} != null)
-                    {{
-                        _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                    }}
-                    if (value != null)
-                    {{
-                        value.IsDirty = true;
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                    }}
-                    ";
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                    propertyTypeDependentSet = $@"
+                        if (_{PropertyName} != null)
+                        {{
+                            _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                        }}
+                        if (value != null)
+                        {{
+                            value.IsDirty = true;
+                            value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        }}
+                        ";
+                else
+                    propertyTypeDependentSet = $@"
+                        if (value != null)
+                        {{
+                            value.IsDirty = true;
+                        }}
+                        ";
+
             }
             else if (IsLazinatorStruct)
             {
@@ -896,25 +905,41 @@ namespace Lazinator.CodeDescription
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                propertyTypeDependentSet = $@"
-                if (value.IsStruct)
-                {{
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
-                    value.IsDirty = true;
-                }}
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                    propertyTypeDependentSet = $@"
+                        if (value.IsStruct)
+                        {{
+                            value.LazinatorParents = new LazinatorParentsCollection(this);
+                            value.IsDirty = true;
+                        }}
+                        else
+                        {{
+                            if (_{PropertyName} != null)
+                            {{
+                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                            }}
+                            if (value != null)
+                            {{
+                                value.IsDirty = true;
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                            }}
+                        }}
+                            ";
                 else
-                {{
-                    if (_{PropertyName} != null)
-                    {{
-                        _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                    }}
-                    if (value != null)
-                    {{
-                        value.IsDirty = true;
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                    }}
-                }}
-                    ";
+                    propertyTypeDependentSet = $@"
+                        if (value.IsStruct)
+                        {{
+                            value.IsDirty = true;
+                        }}
+                        else
+                        {{
+                            if (value != null)
+                            {{
+                                value.IsDirty = true;
+                            }}
+                        }}
+                            ";
+
             }
 
             sb.Append($@"private {AppropriatelyQualifiedTypeName} _{PropertyName};
