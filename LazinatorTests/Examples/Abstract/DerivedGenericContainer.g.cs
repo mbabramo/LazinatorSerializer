@@ -226,14 +226,15 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
+                
                 if (_Item != null)
                 {
                     _Item.LazinatorParents = _Item.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Item = value;

@@ -264,14 +264,23 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
+                
+                if (value.IsStruct)
                 {
-                    _Key.LazinatorParents = _Key.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_Key != null)
+                    {
+                        _Key.LazinatorParents = _Key.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _Key = value;
@@ -311,14 +320,15 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                
                 if (_Left != null)
                 {
                     _Left.LazinatorParents = _Left.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Left = value;
@@ -358,14 +368,15 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                
                 if (_Right != null)
                 {
                     _Right.LazinatorParents = _Right.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Right = value;
@@ -398,14 +409,23 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
+                
+                if (value.IsStruct)
                 {
-                    _Value.LazinatorParents = _Value.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_Value != null)
+                    {
+                        _Value.LazinatorParents = _Value.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _Value = value;

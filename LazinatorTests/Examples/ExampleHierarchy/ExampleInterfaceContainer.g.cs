@@ -229,14 +229,15 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             set
             {
+                
                 if (_ExampleByInterface != null)
                 {
                     _ExampleByInterface.LazinatorParents = _ExampleByInterface.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _ExampleByInterface = value;

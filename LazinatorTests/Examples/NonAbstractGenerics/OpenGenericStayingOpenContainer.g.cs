@@ -237,14 +237,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
+                
                 if (_ClosedGenericBase != null)
                 {
                     _ClosedGenericBase.LazinatorParents = _ClosedGenericBase.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _ClosedGenericBase = value;
@@ -275,14 +276,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
+                
                 if (_ClosedGenericFloat != null)
                 {
                     _ClosedGenericFloat.LazinatorParents = _ClosedGenericFloat.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _ClosedGenericFloat = value;
@@ -313,14 +315,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
+                
                 if (_ClosedGenericFromBaseWithBase != null)
                 {
                     _ClosedGenericFromBaseWithBase.LazinatorParents = _ClosedGenericFromBaseWithBase.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _ClosedGenericFromBaseWithBase = value;
@@ -351,14 +354,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
+                
                 if (_ClosedGenericInterface != null)
                 {
                     _ClosedGenericInterface.LazinatorParents = _ClosedGenericInterface.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _ClosedGenericInterface = value;
@@ -389,14 +393,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
+                
                 if (_ClosedGenericNonexclusiveInterface != null)
                 {
                     _ClosedGenericNonexclusiveInterface.LazinatorParents = _ClosedGenericNonexclusiveInterface.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _ClosedGenericNonexclusiveInterface = value;

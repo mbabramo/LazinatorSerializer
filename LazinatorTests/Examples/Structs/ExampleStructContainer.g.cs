@@ -237,7 +237,7 @@ namespace LazinatorTests.Examples
             set
             {
                 
-                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _IntWrapper = value;
@@ -294,7 +294,7 @@ namespace LazinatorTests.Examples
             set
             {
                 
-                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _MyExampleStruct = value;

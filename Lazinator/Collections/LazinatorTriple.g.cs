@@ -228,14 +228,23 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                
+                if (value.IsStruct)
                 {
-                    _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_Item1 != null)
+                    {
+                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _Item1 = value;
@@ -268,14 +277,23 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                
+                if (value.IsStruct)
                 {
-                    _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_Item2 != null)
+                    {
+                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _Item2 = value;
@@ -308,14 +326,23 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)))
+                
+                if (value.IsStruct)
                 {
-                    _Item3.LazinatorParents = _Item3.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<V>.Default.Equals(value, default(V)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_Item3 != null)
+                    {
+                        _Item3.LazinatorParents = _Item3.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _Item3 = value;

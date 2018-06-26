@@ -250,14 +250,15 @@ namespace LazinatorTests.Examples.Collections
             }
             set
             {
+                
                 if (_MyList != null)
                 {
                     _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _MyList = value;

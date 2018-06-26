@@ -308,14 +308,15 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                
                 if (_Example != null)
                 {
                     _Example.LazinatorParents = _Example.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Example = value;
@@ -346,14 +347,15 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                
                 if (_Example2 != null)
                 {
                     _Example2.LazinatorParents = _Example2.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Example2 = value;
@@ -384,14 +386,15 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                
                 if (_Example3 != null)
                 {
                     _Example3.LazinatorParents = _Example3.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Example3 = value;

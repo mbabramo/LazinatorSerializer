@@ -239,10 +239,8 @@ namespace Lazinator.Wrappers
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {
-                    value.IsDirty = true;
-                }
+                value.LazinatorParents = new LazinatorParentsCollection(this);
+                value.IsDirty = true;
                 IsDirty = true;
                 _NonNullValue = value;
                 _NonNullValue_Accessed = true;

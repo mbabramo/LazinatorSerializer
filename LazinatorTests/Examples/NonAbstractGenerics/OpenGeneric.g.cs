@@ -257,14 +257,23 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)))
+                
+                if (value.IsStruct)
                 {
-                    _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_MyT != null)
+                    {
+                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _MyT = value;

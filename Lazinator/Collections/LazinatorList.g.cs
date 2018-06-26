@@ -250,14 +250,15 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                
                 if (_Offsets != null)
                 {
                     _Offsets.LazinatorParents = _Offsets.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Offsets = value;

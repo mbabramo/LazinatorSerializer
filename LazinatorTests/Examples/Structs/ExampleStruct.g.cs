@@ -265,9 +265,15 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                
+                if (_MyChild1 != null)
+                {
+                    _MyChild1.LazinatorParents = _MyChild1.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _MyChild1 = value;
@@ -298,9 +304,15 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                
+                if (_MyChild2 != null)
+                {
+                    _MyChild2.LazinatorParents = _MyChild2.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _MyChild2 = value;

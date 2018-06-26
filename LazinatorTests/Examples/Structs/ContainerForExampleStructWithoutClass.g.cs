@@ -230,7 +230,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;

@@ -241,14 +241,15 @@ namespace Lazinator.Collections.AvlTree
             [DebuggerStepThrough]
             set
             {
+                
                 if (_UnderlyingTree != null)
                 {
                     _UnderlyingTree.LazinatorParents = _UnderlyingTree.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _UnderlyingTree = value;

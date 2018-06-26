@@ -229,6 +229,7 @@ namespace LazinatorTests.Examples
             set
             {
                 
+                value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _MyExampleStruct = value;

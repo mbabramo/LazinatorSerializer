@@ -224,14 +224,15 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                
                 if (_Root != null)
                 {
                     _Root.LazinatorParents = _Root.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _Root = value;

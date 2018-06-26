@@ -226,14 +226,15 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
+                
                 if (_AbstractProperty != null)
                 {
                     _AbstractProperty.LazinatorParents = _AbstractProperty.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
                 _AbstractProperty = value;

@@ -226,11 +226,11 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                
                 if (value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
-                    _Item1 = value;
                 }
                 else
                 {
@@ -243,9 +243,9 @@ namespace Lazinator.Collections
                         value.IsDirty = true;
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
-                    _Item1 = value;
                 }
                 IsDirty = true;
+                _Item1 = value;
                 _Item1_Accessed = true;
             }
         }
@@ -275,14 +275,23 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                
+                if (value.IsStruct)
                 {
-                    _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
-                }
-                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
+                }
+                else
+                {
+                    if (_Item2 != null)
+                    {
+                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
                 }
                 IsDirty = true;
                 _Item2 = value;
