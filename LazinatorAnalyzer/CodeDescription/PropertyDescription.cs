@@ -924,8 +924,8 @@ namespace Lazinator.CodeDescription
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set
-            {{
-                {propertyTypeDependentSet}IsDirty = true;
+            {{{propertyTypeDependentSet}IsDirty = true;
+                DescendantIsDirty = true;
                 _{PropertyName} = value;{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
                 _{PropertyName}_Dirty = true;" : "")}
                 _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
