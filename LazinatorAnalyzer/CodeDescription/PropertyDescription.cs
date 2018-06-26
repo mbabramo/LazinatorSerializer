@@ -854,13 +854,26 @@ namespace Lazinator.CodeDescription
             }
             else
                 creation = $@"{assignment}";
-            
+
             const string incomingValue = "value"; // if we want to clone (as in previous version), change this string
-            string parentSet = "", parentRelationship = "";
+            string removeContainerAsParent = "", parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
-                parentSet = $@"
+            {
+                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
+                    removeContainerAsParent = $@"
+                            if (_{PropertyName} != null)
+                            {{
+                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                            }}";
+                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                    removeContainerAsParent = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName})))
+                            {{
+                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                            }}";
+                parentSet = $@"{removeContainerAsParent}
                             {incomingValue}.LazinatorParents = value.LazinatorParents.WithAdded(this);
                             {incomingValue}.IsDirty = true;";
+            }
             else
                 parentSet = $@"
                             {incomingValue}.IsDirty = true;";
