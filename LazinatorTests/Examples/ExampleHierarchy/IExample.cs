@@ -31,6 +31,5 @@ namespace LazinatorTests.Examples
         [RelativeOrder(2)] // not necessary, but can confirm that it works
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }
-        [AutoChangeParent] ExampleChild MyAutoChangeParentChild { get; set; }
     }
 }

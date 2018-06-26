@@ -34,9 +34,6 @@ namespace Lazinator.CodeDescription
             var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
                 throw new LazinatorCodeGenException("Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
-            var autoChangeParentAllAttribute = Container.Compilation.GetFirstAttributeOfType<CloneAutoChangeParentAllAttribute>(t);
-            if (autoChangeParentAllAttribute != null)
-                AutoChangeParentAll = true;
             UniqueID = lazinatorAttribute.UniqueID;
             Version = lazinatorAttribute.Version;
 

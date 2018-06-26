@@ -102,8 +102,6 @@ namespace Lazinator.CodeDescription
         internal bool TrackDirtinessNonSerialized { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
-        private bool AutoChangeParent { get; set; }
-        private bool MovesFromOtherHierarchiesAllowed { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool IsGuaranteedSmall { get; set; }
@@ -208,11 +206,6 @@ namespace Lazinator.CodeDescription
             CloneCustomNonlazinatorWriteAttribute nonlazinatorWrite = UserAttributes.OfType<CloneCustomNonlazinatorWriteAttribute>().FirstOrDefault();
             if (nonlazinatorWrite != null)
                 CustomNonlazinatorWrite = nonlazinatorWrite.WriteMethod;
-            CloneAllowMovedAttribute allowMoved = UserAttributes.OfType<CloneAllowMovedAttribute>().FirstOrDefault();
-            CloneAutoChangeParentAttribute autoChangeParent = UserAttributes.OfType<CloneAutoChangeParentAttribute>().FirstOrDefault();
-            // DEBUG -- delete the auto change and moves stuff
-            AutoChangeParent = true; // DEBUG autoChangeParent != null || ContainingObjectDescription.AutoChangeParentAll;
-            MovesFromOtherHierarchiesAllowed = false; // DEBUG !AutoChangeParent && allowMoved != null;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();

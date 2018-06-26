@@ -7,7 +7,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     [Lazinator((int) ExampleUniqueIDs.OpenGeneric)]
     public interface IOpenGeneric<T> where T : ILazinator
     {
-        [AutoChangeParent]
         T MyT { get; set; }
         List<T> MyListT { get; set; }
     }

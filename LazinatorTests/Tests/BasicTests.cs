@@ -196,20 +196,6 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void AutoChangeParentWorks()
-        {
-            var original = GetHierarchy(1, 1, 1, 1, 0);
-            var another = GetHierarchy(1, 1, 1, 1, 0);
-            original.MyAutoChangeParentChild = new ExampleChild();
-            original.MyAutoChangeParentChild.LazinatorParentsReference.Should().Be(original);
-            another.MyAutoChangeParentChild = original.MyAutoChangeParentChild;
-            another.MyAutoChangeParentChild.LazinatorParentsReference.Should().Be(another);
-
-            original.MyAutoChangeParentChild = null;
-            original.MyAutoChangeParentChild.Should().BeNull();
-        }
-
-        [Fact]
         public void SameObjectCanAppearTwiceWithAutoChangeParent()
         {
             LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
