@@ -28,7 +28,7 @@ namespace Lazinator.CodeDescription
         private bool GenericConstrainedToClass => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasReferenceTypeConstraint;
         private bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
         private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
-        private bool IsStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
+        private bool IsLazinatorStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
         internal bool Nullable { get; set; }
@@ -839,12 +839,26 @@ namespace Lazinator.CodeDescription
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
 
-            string creation;
+            string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
+                                        _{PropertyName}_Dirty = true; " : "")}";
+            if (IsLazinatorStruct)
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
+                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
+                                _{PropertyName}_Accessed = true;";
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
+                                if (_{PropertyName} != null)
+                                {{ // {PropertyName} is a struct
+                                    _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
+                                    _{PropertyName}_Accessed = true;
+                                }}";
+
+            string recreation;
             if (PropertyType == LazinatorPropertyType.LazinatorStruct 
                 || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && ContainingObjectDescription.IsSealed))
             {
                 // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
-                creation = GetManualObjectCreation();
+                recreation = GetManualObjectCreation();
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
@@ -854,10 +868,10 @@ namespace Lazinator.CodeDescription
                 //if (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasConstructorConstraint)
                 //    creation = GetManualObjectCreation();
                 //else
-                creation = $@"{assignment}";
+                recreation = $@"{assignment}";
             }
             else
-                creation = $@"{assignment}";
+                recreation = $@"{assignment}";
 
 
             string propertyTypeDependentSet = "";
@@ -875,7 +889,7 @@ namespace Lazinator.CodeDescription
                     }}
                     ";
             }
-            else if (IsStruct)
+            else if (IsLazinatorStruct)
             {
                 propertyTypeDependentSet = $@"
                     value.LazinatorParents = new LazinatorParentsCollection(this);
@@ -914,13 +928,12 @@ namespace Lazinator.CodeDescription
                 {{
                     if (LazinatorObjectBytes.Length == 0)
                     {{
-                        _{PropertyName} = default({AppropriatelyQualifiedTypeName});{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
-                        _{PropertyName}_Dirty = true;" : "")}
+                        {createDefault}
                     }}
                     else
                     {{
                         ReadOnlyMemory<byte> childData = {ChildSliceString};
-                        {creation}
+                        {recreation}
                     }}
                     _{PropertyName}_Accessed = true;
                 }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol) ? $@"
@@ -938,19 +951,7 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
 ");
 
-            string createDefault = $"return null;";
-            if (IsStruct)
-                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
-                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
-                                _{PropertyName}_Accessed = true;";
-            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
-                                if (_{PropertyName} != null)
-                                {{ // {PropertyName} is a struct
-                                    _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
-                                    _{PropertyName}_Accessed = true;
-                                }}";
-
+            // Copy property
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
                 sb.Append($@"{GetAttributesToInsert()}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
@@ -961,17 +962,15 @@ namespace Lazinator.CodeDescription
                                     {{
                                         if (LazinatorObjectBytes.Length == 0)
                                         {{
-                                            {createDefault}
+                                            return default({AppropriatelyQualifiedTypeName});
                                         }}
                                         else
                                         {{
                                             ReadOnlyMemory<byte> childData = {ChildSliceString};
-                                            _{PropertyName} = new {AppropriatelyQualifiedTypeName}()
+                                            return new {AppropriatelyQualifiedTypeName}()
                                             {{
                                                 LazinatorObjectBytes = childData,
                                             }};
-                                            _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
-                                            _{PropertyName}_Accessed = true;
                                         }}
                                     }}
                                     return _{PropertyName};
@@ -980,7 +979,7 @@ namespace Lazinator.CodeDescription
 ");
             }
 
-            if (TrackDirtinessNonSerialized)
+           if (TrackDirtinessNonSerialized)
                 AppendDirtinessTracking(sb);
         }
 
