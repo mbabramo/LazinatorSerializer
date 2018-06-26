@@ -244,6 +244,18 @@ namespace Lazinator.Wrappers
                     value.LazinatorParents = new LazinatorParentsCollection(this);
                     value.IsDirty = true;
                 }
+                else
+                {
+                    if (_NonNullValue != null)
+                    {
+                        _NonNullValue.LazinatorParents = _NonNullValue.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.IsDirty = true;
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
+                }
                 IsDirty = true;
                 DescendantIsDirty = true;
                 _NonNullValue = value;

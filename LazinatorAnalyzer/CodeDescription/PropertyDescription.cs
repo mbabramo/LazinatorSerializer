@@ -25,6 +25,8 @@ namespace Lazinator.CodeDescription
         internal IPropertySymbol PropertySymbol { get; set; }
         private ITypeSymbol TypeSymbolIfNoProperty { get; set; }
         private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
+        private bool GenericConstrainedToClass => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasReferenceTypeConstraint;
+        private bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
         internal bool Nullable { get; set; }
@@ -857,7 +859,7 @@ namespace Lazinator.CodeDescription
 
 
             string propertyTypeDependentSet = "";
-            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface)
+            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass))
             {
                 propertyTypeDependentSet = $@"
                     if (_{PropertyName} != null)
@@ -869,6 +871,13 @@ namespace Lazinator.CodeDescription
                         value.IsDirty = true;
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }}
+                    ";
+            }
+            else if (PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct))
+            {
+                propertyTypeDependentSet = $@"
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.IsDirty = true;
                     ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
@@ -891,13 +900,6 @@ namespace Lazinator.CodeDescription
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }}
                 }}
-                    ";
-            }
-            else if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-            {
-                propertyTypeDependentSet = $@"
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
-                    value.IsDirty = true;
                     ";
             }
 
