@@ -213,6 +213,7 @@ namespace LazinatorTests.Examples.Structs
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _ExampleStructWithoutClass = default(ExampleStructWithoutClass);
+                        _ExampleStructWithoutClass.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {

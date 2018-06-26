@@ -249,6 +249,10 @@ namespace LazinatorTests.Examples.Abstract
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyT = default(T);
+                        if (_MyT != null)
+                        { // MyT is a struct
+                            _MyT.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
                     }
                     else
                     {

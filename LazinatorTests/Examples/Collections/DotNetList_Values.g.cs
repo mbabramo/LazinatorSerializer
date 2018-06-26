@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyLinkedListInt = default(LinkedList<int>);
-                        _MyLinkedListInt_Dirty = true;
+                        _MyLinkedListInt_Dirty = true; 
                     }
                     else
                     {
@@ -262,7 +262,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyListInt = default(List<int>);
-                        _MyListInt_Dirty = true;
+                        _MyListInt_Dirty = true; 
                     }
                     else
                     {
@@ -338,7 +338,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MySortedSetInt = default(SortedSet<int>);
-                        _MySortedSetInt_Dirty = true;
+                        _MySortedSetInt_Dirty = true; 
                     }
                     else
                     {

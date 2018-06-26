@@ -204,6 +204,7 @@ namespace Lazinator.Collections
         private T _Item1;
         public virtual T Item1
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Item1_Accessed)
@@ -212,8 +213,8 @@ namespace Lazinator.Collections
                     {
                         _Item1 = default(T);
                         if (_Item1 != null)
-                        {
-                            var DEBUG = 0;
+                        { // Item1 is a struct
+                            _Item1.LazinatorParents = new LazinatorParentsCollection(this);
                         }
                     }
                     else
@@ -256,6 +257,7 @@ namespace Lazinator.Collections
         private U _Item2;
         public virtual U Item2
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_Item2_Accessed)
@@ -264,8 +266,8 @@ namespace Lazinator.Collections
                     {
                         _Item2 = default(U);
                         if (_Item2 != null)
-                        {
-                            var DEBUG = 0;
+                        { // Item2 is a struct
+                            _Item2.LazinatorParents = new LazinatorParentsCollection(this);
                         }
                     }
                     else

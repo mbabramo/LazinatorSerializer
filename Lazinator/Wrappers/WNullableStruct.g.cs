@@ -225,6 +225,7 @@ namespace Lazinator.Wrappers
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _NonNullValue = default(T);
+                        _NonNullValue.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {

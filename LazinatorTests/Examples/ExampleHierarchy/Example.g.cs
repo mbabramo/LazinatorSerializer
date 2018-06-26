@@ -581,7 +581,7 @@ namespace LazinatorTests.Examples
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyNonLazinatorChild = default(NonLazinatorClass);
-                        _MyNonLazinatorChild_Dirty = true;
+                        _MyNonLazinatorChild_Dirty = true; 
                     }
                     else
                     {
@@ -628,6 +628,7 @@ namespace LazinatorTests.Examples
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _WrappedInt = default(WInt);
+                        _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {

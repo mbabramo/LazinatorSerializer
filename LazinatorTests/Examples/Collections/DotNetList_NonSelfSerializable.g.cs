@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyListNonLazinatorType = default(List<NonLazinatorClass>);
-                        _MyListNonLazinatorType_Dirty = true;
+                        _MyListNonLazinatorType_Dirty = true; 
                     }
                     else
                     {

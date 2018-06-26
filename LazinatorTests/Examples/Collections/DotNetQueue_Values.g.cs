@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyQueueInt = default(Queue<int>);
-                        _MyQueueInt_Dirty = true;
+                        _MyQueueInt_Dirty = true; 
                     }
                     else
                     {

@@ -843,14 +843,12 @@ namespace Lazinator.CodeDescription
                                         _{PropertyName}_Dirty = true; " : "")}";
             if (IsLazinatorStruct)
                 createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
-                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
-                                _{PropertyName}_Accessed = true;";
+                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
                                 if (_{PropertyName} != null)
                                 {{ // {PropertyName} is a struct
                                     _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
-                                    _{PropertyName}_Accessed = true;
                                 }}";
 
             string recreation;

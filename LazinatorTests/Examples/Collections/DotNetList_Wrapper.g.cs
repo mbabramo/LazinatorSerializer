@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyListInt = default(List<WInt>);
-                        _MyListInt_Dirty = true;
+                        _MyListInt_Dirty = true; 
                     }
                     else
                     {

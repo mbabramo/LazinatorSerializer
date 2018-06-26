@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyListSerialized = default(List<ExampleChild>);
-                        _MyListSerialized_Dirty = true;
+                        _MyListSerialized_Dirty = true; 
                     }
                     else
                     {

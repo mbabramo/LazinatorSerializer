@@ -250,6 +250,10 @@ namespace Lazinator.Collections.Avl
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Key = default(TKey);
+                        if (_Key != null)
+                        { // Key is a struct
+                            _Key.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
                     }
                     else
                     {
@@ -395,6 +399,10 @@ namespace Lazinator.Collections.Avl
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Value = default(TValue);
+                        if (_Value != null)
+                        { // Value is a struct
+                            _Value.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
                     }
                     else
                     {

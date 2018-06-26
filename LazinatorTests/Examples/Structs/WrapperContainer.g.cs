@@ -214,6 +214,7 @@ namespace LazinatorTests.Examples.Structs
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _WrappedInt = default(WInt);
+                        _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {

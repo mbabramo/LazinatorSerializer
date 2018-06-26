@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyArrayInt = default(int[,]);
-                        _MyArrayInt_Dirty = true;
+                        _MyArrayInt_Dirty = true; 
                     }
                     else
                     {

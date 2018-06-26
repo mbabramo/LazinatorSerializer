@@ -214,6 +214,10 @@ namespace Lazinator.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Item1 = default(T);
+                        if (_Item1 != null)
+                        { // Item1 is a struct
+                            _Item1.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
                     }
                     else
                     {
@@ -263,6 +267,10 @@ namespace Lazinator.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Item2 = default(U);
+                        if (_Item2 != null)
+                        { // Item2 is a struct
+                            _Item2.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
                     }
                     else
                     {
@@ -312,6 +320,10 @@ namespace Lazinator.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _Item3 = default(V);
+                        if (_Item3 != null)
+                        { // Item3 is a struct
+                            _Item3.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
                     }
                     else
                     {

@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Collections
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyStackInt = default(Stack<int>);
-                        _MyStackInt_Dirty = true;
+                        _MyStackInt_Dirty = true; 
                     }
                     else
                     {

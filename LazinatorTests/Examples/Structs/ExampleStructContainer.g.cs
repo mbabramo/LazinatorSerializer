@@ -220,6 +220,7 @@ namespace LazinatorTests.Examples
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _IntWrapper = default(WInt);
+                        _IntWrapper.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {
@@ -277,6 +278,7 @@ namespace LazinatorTests.Examples
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyExampleStruct = default(ExampleStruct);
+                        _MyExampleStruct.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {

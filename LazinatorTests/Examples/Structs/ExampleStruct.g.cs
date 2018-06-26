@@ -330,7 +330,7 @@ namespace LazinatorTests.Examples
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyLazinatorList = default(List<Example>);
-                        _MyLazinatorList_Dirty = true;
+                        _MyLazinatorList_Dirty = true; 
                     }
                     else
                     {
