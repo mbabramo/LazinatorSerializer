@@ -38,11 +38,11 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ConcreteFromBase()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         

@@ -14,8 +14,8 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static ILazinator GetRoot(this ILazinator node)
         {
-            while (node.LazinatorParentClass.LastAdded != null)
-                node = node.LazinatorParentClass.LastAdded;
+            while (node.LazinatorParentsReference.LastAdded != null)
+                node = node.LazinatorParentsReference.LastAdded;
             return node;
         }
     }

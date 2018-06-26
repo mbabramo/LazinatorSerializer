@@ -33,7 +33,7 @@ namespace Lazinator.Collections.Avl
         {
         }
         
-        public LazinatorParentsReference LazinatorParentClass { get; set; }
+        public LazinatorParentsReference LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -76,11 +76,11 @@ namespace Lazinator.Collections.Avl
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new AvlNode<TKey, TValue>()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         
@@ -99,7 +99,7 @@ namespace Lazinator.Collections.Avl
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
@@ -135,7 +135,7 @@ namespace Lazinator.Collections.Avl
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -270,7 +270,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -300,7 +300,7 @@ namespace Lazinator.Collections.Avl
                         }
                         else _Left = new AvlNode<TKey, TValue>()
                         {
-                            LazinatorParentClass = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -313,7 +313,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -343,7 +343,7 @@ namespace Lazinator.Collections.Avl
                         }
                         else _Right = new AvlNode<TKey, TValue>()
                         {
-                            LazinatorParentClass = new LazinatorParentsReference(this),
+                            LazinatorParentsReference = new LazinatorParentsReference(this),
                             LazinatorObjectBytes = childData,
                         };
                     }
@@ -356,7 +356,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -392,7 +392,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
+        public virtual LazinatorParentsReference LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -79,11 +79,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new OpenGenericStayingOpenContainer()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         
@@ -102,7 +102,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
@@ -138,7 +138,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -243,7 +243,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -277,7 +277,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -345,7 +345,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

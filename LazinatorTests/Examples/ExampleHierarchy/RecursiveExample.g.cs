@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
         }
         
-        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
+        public virtual LazinatorParentsReference LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -76,11 +76,11 @@ namespace LazinatorTests.Examples.Hierarchy
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new RecursiveExample()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         
@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
@@ -135,7 +135,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (value != null)
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

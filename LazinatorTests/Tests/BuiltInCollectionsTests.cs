@@ -104,15 +104,15 @@ namespace LazinatorTests.Tests
         {
             LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
             var results = l.ToList();
-            results[0].LazinatorParentClass.Should().Be(l);
-            results[1].LazinatorParentClass.Should().Be(l);
+            results[0].LazinatorParentsReference.Should().Be(l);
+            results[1].LazinatorParentsReference.Should().Be(l);
             var c = l.CloneLazinatorTyped();
             results = c.ToList();
-            results[0].LazinatorParentClass.Should().Be(c);
-            results[1].LazinatorParentClass.Should().Be(c);
+            results[0].LazinatorParentsReference.Should().Be(c);
+            results[1].LazinatorParentsReference.Should().Be(c);
             c = l.CloneLazinatorTyped();
             foreach (var result in c)
-                result.LazinatorParentClass.Should().Be(c);
+                result.LazinatorParentsReference.Should().Be(c);
         }
 
         [Fact]
@@ -484,23 +484,23 @@ namespace LazinatorTests.Tests
                 new ExampleChild(),
                 new ExampleChild()
             };
-            l[0].LazinatorParentClass.Should().Be(l);
-            l[1].LazinatorParentClass.Should().Be(l);
+            l[0].LazinatorParentsReference.LastAdded.Should().Be(l);
+            l[1].LazinatorParentsReference.LastAdded.Should().Be(l);
             var c = l.CloneLazinatorTyped();
-            c[0].LazinatorParentClass.Should().Be(c);
-            c[1].LazinatorParentClass.Should().Be(c);
+            c[0].LazinatorParentsReference.LastAdded.Should().Be(c);
+            c[1].LazinatorParentsReference.LastAdded.Should().Be(c);
             var c2 = l.CloneLazinatorTyped();
             c2.Insert(0, new ExampleChild());
-            c2[1].LazinatorParentClass.Should().Be(c2);
+            c2[1].LazinatorParentsReference.LastAdded.Should().Be(c2);
             var c3 = l.CloneLazinatorTyped();
             var lc3 = c3.ToList();
-            lc3[1].LazinatorParentClass.Should().Be(c3);
+            lc3[1].LazinatorParentsReference.LastAdded.Should().Be(c3);
             var c4 = l.CloneLazinatorTyped();
             var lc4 = c4.AsEnumerable().ToList();
-            lc4[1].LazinatorParentClass.Should().Be(c4);
+            lc4[1].LazinatorParentsReference.LastAdded.Should().Be(c4);
             var c5 = l.CloneLazinatorTyped();
             c5[0] = new ExampleChild();
-            c5[0].LazinatorParentClass.Should().Be(c5);
+            c5[0].LazinatorParentsReference.LastAdded.Should().Be(c5);
         }
 
         [Fact]

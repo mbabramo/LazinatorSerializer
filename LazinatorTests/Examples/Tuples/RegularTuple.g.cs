@@ -30,7 +30,7 @@ namespace LazinatorTests.Examples.Tuples
     {
         /* Serialization, deserialization, and object relationships */
         
-        public virtual LazinatorParentsReference LazinatorParentClass { get; set; }
+        public virtual LazinatorParentsReference LazinatorParentsReference { get; set; }
         
         protected IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -73,11 +73,11 @@ namespace LazinatorTests.Examples.Tuples
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new RegularTuple()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         
@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples.Tuples
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples.Tuples
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)

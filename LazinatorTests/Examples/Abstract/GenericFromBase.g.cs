@@ -38,11 +38,11 @@ namespace LazinatorTests.Examples.Abstract
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new GenericFromBase<T>()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         
@@ -76,7 +76,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    value.LazinatorParentClass.Add(this);
+                    value.LazinatorParentsReference.Add(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

@@ -266,7 +266,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@""; // everything is inherited from parent abstract class
                 else if (IsAbstract)
                     boilerplate = $@"        /* Abstract declarations */
-			            public abstract LazinatorParentsReference LazinatorParentClass {{ get; set; }}
+			            public abstract LazinatorParentsReference LazinatorParentsReference {{ get; set; }}
                     
                         public abstract int Deserialize();
                         
@@ -347,7 +347,7 @@ namespace Lazinator.CodeDescription
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {constructor}public {DerivationKeyword}LazinatorParentsReference LazinatorParentClass {{ get; set; }}
+                        {constructor}public {DerivationKeyword}LazinatorParentsReference LazinatorParentsReference {{ get; set; }}
 
                         {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
 
@@ -401,11 +401,11 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                LazinatorParentClass = LazinatorParentClass,
+                                LazinatorParentsReference = LazinatorParentsReference,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
                                 HierarchyBytes = bytes,
                             }};
-                            clone.LazinatorParentClass = default;
+                            clone.LazinatorParentsReference = default;
                             return clone;
                         }}
 
@@ -424,7 +424,7 @@ namespace Lazinator.CodeDescription
                                     _IsDirty = value;
                                     if (_IsDirty)
                                     {{
-                                        LazinatorParentClass.InformParentsOfDirtiness();{(ImplementsOnDirty ? $@"
+                                        LazinatorParentsReference.InformParentsOfDirtiness();{(ImplementsOnDirty ? $@"
                                         OnDirty();" : "")}
                                     }}
                                 }}
@@ -461,7 +461,7 @@ namespace Lazinator.CodeDescription
                                     if (_DescendantIsDirty)
                                     {{
                                         _DescendantHasChanged = true;
-                                        LazinatorParentClass.InformParentsOfDirtiness();
+                                        LazinatorParentsReference.InformParentsOfDirtiness();
                                     }}
                                 }}
                                 if (_DescendantIsDirty)
@@ -543,11 +543,11 @@ namespace Lazinator.CodeDescription
                             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                LazinatorParentClass = LazinatorParentClass,
+                                LazinatorParentsReference = LazinatorParentsReference,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
                                 HierarchyBytes = bytes
                             }};
-                            clone.LazinatorParentClass = default;
+                            clone.LazinatorParentsReference = default;
                             return clone;
                         }}
 
@@ -926,7 +926,7 @@ namespace Lazinator.CodeDescription
                 {
                     sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
                     sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
-                    sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentClass.Any()}}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParentsReference.Any()}}"");");
                 }
 
                 if (ContainsOpenGenericParameters || !IsSealedOrStruct)
@@ -1057,7 +1057,7 @@ namespace Lazinator.CodeDescription
                 if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface))
                     classContainingStructContainingClassError = $@"
 
-                        if (LazinatorParentClass.Any())
+                        if (LazinatorParentsReference.Any())
                         {{
                             throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class."");
                         }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 

@@ -13,19 +13,55 @@ namespace Lazinator.Core
         // A complication is that an object can have the same parent more than once (that is, two childs of an
         // object can be the same), so we have to keep track of the number of times a parent is a parent.
 
-        private Dictionary<ILazinator, byte> Parents;
+        private Dictionary<ILazinator, byte> OtherParents;
 
         public ILazinator LastAdded { get; private set; }
 
         public bool Any() => LastAdded != null;
 
-        public int Count => LastAdded == null ? 0 : Parents.Sum(x => x.Value);
+        public int Count => LastAdded == null ? 0 : OtherParents.Sum(x => x.Value);
 
-        public LazinatorParentsReference(ILazinator onlyParent)
+        public LazinatorParentsReference(ILazinator lastAdded, Dictionary<ILazinator, byte> otherParents = null)
         {
-            LastAdded = onlyParent;
-            Parents = null;
+            LastAdded = lastAdded;
+            OtherParents = otherParents;
         }
+
+        public LazinatorParentsReference WithAdded(ILazinator parent)
+        {
+            if (LastAdded == null)
+            {
+                return new LazinatorParentsReference(parent, OtherParents);
+            }
+            var otherParents = OtherParents;
+            if (otherParents == null)
+                otherParents = new Dictionary<ILazinator, byte>();
+            if (otherParents.ContainsKey(parent))
+                otherParents[parent]++;
+            else
+                otherParents[parent] = 1;
+            return new LazinatorParentsReference(LastAdded, otherParents);
+        }
+
+        public LazinatorParentsReference WithRemoved(ILazinator parent)
+        {
+            if (LastAdded == parent)
+            {
+                if (Count == 1)
+                {
+                    return new LazinatorParentsReference();
+                }
+                else
+                    return new LazinatorParentsReference(null, OtherParents);
+            }
+            var otherParents = OtherParents;
+            if (otherParents[parent] == 1)
+                otherParents.Remove(parent);
+            else
+                otherParents[parent]--;
+            return new LazinatorParentsReference(LastAdded, otherParents);
+        }
+
 
         public void Add(ILazinator parent)
         {
@@ -34,12 +70,12 @@ namespace Lazinator.Core
                 LastAdded = parent;
                 return;
             }
-            if (Parents == null)
-                Parents = new Dictionary<ILazinator, byte>();
-            if (Parents.ContainsKey(parent))
-                Parents[parent]++;
+            if (OtherParents == null)
+                OtherParents = new Dictionary<ILazinator, byte>();
+            if (OtherParents.ContainsKey(parent))
+                OtherParents[parent]++;
             else
-                Parents[parent] = 1;
+                OtherParents[parent] = 1;
         }
 
         public void Remove(ILazinator parent)
@@ -49,24 +85,24 @@ namespace Lazinator.Core
                 if (Count == 1)
                 {
                     LastAdded = null;
-                    Parents = null;
+                    OtherParents = null;
                 }
                 else
                     LastAdded = null;
                 return;
             }
-            if (Parents[parent] == 1)
-                Parents.Remove(parent);
+            if (OtherParents[parent] == 1)
+                OtherParents.Remove(parent);
             else
-                Parents[parent]--;
+                OtherParents[parent]--;
         }
 
         public void InformParentsOfDirtiness()
         {
-            if (LastAdded == null)
+            if (LastAdded != null)
                 LastAdded.DescendantIsDirty = true;
-            if (Parents != null)
-                foreach (var parent in Parents)
+            if (OtherParents != null)
+                foreach (var parent in OtherParents)
                 {
                     if (parent.Key != LastAdded)
                         parent.Key.DescendantIsDirty = true;

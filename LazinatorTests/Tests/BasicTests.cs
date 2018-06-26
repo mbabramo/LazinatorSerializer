@@ -201,9 +201,9 @@ namespace LazinatorTests.Tests
             var original = GetHierarchy(1, 1, 1, 1, 0);
             var another = GetHierarchy(1, 1, 1, 1, 0);
             original.MyAutoChangeParentChild = new ExampleChild();
-            original.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(original);
+            original.MyAutoChangeParentChild.LazinatorParentsReference.Should().Be(original);
             another.MyAutoChangeParentChild = original.MyAutoChangeParentChild;
-            another.MyAutoChangeParentChild.LazinatorParentClass.Should().Be(another);
+            another.MyAutoChangeParentChild.LazinatorParentsReference.Should().Be(another);
 
             original.MyAutoChangeParentChild = null;
             original.MyAutoChangeParentChild.Should().BeNull();
@@ -293,8 +293,8 @@ namespace LazinatorTests.Tests
             // do an initial serialization / deserialization cycle
             var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
-            result.MyChild1?.LazinatorParentClass.Should().Be(result);
-            result.MyChild2?.LazinatorParentClass.Should().Be(result);
+            result.MyChild1?.LazinatorParentsReference.Should().Be(result);
+            result.MyChild2?.LazinatorParentsReference.Should().Be(result);
             // repeat the cycle
             var result2 = result.CloneLazinatorTyped();
             ExampleEqual(copy, result2).Should().BeTrue();

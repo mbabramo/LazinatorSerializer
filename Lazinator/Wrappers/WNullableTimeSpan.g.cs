@@ -29,7 +29,7 @@ namespace Lazinator.Wrappers
     {
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorParentsReference LazinatorParentClass { get; set; }
+        public LazinatorParentsReference LazinatorParentsReference { get; set; }
         
         IncludeChildrenMode OriginalIncludeChildrenMode;
         
@@ -68,11 +68,11 @@ namespace Lazinator.Wrappers
             MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new WNullableTimeSpan()
             {
-                LazinatorParentClass = LazinatorParentClass,
+                LazinatorParentsReference = LazinatorParentsReference,
                 OriginalIncludeChildrenMode = includeChildrenMode,
                 HierarchyBytes = bytes,
             };
-            clone.LazinatorParentClass = default;
+            clone.LazinatorParentsReference = default;
             return clone;
         }
         
@@ -91,7 +91,7 @@ namespace Lazinator.Wrappers
                     _IsDirty = value;
                     if (_IsDirty)
                     {
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_IsDirty)
@@ -127,7 +127,7 @@ namespace Lazinator.Wrappers
                     if (_DescendantIsDirty)
                     {
                         _DescendantHasChanged = true;
-                        LazinatorParentClass.InformParentsOfDirtiness();
+                        LazinatorParentsReference.InformParentsOfDirtiness();
                     }
                 }
                 if (_DescendantIsDirty)

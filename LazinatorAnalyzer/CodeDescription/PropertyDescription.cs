@@ -861,18 +861,12 @@ namespace Lazinator.CodeDescription
             }
             else
                 creation = $@"{assignment}";
-
-            bool autoChangingParent = !MovesFromOtherHierarchiesAllowed && 
-                (
-                    (ContainingObjectDescription?.Compilation?.Config?.DefaultAutoChangeParent ?? true)
-                    || AutoChangeParent
-                    || PropertyType == LazinatorPropertyType.LazinatorStruct
-                );
+            
             const string incomingValue = "value"; // if we want to clone (as in previous version), change this string
             string parentSet = "", parentRelationship = "";
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                 parentSet = $@"
-                            {incomingValue}.LazinatorParentClass.Add(this);
+                            {incomingValue}.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                             {incomingValue}.IsDirty = true;";
             else
                 parentSet = $@"
@@ -963,7 +957,7 @@ namespace Lazinator.CodeDescription
 
         private string GetManualObjectCreation()
         {
-            // if the container object containing this property is a struct, then we can't set LazinatorParentClass. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
+            // if the container object containing this property is a struct, then we can't set LazinatorParentsReference. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
             string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct
                 ? ""
                 : $@"if (childData.Length == 0)
@@ -972,7 +966,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
-                            LazinatorParentClass = new LazinatorParentsReference(this),";
+                            LazinatorParentsReference = new LazinatorParentsReference(this),";
             string creation = $@"{nullItemCheck}_{PropertyName} = new {AppropriatelyQualifiedTypeName}()
                     {{{lazinatorParentClassSet}
                         LazinatorObjectBytes = childData,
