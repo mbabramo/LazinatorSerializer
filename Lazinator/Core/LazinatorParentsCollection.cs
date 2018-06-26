@@ -48,8 +48,11 @@ namespace Lazinator.Core
             OtherParents = otherParents;
         }
 
-        public LazinatorParentsCollection WithAdded(ILazinator parent)
+        public LazinatorParentsCollection WithAdded(ILazinator parent, Action<LazinatorParentsCollection, ILazinator> multipleParentsAction = null)
         {
+            if (multipleParentsAction != null && Count > 0)
+                multipleParentsAction(this, parent);
+
             if (parent == null)
                 return this;
 

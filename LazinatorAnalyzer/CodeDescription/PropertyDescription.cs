@@ -130,6 +130,7 @@ namespace Lazinator.CodeDescription
                         [DebuggerStepThrough]" : "";
         private string ConfirmDirtinessConsistencyCheck => $@"
                             LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
+        private string MultipleParentsAction => Config?.MultipleParentsAction == null ? null : (", " + Config?.MultipleParentsAction);
         private string CheckAtEndOfSet => ""; // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
 
         #endregion
@@ -879,7 +880,7 @@ namespace Lazinator.CodeDescription
                         if (value != null)
                         {{
                             value.IsDirty = true;
-                            value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                            value.LazinatorParents = value.LazinatorParents.WithAdded(this{MultipleParentsAction});
                         }}
                         ";
                 else
@@ -916,7 +917,7 @@ namespace Lazinator.CodeDescription
                             if (value != null)
                             {{
                                 value.IsDirty = true;
-                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this{MultipleParentsAction});
                             }}
                         }}
                             ";
