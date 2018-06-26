@@ -202,7 +202,6 @@ namespace Lazinator.Collections
         private T _Item1;
         public virtual T Item1
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Item1_Accessed)
@@ -221,7 +220,6 @@ namespace Lazinator.Collections
                 } 
                 return _Item1;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))

@@ -170,5 +170,65 @@ namespace LazinatorTests.Tests
             c.DescendantIsDirty.Should().BeTrue();
         }
 
+        [Fact]
+        public void DirtinessNotificationOccursWithStructAsGeneric_ChangingFromDefault()
+        {
+            LazinatorTuple<ExampleStruct, ExampleStruct> e = new LazinatorTuple<ExampleStruct, ExampleStruct>();
+            var c = e.CloneLazinatorTyped();
+            c.Item1 = new ExampleStruct() { MyChar = 'A' }; // because Item1 is set, IsDirty notification occurs
+            c.IsDirty.Should().BeTrue();
+
+            // The following code is invalid and thus doesn't present a problem.
+            //e = new LazinatorTuple<ExampleStruct, ExampleStruct>();
+            //c = e.CloneLazinatorTyped();
+            //c.Item1.MyChar = 'A' ; // INVALID -- can't change MyChar b/c Item1 is a struct. Instead, we would do c.Item1 = c.Item1 { MyChar = 'A' }, which works as above
+            //c.IsDirty.Should().BeTrue();
+        }
+
+        [Fact]
+        public void DirtinessNotificationOccursWithStructAsGeneric()
+        {
+            LazinatorTuple<ExampleStruct, ExampleStruct> e = new LazinatorTuple<ExampleStruct, ExampleStruct>
+            (
+                new ExampleStruct() { MyChar = 'B' },
+                new ExampleStruct() { MyChar = 'C' }
+            );
+            var c = e.CloneLazinatorTyped();
+            c.Item1 = new ExampleStruct() { MyChar = 'A' };
+            c.IsDirty.Should().BeTrue();
+        }
+
+        [Fact]
+        public void DirtinessNotificationOccursWithClassAsGeneric()
+        {
+            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>
+            (
+                new ExampleChild() { MyShort = 23 },
+                new ExampleChild() { MyShort = 24 }
+            );
+            var c = e.CloneLazinatorTyped();
+            c.Item1 = new ExampleChild() { MyShort = 25 };
+            c.IsDirty.Should().BeTrue();
+
+            e = new LazinatorTuple<ExampleChild, ExampleChild>
+            (
+                new ExampleChild() { MyShort = 23 },
+                new ExampleChild() { MyShort = 24 }
+            );
+            c = e.CloneLazinatorTyped();
+            c.IsDirty.Should().BeFalse();
+
+            e = new LazinatorTuple<ExampleChild, ExampleChild>
+            (
+                new ExampleChild() { MyShort = 23 },
+                new ExampleChild() { MyShort = 24 }
+            );
+            c = e.CloneLazinatorTyped();
+            c.Item1.MyShort = 25;
+            c.IsDirty.Should().BeFalse();
+            c.DescendantIsDirty.Should().BeTrue();
+        }
+
+
     }
 }
