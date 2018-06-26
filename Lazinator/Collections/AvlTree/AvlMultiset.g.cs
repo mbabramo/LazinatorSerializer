@@ -239,12 +239,12 @@ namespace Lazinator.Collections.AvlTree
             [DebuggerStepThrough]
             set
             {
+                if (_UnderlyingSet != null)
+                {
+                    _UnderlyingSet.LazinatorParents = _UnderlyingSet.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_UnderlyingSet != null)
-                    {
-                        _UnderlyingSet.LazinatorParents = _UnderlyingSet.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

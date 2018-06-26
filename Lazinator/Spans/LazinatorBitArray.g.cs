@@ -263,12 +263,12 @@ namespace Lazinator.Spans
             [DebuggerStepThrough]
             set
             {
+                if (_ByteSpan != null)
+                {
+                    _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_ByteSpan != null)
-                    {
-                        _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

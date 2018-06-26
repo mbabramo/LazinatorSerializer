@@ -244,12 +244,12 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
+                if (_Keys != null)
+                {
+                    _Keys.LazinatorParents = _Keys.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_Keys != null)
-                    {
-                        _Keys.LazinatorParents = _Keys.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -284,12 +284,12 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
+                if (_Values != null)
+                {
+                    _Values.LazinatorParents = _Values.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_Values != null)
-                    {
-                        _Values.LazinatorParents = _Values.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

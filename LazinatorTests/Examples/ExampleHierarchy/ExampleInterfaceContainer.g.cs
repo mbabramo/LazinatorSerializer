@@ -227,12 +227,12 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             set
             {
+                if (_ExampleByInterface != null)
+                {
+                    _ExampleByInterface.LazinatorParents = _ExampleByInterface.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_ExampleByInterface != null)
-                    {
-                        _ExampleByInterface.LazinatorParents = _ExampleByInterface.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

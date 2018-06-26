@@ -237,12 +237,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_ItemU != null)
+                {
+                    _ItemU.LazinatorParents = _ItemU.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_ItemU != null)
-                    {
-                        _ItemU.LazinatorParents = _ItemU.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

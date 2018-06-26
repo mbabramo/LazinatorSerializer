@@ -222,12 +222,12 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (_Root != null)
+                {
+                    _Root.LazinatorParents = _Root.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_Root != null)
-                    {
-                        _Root.LazinatorParents = _Root.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

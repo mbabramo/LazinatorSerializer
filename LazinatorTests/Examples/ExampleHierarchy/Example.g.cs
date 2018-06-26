@@ -397,12 +397,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_IncludableChild != null)
+                {
+                    _IncludableChild.LazinatorParents = _IncludableChild.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_IncludableChild != null)
-                    {
-                        _IncludableChild.LazinatorParents = _IncludableChild.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -435,12 +435,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_MyChild1 != null)
+                {
+                    _MyChild1.LazinatorParents = _MyChild1.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_MyChild1 != null)
-                    {
-                        _MyChild1.LazinatorParents = _MyChild1.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -473,12 +473,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_MyChild2 != null)
+                {
+                    _MyChild2.LazinatorParents = _MyChild2.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_MyChild2 != null)
-                    {
-                        _MyChild2.LazinatorParents = _MyChild2.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -511,12 +511,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_MyChild2Previous != null)
+                {
+                    _MyChild2Previous.LazinatorParents = _MyChild2Previous.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_MyChild2Previous != null)
-                    {
-                        _MyChild2Previous.LazinatorParents = _MyChild2Previous.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -549,12 +549,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_MyInterfaceImplementer != null)
+                {
+                    _MyInterfaceImplementer.LazinatorParents = _MyInterfaceImplementer.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_MyInterfaceImplementer != null)
-                    {
-                        _MyInterfaceImplementer.LazinatorParents = _MyInterfaceImplementer.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -691,12 +691,12 @@ namespace LazinatorTests.Examples
             }
             set
             {
+                if (_ExcludableChild != null)
+                {
+                    _ExcludableChild.LazinatorParents = _ExcludableChild.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_ExcludableChild != null)
-                    {
-                        _ExcludableChild.LazinatorParents = _ExcludableChild.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

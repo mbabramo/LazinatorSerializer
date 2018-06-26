@@ -90,6 +90,28 @@ namespace LazinatorTests.Tests
 
         }
 
+        [Fact]
+        public void ParentsWorksWithGenericStruct()
+        {
+            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>()
+            {
+                Item1 = new WInt(1),
+                Item2 = new WInt(2)
+            };
+            e.Item1.LazinatorParents.LastAdded.Should().Be(e);
+            var c = e.CloneLazinatorTyped();
+            var d = e.CloneLazinatorTyped();
+            d.Item1 = c.Item2;
+            d.Item1.LazinatorParents.Count.Should().Be(1);
+            d.Item1.LazinatorParents.LastAdded.Should().Be(d);
+            d.Item2.LazinatorParents.Count.Should().Be(1);
+            d.Item2.LazinatorParents.LastAdded.Should().Be(d);
+            c.Item1.LazinatorParents.Count.Should().Be(1);
+            c.Item1.LazinatorParents.LastAdded.Should().Be(c);
+            c.Item2.LazinatorParents.Count.Should().Be(1);
+            c.Item2.LazinatorParents.LastAdded.Should().Be(c);
+        }
+
 
         [Fact]
         public void SameObjectCanAppearTwice()

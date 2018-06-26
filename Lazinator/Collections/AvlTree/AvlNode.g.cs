@@ -262,11 +262,12 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
+                {
+                    _Key.LazinatorParents = _Key.LazinatorParents.WithRemoved(this);
+                }
                 if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
-                {if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
-                    {
-                        _Key.LazinatorParents = _Key.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -308,12 +309,12 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (_Left != null)
+                {
+                    _Left.LazinatorParents = _Left.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_Left != null)
-                    {
-                        _Left.LazinatorParents = _Left.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -355,12 +356,12 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (_Right != null)
+                {
+                    _Right.LazinatorParents = _Right.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_Right != null)
-                    {
-                        _Right.LazinatorParents = _Right.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -395,11 +396,12 @@ namespace Lazinator.Collections.Avl
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
+                {
+                    _Value.LazinatorParents = _Value.LazinatorParents.WithRemoved(this);
+                }
                 if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
-                {if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
-                    {
-                        _Value.LazinatorParents = _Value.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

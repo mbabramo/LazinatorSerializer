@@ -238,12 +238,12 @@ namespace Lazinator.Collections.Dictionary
             [DebuggerStepThrough]
             set
             {
+                if (_Buckets != null)
+                {
+                    _Buckets.LazinatorParents = _Buckets.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_Buckets != null)
-                    {
-                        _Buckets.LazinatorParents = _Buckets.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

@@ -224,11 +224,14 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                {
+                    var copy = _Item1;
+                    copy.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                    _Item1 = copy;
+                }
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
-                    {
-                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -263,11 +266,12 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                {
+                    _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                }
                 if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
-                {if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
-                    {
-                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

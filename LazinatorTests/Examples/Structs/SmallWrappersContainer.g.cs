@@ -242,12 +242,12 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
+                if (_ListWrappedBytes != null)
+                {
+                    _ListWrappedBytes.LazinatorParents = _ListWrappedBytes.LazinatorParents.WithRemoved(this);
+                }
                 if (value != null)
                 {
-                    if (_ListWrappedBytes != null)
-                    {
-                        _ListWrappedBytes.LazinatorParents = _ListWrappedBytes.LazinatorParents.WithRemoved(this);
-                    }
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }

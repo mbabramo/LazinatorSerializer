@@ -226,11 +226,12 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                {
+                    _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                }
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
-                {if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
-                    {
-                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -265,11 +266,12 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                {
+                    _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                }
                 if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
-                {if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
-                    {
-                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
@@ -304,11 +306,12 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
+                if (!System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)))
+                {
+                    _Item3.LazinatorParents = _Item3.LazinatorParents.WithRemoved(this);
+                }
                 if (!System.Collections.Generic.EqualityComparer<V>.Default.Equals(value, default(V)))
-                {if (!System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)))
-                    {
-                        _Item3.LazinatorParents = _Item3.LazinatorParents.WithRemoved(this);
-                    }
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     value.IsDirty = true;
                 }
