@@ -15,33 +15,46 @@ namespace Lazinator.Core
 
         private Dictionary<ILazinator, byte> Parents;
 
-        public bool Any() => Parents != null && Parents.Any();
+        public ILazinator LastAdded { get; private set; }
 
-        public int Count => Parents.Sum(x => x.Value);
+        public bool Any() => LastAdded != null;
 
-        public ILazinator First() => Parents.First().Key;
-
-        public ILazinator FirstOrDefault() => Any() ? First() : null;
+        public int Count => LastAdded == null ? 0 : Parents.Sum(x => x.Value);
 
         public LazinatorParentsReference(ILazinator onlyParent)
         {
-            Parents = new Dictionary<ILazinator, byte>();
-            Parents[onlyParent] = 1;
+            LastAdded = onlyParent;
+            Parents = null;
         }
 
         public void Add(ILazinator parent)
         {
+            if (LastAdded == null)
+            {
+                LastAdded = parent;
+                return;
+            }
             if (Parents == null)
                 Parents = new Dictionary<ILazinator, byte>();
             if (Parents.ContainsKey(parent))
                 Parents[parent]++;
             else
                 Parents[parent] = 1;
-
         }
 
         public void Remove(ILazinator parent)
         {
+            if (LastAdded == parent)
+            {
+                if (Count == 1)
+                {
+                    LastAdded = null;
+                    Parents = null;
+                }
+                else
+                    LastAdded = null;
+                return;
+            }
             if (Parents[parent] == 1)
                 Parents.Remove(parent);
             else
@@ -50,10 +63,14 @@ namespace Lazinator.Core
 
         public void InformParentsOfDirtiness()
         {
-            foreach (var parent in Parents)
-            {
-                parent.Key.DescendantIsDirty = true;
-            }
+            if (LastAdded == null)
+                LastAdded.DescendantIsDirty = true;
+            if (Parents != null)
+                foreach (var parent in Parents)
+                {
+                    if (parent.Key != LastAdded)
+                        parent.Key.DescendantIsDirty = true;
+                }
         }
     }
 }

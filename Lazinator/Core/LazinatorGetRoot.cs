@@ -8,13 +8,14 @@ namespace Lazinator.Core
     {
         /// <summary>
         /// Returns the root of a hierarchy if the hierarchy consists of all classes. Otherwise, it returns the highest class containing the node (or the node itself, if it is a struct.)
+        /// Where a node has multiple parents, the hierarchy is considered to be the last added parent.
         /// </summary>
         /// <param name="node">A Lazinator object that may be part of a hierarchy</param>
         /// <returns></returns>
         public static ILazinator GetRoot(this ILazinator node)
         {
-            while (node.LazinatorParentClass.FirstOrDefault() != null)
-                node = node.LazinatorParentClass.FirstOrDefault();
+            while (node.LazinatorParentClass.LastAdded != null)
+                node = node.LazinatorParentClass.LastAdded;
             return node;
         }
     }
