@@ -226,9 +226,7 @@ namespace Lazinator.Collections
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
                 {
-                    var copy = _Item1;
-                    copy.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
-                    _Item1 = copy;
+                    _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
                 }
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {

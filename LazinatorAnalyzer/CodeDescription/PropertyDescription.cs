@@ -868,9 +868,7 @@ namespace Lazinator.CodeDescription
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     removeContainerAsParent = $@"if (!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName})))
                             {{
-                                var copy = _{PropertyName}; // must copy to mutate in case {PropertyName} is struct
-                                copy.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                                _{PropertyName} = copy;
+                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
                             }}
                             ";
                 parentSet = $@"

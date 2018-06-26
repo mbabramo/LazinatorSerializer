@@ -233,6 +233,9 @@ namespace Lazinator.CodeDescription
                     {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { NameIncludingGenerics } : {(IsDerivedFromNonAbstractLazinator ? BaseObjectName + ", " : "")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
+            if (BaseLazinatorObject == null)
+                sb.AppendLine($@"public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct ? "true" : "false")};
+                        ");
         }
 
         private void AppendSupertypesInformation(out string partialsuperclasses, out IEnumerable<ITypeSymbol> supertypes)
@@ -258,6 +261,8 @@ namespace Lazinator.CodeDescription
             string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(false, true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
+
+
 
             if (!IsDerivedFromNonAbstractLazinator)
             {
