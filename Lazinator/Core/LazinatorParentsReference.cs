@@ -6,16 +6,16 @@ using static Lazinator.Core.LazinatorUtilities;
 
 namespace Lazinator.Core
 {
-    public struct LazinatorParentsReference
+    public readonly struct LazinatorParentsReference
     {
         // This class allows a single Lazinator object to be present in multiple hierarchies or in multiple parts of a single hierarchy.
         // It does this by keeping track of the object's parents (assuming they are classes).
         // A complication is that an object can have the same parent more than once (that is, two childs of an
         // object can be the same), so we have to keep track of the number of times a parent is a parent.
 
-        private Dictionary<ILazinator, byte> OtherParents;
+        private readonly Dictionary<ILazinator, byte> OtherParents;
 
-        public ILazinator LastAdded { get; private set; }
+        public readonly ILazinator LastAdded;
 
         public bool Any() => LastAdded != null;
 
@@ -60,41 +60,6 @@ namespace Lazinator.Core
             else
                 otherParents[parent]--;
             return new LazinatorParentsReference(LastAdded, otherParents);
-        }
-
-
-        public void Add(ILazinator parent)
-        {
-            if (LastAdded == null)
-            {
-                LastAdded = parent;
-                return;
-            }
-            if (OtherParents == null)
-                OtherParents = new Dictionary<ILazinator, byte>();
-            if (OtherParents.ContainsKey(parent))
-                OtherParents[parent]++;
-            else
-                OtherParents[parent] = 1;
-        }
-
-        public void Remove(ILazinator parent)
-        {
-            if (LastAdded == parent)
-            {
-                if (Count == 1)
-                {
-                    LastAdded = null;
-                    OtherParents = null;
-                }
-                else
-                    LastAdded = null;
-                return;
-            }
-            if (OtherParents[parent] == 1)
-                OtherParents.Remove(parent);
-            else
-                OtherParents[parent]--;
         }
 
         public void InformParentsOfDirtiness()

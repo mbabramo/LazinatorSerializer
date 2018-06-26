@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedBool = value;
@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedByte = value;
@@ -400,7 +400,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedChar = value;
@@ -457,7 +457,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableBool = value;
@@ -514,7 +514,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableByte = value;
@@ -571,7 +571,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableChar = value;
@@ -628,7 +628,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedNullableSByte = value;
@@ -685,7 +685,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _WrappedSByte = value;

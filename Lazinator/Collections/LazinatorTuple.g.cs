@@ -232,7 +232,7 @@ namespace Lazinator.Collections
             {
                 if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(value, default(T)))
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -268,7 +268,7 @@ namespace Lazinator.Collections
             {
                 if (!System.Collections.Generic.EqualityComparer<U>.Default.Equals(value, default(U)))
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

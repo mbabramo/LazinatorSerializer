@@ -147,13 +147,13 @@ namespace Lazinator.Collections
                 {
                     ((IList<T>)UnderlyingList)[index] = value;
                     if (value != null)
-                        value.LazinatorParentsReference.Add(this);
+                        value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     return;
                 }
                 CreateUnderlyingListIfNecessary();
                 ((IList<T>) UnderlyingList)[index] = value;
                 if (value != null)
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 MarkDirty();
                 ItemsAccessedBeforeFullyDeserialized[index] = true;
             }
@@ -187,7 +187,7 @@ namespace Lazinator.Collections
             // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize,
             // because it doesn't change anything up to this point
             if (item != null)
-                item.LazinatorParentsReference.Add(this);
+                item.LazinatorParentsReference = item.LazinatorParentsReference.WithAdded(this);
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Add(item);
             if (!FullyDeserialized)
@@ -238,7 +238,7 @@ namespace Lazinator.Collections
         {
             FullyDeserializeIfNecessary();
             if (item != null)
-                item.LazinatorParentsReference.Add(this);
+                item.LazinatorParentsReference = item.LazinatorParentsReference.WithAdded(this);
             CreateUnderlyingListIfNecessary();
             ((IList<T>)UnderlyingList).Insert(index, item);
             MarkDirty();

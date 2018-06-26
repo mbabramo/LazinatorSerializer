@@ -270,7 +270,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(value, default(TKey)))
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -313,7 +313,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -356,7 +356,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -392,7 +392,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, default(TValue)))
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;

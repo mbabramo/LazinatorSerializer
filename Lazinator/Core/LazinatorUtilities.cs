@@ -261,7 +261,7 @@ namespace Lazinator.Core
                 }
             }
             if (child != null && !child.LazinatorParentsReference.Any())
-                child.LazinatorParentsReference.Add(parent); // set the parent so that this object can be used like a deserialized object
+                child.LazinatorParentsReference = child.LazinatorParentsReference.WithAdded(parent); // set the parent so that this object can be used like a deserialized object
         }
 
         public static LazinatorGenericIDType GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)

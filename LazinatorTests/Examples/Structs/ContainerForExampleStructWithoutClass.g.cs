@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 
-                value.LazinatorParentsReference.Add(this);
+                value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                 value.IsDirty = true;
                 IsDirty = true;
                 _ExampleStructWithoutClass = value;

@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (value != null)
                 {
-                    value.LazinatorParentsReference.Add(this);
+                    value.LazinatorParentsReference = value.LazinatorParentsReference.WithAdded(this);
                     value.IsDirty = true;
                 }
                 IsDirty = true;
