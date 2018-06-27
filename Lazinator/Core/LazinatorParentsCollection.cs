@@ -48,6 +48,24 @@ namespace Lazinator.Core
             OtherParents = otherParents;
         }
 
+        public T GetSoleParentOfType<T>() where T : class, ILazinator
+        {
+            T found = null;
+            if (LastAdded != null)
+                if (LastAdded is T ofCorrectType)
+                    found = ofCorrectType;
+            if (OtherParents != null)
+                foreach (var node in OtherParents)
+                    if (node is T ofCorrectType)
+                    {
+                        if (found == null)
+                            found = ofCorrectType;
+                        else
+                            throw new Exception($"Only one parent of type {typeof(T)} was expected, but more than one was found.");
+                    }
+            return found;
+        }
+
         private LinkedListNode<(ILazinator parent, int count)> GetNodeWithParent(ILazinator parent)
         {
             if (OtherParents == null || !OtherParents.Any())
@@ -61,6 +79,8 @@ namespace Lazinator.Core
             }
             return null;
         }
+
+        // DEBUG: Consider eliminating multiple parents action, including config setting
 
         public LazinatorParentsCollection WithAdded(ILazinator parent, Action<LazinatorParentsCollection, ILazinator> multipleParentsAction = null)
         {
