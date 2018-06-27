@@ -16,8 +16,9 @@ namespace Lazinator.Core
     {
         // A complication is that an object can have the same parent more than once (that is, two childs of an
         // object can be the same), so we have to keep track of the number of times a parent is a parent.
-
-        private readonly Dictionary<ILazinator, int> OtherParents;
+        // Since usually this will only have one or two items at most, we use a list rather than a dictionary.
+        // TODO: LinkedList?
+        private readonly List<(ILazinator parent, int count)> OtherParents;
 
         /// <summary>
         /// The last Lazinator parent added. If the last added is subsequently removed, this will 
@@ -34,18 +35,30 @@ namespace Lazinator.Core
         /// </summary>
         public int Count => (LastAdded == null ? 0 : 1) + (OtherParents?.Count() ?? 0);
 
-        public LazinatorParentsCollection(ILazinator lastAdded, Dictionary<ILazinator, int> otherParents = null)
+        public LazinatorParentsCollection(ILazinator lastAdded, List<(ILazinator parent, int count)> otherParents = null)
         {
             LastAdded = lastAdded;
             LastAddedCount = (lastAdded == null) ? 0 : 1;
             OtherParents = otherParents;
         }
 
-        public LazinatorParentsCollection(ILazinator lastAdded, int lastAddedCount, Dictionary<ILazinator, int> otherParents = null)
+        public LazinatorParentsCollection(ILazinator lastAdded, int lastAddedCount, List<(ILazinator parent, int count)> otherParents = null)
         {
             LastAdded = lastAdded;
             LastAddedCount = lastAddedCount;
             OtherParents = otherParents;
+        }
+
+
+
+        private int? GetIndexInOtherParents(ILazinator parent)
+        {
+            if (OtherParents == null)
+                return null;
+            for (int i = 0; i < OtherParents.Count; i++)
+                if (OtherParents[i].parent == parent)
+                    return i;
+            return null;
         }
 
         public LazinatorParentsCollection WithAdded(ILazinator parent, Action<LazinatorParentsCollection, ILazinator> multipleParentsAction = null)
@@ -60,11 +73,12 @@ namespace Lazinator.Core
             {
                 if (OtherParents == null)
                     return new LazinatorParentsCollection(parent);
-                if (OtherParents.ContainsKey(parent))
+                int? indexInOtherParents = GetIndexInOtherParents(parent);
+                if (indexInOtherParents != null)
                 {   
                     var otherParentsWithRemoval = OtherParents;
-                    int revisedCount = OtherParents[parent] + 1;
-                    otherParentsWithRemoval.Remove(parent);
+                    int revisedCount = OtherParents[(int) indexInOtherParents].count + 1;
+                    otherParentsWithRemoval.RemoveAt((int) indexInOtherParents);
                     return new LazinatorParentsCollection(parent, revisedCount, otherParentsWithRemoval);
                 }
                 return new LazinatorParentsCollection(parent, OtherParents);
@@ -76,11 +90,8 @@ namespace Lazinator.Core
             // move LastAdded to OtherParents
             var otherParentsWithAddition = OtherParents;
             if (otherParentsWithAddition == null)
-                otherParentsWithAddition = new Dictionary<ILazinator, int>();
-            if (otherParentsWithAddition.ContainsKey(LastAdded))
-                otherParentsWithAddition[LastAdded]++;
-            else
-                otherParentsWithAddition[LastAdded] = 1;
+                otherParentsWithAddition = new List<(ILazinator parent, int count)>();
+            otherParentsWithAddition.Add((LastAdded, LastAddedCount));
             return new LazinatorParentsCollection(parent, otherParentsWithAddition);
         }
 
@@ -95,13 +106,14 @@ namespace Lazinator.Core
                 else
                     return new LazinatorParentsCollection(null, OtherParents);
             }
+            int? indexInOtherParents = GetIndexInOtherParents(parent);
+            if (indexInOtherParents == null)
+                return this; // nothing to remove
             var otherParents = OtherParents;
-            if (otherParents == null || !otherParents.ContainsKey(parent))
-                return this; // do not throw
-            if (otherParents[parent] == 1)
-                otherParents.Remove(parent);
+            if (otherParents[(int) indexInOtherParents].count == 1)
+                otherParents.RemoveAt((int) indexInOtherParents);
             else
-                otherParents[parent]--;
+                otherParents[(int)indexInOtherParents] = (otherParents[(int)indexInOtherParents].parent, otherParents[(int)indexInOtherParents].count - 1);
             return new LazinatorParentsCollection(LastAdded, otherParents);
         }
 
@@ -112,8 +124,8 @@ namespace Lazinator.Core
             if (OtherParents != null)
                 foreach (var parent in OtherParents)
                 {
-                    if (parent.Key != LastAdded)
-                        parent.Key.DescendantIsDirty = true;
+                    if (parent.parent != LastAdded)
+                        parent.parent.DescendantIsDirty = true;
                 }
         }
 
@@ -124,8 +136,8 @@ namespace Lazinator.Core
             if (OtherParents != null)
                 foreach (var parent in OtherParents)
                 {
-                    if (parent.Key != LastAdded)
-                        yield return parent.Key;
+                    if (parent.parent != LastAdded)
+                        yield return parent.parent;
                 }
         }
     }
