@@ -903,7 +903,7 @@ namespace Lazinator.CodeDescription
             {
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                     propertyTypeDependentSet = $@"
-                        if (value.IsStruct)
+                        if (value != null && value.IsStruct)
                         {{
                             value.LazinatorParents = new LazinatorParentsCollection(this);
                             value.IsDirty = true;
@@ -923,7 +923,7 @@ namespace Lazinator.CodeDescription
                             ";
                 else
                     propertyTypeDependentSet = $@"
-                        if (value.IsStruct)
+                        if (value != null && value.IsStruct)
                         {{
                             value.IsDirty = true;
                         }}
