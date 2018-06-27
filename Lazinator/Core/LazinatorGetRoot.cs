@@ -48,7 +48,7 @@ namespace Lazinator.Core
         {
             Queue<ILazinator> q = new Queue<ILazinator>();
             q.Enqueue(node);
-            while (q.Peek() != null)
+            while (q.Any())
             {
                 node = q.Dequeue();
                 if (node.LazinatorParents.Count == 0)
@@ -56,6 +56,55 @@ namespace Lazinator.Core
                 foreach (var parent in node.LazinatorParents.EnumerateParents())
                     q.Enqueue(parent);
             }
+        }
+
+        /// <summary>
+        /// Finds each node that is the closest ancestor of the specified type on a path from the node to a hierarchy root.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> GetAllClosestAncestorsOfType<T>(this ILazinator node) where T : class, ILazinator
+        {
+            Queue<ILazinator> q = new Queue<ILazinator>();
+            q.Enqueue(node);
+            while (q.Any())
+            {
+                node = q.Dequeue();
+                if (node is T correctTypeNode)
+                    yield return correctTypeNode;
+                else
+                {
+                    foreach (var parent in node.LazinatorParents.EnumerateParents())
+                        q.Enqueue(parent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the sole node that is of the specified type and is the closest on the path from the node to the root.
+        /// Throws if there are multiple paths to a hierarchy root with different closest ancestors of the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static T GetSoleClosestAncestorOfType<T>(this ILazinator node) where T : class, ILazinator
+        {
+            ILazinator startPosition = node;
+            // first, see if we can get from this node to an ancestor of the specified type without hitting a place where there might be two ancestors
+            while (node != null && node.LazinatorParents.Count == 1)
+            {
+                node = node.LazinatorParents.LastAdded;
+                if (node is T correctTypeNode)
+                    return correctTypeNode;
+            }
+            // now, we need to use a more cumbersome procedure
+            List<T> matches = GetAllClosestAncestorsOfType<T>(startPosition).ToList();
+            if (!matches.Any())
+                return default(T);
+            if (matches.Count() == 1)
+                return matches.First();
+            throw new Exception($"Expected there to be a sole matching ancestor of type {typeof(T)} but there were {matches.Count()}.");
         }
 
         /// <summary>

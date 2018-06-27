@@ -223,5 +223,40 @@ namespace LazinatorTests.Tests
             c3.Item2.MyLong.Should().Be(543);
         }
 
+        [Fact]
+        public void GetRootsAndAncestors()
+        {
+            LazinatorTuple<ExampleChild, ExampleChild> e1 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = new ExampleChild() { MyWrapperContainer = new WrapperContainer() { WrappedInt = 3 } },
+                Item2 = null
+            };
+            var startingPoint = e1.Item1.MyWrapperContainer.WrappedInt;
+            startingPoint.GetSoleRoot().Should().Be(e1);
+            startingPoint.GetPrincipalRoot().Should().Be(e1);
+            startingPoint.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>().Should().Be(e1);
+            var closestAncestors = startingPoint.GetAllClosestAncestorsOfType<LazinatorTuple<ExampleChild, ExampleChild>>().ToList();
+            closestAncestors.Count().Should().Be(1);
+            closestAncestors[0].Should().Be(e1);
+
+            LazinatorTuple<ExampleChild, ExampleChild> e2 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = null,
+                Item2 = e1.Item1
+            };
+            startingPoint = e2.Item2.MyWrapperContainer.WrappedInt;
+            var roots = startingPoint.GetAllRoots().ToList();
+            roots.Count().Should().Be(2);
+            roots[0].Should().Be(e2);
+            roots[1].Should().Be(e1);
+            startingPoint.GetAllClosestAncestorsOfType<LazinatorTuple<ExampleChild, ExampleChild>>();
+            closestAncestors = startingPoint.GetAllClosestAncestorsOfType<LazinatorTuple<ExampleChild, ExampleChild>>().ToList();
+            closestAncestors.Count().Should().Be(2);
+            closestAncestors[0].Should().Be(e2);
+            closestAncestors[1].Should().Be(e1);
+            Action a = () => { var result = startingPoint.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>(); };
+            a.Should().Throw<Exception>();
+        }
+
     }
 }
