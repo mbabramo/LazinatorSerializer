@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -424,23 +425,98 @@ namespace Lazinator.Core
 
         /// <summary>
         /// Verifies that the 64-bit hashes of each node in two hierarchies match, indicating likely equality.
-        /// This can be useful for determining where two hierarchies expected to be equal differ.
+        /// If the hashes do not match, then this will walk the hierarchy tree to find the first node where 
+        /// a difference is manifest when children are excluded.
         /// </summary>
         /// <param name="firstHierarchy">The first Lazinator hierarchy</param>
         /// <param name="secondHierarchy">The second Lazinator hierarchy</param>
         /// <returns>True if the hashes match</returns>
-        public static void VerifyHierarchyHashesMatch(ILazinator firstHierarchy, ILazinator secondHierarchy)
+        public static void ConfirmHierarchiesEqual(ILazinator firstHierarchy, ILazinator secondHierarchy, string propertyNameSequence = "")
         {
-            var firstHierarchyNodes = firstHierarchy.GetAllNodes();
-            var secondHierarchyNodes = secondHierarchy.GetAllNodes();
+            ulong firstHash = firstHierarchy?.GetBinaryHashCode64() ?? 0;
+            ulong secondHash = secondHierarchy?.GetBinaryHashCode64() ?? 0;
 
-            var zipped = firstHierarchyNodes.Zip(secondHierarchyNodes, (x, y) => (x, y));
-            foreach (var pair in zipped)
-                if (pair.x.GetBinaryHashCode64() != pair.y.GetBinaryHashCode64())
-                    throw new Exception($"VerifyHierarchyHashesMatch failed. Node {pair.x} differed from {pair.y}");
+            if (firstHash != secondHash)
+            {
+                if (TopNodesOfHierarchyEqual(firstHierarchy, secondHierarchy, out string comparison))
+                {
+                    // Difference must be in a child. Find the children with the match failure.
+                    var firstHierarchyNodes = GetLazinatorChildren(firstHierarchy).ToList();
+                    var secondHierarchyNodes = GetLazinatorChildren(secondHierarchy).ToList();
+                    var zipped = firstHierarchyNodes.Zip(secondHierarchyNodes, (x, y) => (x, y));
+                    foreach (var pair in zipped)
+                    {
+                        try
+                        {
+                            if (pair.x.propertyName != pair.y.propertyName)
+                                throw new Exception($"Children properties unexpectedly differed {pair.x.propertyName} vs. {pair.y.propertyName}");
+                            ConfirmHierarchiesEqual(pair.x.descendant, pair.y.descendant, propertyNameSequence + " > " + pair.x.propertyName);
+                        }
+                        catch
+                        {
+                            throw;
+                        }
+                    }
 
-            if (firstHierarchyNodes.Count() != secondHierarchyNodes.Count())
-                throw new Exception("VerifyHierarchyHashesMatch failed. Hierarchies have different numbers of nodes.");
+                }
+                else
+                {
+                    string errorMessage = (propertyNameSequence ?? "") + comparison;
+                    throw new Exception("Hashes were expected to be same, but differed. Difference traced to:\n" + errorMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns true if two hierarchies, when stripped of their Lazinator children, have the same hash. If not, a string comparison is returned.
+        /// Note that 
+        /// </summary>
+        /// <param name="firstHierarchy"></param>
+        /// <param name="secondHierarchy"></param>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public static bool TopNodesOfHierarchyEqual(ILazinator firstHierarchy, ILazinator secondHierarchy, out string comparison)
+        {
+            if (firstHierarchy == null && secondHierarchy == null)
+            {
+                comparison = "";
+                return true;
+            }
+            if ((firstHierarchy == null) != (secondHierarchy == null))
+            {
+                comparison = $"{(firstHierarchy == null ? "First was null; second was not" : "Second was null; first was not")}";
+                return false;
+            }
+            ILazinator firstWithoutChildren = firstHierarchy.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
+            ILazinator secondWithoutChildren = secondHierarchy.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
+            if (firstWithoutChildren.GetBinaryHashCode64() != secondWithoutChildren.GetBinaryHashCode64())
+            {
+                string firstHierarchyTreeString = new HierarchyTree(firstHierarchy).ToString();
+                string secondHierarchyTreeString = new HierarchyTree(secondHierarchy).ToString();
+                
+                StringBuilder sb = new StringBuilder();
+                if (firstHierarchyTreeString == secondHierarchyTreeString)
+                {
+                    sb.Append("Both had same hierarchy tree (so they must differ in a way that does not affect .ToString() function):");
+                    sb.Append(firstHierarchyTreeString);
+                }
+                else
+                {
+                    // difference is apparent from hierarchy, so no 
+                    sb.AppendLine($"First:");
+                    sb.AppendLine(firstHierarchyTreeString);
+                    sb.AppendLine("");
+                    sb.AppendLine($"Second:");
+                    sb.AppendLine(secondHierarchyTreeString);
+                }
+                comparison = sb.ToString();
+                return false;
+            }
+            else
+            {
+                comparison = null;
+                return true;
+            }
         }
 
         /// <summary>

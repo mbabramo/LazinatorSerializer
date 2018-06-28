@@ -256,6 +256,8 @@ namespace LazinatorTests.Tests
             closestAncestors[1].Should().Be(e1);
             Action a = () => { var result = startingPoint.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>(); };
             a.Should().Throw<Exception>();
+
+            e1.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>().Should().Be(null); // don't count node itself
         }
 
     }

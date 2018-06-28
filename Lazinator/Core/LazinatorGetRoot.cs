@@ -67,11 +67,12 @@ namespace Lazinator.Core
         public static IEnumerable<T> GetAllClosestAncestorsOfType<T>(this ILazinator node) where T : class, ILazinator
         {
             Queue<ILazinator> q = new Queue<ILazinator>();
+            ILazinator startingNode = node;
             q.Enqueue(node);
             while (q.Any())
             {
                 node = q.Dequeue();
-                if (node is T correctTypeNode)
+                if (node != startingNode && node is T correctTypeNode)
                     yield return correctTypeNode;
                 else
                 {

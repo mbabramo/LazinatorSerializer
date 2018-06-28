@@ -200,9 +200,9 @@ namespace LazinatorTests.Tests
         {
             var original = GetHierarchy(1, 1, 1, 1, 0);
             var another = GetHierarchy(1, 1, 1, 1, 0);
-            LazinatorUtilities.VerifyHierarchyHashesMatch(original, another);
+            LazinatorUtilities.ConfirmHierarchiesEqual(original, another);
             var clone = original.CloneLazinatorTyped();
-            LazinatorUtilities.VerifyHierarchyHashesMatch(original, clone);
+            LazinatorUtilities.ConfirmHierarchiesEqual(original, clone);
         }
 
         [Fact]
