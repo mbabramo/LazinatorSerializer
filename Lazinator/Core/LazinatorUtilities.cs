@@ -216,7 +216,8 @@ namespace Lazinator.Core
             {
                 if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty)
                 {
-                    childStorage = child.LazinatorObjectBytes; // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
+                    // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
+                    childStorage = child.LazinatorObjectBytes; 
                     if (childStorage.Length != 0)
                         childCouldHaveChanged = false;
                 }
