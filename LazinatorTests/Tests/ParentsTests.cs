@@ -260,5 +260,37 @@ namespace LazinatorTests.Tests
             e1.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>().Should().Be(null); // don't count node itself
         }
 
+        [Fact]
+        public void TopNodesComparisonWorks()
+        {
+            ExampleChild c1 = new ExampleChild() { MyShort = 3 };
+            ExampleChild c2 = new ExampleChild() { MyShort = 3 };
+            LazinatorUtilities.TopNodesOfHierarchyEqual(c1, c2, out string comparison).Should().BeTrue();
+            c2.MyShort = 5;
+            LazinatorUtilities.TopNodesOfHierarchyEqual(c1, c2, out comparison).Should().BeFalse();
+
+            LazinatorTuple<ExampleChild, ExampleChild> e1 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            {
+                Item1 = new ExampleChild() { MyWrapperContainer = new WrapperContainer() { WrappedInt = 3 } },
+                Item2 = null
+            };
+            var e2 = e1.CloneLazinatorTyped();
+            LazinatorUtilities.TopNodesOfHierarchyEqual(e1, e2, out comparison).Should().BeTrue();
+            e2.Item1.MyWrapperContainer.WrappedInt = 5;
+            LazinatorUtilities.TopNodesOfHierarchyEqual(e1, e2, out comparison).Should().BeTrue(); // top node is still equal
+
+            LazinatorList<ExampleChild> l1 = new LazinatorList<ExampleChild>()
+            {
+                new ExampleChild() { MyWrapperContainer = new WrapperContainer() { WrappedInt = 3 } }
+            };
+            LazinatorList<ExampleChild> l2 = new LazinatorList<ExampleChild>()
+            {
+                new ExampleChild() { MyWrapperContainer = new WrapperContainer() { WrappedInt = 6 } }
+            };
+            LazinatorUtilities.TopNodesOfHierarchyEqual(l1, l2, out comparison).Should().BeTrue();
+            l2.Add(null);
+            LazinatorUtilities.TopNodesOfHierarchyEqual(l1, l2, out comparison).Should().BeFalse(); // number of elements differs
+        }
+
     }
 }

@@ -13,7 +13,7 @@ using Lazinator.Attributes;
 namespace Lazinator.Collections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants" })]
-    public partial class LazinatorList<T> : IList<T>, ILazinatorList<T> where T : ILazinator
+    public partial class LazinatorList<T> : IList<T>, ILazinatorList<T>, ILazinatorList where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;
         [NonSerialized] private int CountWhenDeserialized;

@@ -5,7 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Lazinator.Buffers; 
+using Lazinator.Buffers;
+using Lazinator.Collections;
 using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
@@ -450,7 +451,7 @@ namespace Lazinator.Core
                         {
                             if (pair.x.propertyName != pair.y.propertyName)
                                 throw new Exception($"Children properties unexpectedly differed {pair.x.propertyName} vs. {pair.y.propertyName}");
-                            ConfirmHierarchiesEqual(pair.x.descendant, pair.y.descendant, propertyNameSequence + " > " + pair.x.propertyName);
+                            ConfirmHierarchiesEqual(pair.x.descendant, pair.y.descendant, propertyNameSequence == "" ? pair.x.propertyName : propertyNameSequence + " > " + pair.x.propertyName);
                         }
                         catch
                         {
@@ -461,8 +462,8 @@ namespace Lazinator.Core
                 }
                 else
                 {
-                    string errorMessage = (propertyNameSequence ?? "") + comparison;
-                    throw new Exception("Hashes were expected to be same, but differed. Difference traced to:\n" + errorMessage);
+                    string errorMessage = comparison;
+                    throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
                 }
             }
         }
@@ -477,9 +478,9 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static bool TopNodesOfHierarchyEqual(ILazinator firstHierarchy, ILazinator secondHierarchy, out string comparison)
         {
+            comparison = "";
             if (firstHierarchy == null && secondHierarchy == null)
             {
-                comparison = "";
                 return true;
             }
             if ((firstHierarchy == null) != (secondHierarchy == null))
@@ -487,17 +488,27 @@ namespace Lazinator.Core
                 comparison = $"{(firstHierarchy == null ? "First was null; second was not" : "Second was null; first was not")}";
                 return false;
             }
+            if (firstHierarchy is ILazinatorList firstList && secondHierarchy is ILazinatorList secondList)
+            {
+                if (firstList.Count == secondList.Count)
+                    return true;
+                else
+                {
+                    comparison = $"First list had {firstList.Count} members, while second list had {secondList.Count}";
+                    return false;
+                }
+            };
             ILazinator firstWithoutChildren = firstHierarchy.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
             ILazinator secondWithoutChildren = secondHierarchy.CloneLazinatorTyped(IncludeChildrenMode.ExcludeAllChildren);
             if (firstWithoutChildren.GetBinaryHashCode64() != secondWithoutChildren.GetBinaryHashCode64())
             {
-                string firstHierarchyTreeString = new HierarchyTree(firstHierarchy).ToString();
-                string secondHierarchyTreeString = new HierarchyTree(secondHierarchy).ToString();
+                string firstHierarchyTreeString = new HierarchyTree(firstWithoutChildren).ToString();
+                string secondHierarchyTreeString = new HierarchyTree(secondWithoutChildren).ToString();
                 
                 StringBuilder sb = new StringBuilder();
                 if (firstHierarchyTreeString == secondHierarchyTreeString)
                 {
-                    sb.Append("Both had same hierarchy tree (so they must differ in a way that does not affect .ToString() function):");
+                    sb.Append("Both had same hierarchy tree (so they must differ in a way that does not affect their textual representation):");
                     sb.Append(firstHierarchyTreeString);
                 }
                 else

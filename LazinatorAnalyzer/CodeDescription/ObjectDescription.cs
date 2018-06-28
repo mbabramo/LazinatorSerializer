@@ -742,15 +742,18 @@ namespace Lazinator.CodeDescription
 
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsLazinator))
                 {
-                    if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                    if (property.PropertyName != "MainListSerialized") // skip MainListSerialized from LazinatorList, instead focusing on individual items (TODO: use DoNotEnumerate attribute instead)
                     {
-                        // because ReadOnlySpan is a ref struct, we can't enumerate it.
-                        sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName}.ToString());
-                                ");
+                        if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                        {
+                            // because ReadOnlySpan is a ref struct, we can't enumerate it.
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName}.ToString());
+                                    ");
+                        }
+                        else
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName});
+                                    ");
                     }
-                    else
-                        sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName});
-                                ");
                 }
                 sb.Append($@"yield break;
                         }}
