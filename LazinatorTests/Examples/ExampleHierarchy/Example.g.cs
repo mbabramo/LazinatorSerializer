@@ -669,6 +669,7 @@ namespace LazinatorTests.Examples
                         return new WInt()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }

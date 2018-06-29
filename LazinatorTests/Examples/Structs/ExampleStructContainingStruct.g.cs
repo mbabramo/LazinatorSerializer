@@ -251,6 +251,7 @@ namespace LazinatorTests.Examples
                         return new ExampleStruct()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }

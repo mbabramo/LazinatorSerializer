@@ -311,6 +311,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WBool()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -369,6 +370,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WByte()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -427,6 +429,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WChar()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -485,6 +488,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WNullableBool()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -543,6 +547,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WNullableByte()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -601,6 +606,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WNullableChar()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -659,6 +665,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WNullableSByte()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -717,6 +724,7 @@ namespace LazinatorTests.Examples.Structs
                         return new WSByte()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }

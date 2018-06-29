@@ -261,6 +261,7 @@ namespace LazinatorTests.Examples
                         return new WInt()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
@@ -319,6 +320,7 @@ namespace LazinatorTests.Examples
                         return new ExampleStruct()
                         {
                             LazinatorObjectBytes = childData,
+                            IsDirty = false
                         };
                     }
                 }
