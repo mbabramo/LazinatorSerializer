@@ -264,6 +264,10 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        public void ExampleStructWithoutClass_Clean()
+        {
+            _ExampleStructWithoutClass = ExampleStructWithoutClass_Copy;
+        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
@@ -350,7 +354,7 @@ namespace LazinatorTests.Examples.Structs
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExampleStructWithoutClass_Accessed && (ExampleStructWithoutClass.IsDirty || ExampleStructWithoutClass.DescendantIsDirty)));
                 if (_ExampleStructWithoutClass_Accessed)
                 {
-                    _ExampleStructWithoutClass = ExampleStructWithoutClass_Copy;
+                    ExampleStructWithoutClass_Clean();
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

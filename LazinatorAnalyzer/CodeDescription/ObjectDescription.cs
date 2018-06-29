@@ -1119,9 +1119,9 @@ namespace Lazinator.CodeDescription
             {
                 postEncodingDirtinessReset +=
                     $@"
-                    if (_{property.PropertyName}_Accessed)
+                    if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsDirty)
                     {{
-                        {property.PropertyName}_Clean();
+                        {property.PropertyName}_CleanNestedStruct();
                     }}";
             }
 

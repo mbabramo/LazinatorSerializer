@@ -321,6 +321,10 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        public void WrappedBool_Clean()
+        {
+            _WrappedBool = WrappedBool_Copy;
+        }
         private WByte _WrappedByte;
         public WByte WrappedByte
         {
@@ -382,6 +386,10 @@ namespace LazinatorTests.Examples.Structs
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
+        }
+        public void WrappedByte_Clean()
+        {
+            _WrappedByte = WrappedByte_Copy;
         }
         private WChar _WrappedChar;
         public WChar WrappedChar
@@ -445,6 +453,10 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        public void WrappedChar_Clean()
+        {
+            _WrappedChar = WrappedChar_Copy;
+        }
         private WNullableBool _WrappedNullableBool;
         public WNullableBool WrappedNullableBool
         {
@@ -506,6 +518,10 @@ namespace LazinatorTests.Examples.Structs
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
+        }
+        public void WrappedNullableBool_Clean()
+        {
+            _WrappedNullableBool = WrappedNullableBool_Copy;
         }
         private WNullableByte _WrappedNullableByte;
         public WNullableByte WrappedNullableByte
@@ -569,6 +585,10 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        public void WrappedNullableByte_Clean()
+        {
+            _WrappedNullableByte = WrappedNullableByte_Copy;
+        }
         private WNullableChar _WrappedNullableChar;
         public WNullableChar WrappedNullableChar
         {
@@ -630,6 +650,10 @@ namespace LazinatorTests.Examples.Structs
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
+        }
+        public void WrappedNullableChar_Clean()
+        {
+            _WrappedNullableChar = WrappedNullableChar_Copy;
         }
         private WNullableSByte _WrappedNullableSByte;
         public WNullableSByte WrappedNullableSByte
@@ -693,6 +717,10 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        public void WrappedNullableSByte_Clean()
+        {
+            _WrappedNullableSByte = WrappedNullableSByte_Copy;
+        }
         private WSByte _WrappedSByte;
         public WSByte WrappedSByte
         {
@@ -754,6 +782,10 @@ namespace LazinatorTests.Examples.Structs
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
+        }
+        public void WrappedSByte_Clean()
+        {
+            _WrappedSByte = WrappedSByte_Copy;
         }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
@@ -954,35 +986,35 @@ namespace LazinatorTests.Examples.Structs
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ListWrappedBytes_Accessed && _ListWrappedBytes != null && (ListWrappedBytes.IsDirty || ListWrappedBytes.DescendantIsDirty)) || (_WrappedBool_Accessed && (WrappedBool.IsDirty || WrappedBool.DescendantIsDirty)) || (_WrappedByte_Accessed && (WrappedByte.IsDirty || WrappedByte.DescendantIsDirty)) || (_WrappedChar_Accessed && (WrappedChar.IsDirty || WrappedChar.DescendantIsDirty)) || (_WrappedNullableBool_Accessed && (WrappedNullableBool.IsDirty || WrappedNullableBool.DescendantIsDirty)) || (_WrappedNullableByte_Accessed && (WrappedNullableByte.IsDirty || WrappedNullableByte.DescendantIsDirty)) || (_WrappedNullableChar_Accessed && (WrappedNullableChar.IsDirty || WrappedNullableChar.DescendantIsDirty)) || (_WrappedNullableSByte_Accessed && (WrappedNullableSByte.IsDirty || WrappedNullableSByte.DescendantIsDirty)) || (_WrappedSByte_Accessed && (WrappedSByte.IsDirty || WrappedSByte.DescendantIsDirty)));
                 if (_WrappedBool_Accessed)
                 {
-                    _WrappedBool = WrappedBool_Copy;
+                    WrappedBool_Clean();
                 }
                 if (_WrappedByte_Accessed)
                 {
-                    _WrappedByte = WrappedByte_Copy;
+                    WrappedByte_Clean();
                 }
                 if (_WrappedChar_Accessed)
                 {
-                    _WrappedChar = WrappedChar_Copy;
+                    WrappedChar_Clean();
                 }
                 if (_WrappedNullableBool_Accessed)
                 {
-                    _WrappedNullableBool = WrappedNullableBool_Copy;
+                    WrappedNullableBool_Clean();
                 }
                 if (_WrappedNullableByte_Accessed)
                 {
-                    _WrappedNullableByte = WrappedNullableByte_Copy;
+                    WrappedNullableByte_Clean();
                 }
                 if (_WrappedNullableChar_Accessed)
                 {
-                    _WrappedNullableChar = WrappedNullableChar_Copy;
+                    WrappedNullableChar_Clean();
                 }
                 if (_WrappedNullableSByte_Accessed)
                 {
-                    _WrappedNullableSByte = WrappedNullableSByte_Copy;
+                    WrappedNullableSByte_Clean();
                 }
                 if (_WrappedSByte_Accessed)
                 {
-                    _WrappedSByte = WrappedSByte_Copy;
+                    WrappedSByte_Clean();
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -271,6 +271,10 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
+        public void IntWrapper_Clean()
+        {
+            _IntWrapper = IntWrapper_Copy;
+        }
         private ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
@@ -332,6 +336,10 @@ namespace LazinatorTests.Examples
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
+        }
+        public void MyExampleStruct_Clean()
+        {
+            _MyExampleStruct = MyExampleStruct_Copy;
         }
         private List<ExampleStruct> _MyListExampleStruct;
         public List<ExampleStruct> MyListExampleStruct
@@ -499,11 +507,11 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_IntWrapper_Accessed && (IntWrapper.IsDirty || IntWrapper.DescendantIsDirty)) || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty)));
                 if (_IntWrapper_Accessed)
                 {
-                    _IntWrapper = IntWrapper_Copy;
+                    IntWrapper_Clean();
                 }
                 if (_MyExampleStruct_Accessed)
                 {
-                    _MyExampleStruct = MyExampleStruct_Copy;
+                    MyExampleStruct_Clean();
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

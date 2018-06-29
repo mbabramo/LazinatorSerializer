@@ -679,6 +679,10 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
+        public void WrappedInt_Clean()
+        {
+            _WrappedInt = WrappedInt_Copy;
+        }
         private ExampleChild _ExcludableChild;
         public ExampleChild ExcludableChild
         {
@@ -933,7 +937,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_IncludableChild_Accessed && _IncludableChild != null && (IncludableChild.IsDirty || IncludableChild.DescendantIsDirty)) || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty)) || (_MyChild2Previous_Accessed && _MyChild2Previous != null && (MyChild2Previous.IsDirty || MyChild2Previous.DescendantIsDirty)) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null && (MyInterfaceImplementer.IsDirty || MyInterfaceImplementer.DescendantIsDirty)) || (_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)) || (_ExcludableChild_Accessed && _ExcludableChild != null && (ExcludableChild.IsDirty || ExcludableChild.DescendantIsDirty)));
                 if (_WrappedInt_Accessed)
                 {
-                    _WrappedInt = WrappedInt_Copy;
+                    WrappedInt_Clean();
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
