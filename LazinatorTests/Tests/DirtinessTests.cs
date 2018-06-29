@@ -251,6 +251,28 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void DirtinessWithOpenGenericStructChild()
+        {
+            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>
+            {
+                Item1 = 3, 
+                Item2 = 4
+            };
+            e.Item1.IsDirty.Should().BeTrue();
+            e.DescendantIsDirty.Should().BeTrue();
+
+            var c = e.CloneLazinatorTyped();
+            // consider original, which should be clean
+            e.IsDirty.Should().BeFalse();
+            e.DescendantIsDirty.Should().BeFalse();
+            e.Item1.IsDirty.Should().BeFalse();
+            // now consider clone
+            c.IsDirty.Should().BeFalse();
+            c.DescendantIsDirty.Should().BeFalse();
+            c.Item1.IsDirty.Should().BeFalse();
+        }
+
+        [Fact]
         public void DirtinessWithNestedStructs()
         {
             ExampleStructContainingStructContainer e = new ExampleStructContainingStructContainer()
