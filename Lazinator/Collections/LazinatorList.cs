@@ -310,7 +310,13 @@ namespace Lazinator.Collections
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
                         var itemIndex = i; // avoid closure problem
-                        WriteChild(w, UnderlyingList[itemIndex], IncludeChildrenMode.IncludeAllChildren, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        var underlyingItem = UnderlyingList[itemIndex];
+                        WriteChild(w, underlyingItem, IncludeChildrenMode.IncludeAllChildren, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        if (updateStoredBuffer && underlyingItem != null && underlyingItem.IsStruct)
+                        { // the struct that updated is not here
+                            underlyingItem.IsDirty = false;
+                            UnderlyingList[itemIndex] = underlyingItem;
+                        }
                         var offset = (int)(w.Position - startingPosition);
                         offsetList.AddOffset(offset);
                     }
