@@ -71,6 +71,7 @@ namespace Lazinator.CodeDescription
         public bool AllGenericsAreNonlazinator { get; set; }
         public bool ContainsOpenGenericParameters => IsGeneric && !AllGenericsAreNonlazinator;
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
+        public List<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface.PropertiesIncludingInherited;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
@@ -1075,7 +1076,7 @@ namespace Lazinator.CodeDescription
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
             string manualDescendantDirtinessChecks = "";
             string tense = usePastTense ? "HasChanged" : "IsDirty";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
+            foreach (var property in PropertiesIncludingInherited.Where(x => x.IsLazinator))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}))";
@@ -1117,7 +1118,7 @@ namespace Lazinator.CodeDescription
                         _IsDirty = false;
                         _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
 
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
             {
                 postEncodingDirtinessReset +=
                     $@"
@@ -1126,7 +1127,7 @@ namespace Lazinator.CodeDescription
                         {property.PropertyName}_CleanNestedStruct();
                     }}";
             }
-            foreach (var property in PropertiesToDefineThisLevel
+            foreach (var property in PropertiesIncludingInherited
                 .Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))
             {
                 if (!property.GenericConstrainedToStruct)
