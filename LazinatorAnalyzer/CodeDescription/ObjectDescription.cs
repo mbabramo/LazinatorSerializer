@@ -1115,7 +1115,17 @@ namespace Lazinator.CodeDescription
                         _IsDirty = false;
                         _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
 
-            return postEncodingDirtinessReset;
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            {
+                postEncodingDirtinessReset +=
+                    $@"
+                    if (_{property.PropertyName}_Accessed)
+                    {{
+                        _{property.PropertyName}.IsDirty = false;
+                    }}";
+            }
+
+                return postEncodingDirtinessReset;
         }
 
         private static void GetSupportedConversions(CodeStringBuilder sb, List<PropertyDescription> propertiesSupportedCollections, List<PropertyDescription> propertiesSupportedTuples, List<PropertyDescription> propertiesNonSerialized)
