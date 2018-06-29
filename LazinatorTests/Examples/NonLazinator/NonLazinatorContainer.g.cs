@@ -228,12 +228,10 @@ namespace LazinatorTests.Examples
                 return _NonLazinatorClass;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _NonLazinatorClass = value;
                 _NonLazinatorClass_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonLazinatorClass_Accessed;
@@ -259,12 +257,10 @@ namespace LazinatorTests.Examples
                 return _NonLazinatorInterchangeableClass;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _NonLazinatorInterchangeableClass = value;
                 _NonLazinatorInterchangeableClass_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonLazinatorInterchangeableClass_Accessed;
@@ -290,12 +286,10 @@ namespace LazinatorTests.Examples
                 return _NonLazinatorStruct;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _NonLazinatorStruct = value;
                 _NonLazinatorStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonLazinatorStruct_Accessed;

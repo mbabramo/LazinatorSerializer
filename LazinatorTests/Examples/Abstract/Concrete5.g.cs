@@ -63,7 +63,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String4 = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String5;
@@ -77,7 +76,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String5 = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList4;
@@ -102,12 +100,10 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList4;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList4 = value;
                 _IntList4_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList5;
@@ -132,12 +128,10 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList5;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList5 = value;
                 _IntList5_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList5_Accessed;

@@ -234,12 +234,10 @@ namespace LazinatorTests.Examples.Abstract
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _MyBase = value;
                 _MyBase_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyBase_Accessed;

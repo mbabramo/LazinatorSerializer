@@ -83,7 +83,9 @@ namespace Lazinator.Wrappers
         bool _IsDirty;
         public bool IsDirty
         {
+            [DebuggerStepThrough]
             get => _IsDirty;
+            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
@@ -201,7 +203,6 @@ namespace Lazinator.Wrappers
             {
                 IsDirty = true;
                 _WrappedValue = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

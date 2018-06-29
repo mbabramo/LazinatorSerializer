@@ -95,12 +95,10 @@ namespace LazinatorTests.Examples.Abstract
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyT_Accessed;

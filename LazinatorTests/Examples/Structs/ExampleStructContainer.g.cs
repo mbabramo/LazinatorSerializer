@@ -238,12 +238,10 @@ namespace LazinatorTests.Examples
             {
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _IntWrapper = value;
                 _IntWrapper_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntWrapper_Accessed;
@@ -298,12 +296,10 @@ namespace LazinatorTests.Examples
             {
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyExampleStruct_Accessed;
@@ -351,12 +347,10 @@ namespace LazinatorTests.Examples
                 return _MyListExampleStruct;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListExampleStruct = value;
                 _MyListExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListExampleStruct_Accessed;
@@ -382,12 +376,10 @@ namespace LazinatorTests.Examples
                 return _MyListNullableExampleStruct;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListNullableExampleStruct = value;
                 _MyListNullableExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableExampleStruct_Accessed;

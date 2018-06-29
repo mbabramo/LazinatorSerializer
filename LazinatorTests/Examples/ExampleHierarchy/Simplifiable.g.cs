@@ -217,7 +217,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyIntsAre3 = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private char? _Example2Char;
@@ -231,7 +230,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _Example2Char = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private bool _Example3IsNull;
@@ -245,7 +243,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _Example3IsNull = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private bool _ExampleHasDefaultValue;
@@ -259,7 +256,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _ExampleHasDefaultValue = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyInt;
@@ -273,7 +269,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyInt = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyOtherInt;
@@ -287,7 +282,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyOtherInt = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _Example;
@@ -322,12 +316,10 @@ namespace LazinatorTests.Examples
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Example = value;
                 _Example_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Example_Accessed;
@@ -363,12 +355,10 @@ namespace LazinatorTests.Examples
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Example2 = value;
                 _Example2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Example2_Accessed;
@@ -404,12 +394,10 @@ namespace LazinatorTests.Examples
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Example3 = value;
                 _Example3_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Example3_Accessed;

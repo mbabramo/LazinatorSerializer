@@ -221,12 +221,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyHashSetSerialized;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyHashSetSerialized = value;
                 _MyHashSetSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyHashSetSerialized_Accessed;

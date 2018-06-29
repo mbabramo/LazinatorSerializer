@@ -226,12 +226,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 return _MyListT;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListT = value;
                 _MyListT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListT_Accessed;
@@ -279,12 +277,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _MyT = value;
                 _MyT_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyT_Accessed;

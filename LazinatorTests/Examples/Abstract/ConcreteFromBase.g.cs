@@ -59,7 +59,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _IntInConcreteFromBase = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

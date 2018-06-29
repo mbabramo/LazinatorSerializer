@@ -217,11 +217,9 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 _MainListSerialized = value;
                 _MainListSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MainListSerialized_Accessed;
@@ -259,12 +257,10 @@ namespace Lazinator.Collections
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Offsets = value;
                 _Offsets_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Offsets_Accessed;

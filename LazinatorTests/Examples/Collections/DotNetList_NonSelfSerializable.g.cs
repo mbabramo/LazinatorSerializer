@@ -223,13 +223,11 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNonLazinatorType;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListNonLazinatorType = value;
                 _MyListNonLazinatorType_Dirty = true;
                 _MyListNonLazinatorType_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNonLazinatorType_Accessed;
@@ -240,8 +238,7 @@ namespace LazinatorTests.Examples.Collections
             get => _MyListNonLazinatorType_Dirty;
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);if (_MyListNonLazinatorType_Dirty != value)
+                if (_MyListNonLazinatorType_Dirty != value)
                 {
                     _MyListNonLazinatorType_Dirty = value;
                     if (value && !IsDirty)
@@ -249,7 +246,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<NonLazinatorClass> _MyListNonLazinatorType2;
@@ -274,12 +270,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNonLazinatorType2;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListNonLazinatorType2 = value;
                 _MyListNonLazinatorType2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNonLazinatorType2_Accessed;

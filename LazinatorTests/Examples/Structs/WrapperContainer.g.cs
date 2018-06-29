@@ -232,12 +232,10 @@ namespace LazinatorTests.Examples.Structs
             {
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedInt_Accessed;

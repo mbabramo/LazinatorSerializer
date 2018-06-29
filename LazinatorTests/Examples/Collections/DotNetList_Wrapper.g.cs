@@ -229,13 +229,11 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListInt;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListInt = value;
                 _MyListInt_Dirty = true;
                 _MyListInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListInt_Accessed;
@@ -246,8 +244,7 @@ namespace LazinatorTests.Examples.Collections
             get => _MyListInt_Dirty;
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);if (_MyListInt_Dirty != value)
+                if (_MyListInt_Dirty != value)
                 {
                     _MyListInt_Dirty = value;
                     if (value && !IsDirty)
@@ -255,7 +252,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<WNullableByte> _MyListNullableByte;
@@ -280,12 +276,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNullableByte;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListNullableByte = value;
                 _MyListNullableByte_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableByte_Accessed;
@@ -311,12 +305,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNullableInt;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListNullableInt = value;
                 _MyListNullableInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNullableInt_Accessed;

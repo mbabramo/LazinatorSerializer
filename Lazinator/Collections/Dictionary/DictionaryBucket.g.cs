@@ -218,7 +218,6 @@ namespace Lazinator.Collections.Dictionary
             {
                 IsDirty = true;
                 _Initialized = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private LazinatorList<TKey> _Keys;
@@ -255,12 +254,10 @@ namespace Lazinator.Collections.Dictionary
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Keys = value;
                 _Keys_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Keys_Accessed;
@@ -298,12 +295,10 @@ namespace Lazinator.Collections.Dictionary
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Values = value;
                 _Values_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Values_Accessed;

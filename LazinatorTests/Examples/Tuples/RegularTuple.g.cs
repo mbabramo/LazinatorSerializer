@@ -227,12 +227,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyTupleSerialized = value;
                 _MyTupleSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized_Accessed;
@@ -258,12 +256,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized2;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyTupleSerialized2 = value;
                 _MyTupleSerialized2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
@@ -289,12 +285,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized3;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyTupleSerialized3 = value;
                 _MyTupleSerialized3_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
@@ -320,12 +314,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyTupleSerialized4;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyTupleSerialized4 = value;
                 _MyTupleSerialized4_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyTupleSerialized4_Accessed;

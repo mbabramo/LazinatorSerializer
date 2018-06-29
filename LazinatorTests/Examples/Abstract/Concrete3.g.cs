@@ -212,7 +212,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String1 = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String2;
@@ -226,7 +225,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String2 = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String3;
@@ -240,7 +238,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String3 = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _Example2;
@@ -275,12 +272,10 @@ namespace LazinatorTests.Examples.Abstract
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Example2 = value;
                 _Example2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _Example3;
@@ -315,12 +310,10 @@ namespace LazinatorTests.Examples.Abstract
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Example3 = value;
                 _Example3_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList1;
@@ -345,12 +338,10 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList1;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList1 = value;
                 _IntList1_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList2;
@@ -375,12 +366,10 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList2;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList2 = value;
                 _IntList2_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList3;
@@ -405,12 +394,10 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList3;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList3 = value;
                 _IntList3_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList3_Accessed;

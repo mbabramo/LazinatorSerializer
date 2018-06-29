@@ -215,7 +215,6 @@ namespace Lazinator.Spans
             {
                 IsDirty = true;
                 __version = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _m_length;
@@ -231,7 +230,6 @@ namespace Lazinator.Spans
             {
                 IsDirty = true;
                 _m_length = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private LazinatorByteSpan _ByteSpan;
@@ -275,12 +273,10 @@ namespace Lazinator.Spans
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _ByteSpan = value;
                 _ByteSpan_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _ByteSpan_Accessed;

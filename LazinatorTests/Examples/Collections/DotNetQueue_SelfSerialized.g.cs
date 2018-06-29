@@ -225,12 +225,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyQueueSerialized;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyQueueSerialized = value;
                 _MyQueueSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyQueueSerialized_Accessed;

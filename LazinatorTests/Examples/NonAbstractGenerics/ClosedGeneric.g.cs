@@ -60,7 +60,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 IsDirty = true;
                 _AnotherPropertyAdded = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

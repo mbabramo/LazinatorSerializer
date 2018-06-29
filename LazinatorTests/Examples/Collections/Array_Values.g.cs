@@ -222,13 +222,11 @@ namespace LazinatorTests.Examples.Collections
                 return _MyArrayInt;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyArrayInt = value;
                 _MyArrayInt_Dirty = true;
                 _MyArrayInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyArrayInt_Accessed;
@@ -239,8 +237,7 @@ namespace LazinatorTests.Examples.Collections
             get => _MyArrayInt_Dirty;
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);if (_MyArrayInt_Dirty != value)
+                if (_MyArrayInt_Dirty != value)
                 {
                     _MyArrayInt_Dirty = value;
                     if (value && !IsDirty)
@@ -248,7 +245,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int[][] _MyJaggedArrayInt;
@@ -273,12 +269,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyJaggedArrayInt;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyJaggedArrayInt = value;
                 _MyJaggedArrayInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyJaggedArrayInt_Accessed;

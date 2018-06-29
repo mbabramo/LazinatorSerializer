@@ -220,12 +220,10 @@ namespace Lazinator.Wrappers
             }
             [DebuggerStepThrough]
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedValue = value;
                 _WrappedValue_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _WrappedValue_Accessed;

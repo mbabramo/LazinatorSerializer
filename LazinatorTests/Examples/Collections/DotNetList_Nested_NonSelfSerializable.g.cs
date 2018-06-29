@@ -221,12 +221,10 @@ namespace LazinatorTests.Examples.Collections
                 return _MyListNestedNonLazinatorType;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyListNestedNonLazinatorType = value;
                 _MyListNestedNonLazinatorType_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyListNestedNonLazinatorType_Accessed;

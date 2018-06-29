@@ -132,8 +132,7 @@ namespace Lazinator.CodeDescription
                         [DebuggerStepThrough]");
         private string ConfirmDirtinessConsistencyCheck => $@"
                             LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
-        private string MultipleParentsAction => Config?.MultipleParentsAction == null ? null : (", " + Config?.MultipleParentsAction);
-        private string RepeatedCodeExecution => ConfirmDirtinessConsistencyCheck; // DEBUG // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
+        private string RepeatedCodeExecution => ""; // change to expose some action that should be repeated before and after each variable is set.
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
@@ -884,7 +883,7 @@ namespace Lazinator.CodeDescription
                         if (value != null)
                         {{
                             value.IsDirty = true;
-                            value.LazinatorParents = value.LazinatorParents.WithAdded(this{MultipleParentsAction});
+                            value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                         }}
                         ";
                 else
@@ -921,7 +920,7 @@ namespace Lazinator.CodeDescription
                             if (value != null)
                             {{
                                 value.IsDirty = true;
-                                value.LazinatorParents = value.LazinatorParents.WithAdded(this{MultipleParentsAction});
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                             }}
                         }}
                             ";

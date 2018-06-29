@@ -217,11 +217,9 @@ namespace Lazinator.Collections
             [DebuggerStepThrough]
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 _ReadOnlyBytes = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _ReadOnlyBytes_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _ReadOnlyBytes_Accessed;

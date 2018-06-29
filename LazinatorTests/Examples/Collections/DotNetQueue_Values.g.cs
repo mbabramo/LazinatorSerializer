@@ -220,13 +220,11 @@ namespace LazinatorTests.Examples.Collections
                 return _MyQueueInt;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyQueueInt = value;
                 _MyQueueInt_Dirty = true;
                 _MyQueueInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyQueueInt_Accessed;
@@ -237,8 +235,7 @@ namespace LazinatorTests.Examples.Collections
             get => _MyQueueInt_Dirty;
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);if (_MyQueueInt_Dirty != value)
+                if (_MyQueueInt_Dirty != value)
                 {
                     _MyQueueInt_Dirty = value;
                     if (value && !IsDirty)
@@ -246,7 +243,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

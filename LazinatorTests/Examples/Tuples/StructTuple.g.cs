@@ -227,12 +227,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _EnumTuple;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _EnumTuple = value;
                 _EnumTuple_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _EnumTuple_Accessed;
@@ -258,12 +256,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyNamedTuple;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyNamedTuple = value;
                 _MyNamedTuple_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNamedTuple_Accessed;
@@ -289,12 +285,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyNullableTuple;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyNullableTuple = value;
                 _MyNullableTuple_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNullableTuple_Accessed;
@@ -320,12 +314,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyValueTupleSerialized;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyValueTupleSerialized = value;
                 _MyValueTupleSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyValueTupleSerialized_Accessed;

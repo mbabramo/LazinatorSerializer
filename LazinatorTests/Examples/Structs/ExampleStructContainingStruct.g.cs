@@ -228,12 +228,10 @@ namespace LazinatorTests.Examples
             set
             {
                 value.IsDirty = true;
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _MyExampleStruct = value;
                 _MyExampleStruct_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _MyExampleStruct_Accessed;

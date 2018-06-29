@@ -221,7 +221,6 @@ namespace Lazinator.Collections.Avl
             {
                 IsDirty = true;
                 _Balance = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _Count;
@@ -237,7 +236,6 @@ namespace Lazinator.Collections.Avl
             {
                 IsDirty = true;
                 _Count = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private TKey _Key;
@@ -286,12 +284,10 @@ namespace Lazinator.Collections.Avl
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Key = value;
                 _Key_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Key_Accessed;
@@ -336,12 +332,10 @@ namespace Lazinator.Collections.Avl
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Left = value;
                 _Left_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Left_Accessed;
@@ -386,12 +380,10 @@ namespace Lazinator.Collections.Avl
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Right = value;
                 _Right_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Right_Accessed;
@@ -441,12 +433,10 @@ namespace Lazinator.Collections.Avl
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _Value = value;
                 _Value_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _Value_Accessed;

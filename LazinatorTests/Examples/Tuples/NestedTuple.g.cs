@@ -221,12 +221,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyNestedTuple;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyNestedTuple = value;
                 _MyNestedTuple_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyNestedTuple_Accessed;

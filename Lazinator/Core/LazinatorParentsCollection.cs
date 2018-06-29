@@ -80,13 +80,8 @@ namespace Lazinator.Core
             return null;
         }
 
-        // DEBUG: Consider eliminating multiple parents action, including config setting
-
-        public LazinatorParentsCollection WithAdded(ILazinator parent, Action<LazinatorParentsCollection, ILazinator> multipleParentsAction = null)
+        public LazinatorParentsCollection WithAdded(ILazinator parent)
         {
-            if (multipleParentsAction != null && Count > 0)
-                multipleParentsAction(this, parent);
-
             if (parent == null)
                 return this;
 

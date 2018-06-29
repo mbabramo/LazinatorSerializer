@@ -220,13 +220,11 @@ namespace LazinatorTests.Examples.Collections
                 return _MyStackInt;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyStackInt = value;
                 _MyStackInt_Dirty = true;
                 _MyStackInt_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyStackInt_Accessed;
@@ -237,8 +235,7 @@ namespace LazinatorTests.Examples.Collections
             get => _MyStackInt_Dirty;
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);if (_MyStackInt_Dirty != value)
+                if (_MyStackInt_Dirty != value)
                 {
                     _MyStackInt_Dirty = value;
                     if (value && !IsDirty)
@@ -246,7 +243,6 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

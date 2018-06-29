@@ -221,12 +221,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyKeyValuePairSerialized;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyKeyValuePairSerialized = value;
                 _MyKeyValuePairSerialized_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyKeyValuePairSerialized_Accessed;

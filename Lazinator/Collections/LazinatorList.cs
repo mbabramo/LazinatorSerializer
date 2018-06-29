@@ -139,7 +139,6 @@ namespace Lazinator.Collections
                     UnderlyingList[index] = current;
                     ItemsAccessedBeforeFullyDeserialized[index] = true;
                 }
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(current); // DEBUG
                 return current;
             }
             set

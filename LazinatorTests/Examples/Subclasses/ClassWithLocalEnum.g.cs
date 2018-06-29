@@ -213,7 +213,6 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 IsDirty = true;
                 _MyEnum = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<EnumWithinClass> _MyEnumList;
@@ -238,12 +237,10 @@ namespace LazinatorTests.Examples.Subclasses
                 return _MyEnumList;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyEnumList = value;
                 _MyEnumList_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyEnumList_Accessed;

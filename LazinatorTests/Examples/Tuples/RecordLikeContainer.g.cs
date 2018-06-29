@@ -228,12 +228,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyMismatchedRecordLikeType;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyMismatchedRecordLikeType = value;
                 _MyMismatchedRecordLikeType_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyMismatchedRecordLikeType_Accessed;
@@ -259,12 +257,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyRecordLikeClass;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyRecordLikeClass = value;
                 _MyRecordLikeClass_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyRecordLikeClass_Accessed;
@@ -289,12 +285,10 @@ namespace LazinatorTests.Examples.Tuples
                 return _MyRecordLikeType;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyRecordLikeType = value;
                 _MyRecordLikeType_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyRecordLikeType_Accessed;

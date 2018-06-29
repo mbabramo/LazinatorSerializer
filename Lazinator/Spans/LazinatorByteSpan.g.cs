@@ -218,11 +218,9 @@ namespace Lazinator.Spans
             [DebuggerStepThrough]
             set
             {
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 _ReadOnly = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _ReadOnly_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ReadOnly_Accessed;
@@ -250,12 +248,10 @@ namespace Lazinator.Spans
             }
             [DebuggerStepThrough]
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _ReadOrWrite = value;
                 _ReadOrWrite_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ReadOrWrite_Accessed;

@@ -60,7 +60,6 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyListName = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

@@ -211,7 +211,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 IsDirty = true;
                 _MyInt = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private long _MyLong;
@@ -225,7 +224,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 IsDirty = true;
                 _MyLong = value;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private LazinatorList<ExampleChild> _MyList;
@@ -260,12 +258,10 @@ namespace LazinatorTests.Examples.Collections
                     value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
-                
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _MyList = value;
                 _MyList_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyList_Accessed;

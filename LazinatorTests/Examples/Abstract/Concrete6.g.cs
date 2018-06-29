@@ -73,12 +73,10 @@ namespace LazinatorTests.Examples.Abstract
                 return _IntList6;
             }
             set
-            {
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList6 = value;
                 _IntList6_Accessed = true;
-                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList6_Accessed;
