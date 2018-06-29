@@ -355,7 +355,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty)));
                 if (_MyExampleStruct_Accessed)
                 {
-                    _MyExampleStruct.IsDirty = false;
+                    _MyExampleStruct = MyExampleStruct_Copy;
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
