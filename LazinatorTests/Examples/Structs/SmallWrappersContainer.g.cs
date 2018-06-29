@@ -944,6 +944,38 @@ namespace LazinatorTests.Examples.Structs
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ListWrappedBytes_Accessed && _ListWrappedBytes != null && (ListWrappedBytes.IsDirty || ListWrappedBytes.DescendantIsDirty)) || (_WrappedBool_Accessed && (WrappedBool.IsDirty || WrappedBool.DescendantIsDirty)) || (_WrappedByte_Accessed && (WrappedByte.IsDirty || WrappedByte.DescendantIsDirty)) || (_WrappedChar_Accessed && (WrappedChar.IsDirty || WrappedChar.DescendantIsDirty)) || (_WrappedNullableBool_Accessed && (WrappedNullableBool.IsDirty || WrappedNullableBool.DescendantIsDirty)) || (_WrappedNullableByte_Accessed && (WrappedNullableByte.IsDirty || WrappedNullableByte.DescendantIsDirty)) || (_WrappedNullableChar_Accessed && (WrappedNullableChar.IsDirty || WrappedNullableChar.DescendantIsDirty)) || (_WrappedNullableSByte_Accessed && (WrappedNullableSByte.IsDirty || WrappedNullableSByte.DescendantIsDirty)) || (_WrappedSByte_Accessed && (WrappedSByte.IsDirty || WrappedSByte.DescendantIsDirty)));
+                if (_WrappedBool_Accessed)
+                {
+                    _WrappedBool.IsDirty = false;
+                }
+                if (_WrappedByte_Accessed)
+                {
+                    _WrappedByte.IsDirty = false;
+                }
+                if (_WrappedChar_Accessed)
+                {
+                    _WrappedChar.IsDirty = false;
+                }
+                if (_WrappedNullableBool_Accessed)
+                {
+                    _WrappedNullableBool.IsDirty = false;
+                }
+                if (_WrappedNullableByte_Accessed)
+                {
+                    _WrappedNullableByte.IsDirty = false;
+                }
+                if (_WrappedNullableChar_Accessed)
+                {
+                    _WrappedNullableChar.IsDirty = false;
+                }
+                if (_WrappedNullableSByte_Accessed)
+                {
+                    _WrappedNullableSByte.IsDirty = false;
+                }
+                if (_WrappedSByte_Accessed)
+                {
+                    _WrappedSByte.IsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

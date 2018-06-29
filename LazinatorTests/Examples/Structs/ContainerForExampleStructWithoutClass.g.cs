@@ -347,6 +347,10 @@ namespace LazinatorTests.Examples.Structs
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExampleStructWithoutClass_Accessed && (ExampleStructWithoutClass.IsDirty || ExampleStructWithoutClass.DescendantIsDirty)));
+                if (_ExampleStructWithoutClass_Accessed)
+                {
+                    _ExampleStructWithoutClass.IsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

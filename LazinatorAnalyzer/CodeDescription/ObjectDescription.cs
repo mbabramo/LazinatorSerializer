@@ -1121,7 +1121,7 @@ namespace Lazinator.CodeDescription
                     $@"
                     if (_{property.PropertyName}_Accessed)
                     {{
-                        _{property.PropertyName}.IsDirty = false;
+                        _{property.PropertyName} = {property.PropertyName}_Copy;
                     }}";
             }
 
