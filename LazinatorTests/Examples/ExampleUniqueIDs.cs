@@ -78,6 +78,7 @@
         AbstractGeneric1Unofficial,
         ConcreteFromGenericFromBase,
         IncludesSkippable,
-        ConcreteFromBase
+        ConcreteFromBase,
+        ExampleStructContainingStructContainer
     }
 }

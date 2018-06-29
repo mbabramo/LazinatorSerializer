@@ -313,8 +313,8 @@ namespace Lazinator.Collections
                         var underlyingItem = UnderlyingList[itemIndex];
                         WriteChild(w, underlyingItem, IncludeChildrenMode.IncludeAllChildren, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (updateStoredBuffer && underlyingItem != null && underlyingItem.IsStruct)
-                        { // the struct that updated is not here
-                            underlyingItem.IsDirty = false;
+                        { // the struct that updated is not here. Cloning is the only safe way to get a clean hierarchy, because setting .IsDirty = true will not clear .IsDirty from nested structs.
+                            underlyingItem = underlyingItem.CloneLazinatorTyped();
                             UnderlyingList[itemIndex] = underlyingItem;
                         }
                         var offset = (int)(w.Position - startingPosition);

@@ -979,10 +979,11 @@ namespace Lazinator.CodeDescription
                 string resetStructDirtiness = "";
                 if (Symbol is INamedTypeSymbol namedTypeSymbol)
                 {
+                    INamedTypeSymbol interfaceType = ContainingObjectDescription.Compilation.TypeToExclusiveInterface[namedTypeSymbol];
                     var propertyDictionary = ContainingObjectDescription.Compilation.PropertiesForType;
-                    if (propertyDictionary.ContainsKey(namedTypeSymbol))
+                    if (propertyDictionary.ContainsKey(interfaceType))
                     {
-                        var structPropertyNames = propertyDictionary[namedTypeSymbol]
+                        var structPropertyNames = propertyDictionary[interfaceType]
                             .Select(x => new PropertyDescription(x.Property.Type, ContainingObjectDescription, this, x.Property.Name))
                             .Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct && !x.ContainsOpenGenericInnerProperty)
                             .Select(x => x.PropertyName);

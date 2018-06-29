@@ -240,7 +240,7 @@ namespace LazinatorTests.Tests
             e.DescendantIsDirty.Should().BeTrue();
 
             var c = e.CloneLazinatorTyped();
-            // consider original list, which should be clean
+            // consider original, which should be clean
             e.IsDirty.Should().BeFalse();
             e.DescendantIsDirty.Should().BeFalse();
             e.WrappedInt.IsDirty.Should().BeFalse();
@@ -248,6 +248,30 @@ namespace LazinatorTests.Tests
             c.IsDirty.Should().BeFalse();
             c.DescendantIsDirty.Should().BeFalse();
             c.WrappedInt.IsDirty.Should().BeFalse();
+        }
+
+        [Fact]
+        public void DirtinessWithNestedStructs()
+        {
+            ExampleStructContainingStructContainer e = new ExampleStructContainingStructContainer()
+            {
+                Subcontainer = new ExampleStructContainingStruct() { MyExampleStruct = new ExampleStruct() { MyChar = 'Z' } }
+            };
+            e.Subcontainer.IsDirty.Should().BeTrue();
+            e.Subcontainer.MyExampleStruct.IsDirty.Should().BeTrue();
+            e.DescendantIsDirty.Should().BeTrue();
+
+            var c = e.CloneLazinatorTyped();
+            // consider original, which should be clean
+            e.IsDirty.Should().BeFalse();
+            e.DescendantIsDirty.Should().BeFalse();
+            e.Subcontainer.IsDirty.Should().BeFalse();
+            e.Subcontainer.MyExampleStruct.IsDirty.Should().BeFalse();
+            // now consider clone
+            c.IsDirty.Should().BeFalse();
+            c.DescendantIsDirty.Should().BeFalse();
+            c.Subcontainer.IsDirty.Should().BeFalse();
+            c.Subcontainer.MyExampleStruct.IsDirty.Should().BeFalse();
         }
 
 
