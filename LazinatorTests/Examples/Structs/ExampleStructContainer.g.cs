@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples
         private int _ExampleStructContainer_EndByteIndex;
         protected virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
         
-        private WInt _IntWrapper;
+        protected WInt _IntWrapper;
         public WInt IntWrapper
         {
             get
@@ -275,7 +275,7 @@ namespace LazinatorTests.Examples
         {
             _IntWrapper = IntWrapper_Copy;
         }
-        private ExampleStruct _MyExampleStruct;
+        protected ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
             get
@@ -341,7 +341,7 @@ namespace LazinatorTests.Examples
         {
             _MyExampleStruct = MyExampleStruct_Copy;
         }
-        private List<ExampleStruct> _MyListExampleStruct;
+        protected List<ExampleStruct> _MyListExampleStruct;
         public List<ExampleStruct> MyListExampleStruct
         {
             get
@@ -370,7 +370,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListExampleStruct_Accessed;
-        private List<WNullableStruct<ExampleStruct>> _MyListNullableExampleStruct;
+        protected List<WNullableStruct<ExampleStruct>> _MyListNullableExampleStruct;
         public List<WNullableStruct<ExampleStruct>> MyListNullableExampleStruct
         {
             get
@@ -517,6 +517,10 @@ namespace LazinatorTests.Examples
                     {
                         MyExampleStruct_CleanNestedStruct();
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples
         private int _Example_EndByteIndex;
         protected virtual int _ExcludableChild_ByteLength => _Example_EndByteIndex - _ExcludableChild_ByteIndex;
         
-        private double? _MyNullableDouble;
+        protected double? _MyNullableDouble;
         public virtual double? MyNullableDouble
         {
             get
@@ -231,7 +231,7 @@ namespace LazinatorTests.Examples
                 _MyNullableDouble = value;
             }
         }
-        private bool _MyBool;
+        protected bool _MyBool;
         public bool MyBool
         {
             get
@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples
                 _MyBool = value;
             }
         }
-        private char _MyChar;
+        protected char _MyChar;
         public char MyChar
         {
             get
@@ -257,7 +257,7 @@ namespace LazinatorTests.Examples
                 _MyChar = value;
             }
         }
-        private DateTime _MyDateTime;
+        protected DateTime _MyDateTime;
         [Newtonsoft.Json.JsonProperty("MyDT")]
         public DateTime MyDateTime
         {
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples
                 _MyDateTime = value;
             }
         }
-        private string _MyNewString;
+        protected string _MyNewString;
         public string MyNewString
         {
             get
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples
                 _MyNewString = value;
             }
         }
-        private decimal? _MyNullableDecimal;
+        protected decimal? _MyNullableDecimal;
         public decimal? MyNullableDecimal
         {
             get
@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples
                 _MyNullableDecimal = value;
             }
         }
-        private TimeSpan? _MyNullableTimeSpan;
+        protected TimeSpan? _MyNullableTimeSpan;
         public TimeSpan? MyNullableTimeSpan
         {
             get
@@ -310,7 +310,7 @@ namespace LazinatorTests.Examples
                 _MyNullableTimeSpan = value;
             }
         }
-        private string _MyOldString;
+        protected string _MyOldString;
         public string MyOldString
         {
             get
@@ -323,7 +323,7 @@ namespace LazinatorTests.Examples
                 _MyOldString = value;
             }
         }
-        private string _MyString;
+        protected string _MyString;
         public string MyString
         {
             get
@@ -336,7 +336,7 @@ namespace LazinatorTests.Examples
                 _MyString = value;
             }
         }
-        private TestEnum _MyTestEnum;
+        protected TestEnum _MyTestEnum;
         public TestEnum MyTestEnum
         {
             get
@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples
                 _MyTestEnum = value;
             }
         }
-        private TestEnumByte? _MyTestEnumByteNullable;
+        protected TestEnumByte? _MyTestEnumByteNullable;
         public TestEnumByte? MyTestEnumByteNullable
         {
             get
@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples
                 _MyTestEnumByteNullable = value;
             }
         }
-        private uint _MyUint;
+        protected uint _MyUint;
         public uint MyUint
         {
             get
@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples
                 _MyUint = value;
             }
         }
-        private ExampleChild _IncludableChild;
+        protected ExampleChild _IncludableChild;
         public ExampleChild IncludableChild
         {
             get
@@ -414,7 +414,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _IncludableChild_Accessed;
-        private ExampleChild _MyChild1;
+        protected ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
             get
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild1_Accessed;
-        private ExampleChild _MyChild2;
+        protected ExampleChild _MyChild2;
         public ExampleChild MyChild2
         {
             get
@@ -492,7 +492,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2_Accessed;
-        private ExampleChild _MyChild2Previous;
+        protected ExampleChild _MyChild2Previous;
         public ExampleChild MyChild2Previous
         {
             get
@@ -531,7 +531,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2Previous_Accessed;
-        private IExampleNonexclusiveInterface _MyInterfaceImplementer;
+        protected IExampleNonexclusiveInterface _MyInterfaceImplementer;
         public IExampleNonexclusiveInterface MyInterfaceImplementer
         {
             get
@@ -570,7 +570,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyInterfaceImplementer_Accessed;
-        private NonLazinatorClass _MyNonLazinatorChild;
+        protected NonLazinatorClass _MyNonLazinatorChild;
         public NonLazinatorClass MyNonLazinatorChild
         {
             get
@@ -617,7 +617,7 @@ namespace LazinatorTests.Examples
                 }
             }
         }
-        private WInt _WrappedInt;
+        protected WInt _WrappedInt;
         public WInt WrappedInt
         {
             get
@@ -683,7 +683,7 @@ namespace LazinatorTests.Examples
         {
             _WrappedInt = WrappedInt_Copy;
         }
-        private ExampleChild _ExcludableChild;
+        protected ExampleChild _ExcludableChild;
         public ExampleChild ExcludableChild
         {
             get
@@ -943,6 +943,10 @@ namespace LazinatorTests.Examples
                     {
                         WrappedInt_CleanNestedStruct();
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

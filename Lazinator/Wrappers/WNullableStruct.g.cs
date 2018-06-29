@@ -198,7 +198,7 @@ namespace Lazinator.Wrappers
         private int _WNullableStruct_T_EndByteIndex;
         int _NonNullValue_ByteLength => _WNullableStruct_T_EndByteIndex - _NonNullValue_ByteIndex;
         
-        private bool _HasValue;
+        bool _HasValue;
         public bool HasValue
         {
             [DebuggerStepThrough]
@@ -213,7 +213,7 @@ namespace Lazinator.Wrappers
                 _HasValue = value;
             }
         }
-        private T _NonNullValue;
+        T _NonNullValue;
         public T NonNullValue
         {
             [DebuggerStepThrough]
@@ -351,6 +351,10 @@ namespace Lazinator.Wrappers
                     {
                         _NonNullValue = _NonNullValue.CloneLazinatorTyped();
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

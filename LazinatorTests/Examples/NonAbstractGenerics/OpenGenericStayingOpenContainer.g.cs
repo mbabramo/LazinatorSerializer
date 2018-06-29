@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _OpenGenericStayingOpenContainer_EndByteIndex;
         protected virtual int _ClosedGenericNonexclusiveInterface_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGenericNonexclusiveInterface_ByteIndex;
         
-        private OpenGeneric<Base> _ClosedGenericBase;
+        protected OpenGeneric<Base> _ClosedGenericBase;
         public OpenGeneric<Base> ClosedGenericBase
         {
             get
@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericBase_Accessed;
-        private OpenGeneric<WFloat> _ClosedGenericFloat;
+        protected OpenGeneric<WFloat> _ClosedGenericFloat;
         public OpenGeneric<WFloat> ClosedGenericFloat
         {
             get
@@ -291,7 +291,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFloat_Accessed;
-        private GenericFromBase<Base> _ClosedGenericFromBaseWithBase;
+        protected GenericFromBase<Base> _ClosedGenericFromBaseWithBase;
         public GenericFromBase<Base> ClosedGenericFromBaseWithBase
         {
             get
@@ -330,7 +330,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFromBaseWithBase_Accessed;
-        private OpenGeneric<IExampleChild> _ClosedGenericInterface;
+        protected OpenGeneric<IExampleChild> _ClosedGenericInterface;
         public OpenGeneric<IExampleChild> ClosedGenericInterface
         {
             get
@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericInterface_Accessed;
-        private OpenGeneric<IExampleNonexclusiveInterface> _ClosedGenericNonexclusiveInterface;
+        protected OpenGeneric<IExampleNonexclusiveInterface> _ClosedGenericNonexclusiveInterface;
         public OpenGeneric<IExampleNonexclusiveInterface> ClosedGenericNonexclusiveInterface
         {
             get
@@ -560,6 +560,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

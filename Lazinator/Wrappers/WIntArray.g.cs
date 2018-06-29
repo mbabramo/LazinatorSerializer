@@ -196,7 +196,7 @@ namespace Lazinator.Wrappers
         private int _WIntArray_EndByteIndex;
         int _WrappedValue_ByteLength => _WIntArray_EndByteIndex - _WrappedValue_ByteIndex;
         
-        private int[] _WrappedValue;
+        int[] _WrappedValue;
         public int[] WrappedValue
         {
             [DebuggerStepThrough]
@@ -305,6 +305,10 @@ namespace Lazinator.Wrappers
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

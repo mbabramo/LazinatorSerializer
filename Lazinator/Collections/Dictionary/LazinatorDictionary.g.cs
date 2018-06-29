@@ -199,7 +199,7 @@ namespace Lazinator.Collections.Dictionary
         private int _LazinatorDictionary_TKey_TValue_EndByteIndex;
         protected virtual int _Buckets_ByteLength => _LazinatorDictionary_TKey_TValue_EndByteIndex - _Buckets_ByteIndex;
         
-        private int _Count;
+        protected int _Count;
         public int Count
         {
             [DebuggerStepThrough]
@@ -214,7 +214,7 @@ namespace Lazinator.Collections.Dictionary
                 _Count = value;
             }
         }
-        private LazinatorList<DictionaryBucket<TKey, TValue>> _Buckets;
+        protected LazinatorList<DictionaryBucket<TKey, TValue>> _Buckets;
         internal virtual LazinatorList<DictionaryBucket<TKey, TValue>> Buckets
         {
             [DebuggerStepThrough]
@@ -355,6 +355,10 @@ namespace Lazinator.Collections.Dictionary
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

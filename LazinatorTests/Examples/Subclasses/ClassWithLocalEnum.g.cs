@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Subclasses
         private int _ClassWithLocalEnum_EndByteIndex;
         protected virtual int _MyEnumList_ByteLength => _ClassWithLocalEnum_EndByteIndex - _MyEnumList_ByteIndex;
         
-        private global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
+        protected global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
         public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
         {
             get
@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples.Subclasses
                 _MyEnum = value;
             }
         }
-        private List<EnumWithinClass> _MyEnumList;
+        protected List<EnumWithinClass> _MyEnumList;
         public List<EnumWithinClass> MyEnumList
         {
             get
@@ -321,6 +321,10 @@ namespace LazinatorTests.Examples.Subclasses
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

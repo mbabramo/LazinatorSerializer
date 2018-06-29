@@ -208,7 +208,7 @@ namespace Lazinator.Collections.Avl
         private int _AvlNode_TKey_TValue_EndByteIndex = 0;
         int _Value_ByteLength => _AvlNode_TKey_TValue_EndByteIndex - _Value_ByteIndex;
         
-        private int _Balance;
+        int _Balance;
         public int Balance
         {
             [DebuggerStepThrough]
@@ -223,7 +223,7 @@ namespace Lazinator.Collections.Avl
                 _Balance = value;
             }
         }
-        private int _Count;
+        int _Count;
         public int Count
         {
             [DebuggerStepThrough]
@@ -238,7 +238,7 @@ namespace Lazinator.Collections.Avl
                 _Count = value;
             }
         }
-        private TKey _Key;
+        TKey _Key;
         public TKey Key
         {
             [DebuggerStepThrough]
@@ -291,7 +291,7 @@ namespace Lazinator.Collections.Avl
             }
         }
         bool _Key_Accessed;
-        private AvlNode<TKey, TValue> _Left;
+        AvlNode<TKey, TValue> _Left;
         public AvlNode<TKey, TValue> Left
         {
             [DebuggerStepThrough]
@@ -339,7 +339,7 @@ namespace Lazinator.Collections.Avl
             }
         }
         bool _Left_Accessed;
-        private AvlNode<TKey, TValue> _Right;
+        AvlNode<TKey, TValue> _Right;
         public AvlNode<TKey, TValue> Right
         {
             [DebuggerStepThrough]
@@ -387,7 +387,7 @@ namespace Lazinator.Collections.Avl
             }
         }
         bool _Right_Accessed;
-        private TValue _Value;
+        TValue _Value;
         public TValue Value
         {
             [DebuggerStepThrough]
@@ -600,6 +600,10 @@ namespace Lazinator.Collections.Avl
                         _Value.IsDirty = false;
                         _Value.DescendantIsDirty = false;
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

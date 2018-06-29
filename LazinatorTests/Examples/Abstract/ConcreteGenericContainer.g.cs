@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGenericContainer_EndByteIndex = 0;
         protected override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
         
-        private IAbstractGeneric1<int> _Item;
+        protected IAbstractGeneric1<int> _Item;
         public override IAbstractGeneric1<int> Item
         {
             get
@@ -325,6 +325,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

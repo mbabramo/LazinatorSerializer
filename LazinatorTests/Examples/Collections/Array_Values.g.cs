@@ -200,7 +200,7 @@ namespace LazinatorTests.Examples.Collections
         private int _Array_Values_EndByteIndex;
         protected virtual int _MyJaggedArrayInt_ByteLength => _Array_Values_EndByteIndex - _MyJaggedArrayInt_ByteIndex;
         
-        private int[] _MyArrayInt;
+        protected int[] _MyArrayInt;
         public int[] MyArrayInt
         {
             get
@@ -247,7 +247,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private int[][] _MyJaggedArrayInt;
+        protected int[][] _MyJaggedArrayInt;
         public int[][] MyJaggedArrayInt
         {
             get
@@ -354,6 +354,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

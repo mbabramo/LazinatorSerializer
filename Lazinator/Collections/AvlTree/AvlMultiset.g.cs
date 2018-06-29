@@ -200,7 +200,7 @@ namespace Lazinator.Collections.AvlTree
         private int _AvlMultiset_T_EndByteIndex;
         protected virtual int _UnderlyingSet_ByteLength => _AvlMultiset_T_EndByteIndex - _UnderlyingSet_ByteIndex;
         
-        private int _NumItemsAdded;
+        protected int _NumItemsAdded;
         public int NumItemsAdded
         {
             [DebuggerStepThrough]
@@ -215,7 +215,7 @@ namespace Lazinator.Collections.AvlTree
                 _NumItemsAdded = value;
             }
         }
-        private AvlSet<LazinatorTuple<T, WInt>> _UnderlyingSet;
+        protected AvlSet<LazinatorTuple<T, WInt>> _UnderlyingSet;
         public virtual AvlSet<LazinatorTuple<T, WInt>> UnderlyingSet
         {
             [DebuggerStepThrough]
@@ -356,6 +356,10 @@ namespace Lazinator.Collections.AvlTree
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

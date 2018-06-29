@@ -201,7 +201,7 @@ namespace LazinatorTests.Examples
         private int _ExampleChild_EndByteIndex;
         protected virtual int _MyWrapperContainer_ByteLength => _ExampleChild_EndByteIndex - _MyWrapperContainer_ByteIndex;
         
-        private long _MyLong;
+        protected long _MyLong;
         public long MyLong
         {
             get
@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples
                 _MyLong = value;
             }
         }
-        private short _MyShort;
+        protected short _MyShort;
         public short MyShort
         {
             get
@@ -248,7 +248,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ByteSpan_Accessed;
-        private WrapperContainer _MyWrapperContainer;
+        protected WrapperContainer _MyWrapperContainer;
         public WrapperContainer MyWrapperContainer
         {
             get
@@ -382,6 +382,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

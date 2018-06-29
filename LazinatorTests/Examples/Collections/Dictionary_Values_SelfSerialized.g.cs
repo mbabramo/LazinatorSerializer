@@ -203,7 +203,7 @@ namespace LazinatorTests.Examples.Collections
         private int _Dictionary_Values_SelfSerialized_EndByteIndex;
         protected virtual int _MySortedList_ByteLength => _Dictionary_Values_SelfSerialized_EndByteIndex - _MySortedList_ByteIndex;
         
-        private Dictionary<int, ExampleChild> _MyDictionary;
+        protected Dictionary<int, ExampleChild> _MyDictionary;
         public Dictionary<int, ExampleChild> MyDictionary
         {
             get
@@ -232,7 +232,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyDictionary_Accessed;
-        private SortedDictionary<int, ExampleChild> _MySortedDictionary;
+        protected SortedDictionary<int, ExampleChild> _MySortedDictionary;
         public SortedDictionary<int, ExampleChild> MySortedDictionary
         {
             get
@@ -261,7 +261,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedDictionary_Accessed;
-        private SortedList<int, ExampleChild> _MySortedList;
+        protected SortedList<int, ExampleChild> _MySortedList;
         public SortedList<int, ExampleChild> MySortedList
         {
             get
@@ -371,6 +371,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _RecordLikeContainer_EndByteIndex;
         protected virtual int _MyRecordLikeType_ByteLength => _RecordLikeContainer_EndByteIndex - _MyRecordLikeType_ByteIndex;
         
-        private MismatchedRecordLikeType _MyMismatchedRecordLikeType;
+        protected MismatchedRecordLikeType _MyMismatchedRecordLikeType;
         public MismatchedRecordLikeType MyMismatchedRecordLikeType
         {
             get
@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyMismatchedRecordLikeType_Accessed;
-        private RecordLikeClass _MyRecordLikeClass;
+        protected RecordLikeClass _MyRecordLikeClass;
         public RecordLikeClass MyRecordLikeClass
         {
             get
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeClass_Accessed;
-        private RecordLikeType _MyRecordLikeType;
+        protected RecordLikeType _MyRecordLikeType;
         public RecordLikeType MyRecordLikeType
         {
             get
@@ -373,6 +373,10 @@ namespace LazinatorTests.Examples.Tuples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

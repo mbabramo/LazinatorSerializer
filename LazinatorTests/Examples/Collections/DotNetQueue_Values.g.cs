@@ -198,7 +198,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetQueue_Values_EndByteIndex;
         protected virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
         
-        private Queue<int> _MyQueueInt;
+        protected Queue<int> _MyQueueInt;
         public Queue<int> MyQueueInt
         {
             get
@@ -320,6 +320,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

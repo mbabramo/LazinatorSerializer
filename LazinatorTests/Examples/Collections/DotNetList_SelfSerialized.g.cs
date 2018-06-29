@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_SelfSerialized_EndByteIndex;
         protected virtual int _MyListSerialized_ByteLength => _DotNetList_SelfSerialized_EndByteIndex - _MyListSerialized_ByteIndex;
         
-        private List<ExampleChild> _MyListSerialized;
+        protected List<ExampleChild> _MyListSerialized;
         public List<ExampleChild> MyListSerialized
         {
             get
@@ -321,6 +321,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetHashSet_SelfSerialized_EndByteIndex;
         protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_SelfSerialized_EndByteIndex - _MyHashSetSerialized_ByteIndex;
         
-        private HashSet<ExampleChild> _MyHashSetSerialized;
+        protected HashSet<ExampleChild> _MyHashSetSerialized;
         public HashSet<ExampleChild> MyHashSetSerialized
         {
             get
@@ -303,6 +303,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -202,7 +202,7 @@ namespace Lazinator.Spans
         private int _LazinatorBitArray_EndByteIndex;
         int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
         
-        private int __version;
+        int __version;
         private int _version
         {
             [DebuggerStepThrough]
@@ -217,7 +217,7 @@ namespace Lazinator.Spans
                 __version = value;
             }
         }
-        private int _m_length;
+        int _m_length;
         private int m_length
         {
             [DebuggerStepThrough]
@@ -232,7 +232,7 @@ namespace Lazinator.Spans
                 _m_length = value;
             }
         }
-        private LazinatorByteSpan _ByteSpan;
+        LazinatorByteSpan _ByteSpan;
         private LazinatorByteSpan ByteSpan
         {
             [DebuggerStepThrough]
@@ -371,6 +371,10 @@ namespace Lazinator.Spans
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

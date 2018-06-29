@@ -205,7 +205,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _RegularTuple_EndByteIndex;
         protected virtual int _MyTupleSerialized4_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized4_ByteIndex;
         
-        private Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized;
+        protected Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized;
         public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized
         {
             get
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized_Accessed;
-        private Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized2;
+        protected Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized2;
         public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2
         {
             get
@@ -263,7 +263,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
-        private Tuple<uint?, ExampleChild, NonLazinatorClass> _MyTupleSerialized3;
+        protected Tuple<uint?, ExampleChild, NonLazinatorClass> _MyTupleSerialized3;
         public Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3
         {
             get
@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
-        private Tuple<int, ExampleStruct> _MyTupleSerialized4;
+        protected Tuple<int, ExampleStruct> _MyTupleSerialized4;
         public Tuple<int, ExampleStruct> MyTupleSerialized4
         {
             get
@@ -405,6 +405,10 @@ namespace LazinatorTests.Examples.Tuples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -205,7 +205,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _StructTuple_EndByteIndex;
         protected virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
         
-        private (TestEnum firstEnum, TestEnum anotherEnum) _EnumTuple;
+        protected (TestEnum firstEnum, TestEnum anotherEnum) _EnumTuple;
         public (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple
         {
             get
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _EnumTuple_Accessed;
-        private (int MyFirstItem, double MySecondItem) _MyNamedTuple;
+        protected (int MyFirstItem, double MySecondItem) _MyNamedTuple;
         public (int MyFirstItem, double MySecondItem) MyNamedTuple
         {
             get
@@ -263,7 +263,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNamedTuple_Accessed;
-        private (int, double)? _MyNullableTuple;
+        protected (int, double)? _MyNullableTuple;
         public (int, double)? MyNullableTuple
         {
             get
@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNullableTuple_Accessed;
-        private (uint, ExampleChild, NonLazinatorClass) _MyValueTupleSerialized;
+        protected (uint, ExampleChild, NonLazinatorClass) _MyValueTupleSerialized;
         public (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized
         {
             get
@@ -405,6 +405,10 @@ namespace LazinatorTests.Examples.Tuples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

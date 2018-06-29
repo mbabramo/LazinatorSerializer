@@ -223,7 +223,7 @@ namespace Lazinator.Collections
             }
         }
         protected bool _MainListSerialized_Accessed;
-        private LazinatorOffsetList _Offsets;
+        protected LazinatorOffsetList _Offsets;
         public LazinatorOffsetList Offsets
         {
             [DebuggerStepThrough]
@@ -350,6 +350,10 @@ namespace Lazinator.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

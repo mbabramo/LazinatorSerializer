@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _OpenGeneric_T_EndByteIndex = 0;
         protected virtual int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
         
-        private List<T> _MyListT;
+        protected List<T> _MyListT;
         public virtual List<T> MyListT
         {
             get
@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyListT_Accessed;
-        private T _MyT;
+        protected T _MyT;
         public virtual T MyT
         {
             get
@@ -390,6 +390,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         _MyT.IsDirty = false;
                         _MyT.DescendantIsDirty = false;
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

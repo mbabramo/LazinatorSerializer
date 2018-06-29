@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Structs
         private int _SmallWrappersContainer_EndByteIndex;
         protected virtual int _WrappedSByte_ByteLength => _SmallWrappersContainer_EndByteIndex - _WrappedSByte_ByteIndex;
         
-        private LazinatorList<WByte> _ListWrappedBytes;
+        protected LazinatorList<WByte> _ListWrappedBytes;
         public LazinatorList<WByte> ListWrappedBytes
         {
             get
@@ -259,7 +259,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _ListWrappedBytes_Accessed;
-        private WBool _WrappedBool;
+        protected WBool _WrappedBool;
         public WBool WrappedBool
         {
             get
@@ -325,7 +325,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedBool = WrappedBool_Copy;
         }
-        private WByte _WrappedByte;
+        protected WByte _WrappedByte;
         public WByte WrappedByte
         {
             get
@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedByte = WrappedByte_Copy;
         }
-        private WChar _WrappedChar;
+        protected WChar _WrappedChar;
         public WChar WrappedChar
         {
             get
@@ -457,7 +457,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedChar = WrappedChar_Copy;
         }
-        private WNullableBool _WrappedNullableBool;
+        protected WNullableBool _WrappedNullableBool;
         public WNullableBool WrappedNullableBool
         {
             get
@@ -523,7 +523,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedNullableBool = WrappedNullableBool_Copy;
         }
-        private WNullableByte _WrappedNullableByte;
+        protected WNullableByte _WrappedNullableByte;
         public WNullableByte WrappedNullableByte
         {
             get
@@ -589,7 +589,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedNullableByte = WrappedNullableByte_Copy;
         }
-        private WNullableChar _WrappedNullableChar;
+        protected WNullableChar _WrappedNullableChar;
         public WNullableChar WrappedNullableChar
         {
             get
@@ -655,7 +655,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedNullableChar = WrappedNullableChar_Copy;
         }
-        private WNullableSByte _WrappedNullableSByte;
+        protected WNullableSByte _WrappedNullableSByte;
         public WNullableSByte WrappedNullableSByte
         {
             get
@@ -721,7 +721,7 @@ namespace LazinatorTests.Examples.Structs
         {
             _WrappedNullableSByte = WrappedNullableSByte_Copy;
         }
-        private WSByte _WrappedSByte;
+        protected WSByte _WrappedSByte;
         public WSByte WrappedSByte
         {
             get
@@ -1020,6 +1020,10 @@ namespace LazinatorTests.Examples.Structs
                     {
                         WrappedSByte_CleanNestedStruct();
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

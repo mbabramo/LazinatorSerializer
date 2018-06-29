@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.Hierarchy
         private int _RecursiveExample_EndByteIndex;
         protected virtual int _RecursiveInterface_ByteLength => _RecursiveExample_EndByteIndex - _RecursiveInterface_ByteIndex;
         
-        private RecursiveExample _RecursiveClass;
+        protected RecursiveExample _RecursiveClass;
         public RecursiveExample RecursiveClass
         {
             get
@@ -243,7 +243,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveClass_Accessed;
-        private IRecursiveExample _RecursiveInterface;
+        protected IRecursiveExample _RecursiveInterface;
         public IRecursiveExample RecursiveInterface
         {
             get
@@ -386,6 +386,10 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Collections
         private int _ArrayMultidimensional_Values_EndByteIndex;
         protected virtual int _MyThreeDimArrayInt_ByteLength => _ArrayMultidimensional_Values_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
         
-        private int[,] _MyArrayInt;
+        protected int[,] _MyArrayInt;
         public int[,] MyArrayInt
         {
             get
@@ -249,7 +249,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private int[][,,][,,,] _MyCrazyJaggedArray;
+        protected int[][,,][,,,] _MyCrazyJaggedArray;
         public int[][,,][,,,] MyCrazyJaggedArray
         {
             get
@@ -278,7 +278,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyCrazyJaggedArray_Accessed;
-        private int[,,] _MyThreeDimArrayInt;
+        protected int[,,] _MyThreeDimArrayInt;
         public int[,,] MyThreeDimArrayInt
         {
             get
@@ -388,6 +388,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

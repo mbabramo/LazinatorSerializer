@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples
         /* Property definitions */
         
         
-        private bool _IsNull;
+        bool _IsNull;
         public bool IsNull
         {
             get
@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples
                 _IsNull = value;
             }
         }
-        private int _MyInt;
+        int _MyInt;
         public int MyInt
         {
             get
@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples
                 _MyInt = value;
             }
         }
-        private string _MyString;
+        string _MyString;
         public string MyString
         {
             get
@@ -324,6 +324,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

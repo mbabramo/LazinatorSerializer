@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _KeyValuePairTuple_EndByteIndex;
         protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
         
-        private KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
+        protected KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
         public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
         {
             get
@@ -303,6 +303,10 @@ namespace LazinatorTests.Examples.Tuples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

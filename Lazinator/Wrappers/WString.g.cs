@@ -193,7 +193,7 @@ namespace Lazinator.Wrappers
         /* Property definitions */
         
         
-        private string _WrappedValue;
+        string _WrappedValue;
         public string WrappedValue
         {
             [DebuggerStepThrough]
@@ -284,6 +284,10 @@ namespace Lazinator.Wrappers
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -201,7 +201,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _Concrete3_EndByteIndex;
         protected virtual int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
         
-        private string _String1;
+        protected string _String1;
         public override string String1
         {
             get
@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String1 = value;
             }
         }
-        private string _String2;
+        protected string _String2;
         public override string String2
         {
             get
@@ -227,7 +227,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String2 = value;
             }
         }
-        private string _String3;
+        protected string _String3;
         public string String3
         {
             get
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String3 = value;
             }
         }
-        private Example _Example2;
+        protected Example _Example2;
         public override Example Example2
         {
             get
@@ -278,7 +278,7 @@ namespace LazinatorTests.Examples.Abstract
                 _Example2_Accessed = true;
             }
         }
-        private Example _Example3;
+        protected Example _Example3;
         public override Example Example3
         {
             get
@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples.Abstract
                 _Example3_Accessed = true;
             }
         }
-        private List<int> _IntList1;
+        protected List<int> _IntList1;
         public override List<int> IntList1
         {
             get
@@ -344,7 +344,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList1_Accessed = true;
             }
         }
-        private List<int> _IntList2;
+        protected List<int> _IntList2;
         public override List<int> IntList2
         {
             get
@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList2_Accessed = true;
             }
         }
-        private List<int> _IntList3;
+        protected List<int> _IntList3;
         public List<int> IntList3
         {
             get
@@ -520,6 +520,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

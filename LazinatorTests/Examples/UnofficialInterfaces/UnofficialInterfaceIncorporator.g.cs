@@ -205,7 +205,7 @@ namespace LazinatorTests.Examples
         private int _UnofficialInterfaceIncorporator_EndByteIndex;
         protected virtual int _MyUnofficialObject_ByteLength => _UnofficialInterfaceIncorporator_EndByteIndex - _MyUnofficialObject_ByteIndex;
         
-        private long _MyOfficialLong;
+        protected long _MyOfficialLong;
         public long MyOfficialLong
         {
             get
@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples
                 _MyOfficialLong = value;
             }
         }
-        private int _MyUnofficialInt;
+        protected int _MyUnofficialInt;
         private int MyUnofficialInt
         {
             get
@@ -231,7 +231,7 @@ namespace LazinatorTests.Examples
                 _MyUnofficialInt = value;
             }
         }
-        private Concrete5 _MyOfficialObject;
+        protected Concrete5 _MyOfficialObject;
         public Concrete5 MyOfficialObject
         {
             get
@@ -270,7 +270,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyOfficialObject_Accessed;
-        private Concrete3 _MyUnofficialObject;
+        protected Concrete3 _MyUnofficialObject;
         private Concrete3 MyUnofficialObject
         {
             get
@@ -417,6 +417,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -48,7 +48,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Properties */
         
-        private int _IntInConcreteFromBase;
+        protected int _IntInConcreteFromBase;
         public int IntInConcreteFromBase
         {
             get
@@ -126,6 +126,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

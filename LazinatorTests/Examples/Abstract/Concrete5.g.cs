@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _Concrete5_EndByteIndex;
         protected virtual int _IntList5_ByteLength => _Concrete5_EndByteIndex - _IntList5_ByteIndex;
         
-        private string _String4;
+        protected string _String4;
         public override string String4
         {
             get
@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String4 = value;
             }
         }
-        private string _String5;
+        protected string _String5;
         public string String5
         {
             get
@@ -78,7 +78,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String5 = value;
             }
         }
-        private List<int> _IntList4;
+        protected List<int> _IntList4;
         public override List<int> IntList4
         {
             get
@@ -106,7 +106,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList4_Accessed = true;
             }
         }
-        private List<int> _IntList5;
+        protected List<int> _IntList5;
         public List<int> IntList5
         {
             get
@@ -209,6 +209,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

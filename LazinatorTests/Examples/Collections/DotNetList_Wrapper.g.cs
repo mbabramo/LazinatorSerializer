@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Wrapper_EndByteIndex;
         protected virtual int _MyListNullableInt_ByteLength => _DotNetList_Wrapper_EndByteIndex - _MyListNullableInt_ByteIndex;
         
-        private List<WInt> _MyListInt;
+        protected List<WInt> _MyListInt;
         public List<WInt> MyListInt
         {
             get
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private List<WNullableByte> _MyListNullableByte;
+        protected List<WNullableByte> _MyListNullableByte;
         public List<WNullableByte> MyListNullableByte
         {
             get
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNullableByte_Accessed;
-        private List<WNullableInt> _MyListNullableInt;
+        protected List<WNullableInt> _MyListNullableInt;
         public List<WNullableInt> MyListNullableInt
         {
             get
@@ -393,6 +393,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Collections
         private int _SpanAndMemory_EndByteIndex;
         protected virtual int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
         
-        private Memory<int> _MyMemoryInt;
+        protected Memory<int> _MyMemoryInt;
         public Memory<int> MyMemoryInt
         {
             get
@@ -243,7 +243,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyMemoryInt_Accessed;
-        private Memory<int>? _MyNullableMemoryInt;
+        protected Memory<int>? _MyNullableMemoryInt;
         public Memory<int>? MyNullableMemoryInt
         {
             get
@@ -470,6 +470,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

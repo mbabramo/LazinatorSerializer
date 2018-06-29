@@ -201,7 +201,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_NonSelfSerializable_EndByteIndex;
         protected virtual int _MyListNonLazinatorType2_ByteLength => _DotNetList_NonSelfSerializable_EndByteIndex - _MyListNonLazinatorType2_ByteIndex;
         
-        private List<NonLazinatorClass> _MyListNonLazinatorType;
+        protected List<NonLazinatorClass> _MyListNonLazinatorType;
         public List<NonLazinatorClass> MyListNonLazinatorType
         {
             get
@@ -248,7 +248,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private List<NonLazinatorClass> _MyListNonLazinatorType2;
+        protected List<NonLazinatorClass> _MyListNonLazinatorType2;
         public List<NonLazinatorClass> MyListNonLazinatorType2
         {
             get
@@ -355,6 +355,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

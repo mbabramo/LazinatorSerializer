@@ -298,6 +298,10 @@ namespace Lazinator.Wrappers
                 {
                     _DescendantIsDirty = false;
                 }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

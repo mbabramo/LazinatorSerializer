@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _GenericFromBase_T_EndByteIndex = 0;
         protected virtual int _MyT_ByteLength => _GenericFromBase_T_EndByteIndex - _MyT_ByteIndex;
         
-        private T _MyT;
+        protected T _MyT;
         public virtual T MyT
         {
             get
@@ -197,6 +197,10 @@ namespace LazinatorTests.Examples.Abstract
                         _MyT.IsDirty = false;
                         _MyT.DescendantIsDirty = false;
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

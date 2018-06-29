@@ -208,7 +208,7 @@ namespace Lazinator.Collections
         private int _LazinatorOffsetList_EndByteIndex;
         int _TwoByteItems_ByteLength => _LazinatorOffsetList_EndByteIndex - _TwoByteItems_ByteIndex;
         
-        private LazinatorFastReadList<int> _FourByteItems;
+        LazinatorFastReadList<int> _FourByteItems;
         public LazinatorFastReadList<int> FourByteItems
         {
             [DebuggerStepThrough]
@@ -256,7 +256,7 @@ namespace Lazinator.Collections
             }
         }
         bool _FourByteItems_Accessed;
-        private LazinatorFastReadList<short> _TwoByteItems;
+        LazinatorFastReadList<short> _TwoByteItems;
         public LazinatorFastReadList<short> TwoByteItems
         {
             [DebuggerStepThrough]
@@ -407,6 +407,10 @@ namespace Lazinator.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

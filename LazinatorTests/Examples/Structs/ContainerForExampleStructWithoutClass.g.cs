@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Structs
         private int _ContainerForExampleStructWithoutClass_EndByteIndex;
         protected virtual int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
         
-        private ExampleStructWithoutClass _ExampleStructWithoutClass;
+        protected ExampleStructWithoutClass _ExampleStructWithoutClass;
         public ExampleStructWithoutClass ExampleStructWithoutClass
         {
             get
@@ -360,6 +360,10 @@ namespace LazinatorTests.Examples.Structs
                     {
                         ExampleStructWithoutClass_CleanNestedStruct();
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

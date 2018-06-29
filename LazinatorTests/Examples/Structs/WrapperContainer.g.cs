@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Structs
         private int _WrapperContainer_EndByteIndex;
         protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         
-        private WInt _WrappedInt;
+        protected WInt _WrappedInt;
         public WInt WrappedInt
         {
             get
@@ -357,6 +357,10 @@ namespace LazinatorTests.Examples.Structs
                     {
                         WrappedInt_CleanNestedStruct();
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

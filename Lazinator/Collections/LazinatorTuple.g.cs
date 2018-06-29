@@ -200,7 +200,7 @@ namespace Lazinator.Collections
         private int _LazinatorTuple_T_U_EndByteIndex = 0;
         protected virtual int _Item2_ByteLength => _LazinatorTuple_T_U_EndByteIndex - _Item2_ByteIndex;
         
-        private T _Item1;
+        protected T _Item1;
         public virtual T Item1
         {
             [DebuggerStepThrough]
@@ -253,7 +253,7 @@ namespace Lazinator.Collections
             }
         }
         protected bool _Item1_Accessed;
-        private U _Item2;
+        protected U _Item2;
         public virtual U Item2
         {
             [DebuggerStepThrough]
@@ -430,6 +430,10 @@ namespace Lazinator.Collections
                         _Item2.IsDirty = false;
                         _Item2.DescendantIsDirty = false;
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples
         private int _Simplifiable_EndByteIndex;
         protected virtual int _Example3_ByteLength => _Simplifiable_EndByteIndex - _Example3_ByteIndex;
         
-        private bool _MyIntsAre3;
+        protected bool _MyIntsAre3;
         public bool MyIntsAre3
         {
             get
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples
                 _MyIntsAre3 = value;
             }
         }
-        private char? _Example2Char;
+        protected char? _Example2Char;
         public char? Example2Char
         {
             get
@@ -232,7 +232,7 @@ namespace LazinatorTests.Examples
                 _Example2Char = value;
             }
         }
-        private bool _Example3IsNull;
+        protected bool _Example3IsNull;
         public bool Example3IsNull
         {
             get
@@ -245,7 +245,7 @@ namespace LazinatorTests.Examples
                 _Example3IsNull = value;
             }
         }
-        private bool _ExampleHasDefaultValue;
+        protected bool _ExampleHasDefaultValue;
         public bool ExampleHasDefaultValue
         {
             get
@@ -258,7 +258,7 @@ namespace LazinatorTests.Examples
                 _ExampleHasDefaultValue = value;
             }
         }
-        private int _MyInt;
+        protected int _MyInt;
         public int MyInt
         {
             get
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples
                 _MyInt = value;
             }
         }
-        private int _MyOtherInt;
+        protected int _MyOtherInt;
         public int MyOtherInt
         {
             get
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples
                 _MyOtherInt = value;
             }
         }
-        private Example _Example;
+        protected Example _Example;
         public Example Example
         {
             get
@@ -323,7 +323,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example_Accessed;
-        private Example _Example2;
+        protected Example _Example2;
         public Example Example2
         {
             get
@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example2_Accessed;
-        private Example _Example3;
+        protected Example _Example3;
         public Example Example3
         {
             get
@@ -571,6 +571,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

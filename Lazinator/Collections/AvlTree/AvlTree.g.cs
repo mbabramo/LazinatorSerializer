@@ -198,7 +198,7 @@ namespace Lazinator.Collections.Avl
         private int _AvlTree_TKey_TValue_EndByteIndex;
         protected virtual int _Root_ByteLength => _AvlTree_TKey_TValue_EndByteIndex - _Root_ByteIndex;
         
-        private AvlNode<TKey, TValue> _Root;
+        protected AvlNode<TKey, TValue> _Root;
         public virtual AvlNode<TKey, TValue> Root
         {
             [DebuggerStepThrough]
@@ -337,6 +337,10 @@ namespace Lazinator.Collections.Avl
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

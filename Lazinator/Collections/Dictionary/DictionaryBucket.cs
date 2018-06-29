@@ -6,7 +6,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
-    internal partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         private void Initialize()
         {

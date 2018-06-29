@@ -201,7 +201,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGeneric2a_EndByteIndex;
         protected virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2a_EndByteIndex - _LazinatorExample_ByteIndex;
         
-        private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
+        protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
             get
@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric = value;
             }
         }
-        private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
+        protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
             get
@@ -227,7 +227,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric2 = value;
             }
         }
-        private int _MyT;
+        protected int _MyT;
         public override int MyT
         {
             get
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyT = value;
             }
         }
-        private int _MyUnofficialInt;
+        protected int _MyUnofficialInt;
         public override int MyUnofficialInt
         {
             get
@@ -253,7 +253,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyUnofficialInt = value;
             }
         }
-        private string _AnotherProperty;
+        protected string _AnotherProperty;
         public string AnotherProperty
         {
             get
@@ -266,7 +266,7 @@ namespace LazinatorTests.Examples.Abstract
                 _AnotherProperty = value;
             }
         }
-        private Example _LazinatorExample;
+        protected Example _LazinatorExample;
         public Example LazinatorExample
         {
             get
@@ -403,6 +403,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

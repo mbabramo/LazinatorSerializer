@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _BaseContainer_EndByteIndex;
         protected virtual int _MyBase_ByteLength => _BaseContainer_EndByteIndex - _MyBase_ByteIndex;
         
-        private Base _MyBase;
+        protected Base _MyBase;
         public Base MyBase
         {
             get
@@ -329,6 +329,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

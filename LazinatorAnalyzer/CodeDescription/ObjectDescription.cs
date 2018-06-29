@@ -1144,6 +1144,10 @@ namespace Lazinator.CodeDescription
             }
 
             postEncodingDirtinessReset += $@"
+                    }}
+                    else
+                    {{
+                        throw new Exception(""Cannot update stored buffer when serializing only some children."");
                     }}";
 
             return postEncodingDirtinessReset;

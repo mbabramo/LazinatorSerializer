@@ -200,7 +200,7 @@ namespace LazinatorTests.Examples.Collections
         private int _LazinatorListContainer_EndByteIndex;
         protected virtual int _MyList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyList_ByteIndex;
         
-        private int _MyInt;
+        protected int _MyInt;
         public int MyInt
         {
             get
@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyInt = value;
             }
         }
-        private long _MyLong;
+        protected long _MyLong;
         public long MyLong
         {
             get
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyLong = value;
             }
         }
-        private LazinatorList<ExampleChild> _MyList;
+        protected LazinatorList<ExampleChild> _MyList;
         public LazinatorList<ExampleChild> MyList
         {
             get
@@ -357,6 +357,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

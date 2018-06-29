@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _Concrete6_EndByteIndex;
         protected virtual int _IntList6_ByteLength => _Concrete6_EndByteIndex - _IntList6_ByteIndex;
         
-        private List<int> _IntList6;
+        protected List<int> _IntList6;
         public List<int> IntList6
         {
             get
@@ -147,6 +147,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

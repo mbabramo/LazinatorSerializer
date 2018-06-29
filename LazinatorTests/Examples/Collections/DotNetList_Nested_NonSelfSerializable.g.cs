@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Nested_NonSelfSerializable_EndByteIndex;
         protected virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonSelfSerializable_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
         
-        private List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
+        protected List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
         public List<List<NonLazinatorClass>> MyListNestedNonLazinatorType
         {
             get
@@ -303,6 +303,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

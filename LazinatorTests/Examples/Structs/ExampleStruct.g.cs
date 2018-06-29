@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples
         private int _ExampleStruct_EndByteIndex;
         int _MyTuple_ByteLength => _ExampleStruct_EndByteIndex - _MyTuple_ByteIndex;
         
-        private bool _MyBool;
+        bool _MyBool;
         public bool MyBool
         {
             get
@@ -228,7 +228,7 @@ namespace LazinatorTests.Examples
                 _MyBool = value;
             }
         }
-        private char _MyChar;
+        char _MyChar;
         public char MyChar
         {
             get
@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples
                 _MyChar = value;
             }
         }
-        private ExampleChild _MyChild1;
+        ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
             get
@@ -275,7 +275,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyChild1_Accessed;
-        private ExampleChild _MyChild2;
+        ExampleChild _MyChild2;
         public ExampleChild MyChild2
         {
             get
@@ -309,7 +309,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyChild2_Accessed;
-        private List<Example> _MyLazinatorList;
+        List<Example> _MyLazinatorList;
         public List<Example> MyLazinatorList
         {
             get
@@ -356,7 +356,7 @@ namespace LazinatorTests.Examples
                 }
             }
         }
-        private List<int> _MyListValues;
+        List<int> _MyListValues;
         public List<int> MyListValues
         {
             get
@@ -385,7 +385,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyListValues_Accessed;
-        private (NonLazinatorClass myitem1, int? myitem2) _MyTuple;
+        (NonLazinatorClass myitem1, int? myitem2) _MyTuple;
         public (NonLazinatorClass myitem1, int? myitem2) MyTuple
         {
             get
@@ -540,6 +540,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples
         private int _ClosedGenericWithoutBase_EndByteIndex;
         protected virtual int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
         
-        private int _ItemT;
+        protected int _ItemT;
         public int ItemT
         {
             get
@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples
                 _ItemT = value;
             }
         }
-        private ExampleChild _ItemU;
+        protected ExampleChild _ItemU;
         public ExampleChild ItemU
         {
             get
@@ -344,6 +344,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

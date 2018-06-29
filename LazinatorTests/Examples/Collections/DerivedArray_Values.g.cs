@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DerivedArray_Values_EndByteIndex;
         protected virtual int _MyArrayInt_DerivedLevel_ByteLength => _DerivedArray_Values_EndByteIndex - _MyArrayInt_DerivedLevel_ByteIndex;
         
-        private int[] _MyArrayInt_DerivedLevel;
+        protected int[] _MyArrayInt_DerivedLevel;
         public int[] MyArrayInt_DerivedLevel
         {
             get
@@ -165,6 +165,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -224,7 +224,7 @@ namespace Lazinator.Spans
             }
         }
         protected bool _ReadOnly_Accessed;
-        private Memory<byte> _ReadOrWrite;
+        protected Memory<byte> _ReadOrWrite;
         internal Memory<byte> ReadOrWrite
         {
             [DebuggerStepThrough]
@@ -334,6 +334,10 @@ namespace Lazinator.Spans
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

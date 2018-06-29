@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.Subclasses
         private int _ClassWithSubclass_EndByteIndex;
         protected virtual int _SubclassInstance2_ByteLength => _ClassWithSubclass_EndByteIndex - _SubclassInstance2_ByteIndex;
         
-        private int _IntWithinSuperclass;
+        protected int _IntWithinSuperclass;
         public int IntWithinSuperclass
         {
             get
@@ -217,7 +217,7 @@ namespace LazinatorTests.Examples.Subclasses
                 _IntWithinSuperclass = value;
             }
         }
-        private global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance1;
+        protected global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance1;
         public global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass SubclassInstance1
         {
             get
@@ -256,7 +256,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance1_Accessed;
-        private global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance2;
+        protected global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance2;
         public global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass SubclassInstance2
         {
             get
@@ -401,6 +401,10 @@ namespace LazinatorTests.Examples.Subclasses
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

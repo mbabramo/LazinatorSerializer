@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _DerivedGeneric2c_T_EndByteIndex = 0;
         protected override int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;
         
-        private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
+        protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
             get
@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric = value;
             }
         }
-        private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
+        protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
             get
@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric2 = value;
             }
         }
-        private int _MyUnofficialInt;
+        protected int _MyUnofficialInt;
         public override int MyUnofficialInt
         {
             get
@@ -238,7 +238,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyUnofficialInt = value;
             }
         }
-        private T _MyT;
+        protected T _MyT;
         public override T MyT
         {
             get
@@ -397,6 +397,10 @@ namespace LazinatorTests.Examples.Abstract
                         _MyT.IsDirty = false;
                         _MyT.DescendantIsDirty = false;
                     }
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

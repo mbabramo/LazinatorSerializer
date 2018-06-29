@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _ContainerWithAbstract1_EndByteIndex;
         protected virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
         
-        private Abstract1 _AbstractProperty;
+        protected Abstract1 _AbstractProperty;
         public Abstract1 AbstractProperty
         {
             get
@@ -329,6 +329,10 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

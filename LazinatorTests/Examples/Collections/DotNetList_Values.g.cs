@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Values_EndByteIndex;
         protected virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         
-        private LinkedList<int> _MyLinkedListInt;
+        protected LinkedList<int> _MyLinkedListInt;
         public LinkedList<int> MyLinkedListInt
         {
             get
@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private List<int> _MyListInt;
+        protected List<int> _MyListInt;
         public List<int> MyListInt
         {
             get
@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
-        private List<int> _MyListInt2;
+        protected List<int> _MyListInt2;
         public List<int> MyListInt2
         {
             get
@@ -327,7 +327,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListInt2_Accessed;
-        private SortedSet<int> _MySortedSetInt;
+        protected SortedSet<int> _MySortedSetInt;
         public SortedSet<int> MySortedSetInt
         {
             get
@@ -458,6 +458,10 @@ namespace LazinatorTests.Examples.Collections
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

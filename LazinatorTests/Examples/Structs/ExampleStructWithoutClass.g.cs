@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Structs
         /* Property definitions */
         
         
-        private int _MyInt;
+        int _MyInt;
         public int MyInt
         {
             get
@@ -294,6 +294,10 @@ namespace LazinatorTests.Examples.Structs
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples
         private int _NonLazinatorContainer_EndByteIndex;
         int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
         
-        private NonLazinatorClass _NonLazinatorClass;
+        NonLazinatorClass _NonLazinatorClass;
         public NonLazinatorClass NonLazinatorClass
         {
             get
@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorClass_Accessed;
-        private NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
+        NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
         public NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
         {
             get
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorInterchangeableClass_Accessed;
-        private NonLazinatorStruct _NonLazinatorStruct;
+        NonLazinatorStruct _NonLazinatorStruct;
         public NonLazinatorStruct NonLazinatorStruct
         {
             get
@@ -383,6 +383,10 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
+                }
+                else
+                {
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
