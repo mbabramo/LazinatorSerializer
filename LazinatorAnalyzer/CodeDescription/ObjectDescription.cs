@@ -1107,16 +1107,12 @@ namespace Lazinator.CodeDescription
                 throw new NotImplementedException();
 
             string postEncodingDirtinessReset;
-            if (manualDescendantDirtinessChecks == "")
-                postEncodingDirtinessReset =
+            postEncodingDirtinessReset =
                     $@"
                         _IsDirty = false;
-                        _DescendantIsDirty = false;";
-            else
-                postEncodingDirtinessReset =
-                    $@"
-                        _IsDirty = false;
-                        _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && (" + manualDescendantDirtinessChecks.Substring(4) + ");";
+                        if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                        {{
+                            _DescendantIsDirty = false;";
 
             foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
             {
@@ -1146,6 +1142,9 @@ namespace Lazinator.CodeDescription
                             _{property.PropertyName} = _{property.PropertyName}.CloneLazinatorTyped();
                         }}";
             }
+
+            postEncodingDirtinessReset += $@"
+                    }}";
 
             return postEncodingDirtinessReset;
         }
