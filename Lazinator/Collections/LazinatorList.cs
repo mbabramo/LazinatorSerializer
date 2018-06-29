@@ -139,6 +139,7 @@ namespace Lazinator.Collections
                     UnderlyingList[index] = current;
                     ItemsAccessedBeforeFullyDeserialized[index] = true;
                 }
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(current); // DEBUG
                 return current;
             }
             set
@@ -251,15 +252,15 @@ namespace Lazinator.Collections
         public virtual bool Remove(T item)
         {
             FullyDeserializeIfNecessary();
-            MarkDirty();
             var success = ((IList<T>)UnderlyingList).Remove(item);
+            if (success)
+                MarkDirty();
             return success;
         }
 
         public virtual int RemoveAll(Predicate<T> match)
         {
             FullyDeserializeIfNecessary();
-            MarkDirty();
             int matches = 0;
             for (int i = Count - 1; i >= 0; i--) // iterate backwards so that indices stay same during loop
             { 
@@ -270,6 +271,8 @@ namespace Lazinator.Collections
                     matches++;
                 }
             }
+            if (matches > 0)
+                MarkDirty();
             return matches;
         }
 

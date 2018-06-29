@@ -129,9 +129,9 @@ namespace Lazinator.CodeDescription
         private string StepThroughPropertiesString => ContainingObjectDescription.StepThroughProperties ?  $@"
                         [DebuggerStepThrough]" : "";
         private string ConfirmDirtinessConsistencyCheck => $@"
-                            LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
+                            LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);";
         private string MultipleParentsAction => Config?.MultipleParentsAction == null ? null : (", " + Config?.MultipleParentsAction);
-        private string CheckAtEndOfSet => ConfirmDirtinessConsistencyCheck; // DEBUG // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
+        private string RepeatedCodeExecution => ConfirmDirtinessConsistencyCheck; // DEBUG // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
 
         #endregion
 
@@ -785,7 +785,7 @@ namespace Lazinator.CodeDescription
             {SetterAccessibilityString}set
             {{
                 IsDirty = true;
-                _{PropertyName} = value;{CheckAtEndOfSet}
+                _{PropertyName} = value;{RepeatedCodeExecution}
             }}
         }}
 ";
@@ -960,11 +960,11 @@ namespace Lazinator.CodeDescription
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set
-            {{{propertyTypeDependentSet}IsDirty = true;
+            {{{propertyTypeDependentSet}{RepeatedCodeExecution}IsDirty = true;
                 DescendantIsDirty = true;
                 _{PropertyName} = value;{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
                 _{PropertyName}_Dirty = true;" : "")}
-                _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
+                _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
@@ -1045,10 +1045,9 @@ namespace Lazinator.CodeDescription
             }}{StepThroughPropertiesString}
             set
             {{
-                
-                IsDirty = true;
+                {RepeatedCodeExecution}IsDirty = true;
                 _{PropertyName} = {(isSpan ? $"new ReadOnlyMemory<byte>(MemoryMarshal.Cast<{innerFullType}, byte>(value).ToArray());" : "value;")}
-                _{PropertyName}_Accessed = true;{CheckAtEndOfSet}
+                _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
@@ -1075,14 +1074,14 @@ namespace Lazinator.CodeDescription
             get => _{PropertyName}_Dirty;{StepThroughPropertiesString}
             set
             {{
-                if (_{PropertyName}_Dirty != value)
+                {RepeatedCodeExecution}if (_{PropertyName}_Dirty != value)
                 {{
                     _{PropertyName}_Dirty = value;
                     if (value && !IsDirty)
                     {{
                         IsDirty = true;
                     }}
-                }}{CheckAtEndOfSet}
+                }}{RepeatedCodeExecution}
             }}
         }}
 ");
