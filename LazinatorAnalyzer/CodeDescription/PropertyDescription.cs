@@ -778,7 +778,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
-            string propertyString = $@"        private {AppropriatelyQualifiedTypeName} _{PropertyName};
+            string propertyString = $@"        {ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
@@ -941,7 +941,7 @@ namespace Lazinator.CodeDescription
 
             }
 
-            sb.Append($@"private {AppropriatelyQualifiedTypeName} _{PropertyName};
+            sb.Append($@"{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
