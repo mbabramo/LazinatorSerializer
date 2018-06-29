@@ -634,6 +634,8 @@ namespace Lazinator.CodeDescription
                 {{
                     {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ResetAccessedProperties();
                     ")}{resetAccessed}
+                    IsDirty = false;
+                    DescendantIsDirty = false;
                 }}");
         }
 
