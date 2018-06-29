@@ -19,6 +19,8 @@ namespace Lazinator.CodeDescription
         
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
+        private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class;
+        private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct;
         private PropertyDescription ContainingPropertyDescription { get; set; }
         public PropertyDescription OutmostPropertyDescription => ContainingPropertyDescription?.OutmostPropertyDescription ?? this;
         private int UniqueIDForLazinatorType { get; set; }
@@ -81,7 +83,7 @@ namespace Lazinator.CodeDescription
         /* Inner properties */
         private List<PropertyDescription> InnerProperties { get; set; }
         private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
-        internal string NullableStructValueAccessor => PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable ? ".Value" : "";
+        internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable , ".Value");
 
         /* Conversion */
         private string InterchangeTypeName { get; set; }
@@ -126,12 +128,14 @@ namespace Lazinator.CodeDescription
         /* Output customization */
         public LazinatorConfig Config => ContainingObjectDescription.Compilation?.Config;
         private bool Tracing => Config?.IncludeTracingCode ?? false;
-        private string StepThroughPropertiesString => ContainingObjectDescription.StepThroughProperties ?  $@"
-                        [DebuggerStepThrough]" : "";
+        private string StepThroughPropertiesString => IIF(ContainingObjectDescription.StepThroughProperties, $@"
+                        [DebuggerStepThrough]");
         private string ConfirmDirtinessConsistencyCheck => $@"
                             LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);";
         private string MultipleParentsAction => Config?.MultipleParentsAction == null ? null : (", " + Config?.MultipleParentsAction);
         private string RepeatedCodeExecution => ConfirmDirtinessConsistencyCheck; // DEBUG // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
+        private string IIF(bool x, string y) => x ? y : ""; // Include if function
+        private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
         #endregion
 
@@ -747,7 +751,7 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
-            string propertyString = $@"{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct ? " = false" : "")};
+            string propertyString = $@"{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct, " = false")};
         {GetAttributesToInsert()}{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{
             get;
@@ -807,7 +811,7 @@ namespace Lazinator.CodeDescription
             }
 
             string assignment;
-            string selfReference = ContainingObjectDescription.ObjectType == LazinatorObjectType.Class ? ", this" : "";
+            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class, ", this");
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 if (IsInterface)
@@ -835,8 +839,8 @@ namespace Lazinator.CodeDescription
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
 
-            string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
-                                        _{PropertyName}_Dirty = true; " : "")}";
+            string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonSerializedType && TrackDirtinessNonSerialized, $@"
+                                        _{PropertyName}_Dirty = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
                                 _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);";
@@ -955,15 +959,15 @@ namespace Lazinator.CodeDescription
                         {recreation}
                     }}
                     _{PropertyName}_Accessed = true;
-                }}{(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol) ? $@"
-                    IsDirty = true;" : "")} 
+                }}{IIF(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol), $@"
+                    IsDirty = true;")} 
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}IsDirty = true;
                 DescendantIsDirty = true;
-                _{PropertyName} = value;{(IsNonSerializedType && TrackDirtinessNonSerialized ? $@"
-                _{PropertyName}_Dirty = true;" : "")}
+                _{PropertyName} = value;{IIF(IsNonSerializedType && TrackDirtinessNonSerialized, $@"
+                _{PropertyName}_Dirty = true;")}
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
@@ -1057,7 +1061,7 @@ namespace Lazinator.CodeDescription
         private string GetReadOnlySpanBackingFieldCast()
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
-            string spanAccessor = SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? ".Span" : "";
+            string spanAccessor = IIF(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, ".Span");
             string castToSpanOfCorrectType;
             if (innerFullType == "byte")
                 castToSpanOfCorrectType = $"_{PropertyName}{spanAccessor}";
@@ -1218,7 +1222,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)
         {
-            string omitLengthSuffix = OmitLengthBecauseDefinitelyLast ? "_WithoutLengthPrefix" : "";
+            string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
@@ -1889,7 +1893,7 @@ namespace Lazinator.CodeDescription
         private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable)
         {
             string itemToConvertItemName =
-                $"itemToConvert{((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable ? ".Value" : "")}.{itemName}";
+                $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)
                 return ($@"
                         {WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
