@@ -1126,8 +1126,18 @@ namespace Lazinator.CodeDescription
                         {property.PropertyName}_CleanNestedStruct();
                     }}";
             }
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))
+            {
+                postEncodingDirtinessReset +=
+                    $@"
+                    if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && _{property.PropertyName}.IsDirty)
+                    {{
+                        {property.PropertyName}.IsDirty = false;
+                        {property.PropertyName}.DescendantIsDirty = false;
+                    }}";
+            }
 
-                return postEncodingDirtinessReset;
+            return postEncodingDirtinessReset;
         }
 
         private static void GetSupportedConversions(CodeStringBuilder sb, List<PropertyDescription> propertiesSupportedCollections, List<PropertyDescription> propertiesSupportedTuples, List<PropertyDescription> propertiesNonSerialized)
