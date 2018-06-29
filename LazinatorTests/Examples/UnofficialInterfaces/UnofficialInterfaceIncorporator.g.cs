@@ -414,7 +414,10 @@ namespace LazinatorTests.Examples
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyOfficialObject_Accessed && _MyOfficialObject != null && (MyOfficialObject.IsDirty || MyOfficialObject.DescendantIsDirty)) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null && (MyUnofficialObject.IsDirty || MyUnofficialObject.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

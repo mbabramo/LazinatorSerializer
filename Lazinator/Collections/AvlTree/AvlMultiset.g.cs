@@ -353,7 +353,10 @@ namespace Lazinator.Collections.AvlTree
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_UnderlyingSet_Accessed && _UnderlyingSet != null && (UnderlyingSet.IsDirty || UnderlyingSet.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

@@ -321,7 +321,10 @@ namespace LazinatorTests.Examples
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = false;
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

@@ -404,7 +404,10 @@ namespace Lazinator.Collections
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_FourByteItems_Accessed && _FourByteItems != null && (FourByteItems.IsDirty || FourByteItems.DescendantIsDirty)) || (_TwoByteItems_Accessed && _TwoByteItems != null && (TwoByteItems.IsDirty || TwoByteItems.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

@@ -361,7 +361,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ExampleByInterface_Accessed && _ExampleByInterface != null && (ExampleByInterface.IsDirty || ExampleByInterface.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

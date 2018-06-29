@@ -415,7 +415,10 @@ namespace Lazinator.Collections.Dictionary
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Keys_Accessed && _Keys != null && (Keys.IsDirty || Keys.DescendantIsDirty)) || (_Values_Accessed && _Values != null && (Values.IsDirty || Values.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

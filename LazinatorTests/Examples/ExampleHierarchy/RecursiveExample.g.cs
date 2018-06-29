@@ -383,7 +383,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_RecursiveClass_Accessed && _RecursiveClass != null && (RecursiveClass.IsDirty || RecursiveClass.DescendantIsDirty)) || (_RecursiveInterface_Accessed && _RecursiveInterface != null && (RecursiveInterface.IsDirty || RecursiveInterface.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

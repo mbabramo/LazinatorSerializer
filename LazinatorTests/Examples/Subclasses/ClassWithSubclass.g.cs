@@ -398,7 +398,10 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_SubclassInstance1_Accessed && _SubclassInstance1 != null && (SubclassInstance1.IsDirty || SubclassInstance1.DescendantIsDirty)) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null && (SubclassInstance2.IsDirty || SubclassInstance2.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

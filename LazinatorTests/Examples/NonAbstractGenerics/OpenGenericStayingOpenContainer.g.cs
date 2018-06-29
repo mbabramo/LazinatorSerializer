@@ -557,7 +557,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_ClosedGenericBase_Accessed && _ClosedGenericBase != null && (ClosedGenericBase.IsDirty || ClosedGenericBase.DescendantIsDirty)) || (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null && (ClosedGenericFloat.IsDirty || ClosedGenericFloat.DescendantIsDirty)) || (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null && (ClosedGenericFromBaseWithBase.IsDirty || ClosedGenericFromBaseWithBase.DescendantIsDirty)) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null && (ClosedGenericInterface.IsDirty || ClosedGenericInterface.DescendantIsDirty)) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null && (ClosedGenericNonexclusiveInterface.IsDirty || ClosedGenericNonexclusiveInterface.DescendantIsDirty)));
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

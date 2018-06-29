@@ -587,16 +587,19 @@ namespace Lazinator.Collections.Avl
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)) && (Key.IsDirty || Key.DescendantIsDirty)) || (_Left_Accessed && _Left != null && (Left.IsDirty || Left.DescendantIsDirty)) || (_Right_Accessed && _Right != null && (Right.IsDirty || Right.DescendantIsDirty)) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)) && (Value.IsDirty || Value.DescendantIsDirty)));
-                if (_Key_Accessed && _Key != null && _Key.IsStruct && (_Key.IsDirty || _Key.DescendantIsDirty))
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
-                    _Key.IsDirty = false;
-                    _Key.DescendantIsDirty = false;
-                }
-                if (_Value_Accessed && _Value != null && _Value.IsStruct && (_Value.IsDirty || _Value.DescendantIsDirty))
-                {
-                    _Value.IsDirty = false;
-                    _Value.DescendantIsDirty = false;
+                    _DescendantIsDirty = false;
+                    if (_Key_Accessed && _Key != null && _Key.IsStruct && (_Key.IsDirty || _Key.DescendantIsDirty))
+                    {
+                        _Key.IsDirty = false;
+                        _Key.DescendantIsDirty = false;
+                    }
+                    if (_Value_Accessed && _Value != null && _Value.IsStruct && (_Value.IsDirty || _Value.DescendantIsDirty))
+                    {
+                        _Value.IsDirty = false;
+                        _Value.DescendantIsDirty = false;
+                    }
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

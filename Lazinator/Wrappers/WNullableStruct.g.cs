@@ -344,10 +344,13 @@ namespace Lazinator.Wrappers
             {
                 
                 _IsDirty = false;
-                _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty)));
-                if (_NonNullValue_Accessed && _NonNullValue.IsStruct && (_NonNullValue.IsDirty || _NonNullValue.DescendantIsDirty))
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
-                    _NonNullValue = _NonNullValue.CloneLazinatorTyped();
+                    _DescendantIsDirty = false;
+                    if (_NonNullValue_Accessed && _NonNullValue.IsStruct && (_NonNullValue.IsDirty || _NonNullValue.DescendantIsDirty))
+                    {
+                        _NonNullValue = _NonNullValue.CloneLazinatorTyped();
+                    }
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
