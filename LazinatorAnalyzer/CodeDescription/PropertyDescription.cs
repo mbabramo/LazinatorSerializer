@@ -976,6 +976,22 @@ namespace Lazinator.CodeDescription
             // Copy property
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
+                string resetStructDirtiness = "";
+                if (Symbol is INamedTypeSymbol namedTypeSymbol)
+                {
+                    var propertyDictionary = ContainingObjectDescription.Compilation.PropertiesForType;
+                    if (propertyDictionary.ContainsKey(namedTypeSymbol))
+                    {
+                        var structPropertyNames = propertyDictionary[namedTypeSymbol]
+                            .Select(x => new PropertyDescription(x.Property.Type, ContainingObjectDescription, this, x.Property.Name))
+                            .Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct && !x.ContainsOpenGenericInnerProperty)
+                            .Select(x => x.PropertyName);
+                        foreach (var structPropertyName in structPropertyNames)
+                            resetStructDirtiness += $@"
+                                cleanCopy.{structPropertyName} = cleanCopy.{structPropertyName}_Copy;
+                                ";
+                    }
+                }
                 sb.Append($@"{GetAttributesToInsert()}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
                             {{{StepThroughPropertiesString}
                                 get
@@ -997,7 +1013,7 @@ namespace Lazinator.CodeDescription
                                         }}
                                     }}
                                     var cleanCopy = _{PropertyName};
-                                    cleanCopy.IsDirty = false;
+                                    cleanCopy.IsDirty = false;{resetStructDirtiness}
                                     return cleanCopy;
                                 }}
                             }}
