@@ -260,14 +260,14 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
                 var cleanCopy = _Subcontainer;
-                cleanCopy.MyExampleStruct_Clean();
+                cleanCopy.MyExampleStruct_CleanNestedStruct();
                 
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
-        public void Subcontainer_Clean()
+        public void Subcontainer_CleanNestedStruct()
         {
             _Subcontainer = Subcontainer_Copy;
         }
@@ -355,9 +355,9 @@ namespace LazinatorTests.Examples.Structs
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Subcontainer_Accessed && (Subcontainer.IsDirty || Subcontainer.DescendantIsDirty)));
-                if (_Subcontainer_Accessed)
+                if (_Subcontainer_Accessed && _Subcontainer.IsDirty)
                 {
-                    Subcontainer_Clean();
+                    Subcontainer_CleanNestedStruct();
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);

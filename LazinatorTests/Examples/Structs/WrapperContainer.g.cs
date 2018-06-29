@@ -265,7 +265,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedInt_Clean()
+        public void WrappedInt_CleanNestedStruct()
         {
             _WrappedInt = WrappedInt_Copy;
         }
@@ -353,9 +353,9 @@ namespace LazinatorTests.Examples.Structs
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_WrappedInt_Accessed && (WrappedInt.IsDirty || WrappedInt.DescendantIsDirty)));
-                if (_WrappedInt_Accessed)
+                if (_WrappedInt_Accessed && _WrappedInt.IsDirty)
                 {
-                    WrappedInt_Clean();
+                    WrappedInt_CleanNestedStruct();
                 }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
