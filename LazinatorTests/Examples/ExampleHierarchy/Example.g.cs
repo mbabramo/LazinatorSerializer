@@ -97,12 +97,15 @@ namespace LazinatorTests.Examples
             [DebuggerStepThrough]
             set
             {
-                _IsDirty = value;
-                if (_IsDirty)
+                if (_IsDirty != value)
                 {
-                    LazinatorParents.InformParentsOfDirtiness();
-                    OnDirty();
-                    HasChanged = true;
+                    _IsDirty = value;
+                    if (_IsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        OnDirty();
+                        HasChanged = true;
+                    }
                 }
             }
         }
@@ -132,13 +135,9 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = value;
                     if (_DescendantIsDirty)
                     {
-                        _DescendantHasChanged = true;
                         LazinatorParents.InformParentsOfDirtiness();
+                        _DescendantHasChanged = true;
                     }
-                }
-                if (_DescendantIsDirty)
-                {
-                    _DescendantHasChanged = true;
                 }
             }
         }
