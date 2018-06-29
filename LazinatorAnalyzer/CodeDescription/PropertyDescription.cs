@@ -131,7 +131,7 @@ namespace Lazinator.CodeDescription
         private string ConfirmDirtinessConsistencyCheck => $@"
                             LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
         private string MultipleParentsAction => Config?.MultipleParentsAction == null ? null : (", " + Config?.MultipleParentsAction);
-        private string CheckAtEndOfSet => ""; // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
+        private string CheckAtEndOfSet => ConfirmDirtinessConsistencyCheck; // DEBUG // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
 
         #endregion
 

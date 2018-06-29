@@ -576,6 +576,25 @@ namespace LazinatorTests.Tests
             v7.MyList.IsDirty.Should().BeTrue();
             v7.MyList.DescendantIsDirty.Should().BeTrue();
             v7.DescendantIsDirty.Should().BeTrue();
+
+            // attaching item with dirty descendant after fully deserializing
+            v5.MyList[0].MyWrapperContainer = new WrapperContainer() { WrappedInt = 4 };
+            v6 = v5.CloneLazinatorTyped();
+            v7 = v5.CloneLazinatorTyped();
+            v6item = v6.MyList[0];
+            v6item.MyWrapperContainer.WrappedInt = 5;
+            v6item.IsDirty.Should().BeFalse();
+            v6item.DescendantIsDirty.Should().BeTrue();
+            v6.DescendantIsDirty.Should().BeTrue();
+            v7.MyList.Insert(0, null);
+            v7.MyList.LazinatorConvertToBytes();
+            v7.MyList.IsDirty.Should().BeFalse();
+            v7.MyList.DescendantIsDirty.Should().BeFalse();
+            v7.MyList[1] = v6item;
+            v7.MyList[1].IsDirty.Should().BeFalse();
+            v7.MyList[1].DescendantIsDirty.Should().BeTrue();
+            v7.MyList.DescendantIsDirty.Should().BeTrue();
+            v7.DescendantIsDirty.Should().BeTrue();
         }
 
 

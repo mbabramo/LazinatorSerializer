@@ -151,6 +151,7 @@ namespace Lazinator.Collections
                     ((IList<T>)UnderlyingList)[index] = value;
                     if (value != null)
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    MarkDirty();
                     return;
                 }
                 CreateUnderlyingListIfNecessary();

@@ -78,6 +78,10 @@ namespace LazinatorTests.Tests
             cl[0].MyInt = 3;
             cl = cl.CloneLazinatorTyped();
             cl[0].MyIntsAre3.Should().BeTrue();
+
+            cl[0].MyInt = 2;
+            cl.LazinatorConvertToBytes();
+            cl[0].MyIntsAre3.Should().BeFalse();
         }
     }
 }

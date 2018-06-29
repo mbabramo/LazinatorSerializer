@@ -619,8 +619,9 @@ namespace Lazinator.Core
             return MemoryPool<byte>.Shared.Rent(minimumSize);
         }
 
-        public static void ConfirmDescendantDirtinessConsistency(this ILazinator startPoint)
+        public static bool DescendantDirtinessIsConsistent(this ILazinator startPoint)
         {
+
             if (startPoint != null && startPoint.IsDirty)
             {
                 ILazinator parent = startPoint.LazinatorParents.LastAdded;
@@ -630,7 +631,7 @@ namespace Lazinator.Core
                 {
                     if (!parent.DescendantIsDirty && !parent.IsDirty)
                     {
-                        throw new Exception("Internal Lazinator error. Ancestor dirtiness set incorrectly.");
+                        return false;
                     }
                     parent = parent.LazinatorParents.LastAdded;
                     levels++;
@@ -638,8 +639,15 @@ namespace Lazinator.Core
                         throw new Exception("Hierarchy inconsistency error. The hierarchy appears to be circular. The root of the hierarchy should have LazinatorParents set to null.");
                 }
             }
+            return true;
         }
 
-
+        public static void ConfirmDescendantDirtinessConsistency(this ILazinator startPoint)
+        {
+            if (!DescendantDirtinessIsConsistent(startPoint))
+            {
+                throw new Exception("Hierarchy inconsistency error. The ancestor of a dirty node does not have descendant is dirty set.");
+            }
+        }
     }
 }
