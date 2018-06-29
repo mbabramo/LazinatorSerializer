@@ -265,7 +265,9 @@ namespace LazinatorTests.Examples
                         };
                     }
                 }
-                return _IntWrapper;
+                var cleanCopy = _IntWrapper;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private ExampleStruct _MyExampleStruct;
@@ -324,7 +326,9 @@ namespace LazinatorTests.Examples
                         };
                     }
                 }
-                return _MyExampleStruct;
+                var cleanCopy = _MyExampleStruct;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private List<ExampleStruct> _MyListExampleStruct;

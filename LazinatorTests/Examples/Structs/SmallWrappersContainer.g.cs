@@ -315,7 +315,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedBool;
+                var cleanCopy = _WrappedBool;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WByte _WrappedByte;
@@ -374,7 +376,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedByte;
+                var cleanCopy = _WrappedByte;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WChar _WrappedChar;
@@ -433,7 +437,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedChar;
+                var cleanCopy = _WrappedChar;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WNullableBool _WrappedNullableBool;
@@ -492,7 +498,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedNullableBool;
+                var cleanCopy = _WrappedNullableBool;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WNullableByte _WrappedNullableByte;
@@ -551,7 +559,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedNullableByte;
+                var cleanCopy = _WrappedNullableByte;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WNullableChar _WrappedNullableChar;
@@ -610,7 +620,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedNullableChar;
+                var cleanCopy = _WrappedNullableChar;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WNullableSByte _WrappedNullableSByte;
@@ -669,7 +681,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedNullableSByte;
+                var cleanCopy = _WrappedNullableSByte;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private WSByte _WrappedSByte;
@@ -728,7 +742,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedSByte;
+                var cleanCopy = _WrappedSByte;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         

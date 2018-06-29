@@ -259,9 +259,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                var result = _WrappedInt;
-                result.IsDirty = false;
-                return result;
+                var cleanCopy = _WrappedInt;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         

@@ -258,7 +258,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _ExampleStructWithoutClass;
+                var cleanCopy = _ExampleStructWithoutClass;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         

@@ -673,7 +673,9 @@ namespace LazinatorTests.Examples
                         };
                     }
                 }
-                return _WrappedInt;
+                var cleanCopy = _WrappedInt;
+                cleanCopy.IsDirty = false;
+                return cleanCopy;
             }
         }
         private ExampleChild _ExcludableChild;
