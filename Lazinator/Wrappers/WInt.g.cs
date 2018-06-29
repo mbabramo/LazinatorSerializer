@@ -83,9 +83,7 @@ namespace Lazinator.Wrappers
         bool _IsDirty;
         public bool IsDirty
         {
-            [DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)

@@ -229,6 +229,27 @@ namespace LazinatorTests.Tests
             c.DescendantIsDirty.Should().BeTrue();
         }
 
+        [Fact]
+        public void DirtinessWithStructChild()
+        {
+            WrapperContainer e = new WrapperContainer()
+            {
+                WrappedInt = 3
+            };
+            e.WrappedInt.IsDirty.Should().BeTrue();
+            e.DescendantIsDirty.Should().BeTrue();
+
+            var c = e.CloneLazinatorTyped();
+            // consider original list, which should be clean
+            e.IsDirty.Should().BeFalse();
+            e.DescendantIsDirty.Should().BeFalse();
+            e.WrappedInt.IsDirty.Should().BeFalse();
+            // now consider clone
+            c.IsDirty.Should().BeFalse();
+            c.DescendantIsDirty.Should().BeFalse();
+            c.WrappedInt.IsDirty.Should().BeFalse();
+        }
+
 
     }
 }

@@ -597,6 +597,23 @@ namespace LazinatorTests.Tests
             v7.DescendantIsDirty.Should().BeTrue();
         }
 
+        [Fact]
+        public void LazinatorListDirtinessWithStructs()
+        {
+            LazinatorList<ExampleStruct> l = new LazinatorList<ExampleStruct>()
+            {
+                new ExampleStruct() { MyChar = 'z' }
+            };
+            var c = l.CloneLazinatorTyped();
+            // consider original list, which should be clean
+            l.IsDirty.Should().BeFalse();
+            l.DescendantIsDirty.Should().BeFalse(); 
+            l[0].IsDirty.Should().BeFalse();
+            // now consider clone
+            c.IsDirty.Should().BeFalse();
+            c.DescendantIsDirty.Should().BeFalse();
+            c[0].IsDirty.Should().BeFalse();
+        }
 
         [Fact]
         public void ChangeToObjectAppearingTwiceInLazinatorListAffectsBoth()

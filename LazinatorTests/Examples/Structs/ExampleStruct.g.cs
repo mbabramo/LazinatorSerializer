@@ -96,9 +96,7 @@ namespace LazinatorTests.Examples
         bool _IsDirty;
         public bool IsDirty
         {
-            [DebuggerStepThrough]
             get => _IsDirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_IsDirty != value)
