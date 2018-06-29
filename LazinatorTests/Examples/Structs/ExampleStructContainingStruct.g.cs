@@ -212,7 +212,6 @@ namespace LazinatorTests.Examples
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyExampleStruct = default(ExampleStruct);
-                        _MyExampleStruct.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {
@@ -228,7 +227,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
                 LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;

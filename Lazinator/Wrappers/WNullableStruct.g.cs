@@ -225,7 +225,6 @@ namespace Lazinator.Wrappers
                     if (LazinatorObjectBytes.Length == 0)
                     {
                         _NonNullValue = default(T);
-                        _NonNullValue.LazinatorParents = new LazinatorParentsCollection(this);
                     }
                     else
                     {
@@ -240,7 +239,6 @@ namespace Lazinator.Wrappers
             [DebuggerStepThrough]
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
                 LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
