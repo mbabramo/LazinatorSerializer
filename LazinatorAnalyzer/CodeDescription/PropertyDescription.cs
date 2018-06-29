@@ -1013,8 +1013,9 @@ namespace Lazinator.CodeDescription
                                             }};
                                         }}
                                     }}
-                                    var cleanCopy = _{PropertyName};
-                                    cleanCopy.IsDirty = false;{resetStructDirtiness}
+                                    var cleanCopy = _{PropertyName};{resetStructDirtiness}
+                                    cleanCopy._IsDirty = false;
+                                    cleanCopy._DescendantIsDirty = false;
                                     return cleanCopy;
                                 }}
                             }}
