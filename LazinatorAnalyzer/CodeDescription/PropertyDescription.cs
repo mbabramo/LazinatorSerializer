@@ -992,6 +992,7 @@ namespace Lazinator.CodeDescription
                                             return new {AppropriatelyQualifiedTypeName}()
                                             {{
                                                 LazinatorObjectBytes = childData,
+                                                IsDirty = false
                                             }};
                                         }}
                                     }}

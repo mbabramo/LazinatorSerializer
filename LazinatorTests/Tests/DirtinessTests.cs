@@ -237,6 +237,7 @@ namespace LazinatorTests.Tests
                 WrappedInt = 3
             };
             e.WrappedInt.IsDirty.Should().BeTrue();
+            var x = e.WrappedInt_Copy;
             e.DescendantIsDirty.Should().BeTrue();
 
             var c = e.CloneLazinatorTyped();
