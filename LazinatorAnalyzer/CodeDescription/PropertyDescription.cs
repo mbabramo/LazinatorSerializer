@@ -842,14 +842,14 @@ namespace Lazinator.CodeDescription
             string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonSerializedType && TrackDirtinessNonSerialized, $@"
                                         _{PropertyName}_Dirty = true; ")}";
             if (IsLazinatorStruct)
-                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
-                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);";
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass, $@"
+                                _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);")}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass, $@"
                                 if (_{PropertyName} != null)
                                 {{ // {PropertyName} is a struct
                                     _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
-                                }}";
+                                }}")}";
 
             string recreation;
             if (PropertyType == LazinatorPropertyType.LazinatorStruct 
@@ -875,7 +875,7 @@ namespace Lazinator.CodeDescription
             string propertyTypeDependentSet = "";
             if (IsClassOrInterface)
             {
-                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                if (ContainerIsClass)
                     propertyTypeDependentSet = $@"
                         if (_{PropertyName} != null)
                         {{
@@ -898,8 +898,8 @@ namespace Lazinator.CodeDescription
             }
             else if (IsLazinatorStruct)
             {
-                propertyTypeDependentSet = $@"
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
+                    value.LazinatorParents = new LazinatorParentsCollection(this);")}
                     value.IsDirty = true;
                     ";
             }
@@ -908,8 +908,8 @@ namespace Lazinator.CodeDescription
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct)
-                        {{
-                            value.LazinatorParents = new LazinatorParentsCollection(this);
+                        {{{IIF(ContainerIsClass, $@"
+                            value.LazinatorParents = new LazinatorParentsCollection(this);")}
                             value.IsDirty = true;
                         }}
                         else
