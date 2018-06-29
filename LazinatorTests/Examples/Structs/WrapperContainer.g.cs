@@ -259,7 +259,9 @@ namespace LazinatorTests.Examples.Structs
                         };
                     }
                 }
-                return _WrappedInt;
+                var result = _WrappedInt;
+                result.IsDirty = false;
+                return result;
             }
         }
         

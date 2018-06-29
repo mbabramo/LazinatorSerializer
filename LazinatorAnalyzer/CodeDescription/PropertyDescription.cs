@@ -996,7 +996,9 @@ namespace Lazinator.CodeDescription
                                             }};
                                         }}
                                     }}
-                                    return _{PropertyName};
+                                    var cleanCopy = _{PropertyName};
+                                    cleanCopy.IsDirty = false;
+                                    return cleanCopy;
                                 }}
                             }}
 ");
