@@ -489,6 +489,21 @@ namespace Lazinator.Collections
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)) && (Item1.IsDirty || Item1.DescendantIsDirty)) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)) && (Item2.IsDirty || Item2.DescendantIsDirty)) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)) && (Item3.IsDirty || Item3.DescendantIsDirty)));
+                if (_Item1_Accessed && _Item1 != null && _Item1.IsStruct && (_Item1.IsDirty || _Item1.DescendantIsDirty))
+                {
+                    _Item1.IsDirty = false;
+                    _Item1.DescendantIsDirty = false;
+                }
+                if (_Item2_Accessed && _Item2 != null && _Item2.IsStruct && (_Item2.IsDirty || _Item2.DescendantIsDirty))
+                {
+                    _Item2.IsDirty = false;
+                    _Item2.DescendantIsDirty = false;
+                }
+                if (_Item3_Accessed && _Item3 != null && _Item3.IsStruct && (_Item3.IsDirty || _Item3.DescendantIsDirty))
+                {
+                    _Item3.IsDirty = false;
+                    _Item3.DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

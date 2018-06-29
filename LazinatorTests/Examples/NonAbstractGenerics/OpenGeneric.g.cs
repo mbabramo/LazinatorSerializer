@@ -383,6 +383,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)) && (MyT.IsDirty || MyT.DescendantIsDirty)));
+                if (_MyT_Accessed && _MyT != null && _MyT.IsStruct && (_MyT.IsDirty || _MyT.DescendantIsDirty))
+                {
+                    _MyT.IsDirty = false;
+                    _MyT.DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }

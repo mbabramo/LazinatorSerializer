@@ -1132,17 +1132,17 @@ namespace Lazinator.CodeDescription
                 if (!property.GenericConstrainedToStruct)
                     postEncodingDirtinessReset +=
                         $@"
-                        if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && _{property.PropertyName}.IsDirty)
+                        if (_{property.PropertyName}_Accessed && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                         {{
-                            {property.PropertyName}.IsDirty = false;
-                            {property.PropertyName}.DescendantIsDirty = false;
+                            _{property.PropertyName}.IsDirty = false;
+                            _{property.PropertyName}.DescendantIsDirty = false;
                         }}";
                 else
                     postEncodingDirtinessReset +=
                         $@"
-                        if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && _{property.PropertyName}.IsDirty)
+                        if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                         {{
-                            {property.PropertyName} = {property.PropertyName}.CloneLazinatorTyped();
+                            _{property.PropertyName} = _{property.PropertyName}.CloneLazinatorTyped();
                         }}";
             }
 

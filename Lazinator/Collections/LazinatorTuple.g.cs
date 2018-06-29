@@ -418,6 +418,16 @@ namespace Lazinator.Collections
                 
                 _IsDirty = false;
                 _DescendantIsDirty = includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && ((_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)) && (Item1.IsDirty || Item1.DescendantIsDirty)) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)) && (Item2.IsDirty || Item2.DescendantIsDirty)));
+                if (_Item1_Accessed && _Item1 != null && _Item1.IsStruct && (_Item1.IsDirty || _Item1.DescendantIsDirty))
+                {
+                    _Item1.IsDirty = false;
+                    _Item1.DescendantIsDirty = false;
+                }
+                if (_Item2_Accessed && _Item2 != null && _Item2.IsStruct && (_Item2.IsDirty || _Item2.DescendantIsDirty))
+                {
+                    _Item2.IsDirty = false;
+                    _Item2.DescendantIsDirty = false;
+                }
                 
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }
