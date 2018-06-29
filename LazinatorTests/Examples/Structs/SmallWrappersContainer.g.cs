@@ -253,11 +253,11 @@ namespace LazinatorTests.Examples.Structs
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _ListWrappedBytes = value;
                 _ListWrappedBytes_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ListWrappedBytes_Accessed;
@@ -291,11 +291,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedBool = value;
                 _WrappedBool_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedBool_Accessed;
@@ -351,11 +351,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedByte = value;
                 _WrappedByte_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedByte_Accessed;
@@ -411,11 +411,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedChar = value;
                 _WrappedChar_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedChar_Accessed;
@@ -471,11 +471,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedNullableBool = value;
                 _WrappedNullableBool_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableBool_Accessed;
@@ -531,11 +531,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedNullableByte = value;
                 _WrappedNullableByte_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableByte_Accessed;
@@ -591,11 +591,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedNullableChar = value;
                 _WrappedNullableChar_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableChar_Accessed;
@@ -651,11 +651,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedNullableSByte = value;
                 _WrappedNullableSByte_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedNullableSByte_Accessed;
@@ -711,11 +711,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedSByte = value;
                 _WrappedSByte_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedSByte_Accessed;

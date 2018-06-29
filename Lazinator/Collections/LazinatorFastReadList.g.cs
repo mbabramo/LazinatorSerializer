@@ -218,10 +218,10 @@ namespace Lazinator.Collections
             set
             {
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 _ReadOnlyBytes = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _ReadOnlyBytes_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _ReadOnlyBytes_Accessed;

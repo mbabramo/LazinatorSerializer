@@ -213,7 +213,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 IsDirty = true;
                 _Count = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private AvlTree<TKey, WByte> _UnderlyingTree;
@@ -251,11 +251,11 @@ namespace Lazinator.Collections.AvlTree
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _UnderlyingTree = value;
                 _UnderlyingTree_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _UnderlyingTree_Accessed;

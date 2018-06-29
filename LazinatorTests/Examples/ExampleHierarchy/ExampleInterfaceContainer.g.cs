@@ -238,11 +238,11 @@ namespace LazinatorTests.Examples.Hierarchy
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _ExampleByInterface = value;
                 _ExampleByInterface_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleByInterface_Accessed;
@@ -269,11 +269,11 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             set
             {
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _ExampleListByInterface = value;
                 _ExampleListByInterface_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleListByInterface_Accessed;

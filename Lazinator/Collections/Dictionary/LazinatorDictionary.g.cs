@@ -212,7 +212,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 IsDirty = true;
                 _Count = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private LazinatorList<DictionaryBucket<TKey, TValue>> _Buckets;
@@ -250,11 +250,11 @@ namespace Lazinator.Collections.Dictionary
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _Buckets = value;
                 _Buckets_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _Buckets_Accessed;

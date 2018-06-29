@@ -232,11 +232,11 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _Item = value;
                 _Item_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

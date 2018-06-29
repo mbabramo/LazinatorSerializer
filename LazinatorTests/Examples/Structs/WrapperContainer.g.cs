@@ -233,11 +233,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedInt = value;
                 _WrappedInt_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _WrappedInt_Accessed;

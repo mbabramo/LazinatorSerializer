@@ -203,7 +203,7 @@ namespace Lazinator.Wrappers
             {
                 IsDirty = true;
                 _WrappedValue = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

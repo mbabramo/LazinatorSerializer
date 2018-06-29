@@ -63,7 +63,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String4 = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _String5;
@@ -77,7 +77,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _String5 = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList4;
@@ -103,11 +103,11 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList4 = value;
                 _IntList4_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private List<int> _IntList5;
@@ -133,11 +133,11 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _IntList5 = value;
                 _IntList5_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _IntList5_Accessed;

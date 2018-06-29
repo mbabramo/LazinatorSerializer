@@ -131,7 +131,7 @@ namespace Lazinator.CodeDescription
         private string StepThroughPropertiesString => IIF(ContainingObjectDescription.StepThroughProperties, $@"
                         [DebuggerStepThrough]");
         private string ConfirmDirtinessConsistencyCheck => $@"
-                            LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);";
+                            LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
         private string MultipleParentsAction => Config?.MultipleParentsAction == null ? null : (", " + Config?.MultipleParentsAction);
         private string RepeatedCodeExecution => ConfirmDirtinessConsistencyCheck; // DEBUG // uncomment to ensure dirtiness consistency at every point ConfirmDirtinessConsistencyCheck;
         private string IIF(bool x, string y) => x ? y : ""; // Include if function

@@ -211,7 +211,7 @@ namespace Lazinator.Wrappers
             {
                 IsDirty = true;
                 _HasValue = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private T _NonNullValue;
@@ -241,11 +241,11 @@ namespace Lazinator.Wrappers
             {
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _NonNullValue = value;
                 _NonNullValue_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         bool _NonNullValue_Accessed;

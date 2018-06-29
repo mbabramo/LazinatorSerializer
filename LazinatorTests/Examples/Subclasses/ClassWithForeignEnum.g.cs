@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 IsDirty = true;
                 _MyEnum = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     IsDirty = true;
                     _StringWithinSubclass = value;
-                    LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                    LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
                 }
             }
             

@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 IsDirty = true;
                 _MyInt = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

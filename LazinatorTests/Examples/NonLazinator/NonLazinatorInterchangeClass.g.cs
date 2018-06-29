@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _IsNull = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyInt;
@@ -224,7 +224,7 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyInt = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _MyString;
@@ -238,7 +238,7 @@ namespace LazinatorTests.Examples
             {
                 IsDirty = true;
                 _MyString = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         

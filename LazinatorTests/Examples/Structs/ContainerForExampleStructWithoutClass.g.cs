@@ -232,11 +232,11 @@ namespace LazinatorTests.Examples.Structs
                 value.LazinatorParents = new LazinatorParentsCollection(this);
                 value.IsDirty = true;
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _ExampleStructWithoutClass = value;
                 _ExampleStructWithoutClass_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _ExampleStructWithoutClass_Accessed;

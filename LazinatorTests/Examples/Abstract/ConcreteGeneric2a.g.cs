@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _MyEnumWithinAbstractGeneric = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _MyEnumWithinAbstractGeneric2 = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyT;
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _MyT = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private int _MyUnofficialInt;
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _MyUnofficialInt = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private string _AnotherProperty;
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IsDirty = true;
                 _AnotherProperty = value;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         private Example _LazinatorExample;
@@ -304,11 +304,11 @@ namespace LazinatorTests.Examples.Abstract
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _LazinatorExample = value;
                 _LazinatorExample_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _LazinatorExample_Accessed;

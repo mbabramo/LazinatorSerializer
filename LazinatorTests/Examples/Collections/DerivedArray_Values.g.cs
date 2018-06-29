@@ -74,12 +74,12 @@ namespace LazinatorTests.Examples.Collections
             }
             set
             {
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);IsDirty = true;
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);IsDirty = true;
                 DescendantIsDirty = true;
                 _MyArrayInt_DerivedLevel = value;
                 _MyArrayInt_DerivedLevel_Dirty = true;
                 _MyArrayInt_DerivedLevel_Accessed = true;
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         protected bool _MyArrayInt_DerivedLevel_Accessed;
@@ -91,7 +91,7 @@ namespace LazinatorTests.Examples.Collections
             set
             {
                 
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);if (_MyArrayInt_DerivedLevel_Dirty != value)
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);if (_MyArrayInt_DerivedLevel_Dirty != value)
                 {
                     _MyArrayInt_DerivedLevel_Dirty = value;
                     if (value && !IsDirty)
@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples.Collections
                         IsDirty = true;
                     }
                 }
-                LazinatorUtilities.ConfirmAllNodesDescendantDirtinessConsistency(this);
+                LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);
             }
         }
         
