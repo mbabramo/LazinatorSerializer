@@ -261,6 +261,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedInt;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }

@@ -267,6 +267,7 @@ namespace LazinatorTests.Examples
                 }
                 var cleanCopy = _IntWrapper;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -328,6 +329,7 @@ namespace LazinatorTests.Examples
                 }
                 var cleanCopy = _MyExampleStruct;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }

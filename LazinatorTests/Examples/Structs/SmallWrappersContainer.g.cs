@@ -317,6 +317,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedBool;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -378,6 +379,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedByte;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -439,6 +441,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedChar;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -500,6 +503,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedNullableBool;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -561,6 +565,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedNullableByte;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -622,6 +627,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedNullableChar;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -683,6 +689,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedNullableSByte;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
@@ -744,6 +751,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 var cleanCopy = _WrappedSByte;
                 cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }

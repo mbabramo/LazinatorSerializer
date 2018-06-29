@@ -260,9 +260,10 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
                 var cleanCopy = _Subcontainer;
-                cleanCopy.IsDirty = false;
-                cleanCopy.MyExampleStruct = cleanCopy.MyExampleStruct_Copy;
+                cleanCopy.MyExampleStruct_Clean();
                 
+                cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
