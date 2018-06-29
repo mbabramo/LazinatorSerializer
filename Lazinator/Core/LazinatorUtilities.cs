@@ -645,8 +645,16 @@ namespace Lazinator.Core
         public static void ConfirmAllNodesDescendantDirtinessConsistency(this ILazinator startPoint)
         {
             // Note: This is very slow and should only be used for diagnosis.
+            // DEBUG
+            int DEBUG = 0;
             foreach (var node in startPoint.GetAllNodes())
+            {
+                if (DEBUG > 100)
+                {
+                    var DEBUG2 = 0;
+                }
                 ConfirmDescendantDirtinessConsistency(node);
+            }
         }
 
         public static void ConfirmDescendantDirtinessConsistency(this ILazinator startPoint)
