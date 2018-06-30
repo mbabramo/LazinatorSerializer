@@ -932,7 +932,7 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    _WrappedInt_Accessed = false; // must re-deserialize struct
+                    _WrappedInt_Accessed = false;
                 }
                 else
                 {

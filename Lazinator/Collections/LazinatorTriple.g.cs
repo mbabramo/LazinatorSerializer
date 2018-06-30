@@ -487,18 +487,15 @@ namespace Lazinator.Collections
                     _DescendantIsDirty = false;
                     if (_Item1_Accessed && _Item1 != null && _Item1.IsStruct && (_Item1.IsDirty || _Item1.DescendantIsDirty))
                     {
-                        _Item1.IsDirty = false;
-                        _Item1.DescendantIsDirty = false;
+                        _Item1_Accessed = false;
                     }
                     if (_Item2_Accessed && _Item2 != null && _Item2.IsStruct && (_Item2.IsDirty || _Item2.DescendantIsDirty))
                     {
-                        _Item2.IsDirty = false;
-                        _Item2.DescendantIsDirty = false;
+                        _Item2_Accessed = false;
                     }
                     if (_Item3_Accessed && _Item3 != null && _Item3.IsStruct && (_Item3.IsDirty || _Item3.DescendantIsDirty))
                     {
-                        _Item3.IsDirty = false;
-                        _Item3.DescendantIsDirty = false;
+                        _Item3_Accessed = false;
                     }
                 }
                 else

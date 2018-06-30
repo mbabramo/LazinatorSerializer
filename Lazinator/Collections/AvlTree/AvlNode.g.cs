@@ -586,13 +586,11 @@ namespace Lazinator.Collections.Avl
                     _DescendantIsDirty = false;
                     if (_Key_Accessed && _Key != null && _Key.IsStruct && (_Key.IsDirty || _Key.DescendantIsDirty))
                     {
-                        _Key.IsDirty = false;
-                        _Key.DescendantIsDirty = false;
+                        _Key_Accessed = false;
                     }
                     if (_Value_Accessed && _Value != null && _Value.IsStruct && (_Value.IsDirty || _Value.DescendantIsDirty))
                     {
-                        _Value.IsDirty = false;
-                        _Value.DescendantIsDirty = false;
+                        _Value_Accessed = false;
                     }
                 }
                 else

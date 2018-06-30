@@ -355,10 +355,7 @@ namespace LazinatorTests.Examples.Structs
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_ExampleStructWithoutClass_Accessed && _ExampleStructWithoutClass.IsDirty)
-                    {
-                        ExampleStructWithoutClass_CleanStruct();
-                    }
+                    _ExampleStructWithoutClass_Accessed = false;
                 }
                 else
                 {

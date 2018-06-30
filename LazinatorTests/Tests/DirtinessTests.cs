@@ -137,7 +137,7 @@ namespace LazinatorTests.Tests
             clone.MarkHierarchyClassesClean();
             clone.DescendantHasChanged.Should().BeFalse();
             clone.MyChild1.MyWrapperContainer.DescendantHasChanged.Should().BeFalse();
-            clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeTrue(); // because it's a struct, it doesn't change
+            clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeFalse();
 
         }
 

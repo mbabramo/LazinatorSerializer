@@ -358,10 +358,7 @@ namespace LazinatorTests.Examples.Structs
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_Subcontainer_Accessed && _Subcontainer.IsDirty)
-                    {
-                        Subcontainer_CleanStruct();
-                    }
+                    _Subcontainer_Accessed = false;
                 }
                 else
                 {

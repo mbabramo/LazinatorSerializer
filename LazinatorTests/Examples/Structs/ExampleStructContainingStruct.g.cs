@@ -361,10 +361,7 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_MyExampleStruct_Accessed && _MyExampleStruct.IsDirty)
-                    {
-                        MyExampleStruct_CleanStruct();
-                    }
+                    _MyExampleStruct_Accessed = false;
                 }
                 else
                 {

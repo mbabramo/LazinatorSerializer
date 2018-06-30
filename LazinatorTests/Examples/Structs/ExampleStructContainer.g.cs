@@ -507,14 +507,8 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_IntWrapper_Accessed && _IntWrapper.IsDirty)
-                    {
-                        IntWrapper_CleanStruct();
-                    }
-                    if (_MyExampleStruct_Accessed && _MyExampleStruct.IsDirty)
-                    {
-                        MyExampleStruct_CleanStruct();
-                    }
+                    _IntWrapper_Accessed = false;
+                    _MyExampleStruct_Accessed = false;
                 }
                 else
                 {

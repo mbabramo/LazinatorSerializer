@@ -979,38 +979,14 @@ namespace LazinatorTests.Examples.Structs
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_WrappedBool_Accessed && _WrappedBool.IsDirty)
-                    {
-                        WrappedBool_CleanStruct();
-                    }
-                    if (_WrappedByte_Accessed && _WrappedByte.IsDirty)
-                    {
-                        WrappedByte_CleanStruct();
-                    }
-                    if (_WrappedChar_Accessed && _WrappedChar.IsDirty)
-                    {
-                        WrappedChar_CleanStruct();
-                    }
-                    if (_WrappedNullableBool_Accessed && _WrappedNullableBool.IsDirty)
-                    {
-                        WrappedNullableBool_CleanStruct();
-                    }
-                    if (_WrappedNullableByte_Accessed && _WrappedNullableByte.IsDirty)
-                    {
-                        WrappedNullableByte_CleanStruct();
-                    }
-                    if (_WrappedNullableChar_Accessed && _WrappedNullableChar.IsDirty)
-                    {
-                        WrappedNullableChar_CleanStruct();
-                    }
-                    if (_WrappedNullableSByte_Accessed && _WrappedNullableSByte.IsDirty)
-                    {
-                        WrappedNullableSByte_CleanStruct();
-                    }
-                    if (_WrappedSByte_Accessed && _WrappedSByte.IsDirty)
-                    {
-                        WrappedSByte_CleanStruct();
-                    }
+                    _WrappedBool_Accessed = false;
+                    _WrappedByte_Accessed = false;
+                    _WrappedChar_Accessed = false;
+                    _WrappedNullableBool_Accessed = false;
+                    _WrappedNullableByte_Accessed = false;
+                    _WrappedNullableChar_Accessed = false;
+                    _WrappedNullableSByte_Accessed = false;
+                    _WrappedSByte_Accessed = false;
                 }
                 else
                 {

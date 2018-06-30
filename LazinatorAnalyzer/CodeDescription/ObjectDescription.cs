@@ -1128,15 +1128,14 @@ namespace Lazinator.CodeDescription
                         $@"
                         if (_{property.PropertyName}_Accessed && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                         {{
-                            _{property.PropertyName}.IsDirty = false;
-                            _{property.PropertyName}.DescendantIsDirty = false;
+                            _{property.PropertyName}_Accessed = false;
                         }}";
                 else
                     postEncodingDirtinessReset +=
                         $@"
                         if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                         {{
-                            _{property.PropertyName} = _{property.PropertyName}.CloneLazinatorTyped();
+                            _{property.PropertyName}_Accessed = false;
                         }}";
             }
 

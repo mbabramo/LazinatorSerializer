@@ -192,8 +192,7 @@ namespace LazinatorTests.Examples.Abstract
                     _DescendantIsDirty = false;
                     if (_MyT_Accessed && _MyT != null && _MyT.IsStruct && (_MyT.IsDirty || _MyT.DescendantIsDirty))
                     {
-                        _MyT.IsDirty = false;
-                        _MyT.DescendantIsDirty = false;
+                        _MyT_Accessed = false;
                     }
                 }
                 else

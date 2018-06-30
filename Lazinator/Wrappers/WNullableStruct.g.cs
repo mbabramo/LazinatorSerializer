@@ -348,7 +348,7 @@ namespace Lazinator.Wrappers
                     _DescendantIsDirty = false;
                     if (_NonNullValue_Accessed && _NonNullValue.IsStruct && (_NonNullValue.IsDirty || _NonNullValue.DescendantIsDirty))
                     {
-                        _NonNullValue = _NonNullValue.CloneLazinatorTyped();
+                        _NonNullValue_Accessed = false;
                     }
                 }
                 else

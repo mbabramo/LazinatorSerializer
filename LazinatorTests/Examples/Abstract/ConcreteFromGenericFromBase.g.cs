@@ -112,9 +112,7 @@ namespace LazinatorTests.Examples.Abstract
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_MyT_Accessed && _MyT.IsDirty)
-                    {
-                    }
+                    _MyT_Accessed = false;
                 }
                 else
                 {
