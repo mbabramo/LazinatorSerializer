@@ -259,16 +259,10 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
                 var cleanCopy = _Subcontainer;
-                cleanCopy.MyExampleStruct_CleanStruct();
-                
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
-        }
-        public void Subcontainer_CleanStruct()
-        {
-            _Subcontainer = Subcontainer_Copy;
         }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)

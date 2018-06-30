@@ -270,10 +270,6 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
-        public void IntWrapper_CleanStruct()
-        {
-            _IntWrapper = IntWrapper_Copy;
-        }
         protected ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
@@ -334,10 +330,6 @@ namespace LazinatorTests.Examples
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
-        }
-        public void MyExampleStruct_CleanStruct()
-        {
-            _MyExampleStruct = MyExampleStruct_Copy;
         }
         protected List<ExampleStruct> _MyListExampleStruct;
         public List<ExampleStruct> MyListExampleStruct

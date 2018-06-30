@@ -260,10 +260,6 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedInt_CleanStruct()
-        {
-            _WrappedInt = WrappedInt_Copy;
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

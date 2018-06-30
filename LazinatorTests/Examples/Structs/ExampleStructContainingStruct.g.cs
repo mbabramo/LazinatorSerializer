@@ -260,10 +260,6 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
-        public void MyExampleStruct_CleanStruct()
-        {
-            _MyExampleStruct = MyExampleStruct_Copy;
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

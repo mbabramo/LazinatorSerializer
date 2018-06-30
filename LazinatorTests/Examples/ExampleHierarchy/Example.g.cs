@@ -673,10 +673,6 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
-        public void WrappedInt_CleanStruct()
-        {
-            _WrappedInt = WrappedInt_Copy;
-        }
         protected ExampleChild _ExcludableChild;
         public ExampleChild ExcludableChild
         {
