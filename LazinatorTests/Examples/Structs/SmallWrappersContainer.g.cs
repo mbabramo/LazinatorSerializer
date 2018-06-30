@@ -990,35 +990,35 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_WrappedBool_Accessed && _WrappedBool.IsDirty)
                     {
-                        WrappedBool_CleanStruct();
+                        _WrappedBool = WrappedBool_Copy;
                     }
                     if (_WrappedByte_Accessed && _WrappedByte.IsDirty)
                     {
-                        WrappedByte_CleanStruct();
+                        _WrappedByte = WrappedByte_Copy;
                     }
                     if (_WrappedChar_Accessed && _WrappedChar.IsDirty)
                     {
-                        WrappedChar_CleanStruct();
+                        _WrappedChar = WrappedChar_Copy;
                     }
                     if (_WrappedNullableBool_Accessed && _WrappedNullableBool.IsDirty)
                     {
-                        WrappedNullableBool_CleanStruct();
+                        _WrappedNullableBool = WrappedNullableBool_Copy;
                     }
                     if (_WrappedNullableByte_Accessed && _WrappedNullableByte.IsDirty)
                     {
-                        WrappedNullableByte_CleanStruct();
+                        _WrappedNullableByte = WrappedNullableByte_Copy;
                     }
                     if (_WrappedNullableChar_Accessed && _WrappedNullableChar.IsDirty)
                     {
-                        WrappedNullableChar_CleanStruct();
+                        _WrappedNullableChar = WrappedNullableChar_Copy;
                     }
                     if (_WrappedNullableSByte_Accessed && _WrappedNullableSByte.IsDirty)
                     {
-                        WrappedNullableSByte_CleanStruct();
+                        _WrappedNullableSByte = WrappedNullableSByte_Copy;
                     }
                     if (_WrappedSByte_Accessed && _WrappedSByte.IsDirty)
                     {
-                        WrappedSByte_CleanStruct();
+                        _WrappedSByte = WrappedSByte_Copy;
                     }
                 }
                 else

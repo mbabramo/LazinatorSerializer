@@ -114,6 +114,7 @@ namespace LazinatorTests.Examples.Abstract
                     _DescendantIsDirty = false;
                     if (_MyT_Accessed && _MyT.IsDirty)
                     {
+                        _MyT = MyT_Copy;
                     }
                 }
                 else

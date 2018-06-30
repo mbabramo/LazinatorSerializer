@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = false;
                     if (_MyExampleStruct_Accessed && _MyExampleStruct.IsDirty)
                     {
-                        MyExampleStruct_CleanStruct();
+                        _MyExampleStruct = MyExampleStruct_Copy;
                     }
                 }
                 else
