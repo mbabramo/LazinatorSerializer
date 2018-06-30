@@ -433,6 +433,10 @@ namespace Lazinator.Core
         public Func<ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
             DEBUGCounter++;
+            if (DEBUGCounter == 997)
+            {
+                var DEBUG2 = 0;
+            }
             if (GenericFactories.ContainsKey(typeAndGenericTypeArgumentIDs))
                 return GenericFactories[typeAndGenericTypeArgumentIDs];
             (Type type, int numberTypeArgumentsConsumed) = GetTypeBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
