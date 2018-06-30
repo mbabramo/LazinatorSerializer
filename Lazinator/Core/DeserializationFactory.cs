@@ -429,14 +429,13 @@ namespace Lazinator.Core
                 l.Add(TypeToUniqueIDMap[t]);
         }
 
-
+        static int DEBUGCounter = 0;
         public Func<ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
+            DEBUGCounter++;
             if (GenericFactories.ContainsKey(typeAndGenericTypeArgumentIDs))
                 return GenericFactories[typeAndGenericTypeArgumentIDs];
             (Type type, int numberTypeArgumentsConsumed) = GetTypeBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
-            if (type.ToString().Contains("System.RuntimeType"))
-                throw new Exception(); // DEBUG
             var factory = GetCompiledFunctionForType(type);
             GenericFactories[typeAndGenericTypeArgumentIDs] = factory;
             return factory;
