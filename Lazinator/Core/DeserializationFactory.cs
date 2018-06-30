@@ -439,7 +439,15 @@ namespace Lazinator.Core
             }
             if (GenericFactories.ContainsKey(typeAndGenericTypeArgumentIDs))
                 return GenericFactories[typeAndGenericTypeArgumentIDs];
+            if (DEBUGCounter == 997)
+            {
+                var DEBUG3 = 0;
+            }
             (Type type, int numberTypeArgumentsConsumed) = GetTypeBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
+            if (DEBUGCounter == 997)
+            {
+                var DEBUG4 = type.ToString();
+            }
             var factory = GetCompiledFunctionForType(type);
             GenericFactories[typeAndGenericTypeArgumentIDs] = factory;
             return factory;
