@@ -355,7 +355,7 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_WrappedInt_Accessed && _WrappedInt.IsDirty)
                     {
-                        _WrappedInt = WrappedInt_Copy;
+                        WrappedInt_CleanStruct();
                     }
                 }
                 else

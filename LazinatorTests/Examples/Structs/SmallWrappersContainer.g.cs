@@ -990,35 +990,35 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_WrappedBool_Accessed && _WrappedBool.IsDirty)
                     {
-                        _WrappedBool = WrappedBool_Copy;
+                        WrappedBool_CleanStruct();
                     }
                     if (_WrappedByte_Accessed && _WrappedByte.IsDirty)
                     {
-                        _WrappedByte = WrappedByte_Copy;
+                        WrappedByte_CleanStruct();
                     }
                     if (_WrappedChar_Accessed && _WrappedChar.IsDirty)
                     {
-                        _WrappedChar = WrappedChar_Copy;
+                        WrappedChar_CleanStruct();
                     }
                     if (_WrappedNullableBool_Accessed && _WrappedNullableBool.IsDirty)
                     {
-                        _WrappedNullableBool = WrappedNullableBool_Copy;
+                        WrappedNullableBool_CleanStruct();
                     }
                     if (_WrappedNullableByte_Accessed && _WrappedNullableByte.IsDirty)
                     {
-                        _WrappedNullableByte = WrappedNullableByte_Copy;
+                        WrappedNullableByte_CleanStruct();
                     }
                     if (_WrappedNullableChar_Accessed && _WrappedNullableChar.IsDirty)
                     {
-                        _WrappedNullableChar = WrappedNullableChar_Copy;
+                        WrappedNullableChar_CleanStruct();
                     }
                     if (_WrappedNullableSByte_Accessed && _WrappedNullableSByte.IsDirty)
                     {
-                        _WrappedNullableSByte = WrappedNullableSByte_Copy;
+                        WrappedNullableSByte_CleanStruct();
                     }
                     if (_WrappedSByte_Accessed && _WrappedSByte.IsDirty)
                     {
-                        _WrappedSByte = WrappedSByte_Copy;
+                        WrappedSByte_CleanStruct();
                     }
                 }
                 else

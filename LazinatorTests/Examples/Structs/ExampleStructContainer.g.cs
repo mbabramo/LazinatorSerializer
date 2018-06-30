@@ -511,11 +511,11 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = false;
                     if (_IntWrapper_Accessed && _IntWrapper.IsDirty)
                     {
-                        _IntWrapper = IntWrapper_Copy;
+                        IntWrapper_CleanStruct();
                     }
                     if (_MyExampleStruct_Accessed && _MyExampleStruct.IsDirty)
                     {
-                        _MyExampleStruct = MyExampleStruct_Copy;
+                        MyExampleStruct_CleanStruct();
                     }
                 }
                 else

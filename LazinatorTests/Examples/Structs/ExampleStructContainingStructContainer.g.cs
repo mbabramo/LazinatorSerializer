@@ -361,7 +361,7 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_Subcontainer_Accessed && _Subcontainer.IsDirty)
                     {
-                        _Subcontainer = Subcontainer_Copy;
+                        Subcontainer_CleanStruct();
                     }
                 }
                 else
