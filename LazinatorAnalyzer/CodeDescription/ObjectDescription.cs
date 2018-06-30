@@ -60,6 +60,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsPreSerialization => ImplementedMethods.Contains("PreSerialization");
         public bool ImplementsPostDeserialization => ImplementedMethods.Contains("PostDeserialization");
         public bool ImplementsOnDirty => ImplementedMethods.Contains("OnDirty");
+        public bool ImplementsOnDescendantIsDirty => ImplementedMethods.Contains("OnDescendantIsDirty");
         public bool ImplementsConvertFromBytesAfterHeader => ImplementedMethods.Contains("ConvertFromBytesAfterHeader");
         public bool ImplementsWritePropertiesIntoBuffer => ImplementedMethods.Contains("WritePropertiesIntoBuffer");
         public bool ImplementsEnumerateLazinatorDescendants => ImplementedMethods.Contains("EnumerateLazinatorDescendants");
@@ -463,7 +464,8 @@ namespace Lazinator.CodeDescription
                                     _DescendantIsDirty = value;
                                     if (_DescendantIsDirty)
                                     {{
-                                        LazinatorParents.InformParentsOfDirtiness();
+                                        LazinatorParents.InformParentsOfDirtiness();{IIF(ImplementsOnDescendantIsDirty, $@"
+                                        OnDescendantIsDirty();")}
                                         _DescendantHasChanged = true;
                                     }}
                                 }}

@@ -430,26 +430,14 @@ namespace Lazinator.Core
             else
                 l.Add(TypeToUniqueIDMap[t]);
         }
-
-        static int DEBUGCounter = 0;
+        
         public Func<ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
-            DEBUGCounter++;
-            if (DEBUGCounter == 997)
-            {
-                var DEBUG2 = 0;
-            }
+            // NOTE: If this code causes a stack overflow error, it is likely because a property is being accessed in the constructor
+            // before deserialization.
             if (GenericFactories.ContainsKey(typeAndGenericTypeArgumentIDs))
                 return GenericFactories[typeAndGenericTypeArgumentIDs];
-            if (DEBUGCounter == 997)
-            {
-                var DEBUG3 = 0;
-            }
             (Type type, int numberTypeArgumentsConsumed) = GetTypeBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
-            if (DEBUGCounter == 997)
-            {
-                var DEBUG4 = type.ToString();
-            }
             var factory = GetCompiledFunctionForType(type);
             GenericFactories[typeAndGenericTypeArgumentIDs] = factory;
             return factory;

@@ -942,7 +942,8 @@ namespace Lazinator.CodeDescription
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set
-            {{{propertyTypeDependentSet}{RepeatedCodeExecution}IsDirty = true;
+            {{{propertyTypeDependentSet}{RepeatedCodeExecution}
+                IsDirty = true;
                 DescendantIsDirty = true;
                 _{PropertyName} = value;{IIF(IsNonSerializedType && TrackDirtinessNonSerialized, $@"
                 _{PropertyName}_Dirty = true;")}

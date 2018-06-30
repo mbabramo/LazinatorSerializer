@@ -43,7 +43,11 @@ namespace LazinatorTests.Tests
             hierarchy.MyDateTime = DateTime.Now - TimeSpan.FromHours(1);
             hierarchy.IsDirty.Should().BeTrue();
             hierarchy._OnDirtyCalled.Should().BeTrue();
+            hierarchy._OnDescendantIsDirtyCalled.Should().BeFalse();
+            hierarchy.MyChild2.MyLong = -345334;
+            hierarchy._OnDescendantIsDirtyCalled.Should().BeTrue();
             hierarchy._OnDirtyCalled = false; // reset flag
+            hierarchy._OnDescendantIsDirtyCalled = false; // reset flag
             hierarchy.MyChild1.IsDirty.Should().BeFalse();
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.IsDirty.Should().BeFalse();
@@ -240,6 +244,7 @@ namespace LazinatorTests.Tests
             c.DescendantIsDirty.Should().BeFalse();
             c.HasChanged.Should().BeFalse();
             c.DescendantHasChanged.Should().BeFalse();
+            c.Example.MyChar.Should().Be('D');
         }
 
         [Fact]

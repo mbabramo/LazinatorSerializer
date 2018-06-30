@@ -594,12 +594,6 @@ namespace Lazinator.Core
                 node.HasChanged = false;
                 node.DescendantHasChanged = false;
             }
-            // DEBUG
-            foreach (var node in hierarchy.GetAllNodes())
-            {
-                if (node.HasChanged || node.DescendantHasChanged)
-                    throw new Exception("DEBUG");
-            }
         }
         
 
