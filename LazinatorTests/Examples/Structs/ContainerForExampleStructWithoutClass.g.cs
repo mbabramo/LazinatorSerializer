@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.Structs
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -230,7 +230,6 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 value.LazinatorParents = new LazinatorParentsCollection(this);
-                value.IsDirty = true;
                 IsDirty = true;
                 DescendantIsDirty = true;
                 _ExampleStructWithoutClass = value;

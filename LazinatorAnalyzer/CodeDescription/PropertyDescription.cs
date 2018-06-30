@@ -882,24 +882,17 @@ namespace Lazinator.CodeDescription
                         }}
                         if (value != null)
                         {{
-                            value.IsDirty = true;
                             value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                         }}
                         ";
                 else
-                    propertyTypeDependentSet = $@"
-                        if (value != null)
-                        {{
-                            value.IsDirty = true;
-                        }}
-                        ";
+                    propertyTypeDependentSet = $@"";
 
             }
             else if (IsLazinatorStruct)
             {
                 propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
                     value.LazinatorParents = new LazinatorParentsCollection(this);")}
-                    value.IsDirty = true;
                     ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
@@ -909,7 +902,6 @@ namespace Lazinator.CodeDescription
                         if (value != null && value.IsStruct)
                         {{{IIF(ContainerIsClass, $@"
                             value.LazinatorParents = new LazinatorParentsCollection(this);")}
-                            value.IsDirty = true;
                         }}
                         else
                         {{
@@ -919,25 +911,12 @@ namespace Lazinator.CodeDescription
                             }}
                             if (value != null)
                             {{
-                                value.IsDirty = true;
                                 value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                             }}
                         }}
                             ";
                 else
-                    propertyTypeDependentSet = $@"
-                        if (value != null && value.IsStruct)
-                        {{
-                            value.IsDirty = true;
-                        }}
-                        else
-                        {{
-                            if (value != null)
-                            {{
-                                value.IsDirty = true;
-                            }}
-                        }}
-                            ";
+                    propertyTypeDependentSet = $@"";
 
             }
 

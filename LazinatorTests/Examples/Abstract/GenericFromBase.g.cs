@@ -81,7 +81,6 @@ namespace LazinatorTests.Examples.Abstract
                 if (value != null && value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
-                    value.IsDirty = true;
                 }
                 else
                 {
@@ -91,7 +90,6 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (value != null)
                     {
-                        value.IsDirty = true;
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }

@@ -421,7 +421,7 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
-                            get => _IsDirty;
+                            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
                             [DebuggerStepThrough]
                             set
                             {{
@@ -1118,10 +1118,7 @@ namespace Lazinator.CodeDescription
             {
                 postEncodingDirtinessReset +=
                     $@"
-                    if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsDirty)
-                    {{
-                        {property.PropertyName}_CleanStruct();
-                    }}";
+                    _{property.PropertyName}_Accessed = false;"; // force deserialization to make the struct clean
             }
             foreach (var property in PropertiesIncludingInherited
                 .Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))

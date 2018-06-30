@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -227,7 +227,6 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                value.IsDirty = true;
                 IsDirty = true;
                 DescendantIsDirty = true;
                 _MyExampleStruct = value;

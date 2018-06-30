@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.NonLazinator
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {

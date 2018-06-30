@@ -88,7 +88,7 @@ namespace Lazinator.Wrappers
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -238,7 +238,6 @@ namespace Lazinator.Wrappers
             [DebuggerStepThrough]
             set
             {
-                value.IsDirty = true;
                 IsDirty = true;
                 DescendantIsDirty = true;
                 _NonNullValue = value;

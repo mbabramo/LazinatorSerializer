@@ -88,7 +88,7 @@ namespace Lazinator.Collections
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -234,7 +234,6 @@ namespace Lazinator.Collections
                 if (value != null && value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
-                    value.IsDirty = true;
                 }
                 else
                 {
@@ -244,7 +243,6 @@ namespace Lazinator.Collections
                     }
                     if (value != null)
                     {
-                        value.IsDirty = true;
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }
@@ -287,7 +285,6 @@ namespace Lazinator.Collections
                 if (value != null && value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
-                    value.IsDirty = true;
                 }
                 else
                 {
@@ -297,7 +294,6 @@ namespace Lazinator.Collections
                     }
                     if (value != null)
                     {
-                        value.IsDirty = true;
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }
@@ -340,7 +336,6 @@ namespace Lazinator.Collections
                 if (value != null && value.IsStruct)
                 {
                     value.LazinatorParents = new LazinatorParentsCollection(this);
-                    value.IsDirty = true;
                 }
                 else
                 {
@@ -350,7 +345,6 @@ namespace Lazinator.Collections
                     }
                     if (value != null)
                     {
-                        value.IsDirty = true;
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     }
                 }

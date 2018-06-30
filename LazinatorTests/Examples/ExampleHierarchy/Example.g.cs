@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -404,7 +404,6 @@ namespace LazinatorTests.Examples
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -443,7 +442,6 @@ namespace LazinatorTests.Examples
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -482,7 +480,6 @@ namespace LazinatorTests.Examples
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -521,7 +518,6 @@ namespace LazinatorTests.Examples
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -560,7 +556,6 @@ namespace LazinatorTests.Examples
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -645,7 +640,6 @@ namespace LazinatorTests.Examples
             set
             {
                 value.LazinatorParents = new LazinatorParentsCollection(this);
-                value.IsDirty = true;
                 IsDirty = true;
                 DescendantIsDirty = true;
                 _WrappedInt = value;
@@ -712,7 +706,6 @@ namespace LazinatorTests.Examples
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -939,10 +932,7 @@ namespace LazinatorTests.Examples
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     _DescendantIsDirty = false;
-                    if (_WrappedInt_Accessed && _WrappedInt.IsDirty)
-                    {
-                        WrappedInt_CleanStruct();
-                    }
+                    _WrappedInt_Accessed = false; // must re-deserialize struct
                 }
                 else
                 {

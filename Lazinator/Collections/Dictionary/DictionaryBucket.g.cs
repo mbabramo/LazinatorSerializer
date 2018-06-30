@@ -93,7 +93,7 @@ namespace Lazinator.Collections.Dictionary
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -251,7 +251,6 @@ namespace Lazinator.Collections.Dictionary
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -292,7 +291,6 @@ namespace Lazinator.Collections.Dictionary
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;

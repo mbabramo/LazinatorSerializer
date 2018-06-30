@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -242,7 +242,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -281,7 +280,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -320,7 +318,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -359,7 +356,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;
@@ -398,7 +394,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 if (value != null)
                 {
-                    value.IsDirty = true;
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 }
                 IsDirty = true;

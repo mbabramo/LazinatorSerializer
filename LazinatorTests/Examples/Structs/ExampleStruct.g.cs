@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty;
+            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -263,12 +263,7 @@ namespace LazinatorTests.Examples
                 return _MyChild1;
             }
             set
-            {
-                if (value != null)
-                {
-                    value.IsDirty = true;
-                }
-                IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyChild1 = value;
                 _MyChild1_Accessed = true;
@@ -297,12 +292,7 @@ namespace LazinatorTests.Examples
                 return _MyChild2;
             }
             set
-            {
-                if (value != null)
-                {
-                    value.IsDirty = true;
-                }
-                IsDirty = true;
+            {IsDirty = true;
                 DescendantIsDirty = true;
                 _MyChild2 = value;
                 _MyChild2_Accessed = true;
