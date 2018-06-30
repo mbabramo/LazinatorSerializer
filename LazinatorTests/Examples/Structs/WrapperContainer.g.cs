@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _WrappedInt = default(WInt);
                         _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         return default(WInt);
                     }

@@ -232,7 +232,7 @@ namespace Lazinator.Spans
             {
                 if (!_ReadOrWrite_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ReadOrWrite = default(Memory<byte>);
                     }

@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_EnumTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _EnumTuple = default((TestEnum firstEnum, TestEnum anotherEnum));
                     }
@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNamedTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyNamedTuple = default((int MyFirstItem, double MySecondItem));
                     }
@@ -270,7 +270,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNullableTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyNullableTuple = default((int, double)?);
                     }
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyValueTupleSerialized = default((uint, ExampleChild, NonLazinatorClass));
                     }

@@ -205,7 +205,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyStackInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyStackInt = default(Stack<int>);
                         _MyStackInt_Dirty = true; 

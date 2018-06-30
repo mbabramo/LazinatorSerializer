@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyList = default(LazinatorList<ExampleChild>);
                     }

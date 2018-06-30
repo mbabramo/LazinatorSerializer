@@ -211,7 +211,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyListT_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListT = default(List<T>);
                     }
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyT_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyT = default(T);
                         if (_MyT != null)

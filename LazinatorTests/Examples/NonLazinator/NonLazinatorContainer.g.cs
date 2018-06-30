@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _NonLazinatorClass = default(NonLazinatorClass);
                     }
@@ -242,7 +242,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _NonLazinatorInterchangeableClass = default(NonLazinatorInterchangeableClass);
                     }
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _NonLazinatorStruct = default(NonLazinatorStruct);
                     }

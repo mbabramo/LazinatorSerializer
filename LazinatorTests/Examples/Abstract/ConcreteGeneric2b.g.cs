@@ -261,7 +261,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyT_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyT = default(Example);
                     }
@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_LazinatorExample_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _LazinatorExample = default(Example);
                     }

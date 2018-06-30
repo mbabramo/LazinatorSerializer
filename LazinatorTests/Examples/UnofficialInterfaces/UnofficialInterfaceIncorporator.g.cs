@@ -238,7 +238,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyOfficialObject_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyOfficialObject = default(Concrete5);
                     }
@@ -276,7 +276,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyUnofficialObject_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyUnofficialObject = default(Concrete3);
                     }

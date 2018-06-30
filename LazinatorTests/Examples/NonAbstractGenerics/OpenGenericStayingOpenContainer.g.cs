@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericBase_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ClosedGenericBase = default(OpenGeneric<Base>);
                     }
@@ -258,7 +258,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFloat_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ClosedGenericFloat = default(OpenGeneric<WFloat>);
                     }
@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFromBaseWithBase_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ClosedGenericFromBaseWithBase = default(GenericFromBase<Base>);
                     }
@@ -334,7 +334,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ClosedGenericInterface = default(OpenGeneric<IExampleChild>);
                     }
@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericNonexclusiveInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ClosedGenericNonexclusiveInterface = default(OpenGeneric<IExampleNonexclusiveInterface>);
                     }

@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyMemoryInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyMemoryInt = default(Memory<int>);
                     }
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyNullableMemoryInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyNullableMemoryInt = default(Memory<int>?);
                     }

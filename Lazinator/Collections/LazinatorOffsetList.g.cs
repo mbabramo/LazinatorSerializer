@@ -216,7 +216,7 @@ namespace Lazinator.Collections
             {
                 if (!_FourByteItems_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _FourByteItems = default(LazinatorFastReadList<int>);
                     }
@@ -263,7 +263,7 @@ namespace Lazinator.Collections
             {
                 if (!_TwoByteItems_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _TwoByteItems = default(LazinatorFastReadList<short>);
                     }

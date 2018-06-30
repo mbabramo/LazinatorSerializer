@@ -210,7 +210,7 @@ namespace Lazinator.Collections
             {
                 if (!_Item1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Item1 = default(T);
                         if (_Item1 != null)
@@ -261,7 +261,7 @@ namespace Lazinator.Collections
             {
                 if (!_Item2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Item2 = default(U);
                         if (_Item2 != null)
@@ -312,7 +312,7 @@ namespace Lazinator.Collections
             {
                 if (!_Item3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Item3 = default(V);
                         if (_Item3 != null)

@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyBase_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyBase = default(Base);
                     }

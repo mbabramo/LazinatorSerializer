@@ -228,7 +228,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (!_Keys_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Keys = default(LazinatorList<TKey>);
                     }
@@ -268,7 +268,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (!_Values_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Values = default(LazinatorList<TValue>);
                     }

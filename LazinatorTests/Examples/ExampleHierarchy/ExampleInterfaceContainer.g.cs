@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleByInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ExampleByInterface = default(IExample);
                     }
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleListByInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ExampleListByInterface = default(List<IExample>);
                     }

@@ -216,7 +216,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IntWrapper_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _IntWrapper = default(WInt);
                         _IntWrapper.LazinatorParents = new LazinatorParentsCollection(this);
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IntWrapper_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         return default(WInt);
                     }
@@ -277,7 +277,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyExampleStruct = default(ExampleStruct);
                         _MyExampleStruct.LazinatorParents = new LazinatorParentsCollection(this);
@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         return default(ExampleStruct);
                     }
@@ -338,7 +338,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListExampleStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListExampleStruct = default(List<ExampleStruct>);
                     }
@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListNullableExampleStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListNullableExampleStruct = default(List<WNullableStruct<ExampleStruct>>);
                     }

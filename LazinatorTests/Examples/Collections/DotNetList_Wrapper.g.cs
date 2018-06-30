@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListInt = default(List<WInt>);
                         _MyListInt_Dirty = true; 
@@ -261,7 +261,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableByte_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListNullableByte = default(List<WNullableByte>);
                     }
@@ -290,7 +290,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListNullableInt = default(List<WNullableInt>);
                     }

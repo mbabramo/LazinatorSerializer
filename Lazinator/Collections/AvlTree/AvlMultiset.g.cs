@@ -223,7 +223,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 if (!_UnderlyingSet_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _UnderlyingSet = default(AvlSet<LazinatorTuple<T, WInt>>);
                     }

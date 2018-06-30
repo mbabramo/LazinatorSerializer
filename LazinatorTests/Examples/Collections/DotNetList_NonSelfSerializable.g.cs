@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListNonLazinatorType = default(List<NonLazinatorClass>);
                         _MyListNonLazinatorType_Dirty = true; 
@@ -255,7 +255,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyListNonLazinatorType2 = default(List<NonLazinatorClass>);
                     }

@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyTupleSerialized = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
                     }
@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyTupleSerialized2 = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
                     }
@@ -270,7 +270,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyTupleSerialized3 = default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
                     }
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized4_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyTupleSerialized4 = default(Tuple<int, ExampleStruct>);
                     }

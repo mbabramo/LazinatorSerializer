@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNestedTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyNestedTuple = default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
                     }

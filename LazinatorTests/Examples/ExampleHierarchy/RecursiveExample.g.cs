@@ -211,7 +211,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _RecursiveClass = default(RecursiveExample);
                     }
@@ -249,7 +249,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _RecursiveInterface = default(IRecursiveExample);
                     }

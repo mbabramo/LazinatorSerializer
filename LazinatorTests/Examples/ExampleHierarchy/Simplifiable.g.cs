@@ -291,7 +291,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Example = default(Example);
                     }
@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Example2 = default(Example);
                     }
@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Example3 = default(Example);
                     }

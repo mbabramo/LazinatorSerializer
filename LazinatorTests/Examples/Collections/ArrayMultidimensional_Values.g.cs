@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyArrayInt = default(int[,]);
                         _MyArrayInt_Dirty = true; 
@@ -256,7 +256,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyCrazyJaggedArray_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyCrazyJaggedArray = default(int[][,,][,,,]);
                     }
@@ -285,7 +285,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyThreeDimArrayInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyThreeDimArrayInt = default(int[,,]);
                     }

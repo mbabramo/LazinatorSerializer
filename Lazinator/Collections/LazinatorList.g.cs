@@ -231,7 +231,7 @@ namespace Lazinator.Collections
             {
                 if (!_Offsets_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Offsets = default(LazinatorOffsetList);
                     }

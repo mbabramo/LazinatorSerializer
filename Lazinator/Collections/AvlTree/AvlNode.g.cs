@@ -246,7 +246,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Key_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Key = default(TKey);
                         if (_Key != null)
@@ -297,7 +297,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Left_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Left = default(AvlNode<TKey, TValue>);
                     }
@@ -344,7 +344,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Right_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Right = default(AvlNode<TKey, TValue>);
                     }
@@ -391,7 +391,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Value_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Value = default(TValue);
                         if (_Value != null)

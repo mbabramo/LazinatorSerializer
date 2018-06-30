@@ -250,7 +250,7 @@ namespace Lazinator.Core
                 {
                     void action(BinaryBufferWriter w)
                     {
-                        if (child.IsDirty || child.DescendantIsDirty || verifyCleanness || child.LazinatorObjectBytes.Length == 0)
+                        if (child.IsDirty || child.DescendantIsDirty || verifyCleanness)
                             child.SerializeExistingBuffer(w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         else
                             child.LazinatorObjectBytes.Span.Write(w); // the child has been accessed, but is unchanged, so we can use the storage holding the child

@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyQueueSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyQueueSerialized = default(Queue<ExampleChild>);
                     }

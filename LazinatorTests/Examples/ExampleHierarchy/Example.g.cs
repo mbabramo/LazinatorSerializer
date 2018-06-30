@@ -382,7 +382,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IncludableChild_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _IncludableChild = default(ExampleChild);
                     }
@@ -420,7 +420,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyChild1 = default(ExampleChild);
                     }
@@ -458,7 +458,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyChild2 = default(ExampleChild);
                     }
@@ -496,7 +496,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2Previous_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyChild2Previous = default(ExampleChild);
                     }
@@ -534,7 +534,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyInterfaceImplementer_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyInterfaceImplementer = default(IExampleNonexclusiveInterface);
                     }
@@ -572,7 +572,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyNonLazinatorChild_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyNonLazinatorChild = default(NonLazinatorClass);
                         _MyNonLazinatorChild_Dirty = true; 
@@ -619,7 +619,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _WrappedInt = default(WInt);
                         _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
@@ -653,7 +653,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         return default(WInt);
                     }
@@ -680,7 +680,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ExcludableChild_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ExcludableChild = default(ExampleChild);
                     }

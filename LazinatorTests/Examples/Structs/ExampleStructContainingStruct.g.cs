@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyExampleStruct = default(ExampleStruct);
                     }
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         return default(ExampleStruct);
                     }

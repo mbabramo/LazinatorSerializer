@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyMismatchedRecordLikeType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyMismatchedRecordLikeType = default(MismatchedRecordLikeType);
                     }
@@ -242,7 +242,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyRecordLikeClass = default(RecordLikeClass);
                     }
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyRecordLikeType = default(RecordLikeType);
                     }

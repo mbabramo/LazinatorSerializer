@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_AbstractProperty_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _AbstractProperty = default(Abstract1);
                     }

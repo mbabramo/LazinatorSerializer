@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyArrayInt = default(int[]);
                         _MyArrayInt_Dirty = true; 
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyJaggedArrayInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyJaggedArrayInt = default(int[][]);
                     }

@@ -58,7 +58,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList6_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _IntList6 = default(List<int>);
                     }

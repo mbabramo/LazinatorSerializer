@@ -247,7 +247,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Example2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Example2 = default(Example);
                     }
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Example3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Example3 = default(Example);
                     }
@@ -321,7 +321,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _IntList1 = default(List<int>);
                     }
@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _IntList2 = default(List<int>);
                     }
@@ -377,7 +377,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _IntList3 = default(List<int>);
                     }

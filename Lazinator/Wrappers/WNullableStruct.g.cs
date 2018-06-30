@@ -221,7 +221,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_NonNullValue_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _NonNullValue = default(T);
                     }

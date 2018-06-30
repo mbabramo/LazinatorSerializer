@@ -224,7 +224,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _SubclassInstance1 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
                     }
@@ -262,7 +262,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _SubclassInstance2 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
                     }

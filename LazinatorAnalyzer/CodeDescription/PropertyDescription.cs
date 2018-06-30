@@ -927,7 +927,7 @@ namespace Lazinator.CodeDescription
             {{
                 if (!_{PropertyName}_Accessed)
                 {{
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {{
                         {createDefault}
                     }}
@@ -962,7 +962,7 @@ namespace Lazinator.CodeDescription
                                 {{
                                     if (!_{PropertyName}_Accessed)
                                     {{
-                                        if (LazinatorObjectBytes.Length == 0)
+                                        if (_LazinatorObjectBytes.Length == 0)
                                         {{
                                             return default({AppropriatelyQualifiedTypeName});
                                         }}

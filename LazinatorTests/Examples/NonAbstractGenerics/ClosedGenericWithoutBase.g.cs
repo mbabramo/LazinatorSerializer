@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ItemU_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _ItemU = default(ExampleChild);
                     }

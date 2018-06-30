@@ -223,7 +223,7 @@ namespace Lazinator.Collections.AvlTree
             {
                 if (!_UnderlyingTree_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _UnderlyingTree = default(AvlTree<TKey, WByte>);
                     }

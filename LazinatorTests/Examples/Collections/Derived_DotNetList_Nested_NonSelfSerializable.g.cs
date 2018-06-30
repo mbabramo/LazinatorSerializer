@@ -72,7 +72,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLevel2ListNestedNonLazinatorType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyLevel2ListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
                     }

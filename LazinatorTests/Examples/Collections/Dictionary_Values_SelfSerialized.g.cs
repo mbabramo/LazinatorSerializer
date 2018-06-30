@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionary_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyDictionary = default(Dictionary<int, ExampleChild>);
                     }
@@ -239,7 +239,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedDictionary_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MySortedDictionary = default(SortedDictionary<int, ExampleChild>);
                     }
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MySortedList = default(SortedList<int, ExampleChild>);
                     }

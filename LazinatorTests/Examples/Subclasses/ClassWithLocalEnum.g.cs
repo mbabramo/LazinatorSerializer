@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_MyEnumList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyEnumList = default(List<EnumWithinClass>);
                     }

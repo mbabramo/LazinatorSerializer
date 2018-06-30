@@ -206,7 +206,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Root_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Root = default(AvlNode<TKey, TValue>);
                     }

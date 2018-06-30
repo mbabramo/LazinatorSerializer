@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyHashSetSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _MyHashSetSerialized = default(HashSet<ExampleChild>);
                     }

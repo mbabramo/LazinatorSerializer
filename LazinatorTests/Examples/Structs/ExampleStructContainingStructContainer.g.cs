@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_Subcontainer_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Subcontainer = default(ExampleStructContainingStruct);
                         _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_Subcontainer_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         return default(ExampleStructContainingStruct);
                     }

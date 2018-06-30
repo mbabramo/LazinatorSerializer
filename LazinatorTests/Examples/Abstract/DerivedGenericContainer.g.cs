@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Item_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Item = default(AbstractGeneric1<T>);
                     }

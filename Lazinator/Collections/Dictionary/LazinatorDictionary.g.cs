@@ -222,7 +222,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (!_Buckets_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (_LazinatorObjectBytes.Length == 0)
                     {
                         _Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
                     }
