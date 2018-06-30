@@ -1120,7 +1120,7 @@ namespace Lazinator.CodeDescription
                     $@"
                     if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsDirty)
                     {{
-                        {property.PropertyName}_CleanNestedStruct();
+                        {property.PropertyName}_CleanStruct();
                     }}";
             }
             foreach (var property in PropertiesIncludingInherited

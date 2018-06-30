@@ -321,7 +321,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedBool_CleanNestedStruct()
+        public void WrappedBool_CleanStruct()
         {
             _WrappedBool = WrappedBool_Copy;
         }
@@ -387,7 +387,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedByte_CleanNestedStruct()
+        public void WrappedByte_CleanStruct()
         {
             _WrappedByte = WrappedByte_Copy;
         }
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedChar_CleanNestedStruct()
+        public void WrappedChar_CleanStruct()
         {
             _WrappedChar = WrappedChar_Copy;
         }
@@ -519,7 +519,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedNullableBool_CleanNestedStruct()
+        public void WrappedNullableBool_CleanStruct()
         {
             _WrappedNullableBool = WrappedNullableBool_Copy;
         }
@@ -585,7 +585,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedNullableByte_CleanNestedStruct()
+        public void WrappedNullableByte_CleanStruct()
         {
             _WrappedNullableByte = WrappedNullableByte_Copy;
         }
@@ -651,7 +651,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedNullableChar_CleanNestedStruct()
+        public void WrappedNullableChar_CleanStruct()
         {
             _WrappedNullableChar = WrappedNullableChar_Copy;
         }
@@ -717,7 +717,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedNullableSByte_CleanNestedStruct()
+        public void WrappedNullableSByte_CleanStruct()
         {
             _WrappedNullableSByte = WrappedNullableSByte_Copy;
         }
@@ -783,7 +783,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void WrappedSByte_CleanNestedStruct()
+        public void WrappedSByte_CleanStruct()
         {
             _WrappedSByte = WrappedSByte_Copy;
         }
@@ -990,35 +990,35 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_WrappedBool_Accessed && _WrappedBool.IsDirty)
                     {
-                        WrappedBool_CleanNestedStruct();
+                        WrappedBool_CleanStruct();
                     }
                     if (_WrappedByte_Accessed && _WrappedByte.IsDirty)
                     {
-                        WrappedByte_CleanNestedStruct();
+                        WrappedByte_CleanStruct();
                     }
                     if (_WrappedChar_Accessed && _WrappedChar.IsDirty)
                     {
-                        WrappedChar_CleanNestedStruct();
+                        WrappedChar_CleanStruct();
                     }
                     if (_WrappedNullableBool_Accessed && _WrappedNullableBool.IsDirty)
                     {
-                        WrappedNullableBool_CleanNestedStruct();
+                        WrappedNullableBool_CleanStruct();
                     }
                     if (_WrappedNullableByte_Accessed && _WrappedNullableByte.IsDirty)
                     {
-                        WrappedNullableByte_CleanNestedStruct();
+                        WrappedNullableByte_CleanStruct();
                     }
                     if (_WrappedNullableChar_Accessed && _WrappedNullableChar.IsDirty)
                     {
-                        WrappedNullableChar_CleanNestedStruct();
+                        WrappedNullableChar_CleanStruct();
                     }
                     if (_WrappedNullableSByte_Accessed && _WrappedNullableSByte.IsDirty)
                     {
-                        WrappedNullableSByte_CleanNestedStruct();
+                        WrappedNullableSByte_CleanStruct();
                     }
                     if (_WrappedSByte_Accessed && _WrappedSByte.IsDirty)
                     {
-                        WrappedSByte_CleanNestedStruct();
+                        WrappedSByte_CleanStruct();
                     }
                 }
                 else

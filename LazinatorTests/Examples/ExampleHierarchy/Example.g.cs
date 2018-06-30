@@ -679,7 +679,7 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
-        public void WrappedInt_CleanNestedStruct()
+        public void WrappedInt_CleanStruct()
         {
             _WrappedInt = WrappedInt_Copy;
         }
@@ -941,7 +941,7 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = false;
                     if (_WrappedInt_Accessed && _WrappedInt.IsDirty)
                     {
-                        WrappedInt_CleanNestedStruct();
+                        WrappedInt_CleanStruct();
                     }
                 }
                 else

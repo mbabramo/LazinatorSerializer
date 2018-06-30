@@ -989,7 +989,7 @@ namespace Lazinator.CodeDescription
                             .Select(x => x.PropertyName);
                         foreach (var structPropertyName in structPropertyNames)
                             resetStructDirtiness += $@"
-                                cleanCopy.{structPropertyName}_CleanNestedStruct();
+                                cleanCopy.{structPropertyName}_CleanStruct();
                                 ";
                     }
                 }
@@ -1019,7 +1019,7 @@ namespace Lazinator.CodeDescription
                                     return cleanCopy;
                                 }}
                             }}
-                        public void {PropertyName}_CleanNestedStruct()
+                        public void {PropertyName}_CleanStruct()
                         {{
                             _{PropertyName} = {PropertyName}_Copy;
                         }}

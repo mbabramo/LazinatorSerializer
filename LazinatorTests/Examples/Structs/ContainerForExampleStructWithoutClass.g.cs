@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
-        public void ExampleStructWithoutClass_CleanNestedStruct()
+        public void ExampleStructWithoutClass_CleanStruct()
         {
             _ExampleStructWithoutClass = ExampleStructWithoutClass_Copy;
         }
@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_ExampleStructWithoutClass_Accessed && _ExampleStructWithoutClass.IsDirty)
                     {
-                        ExampleStructWithoutClass_CleanNestedStruct();
+                        ExampleStructWithoutClass_CleanStruct();
                     }
                 }
                 else

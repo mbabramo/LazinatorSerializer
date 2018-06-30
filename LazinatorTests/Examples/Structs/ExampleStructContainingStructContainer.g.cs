@@ -260,14 +260,14 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
                 var cleanCopy = _Subcontainer;
-                cleanCopy.MyExampleStruct_CleanNestedStruct();
+                cleanCopy.MyExampleStruct_CleanStruct();
                 
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
                 return cleanCopy;
             }
         }
-        public void Subcontainer_CleanNestedStruct()
+        public void Subcontainer_CleanStruct()
         {
             _Subcontainer = Subcontainer_Copy;
         }
@@ -361,7 +361,7 @@ namespace LazinatorTests.Examples.Structs
                     _DescendantIsDirty = false;
                     if (_Subcontainer_Accessed && _Subcontainer.IsDirty)
                     {
-                        Subcontainer_CleanNestedStruct();
+                        Subcontainer_CleanStruct();
                     }
                 }
                 else
