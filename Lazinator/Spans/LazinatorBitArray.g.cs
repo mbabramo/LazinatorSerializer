@@ -326,6 +326,8 @@ namespace Lazinator.Spans
             _ByteSpan_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

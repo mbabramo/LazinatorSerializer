@@ -336,6 +336,8 @@ namespace LazinatorTests.Examples.Hierarchy
             _RecursiveClass_Accessed = _RecursiveInterface_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

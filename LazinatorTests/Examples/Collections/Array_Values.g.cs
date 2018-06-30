@@ -312,6 +312,8 @@ namespace LazinatorTests.Examples.Collections
             _MyArrayInt_Accessed = _MyJaggedArrayInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

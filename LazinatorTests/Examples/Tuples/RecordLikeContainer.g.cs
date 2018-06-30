@@ -329,6 +329,8 @@ namespace LazinatorTests.Examples.Tuples
             _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

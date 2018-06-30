@@ -283,6 +283,8 @@ namespace Lazinator.Collections.Avl
             _Root_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

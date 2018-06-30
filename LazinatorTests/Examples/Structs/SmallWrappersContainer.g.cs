@@ -879,6 +879,8 @@ namespace LazinatorTests.Examples.Structs
             _ListWrappedBytes_Accessed = _WrappedBool_Accessed = _WrappedByte_Accessed = _WrappedChar_Accessed = _WrappedNullableBool_Accessed = _WrappedNullableByte_Accessed = _WrappedNullableChar_Accessed = _WrappedNullableSByte_Accessed = _WrappedSByte_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

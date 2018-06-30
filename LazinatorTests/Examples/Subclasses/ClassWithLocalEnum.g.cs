@@ -280,6 +280,8 @@ namespace LazinatorTests.Examples.Subclasses
             _MyEnumList_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

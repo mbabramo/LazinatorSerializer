@@ -301,6 +301,8 @@ namespace Lazinator.Collections.AvlTree
             _UnderlyingTree_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

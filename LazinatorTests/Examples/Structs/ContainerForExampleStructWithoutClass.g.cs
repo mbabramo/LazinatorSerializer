@@ -308,6 +308,8 @@ namespace LazinatorTests.Examples.Structs
             _ExampleStructWithoutClass_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

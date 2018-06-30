@@ -293,6 +293,8 @@ namespace Lazinator.Collections
             _MainListSerialized_Accessed = _Offsets_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

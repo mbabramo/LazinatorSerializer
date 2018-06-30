@@ -418,6 +418,8 @@ namespace LazinatorTests.Examples.Collections
             _MyMemoryInt_Accessed = _MyNullableMemoryInt_Accessed = _MyReadOnlyMemoryByte_Accessed = _MyReadOnlySpanByte_Accessed = _MyReadOnlySpanChar_Accessed = _MyReadOnlySpanDateTime_Accessed = _MyReadOnlySpanLong_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

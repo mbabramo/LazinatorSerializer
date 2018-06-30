@@ -328,6 +328,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             _MyListT_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

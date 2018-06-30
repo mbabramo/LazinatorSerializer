@@ -357,6 +357,8 @@ namespace Lazinator.Collections.Dictionary
             _Keys_Accessed = _Values_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

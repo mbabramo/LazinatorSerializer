@@ -389,6 +389,8 @@ namespace LazinatorTests.Examples.Abstract
             _MyT_Accessed = _LazinatorExample_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

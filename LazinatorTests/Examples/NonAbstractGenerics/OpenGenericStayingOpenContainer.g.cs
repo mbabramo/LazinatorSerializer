@@ -492,6 +492,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             _ClosedGenericBase_Accessed = _ClosedGenericFloat_Accessed = _ClosedGenericFromBaseWithBase_Accessed = _ClosedGenericInterface_Accessed = _ClosedGenericNonexclusiveInterface_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

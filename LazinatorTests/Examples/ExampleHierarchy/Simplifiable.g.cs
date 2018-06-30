@@ -471,6 +471,8 @@ namespace LazinatorTests.Examples
             _Example_Accessed = _Example2_Accessed = _Example3_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

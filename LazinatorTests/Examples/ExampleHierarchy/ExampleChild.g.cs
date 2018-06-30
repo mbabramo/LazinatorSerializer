@@ -334,6 +334,8 @@ namespace LazinatorTests.Examples
             _ByteSpan_Accessed = _MyWrapperContainer_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

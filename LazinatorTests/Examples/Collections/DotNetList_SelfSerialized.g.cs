@@ -281,6 +281,8 @@ namespace LazinatorTests.Examples.Collections
             _MyListSerialized_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

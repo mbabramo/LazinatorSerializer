@@ -291,6 +291,8 @@ namespace Lazinator.Spans
             _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

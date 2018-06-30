@@ -262,6 +262,8 @@ namespace Lazinator.Wrappers
             _WrappedValue_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

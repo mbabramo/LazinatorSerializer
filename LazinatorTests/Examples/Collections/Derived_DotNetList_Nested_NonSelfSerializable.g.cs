@@ -122,6 +122,8 @@ namespace LazinatorTests.Examples.Collections
             _MyLevel2ListNestedNonLazinatorType_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

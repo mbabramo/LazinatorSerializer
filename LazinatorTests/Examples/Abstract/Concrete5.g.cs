@@ -165,6 +165,8 @@ namespace LazinatorTests.Examples.Abstract
             _IntList4_Accessed = _IntList5_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

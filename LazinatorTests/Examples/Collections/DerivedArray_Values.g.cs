@@ -125,6 +125,8 @@ namespace LazinatorTests.Examples.Collections
             _MyArrayInt_DerivedLevel_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

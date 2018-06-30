@@ -281,6 +281,8 @@ namespace LazinatorTests.Examples.Abstract
             _Item_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

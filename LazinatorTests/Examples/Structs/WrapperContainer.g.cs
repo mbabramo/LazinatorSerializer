@@ -305,6 +305,8 @@ namespace LazinatorTests.Examples.Structs
             _WrappedInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

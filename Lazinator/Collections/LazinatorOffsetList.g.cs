@@ -358,6 +358,8 @@ namespace Lazinator.Collections
             _FourByteItems_Accessed = _TwoByteItems_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

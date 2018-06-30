@@ -327,6 +327,8 @@ namespace LazinatorTests.Examples.Collections
             _MyDictionary_Accessed = _MySortedDictionary_Accessed = _MySortedList_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

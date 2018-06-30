@@ -247,6 +247,8 @@ namespace LazinatorTests.Examples.Structs
             
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

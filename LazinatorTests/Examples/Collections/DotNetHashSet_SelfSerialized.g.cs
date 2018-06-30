@@ -263,6 +263,8 @@ namespace LazinatorTests.Examples.Collections
             _MyHashSetSerialized_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

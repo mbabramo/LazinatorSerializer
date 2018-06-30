@@ -835,6 +835,8 @@ namespace LazinatorTests.Examples
             _IncludableChild_Accessed = _MyChild1_Accessed = _MyChild2_Accessed = _MyChild2Previous_Accessed = _MyInterfaceImplementer_Accessed = _MyNonLazinatorChild_Accessed = _WrappedInt_Accessed = _ExcludableChild_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

@@ -107,6 +107,8 @@ namespace LazinatorTests.Examples.Abstract
             _IntList6_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

@@ -318,6 +318,8 @@ namespace LazinatorTests.Examples.Hierarchy
             _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

@@ -263,6 +263,8 @@ namespace LazinatorTests.Examples.Collections
             _MyListNestedNonLazinatorType_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

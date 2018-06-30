@@ -514,6 +514,8 @@ namespace Lazinator.Collections.Avl
             _Left_Accessed = _Right_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */

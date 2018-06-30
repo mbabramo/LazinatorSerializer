@@ -350,6 +350,8 @@ namespace LazinatorTests.Examples.Subclasses
             _SubclassInstance1_Accessed = _SubclassInstance2_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         /* Conversion */
