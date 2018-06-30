@@ -180,6 +180,8 @@ namespace Lazinator.Core
         {
             lazinatorType.LazinatorParents = new LazinatorParentsCollection(parent);
             lazinatorType.LazinatorObjectBytes = serializedBytes;
+            lazinatorType.HasChanged = false;
+            lazinatorType.DescendantHasChanged = false;
         }
 
         /// <summary>

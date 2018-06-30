@@ -66,6 +66,7 @@ namespace LazinatorTests.Tests
             c.IsDirty.Should().BeFalse();
             c.HasChanged.Should().BeTrue();
             c2.IsDirty.Should().BeFalse();
+            c2.HasChanged.Should().BeFalse();
 
             c.MarkHierarchyClassesUnchanged(); // reset HasChanged to false
             c.HasChanged.Should().BeFalse();
@@ -74,6 +75,7 @@ namespace LazinatorTests.Tests
             c.IsDirty.Should().BeFalse(); // this is easy because SerializeExistingBuffer resets Dirty
             c.HasChanged.Should().BeFalse(); // this is harder -- for it to work, CloneLazinatorTyped must not temporarily cause c to become dirty
             c3.IsDirty.Should().BeFalse();
+            c3.HasChanged.Should().BeFalse();
         }
 
         [Fact]
@@ -227,6 +229,17 @@ namespace LazinatorTests.Tests
             c.Item1.MyShort = 25;
             c.IsDirty.Should().BeFalse();
             c.DescendantIsDirty.Should().BeTrue();
+        }
+
+        [Fact]
+        public void DirtinessWithDefaultValueInConstructor()
+        {
+            ContainerForExampleWithDefault o = new ContainerForExampleWithDefault();
+            var c = o.CloneLazinatorTyped();
+            c.IsDirty.Should().BeFalse();
+            c.DescendantIsDirty.Should().BeFalse();
+            c.HasChanged.Should().BeFalse();
+            c.DescendantHasChanged.Should().BeFalse();
         }
 
         [Fact]

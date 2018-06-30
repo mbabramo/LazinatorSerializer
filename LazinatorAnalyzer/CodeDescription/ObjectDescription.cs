@@ -637,6 +637,8 @@ namespace Lazinator.CodeDescription
                     ")}{resetAccessed}
                     IsDirty = false;
                     DescendantIsDirty = false;
+                    HasChanged = false;
+                    DescendantHasChanged = false;
                 }}");
         }
 

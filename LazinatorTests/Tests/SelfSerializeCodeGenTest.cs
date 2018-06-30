@@ -196,6 +196,7 @@ public class MyOtherClass
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
+            await CompleteGenerateCode(typeof(ContainerForExampleWithDefault), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleChild), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);

@@ -591,10 +591,6 @@ namespace Lazinator.Core
         {
             foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.IsDirty || x.DescendantIsDirty || x.HasChanged || x.DescendantHasChanged, true, false))
             {
-                if (node.ToString().Contains("TestRoot Items1 0"))
-                {
-                    var DEBUG2 = 0;
-                }
                 node.HasChanged = false;
                 node.DescendantHasChanged = false;
             }
