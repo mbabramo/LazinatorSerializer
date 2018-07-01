@@ -58,38 +58,22 @@ namespace Lazinator.Buffers
                 minimumSize = MinMinBufferSize;
             _MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
             BufferSpan = _MemoryInBuffer.OwnedMemory.Memory.Span;
-            _Position = 0;
+            Position = 0;
             Initialized = true;
         }
 
         public Span<byte> Free => BufferSpan.Slice(Position);
 
         public Span<byte> Written => BufferSpan.Slice(0, Position);
-
-        private int _Position;
-        public int Position
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return _Position; }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set
-            {
-                if (value > BufferSpan.Length)
-                {
-                    while (value > BufferSpan.Length)
-                        Resize(value * 2); // twice desired length to avoid frequent resizes
-                    MemoryInBuffer = MemoryInBuffer.WithBytesFilled(value);
-                }
-                _Position = value;
-            }
-        }
+        
+        public int Position { get; set; }
 
         public void Clear()
         {
             Position = 0;
         }
 
-        public void Resize(int desiredBufferSize = 0)
+        public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
             if (desiredBufferSize <= 0)
             {
@@ -97,10 +81,11 @@ namespace Lazinator.Buffers
                 if (desiredBufferSize < MinMinBufferSize)
                     desiredBufferSize = MinMinBufferSize;
             }
-            else if (desiredBufferSize < BufferSpan.Length + 1) throw new ArgumentOutOfRangeException(nameof(desiredBufferSize));
+            else if (BufferSpan.Length >= desiredBufferSize)
+                return;
             var newMemoryInBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
             Written.CopyTo(newMemoryInBuffer.Memory.Span);
-            MemoryInBuffer = new MemoryInBuffer(newMemoryInBuffer, Position); // size written stays the same
+            MemoryInBuffer = new MemoryInBuffer(newMemoryInBuffer, Position);
         }
 
         public void Write(bool value)
@@ -124,7 +109,7 @@ namespace Lazinator.Buffers
         {
             int originalPosition = Position;
             if (originalPosition + value.Length > BufferSpan.Length)
-                Resize((originalPosition + value.Length) * 2);
+                EnsureMinBufferSize((originalPosition + value.Length) * 2);
             value.CopyTo(Free);
             Position += value.Length;
         }
@@ -174,7 +159,7 @@ namespace Lazinator.Buffers
             {
                 success = value.TryWriteBytes(Free);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += 16; // trywritebytes always writes exactly 16 bytes even though sizeof(Guid) is not defined
         }
@@ -186,7 +171,7 @@ namespace Lazinator.Buffers
             {
                 success = MemoryMarshal.TryWrite<T>(Free, ref value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
         }
 
@@ -197,7 +182,7 @@ namespace Lazinator.Buffers
             {
                 success = value.TryCopyTo(Free);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += value.Length;
         }
@@ -209,7 +194,7 @@ namespace Lazinator.Buffers
             {
                 success = TryWriteInt16LittleEndian(Free, value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += sizeof(short);
         }
@@ -221,7 +206,7 @@ namespace Lazinator.Buffers
             {
                 success = TryWriteUInt16LittleEndian(Free, value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += sizeof(ushort);
         }
@@ -233,7 +218,7 @@ namespace Lazinator.Buffers
             {
                 success = TryWriteInt32LittleEndian(Free, value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += sizeof(int);
         }
@@ -245,7 +230,7 @@ namespace Lazinator.Buffers
             {
                 success = TryWriteUInt32LittleEndian(Free, value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += sizeof(uint);
         }
@@ -257,7 +242,7 @@ namespace Lazinator.Buffers
             {
                 success = TryWriteInt64LittleEndian(Free, value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += sizeof(long);
         }
@@ -269,7 +254,7 @@ namespace Lazinator.Buffers
             {
                 success = TryWriteUInt64LittleEndian(Free, value);
                 if (!success)
-                    Resize();
+                    EnsureMinBufferSize();
             }
             Position += sizeof(ulong);
         }

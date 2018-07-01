@@ -78,7 +78,7 @@ namespace Lazinator.Buffers
                     tryNum++;
                     if (tryNum > maxTries)
                         throw new LazinatorSerializationException("BadBrotliString");
-                    writer.Resize();
+                    writer.EnsureMinBufferSize();
                 }
             }
         }
@@ -105,10 +105,10 @@ namespace Lazinator.Buffers
             while (!success)
             {
                 success = System.IO.Compression.BrotliDecoder.TryDecompress(source, decompressionBuffer.Free,
-                    out int bytesRead);
+                    out int bytesWritten);
                 if (success)
                 {
-                    decompressionBuffer.Position += bytesRead;
+                    decompressionBuffer.Position += bytesWritten;
                     index += length;
                 }
                 else
@@ -116,7 +116,7 @@ namespace Lazinator.Buffers
                     tryNum++;
                     if (tryNum > maxTries)
                         throw new LazinatorSerializationException("BadBrotliString");
-                    decompressionBuffer.Resize();
+                    decompressionBuffer.EnsureMinBufferSize();
                 }
             }
 
