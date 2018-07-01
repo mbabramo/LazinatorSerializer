@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LazinatorCodeGen.Roslyn
 {
-    // NOTE: Must also change LazinatorVersionInfo in Lazinator project
+    // Analyzer project: Must also change LazinatorVersionInfo in main Lazinator project
     public static class LazinatorVersionInfo
     {
         public static readonly Version LazinatorVersion = new Version(0, 1, 0, 181);
