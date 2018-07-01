@@ -589,7 +589,7 @@ namespace Lazinator.Core
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClassesUnchanged(this ILazinator hierarchy)
         {
-            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.IsDirty || x.DescendantIsDirty || x.HasChanged || x.DescendantHasChanged, true, false))
+            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true, false))
             {
                 node.HasChanged = false;
                 node.DescendantHasChanged = false;
