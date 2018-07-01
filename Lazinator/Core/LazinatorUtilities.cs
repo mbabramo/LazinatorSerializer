@@ -123,7 +123,7 @@ namespace Lazinator.Core
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.Span.Write(ref writer);
+                writer.Write(original.Span);
             }
             else if (isBelievedDirty || original.Length == 0)
             {
@@ -138,7 +138,7 @@ namespace Lazinator.Core
                     ReadOnlyMemory<byte> revised = CreateStreamForNonLazinatorObject(nonLazinatorObject, binaryWriterAction);
                     ConfirmMatch(original, revised);
                 }
-                original.Span.Write(ref writer);
+                writer.Write(original.Span);
             }
         }
 
@@ -258,7 +258,7 @@ namespace Lazinator.Core
             if (childStorage.Length == 0)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (skipLength)
-                childStorage.Span.Write(ref writer);
+                writer.Write(childStorage.Span);
             else if (restrictLengthTo250Bytes)
                 childStorage.Span.Write_WithByteLengthPrefix(ref writer);
             else
@@ -290,7 +290,7 @@ namespace Lazinator.Core
                 if (child.IsDirty || child.DescendantIsDirty || verifyCleanness)
                     child.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
-                    child.LazinatorObjectBytes.Span.Write(ref w); // the child has been accessed, but is unchanged, so we can use the storage holding the child
+                    w.Write(child.LazinatorObjectBytes.Span); // the child has been accessed, but is unchanged, so we can use the storage holding the child
             }
             if (skipLength)
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);

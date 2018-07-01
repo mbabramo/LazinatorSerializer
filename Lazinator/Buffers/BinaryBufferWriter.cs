@@ -120,6 +120,15 @@ namespace Lazinator.Buffers
             }
         }
 
+        public void Write(Span<byte> value)
+        {
+            int originalPosition = Position;
+            if (originalPosition + value.Length > BufferSpan.Length)
+                Resize((originalPosition + value.Length) * 2);
+            value.CopyTo(Free);
+            Position += value.Length;
+        }
+
         public void Write(sbyte value)
         {
             WriteEnlargingIfNecessary(ref value);
