@@ -63,7 +63,7 @@ namespace Lazinator.Buffers
             get { return MemoryInBuffer.BytesFilled; }
             set
             {
-                while (value > BufferSpan.Length) Resize(value);
+                while (value > BufferSpan.Length) Resize(value * 2); // twice desired length to avoid frequent resizes
                 MemoryInBuffer = MemoryInBuffer.WithBytesFilled(value);
             }
         }
