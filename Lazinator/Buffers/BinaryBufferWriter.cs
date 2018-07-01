@@ -93,7 +93,10 @@ namespace Lazinator.Buffers
 
         public void Write(byte value)
         {
-            WriteEnlargingIfNecessary(ref value);
+            if (Free.Length > 0)
+                Free[0] = value;
+            else
+                WriteEnlargingIfNecessary(ref value);
             Position += sizeof(byte);
         }
 
