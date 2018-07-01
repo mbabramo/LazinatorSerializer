@@ -9,24 +9,40 @@ using Lazinator.Core;
 
 namespace Lazinator.Buffers
 {
-    public class BinaryBufferWriter : IDisposable
+    public struct BinaryBufferWriter
     {
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
-        
-        public MemoryInBuffer MemoryInBuffer { get; set; }
+
+        private bool Initialized;
+        private MemoryInBuffer _MemoryInBuffer;
+        public MemoryInBuffer MemoryInBuffer
+        {
+            get
+            {
+                if (!Initialized)
+                {
+                    _MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(MinMinBufferSize), 0);
+                    Initialized = true;
+                }
+                return _MemoryInBuffer;
+            }
+            set
+            {
+                _MemoryInBuffer = value;
+                Initialized = true;
+            }
+        }
         Span<byte> _buffer => MemoryInBuffer.OwnedMemory.Memory.Span;
         public ReadOnlyMemory<byte> Slice(int position) => MemoryInBuffer.OwnedMemory.Memory.Slice(position, Position - position);
         public ReadOnlyMemory<byte> Slice(int position, int length) => MemoryInBuffer.OwnedMemory.Memory.Slice(position, length);
-
-        public BinaryBufferWriter() : this(MinMinBufferSize)
-        {
-        }
+        
 
         public BinaryBufferWriter(int minimumSize)
         {
             if (minimumSize < MinMinBufferSize)
                 minimumSize = MinMinBufferSize;
-            MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
+            _MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
+            Initialized = true;
         }
 
         public Span<byte> Free => _buffer.Slice(Position);
@@ -215,11 +231,6 @@ namespace Lazinator.Buffers
                     Resize();
             }
             Position += sizeof(ulong);
-        }
-
-        public void Dispose()
-        {
-            // Right now, we're not doing anything with this, because we're using managed memory. But if we switch to allowing use of native memory, we'll have to release that. 
         }
 
         public class BufferTooSmallException : Exception

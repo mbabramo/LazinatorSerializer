@@ -298,20 +298,20 @@ namespace Lazinator.Collections
             return FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index];
         }
 
-        private void WriteMainList(BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (IsDirty || DescendantIsDirty)
             {
                 var offsetList = new LazinatorOffsetList();
                 int originalStartingPosition = writer.Position;
-                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, w =>
+                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
                     int startingPosition = w.Position;
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
                         var itemIndex = i; // avoid closure problem
                         var underlyingItem = UnderlyingList[itemIndex];
-                        WriteChild(w, underlyingItem, IncludeChildrenMode.IncludeAllChildren, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        WriteChild(ref w, underlyingItem, IncludeChildrenMode.IncludeAllChildren, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (updateStoredBuffer && underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that updated is not here. Cloning is the only safe way to get a clean hierarchy, because setting .IsDirty = true will not clear .IsDirty from nested structs.
                             underlyingItem = underlyingItem.CloneLazinatorTyped();
@@ -327,7 +327,7 @@ namespace Lazinator.Collections
                 _Offsets.IsDirty = true;
             }
             else
-                ConvertToBytes_ReadOnlyMemory_Gbyte_g(writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
 
 

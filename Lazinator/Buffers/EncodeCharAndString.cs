@@ -9,13 +9,13 @@ namespace Lazinator.Buffers
 {
     public static class EncodeCharAndString
     {
-        public static void WriteCharInTwoBytes(this BinaryBufferWriter writer, char c)
+        public static void WriteCharInTwoBytes(this ref BinaryBufferWriter writer, char c)
         {
             writer.Write((byte)((int)c)); // write low byte
             writer.Write((byte)(((int)c) >> 8)); // write high byte
         }
 
-        public static void WriteNullableChar(this BinaryBufferWriter writer, char? c)
+        public static void WriteNullableChar(this ref BinaryBufferWriter writer, char? c)
         {
             if (c == null)
             {
@@ -33,13 +33,13 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="s"></param>
-        public static void WriteStringUtf8WithVarIntPrefix(this BinaryBufferWriter writer, string s)
+        public static void WriteStringUtf8WithVarIntPrefix(ref this BinaryBufferWriter writer, string s)
         {
             if (s == null)
-                CompressedIntegralTypes.WriteCompressedNullableInt(writer, null);
+                CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, null);
             else
             {
-                CompressedIntegralTypes.WriteCompressedNullableInt(writer, s.Length);
+                CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, s.Length);
                 writer.Write(System.Text.Encoding.UTF8.GetBytes(s));
             }
         }
@@ -62,7 +62,7 @@ namespace Lazinator.Buffers
             return s;
         }
 
-        public static void WriteBrotliCompressed(this BinaryBufferWriter writer, string s)
+        public static void WriteBrotliCompressed(ref this BinaryBufferWriter writer, string s)
         {
             bool success = false;
             int bytesWritten = 0;
@@ -83,12 +83,12 @@ namespace Lazinator.Buffers
             }
         }
 
-        public static void WriteBrotliCompressedWithIntPrefix(this BinaryBufferWriter writer, string s)
+        public static void WriteBrotliCompressedWithIntPrefix(ref this BinaryBufferWriter writer, string s)
         {
             if (s == null)
                 writer.Write((int) -1); // signify null
             else
-                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, (w) => { WriteBrotliCompressed(w, s); });
+                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(ref writer, (ref BinaryBufferWriter w) => { WriteBrotliCompressed(ref w, s); });
         }
 
 

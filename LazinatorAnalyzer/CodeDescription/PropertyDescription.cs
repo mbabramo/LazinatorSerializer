@@ -1186,7 +1186,7 @@ namespace Lazinator.CodeDescription
                             {{");
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
+                        CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
             else
             {
                 sb.AppendLine("startOfObjectPosition = writer.Position;");
@@ -1213,11 +1213,11 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine(
                     $@"WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
-                        isAccessed: _{PropertyName}_Accessed, writer: writer,
+                        isAccessed: _{PropertyName}_Accessed, writer: ref writer,
                         getChildSliceForFieldFn: () => {ChildSliceString},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
-                        binaryWriterAction: (w, v) =>
-                            {DirectConverterTypeNamePrefix}{writeMethodName}(w, {BackingFieldString},
+                        binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                            {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString},
                                 includeChildrenMode, v, updateStoredBuffer));");
             }
             else
@@ -1226,7 +1226,7 @@ namespace Lazinator.CodeDescription
                 if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory))
                     binaryWriterAction = $"copy_{PropertyName}.Write(w)";
                 else
-                    binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
+                    binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
                 sb.AppendLine(
                     $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
@@ -1234,10 +1234,10 @@ namespace Lazinator.CodeDescription
                         var copy_{PropertyName} = _{PropertyName};
                         WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
-                        isAccessed: _{PropertyName}_Accessed, writer: writer,
+                        isAccessed: _{PropertyName}_Accessed, writer: ref writer,
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceEndString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
-                        binaryWriterAction: (w, v) =>
+                        binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {binaryWriterAction});");
 
             }
@@ -1248,7 +1248,7 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 sb.AppendLine(
-                    CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
+                    CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
             }
             else
             {
@@ -1259,7 +1259,7 @@ namespace Lazinator.CodeDescription
                             var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
-                            WriteChild(writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);
+                            WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);
                         }}");
             }
         }
@@ -1308,7 +1308,7 @@ namespace Lazinator.CodeDescription
             string innerTypeEncodable = InnerProperties[0].AppropriatelyQualifiedTypeNameEncodable;
 
             sb.Append($@"
-                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                         {{
                             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<{innerFullType}, byte>(itemToConvert{(isSpan ? "" : ".Span")});
                             for (int i = 0; i < toConvert.Length; i++)
@@ -1429,7 +1429,7 @@ namespace Lazinator.CodeDescription
                 // we need a method for the Nullable, then an inner method for the non-nullable case
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
                         if (itemToConvert == null)
                         {{
@@ -1437,7 +1437,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
                     }}
 ");
@@ -1450,7 +1450,7 @@ namespace Lazinator.CodeDescription
                     StringBuilder arrayStringBuilder = new StringBuilder();
                     for (int i = 0; i < ArrayRank; i++)
                     {
-                        string writeLengthForRankString = $"CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength({i}));";
+                        string writeLengthForRankString = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength({i}));";
                         if (i < ArrayRank - 1)
                             arrayStringBuilder.AppendLine(writeLengthForRankString);
                         else
@@ -1459,11 +1459,11 @@ namespace Lazinator.CodeDescription
                     writeCollectionLengthCommand = arrayStringBuilder.ToString();
                 }
                 else
-                    writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.{lengthWord});";
+                    writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
                 string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
                         {{
@@ -1709,15 +1709,15 @@ namespace Lazinator.CodeDescription
             {
                 if (IsPrimitive)
                     return ($@"
-                    {WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}{itemString});");
+                    {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemString});");
                 else if (IsNonSerializedType)
                     return ($@"
-                    void action(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(writer, {itemString}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(writer, action);");
+                    void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref writer, {itemString}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 else
                     return ($@"
-                    void action(BinaryBufferWriter w) => {itemString}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(writer, action);");
+                    void action(ref BinaryBufferWriter w) => {itemString}.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
             }
 
             string writeCommand = GetSupportedCollectionWriteCommandsHelper();
@@ -1794,7 +1794,7 @@ namespace Lazinator.CodeDescription
                         return tupleType;
                     }}
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
                     ");
 
@@ -1880,7 +1880,7 @@ namespace Lazinator.CodeDescription
                 $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)
                 return ($@"
-                        {WriteMethodName}(writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
+                        {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
             else if (IsNonSerializedType)
             {
                 if (Nullable)
@@ -1891,19 +1891,19 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                void action{itemName}(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                                WriteToBinaryWithIntLengthPrefix(writer, action{itemName});
+                                void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                                WriteToBinaryWithIntLengthPrefix(ref writer, action{itemName});
                             }}");
                 else return $@"
-                            void action{itemName}(BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                            WriteToBinaryWithIntLengthPrefix(writer, action{itemName});";
+                            void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref writer, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            WriteToBinaryWithIntLengthPrefix(ref writer, action{itemName});";
             }
             else
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
                     return ($@"
-                        void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(writer, action{itemName});");
+                        void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});");
                 else
                     return ($@"
                         if ({itemToConvertItemName} == null)
@@ -1912,8 +1912,8 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            void action{itemName}(BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                            WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(writer, action{itemName});
+                            void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});
                         }};");
             }
         }
@@ -1941,12 +1941,12 @@ namespace Lazinator.CodeDescription
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
                         }}
 
-                        private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(BinaryBufferWriter writer,
+                        private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer,
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
-                            interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
                         ");
         }

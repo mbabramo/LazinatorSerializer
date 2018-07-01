@@ -7,22 +7,22 @@ namespace Lazinator.Buffers
 {
     public static class EncodeReadOnlyMemory
     {
-        public static void WriteReadOnlyMemoryWithVarIntPrefix<T>(this BinaryBufferWriter writer, ReadOnlyMemory<T> readOnlyMemory) where T : struct
+        public static void WriteReadOnlyMemoryWithVarIntPrefix<T>(ref this BinaryBufferWriter writer, ReadOnlyMemory<T> readOnlyMemory) where T : struct
         {
-            CompressedIntegralTypes.WriteCompressedNullableInt(writer, readOnlyMemory.Length);
+            CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, readOnlyMemory.Length);
             ReadOnlySpan<byte> s = MemoryMarshal.Cast<T, byte>(readOnlyMemory.Span);
             for (int i = 0; i < s.Length; i++)
                 writer.Write(s[i]);
         }
 
-        public static void WriteNullableReadOnlyMemoryWithVarIntPrefix<T>(this BinaryBufferWriter writer, ReadOnlyMemory<T>? readOnlyMemory) where T : struct
+        public static void WriteNullableReadOnlyMemoryWithVarIntPrefix<T>(ref this BinaryBufferWriter writer, ReadOnlyMemory<T>? readOnlyMemory) where T : struct
         {
             if (readOnlyMemory == null)
                 writer.Write((byte)0);
             else
             {
                 writer.Write((byte)1);
-                WriteReadOnlyMemoryWithVarIntPrefix(writer, readOnlyMemory.Value);
+                WriteReadOnlyMemoryWithVarIntPrefix(ref writer, readOnlyMemory.Value);
             }
         }
 

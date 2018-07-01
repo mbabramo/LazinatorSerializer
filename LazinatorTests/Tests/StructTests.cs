@@ -148,9 +148,9 @@ namespace LazinatorTests.Tests
         public void LazinatorReadOnlySpanInStruct()
         {
             // we have special code to deal with ReadOnlySpans within structs. So, here is a test to make sure that it works.
-            WReadOnlySpanChar w = new WReadOnlySpanChar();
-            w.Value = new Span<char>("mystring".ToArray());
-            var result = CloneWithOptionalVerification(w, false, false);
+            WReadOnlySpanChar wReadOnlySpanChar = new WReadOnlySpanChar();
+            wReadOnlySpanChar.Value = new Span<char>("mystring".ToArray());
+            var result = CloneWithOptionalVerification(wReadOnlySpanChar, false, false);
             new string(result.Value).Should().Be("mystring");
         }
 

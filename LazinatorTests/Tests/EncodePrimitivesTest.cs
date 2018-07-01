@@ -14,7 +14,7 @@ namespace LazinatorTests.Tests
             byte valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 1;
@@ -33,7 +33,7 @@ namespace LazinatorTests.Tests
             sbyte valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 1;
@@ -52,7 +52,7 @@ namespace LazinatorTests.Tests
             char valueRead = 'X';
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.WriteCharInTwoBytes(valueToWrite);
                 numBytesExpected = 2;
@@ -71,7 +71,7 @@ namespace LazinatorTests.Tests
             char valueRead = 'X';
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 2;
@@ -90,7 +90,7 @@ namespace LazinatorTests.Tests
             Int16 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 2;
@@ -109,7 +109,7 @@ namespace LazinatorTests.Tests
             Int32 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 4;
@@ -128,7 +128,7 @@ namespace LazinatorTests.Tests
             Int64 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 8;
@@ -147,7 +147,7 @@ namespace LazinatorTests.Tests
             UInt16 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 2;
@@ -166,7 +166,7 @@ namespace LazinatorTests.Tests
             UInt32 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 4;
@@ -185,7 +185,7 @@ namespace LazinatorTests.Tests
             UInt64 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 8;
@@ -204,7 +204,7 @@ namespace LazinatorTests.Tests
             float valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 4;
@@ -224,7 +224,7 @@ namespace LazinatorTests.Tests
             double valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 writer.Write(valueToWrite);
                 numBytesExpected = 8;
@@ -262,9 +262,9 @@ namespace LazinatorTests.Tests
             string valueRead = "";
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, valueToWrite);
+                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, valueToWrite);
                 numBytesExpected = (valueToWrite?.Length ?? 0) + 1; // 12 characters (1 byte each) + 1 byte for length
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToString_VarIntLengthUtf8(ref numBytesRead);
@@ -299,9 +299,9 @@ namespace LazinatorTests.Tests
             string valueRead = "";
             int numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            using (BinaryBufferWriter writer = new BinaryBufferWriter())
+            BinaryBufferWriter writer = new BinaryBufferWriter();
             {
-                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, valueToWrite);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, valueToWrite);
                 bytes = writer.MemoryInBuffer.FilledMemory;
                 valueRead = bytes.Span.ToString_BrotliCompressedWithLength(ref numBytesRead);
                 numBytesRead.Should().Be(bytes.Length);

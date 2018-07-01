@@ -78,9 +78,9 @@ namespace Lazinator.Buffers
         // 8 bit -- indicates whether number (ignoring scale) can be stored in a short
         // 4 bit, 2 bit, 1 bit -- combine to produce a number from 0 to 7. The number is divided by 10^this scale.
 
-        public static byte WriteCompressedDecimal(BinaryBufferWriter writer, decimal d) => WriteCompressedNullableDecimal(writer, d);
+        public static byte WriteCompressedDecimal(ref BinaryBufferWriter writer, decimal d) => WriteCompressedNullableDecimal(ref writer, d);
 
-        public static byte WriteCompressedNullableDecimal(BinaryBufferWriter writer, decimal? d)
+        public static byte WriteCompressedNullableDecimal(ref BinaryBufferWriter writer, decimal? d)
         {
             if (d == null)
             {

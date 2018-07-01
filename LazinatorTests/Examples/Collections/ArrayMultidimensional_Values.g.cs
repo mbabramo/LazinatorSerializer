@@ -378,14 +378,14 @@ namespace LazinatorTests.Examples.Collections
             _ArrayMultidimensional_Values_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
             }
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
                 
@@ -402,7 +402,7 @@ namespace LazinatorTests.Examples.Collections
                 _LazinatorObjectBytes = writer.Slice(startPosition);
             }
         }
-        protected virtual void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
@@ -411,25 +411,25 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (LazinatorGenericID.IsEmpty)
                 {
-                    CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
+                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }
                 else
                 {
-                    WriteLazinatorGenericID(writer, LazinatorGenericID);
+                    WriteLazinatorGenericID(ref writer, LazinatorGenericID);
                 }
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
-            isAccessed: _MyArrayInt_Accessed, writer: writer,
+            isAccessed: _MyArrayInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
-            binaryWriterAction: (w, v) =>
-            ConvertToBytes_int_B_c_b(w, _MyArrayInt,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_int_B_c_b(ref w, _MyArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -438,11 +438,11 @@ namespace LazinatorTests.Examples.Collections
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed,
-            isAccessed: _MyCrazyJaggedArray_Accessed, writer: writer,
+            isAccessed: _MyCrazyJaggedArray_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null),
             verifyCleanness: false,
-            binaryWriterAction: (w, v) =>
-            ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(w, _MyCrazyJaggedArray,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(ref w, _MyCrazyJaggedArray,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -451,11 +451,11 @@ namespace LazinatorTests.Examples.Collections
             startOfObjectPosition = writer.Position;
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed,
-            isAccessed: _MyThreeDimArrayInt_Accessed, writer: writer,
+            isAccessed: _MyThreeDimArrayInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null),
             verifyCleanness: false,
-            binaryWriterAction: (w, v) =>
-            ConvertToBytes_int_B_c_c_b(w, _MyThreeDimArrayInt,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_int_B_c_c_b(ref w, _MyThreeDimArrayInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -492,20 +492,20 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_b(BinaryBufferWriter writer, int[,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_int_B_c_b(ref BinaryBufferWriter writer, int[,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,]))
             {
                 return;
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(0));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(1));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
             int length0 = itemToConvert.GetLength(0);
             int length1 = itemToConvert.GetLength(1);
             for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
             for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert[itemIndex0, itemIndex1]);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1]);
             }
         }
         
@@ -540,13 +540,13 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(BinaryBufferWriter writer, int[][,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(ref BinaryBufferWriter writer, int[][,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[][,,][,,,]))
             {
                 return;
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.Length);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
             int itemToConvertCount = itemToConvert.Length;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
@@ -557,8 +557,8 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_b_B_c_c_c_b(writer, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(writer, action);
+                    void action(ref BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_b_B_c_c_c_b(ref w, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
                 
             }
@@ -599,15 +599,15 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_c_b_B_c_c_c_b(BinaryBufferWriter writer, int[,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_int_B_c_c_b_B_c_c_c_b(ref BinaryBufferWriter writer, int[,,][,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,,][,,,]))
             {
                 return;
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(0));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(1));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(2));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(2));
             int length0 = itemToConvert.GetLength(0);
             int length1 = itemToConvert.GetLength(1);
             int length2 = itemToConvert.GetLength(2);
@@ -622,8 +622,8 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_c_b(writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(writer, action);
+                    void action(ref BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_c_b(ref w, itemToConvert[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
                 
             }
@@ -656,16 +656,16 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_c_c_b(BinaryBufferWriter writer, int[,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_int_B_c_c_c_b(ref BinaryBufferWriter writer, int[,,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,,,]))
             {
                 return;
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(0));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(1));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(2));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(3));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(2));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(3));
             int length0 = itemToConvert.GetLength(0);
             int length1 = itemToConvert.GetLength(1);
             int length2 = itemToConvert.GetLength(2);
@@ -675,7 +675,7 @@ namespace LazinatorTests.Examples.Collections
             for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
             for (int itemIndex3 = 0; itemIndex3 < length3; itemIndex3++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2, itemIndex3]);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2, itemIndex3]);
             }
         }
         
@@ -704,15 +704,15 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_int_B_c_c_b(BinaryBufferWriter writer, int[,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_int_B_c_c_b(ref BinaryBufferWriter writer, int[,,] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(int[,,]))
             {
                 return;
             }
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(0));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(1));
-            CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert.GetLength(2));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(2));
             int length0 = itemToConvert.GetLength(0);
             int length1 = itemToConvert.GetLength(1);
             int length2 = itemToConvert.GetLength(2);
@@ -720,7 +720,7 @@ namespace LazinatorTests.Examples.Collections
             for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
             for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2]);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2]);
             }
         }
         

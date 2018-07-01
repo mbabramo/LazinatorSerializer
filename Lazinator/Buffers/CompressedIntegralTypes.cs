@@ -8,7 +8,7 @@ namespace Lazinator.Buffers
     {
         #region Compression of int/long
 
-        public static byte WriteCompressedInt(BinaryBufferWriter writer, int value)
+        public static byte WriteCompressedInt(ref BinaryBufferWriter writer, int value)
         {
             uint num = (uint) value;
             byte numBytes = 0;
@@ -48,7 +48,7 @@ namespace Lazinator.Buffers
             throw new FormatException("Format_Bad7BitInt32");
         }
 
-        public static byte WriteCompressedLong(BinaryBufferWriter writer, long value)
+        public static byte WriteCompressedLong(ref BinaryBufferWriter writer, long value)
         {
             ulong num = (ulong) value;
             byte numBytes = 0;
@@ -92,7 +92,7 @@ namespace Lazinator.Buffers
 
         #region Shorts and ushorts (using int methods)
 
-        public static byte WriteCompressedShort(BinaryBufferWriter writer, short value) => WriteCompressedInt(writer, value);
+        public static byte WriteCompressedShort(ref BinaryBufferWriter writer, short value) => WriteCompressedInt(ref writer, value);
 
         public static short ToDecompressedShort(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -102,7 +102,7 @@ namespace Lazinator.Buffers
             return (short)value;
         }
 
-        public static byte WriteCompressedUshort(BinaryBufferWriter writer, ushort value) => WriteCompressedUint(writer, value);
+        public static byte WriteCompressedUshort(ref BinaryBufferWriter writer, ushort value) => WriteCompressedUint(ref writer, value);
 
         public static ushort ToDecompressedUshort(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -116,7 +116,7 @@ namespace Lazinator.Buffers
 
         #region Unsigned (using int/long methods)
 
-        public static byte WriteCompressedUint(BinaryBufferWriter writer, uint value) => WriteCompressedInt(writer, (int) value);
+        public static byte WriteCompressedUint(ref BinaryBufferWriter writer, uint value) => WriteCompressedInt(ref writer, (int) value);
 
         public static uint ToDecompressedUint(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -124,7 +124,7 @@ namespace Lazinator.Buffers
             return (uint) value;
         }
 
-        public static byte WriteCompressedUlong(BinaryBufferWriter writer, ulong value) => WriteCompressedLong(writer, (long) value);
+        public static byte WriteCompressedUlong(ref BinaryBufferWriter writer, ulong value) => WriteCompressedLong(ref writer, (long) value);
 
         public static ulong ToDecompressedUlong(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -139,7 +139,7 @@ namespace Lazinator.Buffers
 
         // Supporting null: We use the usual approach to 7-bit encoding, but we take advantage of the fact that in standard 7-bit encoding, there are two byte sequences not corresponding to a number, specifically where the high bit of the first byte is set (indicating that there is more data) and the second byte is 0 (indicating that actually there isn't). We could just assign this to null, but since null is probably more common than 127, we use this special combination to represent null and we encode null as 127 (thus using only a single byte).
 
-        public static byte WriteCompressedNullableInt(BinaryBufferWriter writer, int? value)
+        public static byte WriteCompressedNullableInt(ref BinaryBufferWriter writer, int? value)
         {
             if (value == null)
                 value = 127;
@@ -149,7 +149,7 @@ namespace Lazinator.Buffers
                 writer.Write((byte) 0);
                 return 2;
             }
-            return WriteCompressedInt(writer, (int) value);
+            return WriteCompressedInt(ref writer, (int) value);
         }
 
         public static int? ToDecompressedNullableInt(this ReadOnlySpan<byte> bytes, ref int index)
@@ -166,7 +166,7 @@ namespace Lazinator.Buffers
             return (int?) initialValue;
         }
 
-        public static byte WriteCompressedNullableLong(BinaryBufferWriter writer, long? value)
+        public static byte WriteCompressedNullableLong(ref BinaryBufferWriter writer, long? value)
         {
             if (value == null)
                 value = 127;
@@ -176,7 +176,7 @@ namespace Lazinator.Buffers
                 writer.Write((byte) 0);
                 return 2;
             }
-            return WriteCompressedLong(writer, (long) value);
+            return WriteCompressedLong(ref writer, (long) value);
         }
 
         public static long? ToDecompressedNullableLong(this ReadOnlySpan<byte> bytes, ref int index)
@@ -197,7 +197,7 @@ namespace Lazinator.Buffers
 
         #region Nullable shorts, ushorts, uint, ulong
 
-        public static byte WriteCompressedNullableShort(BinaryBufferWriter writer, short? value) => WriteCompressedNullableInt(writer, value);
+        public static byte WriteCompressedNullableShort(ref BinaryBufferWriter writer, short? value) => WriteCompressedNullableInt(ref writer, value);
 
         public static short? ToDecompressedNullableShort(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -209,7 +209,7 @@ namespace Lazinator.Buffers
             return (short) (int) value;
         }
 
-        public static byte WriteCompressedNullableUshort(BinaryBufferWriter writer, ushort? value) => WriteCompressedNullableInt(writer, (int?)value);
+        public static byte WriteCompressedNullableUshort(ref BinaryBufferWriter writer, ushort? value) => WriteCompressedNullableInt(ref writer, (int?)value);
 
         public static ushort? ToDecompressedNullableUshort(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -219,7 +219,7 @@ namespace Lazinator.Buffers
             return (ushort?)value;
         }
 
-        public static byte WriteCompressedNullableUint(BinaryBufferWriter writer, uint? value) => WriteCompressedNullableInt(writer, (int?) value);
+        public static byte WriteCompressedNullableUint(ref BinaryBufferWriter writer, uint? value) => WriteCompressedNullableInt(ref writer, (int?) value);
 
         public static uint? ToDecompressedNullableUint(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -227,7 +227,7 @@ namespace Lazinator.Buffers
             return (uint?) value;
         }
 
-        public static byte WriteCompressedNullableUlong(BinaryBufferWriter writer, ulong? value) => WriteCompressedNullableLong(writer, (long?) value);
+        public static byte WriteCompressedNullableUlong(ref BinaryBufferWriter writer, ulong? value) => WriteCompressedNullableLong(ref writer, (long?) value);
 
         public static ulong? ToDecompressedNullableUlong(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -239,12 +239,12 @@ namespace Lazinator.Buffers
 
         #region Nullable bytes and bools (using int methods for bytes)
 
-        public static byte WriteCompressedNullableSByte(BinaryBufferWriter writer, sbyte? value) => WriteCompressedNullableByte(writer, (byte?)value);
+        public static byte WriteCompressedNullableSByte(ref BinaryBufferWriter writer, sbyte? value) => WriteCompressedNullableByte(ref writer, (byte?)value);
 
         public static sbyte? ToDecompressedNullableSByte(this ReadOnlySpan<byte> bytes, ref int index) =>
             (sbyte?) ToDecompressedNullableByte(bytes, ref index);
 
-        public static byte WriteCompressedNullableByte(BinaryBufferWriter writer, byte? value) => WriteCompressedNullableInt(writer, value);
+        public static byte WriteCompressedNullableByte(ref BinaryBufferWriter writer, byte? value) => WriteCompressedNullableInt(ref writer, value);
 
         public static byte? ToDecompressedNullableByte(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -256,7 +256,7 @@ namespace Lazinator.Buffers
             return (byte) (int) value;
         }
 
-        public static byte WriteCompressedNullableBool(BinaryBufferWriter writer, bool? value)
+        public static byte WriteCompressedNullableBool(ref BinaryBufferWriter writer, bool? value)
         {
             if (value == true)
                 writer.Write((byte) 1);
@@ -284,7 +284,7 @@ namespace Lazinator.Buffers
 
         #region Dates and time spans (including nullables)
 
-        public static byte WriteCompressedTimeSpan(BinaryBufferWriter writer, TimeSpan value) => WriteCompressedLong(writer, value.Ticks);
+        public static byte WriteCompressedTimeSpan(ref BinaryBufferWriter writer, TimeSpan value) => WriteCompressedLong(ref writer, value.Ticks);
 
         public static TimeSpan ToDecompressedTimeSpan(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -292,7 +292,7 @@ namespace Lazinator.Buffers
             return new TimeSpan(value);
         }
 
-        public static byte WriteCompressedNullableTimeSpan(BinaryBufferWriter writer, TimeSpan? value) => WriteCompressedNullableLong(writer, value?.Ticks);
+        public static byte WriteCompressedNullableTimeSpan(ref BinaryBufferWriter writer, TimeSpan? value) => WriteCompressedNullableLong(ref writer, value?.Ticks);
 
         public static TimeSpan? ToDecompressedNullableTimeSpan(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -300,7 +300,7 @@ namespace Lazinator.Buffers
             return value == null ? (TimeSpan?) null : new TimeSpan((long) value);
         }
 
-        public static byte WriteCompressedDateTime(BinaryBufferWriter writer, DateTime value) => WriteCompressedLong(writer, value.Ticks);
+        public static byte WriteCompressedDateTime(ref BinaryBufferWriter writer, DateTime value) => WriteCompressedLong(ref writer, value.Ticks);
 
         public static DateTime ToDecompressedDateTime(this ReadOnlySpan<byte> bytes, ref int index)
         {
@@ -308,7 +308,7 @@ namespace Lazinator.Buffers
             return new DateTime(value);
         }
 
-        public static byte WriteCompressedNullableDateTime(BinaryBufferWriter writer, DateTime? value) => WriteCompressedNullableLong(writer, value?.Ticks);
+        public static byte WriteCompressedNullableDateTime(ref BinaryBufferWriter writer, DateTime? value) => WriteCompressedNullableLong(ref writer, value?.Ticks);
 
         public static DateTime? ToDecompressedNullableDateTime(this ReadOnlySpan<byte> bytes, ref int index)
         {

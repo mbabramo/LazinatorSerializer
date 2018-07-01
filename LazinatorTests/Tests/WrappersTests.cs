@@ -14,14 +14,14 @@ namespace LazinatorTests.Tests
         [Fact]
         public void WrapperNullableStructWorks()
         {
-            WNullableStruct<ExampleStruct> w = new WNullableStruct<ExampleStruct>()
+            WNullableStruct<ExampleStruct> wNullableStruct = new WNullableStruct<ExampleStruct>()
             {
                 AsNullableStruct = new ExampleStruct()
                 {
                     MyChar = 'q'
                 }
             };
-            var w2 = CloneWithOptionalVerification(w, true, false);
+            var w2 = CloneWithOptionalVerification(wNullableStruct, true, false);
             w2.AsNullableStruct.Value.MyChar.Should().Be('q');
             w2.AsNullableStruct = null;
             var w3 = CloneWithOptionalVerification(w2, true, false);
@@ -32,8 +32,8 @@ namespace LazinatorTests.Tests
         public void WrapperNullableGuidWorks()
         {
             Guid g = Guid.NewGuid();
-            WNullableGuid w = new WNullableGuid(g);
-            var w2 = CloneWithOptionalVerification(w, true, false);
+            WNullableGuid wNullableGuid = new WNullableGuid(g);
+            var w2 = CloneWithOptionalVerification(wNullableGuid, true, false);
             w2.WrappedValue.Should().Be(g);
         }
 

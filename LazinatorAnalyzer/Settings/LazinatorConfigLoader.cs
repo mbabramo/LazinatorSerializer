@@ -35,9 +35,9 @@ namespace LazinatorAnalyzer.Settings
 
             using (var stream = new MemoryStream())
             {
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+                using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8, 1024, true))
                 {
-                    fileText.Write(writer, cancellationToken);
+                    fileText.Write(streamWriter, cancellationToken);
                 }
 
                 stream.Position = 0;
@@ -66,9 +66,9 @@ namespace LazinatorAnalyzer.Settings
 
             using (var stream = new MemoryStream())
             {
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8, 1024, true))
+                using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8, 1024, true))
                 {
-                    fileText.Write(writer, cancellationToken);
+                    fileText.Write(streamWriter, cancellationToken);
                 }
 
                 stream.Position = 0;
