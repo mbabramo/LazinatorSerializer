@@ -25,5 +25,18 @@ namespace Lazinator.Core
             }
             return res;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is LazinatorGenericIDType other)
+            {
+                if (IsEmpty && other.IsEmpty)
+                    return true;
+                if (IsEmpty != other.IsEmpty)
+                    return false;
+                return TypeAndInnerTypeIDs.SequenceEqual(other.TypeAndInnerTypeIDs);
+            }
+            return false;
+        }
     }
 }
