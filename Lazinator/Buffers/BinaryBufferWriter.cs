@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Buffers;
 using Lazinator.Support;
 using Lazinator.Core;
+using System.Runtime.CompilerServices;
 
 namespace Lazinator.Buffers
 {
@@ -68,7 +69,9 @@ namespace Lazinator.Buffers
         private int _Position;
         public int Position
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return _Position; }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set
             {
                 if (value > BufferSpan.Length)
@@ -108,11 +111,13 @@ namespace Lazinator.Buffers
 
         public void Write(byte value)
         {
-            if (Free.Length > 0)
-                Free[0] = value;
+            if (BufferSpan.Length > Position)
+                BufferSpan[Position++] = value;
             else
+            {
                 WriteEnlargingIfNecessary(ref value);
-            Position += sizeof(byte);
+                Position++;
+            }
         }
 
         public void Write(sbyte value)
