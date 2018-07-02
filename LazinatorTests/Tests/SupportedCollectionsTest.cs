@@ -464,6 +464,7 @@ namespace LazinatorTests.Tests
             result.MyArrayInt[2] = 6;
             result.MyArrayInt_Dirty = true;
             var result2 = result.CloneLazinatorTyped();
+            result2.MyArrayInt_Dirty.Should().BeFalse();
             copyWithGoal.MyArrayInt.SequenceEqual(result2.MyArrayInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyArrayInt[2] = 7;
