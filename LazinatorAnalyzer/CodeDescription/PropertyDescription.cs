@@ -106,7 +106,6 @@ namespace Lazinator.CodeDescription
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
-        private bool GetDoesntDirty { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
@@ -229,7 +228,6 @@ namespace Lazinator.CodeDescription
                 SkipCondition = skipIf.SkipCondition;
                 InitializeWhenSkipped = skipIf.InitializeWhenSkipped;
             }
-            GetDoesntDirty = UserAttributes.OfType<CloneGetDoesntDirtyAttribute>().Any();
         }
 
         private string GetAttributesToInsert()
@@ -836,6 +834,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
+                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
 
@@ -1246,7 +1245,7 @@ namespace Lazinator.CodeDescription
                         nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
                         isAccessed: _{PropertyName}_Accessed, writer: ref writer,
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceEndString}),
-                        verifyCleanness: {(TrackDirtinessNonSerialized || GetDoesntDirty ? "verifyCleanness" : "false")},
+                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {binaryWriterAction});");
 
