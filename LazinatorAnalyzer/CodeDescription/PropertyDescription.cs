@@ -1181,15 +1181,23 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)
         {
+            // We remember the startOfObjectPosition, and then update the stored buffer at the end,
+            // because we can't change the _ByteIndex until after the write, since we may need
+            // to read from storage during the write.
+            if (!IsPrimitive)
+                sb.AppendLine("startOfObjectPosition = writer.Position;");
+            // Now, we have to consider the SkipCondition, from a SkipIf attribute. We don't write if the skip condition is
+            // met (but still must update the byte index).
             if (SkipCondition != null)
                 sb.AppendLine($@"if (!({SkipCondition}))
                             {{");
+            // Now, we consider versioning information.
             if (IsPrimitive)
                 sb.AppendLine(
                         CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
             else
             {
-                sb.AppendLine("startOfObjectPosition = writer.Position;");
+                // Finally, the main code for writing a serialized or non serialized object.
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     AppendPropertyWriteString_SelfSerialized(sb);
                 else
@@ -1197,6 +1205,7 @@ namespace Lazinator.CodeDescription
             }
             if (SkipCondition != null)
                 sb.AppendLine($@"}}");
+            // Now, we update the byte index
             if (!IsPrimitive)
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{

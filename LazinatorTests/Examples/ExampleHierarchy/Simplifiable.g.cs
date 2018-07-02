@@ -672,13 +672,13 @@ namespace LazinatorTests.Examples
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyOtherInt);
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                WriteChild(ref writer, _ANonSkippableEarlierExample, includeChildrenMode, _ANonSkippableEarlierExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
-            }
             if (updateStoredBuffer)
             {
                 _ANonSkippableEarlierExample_ByteIndex = startOfObjectPosition - startPosition;
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                WriteChild(ref writer, _ANonSkippableEarlierExample, includeChildrenMode, _ANonSkippableEarlierExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             startOfObjectPosition = writer.Position;
             if (updateStoredBuffer)
