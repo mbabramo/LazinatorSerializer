@@ -470,7 +470,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (itemToConvert[itemIndex] == default(IExample))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     

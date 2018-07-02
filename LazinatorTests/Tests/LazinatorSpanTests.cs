@@ -192,6 +192,14 @@ namespace LazinatorTests.Tests
                 };
             }
 
+            SpanAndMemory GetObject2()
+            {
+                return new SpanAndMemory
+                {
+                    MyNullableMemoryInt = new int[] { 0, 0, 0 }
+                };
+            }
+
             SpanAndMemory GetEmptyMemoryObject()
             {
                 return new SpanAndMemory
@@ -228,6 +236,11 @@ namespace LazinatorTests.Tests
             var result = copy.CloneLazinatorTyped();
             SequenceEqual(copy.MyNullableMemoryInt.Value, result.MyNullableMemoryInt.Value).Should().BeTrue();
             result.MyMemoryInt.Length.Should().Be(0);
+
+            // now, see if the second object works
+            original = GetObject2();
+            result = original.CloneLazinatorTyped();
+            SequenceEqual(result.MyNullableMemoryInt.Value, original.MyNullableMemoryInt.Value).Should().BeTrue();
 
             // now, let's make sure that null serializes correctly
             original = new SpanAndMemory();

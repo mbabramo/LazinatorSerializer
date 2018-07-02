@@ -515,7 +515,7 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert.Example == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG4 */
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);

@@ -524,7 +524,7 @@ namespace LazinatorTests.Examples.Collections
             if (itemToConvert.Value == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG4 */
             else
             {
                 void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);

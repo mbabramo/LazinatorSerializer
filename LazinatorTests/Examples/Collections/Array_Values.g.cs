@@ -538,7 +538,7 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToConvert[itemIndex] == default(int?))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     
@@ -592,7 +592,7 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToConvert[itemIndex] == default(int[]))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     

@@ -1435,19 +1435,14 @@ namespace Lazinator.CodeDescription
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && Nullable)
             {
-                // we need a method for the Nullable, then an inner method for the non-nullable case
+                // we will use a method for the Nullable, then an inner method for the non-nullable case,
+                // even though the WriteNonLazinator takes care of the nullable, so there is nothing to do 
+                // but call the inner method.
                 sb.Append($@"
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
-                        if (itemToConvert == null)
-                        {{
-                            writer.Write((uint)0);
-                        }} /* DEBUG1a */
-                        else
-                        {{
-                            {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        }}
+                        {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     }}
 ");
             }
@@ -1733,7 +1728,10 @@ namespace Lazinator.CodeDescription
             string fullWriteCommands;
             if (Nullable)
             {
-                if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                if (IsPrimitive)
+                    fullWriteCommands = $@"
+                            {writeCommand}";
+                else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     fullWriteCommands =
                         $@"
                     if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({itemString}, default({AppropriatelyQualifiedTypeName})))

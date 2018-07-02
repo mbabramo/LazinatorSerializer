@@ -494,7 +494,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToConvert[itemIndex], default(T)))
                 {
                     writer.Write((uint)0);
-                }
+                } /* DEBUG1 */
                 else 
                 {
                     

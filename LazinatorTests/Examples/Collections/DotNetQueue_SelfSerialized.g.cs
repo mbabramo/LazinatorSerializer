@@ -405,7 +405,7 @@ namespace LazinatorTests.Examples.Collections
                 if (dequeuedItem == default(ExampleChild))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     

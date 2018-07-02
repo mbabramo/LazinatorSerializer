@@ -418,7 +418,7 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToConvert[itemIndex] == default(ExampleChild))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     

@@ -400,7 +400,7 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToConvert[itemIndex] == default(List<NonLazinatorClass>))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     
@@ -455,7 +455,7 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToConvert[itemIndex] == default(NonLazinatorClass))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     

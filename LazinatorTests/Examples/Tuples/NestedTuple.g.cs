@@ -406,7 +406,7 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert.Item3 == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG3 */
             else
             {
                 void actionItem3(ref BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item3, includeChildrenMode, verifyCleanness, updateStoredBuffer);
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert.Item1 == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG4 */
             else
             {
                 void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
@@ -507,7 +507,7 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert.Item2 == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG3 */
             else
             {
                 void actionItem2(ref BinaryBufferWriter w) => ConvertToBytes__Pint_C32a_c_C32string_C32b_p_C63(ref w, itemToConvert.Item2, includeChildrenMode, verifyCleanness, updateStoredBuffer);
@@ -517,7 +517,7 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert.Item3 == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG3 */
             else
             {
                 void actionItem3(ref BinaryBufferWriter w) => ConvertToBytes_Tuple_Gshort_c_C32long_g(ref w, itemToConvert.Item3, includeChildrenMode, verifyCleanness, updateStoredBuffer);

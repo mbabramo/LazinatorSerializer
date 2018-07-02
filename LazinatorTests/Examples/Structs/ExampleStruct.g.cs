@@ -686,7 +686,7 @@ namespace LazinatorTests.Examples
                 if (itemToConvert[itemIndex] == default(Example))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     
@@ -764,7 +764,7 @@ namespace LazinatorTests.Examples
             if (itemToConvert.Item1 == null)
             {
                 writer.Write((uint)0);
-            }
+            }/* DEBUG3 */
             else
             {
                 void actionItem1(ref BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item1, includeChildrenMode, verifyCleanness, updateStoredBuffer);

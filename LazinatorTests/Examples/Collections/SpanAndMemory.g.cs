@@ -659,14 +659,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static void ConvertToBytes_Memory_Gint_g_C63(ref BinaryBufferWriter writer, Memory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            if (itemToConvert == null)
-            {
-                writer.Write((uint)0);
-            }
-            else
-            {
-                ConvertToBytes_Memory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            }
+            ConvertToBytes_Memory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
         private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)

@@ -399,7 +399,7 @@ namespace LazinatorTests.Examples.Collections
                 if (item == default(ExampleChild))
                 {
                     writer.Write((uint)0);
-                }
+                }/* DEBUG2 */
                 else 
                 {
                     
