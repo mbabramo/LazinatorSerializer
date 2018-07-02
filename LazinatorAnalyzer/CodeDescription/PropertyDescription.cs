@@ -1443,7 +1443,7 @@ namespace Lazinator.CodeDescription
                         if (itemToConvert == null)
                         {{
                             writer.Write((uint)0);
-                        }}
+                        }} /* DEBUG1a */
                         else
                         {{
                             {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
@@ -1739,7 +1739,7 @@ namespace Lazinator.CodeDescription
                     if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({itemString}, default({AppropriatelyQualifiedTypeName})))
                     {{
                         writer.Write((uint)0);
-                    }}
+                    }} /* DEBUG1 */
                     else 
                     {{
                         {writeCommand}
@@ -1751,7 +1751,7 @@ namespace Lazinator.CodeDescription
                     if ({itemString} == default({AppropriatelyQualifiedTypeName}))
                     {{
                         {WriteDefaultLengthString}
-                    }}
+                    }}/* DEBUG2 */
                     else 
                     {{
                         {writeCommand}
@@ -1897,7 +1897,7 @@ namespace Lazinator.CodeDescription
                             if ({itemToConvertItemName} == null)
                             {{
                                 {WriteDefaultLengthString}
-                            }}
+                            }}/* DEBUG3 */
                             else
                             {{
                                 void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
@@ -1918,7 +1918,7 @@ namespace Lazinator.CodeDescription
                         if ({itemToConvertItemName} == null)
                         {{
                             {WriteDefaultLengthString}
-                        }}
+                        }}/* DEBUG4 */
                         else
                         {{
                             void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
