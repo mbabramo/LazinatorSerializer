@@ -112,6 +112,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneExcludableChildAttribute();
                 case "DoNotAutogenerateAttribute":
                     return new CloneDoNotAutogenerateAttribute();
+                case "GetDoesntDirtyAttribute":
+                    return new CloneGetDoesntDirtyAttribute();
                 case "IncludableChildAttribute":
                     return new CloneIncludableChildAttribute();
                 case "NonexclusiveLazinatorAttribute":
