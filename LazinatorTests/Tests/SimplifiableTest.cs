@@ -16,7 +16,10 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SimplifiableWorks()
         {
-            Simplifiable s = new Simplifiable();
+            Simplifiable s = new Simplifiable()
+            {
+                ANonSkippableEarlierExample = new Example() { MyChar = 'A' }
+            };
             var c = s.CloneLazinatorTyped();
             s.MyInt.Should().Be(0);
             s.MyOtherInt.Should().Be(0);
@@ -31,6 +34,7 @@ namespace LazinatorTests.Tests
             {
                 MyInt = 3,
                 MyOtherInt = 3,
+                ANonSkippableEarlierExample = new Example() { MyChar = 'A' },
                 Example = new Example() { MyChar = 'X', MyString = Simplifiable.LongString },
                 Example2 = new Example() { MyChar = 'Z' },
                 Example3 = null
@@ -38,6 +42,7 @@ namespace LazinatorTests.Tests
             c = s.CloneLazinatorTyped();
             s.MyInt.Should().Be(3);
             s.MyOtherInt.Should().Be(3);
+            s.ANonSkippableEarlierExample.MyChar.Should().Be('A');
             s.Example.MyChar.Should().Be('X');
             s.Example.MyString.Should().Be(Simplifiable.LongString);
             s.Example2.MyChar.Should().Be('Z');

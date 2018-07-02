@@ -18,6 +18,7 @@ namespace LazinatorTests.Examples
         [RelativeOrder(-1)]
         [SetterAccessibility("private")]
         bool MyIntsAre3 { get; }
+        Example ANonSkippableEarlierExample { get; set; }
         [SkipIf("ExampleHasDefaultValue", "SetExampleToDefaultValue();")]
         Example Example { get; set; }
         [SkipIf("Example2Char != null", "Example2 = new Example() { MyChar = (char)Example2Char };")]
