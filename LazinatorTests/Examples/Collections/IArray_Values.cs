@@ -8,5 +8,6 @@ namespace LazinatorTests.Examples.Collections
         int[] MyArrayInt { get; set; }
         bool MyArrayInt_Dirty { get; set; }
         int[][] MyJaggedArrayInt { get; set; }
+        int?[] MyArrayNullableInt { get; set; }
     }
 }

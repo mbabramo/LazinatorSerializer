@@ -476,6 +476,19 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ArrayNullableInt()
+        {
+            int?[] array = new int?[] { 3, 4, 5, 0, 1, 2, null, 6 };
+            Array_Values a = new Array_Values() { MyArrayNullableInt = array };
+            var c = a.CloneLazinatorTyped();
+            c.MyArrayNullableInt.SequenceEqual(array).Should().BeTrue();
+            array = new int?[] { null, 0, (int) ((uint) 0) };
+            a = new Array_Values() { MyArrayNullableInt = array };
+            c = a.CloneLazinatorTyped();
+            c.MyArrayNullableInt.SequenceEqual(array).Should().BeTrue();
+        }
+
+        [Fact]
         public void LazinatorDerivedArrayInt_UsingDerivedProperty()
         {
             Array_Values GetObject(int thirdItem)
