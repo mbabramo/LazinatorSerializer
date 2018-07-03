@@ -367,6 +367,7 @@ namespace LazinatorTests.Tests
             result.MyQueueInt_Dirty = true;
             var result2 = result.CloneLazinatorTyped();
             copyWithGoal.MyQueueInt.SequenceEqual(result2.MyQueueInt).Should().BeTrue();
+            result.MyQueueInt.SequenceEqual(result2.MyQueueInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyQueueInt.Enqueue(7);
             var result3 = result2.CloneLazinatorTyped();
@@ -434,6 +435,7 @@ namespace LazinatorTests.Tests
             result.MyStackInt_Dirty = true;
             var result2 = result.CloneLazinatorTyped();
             copyWithGoal.MyStackInt.SequenceEqual(result2.MyStackInt).Should().BeTrue();
+            result.MyStackInt.SequenceEqual(result2.MyStackInt).Should().BeTrue();
             // if we make a change but don't set dirty, nothing happens if we don't verify cleanliness
             result2.MyStackInt.Push(7);
             var result3 = result2.CloneLazinatorTyped();
