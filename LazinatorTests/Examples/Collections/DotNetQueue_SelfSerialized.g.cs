@@ -399,17 +399,17 @@ namespace LazinatorTests.Examples.Collections
             }
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
             int itemToConvertCount = itemToConvert.Count;
+            var q = System.Linq.Enumerable.ToList(itemToConvert);
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                var dequeuedItem = itemToConvert.Dequeue();
-                if (dequeuedItem == default(ExampleChild))
+                if (q[itemIndex] == default(ExampleChild))
                 {
                     writer.Write((uint)0);
                 }
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => dequeuedItem.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => q[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
                 

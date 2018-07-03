@@ -1390,11 +1390,10 @@ namespace Lazinator.CodeDescription
             {
                 forStatement =
                     $@"int itemToConvertCount = itemToConvert.{lengthWord};
+                        var q = System.Linq.Enumerable.ToList(itemToConvert);
                         for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
-                itemStringSetup = $@"
-                                        var dequeuedItem = itemToConvert.Dequeue();";
                 itemString =
-                    "dequeuedItem";
+                    "q[itemIndex]";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {

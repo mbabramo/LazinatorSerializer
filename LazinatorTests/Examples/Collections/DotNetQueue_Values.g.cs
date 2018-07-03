@@ -402,11 +402,10 @@ namespace LazinatorTests.Examples.Collections
             }
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
             int itemToConvertCount = itemToConvert.Count;
-            var enumerated = itemToConvert.ToList();
+            var q = System.Linq.Enumerable.ToList(itemToConvert);
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                var enqueuedItem = enumerated[itemIndex];
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, enqueuedItem);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, q[itemIndex]);
             }
         }
         
