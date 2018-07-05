@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using Lazinator.Buffers;
 using Lazinator.Collections;
 using Lazinator.Core;
@@ -15,6 +17,8 @@ namespace Lazinator.Core
 {
     public static class LazinatorUtilities
     {
+        #region Delegate types
+
         // Delegate types. Methods matching these types must be passed into some of the methods below.
 
         public delegate MemoryInBuffer StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
@@ -24,6 +28,10 @@ namespace Lazinator.Core
         public delegate void WriteDelegate(ref BinaryBufferWriter writer);
 
         public delegate void WritePossiblyVerifyingCleannessDelegate(ref BinaryBufferWriter writer, bool verifyCleanness);
+
+        #endregion
+
+        #region Encoding
 
         /// <summary>
         /// Serializes from the top of the hierarchy, using the original storage if the item is not dirty and does not need its cleanness verified or, if dirty, creating a stream to manually serialize. 
@@ -64,82 +72,6 @@ namespace Lazinator.Core
             BinaryBufferWriter writer = new BinaryBufferWriter(BinaryBufferWriter.MinMinBufferSize);
             selfSerialized.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, true);
             return writer.MemoryInBuffer;
-        }
-
-        /// <summary>
-        /// Initiates the conversion to binary of a non-lazinator object. 
-        /// </summary>
-        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
-        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
-        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
-        /// <param name="writer">The binary writer</param>
-        /// <param name="getChildSliceForFieldFn"></param>
-        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
-        /// <param name="binaryWriterAction"></param>
-        public static void WriteNonLazinatorObject(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
-        {
-            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
-            if (!isAccessed)
-            {
-                // object has never been loaded into memory, so there is no need to verify cleanness
-                // just return what we have.
-                original.Span.Write_WithIntLengthPrefix(ref writer);
-            }
-            else if (isBelievedDirty || original.Length == 0)
-            {
-                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
-            }
-            else
-            {
-                if (verifyCleanness)
-                {
-                    ReadOnlyMemory<byte> revised = CreateStreamForNonLazinatorObject(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original, revised);
-                }
-                original.Span.Write_WithIntLengthPrefix(ref writer);
-            }
-        }
-
-        /// <summary>
-        /// Initiates the conversion to binary of a non-lazinator object, omitting the length prefix. This can be used on the last property of a struct or sealed class.
-        /// </summary>
-        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
-        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
-        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
-        /// <param name="writer">The binary writer</param>
-        /// <param name="getChildSliceForFieldFn"></param>
-        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
-        /// <param name="binaryWriterAction"></param>
-        public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
-        {
-            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
-            if (!isAccessed)
-            {
-                // object has never been loaded into memory, so there is no need to verify cleanness
-                // just return what we have.
-                writer.Write(original.Span);
-            }
-            else if (isBelievedDirty || original.Length == 0)
-            {
-                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
-                WriteToBinaryWithoutLengthPrefix(ref writer, action);
-            }
-            else
-            {
-                if (verifyCleanness)
-                {
-                    ReadOnlyMemory<byte> revised = CreateStreamForNonLazinatorObject(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original, revised);
-                }
-                writer.Write(original.Span);
-            }
         }
 
         /// <summary>
@@ -300,6 +232,10 @@ namespace Lazinator.Core
                 LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(ref writer, action);
         }
 
+        #endregion
+
+        #region Generic IDs
+
         public static LazinatorGenericIDType GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
         {
             if (containsOpenGenericParameters)
@@ -346,6 +282,86 @@ namespace Lazinator.Core
             return new LazinatorGenericIDType(l);
         }
 
+        #endregion
+
+        #region Nonlazinators
+
+        /// <summary>
+        /// Initiates the conversion to binary of a non-lazinator object. 
+        /// </summary>
+        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
+        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="getChildSliceForFieldFn"></param>
+        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
+        /// <param name="binaryWriterAction"></param>
+        public static void WriteNonLazinatorObject(object nonLazinatorObject,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
+        {
+            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
+            if (!isAccessed)
+            {
+                // object has never been loaded into memory, so there is no need to verify cleanness
+                // just return what we have.
+                original.Span.Write_WithIntLengthPrefix(ref writer);
+            }
+            else if (isBelievedDirty || original.Length == 0)
+            {
+                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
+                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+            }
+            else
+            {
+                if (verifyCleanness)
+                {
+                    ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
+                    ConfirmMatch(original, revised);
+                }
+                original.Span.Write_WithIntLengthPrefix(ref writer);
+            }
+        }
+
+        /// <summary>
+        /// Initiates the conversion to binary of a non-lazinator object, omitting the length prefix. This can be used on the last property of a struct or sealed class.
+        /// </summary>
+        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
+        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="getChildSliceForFieldFn"></param>
+        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
+        /// <param name="binaryWriterAction"></param>
+        public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
+        {
+            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
+            if (!isAccessed)
+            {
+                // object has never been loaded into memory, so there is no need to verify cleanness
+                // just return what we have.
+                writer.Write(original.Span);
+            }
+            else if (isBelievedDirty || original.Length == 0)
+            {
+                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
+                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                WriteToBinaryWithoutLengthPrefix(ref writer, action);
+            }
+            else
+            {
+                if (verifyCleanness)
+                {
+                    ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
+                    ConfirmMatch(original, revised);
+                }
+                writer.Write(original.Span);
+            }
+        }
+
         /// <summary>
         /// Converts a non-Lazinator property to bytes by creating a stream and calling an action that accepts a binary writer as a parameter.
         /// This is used when it is necessary to verify the cleanness of a non-Lazinator property.
@@ -353,7 +369,7 @@ namespace Lazinator.Core
         /// <param name="nonLazinatorObject">The object to be converted</param>
         /// <param name="binaryWriterAction">The method that uses a binary writer to write the bytes for the non Lazinator fields. The second parameter will be ignored.</param>
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> CreateStreamForNonLazinatorObject(object nonLazinatorObject, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
+        public static ReadOnlyMemory<byte> ConvertNonLazinatorObjectToBytes(object nonLazinatorObject, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             if (nonLazinatorObject == null)
                 return new ReadOnlyMemory<byte>();
@@ -385,57 +401,9 @@ namespace Lazinator.Core
             }
         }
 
-        /// <summary>
-        /// Returns a slice of serialized bytes corresponding to a child, excluding the length prefix.
-        /// </summary>
-        /// <param name="serializedBytes">The serialized bytes for the parent object</param>
-        /// <param name="byteOffset">The byte offset into the parent object of the length prefix for the child object</param>
-        /// <param name="byteLength">The byte length of the child, including the length prefix</param>
-        /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
-        /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
-        /// <returns></returns>
-        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
-        {
-            if (byteLength == 0)
-            {
-                return new ReadOnlyMemory<byte>();
-            }
-            if (omitLength) // length is omitted because the child takes up the full slice
-                return serializedBytes.Slice(byteOffset, byteLength);
-            if (fixedLength != null)
-                return serializedBytes.Slice(byteOffset, (int) fixedLength);
-            if (lengthInSingleByte)
-                return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
-            return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
-        }
-
-        /// <summary>
-        /// Creates a new byte array representing the contents of a stream.
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public static byte[] ToByteArray(this Stream stream)
-        {
-            stream.Position = 0;
-            byte[] buffer = new byte[stream.Length];
-            int streamLength = Convert.ToInt32(stream.Length);
-            for (int totalBytesCopied = 0; totalBytesCopied < streamLength;)
-                totalBytesCopied += stream.Read(buffer, totalBytesCopied, streamLength - totalBytesCopied);
-            return buffer;
-        }
-
-        /// <summary>
-        /// Clones a Lazinator class, returning the object as its own type.
-        /// </summary>
-        /// <typeparam name="T">The type of the Lazinator object</typeparam>
-        /// <param name="lazinator">The lazinator object</param>
-        /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneLazinatorTyped<T>(this T lazinator) where T : ILazinator
-        {
-            if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
-                return default(T);
-            return (T) lazinator.CloneLazinator();
-        }
+        #endregion
+        
+        #region Enumeration
 
         /// <summary>
         /// Enumerates all nodes in the hierarchy.
@@ -626,29 +594,6 @@ namespace Lazinator.Core
                 node.DescendantHasChanged = false;
             }
         }
-        
-
-        /// <summary>
-        /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.
-        /// </summary>
-        /// <typeparam name="T">The type of the Lazinator object</typeparam>
-        /// <param name="lazinator">The lazinator object</param>
-        /// <param name="includeChildrenMode">Whether to include children of the class being cloned.</param>
-        /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode) where T : class, ILazinator
-        {
-            return lazinator.CloneLazinator(includeChildrenMode) as T;
-        }
-
-        /// <summary>
-        /// Returns a rented memory buffer. This will be disposed when Dispose() is called on the object containing it.
-        /// </summary>
-        /// <param name="minimumSize"></param>
-        /// <returns></returns>
-        public static IMemoryOwner<byte> GetRentedMemory(int minimumSize)
-        {
-            return MemoryPool<byte>.Shared.Rent(minimumSize);
-        }
 
         public static bool DescendantDirtinessIsConsistent(this ILazinator startPoint)
         {
@@ -671,7 +616,7 @@ namespace Lazinator.Core
                 }
             }
             return true;
-        } 
+        }
 
         public static void ConfirmDescendantDirtinessConsistency(this ILazinator startPoint)
         {
@@ -680,5 +625,131 @@ namespace Lazinator.Core
                 throw new Exception("Hierarchy inconsistency error. The ancestor of a dirty node does not have descendant is dirty set.");
             }
         }
+
+        #endregion
+
+        #region Cloning
+
+        /// <summary>
+        /// Clones a Lazinator class, returning the object as its own type.
+        /// </summary>
+        /// <typeparam name="T">The type of the Lazinator object</typeparam>
+        /// <param name="lazinator">The lazinator object</param>
+        /// <returns>A clone of the Lazinator class</returns>
+        public static T CloneLazinatorTyped<T>(this T lazinator) where T : ILazinator
+        {
+            if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
+                return default(T);
+            return (T)lazinator.CloneLazinator();
+        }
+
+        /// <summary>
+        /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.
+        /// </summary>
+        /// <typeparam name="T">The type of the Lazinator object</typeparam>
+        /// <param name="lazinator">The lazinator object</param>
+        /// <param name="includeChildrenMode">Whether to include children of the class being cloned.</param>
+        /// <returns>A clone of the Lazinator class</returns>
+        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode) where T : class, ILazinator
+        {
+            return lazinator.CloneLazinator(includeChildrenMode) as T;
+        }
+
+        #endregion
+
+        #region Memory management
+
+        /// <summary>
+        /// The Lazinator memory pool. By default, this is set to the default shared memory pool, but this can be 
+        /// changed on application startup, resulting in changing the memory pool to be used for all Lazinator objects.
+        /// </summary>
+        public static MemoryPool<byte> LazinatorMemoryPool = MemoryPool<byte>.Shared;
+
+        /// <summary>
+        /// Returns a rented memory buffer. This will be disposed when Dispose() is called on the object containing it.
+        /// </summary>
+        /// <param name="minimumSize"></param>
+        /// <returns></returns>
+        public static IMemoryOwner<byte> GetRentedMemory(int minimumSize)
+        {
+            return LazinatorMemoryPool.Rent(minimumSize);
+        }
+
+        /// <summary>
+        /// Returns a slice of serialized bytes corresponding to a child, excluding the length prefix.
+        /// </summary>
+        /// <param name="serializedBytes">The serialized bytes for the parent object</param>
+        /// <param name="byteOffset">The byte offset into the parent object of the length prefix for the child object</param>
+        /// <param name="byteLength">The byte length of the child, including the length prefix</param>
+        /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
+        /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
+        /// <returns></returns>
+        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
+        {
+            if (byteLength == 0)
+            {
+                return new ReadOnlyMemory<byte>();
+            }
+            if (omitLength) // length is omitted because the child takes up the full slice
+                return serializedBytes.Slice(byteOffset, byteLength);
+            if (fixedLength != null)
+                return serializedBytes.Slice(byteOffset, (int)fixedLength);
+            if (lengthInSingleByte)
+                return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
+            return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
+        }
+
+        /// <summary>
+        /// Get a MemoryStream from ReadOnlyMemory, if possibly without copying the source memory.
+        /// </summary>
+        /// <param name="memory">The source memory</param>
+        /// <returns>The resulting memory stream</returns>
+        public static MemoryStream GetMemoryStream(this ReadOnlyMemory<byte> memory)
+        {
+            bool arrayLoaded = MemoryMarshal.TryGetArray(memory, out ArraySegment<byte> segment);
+            if (arrayLoaded)
+            {
+                MemoryStream stream = new MemoryStream(segment.Array);
+                return stream;
+            }
+            else
+            {
+                // MemoryMarshal can't get an array. Thus, write the memory stream manually.
+                MemoryStream stream = new MemoryStream();
+                stream.Write(memory.Span);
+                stream.Flush();
+                stream.Position = 0;
+                return stream;
+            }
+        }
+
+        /// <summary>
+        /// Get a memory stream containing the lazinator object.
+        /// </summary>
+        /// <param name="lazinator"></param>
+        /// <returns></returns>
+        public static MemoryStream GetMemoryStream(this ILazinator lazinator)
+        {
+            lazinator.LazinatorConvertToBytes();
+            return lazinator.LazinatorObjectBytes.GetMemoryStream();
+        }
+
+        /// <summary>
+        /// Creates a new byte array representing the contents of a stream.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static byte[] ToByteArray(this Stream stream)
+        {
+            stream.Position = 0;
+            byte[] buffer = new byte[stream.Length];
+            int streamLength = Convert.ToInt32(stream.Length);
+            for (int totalBytesCopied = 0; totalBytesCopied < streamLength;)
+                totalBytesCopied += stream.Read(buffer, totalBytesCopied, streamLength - totalBytesCopied);
+            return buffer;
+        }
+
+        #endregion
+
     }
 }
