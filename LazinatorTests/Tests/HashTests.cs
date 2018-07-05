@@ -105,13 +105,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BinaryHashCodesWork()
         {
-            var example = GetHierarchy(1, 1, 1, 1, 0);
+            var example = GetTypicalExample();
             var hash32 = example.GetBinaryHashCode32();
             var hash64 = example.GetBinaryHashCode64();
             var clone = example.CloneLazinatorTyped();
             clone.GetBinaryHashCode32().Should().Be(hash32);
             clone.GetBinaryHashCode64().Should().Be(hash64);
-            var anotherExample = GetHierarchy(1, 1, 1, 1, 0);
+            var anotherExample = GetTypicalExample();
             anotherExample.GetBinaryHashCode64().Should().Be(hash64);
 
             example.MyBool = !example.MyBool;
@@ -152,7 +152,7 @@ namespace LazinatorTests.Tests
         void BinaryHashCanBeAssignedToPropertyOfItem()
         {
             // the challenge here is that the call to GetBinaryHashCode results in a ConvertToBytes. Meanwhile, the object may have been accessed already on the left side of the assignment. We want to make sure this doesn't cause any problems.
-            Example e = GetHierarchy(1, 1, 1, 1, 0);
+            Example e = GetTypicalExample();
             e.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
             e.MyChild1.Should().NotBeNull();
             e.MyChild1.MyLong.Should().NotBe(0);
@@ -161,7 +161,7 @@ namespace LazinatorTests.Tests
             c.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();
             c.MyChild1.Should().NotBeNull();
             c.MyChild1.MyLong.Should().NotBe(0);
-            Example e2 = GetHierarchy(1, 1, 1, 1, 0);
+            Example e2 = GetTypicalExample();
             e2.MyChild1 = new ExampleChild();
             e2.MyChild1.MyLong = 0;
             e2.MyChild1.MyLong = (long)e.MyChild1.GetBinaryHashCode64();

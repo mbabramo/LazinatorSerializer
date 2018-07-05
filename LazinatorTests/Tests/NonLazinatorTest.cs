@@ -55,8 +55,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SelfSerializationUpdatesNonSerializedTypeProperly()
         {
-            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
-            var copy = GetHierarchy(1, 1, 1, 1, 0);
+            var hierarchy = GetTypicalExample();
+            var copy = GetTypicalExample();
             var goal = GetHierarchy(1, 1, 1, 2, 0);
             ChangeHierarchyToGoal(copy, goal, serializeAndDeserializeFirst: true, setDirtyFlag: true, verifyCleanliness: true);
             ChangeHierarchyToGoal(copy, goal, serializeAndDeserializeFirst: true, setDirtyFlag: true, verifyCleanliness: false);

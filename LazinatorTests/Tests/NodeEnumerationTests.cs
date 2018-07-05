@@ -21,7 +21,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessEnumerationWorks()
         {
-            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
+            var hierarchy = GetTypicalExample();
             var results = hierarchy.GetDirtyNodes(true).ToList();
             results.Count().Should().BeGreaterThan(1);
 
@@ -128,7 +128,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void HierarchyTreeWorks_TwoLevel()
         {
-            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
+            var hierarchy = GetTypicalExample();
             HierarchyTree tree = new HierarchyTree(hierarchy);
             string result = tree.ToString();
             string expected = 

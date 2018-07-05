@@ -15,13 +15,11 @@ namespace LazinatorTests.Tests
 {
     public class BasicTests : SerializationDeserializationTestBase
     {
-
-
         [Fact]
         public void BasicSelfSerializationWorks()
         {
-            var original = GetHierarchy(1, 1, 1, 1, 0);
-            var copy = GetHierarchy(1, 1, 1, 1, 0);
+            var original = GetTypicalExample();
+            var copy = GetTypicalExample();
             var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
         }
@@ -29,7 +27,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SelfSerializationCanSetChildToNull()
         {
-            var original = GetHierarchy(1, 1, 1, 1, 0);
+            var original = GetTypicalExample();
             var result = original.CloneLazinatorTyped();
             result.MyChild1 = null;
             var result2 = result.CloneLazinatorTyped();
@@ -39,7 +37,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SelfSerializationVersionUpgradeWorks()
         {
-            var original = GetHierarchy(1, 1, 1, 1, 0);
+            var original = GetTypicalExample();
             // Set to old version number. This should serialize as the old version number.
             original.LazinatorObjectVersion = 2;
             original.MyOldString = "Old string";
@@ -160,7 +158,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DeserializeMultipleWorks()
         {
-            Example e = GetHierarchy(1, 1, 1, 1, 0);
+            Example e = GetTypicalExample();
             OpenGeneric<WFloat> o = new OpenGeneric<WFloat>()
             {
                 MyT = 3.0F,
@@ -198,8 +196,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void VerifyHierarchyWorks()
         {
-            var original = GetHierarchy(1, 1, 1, 1, 0);
-            var another = GetHierarchy(1, 1, 1, 1, 0);
+            var original = GetTypicalExample();
+            var another = GetTypicalExample();
             LazinatorUtilities.ConfirmHierarchiesEqual(original, another);
             var clone = original.CloneLazinatorTyped();
             LazinatorUtilities.ConfirmHierarchiesEqual(original, clone);

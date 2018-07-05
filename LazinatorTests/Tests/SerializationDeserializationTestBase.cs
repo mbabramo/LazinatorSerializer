@@ -20,7 +20,12 @@ namespace LazinatorTests.Tests
 
             return result;
         }
-        
+
+        internal Example GetTypicalExample()
+        {
+            return GetHierarchy(1, 1, 1, 1, 0);
+        }
+
         internal Example GetHierarchy(int indexUpTo2, int indexUpTo3a, int indexUpTo3b, int indexUpTo3c, int indexUpTo2b)
         {
             var parent = GetExample(indexUpTo2);
@@ -33,7 +38,7 @@ namespace LazinatorTests.Tests
         
         internal void ChangeHierarchyToGoal(Example copy, Example goal, bool serializeAndDeserializeFirst, bool setDirtyFlag, bool verifyCleanliness)
         {
-            var hierarchy = GetHierarchy(1, 1, 1, 1, 0);
+            var hierarchy = GetTypicalExample();
             if (serializeAndDeserializeFirst)
             {
                 hierarchy = hierarchy.CloneLazinatorTyped();

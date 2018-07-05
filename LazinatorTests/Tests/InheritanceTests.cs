@@ -102,8 +102,8 @@ namespace LazinatorTests.Tests
 
             var concrete = new Concrete3()
             {
-                Example2 = GetHierarchy(1, 1, 1, 1, 0),
-                Example3 = GetHierarchy(1, 1, 1, 1, 0)
+                Example2 = GetTypicalExample(),
+                Example3 = GetTypicalExample()
             };
             var concrete2 = concrete.CloneLazinatorTyped();
             concrete2.Example2.Should().NotBeNull();
@@ -111,7 +111,7 @@ namespace LazinatorTests.Tests
 
             ContainerWithAbstract1 c = new ContainerWithAbstract1()
             {
-                AbstractProperty = new Concrete3() { Example2 = GetHierarchy(1, 1, 1, 1, 0), Example3 = GetHierarchy(1, 1, 1, 1, 0) }
+                AbstractProperty = new Concrete3() { Example2 = GetTypicalExample(), Example3 = GetTypicalExample() }
             };
             var c2 = c.CloneLazinatorTyped();
             var c2_abstractProperty = (c2.AbstractProperty as Concrete3);

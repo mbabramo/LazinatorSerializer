@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -732,6 +733,30 @@ namespace Lazinator.Core
         {
             lazinator.LazinatorConvertToBytes();
             return lazinator.LazinatorObjectBytes.GetMemoryStream();
+        }
+
+        /// <summary>
+        /// Gets a pipe containing the Lazinator object. 
+        /// </summary>
+        /// <param name="lazinator"></param>
+        /// <returns></returns>
+        public static (Pipe pipe, int bytes) GetPipe(this ILazinator lazinator)
+        {
+            lazinator.LazinatorConvertToBytes();
+            Pipe pipe = new Pipe();
+            AddToPipe(lazinator, pipe);
+            pipe.Writer.Complete();
+            return (pipe, lazinator.LazinatorObjectBytes.Length);
+        }
+
+        /// <summary>
+        /// Writes a Lazinator object into a pipe.
+        /// </summary>
+        /// <param name="lazinator"></param>
+        /// <param name="pipe"></param>
+        public static void AddToPipe(this ILazinator lazinator, Pipe pipe)
+        {
+            pipe.Writer.Write(lazinator.LazinatorObjectBytes.Span);
         }
 
         /// <summary>
