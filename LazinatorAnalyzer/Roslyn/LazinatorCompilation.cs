@@ -451,7 +451,7 @@ namespace LazinatorCodeGen.Roslyn
             bool defaultAllowRecordLikeClasses = false, defaultAllowRecordLikeRegularStructs = false, defaultAllowRecordLikeReadOnlyStructs = true;
             if (Config != null)
             {
-                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName();
                 if (Config.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
                 if (Config.IgnoreRecordLikeTypes.Contains(appropriatelyQualifiedName))
@@ -471,7 +471,7 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (Config != null)
             {
-                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName();
                 if (Config.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
             }
@@ -553,7 +553,7 @@ namespace LazinatorCodeGen.Roslyn
             {
                 if (symbol is INamedTypeSymbol namedSymbol)
                 {
-                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol);
+                    string fullyQualifiedName = RoslynHelpers.GetFullNamespacePlusSimpleName(namedSymbol);
                     if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name))
                         return namedSymbol;
                 }

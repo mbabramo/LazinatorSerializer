@@ -165,9 +165,14 @@ namespace LazinatorCodeGen.Roslyn
 
         public static string GetFullyQualifiedNameWithoutGlobal(this ISymbol symbol)
         {
+            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+        }
+
+        public static string GetFullNamespacePlusSimpleName(this ISymbol symbol)
+        {
             if (symbol == null)
                 return "";
-            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+            return GetFullNamespace(symbol) + "." + symbol.Name;
         }
 
         public static string GetFullNamespace(this ISymbol symbol)
@@ -331,7 +336,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static bool HasAttribute(this ISymbol symbol, INamedTypeSymbol attributeSymbol)
         {
-            return symbol.GetAttributes().Any(x => x.AttributeClass.GetFullyQualifiedNameWithoutGlobal().Equals(attributeSymbol.GetFullyQualifiedNameWithoutGlobal()));
+            return symbol.GetAttributes().Any(x => x.AttributeClass.GetFullNamespacePlusSimpleName().Equals(attributeSymbol.GetFullNamespacePlusSimpleName()));
         }
 
         public static INamedTypeSymbol GetTopLevelInterfaceImplementingAttribute(this INamedTypeSymbol lazinatorObject, INamedTypeSymbol attributeType)
