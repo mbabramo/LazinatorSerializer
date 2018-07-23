@@ -148,7 +148,7 @@ namespace Lazinator.Core
             }
             else
             {
-                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty)
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
                     childStorage = child.LazinatorObjectBytes;
@@ -220,7 +220,7 @@ namespace Lazinator.Core
         {
             void action(ref BinaryBufferWriter w)
             {
-                if (child.IsDirty || child.DescendantIsDirty || verifyCleanness)
+                if (child.IsDirty || child.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
                     child.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
                     w.Write(child.LazinatorObjectBytes.Span); // the child has been accessed, but is unchanged, so we can use the storage holding the child

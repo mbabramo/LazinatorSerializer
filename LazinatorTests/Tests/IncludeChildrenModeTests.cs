@@ -89,7 +89,7 @@ namespace LazinatorTests.Tests
             result = container.CloneLazinatorTyped(IncludeChildrenMode.IncludeOnlyIncludableChildren);
             result.ExampleByInterface.Should().NotBeNull(); // because ExampleByInterface is defined as an includable child
             result.ExampleByInterface.IncludableChild.Should().NotBeNull();
-            result.ExampleByInterface.Should().BeNull();
+            result.ExampleByInterface.ExcludableChild.Should().BeNull();
             result.ExampleByInterface.MyChild1.Should().BeNull();
         }
 
