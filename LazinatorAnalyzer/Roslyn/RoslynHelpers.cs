@@ -168,6 +168,13 @@ namespace LazinatorCodeGen.Roslyn
             return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
         }
 
+        public static string GetFullyQualifiedMetadataName(this ISymbol symbol)
+        {
+            if (symbol == null)
+                return "";
+            return GetFullNamespace(symbol) + "." + symbol.MetadataName;
+        }
+
         public static string GetFullNamespacePlusSimpleName(this ISymbol symbol)
         {
             if (symbol == null)

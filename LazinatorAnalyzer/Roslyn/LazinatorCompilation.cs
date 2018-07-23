@@ -554,7 +554,8 @@ namespace LazinatorCodeGen.Roslyn
                 if (symbol is INamedTypeSymbol namedSymbol)
                 {
                     string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol);
-                    if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name))
+                    string fullyQualifiedMetadataName = RoslynHelpers.GetFullyQualifiedMetadataName(namedSymbol);
+                    if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name) || namedSymbol.MetadataName == name || fullyQualifiedMetadataName == name)
                         return namedSymbol;
                 }
             }
