@@ -399,6 +399,10 @@ namespace LazinatorTests.Examples.Hierarchy
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ExampleByInterface_Accessed)
+                {
+                    var deserialized = ExampleByInterface;
+                }
                 WriteChild(ref writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
@@ -406,6 +410,10 @@ namespace LazinatorTests.Examples.Hierarchy
                 _ExampleByInterface_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ExampleListByInterface_Accessed)
+            {
+                var deserialized = ExampleListByInterface;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
             isAccessed: _ExampleListByInterface_Accessed, writer: ref writer,

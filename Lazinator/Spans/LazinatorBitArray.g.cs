@@ -401,6 +401,10 @@ namespace Lazinator.Spans
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ByteSpan_Accessed)
+                {
+                    var deserialized = ByteSpan;
+                }
                 WriteChild(ref writer, _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

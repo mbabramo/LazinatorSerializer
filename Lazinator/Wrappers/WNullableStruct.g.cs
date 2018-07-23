@@ -385,6 +385,10 @@ namespace Lazinator.Wrappers
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonNullValue_Accessed)
+                {
+                    var deserialized = NonNullValue;
+                }
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _NonNullValue_ByteIndex;
                 var byteLengthCopy = _NonNullValue_ByteLength;

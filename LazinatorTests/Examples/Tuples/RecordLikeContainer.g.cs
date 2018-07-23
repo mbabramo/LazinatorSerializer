@@ -408,6 +408,10 @@ namespace LazinatorTests.Examples.Tuples
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyMismatchedRecordLikeType_Accessed)
+            {
+                var deserialized = MyMismatchedRecordLikeType;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyMismatchedRecordLikeType, isBelievedDirty: _MyMismatchedRecordLikeType_Accessed,
             isAccessed: _MyMismatchedRecordLikeType_Accessed, writer: ref writer,
@@ -421,6 +425,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyMismatchedRecordLikeType_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyRecordLikeClass_Accessed)
+            {
+                var deserialized = MyRecordLikeClass;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed,
             isAccessed: _MyRecordLikeClass_Accessed, writer: ref writer,
@@ -434,6 +442,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeClass_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyRecordLikeType_Accessed)
+            {
+                var deserialized = MyRecordLikeType;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed,
             isAccessed: _MyRecordLikeType_Accessed, writer: ref writer,

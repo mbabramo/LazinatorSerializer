@@ -436,6 +436,10 @@ namespace LazinatorTests.Examples.Subclasses
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_SubclassInstance1_Accessed)
+                {
+                    var deserialized = SubclassInstance1;
+                }
                 WriteChild(ref writer, _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
@@ -445,6 +449,10 @@ namespace LazinatorTests.Examples.Subclasses
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_SubclassInstance2_Accessed)
+                {
+                    var deserialized = SubclassInstance2;
+                }
                 WriteChild(ref writer, _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

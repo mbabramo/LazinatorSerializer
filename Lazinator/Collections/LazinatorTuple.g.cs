@@ -460,6 +460,10 @@ namespace Lazinator.Collections
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Item1_Accessed)
+                {
+                    var deserialized = Item1;
+                }
                 WriteChild(ref writer, _Item1, includeChildrenMode, _Item1_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item1_ByteIndex, _Item1_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
@@ -469,6 +473,10 @@ namespace Lazinator.Collections
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Item2_Accessed)
+                {
+                    var deserialized = Item2;
+                }
                 WriteChild(ref writer, _Item2, includeChildrenMode, _Item2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Item2_ByteIndex, _Item2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

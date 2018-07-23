@@ -185,6 +185,10 @@ namespace LazinatorTests.Examples.Collections
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyArrayInt_DerivedLevel_Accessed)
+            {
+                var deserialized = MyArrayInt_DerivedLevel;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt_DerivedLevel, isBelievedDirty: MyArrayInt_DerivedLevel_Dirty,
             isAccessed: _MyArrayInt_DerivedLevel_Accessed, writer: ref writer,

@@ -371,6 +371,10 @@ namespace Lazinator.Collections.Avl
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Root_Accessed)
+                {
+                    var deserialized = Root;
+                }
                 WriteChild(ref writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Root_ByteIndex, _Root_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

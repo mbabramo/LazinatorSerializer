@@ -423,6 +423,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyArrayInt_Accessed)
+            {
+                var deserialized = MyArrayInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
             isAccessed: _MyArrayInt_Accessed, writer: ref writer,
@@ -436,6 +440,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyArrayInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyArrayNullableInt_Accessed)
+            {
+                var deserialized = MyArrayNullableInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayNullableInt, isBelievedDirty: _MyArrayNullableInt_Accessed,
             isAccessed: _MyArrayNullableInt_Accessed, writer: ref writer,
@@ -449,6 +457,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyArrayNullableInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyJaggedArrayInt_Accessed)
+            {
+                var deserialized = MyJaggedArrayInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyJaggedArrayInt, isBelievedDirty: _MyJaggedArrayInt_Accessed,
             isAccessed: _MyJaggedArrayInt_Accessed, writer: ref writer,

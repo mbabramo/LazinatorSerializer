@@ -428,6 +428,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListInt_Accessed)
+            {
+                var deserialized = MyListInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
             isAccessed: _MyListInt_Accessed, writer: ref writer,
@@ -441,6 +445,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyListInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListNullableByte_Accessed)
+            {
+                var deserialized = MyListNullableByte;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableByte, isBelievedDirty: _MyListNullableByte_Accessed,
             isAccessed: _MyListNullableByte_Accessed, writer: ref writer,
@@ -454,6 +462,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyListNullableByte_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListNullableInt_Accessed)
+            {
+                var deserialized = MyListNullableInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableInt, isBelievedDirty: _MyListNullableInt_Accessed,
             isAccessed: _MyListNullableInt_Accessed, writer: ref writer,

@@ -416,6 +416,10 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedLong(ref writer, _MyLong);
             CompressedIntegralTypes.WriteCompressedShort(ref writer, _MyShort);
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ByteSpan_Accessed)
+            {
+                var deserialized = ByteSpan;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ByteSpan, isBelievedDirty: _ByteSpan_Accessed,
             isAccessed: _ByteSpan_Accessed, writer: ref writer,
@@ -431,6 +435,10 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyWrapperContainer_Accessed)
+                {
+                    var deserialized = MyWrapperContainer;
+                }
                 WriteChild(ref writer, _MyWrapperContainer, includeChildrenMode, _MyWrapperContainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

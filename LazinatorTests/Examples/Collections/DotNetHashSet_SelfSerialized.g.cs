@@ -336,6 +336,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyHashSetSerialized_Accessed)
+            {
+                var deserialized = MyHashSetSerialized;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyHashSetSerialized, isBelievedDirty: _MyHashSetSerialized_Accessed,
             isAccessed: _MyHashSetSerialized_Accessed, writer: ref writer,

@@ -167,6 +167,10 @@ namespace LazinatorTests.Examples.Abstract
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList6_Accessed)
+            {
+                var deserialized = IntList6;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed,
             isAccessed: _IntList6_Accessed, writer: ref writer,

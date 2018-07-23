@@ -504,6 +504,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyMemoryInt_Accessed)
+            {
+                var deserialized = MyMemoryInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyMemoryInt, isBelievedDirty: _MyMemoryInt_Accessed,
             isAccessed: _MyMemoryInt_Accessed, writer: ref writer,
@@ -517,6 +521,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyMemoryInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableMemoryInt_Accessed)
+            {
+                var deserialized = MyNullableMemoryInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableMemoryInt, isBelievedDirty: _MyNullableMemoryInt_Accessed,
             isAccessed: _MyNullableMemoryInt_Accessed, writer: ref writer,
@@ -530,6 +538,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyNullableMemoryInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlyMemoryByte_Accessed)
+            {
+                var deserialized = MyReadOnlyMemoryByte;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlyMemoryByte, isBelievedDirty: _MyReadOnlyMemoryByte_Accessed,
             isAccessed: _MyReadOnlyMemoryByte_Accessed, writer: ref writer,
@@ -543,6 +555,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlyMemoryByte_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanByte_Accessed)
+            {
+                var deserialized = MyReadOnlySpanByte;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanByte, isBelievedDirty: _MyReadOnlySpanByte_Accessed,
             isAccessed: _MyReadOnlySpanByte_Accessed, writer: ref writer,
@@ -556,6 +572,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanByte_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanChar_Accessed)
+            {
+                var deserialized = MyReadOnlySpanChar;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanChar, isBelievedDirty: _MyReadOnlySpanChar_Accessed,
             isAccessed: _MyReadOnlySpanChar_Accessed, writer: ref writer,
@@ -569,6 +589,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanChar_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanDateTime_Accessed)
+            {
+                var deserialized = MyReadOnlySpanDateTime;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanDateTime, isBelievedDirty: _MyReadOnlySpanDateTime_Accessed,
             isAccessed: _MyReadOnlySpanDateTime_Accessed, writer: ref writer,
@@ -582,6 +606,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyReadOnlySpanDateTime_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanLong_Accessed)
+            {
+                var deserialized = MyReadOnlySpanLong;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanLong, isBelievedDirty: _MyReadOnlySpanLong_Accessed,
             isAccessed: _MyReadOnlySpanLong_Accessed, writer: ref writer,

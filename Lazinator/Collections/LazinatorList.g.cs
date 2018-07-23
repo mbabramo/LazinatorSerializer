@@ -382,6 +382,10 @@ namespace Lazinator.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MainListSerialized_Accessed)
+            {
+                var deserialized = MainListSerialized;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MainListSerialized, isBelievedDirty: _MainListSerialized_Accessed,
             isAccessed: _MainListSerialized_Accessed, writer: ref writer,
@@ -397,6 +401,10 @@ namespace Lazinator.Collections
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Offsets_Accessed)
+                {
+                    var deserialized = Offsets;
+                }
                 WriteChild(ref writer, _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

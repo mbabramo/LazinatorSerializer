@@ -331,6 +331,10 @@ namespace Lazinator.Wrappers
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_WrappedValue_Accessed)
+            {
+                var deserialized = WrappedValue;
+            }
             var serializedBytesCopy_WrappedValue = LazinatorObjectBytes;
             var byteIndexCopy_WrappedValue = _WrappedValue_ByteIndex;
             var byteLengthCopy_WrappedValue = _WrappedValue_ByteLength;

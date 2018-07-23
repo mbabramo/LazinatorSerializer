@@ -336,6 +336,10 @@ namespace LazinatorTests.Examples.Tuples
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNestedTuple_Accessed)
+            {
+                var deserialized = MyNestedTuple;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNestedTuple, isBelievedDirty: _MyNestedTuple_Accessed,
             isAccessed: _MyNestedTuple_Accessed, writer: ref writer,

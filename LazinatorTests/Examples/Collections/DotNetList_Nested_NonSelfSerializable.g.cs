@@ -336,6 +336,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListNestedNonLazinatorType_Accessed)
+            {
+                var deserialized = MyListNestedNonLazinatorType;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNestedNonLazinatorType, isBelievedDirty: _MyListNestedNonLazinatorType_Accessed,
             isAccessed: _MyListNestedNonLazinatorType_Accessed, writer: ref writer,

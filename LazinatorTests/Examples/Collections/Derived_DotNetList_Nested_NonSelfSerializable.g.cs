@@ -184,6 +184,10 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyLevel2Int);
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyLevel2ListNestedNonLazinatorType_Accessed)
+            {
+                var deserialized = MyLevel2ListNestedNonLazinatorType;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLevel2ListNestedNonLazinatorType, isBelievedDirty: _MyLevel2ListNestedNonLazinatorType_Accessed,
             isAccessed: _MyLevel2ListNestedNonLazinatorType_Accessed, writer: ref writer,

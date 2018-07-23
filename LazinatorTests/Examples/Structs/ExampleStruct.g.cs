@@ -565,6 +565,10 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyChild1_Accessed)
+                {
+                    var deserialized = MyChild1;
+                }
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyChild1_ByteIndex;
                 var byteLengthCopy = _MyChild1_ByteLength;
@@ -577,6 +581,10 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyChild2_Accessed)
+                {
+                    var deserialized = MyChild2;
+                }
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyChild2_ByteIndex;
                 var byteLengthCopy = _MyChild2_ByteLength;
@@ -587,6 +595,10 @@ namespace LazinatorTests.Examples
                 _MyChild2_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyLazinatorList_Accessed)
+            {
+                var deserialized = MyLazinatorList;
+            }
             var serializedBytesCopy_MyLazinatorList = LazinatorObjectBytes;
             var byteIndexCopy_MyLazinatorList = _MyLazinatorList_ByteIndex;
             var byteLengthCopy_MyLazinatorList = _MyLazinatorList_ByteLength;
@@ -603,6 +615,10 @@ namespace LazinatorTests.Examples
                 _MyLazinatorList_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListValues_Accessed)
+            {
+                var deserialized = MyListValues;
+            }
             var serializedBytesCopy_MyListValues = LazinatorObjectBytes;
             var byteIndexCopy_MyListValues = _MyListValues_ByteIndex;
             var byteLengthCopy_MyListValues = _MyListValues_ByteLength;
@@ -619,6 +635,10 @@ namespace LazinatorTests.Examples
                 _MyListValues_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTuple_Accessed)
+            {
+                var deserialized = MyTuple;
+            }
             var serializedBytesCopy_MyTuple = LazinatorObjectBytes;
             var byteIndexCopy_MyTuple = _MyTuple_ByteIndex;
             var byteLengthCopy_MyTuple = _MyTuple_ByteLength;

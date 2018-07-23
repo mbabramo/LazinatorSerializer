@@ -327,6 +327,10 @@ namespace Lazinator.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ReadOnlyBytes_Accessed)
+            {
+                var deserialized = ReadOnlyBytes;
+            }
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed,
             isAccessed: _ReadOnlyBytes_Accessed, writer: ref writer,

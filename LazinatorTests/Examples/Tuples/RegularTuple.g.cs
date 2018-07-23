@@ -441,6 +441,10 @@ namespace LazinatorTests.Examples.Tuples
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized_Accessed)
+            {
+                var deserialized = MyTupleSerialized;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized, isBelievedDirty: _MyTupleSerialized_Accessed,
             isAccessed: _MyTupleSerialized_Accessed, writer: ref writer,
@@ -454,6 +458,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized2_Accessed)
+            {
+                var deserialized = MyTupleSerialized2;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized2, isBelievedDirty: _MyTupleSerialized2_Accessed,
             isAccessed: _MyTupleSerialized2_Accessed, writer: ref writer,
@@ -467,6 +475,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized2_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized3_Accessed)
+            {
+                var deserialized = MyTupleSerialized3;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized3, isBelievedDirty: _MyTupleSerialized3_Accessed,
             isAccessed: _MyTupleSerialized3_Accessed, writer: ref writer,
@@ -480,6 +492,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyTupleSerialized3_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized4_Accessed)
+            {
+                var deserialized = MyTupleSerialized4;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyTupleSerialized4, isBelievedDirty: _MyTupleSerialized4_Accessed,
             isAccessed: _MyTupleSerialized4_Accessed, writer: ref writer,

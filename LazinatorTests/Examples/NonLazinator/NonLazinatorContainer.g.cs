@@ -412,6 +412,10 @@ namespace LazinatorTests.Examples
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorClass_Accessed)
+            {
+                var deserialized = NonLazinatorClass;
+            }
             var serializedBytesCopy_NonLazinatorClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorClass = _NonLazinatorClass_ByteIndex;
             var byteLengthCopy_NonLazinatorClass = _NonLazinatorClass_ByteLength;
@@ -428,6 +432,10 @@ namespace LazinatorTests.Examples
                 _NonLazinatorClass_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorInterchangeableClass_Accessed)
+            {
+                var deserialized = NonLazinatorInterchangeableClass;
+            }
             var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
@@ -444,6 +452,10 @@ namespace LazinatorTests.Examples
                 _NonLazinatorInterchangeableClass_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorStruct_Accessed)
+            {
+                var deserialized = NonLazinatorStruct;
+            }
             var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;

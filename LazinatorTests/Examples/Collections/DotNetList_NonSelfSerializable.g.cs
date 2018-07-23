@@ -389,6 +389,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListNonLazinatorType_Accessed)
+            {
+                var deserialized = MyListNonLazinatorType;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType, isBelievedDirty: MyListNonLazinatorType_Dirty,
             isAccessed: _MyListNonLazinatorType_Accessed, writer: ref writer,
@@ -402,6 +406,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyListNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListNonLazinatorType2_Accessed)
+            {
+                var deserialized = MyListNonLazinatorType2;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType2, isBelievedDirty: _MyListNonLazinatorType2_Accessed,
             isAccessed: _MyListNonLazinatorType2_Accessed, writer: ref writer,

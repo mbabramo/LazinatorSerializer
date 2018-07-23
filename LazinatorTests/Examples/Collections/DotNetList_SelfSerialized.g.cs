@@ -354,6 +354,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListSerialized_Accessed)
+            {
+                var deserialized = MyListSerialized;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListSerialized, isBelievedDirty: MyListSerialized_Dirty,
             isAccessed: _MyListSerialized_Accessed, writer: ref writer,

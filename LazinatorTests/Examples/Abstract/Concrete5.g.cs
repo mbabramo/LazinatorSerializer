@@ -232,6 +232,10 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String4);
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String5);
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList4_Accessed)
+            {
+                var deserialized = IntList4;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList4, isBelievedDirty: _IntList4_Accessed,
             isAccessed: _IntList4_Accessed, writer: ref writer,
@@ -245,6 +249,10 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList4_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList5_Accessed)
+            {
+                var deserialized = IntList5;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed,
             isAccessed: _IntList5_Accessed, writer: ref writer,

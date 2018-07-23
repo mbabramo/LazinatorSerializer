@@ -156,7 +156,7 @@ namespace Lazinator.Core
                         childCouldHaveChanged = false;
                 }
             }
-            if (!childCouldHaveChanged && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren /* DEBUG -- remove this conditional */)
+            if (!childCouldHaveChanged)
             {
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
             }

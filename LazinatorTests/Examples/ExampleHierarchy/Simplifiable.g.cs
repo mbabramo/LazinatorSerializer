@@ -674,6 +674,10 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ANonSkippableEarlierExample_Accessed)
+                {
+                    var deserialized = ANonSkippableEarlierExample;
+                }
                 WriteChild(ref writer, _ANonSkippableEarlierExample, includeChildrenMode, _ANonSkippableEarlierExample_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
@@ -685,6 +689,10 @@ namespace LazinatorTests.Examples
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
                 {
+                    if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Example_Accessed)
+                    {
+                        var deserialized = Example;
+                    }
                     WriteChild(ref writer, _Example, includeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example_ByteIndex, _Example_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 }
             }
@@ -697,6 +705,10 @@ namespace LazinatorTests.Examples
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion >= 4) 
                 {
+                    if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Example2_Accessed)
+                    {
+                        var deserialized = Example2;
+                    }
                     WriteChild(ref writer, _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 }
             }
@@ -709,6 +721,10 @@ namespace LazinatorTests.Examples
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
                 {
+                    if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Example3_Accessed)
+                    {
+                        var deserialized = Example3;
+                    }
                     WriteChild(ref writer, _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Example3_ByteIndex, _Example3_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 }
             }

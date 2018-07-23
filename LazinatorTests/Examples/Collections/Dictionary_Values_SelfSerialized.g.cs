@@ -406,6 +406,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyDictionary_Accessed)
+            {
+                var deserialized = MyDictionary;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyDictionary, isBelievedDirty: _MyDictionary_Accessed,
             isAccessed: _MyDictionary_Accessed, writer: ref writer,
@@ -419,6 +423,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyDictionary_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MySortedDictionary_Accessed)
+            {
+                var deserialized = MySortedDictionary;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed,
             isAccessed: _MySortedDictionary_Accessed, writer: ref writer,
@@ -432,6 +440,10 @@ namespace LazinatorTests.Examples.Collections
                 _MySortedDictionary_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MySortedList_Accessed)
+            {
+                var deserialized = MySortedList;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed,
             isAccessed: _MySortedList_Accessed, writer: ref writer,

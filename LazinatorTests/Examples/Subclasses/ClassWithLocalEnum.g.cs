@@ -355,6 +355,10 @@ namespace LazinatorTests.Examples.Subclasses
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnum);
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyEnumList_Accessed)
+            {
+                var deserialized = MyEnumList;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed,
             isAccessed: _MyEnumList_Accessed, writer: ref writer,

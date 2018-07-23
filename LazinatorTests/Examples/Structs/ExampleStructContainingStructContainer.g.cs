@@ -388,6 +388,10 @@ namespace LazinatorTests.Examples.Structs
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Subcontainer_Accessed)
+                {
+                    var deserialized = Subcontainer;
+                }
                 WriteChild(ref writer, _Subcontainer, includeChildrenMode, _Subcontainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)

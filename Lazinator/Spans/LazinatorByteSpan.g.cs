@@ -367,6 +367,10 @@ namespace Lazinator.Spans
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ReadOnly_Accessed)
+            {
+                var deserialized = ReadOnly;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnly, isBelievedDirty: _ReadOnly_Accessed,
             isAccessed: _ReadOnly_Accessed, writer: ref writer,
@@ -380,6 +384,10 @@ namespace Lazinator.Spans
                 _ReadOnly_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ReadOrWrite_Accessed)
+            {
+                var deserialized = ReadOrWrite;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed,
             isAccessed: _ReadOrWrite_Accessed, writer: ref writer,

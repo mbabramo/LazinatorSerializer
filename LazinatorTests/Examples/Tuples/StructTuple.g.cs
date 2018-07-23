@@ -441,6 +441,10 @@ namespace LazinatorTests.Examples.Tuples
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_EnumTuple_Accessed)
+            {
+                var deserialized = EnumTuple;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _EnumTuple, isBelievedDirty: _EnumTuple_Accessed,
             isAccessed: _EnumTuple_Accessed, writer: ref writer,
@@ -454,6 +458,10 @@ namespace LazinatorTests.Examples.Tuples
                 _EnumTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNamedTuple_Accessed)
+            {
+                var deserialized = MyNamedTuple;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNamedTuple, isBelievedDirty: _MyNamedTuple_Accessed,
             isAccessed: _MyNamedTuple_Accessed, writer: ref writer,
@@ -467,6 +475,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyNamedTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableTuple_Accessed)
+            {
+                var deserialized = MyNullableTuple;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableTuple, isBelievedDirty: _MyNullableTuple_Accessed,
             isAccessed: _MyNullableTuple_Accessed, writer: ref writer,
@@ -480,6 +492,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyNullableTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyValueTupleSerialized_Accessed)
+            {
+                var deserialized = MyValueTupleSerialized;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyValueTupleSerialized, isBelievedDirty: _MyValueTupleSerialized_Accessed,
             isAccessed: _MyValueTupleSerialized_Accessed, writer: ref writer,

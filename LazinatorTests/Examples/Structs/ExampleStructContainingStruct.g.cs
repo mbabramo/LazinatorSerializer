@@ -387,6 +387,10 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyExampleStruct_Accessed)
+                {
+                    var deserialized = MyExampleStruct;
+                }
                 var serializedBytesCopy = LazinatorObjectBytes;
                 var byteIndexCopy = _MyExampleStruct_ByteIndex;
                 var byteLengthCopy = _MyExampleStruct_ByteLength;

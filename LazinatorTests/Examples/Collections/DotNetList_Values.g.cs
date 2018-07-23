@@ -494,6 +494,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyLinkedListInt_Accessed)
+            {
+                var deserialized = MyLinkedListInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyLinkedListInt, isBelievedDirty: MyLinkedListInt_Dirty,
             isAccessed: _MyLinkedListInt_Accessed, writer: ref writer,
@@ -507,6 +511,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyLinkedListInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListInt_Accessed)
+            {
+                var deserialized = MyListInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
             isAccessed: _MyListInt_Accessed, writer: ref writer,
@@ -520,6 +528,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyListInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListInt2_Accessed)
+            {
+                var deserialized = MyListInt2;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt2, isBelievedDirty: _MyListInt2_Accessed,
             isAccessed: _MyListInt2_Accessed, writer: ref writer,
@@ -533,6 +545,10 @@ namespace LazinatorTests.Examples.Collections
                 _MyListInt2_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MySortedSetInt_Accessed)
+            {
+                var deserialized = MySortedSetInt;
+            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty,
             isAccessed: _MySortedSetInt_Accessed, writer: ref writer,
