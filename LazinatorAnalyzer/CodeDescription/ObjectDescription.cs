@@ -98,7 +98,7 @@ namespace Lazinator.CodeDescription
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
-            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullNamespacePlusSimpleName();
+            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal();
             NameIncludingGenerics = iLazinatorTypeSymbol.Name; // possibly updated later
             SimpleName = iLazinatorTypeSymbol.Name;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
