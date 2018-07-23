@@ -244,7 +244,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendSupertypesInformation(out string partialsuperclasses, out IEnumerable<ITypeSymbol> supertypes)
         {
-            // we may have nested lazinator classes, in which class we need to nest the partial class definitions. We assume that the 
+            // we may have nested lazinator classes, in which class we need to nest the partial class definitions.
             partialsuperclasses = "";
             supertypes = null;
             if (ILazinatorTypeSymbol.ContainingType != null)
@@ -1226,12 +1226,9 @@ namespace Lazinator.CodeDescription
                 else
                     throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator. Add a clause like 'where T : ILazinator, new()' to both the main class and the interface definition");
             }
+            NameIncludingGenerics = iLazinatorType.GetMinimallyQualifiedName();
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
-            if (GenericArgumentNames.Any())
-                NameIncludingGenerics = iLazinatorType.Name + "<" + string.Join(", ", GenericArgumentNames) + ">";
-            else
-                NameIncludingGenerics = iLazinatorType.Name;
-            FullyQualifiedObjectName = iLazinatorType.GetFullNamespace() + "." + NameIncludingGenerics;
+            FullyQualifiedObjectName = iLazinatorType.GetFullyQualifiedName();
         }
 
         private bool IsNonlazinatorGeneric(ITypeSymbol typeSymbol)
