@@ -7,7 +7,7 @@ using Lazinator.Core;
 using Lazinator.Wrappers;
 using Xunit;
 
-namespace LazinatorTests.Tests.AVL
+namespace LazinatorTests.AVL
 {
     public class AvlSerializationTest
     {
