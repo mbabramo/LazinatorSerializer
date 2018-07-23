@@ -167,7 +167,7 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (symbol == null)
                 return "";
-            return GetFullNamespace(symbol) + "." + symbol.Name;
+            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
         }
 
         public static string GetFullNamespace(this ISymbol symbol)
