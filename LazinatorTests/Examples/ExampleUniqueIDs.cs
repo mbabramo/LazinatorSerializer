@@ -80,6 +80,7 @@
         IncludesSkippable,
         ConcreteFromBase,
         ExampleStructContainingStructContainer,
-        ContainerForExampleWithDefault
+        ContainerForExampleWithDefault,
+        ClosedGenericWithGeneric
     }
 }
