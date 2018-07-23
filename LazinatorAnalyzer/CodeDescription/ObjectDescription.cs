@@ -1228,7 +1228,7 @@ namespace Lazinator.CodeDescription
             }
             NameIncludingGenerics = iLazinatorType.GetMinimallyQualifiedName();
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
-            FullyQualifiedObjectName = iLazinatorType.GetFullyQualifiedName();
+            FullyQualifiedObjectName = iLazinatorType.GetFullyQualifiedNameWithoutGlobal();
         }
 
         private bool IsNonlazinatorGeneric(ITypeSymbol typeSymbol)
