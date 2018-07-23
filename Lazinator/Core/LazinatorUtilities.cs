@@ -125,8 +125,8 @@ namespace Lazinator.Core
         /// Initiates a binary write to a child of a Lazinator object, optionally including a length prefix, using existing storage if possible
         /// </summary>
         /// <param name="writer">The binary writer</param>
-        /// <param name="child">The child</param>
-        /// <param name="includeChildrenMode"></param>
+        /// <param name="child">The child to be written. This child will be written regardless of includeChildrenMode.</param>
+        /// <param name="includeChildrenMode">An indication of which descendants of this child should be written.</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
@@ -156,7 +156,7 @@ namespace Lazinator.Core
                         childCouldHaveChanged = false;
                 }
             }
-            if (!childCouldHaveChanged && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!childCouldHaveChanged && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren /* DEBUG -- remove this conditional */)
             {
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
             }

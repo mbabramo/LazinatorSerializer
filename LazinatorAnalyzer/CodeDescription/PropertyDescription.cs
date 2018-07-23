@@ -1127,7 +1127,7 @@ namespace Lazinator.CodeDescription
                 if (SkipCondition != null)
                     sb.AppendLine(skipCheckString);
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
+                        CreateConditional(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
             }
             else
             {
@@ -1148,12 +1148,12 @@ namespace Lazinator.CodeDescription
                 else if (IsGuaranteedSmall)
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
-                            " + CreateConditionalForSingleLine(ReadInclusionConditional,
+                            " + CreateConditional(ReadInclusionConditional,
                             "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
                 else
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
-                            " + CreateConditionalForSingleLine(ReadInclusionConditional,
+                            " + CreateConditional(ReadInclusionConditional,
                             "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
             }
             if (SkipCondition != null)
@@ -1162,7 +1162,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private string CreateConditionalForSingleLine(string conditional, string consequent, string elseConsequent = null)
+        private string CreateConditional(string conditional, string consequent, string elseConsequent = null)
         {
             if (conditional.Trim() == "")
                 return consequent;
@@ -1194,7 +1194,7 @@ namespace Lazinator.CodeDescription
             // Now, we consider versioning information.
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditionalForSingleLine(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
+                        CreateConditional(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
             else
             {
                 // Finally, the main code for writing a serialized or non serialized object.
@@ -1217,6 +1217,7 @@ namespace Lazinator.CodeDescription
         {
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
+            sb.Append($"{EnsureExcludableChildrenLoaded()}");
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 sb.AppendLine(
@@ -1257,7 +1258,7 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 sb.AppendLine(
-                    CreateConditionalForSingleLine(WriteInclusionConditional, $"WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
+                    CreateConditional(WriteInclusionConditional, $"{EnsureExcludableChildrenLoaded()}WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
             }
             else
             {
@@ -1265,12 +1266,21 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine(
                     $@"{WriteInclusionConditional} 
                         {{
-                            var serializedBytesCopy = LazinatorObjectBytes;
+                            {EnsureExcludableChildrenLoaded()}var serializedBytesCopy = LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
                             WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);
                         }}");
             }
+        }
+
+        private string EnsureExcludableChildrenLoaded()
+        {
+            return $@"if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_{PropertyName}_Accessed)
+                                {{
+                                   var deserialized = {PropertyName};
+                                }}
+                    ";
         }
 
         #endregion
