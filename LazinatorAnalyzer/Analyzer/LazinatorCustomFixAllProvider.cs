@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Lazinator.CodeDescription;
@@ -37,14 +38,45 @@ namespace LazinatorAnalyzer.Analyzer
             {
                 LazinatorCodeFixProvider.RecycleLazinatorCompilation = true;
                 LazinatorCodeFixProvider._LastLazinatorCompilation = null;
-                var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
-                CodeAction result = await this.GetCodeActionToFixAll(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
+                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext);
+                CodeAction result = await this.GetCodeActionToFixAll(revisedSolution, fixAllContext).ConfigureAwait(false);
                 return result;
             }
             finally
             {
                 LazinatorCodeFixProvider.RecycleLazinatorCompilation = false;
             }
+        }
+
+        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext)
+        {
+            var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+            Solution revisedSolution;
+            if (documentsAndDiagnosticsToFixMap.Any())
+                revisedSolution = await GenerateSolutionFromProblemsList(documentsAndDiagnosticsToFixMap, fixAllContext);
+            else
+                revisedSolution = fixAllContext.Solution;
+            return revisedSolution;
+        }
+
+        private FixAllContext GetNextStageFixAllContext(FixAllContext originalContext, Solution revisedSolution)
+        {
+            if (originalContext.Document != null)
+            {
+                var id = originalContext.Document.Id;
+                var documentInRevised = revisedSolution.GetDocument(id);
+                FixAllContext revisedContext = new FixAllContext(documentInRevised, originalContext.CodeFixProvider, originalContext.Scope, originalContext.CodeActionEquivalenceKey, originalContext.DiagnosticIds, originalContext.State.DiagnosticProvider, originalContext.CancellationToken);
+            }
+        }
+
+        private FixAllContext.DiagnosticProvider GetDiagnosticProvider(FixAllContext context)
+        {
+            System.Reflection.BindingFlags
+            PropertyInfo prop =
+    typeof(FixAllContext).GetProperty("FooBar", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            MethodInfo getter = prop.GetGetMethod(nonPublic: true);
+            object bar = getter.Invoke(f, null);
         }
 
         public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(
@@ -136,17 +168,16 @@ namespace LazinatorAnalyzer.Analyzer
             analyzer.ClearDiagnostics();
         }
 
-        public virtual async Task<CodeAction> GetCodeActionToFixAll(
-            ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
+        public virtual Task<CodeAction> GetCodeActionToFixAll(
+            Solution revisedSolution,
             FixAllContext fixAllContext)
         {
-            Solution revisedSolution = await GetSolutionWithAllFixed(documentsAndDiagnosticsToFixMap, fixAllContext);
             var title = this.GetFixAllTitle(fixAllContext);
             CodeAction result = CodeAction.Create(title, cancellationToken => Task.FromResult(revisedSolution));
-            return result;
+            return Task.FromResult(result);
         }
 
-        public virtual async Task<Solution> GetSolutionWithAllFixed(ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
+        public virtual async Task<Solution> GenerateSolutionFromProblemsList(ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
             Solution revisedSolution = null;
