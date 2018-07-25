@@ -50,7 +50,7 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne = 0)
+        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne = 0, bool suppressRegenerate = false)
         {
             var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
             Solution revisedSolution;
@@ -60,7 +60,7 @@ namespace LazinatorAnalyzer.Analyzer
                 if (maxStagesAfterThisOne == 0)
                     revisedSolution = solutionAfterStage;
                 else
-                    revisedSolution = await GenerateRevisedSolution(GetNextStageFixAllContext(fixAllContext, solutionAfterStage), maxStagesAfterThisOne - 1);
+                    revisedSolution = await GenerateRevisedSolution(GetNextStageFixAllContext(fixAllContext, solutionAfterStage), maxStagesAfterThisOne - 1, true /* don't regenerate things -- only worry about things that are stil errors */);
             }
             else
                 revisedSolution = fixAllContext.Solution;
@@ -110,7 +110,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         private object GetNonpublicProperty<T>(T containingInstance, string propertyName)
         {
-            return GetNonpublicProperty(containingInstance, propertyName);
+            return GetNonpublicProperty((object) containingInstance, propertyName);
         }
 
         private static object GetNonpublicProperty(object containingInstance, string propertyName)
@@ -169,7 +169,7 @@ namespace LazinatorAnalyzer.Analyzer
                 return;
             analyzer.DisableStartingFromInterface = true;
             var config = analyzer.Config;
-            foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular && !x.FilePath.EndsWith(config?.GeneratedCodeFileExtension ?? ".laz.cs")))
+            foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular && !(x.FilePath ?? x.Name).EndsWith(config?.GeneratedCodeFileExtension ?? ".laz.cs")))
             {
                 await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, doc, cancellationToken);
             }
@@ -288,7 +288,7 @@ namespace LazinatorAnalyzer.Analyzer
                     await task.ConfigureAwait(false);
 
                     cancellationToken.ThrowIfCancellationRequested();
-                    localFixes.RemoveAll(action => action.EquivalenceKey != fixAllContext.CodeActionEquivalenceKey);
+                    // DEBUG -- test removing this. We'd like to combine Generate & Regenerate fixes. Otherwise, we need to make sure we're only generating fixes of the correct type. localFixes.RemoveAll(action => action.EquivalenceKey != fixAllContext.CodeActionEquivalenceKey);
                     fixes[currentFixIndex] = localFixes;
                 });
             }

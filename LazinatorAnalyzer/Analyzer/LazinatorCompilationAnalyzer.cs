@@ -287,7 +287,7 @@ namespace LazinatorAnalyzer.Analyzer
             {
                 List<Diagnostic> diagnosticsToAdd = null;
                 var lazinatorPairInfo = compilationInfoEntry.Value;
-                if (lazinatorPairInfo.IncorrectCodeBehindLocations.Any())
+                if (lazinatorPairInfo.IncorrectCodeBehindLocations?.Any() ?? false)
                 {
                     diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo.IncorrectCodeBehindLocations);
                 }
