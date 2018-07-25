@@ -166,7 +166,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             if (lazinatorPairInfo != null)
             {
-                Location key = lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.First();
+                Location key = lazinatorPairInfo.PrimaryLocation;
                 CompilationInformation.AddOrUpdate(key, lazinatorPairInfo, (k, v) => lazinatorPairInfo);
             }
         }
@@ -198,14 +198,13 @@ namespace LazinatorAnalyzer.Analyzer
                                             .ToList();
             var primaryLocation = locationsExcludingCodeBehind
                 .FirstOrDefault();
-            var nonPrimaryLocation = locationsExcludingCodeBehind.Where(x => !(x == primaryLocation));
 
             if (primaryLocation != null)
             {
                 LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation();
                 lazinatorPairInfo.LazinatorObject = lazinatorObjectType;
                 lazinatorPairInfo.LazinatorInterface = namedInterfaceType;
-                (lazinatorPairInfo.CodeBehindLocation, lazinatorPairInfo.IncorrectCodeBehindLocations, lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind) = LazinatorPairInformation.CategorizeLocations(Config, lazinatorObjectType, new List<Location>(nonPrimaryLocation));
+                (lazinatorPairInfo.CodeBehindLocation, lazinatorPairInfo.IncorrectCodeBehindLocations, lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind) = LazinatorPairInformation.CategorizeLocations(Config, lazinatorObjectType, lazinatorObjectType.Locations.ToList());
                 return lazinatorPairInfo;
             }
 
@@ -277,7 +276,7 @@ namespace LazinatorAnalyzer.Analyzer
                 var lazinatorPairInfo = compilationInfoEntry.Value;
                 if (lazinatorPairInfo.IncorrectCodeBehindLocations?.Any() ?? false)
                 {
-                    diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo.IncorrectCodeBehindLocations);
+                    diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo.PrimaryLocation);
                 }
                 else if (lazinatorPairInfo.LazinatorInterface != null
                     && lazinatorPairInfo.LazinatorObject != null
@@ -307,7 +306,7 @@ namespace LazinatorAnalyzer.Analyzer
             AssessGenerationFeasibility(lazinatorPairInfo, out couldBeGenerated, out needsGeneration);
             if (needsGeneration || couldBeGenerated) 
             {
-                var locationOfImplementingType = lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
+                var locationOfImplementingType = lazinatorPairInfo.PrimaryLocation;
                 var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
                 TypeDeclarationSyntax implementingTypeSyntaxNode = (TypeDeclarationSyntax)implementingTypeRoot.FindNode(locationOfImplementingType.SourceSpan);
                 Microsoft.CodeAnalysis.Text.TextSpan? textSpan =
@@ -344,11 +343,10 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private List<Diagnostic> GetIncorrectCodeBehindDiagnosticsToReport(List<Location> incorrectCodeBehindLocations)
+        private List<Diagnostic> GetIncorrectCodeBehindDiagnosticsToReport(Location primaryLocation)
         {
             List<Diagnostic> diagnosticsToReturn = new List<Diagnostic>();
-            foreach (var location in incorrectCodeBehindLocations)
-                diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileRule, location));
+            diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileRule, primaryLocation));
             return diagnosticsToReturn;
         }
 

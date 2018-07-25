@@ -13,6 +13,7 @@ namespace LazinatorAnalyzer.Analyzer
         public INamedTypeSymbol LazinatorObject;
         public INamedTypeSymbol LazinatorInterface;
         public List<Location> LazinatorObjectLocationsExcludingCodeBehind;
+        public Location PrimaryLocation => LazinatorObjectLocationsExcludingCodeBehind[0];
         public Location CodeBehindLocation;
         public List<Location> IncorrectCodeBehindLocations;
         public string Config;
@@ -25,7 +26,7 @@ namespace LazinatorAnalyzer.Analyzer
         }
 
         public LazinatorPairInformation(SemanticModel semanticModel, ImmutableDictionary<string, string> symbolsDictionary,
-            IReadOnlyList<Location> additionalLocations)
+            IReadOnlyList<Location> locations)
         {
             Config = symbolsDictionary["configJsonString"];
             ConfigPath = symbolsDictionary["configPath"];
@@ -36,27 +37,26 @@ namespace LazinatorAnalyzer.Analyzer
             bool codeBehindExists = symbolsDictionary["codeBehindExists"] == "true";
             if (codeBehindExists)
             {
-                (CodeBehindLocation, IncorrectCodeBehindLocations, LazinatorObjectLocationsExcludingCodeBehind) = CategorizeLocations(config, LazinatorObject, new List<Location>(additionalLocations));
+                (CodeBehindLocation, IncorrectCodeBehindLocations, LazinatorObjectLocationsExcludingCodeBehind) = CategorizeLocations(config, LazinatorObject, new List<Location>(locations));
             }
             else
             {
                 CodeBehindLocation = null;
-                LazinatorObjectLocationsExcludingCodeBehind = additionalLocations.ToList();
+                LazinatorObjectLocationsExcludingCodeBehind = locations.ToList();
             }
         }
 
-        public static (Location codeBehindLocation, List<Location> incorrectCodeBehindLocations, List<Location> lazinatorObjectLocationsExcludingCodeBehind) CategorizeLocations(LazinatorConfig config, INamedTypeSymbol lazinatorObject, List<Location> locationsBesidesMainTypeAndInterface)
+        public static (Location codeBehindLocation, List<Location> incorrectCodeBehindLocations, List<Location> lazinatorObjectLocationsExcludingCodeBehind) CategorizeLocations(LazinatorConfig config, INamedTypeSymbol lazinatorObject, List<Location> mainTypeLocations)
         {
             string generatedCodeFileExtension = config?.GeneratedCodeFileExtension ?? ".laz.cs";
             bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || lazinatorObject.ContainingType != null || lazinatorObject.IsGenericType;
             string correctCodeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObject, useFullyQualifiedNames) + generatedCodeFileExtension;
-            IEnumerable<Location> probablyCorrectNames = locationsBesidesMainTypeAndInterface.Where(x => x.SourceTree.FilePath.EndsWith(generatedCodeFileExtension));
-            Location codeBehindLocation = probablyCorrectNames.FirstOrDefault();
-            List<Location> incorrectCodeBehindLocations = locationsBesidesMainTypeAndInterface.Where(x => !x.SourceTree.FilePath.EndsWith(correctCodeBehindName)).ToList();
-            if (probablyCorrectNames.Count() > 1)
-                incorrectCodeBehindLocations.AddRange(probablyCorrectNames.Skip(1));
-            var lazinatorObjectLocationsExcludingCodeBehind = locationsBesidesMainTypeAndInterface.Where(x => !x.Equals(codeBehindLocation) && !incorrectCodeBehindLocations.Any(y => y.Equals(x))).ToList();
-            return (codeBehindLocation, incorrectCodeBehindLocations, lazinatorObjectLocationsExcludingCodeBehind);
+            var nonGeneratedLocations = mainTypeLocations.Where(x => !x.SourceTree.FilePath.EndsWith(generatedCodeFileExtension)).ToList();
+            var codeBehindLocations = mainTypeLocations.Where(x => x.SourceTree.FilePath.EndsWith(generatedCodeFileExtension)).ToList();
+            IEnumerable<Location> possiblyCorrectCodeBehindLocations = mainTypeLocations.Where(x => x.SourceTree.FilePath.EndsWith(correctCodeBehindName));
+            Location codeBehindLocation = possiblyCorrectCodeBehindLocations.FirstOrDefault();
+            List<Location> incorrectCodeBehindLocations = codeBehindLocations.Where(x => x != codeBehindLocation).ToList();
+            return (codeBehindLocation, incorrectCodeBehindLocations, nonGeneratedLocations);
         }
 
 

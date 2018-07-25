@@ -77,16 +77,17 @@ namespace LazinatorAnalyzer.Analyzer
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         title: title,
-                        createChangedSolution: c => DeleteExtraFile(context.Document, c),
+                        createChangedSolution: c => DeleteExtraFiles(context.Document.Project.Solution,  lazinatorPairInfo.IncorrectCodeBehindLocations, c),
                         equivalenceKey: title),
                     diagnostic);
             }
         }
 
-        public static Task<Solution> DeleteExtraFile(Document originalDocument, CancellationToken cancellationToken)
+        public static Task<Solution> DeleteExtraFiles(Solution originalSolution, List<Location> extraFiles, CancellationToken cancellationToken)
         {
-            Solution originalSolution = originalDocument.Project.Solution;
-            Solution revisedSolution = originalSolution.RemoveDocument(originalDocument.Id);
+            Solution revisedSolution = originalSolution;
+            foreach (var d in extraFiles.Select(x => originalSolution.GetDocument(x.SourceTree)))
+                revisedSolution = originalSolution.RemoveDocument(d.Id);
             return Task.FromResult(revisedSolution);
         }
 
