@@ -252,7 +252,7 @@ namespace LazinatorAnalyzer.Analyzer
                     revisedSolution = await this.TryGetMergedFixAsync(codeActionsForEachDocument.SelectMany(i => i), fixAllContext).ConfigureAwait(false);
                 }
             }
-            return revisedSolution;
+            return revisedSolution ?? fixAllContext.Solution;
         }
 
         public async virtual Task AddDocumentFixesAsync(Document document, ImmutableArray<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)

@@ -32,7 +32,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(LazinatorCodeAnalyzer.Lazin001, LazinatorCodeAnalyzer.Lazin002); }
+            get { return ImmutableArray.Create(LazinatorCodeAnalyzer.Lazin001, LazinatorCodeAnalyzer.Lazin002, LazinatorCodeAnalyzer.Lazin004); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

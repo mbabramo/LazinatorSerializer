@@ -276,7 +276,7 @@ namespace LazinatorAnalyzer.Analyzer
                 var lazinatorPairInfo = compilationInfoEntry.Value;
                 if (lazinatorPairInfo.IncorrectCodeBehindLocations?.Any() ?? false)
                 {
-                    diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo.PrimaryLocation);
+                    diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo);
                 }
                 else if (lazinatorPairInfo.LazinatorInterface != null
                     && lazinatorPairInfo.LazinatorObject != null
@@ -343,11 +343,21 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private List<Diagnostic> GetIncorrectCodeBehindDiagnosticsToReport(Location primaryLocation)
+        private List<Diagnostic> GetIncorrectCodeBehindDiagnosticsToReport(LazinatorPairInformation lazinatorPairInfo)
         {
             List<Diagnostic> diagnosticsToReturn = new List<Diagnostic>();
-            diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileRule, primaryLocation));
+            List<Location> additionalLocations = GetAdditionalLocations(lazinatorPairInfo);
+            diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileRule, lazinatorPairInfo.PrimaryLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString)));
             return diagnosticsToReturn;
+        }
+
+        private static List<Location> GetAdditionalLocations(LazinatorPairInformation lazinatorPairInfo)
+        {
+            var additionalLocations = new List<Location>();
+            if (lazinatorPairInfo.CodeBehindLocation != null)
+                additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
+            additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
+            return additionalLocations;
         }
 
         private Diagnostic GetDiagnosticForGeneratable(LazinatorPairInformation lazinatorPairInfo, bool needsGeneration, Location locationOfImplementingType, Microsoft.CodeAnalysis.Text.TextSpan? textSpan, bool suppressRegenerate)
@@ -355,10 +365,7 @@ namespace LazinatorAnalyzer.Analyzer
             Location interfaceSpecificationLocation = Location.Create(
                 locationOfImplementingType.SourceTree,
                 textSpan.Value);
-            var additionalLocations = new List<Location>();
-            if (lazinatorPairInfo.CodeBehindLocation != null)
-                additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
-            additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
+            List<Location> additionalLocations = GetAdditionalLocations(lazinatorPairInfo);
             if (suppressRegenerate && !needsGeneration)
                 return null;
             var diagnostic = Diagnostic.Create(needsGeneration ? LazinatorCodeAnalyzer.OutOfDateRule : LazinatorCodeAnalyzer.OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
