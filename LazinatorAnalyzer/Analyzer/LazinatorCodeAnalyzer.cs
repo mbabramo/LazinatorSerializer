@@ -50,7 +50,14 @@ namespace LazinatorAnalyzer.Analyzer
             "A field in an object implementing a Lazinator interface must be marked NonSerialable. Consider marking as [NonSerialized].";
         private static readonly DiagnosticDescriptor LazinatorUnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle, LazinatorUnaccountedForFieldMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
         internal static DiagnosticDescriptor UnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle.ToString(), LazinatorUnaccountedForFieldMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
-        
+        // 4. If there is an extra code behind file (for example, as a result of a refactoring), generate an error so that it can be deleted
+        public const string Lazin004 = "Lazin004";
+        private static readonly string LazinatorExtraFileFieldTitle = "Lazinator Extra File";
+        private static readonly string LazinatorExtraFileFieldMessageFormat = "Remove extra code-behind file";
+        private static readonly string LazinatorExtraFileFieldDescription =
+            "This code-behind file was generated but no longer belongs here. (This could be the result of a refactoring.)";
+        private static readonly DiagnosticDescriptor LazinatorExtraFileFieldRule = new DiagnosticDescriptor(Lazin004, LazinatorExtraFileFieldTitle, LazinatorExtraFileFieldMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorExtraFileFieldDescription);
+        internal static DiagnosticDescriptor ExtraFileFieldRule = new DiagnosticDescriptor(Lazin004, LazinatorExtraFileFieldTitle.ToString(), LazinatorExtraFileFieldMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorExtraFileFieldDescription);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule, LazinatorOptionalRegenerationRule, LazinatorUnaccountedForFieldRule); } }
 

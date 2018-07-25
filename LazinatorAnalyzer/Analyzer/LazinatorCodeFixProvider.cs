@@ -25,6 +25,7 @@ namespace LazinatorAnalyzer.Analyzer
     {
         private const string Lazin001Title = "Generate Lazinator code behind";
         private const string Lazin002Title = "Regenerate Lazinator code behind";
+        private const string Lazin004Title = "Remove Lazinator code behind";
 
         public static bool RecycleLazinatorCompilation { get; set; }
         public static LazinatorCompilation _LastLazinatorCompilation { get; set; }
@@ -69,8 +70,26 @@ namespace LazinatorAnalyzer.Analyzer
                         equivalenceKey: title),
                     diagnostic);
             }
+
+            if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin004)
+            {
+                string title = Lazin004Title;
+                context.RegisterCodeFix(
+                    CodeAction.Create(
+                        title: title,
+                        createChangedSolution: c => DeleteExtraFile(context.Document, c),
+                        equivalenceKey: title),
+                    diagnostic);
+            }
         }
-        
+
+        public static Task<Solution> DeleteExtraFile(Document originalDocument, CancellationToken cancellationToken)
+        {
+            Solution originalSolution = originalDocument.Project.Solution;
+            Solution revisedSolution = originalSolution.RemoveDocument(originalDocument.Id);
+            return Task.FromResult(revisedSolution);
+        }
+
         public static async Task<Solution> FixGenerateLazinatorCodeBehind(Document originalDocument, TypeDeclarationSyntax enclosingType, LazinatorPairInformation lazinatorPairInformation, CancellationToken cancellationToken)
         {
 
@@ -94,7 +113,7 @@ namespace LazinatorAnalyzer.Analyzer
         public static async Task<Solution> AttemptFixGenerateLazinatorCodeBehind(Document originalDocument, LazinatorPairInformation lazinatorPairInformation, CancellationToken cancellationToken)
         {
             var originalSolution = originalDocument.Project.Solution;
-            LazinatorConfig config = LoadLazinatorConfig(lazinatorPairInformation);
+            LazinatorConfig config = lazinatorPairInformation.LoadLazinatorConfig();
 
             var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
             LazinatorCompilation generator = null;
@@ -157,24 +176,6 @@ namespace LazinatorAnalyzer.Analyzer
             }
             revisedSolution = await AddAnnotationToIndicateSuccess(revisedSolution, true);
             return revisedSolution;
-        }
-
-        private static LazinatorConfig LoadLazinatorConfig(LazinatorPairInformation lazinatorPairInformation)
-        {
-            LazinatorConfig config = null;
-            if (lazinatorPairInformation.Config != null && lazinatorPairInformation.Config != "")
-            {
-                try
-                {
-                    config = new LazinatorConfig(lazinatorPairInformation.ConfigPath, lazinatorPairInformation.Config);
-                }
-                catch
-                {
-                    throw new LazinatorCodeGenException("Lazinator.config is not a valid JSON file.");
-                }
-            }
-
-            return config;
         }
 
         private static async Task<Solution> InsertLazinatorCodeGenerationError(Document originalDocument, TypeDeclarationSyntax enclosingType, LazinatorCodeGenException e, CancellationToken cancellationToken)

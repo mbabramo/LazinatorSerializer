@@ -38,7 +38,9 @@ namespace LazinatorAnalyzer.Analyzer
             {
                 LazinatorCodeFixProvider.RecycleLazinatorCompilation = true;
                 LazinatorCodeFixProvider._LastLazinatorCompilation = null;
-                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext);
+                // We allow for the possibility that our initial solution will still need work. 
+                const int MaxStages = 5;
+                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext, MaxStages);
                 CodeAction result = await this.GetCodeActionToFixAll(revisedSolution, fixAllContext).ConfigureAwait(false);
                 return result;
             }
@@ -48,12 +50,18 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext)
+        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne = 0)
         {
             var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
             Solution revisedSolution;
             if (documentsAndDiagnosticsToFixMap.Any())
-                revisedSolution = await GenerateSolutionFromProblemsList(documentsAndDiagnosticsToFixMap, fixAllContext);
+            {
+                var solutionAfterStage = await GenerateSolutionFromProblemsList(documentsAndDiagnosticsToFixMap, fixAllContext);
+                if (maxStagesAfterThisOne == 0)
+                    revisedSolution = solutionAfterStage;
+                else
+                    revisedSolution = await GenerateRevisedSolution(GetNextStageFixAllContext(fixAllContext, solutionAfterStage), maxStagesAfterThisOne - 1);
+            }
             else
                 revisedSolution = fixAllContext.Solution;
             return revisedSolution;
@@ -61,22 +69,57 @@ namespace LazinatorAnalyzer.Analyzer
 
         private FixAllContext GetNextStageFixAllContext(FixAllContext originalContext, Solution revisedSolution)
         {
+            FixAllContext.DiagnosticProvider diagnosticProvider = GetDiagnosticProvider(originalContext);
+            if (diagnosticProvider == null)
+                return null; // Roslyn changed -- won't be able to do multi-stage work
+            FixAllContext revisedContext;
             if (originalContext.Document != null)
             {
                 var id = originalContext.Document.Id;
                 var documentInRevised = revisedSolution.GetDocument(id);
-                FixAllContext revisedContext = new FixAllContext(documentInRevised, originalContext.CodeFixProvider, originalContext.Scope, originalContext.CodeActionEquivalenceKey, originalContext.DiagnosticIds, originalContext.State.DiagnosticProvider, originalContext.CancellationToken);
+                revisedContext = new FixAllContext(documentInRevised, originalContext.CodeFixProvider, originalContext.Scope, originalContext.CodeActionEquivalenceKey, originalContext.DiagnosticIds, diagnosticProvider, originalContext.CancellationToken);
             }
+            else
+            {
+                var id = originalContext.Project.Id;
+                var projectInRevised = revisedSolution.GetProject(id);
+                revisedContext = new FixAllContext(projectInRevised, originalContext.CodeFixProvider, originalContext.Scope, originalContext.CodeActionEquivalenceKey, originalContext.DiagnosticIds, diagnosticProvider, originalContext.CancellationToken);
+            }
+            return revisedContext;
         }
 
         private FixAllContext.DiagnosticProvider GetDiagnosticProvider(FixAllContext context)
         {
-            System.Reflection.BindingFlags
-            PropertyInfo prop =
-    typeof(FixAllContext).GetProperty("FooBar", BindingFlags.NonPublic | BindingFlags.Instance);
+            // This is a hack to get the DiagnosticProvider. 
+            try
+            {
+                object fixAllState = GetNonpublicProperty(context, "State"); // returns an internal type FixAllState
+                FixAllContext.DiagnosticProvider diagnosticProvider = (FixAllContext.DiagnosticProvider)GetNonpublicProperty(fixAllState, "DiagnosticProvider");
+                return diagnosticProvider;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        private U GetNonpublicProperty<T, U>(T containingInstance, string propertyName)
+        {
+            return (U) GetNonpublicProperty<T>(containingInstance, propertyName);
+        }
+
+        private object GetNonpublicProperty<T>(T containingInstance, string propertyName)
+        {
+            return GetNonpublicProperty(containingInstance, propertyName);
+        }
+
+        private static object GetNonpublicProperty(object containingInstance, string propertyName)
+        {
+            Type containingType = containingInstance.GetType();
+            PropertyInfo prop = containingType.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
             MethodInfo getter = prop.GetGetMethod(nonPublic: true);
-            object bar = getter.Invoke(f, null);
+            object bar = getter.Invoke(containingInstance, null);
+            return bar;
         }
 
         public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(
@@ -321,6 +364,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         public class RevisionsTracker
         {
+            public HashSet<DocumentId> removedDocuments = new HashSet<DocumentId>();
             public Dictionary<DocumentId, Document> newDocumentsMap = new Dictionary<DocumentId, Document>();
             public Dictionary<DocumentId, Document> changedDocumentsMap = new Dictionary<DocumentId, Document>();
             public Dictionary<DocumentId, List<Document>> documentsToMergeMap = null;
@@ -376,9 +420,10 @@ namespace LazinatorAnalyzer.Analyzer
                 return false;
 
             var solutionChanges = changedSolution.GetChanges(oldSolution);
-
-            // TODO: Handle removed documents
-            // Probably not needed: handle "additionaldocuments," i.e. non-code documents, since we're not producing any
+            
+            foreach (var projectChange in solutionChanges.GetProjectChanges())
+                foreach (var removed in projectChange.GetRemovedDocuments())
+                    revisionsTracker.removedDocuments.Add(removed);
 
             var documentIdsForNew = solutionChanges
                 .GetProjectChanges()
@@ -430,6 +475,9 @@ namespace LazinatorAnalyzer.Analyzer
         private static async Task<Solution> UpdateSolutionFromRevisionsAsync(Solution oldSolution, RevisionsTracker revisionsTracker, CancellationToken cancellationToken)
         {
             var currentSolution = oldSolution;
+
+            foreach (DocumentId removedDoc in revisionsTracker.removedDocuments)
+                currentSolution = currentSolution.RemoveDocument(removedDoc);
 
             foreach (KeyValuePair<DocumentId, Document> doc in revisionsTracker.newDocumentsMap)
             {

@@ -285,17 +285,22 @@ namespace LazinatorAnalyzer.Analyzer
             // Analyze types
             foreach (var compilationInfoEntry in CompilationInformation)
             {
+                List<Diagnostic> diagnosticsToAdd = null;
                 var lazinatorPairInfo = compilationInfoEntry.Value;
-                if (lazinatorPairInfo.LazinatorInterface != null
+                if (lazinatorPairInfo.IncorrectCodeBehindLocations.Any())
+                {
+                    diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo.IncorrectCodeBehindLocations);
+                }
+                else if (lazinatorPairInfo.LazinatorInterface != null
                     && lazinatorPairInfo.LazinatorObject != null
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind != null
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                 {
-                    var diagnosticsToAdd = GetDiagnosticsToReport(lazinatorPairInfo);
-                    if (diagnosticsToAdd != null)
-                        foreach (var diagnostic in diagnosticsToAdd)
-                            diagnostics.Add(diagnostic);
+                    diagnosticsToAdd = GetDiagnosticsToReport(lazinatorPairInfo);
                 }
+                if (diagnosticsToAdd != null)
+                    foreach (var diagnostic in diagnosticsToAdd)
+                        diagnostics.Add(diagnostic);
             }
 
             return diagnostics;
@@ -347,6 +352,14 @@ namespace LazinatorAnalyzer.Analyzer
             {
                 return null;
             }
+        }
+
+        private List<Diagnostic> GetIncorrectCodeBehindDiagnosticsToReport(List<Location> incorrectCodeBehindLocations)
+        {
+            List<Diagnostic> diagnosticsToReturn = new List<Diagnostic>();
+            foreach (var location in incorrectCodeBehindLocations)
+                diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileFieldRule, location));
+            return diagnosticsToReturn;
         }
 
         private Diagnostic GetDiagnosticForGeneratable(LazinatorPairInformation lazinatorPairInfo, bool needsGeneration, Location locationOfImplementingType, Microsoft.CodeAnalysis.Text.TextSpan? textSpan)
