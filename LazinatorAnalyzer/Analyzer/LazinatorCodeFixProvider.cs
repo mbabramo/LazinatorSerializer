@@ -215,7 +215,10 @@ namespace LazinatorAnalyzer.Analyzer
         {
             var documentInSolution = revisedSolution.Projects.FirstOrDefault()?.Documents?.FirstOrDefault();
             var syntaxRoot = await documentInSolution.GetSyntaxRootAsync();
-            return syntaxRoot.HasAnnotations("Lazinator") && syntaxRoot.GetAnnotations("Lazinator").First().Data == "Failure";
+            bool hasAnnotations = syntaxRoot.HasAnnotations("Lazinator");
+            var annotations = syntaxRoot.GetAnnotations("Lazinator");
+            bool failure = annotations.First().Data == "Failure";
+            return failure;
         }
     }
 }

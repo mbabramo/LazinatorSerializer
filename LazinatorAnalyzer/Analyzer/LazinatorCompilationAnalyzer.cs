@@ -198,16 +198,13 @@ namespace LazinatorAnalyzer.Analyzer
                                             .ToList();
             var primaryLocation = locationsExcludingCodeBehind
                 .FirstOrDefault();
-            var possibleName1 =
-                RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, true) +
-                (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
-            var possibleName2 =
-                RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, false) +
+            bool useFullyQualifiedNames = (Config?.UseFullyQualifiedNames ?? false) || lazinatorObjectType.ContainingType != null || namedInterfaceType.IsGenericType;
+            var name =
+                RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, useFullyQualifiedNames) +
                 (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
             var codeBehindLocation =
                 lazinatorObjectType.Locations
-                    .Where(x => x.SourceTree.FilePath.EndsWith(possibleName1) ||
-                                x.SourceTree.FilePath.EndsWith(possibleName2))
+                    .Where(x => x.SourceTree.FilePath.EndsWith(name))
                     .FirstOrDefault();
             if (primaryLocation != null)
             {
@@ -317,7 +314,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             bool couldBeGenerated, needsGeneration;
             AssessGenerationFeasibility(lazinatorPairInfo, out couldBeGenerated, out needsGeneration);
-            if (needsGeneration || couldBeGenerated)
+            if (needsGeneration || couldBeGenerated) 
             {
                 var locationOfImplementingType = lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind[0];
                 var implementingTypeRoot = locationOfImplementingType.SourceTree.GetRoot();
@@ -360,7 +357,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             List<Diagnostic> diagnosticsToReturn = new List<Diagnostic>();
             foreach (var location in incorrectCodeBehindLocations)
-                diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileFieldRule, location));
+                diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileRule, location));
             return diagnosticsToReturn;
         }
 

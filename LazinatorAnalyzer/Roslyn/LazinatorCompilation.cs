@@ -362,12 +362,20 @@ namespace LazinatorCodeGen.Roslyn
             var syntaxNodes = GetSyntaxNodesForNamedType(@interface);
             if (syntaxNodes.Count() > 1)
                 throw new LazinatorCodeGenException("Lazinator interface must be contained in a single file.");
+            if (@interface.ToString().Contains("RecentItems"))
+            {
+                var DEBUG = 0;
+            }
             Guid hash = GetHashForInterface(syntaxNodes.Single(), implementingType, typeImplementsMethodHashSet, implementingTypeRequiresParameterlessConstructor);
             return hash;
         }
 
         public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
         {
+            if (implementingType.ToString().Contains("RecentItems"))
+            {
+                var DEBUG = 0;
+            }
             // The advantage of the approach here is that we can determine whether we need an update extremely quickly, thus
             // avoiding delaying compilation. The disadvantage is that it might miss an unusual scenario: where the interface has not
             // changed but the types it has referenced have changed -- for example, because a Lazinator class has become non-Lazinator.
