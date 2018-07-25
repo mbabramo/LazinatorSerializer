@@ -141,7 +141,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             try
             {
-                var diagnostics = GetDiagnosticsToReport();
+                var diagnostics = GetDiagnosticsToReport(false);
                 foreach (var diagnostic in diagnostics)
                     context.ReportDiagnostic(diagnostic);
             }
@@ -274,7 +274,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         #region Diagnostics
 
-        public List<Diagnostic> GetDiagnosticsToReport()
+        public List<Diagnostic> GetDiagnosticsToReport(bool suppressRegenerate)
         {
             if (!CompilationInformation.Any())
             {
@@ -296,7 +296,7 @@ namespace LazinatorAnalyzer.Analyzer
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind != null
                     && lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind.Any())
                 {
-                    diagnosticsToAdd = GetDiagnosticsToReport(lazinatorPairInfo);
+                    diagnosticsToAdd = GetDiagnosticsToReport(lazinatorPairInfo, suppressRegenerate);
                 }
                 if (diagnosticsToAdd != null)
                     foreach (var diagnostic in diagnosticsToAdd)
@@ -313,7 +313,7 @@ namespace LazinatorAnalyzer.Analyzer
 
 
 
-        public List<Diagnostic> GetDiagnosticsToReport(LazinatorPairInformation lazinatorPairInfo)
+        public List<Diagnostic> GetDiagnosticsToReport(LazinatorPairInformation lazinatorPairInfo, bool suppressRegenerate)
         {
             bool couldBeGenerated, needsGeneration;
             AssessGenerationFeasibility(lazinatorPairInfo, out couldBeGenerated, out needsGeneration);
@@ -344,7 +344,9 @@ namespace LazinatorAnalyzer.Analyzer
                     }
                     else
                         diagnosticsToReturn = new List<Diagnostic>();
-                    diagnosticsToReturn.Add(GetDiagnosticForGeneratable(lazinatorPairInfo, needsGeneration, locationOfImplementingType, textSpan));
+                    Diagnostic diagnosticForGeneratable = GetDiagnosticForGeneratable(lazinatorPairInfo, needsGeneration, locationOfImplementingType, textSpan, suppressRegenerate);
+                    if (diagnosticForGeneratable != null)
+                        diagnosticsToReturn.Add(diagnosticForGeneratable);
                     return diagnosticsToReturn;
                 }
             }
@@ -362,7 +364,7 @@ namespace LazinatorAnalyzer.Analyzer
             return diagnosticsToReturn;
         }
 
-        private Diagnostic GetDiagnosticForGeneratable(LazinatorPairInformation lazinatorPairInfo, bool needsGeneration, Location locationOfImplementingType, Microsoft.CodeAnalysis.Text.TextSpan? textSpan)
+        private Diagnostic GetDiagnosticForGeneratable(LazinatorPairInformation lazinatorPairInfo, bool needsGeneration, Location locationOfImplementingType, Microsoft.CodeAnalysis.Text.TextSpan? textSpan, bool suppressRegenerate)
         {
             Location interfaceSpecificationLocation = Location.Create(
                 locationOfImplementingType.SourceTree,
@@ -371,6 +373,8 @@ namespace LazinatorAnalyzer.Analyzer
             if (lazinatorPairInfo.CodeBehindLocation != null)
                 additionalLocations.Add(lazinatorPairInfo.CodeBehindLocation);
             additionalLocations.AddRange(lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind);
+            if (suppressRegenerate && !needsGeneration)
+                return null;
             var diagnostic = Diagnostic.Create(needsGeneration ? LazinatorCodeAnalyzer.OutOfDateRule : LazinatorCodeAnalyzer.OptionalRegenerationRule, interfaceSpecificationLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString));
             return diagnostic;
         }

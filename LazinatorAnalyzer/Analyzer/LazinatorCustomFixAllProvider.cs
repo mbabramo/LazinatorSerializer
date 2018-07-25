@@ -40,7 +40,7 @@ namespace LazinatorAnalyzer.Analyzer
                 LazinatorCodeFixProvider._LastLazinatorCompilation = null;
                 // We allow for the possibility that our initial solution will still need work. 
                 const int MaxStages = 5;
-                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext, MaxStages);
+                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext, MaxStages, false);
                 CodeAction result = await this.GetCodeActionToFixAll(revisedSolution, fixAllContext).ConfigureAwait(false);
                 return result;
             }
@@ -50,9 +50,9 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne = 0, bool suppressRegenerate = false)
+        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne, bool suppressRegenerate)
         {
-            var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+            var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext, suppressRegenerate).ConfigureAwait(false);
             Solution revisedSolution;
             if (documentsAndDiagnosticsToFixMap.Any())
             {
@@ -123,7 +123,7 @@ namespace LazinatorAnalyzer.Analyzer
         }
 
         public async Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(
-            FixAllContext fixAllContext)
+            FixAllContext fixAllContext, bool suppressRegenerate)
         {
             var document = fixAllContext.Document;
             var project = fixAllContext.Project;
@@ -132,15 +132,15 @@ namespace LazinatorAnalyzer.Analyzer
             switch (fixAllContext.Scope)
             {
                 case FixAllScope.Document:
-                    await AddDiagnosticsToBuilder(document, builder, fixAllContext.CancellationToken);
+                    await AddDiagnosticsToBuilder(document, builder, fixAllContext.CancellationToken, suppressRegenerate);
                     break;
 
                 case FixAllScope.Project:
-                    await AddDiagnosticsToBuilder(project, builder, fixAllContext.CancellationToken);
+                    await AddDiagnosticsToBuilder(project, builder, fixAllContext.CancellationToken, suppressRegenerate);
                     break;
 
                 case FixAllScope.Solution:
-                    await AddDiagnosticsToBuilder(project.Solution, builder, fixAllContext.CancellationToken);
+                    await AddDiagnosticsToBuilder(project.Solution, builder, fixAllContext.CancellationToken, suppressRegenerate);
                     break;
 
                 default:
@@ -150,14 +150,14 @@ namespace LazinatorAnalyzer.Analyzer
             return builder.ToImmutable();
         }
 
-        public async Task AddDiagnosticsToBuilder(Solution s, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
+        public async Task AddDiagnosticsToBuilder(Solution s, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken, bool suppressRegenerate)
         {
             if (s != null)
                 foreach (var project in s.Projects)
-                    await AddDiagnosticsToBuilder(project, builder, cancellationToken);
+                    await AddDiagnosticsToBuilder(project, builder, cancellationToken, suppressRegenerate);
         }
 
-        public async Task AddDiagnosticsToBuilder(Project p, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
+        public async Task AddDiagnosticsToBuilder(Project p, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken, bool suppressRegenerate)
         {
             if (p == null)
                 return;
@@ -171,11 +171,11 @@ namespace LazinatorAnalyzer.Analyzer
             var config = analyzer.Config;
             foreach (var doc in p.Documents.Where(x => x.SourceCodeKind == SourceCodeKind.Regular && !(x.FilePath ?? x.Name).EndsWith(config?.GeneratedCodeFileExtension ?? ".laz.cs")))
             {
-                await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, doc, cancellationToken);
+                await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, doc, cancellationToken, suppressRegenerate);
             }
         }
 
-        public async Task AddDiagnosticsToBuilder(Document d, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken)
+        public async Task AddDiagnosticsToBuilder(Document d, ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, CancellationToken cancellationToken, bool suppressRegenerate)
         {
             if (d == null)
                 return;
@@ -184,10 +184,10 @@ namespace LazinatorAnalyzer.Analyzer
             var additionalDocuments = p.AdditionalDocuments;
             LazinatorCompilationAnalyzer analyzer = await
                 LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalDocuments.ToImmutableArray());
-            await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, d, cancellationToken);
+            await AddDiagnosticsForDocument(builder, compilation, additionalDocuments, analyzer, d, cancellationToken, suppressRegenerate);
         }
 
-        private static async Task AddDiagnosticsForDocument(ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, Compilation compilation, IEnumerable<TextDocument> additionalDocuments, LazinatorCompilationAnalyzer analyzer, Document doc, CancellationToken cancellationToken)
+        private static async Task AddDiagnosticsForDocument(ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder, Compilation compilation, IEnumerable<TextDocument> additionalDocuments, LazinatorCompilationAnalyzer analyzer, Document doc, CancellationToken cancellationToken, bool suppressRegenerate)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (analyzer == null)
@@ -205,7 +205,7 @@ namespace LazinatorAnalyzer.Analyzer
                 .ToList();
             foreach (var symbol in namedTypes)
                 analyzer.AnalyzeNamedType(symbol, compilation);
-            ImmutableArray<Diagnostic> diagnostics = analyzer.GetDiagnosticsToReport().ToImmutableArray();
+            ImmutableArray<Diagnostic> diagnostics = analyzer.GetDiagnosticsToReport(suppressRegenerate).ToImmutableArray();
             if (diagnostics.Any())
                 builder.Add(doc, diagnostics);
             analyzer.ClearDiagnostics();
