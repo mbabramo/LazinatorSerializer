@@ -140,8 +140,18 @@ namespace LazinatorAnalyzer.Analyzer
             ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
+            Solution revisedSolution = await GetSolutionWithAllFixed(documentsAndDiagnosticsToFixMap, fixAllContext);
+            var title = this.GetFixAllTitle(fixAllContext);
+            CodeAction result = CodeAction.Create(title, cancellationToken => Task.FromResult(revisedSolution));
+            return result;
+        }
+
+        public virtual async Task<Solution> GetSolutionWithAllFixed(ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
+            FixAllContext fixAllContext)
+        {
+            Solution revisedSolution = null;
             if (documentsAndDiagnosticsToFixMap != null && documentsAndDiagnosticsToFixMap.Any())
-            { 
+            {
                 fixAllContext.CancellationToken.ThrowIfCancellationRequested();
 
                 var documents = documentsAndDiagnosticsToFixMap.Keys.ToImmutableArray();
@@ -165,17 +175,10 @@ namespace LazinatorAnalyzer.Analyzer
 
                 if (codeActionsForEachDocument.Any(fixes => fixes.Count > 0))
                 {
-                    Solution newSolution = await this.TryGetMergedFixAsync(codeActionsForEachDocument.SelectMany(i => i), fixAllContext).ConfigureAwait(false);
-                    if (newSolution != null)
-                    {
-                        var title = this.GetFixAllTitle(fixAllContext);
-                        CodeAction result = CodeAction.Create(title, cancellationToken => Task.FromResult(newSolution));
-                        return result;
-                    }
+                    revisedSolution = await this.TryGetMergedFixAsync(codeActionsForEachDocument.SelectMany(i => i), fixAllContext).ConfigureAwait(false);
                 }
             }
-
-            return null;
+            return revisedSolution;
         }
 
         public async virtual Task AddDocumentFixesAsync(Document document, ImmutableArray<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)
@@ -206,8 +209,7 @@ namespace LazinatorAnalyzer.Analyzer
                         },
                         cancellationToken);
 
-                    // TODO: Wrap call to ComputeFixesAsync() below in IExtensionManager.PerformFunctionAsync() so that
-                    // a buggy extension that throws can't bring down the host?
+                    // TODO: Wrap call to ComputeFixesAsync() below in IExtensionManager.PerformFunctionAsync() so that a buggy extension that throws can't bring down the host?
                     var task = fixAllContext.CodeFixProvider.RegisterCodeFixesAsync(context) ?? Task.CompletedTask;
                     await task.ConfigureAwait(false);
 
