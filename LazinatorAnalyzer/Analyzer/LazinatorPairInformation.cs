@@ -30,28 +30,33 @@ namespace LazinatorAnalyzer.Analyzer
             Config = symbolsDictionary["configJsonString"];
             ConfigPath = symbolsDictionary["configPath"];
             LazinatorConfig config = LoadLazinatorConfig();
-            string generatedCodeFileExtension = config?.GeneratedCodeFileExtension ?? ".laz.cs";
             SymbolsDictionary = symbolsDictionary;
             LazinatorObject = semanticModel.Compilation.GetTypeByMetadataName(symbolsDictionary["object"]);
             LazinatorInterface = semanticModel.Compilation.GetTypeByMetadataName(symbolsDictionary["interface"]);
             bool codeBehindExists = symbolsDictionary["codeBehindExists"] == "true";
             if (codeBehindExists)
             {
-                bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || LazinatorObject.ContainingType != null || LazinatorObject.IsGenericType;
-                string correctCodeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(LazinatorObject, useFullyQualifiedNames) + generatedCodeFileExtension;
-                IEnumerable<Location> probablyCorrectNames = additionalLocations.Where(x => x.SourceTree.FilePath.EndsWith(correctCodeBehindName));
-                CodeBehindLocation = probablyCorrectNames.FirstOrDefault();
-                IncorrectCodeBehindLocations = additionalLocations.Where(x => !x.SourceTree.FilePath.EndsWith(correctCodeBehindName)).ToList();
-                if (probablyCorrectNames.Count() > 1)
-                    IncorrectCodeBehindLocations.AddRange(probablyCorrectNames.Skip(1));
-
-                LazinatorObjectLocationsExcludingCodeBehind = additionalLocations.Skip(1).ToList();
+                (CodeBehindLocation, IncorrectCodeBehindLocations, LazinatorObjectLocationsExcludingCodeBehind) = CategorizeLocations(config, LazinatorObject, new List<Location>(additionalLocations));
             }
             else
             {
                 CodeBehindLocation = null;
                 LazinatorObjectLocationsExcludingCodeBehind = additionalLocations.ToList();
             }
+        }
+
+        public static (Location codeBehindLocation, List<Location> incorrectCodeBehindLocations, List<Location> lazinatorObjectLocationsExcludingCodeBehind) CategorizeLocations(LazinatorConfig config, INamedTypeSymbol lazinatorObject, List<Location> locationsBesidesMainTypeAndInterface)
+        {
+            string generatedCodeFileExtension = config?.GeneratedCodeFileExtension ?? ".laz.cs";
+            bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || lazinatorObject.ContainingType != null || lazinatorObject.IsGenericType;
+            string correctCodeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObject, useFullyQualifiedNames) + generatedCodeFileExtension;
+            IEnumerable<Location> probablyCorrectNames = locationsBesidesMainTypeAndInterface.Where(x => x.SourceTree.FilePath.EndsWith(generatedCodeFileExtension));
+            Location codeBehindLocation = probablyCorrectNames.FirstOrDefault();
+            List<Location> incorrectCodeBehindLocations = locationsBesidesMainTypeAndInterface.Where(x => !x.SourceTree.FilePath.EndsWith(correctCodeBehindName)).ToList();
+            if (probablyCorrectNames.Count() > 1)
+                incorrectCodeBehindLocations.AddRange(probablyCorrectNames.Skip(1));
+            var lazinatorObjectLocationsExcludingCodeBehind = locationsBesidesMainTypeAndInterface.Where(x => !x.Equals(codeBehindLocation) && !incorrectCodeBehindLocations.Any(y => y.Equals(x))).ToList();
+            return (codeBehindLocation, incorrectCodeBehindLocations, lazinatorObjectLocationsExcludingCodeBehind);
         }
 
 

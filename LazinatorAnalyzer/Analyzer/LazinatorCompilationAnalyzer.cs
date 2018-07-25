@@ -198,23 +198,14 @@ namespace LazinatorAnalyzer.Analyzer
                                             .ToList();
             var primaryLocation = locationsExcludingCodeBehind
                 .FirstOrDefault();
-            bool useFullyQualifiedNames = (Config?.UseFullyQualifiedNames ?? false) || lazinatorObjectType.ContainingType != null || namedInterfaceType.IsGenericType;
-            var name =
-                RoslynHelpers.GetEncodableVersionOfIdentifier(lazinatorObjectType, useFullyQualifiedNames) +
-                (_config?.GeneratedCodeFileExtension ?? ".laz.cs");
-            var codeBehindLocation =
-                lazinatorObjectType.Locations
-                    .Where(x => x.SourceTree.FilePath.EndsWith(name))
-                    .FirstOrDefault();
+            var nonPrimaryLocation = locationsExcludingCodeBehind.Where(x => !(x == primaryLocation));
+
             if (primaryLocation != null)
             {
                 LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation();
                 lazinatorPairInfo.LazinatorObject = lazinatorObjectType;
                 lazinatorPairInfo.LazinatorInterface = namedInterfaceType;
-                lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind =
-                    locationsExcludingCodeBehind;
-                lazinatorPairInfo.CodeBehindLocation =
-                    codeBehindLocation;
+                (lazinatorPairInfo.CodeBehindLocation, lazinatorPairInfo.IncorrectCodeBehindLocations, lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind) = LazinatorPairInformation.CategorizeLocations(Config, lazinatorObjectType, new List<Location>(nonPrimaryLocation));
                 return lazinatorPairInfo;
             }
 
