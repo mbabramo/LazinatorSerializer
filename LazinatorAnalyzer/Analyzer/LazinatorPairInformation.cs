@@ -30,20 +30,25 @@ namespace LazinatorAnalyzer.Analyzer
         {
             Config = symbolsDictionary["configJsonString"];
             ConfigPath = symbolsDictionary["configPath"];
-            LazinatorConfig config = LoadLazinatorConfig();
             SymbolsDictionary = symbolsDictionary;
             LazinatorObject = semanticModel.Compilation.GetTypeByMetadataName(symbolsDictionary["object"]);
             LazinatorInterface = semanticModel.Compilation.GetTypeByMetadataName(symbolsDictionary["interface"]);
             bool codeBehindExists = symbolsDictionary["codeBehindExists"] == "true";
             if (codeBehindExists)
             {
-                (CodeBehindLocation, IncorrectCodeBehindLocations, LazinatorObjectLocationsExcludingCodeBehind) = CategorizeLocations(config, LazinatorObject, new List<Location>(locations));
+                CategorizeLocations(locations);
             }
             else
             {
                 CodeBehindLocation = null;
                 LazinatorObjectLocationsExcludingCodeBehind = locations.ToList();
             }
+        }
+
+        private void CategorizeLocations(IReadOnlyList<Location> locations)
+        {
+            LazinatorConfig config = LoadLazinatorConfig();
+            (CodeBehindLocation, IncorrectCodeBehindLocations, LazinatorObjectLocationsExcludingCodeBehind) = CategorizeLocations(config, LazinatorObject, new List<Location>(locations));
         }
 
         public static (Location codeBehindLocation, List<Location> incorrectCodeBehindLocations, List<Location> lazinatorObjectLocationsExcludingCodeBehind) CategorizeLocations(LazinatorConfig config, INamedTypeSymbol lazinatorObject, List<Location> mainTypeLocations)
@@ -84,7 +89,7 @@ namespace LazinatorAnalyzer.Analyzer
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
             builder.Add("object", LazinatorObject.GetFullMetadataName());
             builder.Add("interface", LazinatorInterface.GetFullMetadataName());
-            builder.Add("codeBehindExists", CodeBehindLocation == null ? "false" : "true");
+            builder.Add("codeBehindExists", CodeBehindLocation == null && (IncorrectCodeBehindLocations == null || !IncorrectCodeBehindLocations.Any()) ? "false" : "true");
             builder.Add("configJsonString", configJsonString);
             builder.Add("configPath", configPath);
             return builder.ToImmutable();

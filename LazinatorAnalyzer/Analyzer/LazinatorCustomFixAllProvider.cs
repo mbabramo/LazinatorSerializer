@@ -39,8 +39,9 @@ namespace LazinatorAnalyzer.Analyzer
                 LazinatorCodeFixProvider.RecycleLazinatorCompilation = true;
                 LazinatorCodeFixProvider._LastLazinatorCompilation = null;
                 // We allow for the possibility that our initial solution will still need work. 
-                const int MaxStages = 5;
-                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext, MaxStages, false);
+                const int MaxStages = 10;
+                bool removalOnly = fixAllContext.DiagnosticIds.Count() == 1 && fixAllContext.DiagnosticIds.First() == LazinatorCodeAnalyzer.Lazin004;
+                Solution revisedSolution = await GenerateRevisedSolution(fixAllContext, MaxStages, 0, removalOnly, removalOnly);
                 CodeAction result = await this.GetCodeActionToFixAll(revisedSolution, fixAllContext).ConfigureAwait(false);
                 return result;
             }
@@ -50,9 +51,18 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne, bool suppressRegenerate)
+        private async Task<Solution> GenerateRevisedSolution(FixAllContext fixAllContext, int maxStagesAfterThisOne, int numFixesLastRound, bool removalOnly, bool suppressRegenerate)
         {
             var documentsAndDiagnosticsToFixMap = await GetDocumentDiagnosticsToFixAsync(fixAllContext, suppressRegenerate).ConfigureAwait(false);
+            if (documentsAndDiagnosticsToFixMap.Count == numFixesLastRound)
+                return fixAllContext.Solution; // we have the same number of fixes, so this is probably just the same fixes as last round, just not getting fixed.
+            if (removalOnly)
+            {
+                ImmutableDictionary<Document, ImmutableArray<Diagnostic>>.Builder builder = ImmutableDictionary.CreateBuilder<Document, ImmutableArray<Diagnostic>>();
+                foreach (var docAndDiag in documentsAndDiagnosticsToFixMap.Where(x => x.Value.Any(y => y.Id == LazinatorCodeAnalyzer.Lazin004)))
+                    builder.Add(docAndDiag.Key, docAndDiag.Value.Where(x => x.Id == LazinatorCodeAnalyzer.Lazin004).ToImmutableArray());
+                documentsAndDiagnosticsToFixMap = builder.ToImmutable();
+            }
             Solution revisedSolution;
             if (documentsAndDiagnosticsToFixMap.Any())
             {
@@ -60,7 +70,7 @@ namespace LazinatorAnalyzer.Analyzer
                 if (maxStagesAfterThisOne == 0)
                     revisedSolution = solutionAfterStage;
                 else
-                    revisedSolution = await GenerateRevisedSolution(GetNextStageFixAllContext(fixAllContext, solutionAfterStage), maxStagesAfterThisOne - 1, true /* don't regenerate things -- only worry about things that are stil errors */);
+                    revisedSolution = await GenerateRevisedSolution(GetNextStageFixAllContext(fixAllContext, solutionAfterStage), maxStagesAfterThisOne - 1, documentsAndDiagnosticsToFixMap.Count, removalOnly, true /* don't regenerate things after initial run through -- only worry about things that are stil errors */);
             }
             else
                 revisedSolution = fixAllContext.Solution;
@@ -481,6 +491,8 @@ namespace LazinatorAnalyzer.Analyzer
 
             foreach (KeyValuePair<DocumentId, Document> doc in revisionsTracker.newDocumentsMap)
             {
+                if (revisionsTracker.removedDocuments.Contains(doc.Key))
+                    break;
                 var documentText = await doc.Value.GetTextAsync(cancellationToken).ConfigureAwait(false);
                 if (!currentSolution.ContainsDocument(doc.Key))
                     currentSolution = currentSolution.AddDocument(DocumentInfo.Create(doc.Key, doc.Value.Name, doc.Value.Folders));
@@ -489,6 +501,8 @@ namespace LazinatorAnalyzer.Analyzer
 
             foreach (var kvp in revisionsTracker.changedDocumentsMap)
             {
+                if (revisionsTracker.removedDocuments.Contains(kvp.Key))
+                    break;
                 cancellationToken.ThrowIfCancellationRequested();
                 var document = kvp.Value;
                 if (document != null)

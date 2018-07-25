@@ -86,8 +86,9 @@ namespace LazinatorAnalyzer.Analyzer
         public static Task<Solution> DeleteExtraFiles(Solution originalSolution, List<Location> extraFiles, CancellationToken cancellationToken)
         {
             Solution revisedSolution = originalSolution;
-            foreach (var d in extraFiles.Select(x => originalSolution.GetDocument(x.SourceTree)))
-                revisedSolution = originalSolution.RemoveDocument(d.Id);
+            if (extraFiles != null)
+                foreach (var d in extraFiles.Select(x => originalSolution.GetDocument(x.SourceTree)))
+                    revisedSolution = originalSolution.RemoveDocument(d.Id);
             return Task.FromResult(revisedSolution);
         }
 
@@ -218,8 +219,12 @@ namespace LazinatorAnalyzer.Analyzer
             var syntaxRoot = await documentInSolution.GetSyntaxRootAsync();
             bool hasAnnotations = syntaxRoot.HasAnnotations("Lazinator");
             var annotations = syntaxRoot.GetAnnotations("Lazinator");
-            bool failure = annotations.First().Data == "Failure";
-            return failure;
+            if (annotations.Any())
+            {
+                bool failure = annotations.First().Data == "Failure";
+                return failure;
+            }
+            return false;
         }
     }
 }

@@ -100,7 +100,7 @@ namespace LazinatorAnalyzer.Analyzer
         public LazinatorCompilationAnalyzer(INamedTypeSymbol lazinatorAttributeType, INamedTypeSymbol lazinatorInterfaceType, string configPath, string configString, LazinatorConfig config)
         {
             _lazinatorAttributeType = lazinatorAttributeType;
-            _lazinatorInterfaceType = lazinatorInterfaceType;
+             _lazinatorInterfaceType = lazinatorInterfaceType;
             // we pass information about the config as well as the config itself, since we need to use the config, but also need to pass information about it to the code fix provider
             _configPath = configPath;
             _configString = configString;
@@ -182,7 +182,7 @@ namespace LazinatorAnalyzer.Analyzer
                 var lazinatorAttribute = RoslynHelpers.GetKnownAttributes<CloneLazinatorAttribute>(namedInterfaceType).FirstOrDefault();
                 if (lazinatorAttribute != null && lazinatorAttribute.Autogenerate)
                 {
-                    var lazinatorPairInfo = GetLazinatorPairInfo(lazinatorObjectType, namedInterfaceType);
+                    var lazinatorPairInfo = GetLazinatorPairInfo(compilation, lazinatorObjectType, namedInterfaceType);
                     return lazinatorPairInfo;
                 }
             }
@@ -190,12 +190,35 @@ namespace LazinatorAnalyzer.Analyzer
             return null;
         }
 
-        private LazinatorPairInformation GetLazinatorPairInfo(INamedTypeSymbol lazinatorObjectType, INamedTypeSymbol namedInterfaceType)
+        private LazinatorPairInformation GetLazinatorPairInfo(Compilation compilation, INamedTypeSymbol lazinatorObjectType, INamedTypeSymbol namedInterfaceType)
         {
+
             var locationsExcludingCodeBehind =
                                         lazinatorObjectType.Locations
                                             .Where(x => !x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
                                             .ToList();
+            var codeBehindLocations = lazinatorObjectType.Locations
+                                            .Where(x => x.SourceTree.FilePath.EndsWith(GetGeneratedCodeFileExtension()))
+                                            .ToList();
+            // Complication: we should exclude code behind locations that are just for partial classes.
+            // Similarly, if this is a partial class, we should exclude code behind locations for the main class.
+            // We can figure this out by looking at the last partial class declared in the syntax tree and seeing if it matches.
+            HashSet<Location> excludedCodeBehindLocations = null;
+            foreach (Location location in lazinatorObjectType.Locations)
+            {
+                var lastClassNode = location.SourceTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().LastOrDefault();
+                SemanticModel semanticModel = compilation.GetSemanticModel(location.SourceTree);
+                INamedTypeSymbol mainClass = lastClassNode == null ? null : semanticModel.GetDeclaredSymbol(lastClassNode);
+                if (mainClass != lazinatorObjectType)
+                {
+                    if (excludedCodeBehindLocations == null)
+                        excludedCodeBehindLocations = new HashSet<Location>();
+                    excludedCodeBehindLocations.Add(location);
+                }
+            }
+            // Now, make a list of all non-excluded locations
+            List<Location> allLocations = lazinatorObjectType.Locations.Where(x => excludedCodeBehindLocations == null || !excludedCodeBehindLocations.Contains(x)).ToList();
+
             var primaryLocation = locationsExcludingCodeBehind
                 .FirstOrDefault();
 
@@ -204,7 +227,7 @@ namespace LazinatorAnalyzer.Analyzer
                 LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation();
                 lazinatorPairInfo.LazinatorObject = lazinatorObjectType;
                 lazinatorPairInfo.LazinatorInterface = namedInterfaceType;
-                (lazinatorPairInfo.CodeBehindLocation, lazinatorPairInfo.IncorrectCodeBehindLocations, lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind) = LazinatorPairInformation.CategorizeLocations(Config, lazinatorObjectType, lazinatorObjectType.Locations.ToList());
+                (lazinatorPairInfo.CodeBehindLocation, lazinatorPairInfo.IncorrectCodeBehindLocations, lazinatorPairInfo.LazinatorObjectLocationsExcludingCodeBehind) = LazinatorPairInformation.CategorizeLocations(Config, lazinatorObjectType, allLocations);
                 return lazinatorPairInfo;
             }
 
@@ -347,6 +370,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             List<Diagnostic> diagnosticsToReturn = new List<Diagnostic>();
             List<Location> additionalLocations = GetAdditionalLocations(lazinatorPairInfo);
+            additionalLocations.AddRange(lazinatorPairInfo.IncorrectCodeBehindLocations);
             diagnosticsToReturn.Add(Diagnostic.Create(LazinatorCodeAnalyzer.ExtraFileRule, lazinatorPairInfo.PrimaryLocation, additionalLocations, lazinatorPairInfo.GetSourceFileDictionary(_configPath, _configString)));
             return diagnosticsToReturn;
         }
