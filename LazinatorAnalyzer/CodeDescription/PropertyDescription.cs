@@ -1542,6 +1542,8 @@ namespace Lazinator.CodeDescription
                 creationText =
                     $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
                             var collectionAsSpan = collection.Span;"; // for now, create array on the heap
+                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+                    creationText = creationText.Replace("ReadOnlyMemory<", "Memory<"); // we must use Memory here so that it can be assigned to
             }
             else if (isArray)
             {
@@ -1648,7 +1650,7 @@ namespace Lazinator.CodeDescription
                     collectionAddNull = $"collection[{innerArrayText}] = default({AppropriatelyQualifiedTypeName});";
                 }
             }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
             {
                 collectionAddItem = "collectionAsSpan[i] = item;";
                 collectionAddNull = $"collectionAsSpan[i] = default({AppropriatelyQualifiedTypeName});";
