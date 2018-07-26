@@ -33,7 +33,7 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly string LazinatorOutOfDateDescription =
             "This object implements an interface with the Lazinator attribute, but it is out of date.";
         private static readonly DiagnosticDescriptor LazinatorOutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle, LazinatorOutOfDateMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
-        internal static DiagnosticDescriptor OutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle.ToString(), LazinatorOutOfDateMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
+        internal static DiagnosticDescriptor OutOfDateRule = new DiagnosticDescriptor(Lazin001, LazinatorOutOfDateTitle, LazinatorOutOfDateMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorOutOfDateDescription);
         // 2. Otherwise, we can create an option to regenerate the Lazinator code.
         public const string Lazin002 = "Lazin002";
         private static readonly string LazinatorOptionalRegenerationTitle = "Lazinator Generation";
@@ -41,7 +41,7 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly string LazinatorOptionalRegenerationDescription =
             "This object implements an interface with the Lazinator attribute.";
         private static readonly DiagnosticDescriptor LazinatorOptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle, LazinatorOptionalRegenerationMessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
-        internal static DiagnosticDescriptor OptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle.ToString(), LazinatorOptionalRegenerationMessageFormat.ToString(), Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
+        internal static DiagnosticDescriptor OptionalRegenerationRule = new DiagnosticDescriptor(Lazin002, LazinatorOptionalRegenerationTitle, LazinatorOptionalRegenerationMessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: LazinatorOptionalRegenerationDescription);
         // 3. If fields exist in main code without ILazinator, report an error.
         public const string Lazin003 = "Lazin003";
         private static readonly string LazinatorUnaccountedForFieldTitle = "Lazinator Field Problem";
@@ -49,7 +49,7 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly string LazinatorUnaccountedForFieldDescription =
             "A field in an object implementing a Lazinator interface must be marked NonSerialable. Consider marking as [NonSerialized].";
         private static readonly DiagnosticDescriptor LazinatorUnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle, LazinatorUnaccountedForFieldMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
-        internal static DiagnosticDescriptor UnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle.ToString(), LazinatorUnaccountedForFieldMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
+        internal static DiagnosticDescriptor UnaccountedForFieldRule = new DiagnosticDescriptor(Lazin003, LazinatorUnaccountedForFieldTitle, LazinatorUnaccountedForFieldMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorUnaccountedForFieldDescription);
         // 4. If there is an extra code behind file (for example, as a result of a refactoring), generate an error so that it can be deleted
         public const string Lazin004 = "Lazin004";
         private static readonly string LazinatorExtraFileTitle = "Lazinator Extra File";
@@ -57,7 +57,7 @@ namespace LazinatorAnalyzer.Analyzer
         private static readonly string LazinatorExtraFileDescription =
             "This code-behind file was generated but no longer belongs here. (This could be the result of a refactoring.)";
         private static readonly DiagnosticDescriptor LazinatorExtraFileRule = new DiagnosticDescriptor(Lazin004, LazinatorExtraFileTitle, LazinatorExtraFileMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorExtraFileDescription);
-        internal static DiagnosticDescriptor ExtraFileRule = new DiagnosticDescriptor(Lazin004, LazinatorExtraFileTitle.ToString(), LazinatorExtraFileMessageFormat.ToString(), Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorExtraFileDescription);
+        internal static DiagnosticDescriptor ExtraFileRule = new DiagnosticDescriptor(Lazin004, LazinatorExtraFileTitle, LazinatorExtraFileMessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: LazinatorExtraFileDescription);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(LazinatorOutOfDateRule, LazinatorOptionalRegenerationRule, LazinatorUnaccountedForFieldRule, LazinatorExtraFileRule); } }
 

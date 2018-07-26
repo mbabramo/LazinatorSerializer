@@ -123,13 +123,21 @@ namespace LazinatorAnalyzer.Analyzer
 
         public void AnalyzeSymbol(SymbolAnalysisContext context)
         {
-            switch (context.Symbol.Kind)
+            try
             {
-                case SymbolKind.NamedType:
-                    var namedType = (INamedTypeSymbol)context.Symbol;
-                    Compilation compilation = context.Compilation;
-                    AnalyzeNamedType(namedType, compilation);
-                    break;
+                switch (context.Symbol.Kind)
+                {
+                    case SymbolKind.NamedType:
+                        var namedType = (INamedTypeSymbol)context.Symbol;
+                        Compilation compilation = context.Compilation;
+                        AnalyzeNamedType(namedType, compilation);
+                        break;
+                }
+            }
+
+            catch (Exception ex)
+            { // catch exceptions so that we can get a more useful error in the Visual Studio consumer of this analyzer.
+                throw new Exception($"Lazinator analyzer exception encountered in AnalyzeSymbol. Message {ex.Message} Stack trace: {ex.StackTrace}");
             }
         }
 
@@ -145,10 +153,10 @@ namespace LazinatorAnalyzer.Analyzer
                 foreach (var diagnostic in diagnostics)
                     context.ReportDiagnostic(diagnostic);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+
+            catch (Exception ex)
+            { // catch exceptions so that we can get a more useful error in the Visual Studio consumer of this analyzer.
+                throw new Exception($"Lazinator analyzer exception encountered in SemanticModelEndAction. Message {ex.Message} Stack trace: {ex.StackTrace}");
             }
         }
 
