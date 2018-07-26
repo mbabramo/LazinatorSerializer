@@ -1009,11 +1009,11 @@ namespace Lazinator.CodeDescription
             return creation;
         }
 
-        private void AppendReadOnlyMemoryProperty(CodeStringBuilder sb) => AppendReadOnlySpanOrMemoryProperty(sb, false);
+        private void AppendReadOnlyMemoryProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryOrReadOnlySpanProperty(sb, false);
 
-        private void AppendReadOnlySpanProperty(CodeStringBuilder sb) => AppendReadOnlySpanOrMemoryProperty(sb, true);
+        private void AppendReadOnlySpanProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryOrReadOnlySpanProperty(sb, true);
 
-        private void AppendReadOnlySpanOrMemoryProperty(CodeStringBuilder sb, bool isSpan)
+        private void AppendReadOnlyMemoryOrReadOnlySpanProperty(CodeStringBuilder sb, bool isSpan)
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string castToSpanOfCorrectType;
@@ -1035,6 +1035,33 @@ namespace Lazinator.CodeDescription
             {{
                 {RepeatedCodeExecution}IsDirty = true;
                 _{PropertyName} = {(isSpan ? $"new ReadOnlyMemory<byte>(MemoryMarshal.Cast<{innerFullType}, byte>(value).ToArray());" : "value;")}
+                _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
+            }}
+        }}
+        {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
+");
+        }
+
+        private void AppendReadOnlyMemoryByteProperty(CodeStringBuilder sb)
+        {
+            var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
+            sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
+        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+        {{{StepThroughPropertiesString}
+            get
+            {{
+                if (!_{PropertyName}_Accessed)
+                {{
+                    ReadOnlyMemory<byte> childData = {ChildSliceString};
+                    _{PropertyName} = childData;
+                    _{PropertyName}_Accessed = true;
+                }}
+                return _{PropertyName};
+            }}{StepThroughPropertiesString}
+            set
+            {{
+                {RepeatedCodeExecution}IsDirty = true;
+                _{PropertyName} = value;
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}

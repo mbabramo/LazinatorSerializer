@@ -627,9 +627,9 @@ namespace LazinatorTests.Examples.Collections
                 _SpanAndMemory_EndByteIndex = writer.Position - startPosition;
             }
         }
-        
+
         /* Conversion of supported collections and tuples */
-        
+
         private static Memory<int> ConvertFromBytes_Memory_Gint_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)

@@ -307,7 +307,7 @@ namespace LazinatorAnalyzer.Analyzer
                 var lazinatorPairInfo = compilationInfoEntry.Value;
                 if (lazinatorPairInfo.IncorrectCodeBehindLocations?.Any() ?? false)
                 {
-                    diagnosticsToAdd = GetIncorrectCodeBehindDiagnosticsToReport(lazinatorPairInfo);
+                    diagnosticsToAdd = GetExtraFileDiagnosticsToReport(lazinatorPairInfo);
                 }
                 else if (lazinatorPairInfo.LazinatorInterface != null
                     && lazinatorPairInfo.LazinatorObject != null
@@ -374,7 +374,7 @@ namespace LazinatorAnalyzer.Analyzer
             }
         }
 
-        private List<Diagnostic> GetIncorrectCodeBehindDiagnosticsToReport(LazinatorPairInformation lazinatorPairInfo)
+        private List<Diagnostic> GetExtraFileDiagnosticsToReport(LazinatorPairInformation lazinatorPairInfo)
         {
             List<Diagnostic> diagnosticsToReturn = new List<Diagnostic>();
             List<Location> additionalLocations = GetAdditionalLocations(lazinatorPairInfo);
