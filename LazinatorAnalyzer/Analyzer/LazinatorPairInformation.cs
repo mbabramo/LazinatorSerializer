@@ -89,6 +89,10 @@ namespace LazinatorAnalyzer.Analyzer
             var builder = ImmutableDictionary.CreateBuilder<string, string>();
             builder.Add("object", LazinatorObject.GetFullMetadataName());
             builder.Add("interface", LazinatorInterface.GetFullMetadataName());
+            if (LazinatorObject.GetFullMetadataName()?.Contains("StatCollectorArrayInterchange") ?? false)
+            {
+                var DEBUG = 0;
+            }
             builder.Add("codeBehindExists", CodeBehindLocation == null && (IncorrectCodeBehindLocations == null || !IncorrectCodeBehindLocations.Any()) ? "false" : "true");
             builder.Add("configJsonString", configJsonString);
             builder.Add("configPath", configPath);

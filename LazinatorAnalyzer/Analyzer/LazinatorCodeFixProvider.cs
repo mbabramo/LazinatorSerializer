@@ -53,6 +53,11 @@ namespace LazinatorAnalyzer.Analyzer
             LazinatorPairInformation lazinatorPairInfo = new LazinatorPairInformation(
                 await context.Document.GetSemanticModelAsync(), diagnostic.Properties, diagnostic.AdditionalLocations);
             
+            if (lazinatorPairInfo.LazinatorObject?.ToString().Contains("StatCollectorArrayInterchange") ?? false)
+            {
+                var DEBUG = 0;
+            }
+
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
             // Find the type declaration identified by the diagnostic.
@@ -140,6 +145,10 @@ namespace LazinatorAnalyzer.Analyzer
             string[] codeBehindFolders = null;
             bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || generator.ImplementingTypeSymbol.ContainingType != null || generator.ImplementingTypeSymbol.IsGenericType;
             codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, useFullyQualifiedNames) + fileExtension;
+            if (codeBehindName != null && codeBehindName.Contains("StatCollectorArrayInterchange"))
+            {
+                var DEBUG = 0;
+            }
             if (config?.GeneratedCodePath == null)
             { // use short form of name in same location as original code
 
@@ -148,6 +157,8 @@ namespace LazinatorAnalyzer.Analyzer
             else
             { // we have a config file specifying a common directory
                 codeBehindFilePath = config.GeneratedCodePath;
+                if (!codeBehindFilePath.EndsWith("\\"))
+                    codeBehindFilePath += "\\";
                 codeBehindFolders = config.RelativeGeneratedCodePath.Split('\\', '/');
             }
             codeBehindFilePath = System.IO.Path.GetDirectoryName(codeBehindFilePath);

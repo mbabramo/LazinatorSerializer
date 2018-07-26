@@ -430,10 +430,16 @@ namespace LazinatorAnalyzer.Analyzer
                 return false;
 
             var solutionChanges = changedSolution.GetChanges(oldSolution);
-            
+
             foreach (var projectChange in solutionChanges.GetProjectChanges())
                 foreach (var removed in projectChange.GetRemovedDocuments())
+                {
                     revisionsTracker.removedDocuments.Add(removed);
+                    if (changedSolution.GetDocument(removed)?.Name?.Contains("StatCollectorArrayInterchange") ?? false)
+                    {
+                        var DEBUG = 0;
+                    }
+                }
 
             var documentIdsForNew = solutionChanges
                 .GetProjectChanges()
@@ -444,6 +450,10 @@ namespace LazinatorAnalyzer.Analyzer
                 if (revisionsTracker.newDocumentsMap.ContainsKey(documentId))
                     throw new LazinatorCodeGenException("Internal exception. Did not expect multiple code fixes to produce same new document.");
                 revisionsTracker.newDocumentsMap[documentId] = changedSolution.GetDocument(documentId);
+                if (changedSolution.GetDocument(documentId)?.Name?.Contains("StatCollectorArrayInterchange") ?? false)
+                {
+                    var DEBUG = 0;
+                }
             }
 
             var documentIdsWithChanges = solutionChanges
@@ -455,6 +465,10 @@ namespace LazinatorAnalyzer.Analyzer
                 cancellationToken.ThrowIfCancellationRequested();
                 var document = changedSolution.GetDocument(documentId);
 
+                if (document?.Name?.Contains("StatCollectorArrayInterchange") ?? false)
+                {
+                    var DEBUG = 0;
+                }
                 Document existingDocument;
                 if (revisionsTracker.changedDocumentsMap.TryGetValue(documentId, out existingDocument))
                 {
@@ -494,20 +508,38 @@ namespace LazinatorAnalyzer.Analyzer
                 if (revisionsTracker.removedDocuments.Contains(doc.Key))
                     break;
                 var documentText = await doc.Value.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                var existingMatches = currentSolution.GetDocumentIdsWithFilePath(doc.Value.FilePath).ToList();
+                var DEBUG3 = currentSolution.Projects.SelectMany(x => x.Documents).Select(x => x?.FilePath).Where(x => x != null && x.Contains("StatCollectorArrayInterchange")).ToList();
+                if (doc.Value?.FilePath != null && doc.Value.FilePath.Contains("StatCollectorArrayInterchange"))
+                {
+                    var DEBUG = 0;
+                }
+                foreach (var existingMatch in existingMatches)
+                    currentSolution = currentSolution.RemoveDocument(existingMatch);
                 if (!currentSolution.ContainsDocument(doc.Key))
                     currentSolution = currentSolution.AddDocument(DocumentInfo.Create(doc.Key, doc.Value.Name, doc.Value.Folders));
                 currentSolution = currentSolution.WithDocumentText(doc.Key, documentText);
             }
 
+            var DEBUG2 = revisionsTracker.changedDocumentsMap.Select(x => $"{x.Value} ({x.Key})").ToArray();
+
             foreach (var kvp in revisionsTracker.changedDocumentsMap)
             {
                 if (revisionsTracker.removedDocuments.Contains(kvp.Key))
                     break;
-                cancellationToken.ThrowIfCancellationRequested();
-                var document = kvp.Value;
-                if (document != null)
+                if (kvp.Value is Document changedDoc)
                 {
-                    var documentText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
+                    var existingMatches = currentSolution.GetDocumentIdsWithFilePath(changedDoc.FilePath).ToList();
+                    if (kvp.Value.ToString().Contains("StatCollectoryArrayInterchange"))
+                    {
+                        var DEBUG = 0;
+                    }
+                    //foreach (var existingMatch in existingMatches)
+                    //    currentSolution = currentSolution.RemoveDocument(existingMatch);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    //if (!currentSolution.ContainsDocument(kvp.Key))
+                    //    currentSolution = currentSolution.AddDocument(DocumentInfo.Create(kvp.Key, kvp.Value.Name, kvp.Value.Folders));
+                    var documentText = await changedDoc.GetTextAsync(cancellationToken).ConfigureAwait(false);
                     currentSolution = currentSolution.WithDocumentText(kvp.Key, documentText);
                 }
             }

@@ -158,6 +158,10 @@ namespace LazinatorAnalyzer.Analyzer
 
         public void AnalyzeNamedType(INamedTypeSymbol namedType, Compilation compilation)
         {
+            if (namedType?.ToString().Contains("StatCollectorArrayInterchange") ?? false)
+            {
+                var DEBUG = 0;
+            }
             var lazinatorPairInfo = GetLazinatorPairInfo(compilation, namedType);
             RememberLazinatorPair(lazinatorPairInfo);
         }
@@ -204,7 +208,7 @@ namespace LazinatorAnalyzer.Analyzer
             // Similarly, if this is a partial class, we should exclude code behind locations for the main class.
             // We can figure this out by looking at the last partial class declared in the syntax tree and seeing if it matches.
             HashSet<Location> excludedCodeBehindLocations = null;
-            foreach (Location location in lazinatorObjectType.Locations)
+            foreach (Location location in codeBehindLocations)
             {
                 var lastClassNode = location.SourceTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().LastOrDefault();
                 SemanticModel semanticModel = compilation.GetSemanticModel(location.SourceTree);
