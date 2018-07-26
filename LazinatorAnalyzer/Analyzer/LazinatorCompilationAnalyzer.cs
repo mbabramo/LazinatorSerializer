@@ -158,10 +158,6 @@ namespace LazinatorAnalyzer.Analyzer
 
         public void AnalyzeNamedType(INamedTypeSymbol namedType, Compilation compilation)
         {
-            if (namedType?.ToString().Contains("StatCollectorArrayInterchange") ?? false)
-            {
-                var DEBUG = 0;
-            }
             var lazinatorPairInfo = GetLazinatorPairInfo(compilation, namedType);
             RememberLazinatorPair(lazinatorPairInfo);
         }
