@@ -9,7 +9,7 @@ namespace LazinatorTests.Examples.Collections
         ReadOnlySpan<long> MyReadOnlySpanLong { get; set; }
         ReadOnlySpan<byte> MyReadOnlySpanByte { get; set; }
         ReadOnlyMemory<byte> MyReadOnlyMemoryByte { get; set; }
-        ReadOnlyMemory<char> MyReadOnlyMemoryChar { get; set; }
+        //ReadOnlyMemory<char> MyReadOnlyMemoryChar { get; set; }
         ReadOnlySpan<DateTime> MyReadOnlySpanDateTime { get; set; }
         ReadOnlySpan<char> MyReadOnlySpanChar { get; set; }
         Memory<int> MyMemoryInt { get; set; }

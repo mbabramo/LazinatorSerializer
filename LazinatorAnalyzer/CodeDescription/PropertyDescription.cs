@@ -1009,11 +1009,11 @@ namespace Lazinator.CodeDescription
             return creation;
         }
 
-        private void AppendReadOnlyMemoryProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryOrReadOnlySpanProperty(sb, false);
+        private void AppendReadOnlyMemoryProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryByteProperty(sb);
 
-        private void AppendReadOnlySpanProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryOrReadOnlySpanProperty(sb, true);
+        private void AppendReadOnlySpanProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryOrReadOnlySpanProperty(sb);
 
-        private void AppendReadOnlyMemoryOrReadOnlySpanProperty(CodeStringBuilder sb, bool isSpan)
+        private void AppendReadOnlyMemoryOrReadOnlySpanProperty(CodeStringBuilder sb)
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string castToSpanOfCorrectType;
@@ -1034,7 +1034,7 @@ namespace Lazinator.CodeDescription
             set
             {{
                 {RepeatedCodeExecution}IsDirty = true;
-                _{PropertyName} = {(isSpan ? $"new ReadOnlyMemory<byte>(MemoryMarshal.Cast<{innerFullType}, byte>(value).ToArray());" : "value;")}
+                _{PropertyName} = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<{innerFullType}, byte>(value).ToArray());
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}
