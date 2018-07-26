@@ -297,8 +297,8 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyReadOnlyMemoryByte_Accessed;
-        protected Memory<char> _MyReadOnlyMemoryChar;
-        public Memory<char> MyReadOnlyMemoryChar
+        protected ReadOnlyMemory<char> _MyReadOnlyMemoryChar;
+        public ReadOnlyMemory<char> MyReadOnlyMemoryChar
         {
             get
             {
@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, false, false, null);
-                        _MyReadOnlyMemoryChar = ConvertFromBytes_Memory_Gchar_g(childData);
+                        _MyReadOnlyMemoryChar = ConvertFromBytes_ReadOnlyMemory_Gchar_g(childData);
                     }
                     _MyReadOnlyMemoryChar_Accessed = true;
                 }
@@ -600,7 +600,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Memory_Gchar_g(ref w, _MyReadOnlyMemoryChar,
+            ConvertToBytes_ReadOnlyMemory_Gchar_g(ref w, _MyReadOnlyMemoryChar,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -751,11 +751,11 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Memory<char> ConvertFromBytes_Memory_Gchar_g(ReadOnlyMemory<byte> storage)
+        private static ReadOnlyMemory<char> ConvertFromBytes_ReadOnlyMemory_Gchar_g(ReadOnlyMemory<byte> storage)
         {
             if (storage.Length == 0)
             {
-                return default(Memory<char>);
+                return default(ReadOnlyMemory<char>);
             }
             ReadOnlySpan<byte> span = storage.Span;
             
@@ -773,7 +773,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Memory_Gchar_g(ref BinaryBufferWriter writer, Memory<char> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_ReadOnlyMemory_Gchar_g(ref BinaryBufferWriter writer, ReadOnlyMemory<char> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
             var itemToConvertSpan = itemToConvert.Span;
