@@ -12,7 +12,8 @@ namespace LazinatorTests.Examples.Collections
         ReadOnlySpan<char> MyReadOnlySpanChar { get; set; }
         ReadOnlyMemory<byte> MyReadOnlyMemoryByte { get; set; }
         ReadOnlyMemory<char> MyReadOnlyMemoryChar { get; set; }
-        ReadOnlyMemory<int> MyNullableReadOnlyMemoryInt { get; set; }
+        ReadOnlyMemory<int> MyReadOnlyMemoryInt { get; set; }
+        ReadOnlyMemory<int>? MyNullableReadOnlyMemoryInt { get; set; }
         Memory<int> MyMemoryInt { get; set; }
         Memory<int>? MyNullableMemoryInt { get; set; }
     }

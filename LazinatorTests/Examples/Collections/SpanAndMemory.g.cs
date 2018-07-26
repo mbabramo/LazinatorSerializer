@@ -279,7 +279,7 @@ namespace LazinatorTests.Examples.Collections
         }
         protected bool _MyNullableMemoryInt_Accessed;
         protected ReadOnlyMemory<int> _MyNullableReadOnlyMemoryInt;
-        public ReadOnlyMemory<int> MyNullableReadOnlyMemoryInt
+        public ReadOnlyMemory<int> MyReadOnlyMemoryInt
         {
             get
             {
@@ -471,7 +471,7 @@ namespace LazinatorTests.Examples.Collections
         {
             yield return ("MyMemoryInt", (object)MyMemoryInt);
             yield return ("MyNullableMemoryInt", (object)MyNullableMemoryInt);
-            yield return ("MyNullableReadOnlyMemoryInt", (object)MyNullableReadOnlyMemoryInt);
+            yield return ("MyNullableReadOnlyMemoryInt", (object)MyReadOnlyMemoryInt);
             yield return ("MyReadOnlyMemoryByte", (object)MyReadOnlyMemoryByte);
             yield return ("MyReadOnlyMemoryChar", (object)MyReadOnlyMemoryChar);
             yield return ("MyReadOnlySpanByte", (object)MyReadOnlySpanByte.ToString());
@@ -610,7 +610,7 @@ namespace LazinatorTests.Examples.Collections
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableReadOnlyMemoryInt_Accessed)
             {
-                var deserialized = MyNullableReadOnlyMemoryInt;
+                var deserialized = MyReadOnlyMemoryInt;
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNullableReadOnlyMemoryInt, isBelievedDirty: _MyNullableReadOnlyMemoryInt_Accessed,
