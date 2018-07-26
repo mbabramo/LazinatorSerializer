@@ -63,26 +63,33 @@ namespace LazinatorAnalyzer.Analyzer
 
         public override void Initialize(AnalysisContext context)
         {
-            context.EnableConcurrentExecution();
-            context.RegisterCompilationStartAction(compilationContext =>
+            try
             {
-                var additionalFiles = compilationContext.Options.AdditionalFiles;
-                var compilation = compilationContext.Compilation;
-                var cancellationToken = compilationContext.CancellationToken;
-                var analyzer = LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalFiles);
-                if (analyzer == null)
-                    return;
+                context.EnableConcurrentExecution();
+                context.RegisterCompilationStartAction(compilationContext =>
+                {
+                    var additionalFiles = compilationContext.Options.AdditionalFiles;
+                    var compilation = compilationContext.Compilation;
+                    var cancellationToken = compilationContext.CancellationToken;
+                    var analyzer = LazinatorCompilationAnalyzer.CreateCompilationAnalyzer(compilation, cancellationToken, additionalFiles);
+                    if (analyzer == null)
+                        return;
 
-                // Register intermediate non-end actions that access and modify the state.
-                compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
-                compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType, SymbolKind.Method);
+                    // Register intermediate non-end actions that access and modify the state.
+                    compilationContext.RegisterSyntaxNodeAction(analyzer.AnalyzeSyntaxNode, SyntaxKind.StructDeclaration, SyntaxKind.ClassDeclaration);
+                    compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType, SymbolKind.Method);
 
-                // Register an end action to report diagnostics based on the final state.
-                compilationContext.RegisterSyntaxTreeAction(analyzer.SyntaxTreeStartAction);
-                compilationContext.RegisterSemanticModelAction(analyzer.SemanticModelEndAction);
+                    // Register an end action to report diagnostics based on the final state.
+                    compilationContext.RegisterSyntaxTreeAction(analyzer.SyntaxTreeStartAction);
+                    compilationContext.RegisterSemanticModelAction(analyzer.SemanticModelEndAction);
 
-                // NOTE: We could register a compilation end action, but this will not execute at all if full solution analysis is disabled. 
-            });
+                    // NOTE: We could register a compilation end action, but this will not execute at all if full solution analysis is disabled. 
+                });
+            }
+            catch (Exception ex)
+            { // catch exceptions so that we can get a more useful error in the Visual Studio consumer of this analyzer.
+                throw new Exception($"Lazinator analyzer exception encountered. Message {ex.Message} Stack trace: {ex.StackTrace}");
+            }
         }
     }
 }
