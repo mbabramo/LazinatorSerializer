@@ -210,7 +210,7 @@ namespace LazinatorAnalyzer.Analyzer
             HashSet<Location> excludedCodeBehindLocations = null;
             foreach (Location location in codeBehindLocations)
             {
-                var lastClassNode = location.SourceTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().LastOrDefault();
+                var lastClassNode = location.SourceTree.GetRoot().DescendantNodes().Where(x => x is ClassDeclarationSyntax || x is StructDeclarationSyntax).Select(x => (TypeDeclarationSyntax)x).LastOrDefault();
                 SemanticModel semanticModel = compilation.GetSemanticModel(location.SourceTree);
                 INamedTypeSymbol mainClass = lastClassNode == null ? null : semanticModel.GetDeclaredSymbol(lastClassNode);
                 if (mainClass != lazinatorObjectType)
