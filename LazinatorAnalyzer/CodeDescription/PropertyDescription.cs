@@ -446,42 +446,49 @@ namespace Lazinator.CodeDescription
 
         private void SetSelfSerializablePropertyType(INamedTypeSymbol t)
         {
-            if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
+            try
             {
-                Nullable = true;
-                PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
-            }
-            else
-                PropertyType = LazinatorPropertyType.LazinatorStruct;
-
-            IsInterface = t.TypeKind == TypeKind.Interface;
-            if (!IsInterface)
-            {
-                var exclusiveInterface = ContainingObjectDescription.Compilation.TypeToExclusiveInterface[t.OriginalDefinition];
-                CloneLazinatorAttribute attribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
-                if (attribute == null)
-                    throw new LazinatorCodeGenException(
-                        "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
-                UniqueIDForLazinatorType = attribute.UniqueID;
-                CloneSmallLazinatorAttribute smallAttribute =
-                    ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
-                if (smallAttribute != null)
-                    IsGuaranteedSmall = true;
-
-                CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
-                    ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
-                if (fixedLengthAttribute != null)
+                if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
-                    IsGuaranteedFixedLength = true;
-                    FixedLength = fixedLengthAttribute.FixedLength;
+                    Nullable = true;
+                    PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
+                }
+                else
+                    PropertyType = LazinatorPropertyType.LazinatorStruct;
+
+                IsInterface = t.TypeKind == TypeKind.Interface;
+                if (!IsInterface)
+                {
+                    var exclusiveInterface = ContainingObjectDescription.Compilation.TypeToExclusiveInterface[t.OriginalDefinition];
+                    CloneLazinatorAttribute attribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
+                    if (attribute == null)
+                        throw new LazinatorCodeGenException(
+                            "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
+                    UniqueIDForLazinatorType = attribute.UniqueID;
+                    CloneSmallLazinatorAttribute smallAttribute =
+                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
+                    if (smallAttribute != null)
+                        IsGuaranteedSmall = true;
+
+                    CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
+                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
+                    if (fixedLengthAttribute != null)
+                    {
+                        IsGuaranteedFixedLength = true;
+                        FixedLength = fixedLengthAttribute.FixedLength;
+                    }
+                }
+
+                if (t.IsGenericType)
+                {
+                    // This is a generic Lazinator type, e.g., MySelfSerializingDictionary<int, long> or MyType<T,U> where T,U : ILazinator
+                    SetInnerProperties(t);
+                    return;
                 }
             }
-
-            if (t.IsGenericType)
+            catch (Exception ex)
             {
-                // This is a generic Lazinator type, e.g., MySelfSerializingDictionary<int, long> or MyType<T,U> where T,U : ILazinator
-                SetInnerProperties(t);
-                return;
+                throw new Exception($"SetSelfSerializablePropertyType failed; message {ex.Message}");
             }
         }
 
