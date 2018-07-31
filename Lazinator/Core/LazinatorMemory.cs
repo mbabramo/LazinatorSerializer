@@ -32,6 +32,9 @@ namespace Lazinator.Core
         {
         }
 
+        public LazinatorMemory Slice(int position) => new LazinatorMemory(Memory.Slice(position));
+        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(Memory.Slice(position, length));
+
         private void FreeMemory()
         {
             OwnedMemory.Dispose();
