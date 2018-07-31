@@ -935,16 +935,22 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<byte>? ConvertFromBytes_Memory_Gbyte_g_C63(LazinatorMemory storage)
         {
-            return storage.Memory;
+            int index = 0;
+            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+            if (isNull)
+                return null;
+            return storage.Memory.Slice(1);
         }
         
         private static void ConvertToBytes_Memory_Gbyte_g_C63(ref BinaryBufferWriter writer, Memory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == null)
             {
+                writer.Write((bool)true);
                 return;
             }
-            ConvertToBytes_Memory_Gbyte_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            writer.Write((bool)false);
+            writer.Write(itemToConvert.Value.Span);
         }
         
         private static Memory<int>? ConvertFromBytes_Memory_Gint_g_C63(LazinatorMemory storage)
