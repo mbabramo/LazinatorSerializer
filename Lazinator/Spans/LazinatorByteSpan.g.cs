@@ -433,5 +433,6 @@ namespace Lazinator.Spans
         {
             writer.Write(itemToConvert.Span);
         }
+        
     }
 }

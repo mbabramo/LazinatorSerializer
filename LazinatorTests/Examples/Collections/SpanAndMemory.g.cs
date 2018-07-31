@@ -902,6 +902,7 @@ namespace LazinatorTests.Examples.Collections
         {
             writer.Write(itemToConvert.Span);
         }
+        
         private static Memory<int> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
