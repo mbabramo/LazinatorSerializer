@@ -904,7 +904,7 @@ namespace Lazinator.CodeDescription
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
-                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);");
+                _LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);");
             sb.Append($@"}}
 ");
             sb.Append($@"}}
