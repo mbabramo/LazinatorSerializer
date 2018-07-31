@@ -40,7 +40,7 @@ namespace Lazinator.CodeDescription
         internal bool IsDefinedInLowerLevelInterface { get; set; }
         internal bool IsLast { get; set; }
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
-        private string ChildSliceString => $"GetChildSlice(_LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
+        private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
         private string ChildSliceEndString => $", {(OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
 
         /* Property type */
@@ -1273,7 +1273,7 @@ namespace Lazinator.CodeDescription
                 else
                     binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
                 sb.AppendLine(
-                    $@"var serializedBytesCopy_{PropertyName} = _LazinatorObjectBytes;
+                    $@"var serializedBytesCopy_{PropertyName} = LazinatorMemoryStorage;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
                         var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
                         var copy_{PropertyName} = _{PropertyName};
@@ -1301,7 +1301,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine(
                     $@"{WriteInclusionConditional} 
                         {{
-                            {EnsureExcludableChildrenLoaded()}var serializedBytesCopy = _LazinatorObjectBytes;
+                            {EnsureExcludableChildrenLoaded()}var serializedBytesCopy = LazinatorMemoryStorage;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
                             WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);

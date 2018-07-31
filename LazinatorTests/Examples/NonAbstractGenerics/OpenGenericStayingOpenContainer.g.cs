@@ -153,15 +153,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        protected ReadOnlyMemory<byte> _LazinatorObjectBytes;
+        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
         public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
         {
-            get => _LazinatorObjectBytes;
+            get => LazinatorMemoryStorage;
             set
             {
-                _LazinatorObjectBytes = value;
+                LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                _LazinatorObjectBytes = _LazinatorObjectBytes.Slice(0, length);
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
         }
         
@@ -567,7 +567,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                _LazinatorObjectBytes = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.Slice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

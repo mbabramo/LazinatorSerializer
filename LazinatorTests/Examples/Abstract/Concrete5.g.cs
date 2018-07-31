@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Abstract
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                _LazinatorObjectBytes = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.Slice(startPosition);
             }
         }
         

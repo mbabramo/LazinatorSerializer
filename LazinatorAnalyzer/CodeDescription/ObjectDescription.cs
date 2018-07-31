@@ -486,13 +486,23 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public LazinatorMemory _LazinatorObjectBytes;
-                        public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
+                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage
+                        public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage;
                         {{
-                            get => _LazinatorObjectBytes.Memory;
+                            get => _LazinatorMemoryStorage;
                             set
                             {{
-                                _LazinatorObjectBytes = new LazinatorMemory(value);
+                                _LazinatorMemoryStorage = value;
+                                int length = Deserialize();
+                            }}
+                        }}
+
+                        public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
+                        {{
+                            get => LazinatorMemoryStorage.Memory;
+                            set
+                            {{
+                                LazinatorMemoryStorage = new LazinatorMemory(value);
                                 int length = Deserialize();
                             }}
                         }}
@@ -894,7 +904,7 @@ namespace Lazinator.CodeDescription
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
-                _LazinatorObjectBytes = writer.LazinatorMemorySlice(startPosition);");
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);");
             sb.Append($@"}}
 ");
             sb.Append($@"}}
