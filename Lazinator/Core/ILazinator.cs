@@ -37,7 +37,7 @@ namespace Lazinator.Core
         /// <param name="includeChildren">Whether child objects should be included. If false, the child objects will be skipped.</param>
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <returns></returns>
-        LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
         /// Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. This is primarily used internally by Lazinator.
         /// </summary>

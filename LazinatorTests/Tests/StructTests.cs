@@ -124,10 +124,10 @@ namespace LazinatorTests.Tests
             s3.MyLazinatorList[0] = new Example() { MyChar = 'y' };
             s3.IsDirty.Should().Be(false);
             s3.DescendantIsDirty.Should().Be(false); // struct can't be informed about this kind of change
-            Action reserializationAction = () => s3.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true);
+            Action reserializationAction = () => s3.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true, false);
             reserializationAction.Should().Throw<UnexpectedDirtinessException>();
             s3.MyLazinatorList_Dirty = true;
-            var s3Serialized = s3.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true);
+            var s3Serialized = s3.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true, false);
             ExampleStruct s3b = new ExampleStruct()
             {
                 HierarchyBytes = s3Serialized
