@@ -319,7 +319,13 @@ namespace Lazinator.CodeDescription
                         {{
 			                set;
                         }}
-                        
+
+                        public abstract LazinatorMemory LazinatorMemoryStorage
+                        {{
+			                get;
+			                set;
+                        }}
+
                         public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
 			                get;
