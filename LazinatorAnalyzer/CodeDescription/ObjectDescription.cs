@@ -285,7 +285,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator();
                         
-                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
+                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false);
                         
                         public abstract bool HasChanged
                         {{
@@ -407,9 +407,9 @@ namespace Lazinator.CodeDescription
                             return CloneLazinator(OriginalIncludeChildrenMode);
                         }}
 
-                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
                         {{
-                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
+                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParents = LazinatorParents,
@@ -542,9 +542,9 @@ namespace Lazinator.CodeDescription
             {
                 sb.Append($@"        /* Clone overrides */
 
-                        {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+                        {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
                         {{
-                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
+                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParents = LazinatorParents,
