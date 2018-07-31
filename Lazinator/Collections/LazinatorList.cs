@@ -304,6 +304,7 @@ namespace Lazinator.Collections
             {
                 var offsetList = new LazinatorOffsetList();
                 int originalStartingPosition = writer.Position;
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, UnderlyingList?.Count ?? 0);
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
                     int startingPosition = w.Position;

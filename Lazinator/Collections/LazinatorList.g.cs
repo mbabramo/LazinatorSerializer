@@ -206,7 +206,6 @@ namespace Lazinator.Collections
         protected Memory<byte> _MainListSerialized;
         public Memory<byte> MainListSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MainListSerialized_Accessed)
@@ -225,7 +224,6 @@ namespace Lazinator.Collections
                 IsDirty = true; 
                 return _MainListSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
