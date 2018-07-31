@@ -12,7 +12,7 @@ namespace LazinatorTests.Tests
     {
 
         [Fact]
-        public void LazinatorReadOnlySpans()
+        public void LazinatorSpansAndMemory()
         {
             var chars = "Hello, world".ToCharArray();
 
@@ -22,19 +22,34 @@ namespace LazinatorTests.Tests
                 if (emptySpans)
                     return new SpanAndMemory
                     {
-                        MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
                         MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { }),
+                        MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(new char[] { }),
+                        MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { }),
+                        MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
+                        MyReadOnlySpanChar = new ReadOnlySpan<char>(new char[] { }),
                         MyReadOnlySpanDateTime = new Span<DateTime>(), // should also work with no array
                         MyReadOnlySpanLong = new Span<long>(new long[] { }),
+                        MyMemoryByte = new Memory<byte>(new byte[] { }),
+                        MyMemoryInt = new Memory<int>(new int[] { }),
+                        MyNullableMemoryByte = new Memory<byte>(new byte[] { }),
+                        MyNullableMemoryInt = new Memory<int>(new int[] { }),
+                        MyNullableReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { })
 
                     };
                 return new SpanAndMemory
                 {
-                    MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
                     MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                    MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(chars),
+                    MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 }),
+                    MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
+                    MyReadOnlySpanChar = new ReadOnlySpan<char>(chars),
                     MyReadOnlySpanDateTime = new Span<DateTime>(new DateTime[] { now }),
                     MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue }),
-                    MyReadOnlySpanChar = new ReadOnlySpan<char>(chars)
+                    MyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                    MyMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
+                    MyNullableMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                    MyNullableMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
+                    MyNullableReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 })
                 };
             }
 
@@ -43,16 +58,30 @@ namespace LazinatorTests.Tests
             for (int i = 0; i < 3; i++)
             {
                 var result = copy.CloneLazinatorTyped();
-                result.MyReadOnlySpanByte.Length.Should().Be(3);
-                result.MyReadOnlySpanByte[1].Should().Be(4);
                 result.MyReadOnlyMemoryByte.Span[1].Should().Be(4);
                 result.MyReadOnlyMemoryByte.Length.Should().Be(3);
+                new string(result.MyReadOnlyMemoryChar.Span).Equals("Hello, world").Should().BeTrue();
+                new string(result.MyReadOnlyMemoryChar.Span.Slice(0, 5)).Equals("Hello").Should().BeTrue();
+                result.MyReadOnlyMemoryInt.Span[1].Should().Be(4);
+                result.MyReadOnlyMemoryInt.Length.Should().Be(3);
+                result.MyReadOnlySpanByte.Length.Should().Be(3);
+                result.MyReadOnlySpanByte[1].Should().Be(4);
+                new string(result.MyReadOnlySpanChar).Equals("Hello, world").Should().BeTrue();
+                new string(result.MyReadOnlySpanChar.Slice(0, 5)).Equals("Hello").Should().BeTrue();
                 result.MyReadOnlySpanDateTime.Length.Should().Be(1);
                 result.MyReadOnlySpanDateTime[0].Should().Be(now);
                 result.MyReadOnlySpanLong.Length.Should().Be(2);
                 result.MyReadOnlySpanLong[1].Should().Be(long.MaxValue);
-                new string(result.MyReadOnlySpanChar).Equals("Hello, world").Should().BeTrue();
-                new string(result.MyReadOnlySpanChar.Slice(0, 5)).Equals("Hello").Should().BeTrue();
+                result.MyMemoryByte.Span[1].Should().Be(4);
+                result.MyMemoryByte.Length.Should().Be(3);
+                result.MyMemoryInt.Span[1].Should().Be(4);
+                result.MyMemoryInt.Length.Should().Be(3);
+                result.MyNullableMemoryByte.Value.Span[1].Should().Be(4);
+                result.MyNullableMemoryByte.Value.Length.Should().Be(3);
+                result.MyNullableMemoryInt.Value.Span[1].Should().Be(4);
+                result.MyNullableMemoryInt.Value.Length.Should().Be(3);
+                result.MyNullableReadOnlyMemoryInt.Value.Span[1].Should().Be(4);
+                result.MyNullableReadOnlyMemoryInt.Value.Length.Should().Be(3);
                 copy = result;
             }
 
@@ -61,10 +90,18 @@ namespace LazinatorTests.Tests
             for (int i = 0; i < 3; i++)
             {
                 var result = copy.CloneLazinatorTyped();
-                result.MyReadOnlySpanByte.Length.Should().Be(0);
                 result.MyReadOnlyMemoryByte.Length.Should().Be(0);
+                result.MyReadOnlyMemoryChar.Length.Should().Be(0);
+                result.MyReadOnlyMemoryInt.Length.Should().Be(0);
+                result.MyReadOnlySpanByte.Length.Should().Be(0);
+                result.MyReadOnlySpanChar.Length.Should().Be(0);
                 result.MyReadOnlySpanDateTime.Length.Should().Be(0);
                 result.MyReadOnlySpanLong.Length.Should().Be(0);
+                result.MyMemoryByte.Length.Should().Be(0);
+                result.MyMemoryInt.Length.Should().Be(0);
+                result.MyNullableMemoryByte.Value.Length.Should().Be(0);
+                result.MyNullableMemoryInt.Value.Length.Should().Be(0);
+                result.MyNullableReadOnlyMemoryInt.Value.Length.Should().Be(0);
                 copy = result;
             }
         }
@@ -180,6 +217,20 @@ namespace LazinatorTests.Tests
             SequenceEqual(copy.MyMemoryInt, result.MyMemoryInt).Should().BeTrue();
         }
 
+        [Fact]
+        public void LazinatorNullableMemoryAsNull()
+        {
+            var l = new SpanAndMemory
+            {
+                MyNullableMemoryInt = null,
+                MyNullableMemoryByte = null,
+                MyNullableReadOnlyMemoryInt = null
+            };
+            var c = l.CloneLazinatorTyped();
+            c.MyNullableReadOnlyMemoryInt.Should().Be(null);
+            c.MyNullableMemoryByte.Should().Be(null);
+            c.MyNullableReadOnlyMemoryInt.Should().Be(null);
+        }
 
         [Fact]
         public void LazinatorNullableMemoryInt()
