@@ -604,6 +604,7 @@ namespace LazinatorTests.Tests
             {
                 new WInt(3)
             };
+            l.EnsureLazinatorMemoryUpToDate();
             var c = l.CloneLazinatorTyped();
             // consider original list, which should be clean
             l.IsDirty.Should().BeFalse();
@@ -622,6 +623,7 @@ namespace LazinatorTests.Tests
             {
                 new ExampleStructContainingStruct() { MyExampleStruct = new ExampleStruct() { MyChar = 'Q'} }
             };
+            l.EnsureLazinatorMemoryUpToDate();
             var c = l.CloneLazinatorTyped();
             // consider original list, which should be clean
             l.IsDirty.Should().BeFalse();

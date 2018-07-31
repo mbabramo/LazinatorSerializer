@@ -58,14 +58,19 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void CloningShouldntMakeDirtyOrChanged()
+        public void CloningShouldntChangeDirtiness()
         {
             DotNetList_Values v = new DotNetList_Values() { MyListInt2 = new List<int>() { 3, 4 } };
+            v.EnsureLazinatorMemoryUpToDate();
             var c = v.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
             var list = c.MyListInt2; // note that this doesn't have a _Dirty property
             c.IsDirty.Should().BeTrue(); // as a result of access of nonlazinator
             c.HasChanged.Should().BeTrue();
+            var ctemp = c.CloneLazinatorTyped();
+            c.IsDirty.Should().BeTrue(); // still true since the original hasn't changed
+            c.HasChanged.Should().BeTrue();
+            c.EnsureLazinatorMemoryUpToDate();
             var c2 = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
             c.HasChanged.Should().BeTrue();
@@ -75,6 +80,7 @@ namespace LazinatorTests.Tests
             c.MarkHierarchyClassesUnchanged(); // reset HasChanged to false
             c.HasChanged.Should().BeFalse();
             c.DescendantIsDirty = true; // force serialization to test whether the serialization itself causes dirtiness
+            c.EnsureLazinatorMemoryUpToDate();
             var c3 = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse(); // this is easy because SerializeExistingBuffer resets Dirty
             c.HasChanged.Should().BeFalse(); // this is harder -- for it to work, CloneLazinatorTyped must not temporarily cause c to become dirty
@@ -257,6 +263,7 @@ namespace LazinatorTests.Tests
             e.WrappedInt.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
+            e.EnsureLazinatorMemoryUpToDate();
             var c = e.CloneLazinatorTyped();
             // consider original, which should be clean
             e.IsDirty.Should().BeFalse();
@@ -279,6 +286,7 @@ namespace LazinatorTests.Tests
             e.Item1.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
+            e.EnsureLazinatorMemoryUpToDate();
             var c = e.CloneLazinatorTyped();
             // consider original, which should be clean
             e.IsDirty.Should().BeFalse();
@@ -301,6 +309,7 @@ namespace LazinatorTests.Tests
             e.Subcontainer.MyExampleStruct.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
+            e.EnsureLazinatorMemoryUpToDate();
             var c = e.CloneLazinatorTyped();
             // consider original, which should be clean
             e.IsDirty.Should().BeFalse();

@@ -168,6 +168,8 @@ namespace LazinatorTests.Tests
                         2.0F
                     }
             };
+            e.EnsureLazinatorMemoryUpToDate();
+            o.EnsureLazinatorMemoryUpToDate();
             int lengthExample = e.CloneLazinator().LazinatorObjectBytes.Length;
             int lengthOpenGeneric = o.CloneLazinator().LazinatorObjectBytes.Length;
             int lengthSoFar = 0;
