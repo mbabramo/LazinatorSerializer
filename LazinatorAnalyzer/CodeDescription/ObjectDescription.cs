@@ -501,11 +501,7 @@ namespace Lazinator.CodeDescription
                                 int length = Deserialize();
                             }}
                         }}
-
-                        public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
-                        {{
-                            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-                        }}
+                        {ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
                         {{
