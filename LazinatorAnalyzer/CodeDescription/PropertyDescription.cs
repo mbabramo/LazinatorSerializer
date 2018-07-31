@@ -40,7 +40,7 @@ namespace Lazinator.CodeDescription
         internal bool IsDefinedInLowerLevelInterface { get; set; }
         internal bool IsLast { get; set; }
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
-        private string ChildSliceString => $"GetChildSlice(LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
+        private string ChildSliceString => $"GetChildSlice(_LazinatorObjectBytes, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
         private string ChildSliceEndString => $", {(OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
 
         /* Property type */
@@ -943,7 +943,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        ReadOnlyMemory<byte> childData = {ChildSliceString};
+                        LazinatorMemory childData = {ChildSliceString};
                         {recreation}
                     }}
                     _{PropertyName}_Accessed = true;
@@ -979,7 +979,7 @@ namespace Lazinator.CodeDescription
                                         }}
                                         else
                                         {{
-                                            ReadOnlyMemory<byte> childData = {ChildSliceString};
+                                            LazinatorMemory childData = {ChildSliceString};
                                             return new {AppropriatelyQualifiedTypeName}()
                                             {{
                                                 LazinatorObjectBytes = childData,
@@ -1033,7 +1033,7 @@ namespace Lazinator.CodeDescription
             {{
                 if (!_{PropertyName}_Accessed)
                 {{
-                    ReadOnlyMemory<byte> childData = {ChildSliceString};
+                    ReadOnlyMemory<byte> childData = {ChildSliceString}.Memory;
                     _{PropertyName} = childData;
                     _{PropertyName}_Accessed = true;
                 }}
@@ -1060,7 +1060,7 @@ namespace Lazinator.CodeDescription
             {{
                 if (!_{PropertyName}_Accessed)
                 {{
-                    ReadOnlyMemory<byte> childData = {ChildSliceString};
+                    ReadOnlyMemory<byte> childData = {ChildSliceString}.Memory;
                     _{PropertyName} = childData;
                     _{PropertyName}_Accessed = true;
                 }}
@@ -1273,7 +1273,7 @@ namespace Lazinator.CodeDescription
                 else
                     binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
                 sb.AppendLine(
-                    $@"var serializedBytesCopy_{PropertyName} = LazinatorObjectBytes;
+                    $@"var serializedBytesCopy_{PropertyName} = _LazinatorObjectBytes;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
                         var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
                         var copy_{PropertyName} = _{PropertyName};
@@ -1301,7 +1301,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine(
                     $@"{WriteInclusionConditional} 
                         {{
-                            {EnsureExcludableChildrenLoaded()}var serializedBytesCopy = LazinatorObjectBytes;
+                            {EnsureExcludableChildrenLoaded()}var serializedBytesCopy = _LazinatorObjectBytes;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
                             WriteChild(ref writer, _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);
@@ -1703,7 +1703,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
                             var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                             {collectionAddItem}
                         }}
@@ -1711,7 +1711,7 @@ namespace Lazinator.CodeDescription
                 else
                     return ($@"
                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                        ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                        ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
                         var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                             {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
@@ -1734,7 +1734,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
                             var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                             {collectionAddItem}
                         }}
@@ -1743,7 +1743,7 @@ namespace Lazinator.CodeDescription
                     return (
                         $@"
                         {lengthCollectionMemberString}
-                        ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                        ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
                         var item = new {AppropriatelyQualifiedTypeName}()
                         {{
                             LazinatorObjectBytes = childData,
