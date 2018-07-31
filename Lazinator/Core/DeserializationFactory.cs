@@ -221,11 +221,6 @@ namespace Lazinator.Core
             }
         }
 
-        private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes)
-        {
-            lazinatorType.LazinatorObjectBytes = serializedBytes;
-        }
-
         #endregion
 
         #region Factory setup

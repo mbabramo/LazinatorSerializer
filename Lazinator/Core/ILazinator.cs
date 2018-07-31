@@ -39,7 +39,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         /// <summary>
-        /// Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer.
+        /// Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. This is primarily used internally by Lazinator.
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
         /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>

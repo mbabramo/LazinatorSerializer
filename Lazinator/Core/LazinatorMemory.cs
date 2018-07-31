@@ -18,6 +18,12 @@ namespace Lazinator.Core
             BytesFilled = bytesFilled;
         }
 
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory)
+        {
+            OwnedMemory = ownedMemory;
+            BytesFilled = ownedMemory.Memory.Length;
+        }
+
         public LazinatorMemory(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)
         {
         }
@@ -26,13 +32,18 @@ namespace Lazinator.Core
         {
         }
 
+        private void FreeMemory()
+        {
+            OwnedMemory.Dispose();
+        }
+
         /// <summary>
         /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
         /// without calling this, but it will be less efficient.
         /// </summary>
         public void Dispose()
         {
-            OwnedMemory.Dispose();
+            FreeMemory();
         }
 
         public static implicit operator LazinatorMemory(Memory<byte> memory)
