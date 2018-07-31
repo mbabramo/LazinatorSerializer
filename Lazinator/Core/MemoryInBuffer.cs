@@ -26,6 +26,16 @@ namespace Lazinator.Core
         {
         }
 
+        /// <summary>
+        /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
+        /// without calling this, but it will be less efficient. If MemoryInBuffer is copied, then this should be called on
+        /// only one instance of the MemoryInBuffer.
+        /// </summary>
+        public void Dispose()
+        {
+            OwnedMemory.Dispose();
+        }
+
         public static implicit operator MemoryInBuffer(Memory<byte> memory)
         {
             return new MemoryInBuffer(memory);

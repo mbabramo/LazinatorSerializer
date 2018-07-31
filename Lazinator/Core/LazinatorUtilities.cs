@@ -364,8 +364,8 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Converts a non-Lazinator property to bytes by creating a stream and calling an action that accepts a binary writer as a parameter.
-        /// This is used when it is necessary to verify the cleanness of a non-Lazinator property.
+        /// Converts a non-Lazinator property to bytes by creating a binary buffer writer and calling an action that accepts a binary writer as a parameter.
+        /// This is used only when it is necessary to verify the cleanness of a non-Lazinator property.
         /// </summary>
         /// <param name="nonLazinatorObject">The object to be converted</param>
         /// <param name="binaryWriterAction">The method that uses a binary writer to write the bytes for the non Lazinator fields. The second parameter will be ignored.</param>
