@@ -73,7 +73,7 @@ namespace LazinatorTests.Tests
             c.EnsureLazinatorMemoryUpToDate();
             var c2 = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
-            c.HasChanged.Should().BeTrue();
+            c.HasChanged.Should().BeFalse();
             c2.IsDirty.Should().BeFalse();
             c2.HasChanged.Should().BeFalse();
 
@@ -109,7 +109,7 @@ namespace LazinatorTests.Tests
 
 
         [Fact]
-        public void DirtinessWorksAfterConvertToBytes()
+        public void DirtinessWorksAfterEnsureUpToDate()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             hierarchy.MyChild1.MyWrapperContainer = new WrapperContainer() { WrappedInt = 17 };

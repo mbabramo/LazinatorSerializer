@@ -61,7 +61,7 @@ namespace Lazinator.Core
         /// <returns>A cloned copy of the class/struct</returns>
         ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false);
         /// <summary>
-        /// Indicates whether a Lazinator object has changed since it was last deserialized (or since the last call to MarkHierarchyClassesUnchanged).
+        /// Indicates whether a Lazinator object has changed since it was last deserialized (or since the last call to EnsureLazinatorUpToDate).
         /// </summary>
         bool HasChanged { get; set; }
         /// <summary>
