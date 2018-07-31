@@ -482,12 +482,12 @@ namespace Lazinator.CodeDescription
                             set
                             {{
                                 _HierarchyBytes = value;
-                                LazinatorObjectBytes = value.Memory;
+                                LazinatorMemoryStorage = value;
                             }}
                         }}
 
-                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage
-                        public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage;
+                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+                        public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
                         {{
                             get => _LazinatorMemoryStorage;
                             set
@@ -500,11 +500,6 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
                             get => LazinatorMemoryStorage.Memory;
-                            set
-                            {{
-                                LazinatorMemoryStorage = new LazinatorMemory(value);
-                                int length = Deserialize();
-                            }}
                         }}
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
