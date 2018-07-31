@@ -163,7 +163,7 @@ namespace Lazinator.Collections.Avl
         
         public ReadOnlyMemory<byte> LazinatorObjectBytes
         {
-            get => LazinatorMemoryStorage.Memory;
+            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()

@@ -162,7 +162,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ReadOnlyMemory<byte> LazinatorObjectBytes
         {
-            get => LazinatorMemoryStorage.Memory;
+            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         }
         
         public override void EnsureLazinatorMemoryUpToDate()

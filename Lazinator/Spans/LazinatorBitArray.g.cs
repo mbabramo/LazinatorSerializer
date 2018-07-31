@@ -163,7 +163,7 @@ namespace Lazinator.Spans
         
         public ReadOnlyMemory<byte> LazinatorObjectBytes
         {
-            get => LazinatorMemoryStorage.Memory;
+            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()

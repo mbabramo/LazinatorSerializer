@@ -164,7 +164,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
         {
-            get => LazinatorMemoryStorage.Memory;
+            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()

@@ -504,7 +504,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
-                            get => LazinatorMemoryStorage.Memory;
+                            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
                         }}
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()

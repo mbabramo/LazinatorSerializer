@@ -32,6 +32,14 @@ namespace Lazinator.Core
 
         #endregion
 
+        #region Empties
+
+        public static Memory<byte> EmptyMemory = new Memory<byte>();
+        public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
+        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
+
+        #endregion
+
         #region Encoding
 
         /// <summary>
@@ -685,7 +693,6 @@ namespace Lazinator.Core
         /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
-        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
         public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
         {
             if (byteLength == 0)
