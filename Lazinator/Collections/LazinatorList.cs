@@ -96,14 +96,14 @@ namespace Lazinator.Collections
             return FarmhashByteSpans.Hash32(byteSpan.Span);
         }
 
-        private ReadOnlyMemory<byte> GetListMemberSlice(int index)
+        private LazinatorMemory GetListMemberSlice(int index)
         {
             if (FullyDeserialized)
             { // we can't rely on original offsets, because an insertion/removal may have occurred
                 T underlyingItem = UnderlyingList[index];
                 if (underlyingItem == null)
-                    return new ReadOnlyMemory<byte>();
-                return underlyingItem.LazinatorObjectBytes;
+                    return LazinatorUtilities.EmptyLazinatorMemory;
+                return underlyingItem.LazinatorMemoryStorage;
             }
             // The 1st item (# 0) has index 0 always, so it's not stored in Offsets.
             // If we have three items, we store the offset of the second and the third,
@@ -112,7 +112,7 @@ namespace Lazinator.Collections
             // The offset of the second is then Offsets[0] and next offset is Offsets[1].
             // The offste of the third is Offsets[1] and the next offset is Offsets[2], the position at the end of the third item.
             if (Offsets == null || index >= Offsets.Count)
-                return new ReadOnlyMemory<byte>();
+                return LazinatorUtilities.EmptyLazinatorMemory;
             int offset;
             if (index == 0)
                 offset = 0;
@@ -120,7 +120,8 @@ namespace Lazinator.Collections
                 offset = Offsets[index - 1];
             int nextOffset = Offsets[index];
             var byteSpan = MainListSerialized.Slice(offset, nextOffset - offset);
-            return byteSpan;
+            throw new Exception(); // DEBUG
+           // return byteSpan;
         }
 
         public T this[int index]
