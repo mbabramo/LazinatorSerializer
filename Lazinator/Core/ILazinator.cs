@@ -56,8 +56,9 @@ namespace Lazinator.Core
         /// Clones the class/struct, possibly excluding some or all children
         /// </summary>
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
+        /// <param name="updateStoredBuffer">Whether to update the stored buffer, so that both copies have the same underlying buffer, assuming that all children are being included. If false, then the original object is unchanged.</param>
         /// <returns>A cloned copy of the class/struct</returns>
-        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
+        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false);
         /// <summary>
         /// Indicates whether a Lazinator object has changed since it was last deserialized (or since the last call to MarkHierarchyClassesUnchanged).
         /// </summary>

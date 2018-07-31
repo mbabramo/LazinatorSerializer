@@ -40,7 +40,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract ILazinator CloneLazinator();
         
-        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode);
+        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false);
         
         public abstract bool HasChanged
         {

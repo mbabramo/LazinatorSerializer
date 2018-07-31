@@ -70,9 +70,9 @@ namespace Lazinator.Collections.Dictionary
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
         {
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new LazinatorDictionary<TKey, TValue>()
             {
                 LazinatorParents = LazinatorParents,

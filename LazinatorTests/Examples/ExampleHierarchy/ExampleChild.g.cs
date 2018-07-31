@@ -70,9 +70,9 @@ namespace LazinatorTests.Examples
             return CloneLazinator(OriginalIncludeChildrenMode);
         }
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
         {
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new ExampleChild()
             {
                 LazinatorParents = LazinatorParents,
