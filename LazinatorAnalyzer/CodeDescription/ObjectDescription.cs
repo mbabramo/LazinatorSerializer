@@ -329,7 +329,6 @@ namespace Lazinator.CodeDescription
                         public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
 			                get;
-			                set;
                         }}
 
                         public abstract void EnsureLazinatorMemoryUpToDate();

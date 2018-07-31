@@ -1033,7 +1033,7 @@ namespace Lazinator.CodeDescription
             {{
                 if (!_{PropertyName}_Accessed)
                 {{
-                    ReadOnlyMemory<byte> childData = {ChildSliceString}.Memory;
+                    LazinatorMemory childData = {ChildSliceString};
                     _{PropertyName} = childData;
                     _{PropertyName}_Accessed = true;
                 }}
@@ -1060,7 +1060,7 @@ namespace Lazinator.CodeDescription
             {{
                 if (!_{PropertyName}_Accessed)
                 {{
-                    ReadOnlyMemory<byte> childData = {ChildSliceString}.Memory;
+                    LazinatorMemory childData = {ChildSliceString};
                     _{PropertyName} = childData;
                     _{PropertyName}_Accessed = true;
                 }}
@@ -1907,7 +1907,7 @@ namespace Lazinator.CodeDescription
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = new {AppropriatelyQualifiedTypeName}()
                             {{
                                 LazinatorMemoryStorage = childData,
