@@ -982,7 +982,7 @@ namespace Lazinator.CodeDescription
                                             LazinatorMemory childData = {ChildSliceString};
                                             return new {AppropriatelyQualifiedTypeName}()
                                             {{
-                                                LazinatorObjectBytes = childData,
+                                                LazinatorMemoryStorage = childData,
                                                 IsDirty = false
                                             }};
                                         }}
@@ -1014,7 +1014,7 @@ namespace Lazinator.CodeDescription
                             LazinatorParents = new LazinatorParentsCollection(this),";
             string creation = $@"{nullItemCheck}_{PropertyName} = new {AppropriatelyQualifiedTypeName}()
                     {{{lazinatorParentClassSet}
-                        LazinatorObjectBytes = childData,
+                        LazinatorMemoryStorage = childData,
                     }};";
             return creation;
         }
@@ -1746,7 +1746,7 @@ namespace Lazinator.CodeDescription
                         ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
                         var item = new {AppropriatelyQualifiedTypeName}()
                         {{
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                         }};
                         {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
@@ -1910,7 +1910,7 @@ namespace Lazinator.CodeDescription
                             ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = new {AppropriatelyQualifiedTypeName}()
                             {{
-                                LazinatorObjectBytes = childData,
+                                LazinatorMemoryStorage = childData,
                             }};
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
@@ -1988,7 +1988,7 @@ namespace Lazinator.CodeDescription
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
-                                LazinatorObjectBytes = storage
+                                LazinatorMemoryStorage = storage
                             }};
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
                         }}
