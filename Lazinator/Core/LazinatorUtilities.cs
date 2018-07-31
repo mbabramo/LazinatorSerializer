@@ -22,7 +22,9 @@ namespace Lazinator.Core
 
         // Delegate types. Methods matching these types must be passed into some of the methods below.
 
-        public delegate LazinatorMemory StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        public delegate LazinatorMemory StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness); // DEBUG
+
+        public delegate LazinatorMemory EncodeManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
 
         public delegate ReadOnlyMemory<byte> ReturnReadOnlyMemoryDelegate();
 
