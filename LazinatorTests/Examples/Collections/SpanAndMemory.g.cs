@@ -983,6 +983,10 @@ namespace LazinatorTests.Examples.Collections
         
         private static void ConvertToBytes_Memory_Gbyte_g_C63(ref BinaryBufferWriter writer, Memory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (itemToConvert == null)
+            {
+                return;
+            }
             ConvertToBytes_Memory_Gbyte_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
@@ -1010,6 +1014,10 @@ namespace LazinatorTests.Examples.Collections
         
         private static void ConvertToBytes_Memory_Gint_g_C63(ref BinaryBufferWriter writer, Memory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (itemToConvert == null)
+            {
+                return;
+            }
             ConvertToBytes_Memory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
@@ -1037,6 +1045,10 @@ namespace LazinatorTests.Examples.Collections
         
         private static void ConvertToBytes_ReadOnlyMemory_Gint_g_C63(ref BinaryBufferWriter writer, ReadOnlyMemory<int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (itemToConvert == null)
+            {
+                return;
+            }
             ConvertToBytes_ReadOnlyMemory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         

@@ -206,6 +206,7 @@ namespace Lazinator.Collections
         protected Memory<byte> _MainListSerialized;
         public Memory<byte> MainListSerialized
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_MainListSerialized_Accessed)
@@ -217,7 +218,7 @@ namespace Lazinator.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
-                        _MainListSerialized = childData.Memory;
+                        _MainListSerialized = ConvertFromBytes_Memory_Gbyte_g(childData);
                     }
                     _MainListSerialized_Accessed = true;
                 }
