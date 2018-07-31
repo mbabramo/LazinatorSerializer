@@ -895,10 +895,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(Memory<byte>);
-            }
             return storage.Memory;
         }
         

@@ -1513,7 +1513,17 @@ namespace Lazinator.CodeDescription
                 else
                     writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
                 string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
-                sb.Append($@"
+                if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
+                {
+                    sb.Append($@"
+
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    {{
+                        writer.Write(itemToConvert.Span);
+                    }}");
+                }
+                else
+                    sb.Append($@"
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
@@ -1532,6 +1542,16 @@ namespace Lazinator.CodeDescription
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
         {
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
+            {
+                sb.Append( $@"
+                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
+                    {{
+                        return storage.Memory;
+                    }}"
+                    );
+                return;
+            }
 
             string creationText;
             bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
