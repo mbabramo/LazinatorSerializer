@@ -486,7 +486,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicable}LazinatorMemory _LazinatorObjectBytes;
+                        public LazinatorMemory _LazinatorObjectBytes;
                         public {DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
                             get => _LazinatorObjectBytes.Memory;

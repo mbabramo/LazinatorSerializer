@@ -26,7 +26,9 @@ namespace Lazinator.Core
 
         public delegate LazinatorMemory EncodeManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
 
-        public delegate ReadOnlyMemory<byte> ReturnReadOnlyMemoryDelegate();
+        public delegate ReadOnlyMemory<byte> ReturnReadOnlyMemoryDelegate(); // DEBUG
+
+        public delegate LazinatorMemory ReturnLazinatorMemoryDelegate();
 
         public delegate void WriteDelegate(ref BinaryBufferWriter writer);
 
@@ -175,6 +177,46 @@ namespace Lazinator.Core
             }
             AddParentToChildless(child, parent);
         }
+        // DEBUG above
+        //public static void WriteChild<T>(ref BinaryBufferWriter writer, T child,
+        //    IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
+        //    ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
+        //{
+        //    bool childCouldHaveChanged = childHasBeenAccessed;
+        //    LazinatorMemory childStorage = default;
+        //    if (!childHasBeenAccessed && child != null)
+        //    {
+        //        childStorage = getChildSliceFn();
+        //        if (childStorage.Length == 0)
+        //            childCouldHaveChanged = true; // child is an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
+        //    }
+        //    else
+        //    {
+        //        if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+        //        {
+        //            // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
+        //            childStorage = child.LazinatorObjectBytes;
+        //            if (childStorage.Length != 0)
+        //                childCouldHaveChanged = false;
+        //        }
+        //    }
+        //    if (!childCouldHaveChanged)
+        //    {
+        //        childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
+        //    }
+        //    else
+        //    {
+        //        if (child == null)
+        //        {
+        //            WriteNullChild(ref writer, restrictLengthTo250Bytes, skipLength);
+        //        }
+        //        else
+        //        {
+        //            WriteChildToBinary(ref writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
+        //        }
+        //    }
+        //    AddParentToChildless(child, parent);
+        //}
 
         public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
         {
