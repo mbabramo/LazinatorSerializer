@@ -22,7 +22,7 @@ namespace LazinatorTests.Tests
                 df.CreateKnownID((int) ExampleUniqueIDs.ExampleChild, serializedBytes,
                     parent);
             selfSerialized.Should().NotBeNull();
-            selfSerialized.LazinatorObjectBytes.Should().Be(serializedBytes);
+            selfSerialized.LazinatorMemoryStorage.Should().Be(serializedBytes);
             selfSerialized.LazinatorParents.Should().Be(parent);
         }
 

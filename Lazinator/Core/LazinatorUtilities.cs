@@ -231,7 +231,7 @@ namespace Lazinator.Core
                 if (child.IsDirty || child.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
                     child.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
-                    w.Write(child.LazinatorObjectBytes.Span); // the child has been accessed, but is unchanged, so we can use the storage holding the child
+                    w.Write(child.LazinatorMemoryStorage.Span); // the child has been accessed, but is unchanged, so we can use the storage holding the child
             }
             if (skipLength)
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);
@@ -740,7 +740,7 @@ namespace Lazinator.Core
         public static MemoryStream GetMemoryStream(this ILazinator lazinator)
         {
             lazinator.EnsureLazinatorMemoryUpToDate();
-            return lazinator.LazinatorObjectBytes.GetMemoryStream();
+            return lazinator.LazinatorMemoryStorage.ReadOnlyMemory.GetMemoryStream();
         }
 
         /// <summary>
@@ -754,7 +754,7 @@ namespace Lazinator.Core
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();
-            return (pipe, lazinator.LazinatorObjectBytes.Length);
+            return (pipe, lazinator.LazinatorMemoryStorage.Length);
         }
 
         /// <summary>
@@ -764,7 +764,7 @@ namespace Lazinator.Core
         /// <param name="pipe"></param>
         public static void AddToPipe(this ILazinator lazinator, Pipe pipe)
         {
-            pipe.Writer.Write(lazinator.LazinatorObjectBytes.Span);
+            pipe.Writer.Write(lazinator.LazinatorMemoryStorage.Span);
         }
 
         /// <summary>

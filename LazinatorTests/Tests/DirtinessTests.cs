@@ -73,7 +73,7 @@ namespace LazinatorTests.Tests
             c.EnsureLazinatorMemoryUpToDate();
             var c2 = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
-            c.HasChanged.Should().BeFalse();
+            c.HasChanged.Should().BeTrue();
             c2.IsDirty.Should().BeFalse();
             c2.HasChanged.Should().BeFalse();
 
@@ -123,7 +123,7 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.HasChanged.Should().BeTrue();
             hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeFalse();
-            hierarchy.MyChild1.MyWrapperContainer.HasChanged.Should().BeTrue(); // here is the key difference
+            hierarchy.MyChild1.MyWrapperContainer.HasChanged.Should().BeTrue(); // here is the key difference -- it will stay in HasChanged until it is manually changed.
             hierarchy.DescendantHasChanged.Should().BeTrue();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 18;
             hierarchy.MyChild1.MyWrapperContainer.IsDirty.Should().BeTrue();
