@@ -216,8 +216,8 @@ namespace Lazinator.Spans
             {
                 if (!_ReadOnly_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null).Memory;
-                    _ReadOnly = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null);
+                    _ReadOnly = childData.ReadOnlyMemory;
                     _ReadOnly_Accessed = true;
                 }
                 return _ReadOnly.Span;

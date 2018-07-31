@@ -211,8 +211,8 @@ namespace Lazinator.Collections
             {
                 if (!_MainListSerialized_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null).Memory;
-                    _MainListSerialized = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
+                    _MainListSerialized = childData.Memory;
                     _MainListSerialized_Accessed = true;
                 }
                 return _MainListSerialized;

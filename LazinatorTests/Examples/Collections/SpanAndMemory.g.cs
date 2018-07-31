@@ -384,8 +384,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlyMemoryByte_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, false, false, null).Memory;
-                    _MyReadOnlyMemoryByte = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, false, false, null);
+                    _MyReadOnlyMemoryByte = childData.Memory;
                     _MyReadOnlyMemoryByte_Accessed = true;
                 }
                 return _MyReadOnlyMemoryByte;
@@ -465,8 +465,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlySpanByte_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null).Memory;
-                    _MyReadOnlySpanByte = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null);
+                    _MyReadOnlySpanByte = childData.ReadOnlyMemory;
                     _MyReadOnlySpanByte_Accessed = true;
                 }
                 return _MyReadOnlySpanByte.Span;
@@ -486,8 +486,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlySpanChar_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, false, false, null).Memory;
-                    _MyReadOnlySpanChar = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, false, false, null);
+                    _MyReadOnlySpanChar = childData.ReadOnlyMemory;
                     _MyReadOnlySpanChar_Accessed = true;
                 }
                 return MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span);
@@ -507,8 +507,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlySpanDateTime_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanDateTime_ByteIndex, _MyReadOnlySpanDateTime_ByteLength, false, false, null).Memory;
-                    _MyReadOnlySpanDateTime = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanDateTime_ByteIndex, _MyReadOnlySpanDateTime_ByteLength, false, false, null);
+                    _MyReadOnlySpanDateTime = childData.ReadOnlyMemory;
                     _MyReadOnlySpanDateTime_Accessed = true;
                 }
                 return MemoryMarshal.Cast<byte, DateTime>(_MyReadOnlySpanDateTime.Span);
@@ -528,8 +528,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlySpanLong_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, false, false, null).Memory;
-                    _MyReadOnlySpanLong = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, false, false, null);
+                    _MyReadOnlySpanLong = childData.ReadOnlyMemory;
                     _MyReadOnlySpanLong_Accessed = true;
                 }
                 return MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span);

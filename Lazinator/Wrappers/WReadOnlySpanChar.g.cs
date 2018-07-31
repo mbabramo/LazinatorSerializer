@@ -207,8 +207,8 @@ namespace Lazinator.Wrappers
             {
                 if (!_Value_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null).Memory;
-                    _Value = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
+                    _Value = childData.ReadOnlyMemory;
                     _Value_Accessed = true;
                 }
                 return MemoryMarshal.Cast<byte, char>(_Value.Span);

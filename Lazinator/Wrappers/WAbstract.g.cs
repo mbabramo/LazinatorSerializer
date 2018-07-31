@@ -84,7 +84,6 @@ namespace Lazinator.Wrappers
         public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;
-            set;
         }
         
         public abstract void EnsureLazinatorMemoryUpToDate();

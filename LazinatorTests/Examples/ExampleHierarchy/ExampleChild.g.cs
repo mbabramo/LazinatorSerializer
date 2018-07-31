@@ -237,8 +237,8 @@ namespace LazinatorTests.Examples
             {
                 if (!_ByteSpan_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null).Memory;
-                    _ByteSpan = childData;
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
+                    _ByteSpan = childData.ReadOnlyMemory;
                     _ByteSpan_Accessed = true;
                 }
                 return _ByteSpan.Span;
