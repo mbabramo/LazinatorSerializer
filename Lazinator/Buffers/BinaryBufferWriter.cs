@@ -29,7 +29,7 @@ namespace Lazinator.Buffers
                 else
                 {
                     if (Position != _MemoryInBuffer.BytesFilled)
-                        _MemoryInBuffer = new MemoryInBuffer(_MemoryInBuffer.OwnedMemory, Position);
+                        _MemoryInBuffer.BytesFilled = Position;
                     return _MemoryInBuffer;
                 }
                 return _MemoryInBuffer;
@@ -85,6 +85,7 @@ namespace Lazinator.Buffers
                 return;
             var newMemoryInBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
             Written.CopyTo(newMemoryInBuffer.Memory.Span);
+            // DEBUG: Handle old MemoryInBuffer
             MemoryInBuffer = new MemoryInBuffer(newMemoryInBuffer, Position);
         }
 

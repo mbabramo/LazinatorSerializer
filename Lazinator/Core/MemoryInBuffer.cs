@@ -9,7 +9,7 @@ namespace Lazinator.Core
     public class MemoryInBuffer
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
-        public readonly int BytesFilled;
+        public int BytesFilled { get; set; }
         public Memory<byte> FilledMemory => OwnedMemory.Memory.Slice(0, BytesFilled);
 
         public MemoryInBuffer(IMemoryOwner<byte> ownedMemory, int bytesFilled)
@@ -43,11 +43,6 @@ namespace Lazinator.Core
         public static implicit operator MemoryInBuffer(byte[] array)
         {
             return new MemoryInBuffer(new Memory<byte>(array));
-        }
-
-        public MemoryInBuffer WithBytesFilled(int bytesFilled)
-        {
-            return new MemoryInBuffer(OwnedMemory, bytesFilled);
         }
     }
 }
