@@ -31,7 +31,7 @@ namespace Lazinator.Collections
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer);
             var clone = new LazinatorArray<T>()
             {
                 LazinatorParents = LazinatorParents,

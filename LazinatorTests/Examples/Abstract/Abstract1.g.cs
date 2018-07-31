@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
-        protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         
         public abstract ILazinator CloneLazinator();
         
