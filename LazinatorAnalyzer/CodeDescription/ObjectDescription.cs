@@ -499,6 +499,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 _LazinatorMemoryStorage = value;
                                 int length = Deserialize();
+                                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(length);
                             }}
                         }}
                         {ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
