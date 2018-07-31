@@ -11,8 +11,9 @@ namespace Lazinator.Core
         public readonly IMemoryOwner<byte> OwnedMemory;
         public int BytesFilled { get; set; }
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(0, BytesFilled);
+        public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
-        public ReadOnlySpan<byte> ReadOnlySpan => (ReadOnlySpan<byte>)Memory.Span;
+        public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
         public int Length => Memory.Length;
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
