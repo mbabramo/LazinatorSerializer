@@ -6,7 +6,7 @@ using System.Text;
 namespace Lazinator.Core
 {
     [Serializable]
-    public readonly struct MemoryInBuffer
+    public class MemoryInBuffer
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
         public readonly int BytesFilled;
@@ -28,8 +28,7 @@ namespace Lazinator.Core
 
         /// <summary>
         /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
-        /// without calling this, but it will be less efficient. If MemoryInBuffer is copied, then this should be called on
-        /// only one instance of the MemoryInBuffer.
+        /// without calling this, but it will be less efficient.
         /// </summary>
         public void Dispose()
         {

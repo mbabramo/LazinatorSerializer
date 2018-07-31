@@ -54,8 +54,10 @@ namespace Lazinator.Spans
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            if (_HierarchyBytes.BytesFilled > 0)
-            LazinatorParents = default;
+            if (_HierarchyBytes != null && _HierarchyBytes.BytesFilled > 0)
+            {
+                LazinatorParents = default;
+            }
             PostDeserialization();
             return bytesSoFar;
         }

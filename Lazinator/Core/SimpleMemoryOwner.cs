@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Lazinator.Core
 {
+    /// <summary>
+    /// A memory owner that involves no memory pooling. When this is disposed, the memory will eventually be reclaimed due to garbage collection, which is usually less efficient than memory pooling.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public struct SimpleMemoryOwner<T> : IMemoryOwner<T>
     {
         public Memory<T> Memory { get; set; }

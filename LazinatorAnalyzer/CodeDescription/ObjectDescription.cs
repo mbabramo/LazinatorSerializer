@@ -386,8 +386,10 @@ namespace Lazinator.CodeDescription
                         }{
                             IIF(ImplementsPostDeserialization,
                                 $@"
-                            if (_HierarchyBytes.BytesFilled > 0)
+                            if (_HierarchyBytes != null && _HierarchyBytes.BytesFilled > 0)
+                            {{
                                 LazinatorParents = default;
+                            }}
                             PostDeserialization();")
                         }
                             return bytesSoFar;
