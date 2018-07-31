@@ -196,14 +196,14 @@ namespace Lazinator.Core
         public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
         {
             // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
-            if (childStorage.Memory.Length == 0)
+            if (childStorage == null || childStorage.Length == 0)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (skipLength)
-                writer.Write(childStorage.Memory.Span);
+                writer.Write(childStorage.Span);
             else if (restrictLengthTo250Bytes)
-                ((ReadOnlySpan<byte>)childStorage.Memory.Span).Write_WithByteLengthPrefix(ref writer);
+                childStorage.ReadOnlySpan.Write_WithByteLengthPrefix(ref writer);
             else
-                ((ReadOnlySpan<byte>)childStorage.Memory.Span).Write_WithIntLengthPrefix(ref writer);
+                childStorage.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
             return childStorage;
         }
 
