@@ -145,7 +145,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        protected LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
         public override LazinatorMemory LazinatorMemoryStorage
         {
             get => _LazinatorMemoryStorage;

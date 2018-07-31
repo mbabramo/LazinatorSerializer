@@ -148,7 +148,7 @@ namespace Lazinator.Collections.AvlTree
             }
         }
         
-        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        protected LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
         public virtual LazinatorMemory LazinatorMemoryStorage
         {
             get => _LazinatorMemoryStorage;

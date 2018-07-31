@@ -491,7 +491,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
                         public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
                         {{
                             get => _LazinatorMemoryStorage;

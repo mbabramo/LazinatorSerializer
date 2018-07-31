@@ -154,7 +154,7 @@ namespace Lazinator.Collections
             }
         }
         
-        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
         public LazinatorMemory LazinatorMemoryStorage
         {
             get => _LazinatorMemoryStorage;

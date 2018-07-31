@@ -86,7 +86,6 @@ namespace Lazinator.Buffers
                 return;
             var newLazinatorMemory = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
             Written.CopyTo(newLazinatorMemory.Memory.Span);
-            // DEBUG: Handle old LazinatorMemory
             LazinatorMemory = new LazinatorMemory(newLazinatorMemory, Position);
         }
 
