@@ -203,8 +203,8 @@ namespace Lazinator.Collections
         private int _LazinatorList_T_EndByteIndex;
         protected virtual int _Offsets_ByteLength => _LazinatorList_T_EndByteIndex - _Offsets_ByteIndex;
         
-        private ReadOnlyMemory<byte> _MainListSerialized;
-        public ReadOnlyMemory<byte> MainListSerialized
+        private Memory<byte> _MainListSerialized;
+        public Memory<byte> MainListSerialized
         {
             [DebuggerStepThrough]
             get
