@@ -321,7 +321,7 @@ namespace Lazinator.Collections
                         offsetList.AddOffset(offset);
                     }
                 });
-                MainListSerialized = writer.MemoryInBuffer.FilledMemory.Slice(originalStartingPosition);
+                MainListSerialized = writer.LazinatorMemory.Memory.Slice(originalStartingPosition);
                 _Offsets_Accessed = true;
                 _Offsets = offsetList;
                 _Offsets.IsDirty = true;

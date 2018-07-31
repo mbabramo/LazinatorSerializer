@@ -61,12 +61,12 @@ namespace Lazinator.Collections.Avl
             return bytesSoFar;
         }
         
-        public MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public ILazinator CloneLazinator()
         {
@@ -75,7 +75,7 @@ namespace Lazinator.Collections.Avl
         
         public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new AvlNode<TKey, TValue>()
             {
                 LazinatorParents = LazinatorParents,
@@ -92,7 +92,7 @@ namespace Lazinator.Collections.Avl
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
+            get => _IsDirty || LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -140,13 +140,13 @@ namespace Lazinator.Collections.Avl
             }
         }
         
-        private MemoryInBuffer _HierarchyBytes;
-        public MemoryInBuffer HierarchyBytes
+        private LazinatorMemory _HierarchyBytes;
+        public LazinatorMemory HierarchyBytes
         {
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.FilledMemory;
+                LazinatorObjectBytes = value.Memory;
             }
         }
         
@@ -164,18 +164,18 @@ namespace Lazinator.Collections.Avl
         
         public void LazinatorConvertToBytes()
         {
-            if (!IsDirty && !DescendantIsDirty && _LazinatorObjectBytes.Length > 0)
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;
             }
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            _LazinatorObjectBytes = bytes.FilledMemory;
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _LazinatorObjectBytes = bytes.Memory;
         }
         
         public int GetByteLength()
         {
             LazinatorConvertToBytes();
-            return _LazinatorObjectBytes.Length;
+            return LazinatorObjectBytes.Length;
         }
         
         public uint GetBinaryHashCode32()
@@ -246,7 +246,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Key_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Key = default(TKey);
                         if (_Key != null)
@@ -298,7 +298,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Left_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Left = default(AvlNode<TKey, TValue>);
                     }
@@ -346,7 +346,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Right_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Right = default(AvlNode<TKey, TValue>);
                     }
@@ -394,7 +394,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (!_Value_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Value = default(TValue);
                         if (_Value != null)

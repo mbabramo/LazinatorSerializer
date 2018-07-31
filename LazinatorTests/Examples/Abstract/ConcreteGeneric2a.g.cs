@@ -60,12 +60,12 @@ namespace LazinatorTests.Examples.Abstract
             return bytesSoFar;
         }
         
-        public override MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public override LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected override MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected override LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public override ILazinator CloneLazinator()
         {
@@ -74,7 +74,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new ConcreteGeneric2a()
             {
                 LazinatorParents = LazinatorParents,
@@ -91,7 +91,7 @@ namespace LazinatorTests.Examples.Abstract
         public override bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
+            get => _IsDirty || LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -139,13 +139,13 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private MemoryInBuffer _HierarchyBytes;
-        public override MemoryInBuffer HierarchyBytes
+        private LazinatorMemory _HierarchyBytes;
+        public override LazinatorMemory HierarchyBytes
         {
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.FilledMemory;
+                LazinatorObjectBytes = value.Memory;
             }
         }
         
@@ -163,18 +163,18 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void LazinatorConvertToBytes()
         {
-            if (!IsDirty && !DescendantIsDirty && _LazinatorObjectBytes.Length > 0)
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;
             }
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            _LazinatorObjectBytes = bytes.FilledMemory;
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _LazinatorObjectBytes = bytes.Memory;
         }
         
         public override int GetByteLength()
         {
             LazinatorConvertToBytes();
-            return _LazinatorObjectBytes.Length;
+            return LazinatorObjectBytes.Length;
         }
         
         public override uint GetBinaryHashCode32()
@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_LazinatorExample_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _LazinatorExample = default(Example);
                     }

@@ -279,9 +279,9 @@ namespace Lazinator.CodeDescription
                     
                         public abstract int Deserialize();
                         
-                        public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        public abstract LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         
-                        protected abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+                        protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
                         
                         public abstract ILazinator CloneLazinator();
                         
@@ -315,7 +315,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
 		                
-                        public abstract MemoryInBuffer HierarchyBytes
+                        public abstract LazinatorMemory HierarchyBytes
                         {{
 			                set;
                         }}
@@ -395,12 +395,12 @@ namespace Lazinator.CodeDescription
                             return bytesSoFar;
                         }}
 
-                        public {DerivationKeyword}MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+                        public {DerivationKeyword}LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
                         {{
                             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
                         }}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+                        {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
 
                         public {DerivationKeyword}ILazinator CloneLazinator()
                         {{
@@ -409,7 +409,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
-                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParents = LazinatorParents,
@@ -426,7 +426,7 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
-                            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
+                            get => _IsDirty || LazinatorObjectBytes.Length == 0;
                             [DebuggerStepThrough]
                             set
                             {{
@@ -476,13 +476,13 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
         
-                        private MemoryInBuffer _HierarchyBytes;
-                        public {DerivationKeyword}MemoryInBuffer HierarchyBytes
+                        private LazinatorMemory _HierarchyBytes;
+                        public {DerivationKeyword}LazinatorMemory HierarchyBytes
                         {{
                             set
                             {{
                                 _HierarchyBytes = value;
-                                LazinatorObjectBytes = value.FilledMemory;
+                                LazinatorObjectBytes = value.Memory;
                             }}
                         }}
 
@@ -500,18 +500,18 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}void LazinatorConvertToBytes()
                         {{
-                            if (!IsDirty && !DescendantIsDirty && _LazinatorObjectBytes.Length > 0)
+                            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
                             {{
                                 return;
                             }}
-                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-                            _LazinatorObjectBytes = bytes.FilledMemory;
+                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            _LazinatorObjectBytes = bytes.Memory;
                         }}
 
                         public {DerivationKeyword}int GetByteLength()
                         {{
                             LazinatorConvertToBytes();
-                            return _LazinatorObjectBytes.Length;
+                            return LazinatorObjectBytes.Length;
                         }}
 
                         public {DerivationKeyword}uint GetBinaryHashCode32()
@@ -545,7 +545,7 @@ namespace Lazinator.CodeDescription
 
                         {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
                         {{
-                            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParents = LazinatorParents,

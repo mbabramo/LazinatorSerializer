@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new Concrete5()
             {
                 LazinatorParents = LazinatorParents,
@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList4_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _IntList4 = default(List<int>);
                     }
@@ -114,7 +114,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList5_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _IntList5 = default(List<int>);
                     }

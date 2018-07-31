@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new DerivedArray_Values()
             {
                 LazinatorParents = LazinatorParents,
@@ -58,7 +58,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_DerivedLevel_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyArrayInt_DerivedLevel = default(int[]);
                         _MyArrayInt_DerivedLevel_Dirty = true; 

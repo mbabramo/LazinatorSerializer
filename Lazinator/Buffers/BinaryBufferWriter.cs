@@ -15,28 +15,28 @@ namespace Lazinator.Buffers
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
 
         private bool Initialized;
-        private MemoryInBuffer _MemoryInBuffer;
-        public MemoryInBuffer MemoryInBuffer
+        private LazinatorMemory _LazinatorMemory;
+        public LazinatorMemory LazinatorMemory
         {
             get
             {
                 if (!Initialized)
                 {
-                    _MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(MinMinBufferSize), 0);
+                    _LazinatorMemory = new LazinatorMemory(LazinatorUtilities.GetRentedMemory(MinMinBufferSize), 0);
                     InitializeBufferSpan();
                     Initialized = true;
                 }
                 else
                 {
-                    if (Position != _MemoryInBuffer.BytesFilled)
-                        _MemoryInBuffer.BytesFilled = Position;
-                    return _MemoryInBuffer;
+                    if (Position != _LazinatorMemory.BytesFilled)
+                        _LazinatorMemory.BytesFilled = Position;
+                    return _LazinatorMemory;
                 }
-                return _MemoryInBuffer;
+                return _LazinatorMemory;
             }
             set
             {
-                _MemoryInBuffer = value;
+                _LazinatorMemory = value;
                 InitializeBufferSpan();
                 Initialized = true;
             }
@@ -45,19 +45,19 @@ namespace Lazinator.Buffers
         Span<byte> BufferSpan;
         private void InitializeBufferSpan()
         {
-            BufferSpan = _MemoryInBuffer.OwnedMemory.Memory.Span;
+            BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
         }
 
-        public ReadOnlyMemory<byte> Slice(int position) => MemoryInBuffer.OwnedMemory.Memory.Slice(position, Position - position);
-        public ReadOnlyMemory<byte> Slice(int position, int length) => MemoryInBuffer.OwnedMemory.Memory.Slice(position, length);
+        public ReadOnlyMemory<byte> Slice(int position) => LazinatorMemory.OwnedMemory.Memory.Slice(position, Position - position);
+        public ReadOnlyMemory<byte> Slice(int position, int length) => LazinatorMemory.OwnedMemory.Memory.Slice(position, length);
         
 
         public BinaryBufferWriter(int minimumSize)
         {
             if (minimumSize < MinMinBufferSize)
                 minimumSize = MinMinBufferSize;
-            _MemoryInBuffer = new MemoryInBuffer(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
-            BufferSpan = _MemoryInBuffer.OwnedMemory.Memory.Span;
+            _LazinatorMemory = new LazinatorMemory(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
+            BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
             Position = 0;
             Initialized = true;
         }
@@ -83,10 +83,10 @@ namespace Lazinator.Buffers
             }
             else if (BufferSpan.Length >= desiredBufferSize)
                 return;
-            var newMemoryInBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
-            Written.CopyTo(newMemoryInBuffer.Memory.Span);
-            // DEBUG: Handle old MemoryInBuffer
-            MemoryInBuffer = new MemoryInBuffer(newMemoryInBuffer, Position);
+            var newLazinatorMemory = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
+            Written.CopyTo(newLazinatorMemory.Memory.Span);
+            // DEBUG: Handle old LazinatorMemory
+            LazinatorMemory = new LazinatorMemory(newLazinatorMemory, Position);
         }
 
         public void Write(bool value)

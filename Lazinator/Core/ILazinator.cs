@@ -12,7 +12,7 @@ namespace Lazinator.Core
         /// <summary>
         /// The memory (generally rented from a memory pool) used to initialize a Lazinator class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
         /// </summary>
-        MemoryInBuffer HierarchyBytes { set; }
+        LazinatorMemory HierarchyBytes { set; }
         /// <summary>
         /// The bytes used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyBytes or from the parent's LazinatorObjectBytes.
         /// </summary>
@@ -37,7 +37,7 @@ namespace Lazinator.Core
         /// <param name="includeChildren">Whether child objects should be included. If false, the child objects will be skipped.</param>
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <returns></returns>
-        MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         /// <summary>
         /// Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer.
         /// </summary>

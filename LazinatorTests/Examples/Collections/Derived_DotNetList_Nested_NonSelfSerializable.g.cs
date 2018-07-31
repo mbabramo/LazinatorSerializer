@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new Derived_DotNetList_Nested_NonSelfSerializable()
             {
                 LazinatorParents = LazinatorParents,
@@ -72,7 +72,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLevel2ListNestedNonLazinatorType_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyLevel2ListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
                     }

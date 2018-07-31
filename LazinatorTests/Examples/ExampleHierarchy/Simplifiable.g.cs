@@ -61,12 +61,12 @@ namespace LazinatorTests.Examples
             return bytesSoFar;
         }
         
-        public virtual MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -75,7 +75,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new Simplifiable()
             {
                 LazinatorParents = LazinatorParents,
@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
+            get => _IsDirty || LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -140,13 +140,13 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private MemoryInBuffer _HierarchyBytes;
-        public virtual MemoryInBuffer HierarchyBytes
+        private LazinatorMemory _HierarchyBytes;
+        public virtual LazinatorMemory HierarchyBytes
         {
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.FilledMemory;
+                LazinatorObjectBytes = value.Memory;
             }
         }
         
@@ -164,18 +164,18 @@ namespace LazinatorTests.Examples
         
         public virtual void LazinatorConvertToBytes()
         {
-            if (!IsDirty && !DescendantIsDirty && _LazinatorObjectBytes.Length > 0)
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;
             }
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            _LazinatorObjectBytes = bytes.FilledMemory;
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _LazinatorObjectBytes = bytes.Memory;
         }
         
         public virtual int GetByteLength()
         {
             LazinatorConvertToBytes();
-            return _LazinatorObjectBytes.Length;
+            return LazinatorObjectBytes.Length;
         }
         
         public virtual uint GetBinaryHashCode32()
@@ -293,7 +293,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ANonSkippableEarlierExample_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _ANonSkippableEarlierExample = default(Example);
                     }
@@ -332,7 +332,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Example = default(Example);
                     }
@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example2_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Example2 = default(Example);
                     }
@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example3_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _Example3 = default(Example);
                     }

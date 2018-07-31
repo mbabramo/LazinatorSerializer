@@ -58,12 +58,12 @@ namespace LazinatorTests.Examples.Tuples
             return bytesSoFar;
         }
         
-        public virtual MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
+        public virtual LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness)
         {
             return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate) EncodeToNewBuffer);
         }
         
-        protected virtual MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
+        protected virtual LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness);
         
         public virtual ILazinator CloneLazinator()
         {
@@ -72,7 +72,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
             var clone = new StructTuple()
             {
                 LazinatorParents = LazinatorParents,
@@ -89,7 +89,7 @@ namespace LazinatorTests.Examples.Tuples
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || _LazinatorObjectBytes.Length == 0;
+            get => _IsDirty || LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -137,13 +137,13 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private MemoryInBuffer _HierarchyBytes;
-        public virtual MemoryInBuffer HierarchyBytes
+        private LazinatorMemory _HierarchyBytes;
+        public virtual LazinatorMemory HierarchyBytes
         {
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.FilledMemory;
+                LazinatorObjectBytes = value.Memory;
             }
         }
         
@@ -161,18 +161,18 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void LazinatorConvertToBytes()
         {
-            if (!IsDirty && !DescendantIsDirty && _LazinatorObjectBytes.Length > 0)
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;
             }
-            MemoryInBuffer bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
-            _LazinatorObjectBytes = bytes.FilledMemory;
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (StreamManuallyDelegate)EncodeToNewBuffer);
+            _LazinatorObjectBytes = bytes.Memory;
         }
         
         public virtual int GetByteLength()
         {
             LazinatorConvertToBytes();
-            return _LazinatorObjectBytes.Length;
+            return LazinatorObjectBytes.Length;
         }
         
         public virtual uint GetBinaryHashCode32()
@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_EnumTuple_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _EnumTuple = default((TestEnum firstEnum, TestEnum anotherEnum));
                     }
@@ -242,7 +242,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNamedTuple_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyNamedTuple = default((int MyFirstItem, double MySecondItem));
                     }
@@ -272,7 +272,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNullableTuple_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyNullableTuple = default((int, double)?);
                     }
@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleSerialized_Accessed)
                 {
-                    if (_LazinatorObjectBytes.Length == 0)
+                    if (LazinatorObjectBytes.Length == 0)
                     {
                         _MyValueTupleSerialized = default((uint, ExampleChild, NonLazinatorClass));
                     }

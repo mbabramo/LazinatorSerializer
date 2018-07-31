@@ -6,23 +6,23 @@ using System.Text;
 namespace Lazinator.Core
 {
     [Serializable]
-    public class MemoryInBuffer
+    public class LazinatorMemory : IMemoryOwner<byte>
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
         public int BytesFilled { get; set; }
-        public Memory<byte> FilledMemory => OwnedMemory.Memory.Slice(0, BytesFilled);
+        public Memory<byte> Memory => OwnedMemory.Memory.Slice(0, BytesFilled);
 
-        public MemoryInBuffer(IMemoryOwner<byte> ownedMemory, int bytesFilled)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
         {
             OwnedMemory = ownedMemory;
             BytesFilled = bytesFilled;
         }
 
-        public MemoryInBuffer(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)
+        public LazinatorMemory(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)
         {
         }
 
-        public MemoryInBuffer(byte[] array) : this(new SimpleMemoryOwner<byte>(new Memory<byte>(array)), array.Length)
+        public LazinatorMemory(byte[] array) : this(new SimpleMemoryOwner<byte>(new Memory<byte>(array)), array.Length)
         {
         }
 
@@ -35,14 +35,14 @@ namespace Lazinator.Core
             OwnedMemory.Dispose();
         }
 
-        public static implicit operator MemoryInBuffer(Memory<byte> memory)
+        public static implicit operator LazinatorMemory(Memory<byte> memory)
         {
-            return new MemoryInBuffer(memory);
+            return new LazinatorMemory(memory);
         }
 
-        public static implicit operator MemoryInBuffer(byte[] array)
+        public static implicit operator LazinatorMemory(byte[] array)
         {
-            return new MemoryInBuffer(new Memory<byte>(array));
+            return new LazinatorMemory(new Memory<byte>(array));
         }
     }
 }

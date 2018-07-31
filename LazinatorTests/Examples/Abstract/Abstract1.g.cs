@@ -35,9 +35,9 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract int Deserialize();
         
-        public abstract MemoryInBuffer SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        public abstract LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
-        protected abstract MemoryInBuffer EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
         
         public abstract ILazinator CloneLazinator();
         
@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.Abstract
         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         
-        public abstract MemoryInBuffer HierarchyBytes
+        public abstract LazinatorMemory HierarchyBytes
         {
             set;
         }

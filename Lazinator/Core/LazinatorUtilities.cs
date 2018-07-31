@@ -22,7 +22,7 @@ namespace Lazinator.Core
 
         // Delegate types. Methods matching these types must be passed into some of the methods below.
 
-        public delegate MemoryInBuffer StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
+        public delegate LazinatorMemory StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness);
 
         public delegate ReadOnlyMemory<byte> ReturnReadOnlyMemoryDelegate();
 
@@ -45,7 +45,7 @@ namespace Lazinator.Core
         /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
         /// <param name="streamManually_Fn">The function that completes the conversion to bytes, without considering using the original storage for the item as a whole.</param>
         /// <returns></returns>
-        public static MemoryInBuffer EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, ReadOnlyMemory<byte> originalStorage, StreamManuallyDelegate streamManually_Fn)
+        public static LazinatorMemory EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, ReadOnlyMemory<byte> originalStorage, StreamManuallyDelegate streamManually_Fn)
         {
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
@@ -65,14 +65,14 @@ namespace Lazinator.Core
             // We can use the original storage. But we still have to copy it. 
             BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length);
             writer.Write(originalStorage.Span);
-            return writer.MemoryInBuffer;
+            return writer.LazinatorMemory;
         }
 
-        public static MemoryInBuffer EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) where T : ILazinator, new()
+        public static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness) where T : ILazinator, new()
         {
             BinaryBufferWriter writer = new BinaryBufferWriter(BinaryBufferWriter.MinMinBufferSize);
             selfSerialized.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, true);
-            return writer.MemoryInBuffer;
+            return writer.LazinatorMemory;
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace Lazinator.Core
 
             BinaryBufferWriter writer = new BinaryBufferWriter();
             binaryWriterAction(ref writer, true);
-            return writer.MemoryInBuffer.FilledMemory;
+            return writer.LazinatorMemory.Memory;
         }
 
         /// <summary>

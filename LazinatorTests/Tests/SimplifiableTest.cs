@@ -48,7 +48,7 @@ namespace LazinatorTests.Tests
             s.Example2.MyChar.Should().Be('Z');
             s.Example3.Should().BeNull();
             var d = s.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
-            d.FilledMemory.Length.Should().BeLessOrEqualTo(originalbytes.FilledMemory.Length); // shorter even though it is more complex once constructed
+            d.Memory.Length.Should().BeLessOrEqualTo(originalbytes.Memory.Length); // shorter even though it is more complex once constructed
 
             // now use the values that are not simplified
             s = new Simplifiable()

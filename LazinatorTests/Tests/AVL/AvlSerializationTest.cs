@@ -31,7 +31,7 @@ namespace LazinatorTests.AVL
         {
             GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
-            MemoryInBuffer b = tree.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
+            LazinatorMemory b = tree.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false);
             //const int repetitions = 10000;
             //for (int i = 0; i < repetitions; i++)
             //{
