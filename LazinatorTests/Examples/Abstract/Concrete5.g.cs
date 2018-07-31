@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode)
         {
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true /* DEBUG */);
             var clone = new Concrete5()
             {
                 LazinatorParents = LazinatorParents,
