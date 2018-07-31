@@ -120,8 +120,7 @@ namespace Lazinator.Collections
                 offset = Offsets[index - 1];
             int nextOffset = Offsets[index];
             var byteSpan = MainListSerialized.Slice(offset, nextOffset - offset);
-            throw new Exception(); // DEBUG
-           // return byteSpan;
+            return byteSpan;
         }
 
         public T this[int index]
@@ -328,7 +327,7 @@ namespace Lazinator.Collections
                 _Offsets.IsDirty = true;
             }
             else
-                ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                ConvertToBytes_Memory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
 
 
