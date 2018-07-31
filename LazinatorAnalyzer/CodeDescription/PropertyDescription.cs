@@ -1603,7 +1603,7 @@ namespace Lazinator.CodeDescription
             CheckForLazinatorInNonLazinator(innerProperty);
             string readCommand = innerProperty.GetSupportedCollectionReadCommands(this);
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage)
+                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
                         if (storage.Length == 0)
                         {{
@@ -1703,7 +1703,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                             var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                             {collectionAddItem}
                         }}
@@ -1711,7 +1711,7 @@ namespace Lazinator.CodeDescription
                 else
                     return ($@"
                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                        ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
+                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                         var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                             {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
@@ -1734,7 +1734,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                             var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                             {collectionAddItem}
                         }}
@@ -1743,7 +1743,7 @@ namespace Lazinator.CodeDescription
                     return (
                         $@"
                         {lengthCollectionMemberString}
-                        ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember).Memory;
+                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                         var item = new {AppropriatelyQualifiedTypeName}()
                         {{
                             LazinatorMemoryStorage = childData,
@@ -1821,13 +1821,13 @@ namespace Lazinator.CodeDescription
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage)
+                    private static {AppropriatelyQualifiedTypeName} {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
                         if (storage.Length == 0)
                         {{
                             return default;
                         }}
-                        ReadOnlySpan<byte> span = storage.Span;
+                        ReadOnlySpan<byte> span = storage.ReadOnlySpan;
 
                         int bytesSoFar = 0;
                         ");
@@ -1894,7 +1894,7 @@ namespace Lazinator.CodeDescription
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
@@ -1919,7 +1919,7 @@ namespace Lazinator.CodeDescription
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
-                            ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
@@ -1984,7 +1984,7 @@ namespace Lazinator.CodeDescription
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
             sb.Append($@"
-                   private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(ReadOnlyMemory<byte> storage)
+                   private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
