@@ -326,7 +326,7 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
-                        public abstract void LazinatorConvertToBytes();
+                        public abstract void EnsureLazinatorMemoryUpToDate();
                         public abstract int GetByteLength();
                         public abstract uint GetBinaryHashCode32();
                         public abstract ulong GetBinaryHashCode64();
@@ -351,7 +351,7 @@ namespace Lazinator.CodeDescription
 
                                     ";
                     string hash32 = NonbinaryHash ? "return (uint) GetHashCode();" :
-                            $@"LazinatorConvertToBytes();
+                            $@"EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);";
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
@@ -498,7 +498,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {DerivationKeyword}void LazinatorConvertToBytes()
+                        public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
                         {{
                             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
                             {{
@@ -509,7 +509,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}int GetByteLength()
                         {{
-                            LazinatorConvertToBytes();
+                            EnsureLazinatorMemoryUpToDate();
                             return LazinatorObjectBytes.Length;
                         }}
 
@@ -520,13 +520,13 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}ulong GetBinaryHashCode64()
                         {{
-                            LazinatorConvertToBytes();
+                            EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
                         }}
 
                         public {DerivationKeyword}Guid GetBinaryHashCode128()
                         {{
-                            LazinatorConvertToBytes();
+                            EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
                         }}
 

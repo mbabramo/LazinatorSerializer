@@ -103,7 +103,7 @@ namespace Lazinator.Core
         /// <summary>
         /// Converts the Lazinator object to a byte representation, if it has changed. This does not need to be called manually before serialization.
         /// </summary>
-        void LazinatorConvertToBytes();
+        void EnsureLazinatorMemoryUpToDate();
         /// <summary>
         /// Returns the serialized length of an object, performing the serialization needed to make the computation if necessary.
         /// </summary>

@@ -85,7 +85,7 @@ namespace LazinatorTests.Tests
             cl[0].MyIntsAre3.Should().BeTrue();
 
             cl[0].MyInt = 2;
-            cl.LazinatorConvertToBytes();
+            cl.EnsureLazinatorMemoryUpToDate();
             cl[0].MyIntsAre3.Should().BeFalse();
         }
     }

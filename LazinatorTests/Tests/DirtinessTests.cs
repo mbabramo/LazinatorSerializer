@@ -111,7 +111,7 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
             hierarchy.MyChild1.HasChanged.Should().BeTrue();
             hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
-            hierarchy.MyChild1.MyWrapperContainer.LazinatorConvertToBytes();
+            hierarchy.MyChild1.MyWrapperContainer.EnsureLazinatorMemoryUpToDate();
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
             hierarchy.MyChild1.HasChanged.Should().BeTrue();
@@ -128,7 +128,7 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
             
             var clone = hierarchy.CloneLazinatorTyped();
-            // The following is the tricky part. We must make sure that LazinatorConvertToBytes doesn't cause MyChild1 to think that no serialization is necessary.
+            // The following is the tricky part. We must make sure that EnsureLazinatorMemoryUpToDate doesn't cause MyChild1 to think that no serialization is necessary.
             clone.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(18);
             clone.MyChild1.IsDirty.Should().BeFalse();
             clone.MyChild1.HasChanged.Should().BeFalse();
@@ -153,7 +153,7 @@ namespace LazinatorTests.Tests
             DotNetHashSet_SelfSerialized l = new DotNetHashSet_SelfSerialized();
             l.MyHashSetSerialized = new HashSet<ExampleChild>();
             l.MyHashSetSerialized.Add(new ExampleChild());
-            l.LazinatorConvertToBytes();
+            l.EnsureLazinatorMemoryUpToDate();
             l.IsDirty.Should().BeFalse();
             l.DescendantIsDirty.Should().BeFalse();
             var firstItem = l.MyHashSetSerialized.First();

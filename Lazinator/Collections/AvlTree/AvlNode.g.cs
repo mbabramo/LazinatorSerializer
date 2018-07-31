@@ -162,37 +162,36 @@ namespace Lazinator.Collections.Avl
             }
         }
         
-        public void LazinatorConvertToBytes()
+        public void EnsureLazinatorMemoryUpToDate()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;
             }
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true /* DEBUG */);
-            _LazinatorObjectBytes = bytes.Memory;
+            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
         }
         
         public int GetByteLength()
         {
-            LazinatorConvertToBytes();
+            EnsureLazinatorMemoryUpToDate();
             return LazinatorObjectBytes.Length;
         }
         
         public uint GetBinaryHashCode32()
         {
-            LazinatorConvertToBytes();
+            EnsureLazinatorMemoryUpToDate();
             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
         }
         
         public ulong GetBinaryHashCode64()
         {
-            LazinatorConvertToBytes();
+            EnsureLazinatorMemoryUpToDate();
             return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
         }
         
         public Guid GetBinaryHashCode128()
         {
-            LazinatorConvertToBytes();
+            EnsureLazinatorMemoryUpToDate();
             return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
         }
         

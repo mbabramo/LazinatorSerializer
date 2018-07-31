@@ -587,7 +587,7 @@ namespace LazinatorTests.Tests
             v6item.DescendantIsDirty.Should().BeTrue();
             v6.DescendantIsDirty.Should().BeTrue();
             v7.MyList.Insert(0, null);
-            v7.MyList.LazinatorConvertToBytes();
+            v7.MyList.EnsureLazinatorMemoryUpToDate();
             v7.MyList.IsDirty.Should().BeFalse();
             v7.MyList.DescendantIsDirty.Should().BeFalse();
             v7.MyList[1] = v6item;

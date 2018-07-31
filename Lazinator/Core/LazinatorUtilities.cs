@@ -581,7 +581,7 @@ namespace Lazinator.Core
         /// <param name="hierarchy"></param>
         public static void MarkHierarchyClassesClean(this ILazinator hierarchy)
         {
-            hierarchy.LazinatorConvertToBytes(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
+            hierarchy.EnsureLazinatorMemoryUpToDate(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
             MarkHierarchyClassesUnchanged(hierarchy);
         }
 
@@ -733,7 +733,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static MemoryStream GetMemoryStream(this ILazinator lazinator)
         {
-            lazinator.LazinatorConvertToBytes();
+            lazinator.EnsureLazinatorMemoryUpToDate();
             return lazinator.LazinatorObjectBytes.GetMemoryStream();
         }
 
@@ -744,7 +744,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static (Pipe pipe, int bytes) GetPipe(this ILazinator lazinator)
         {
-            lazinator.LazinatorConvertToBytes();
+            lazinator.EnsureLazinatorMemoryUpToDate();
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();

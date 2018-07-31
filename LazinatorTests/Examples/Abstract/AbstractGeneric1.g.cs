@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
-        public abstract void LazinatorConvertToBytes();
+        public abstract void EnsureLazinatorMemoryUpToDate();
         public abstract int GetByteLength();
         public abstract uint GetBinaryHashCode32();
         public abstract ulong GetBinaryHashCode64();
