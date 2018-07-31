@@ -127,6 +127,41 @@ namespace Lazinator.Core
             InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
         }
+        public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, LazinatorMemory storage, ILazinator parent = null) where T : ILazinator, new()
+        {
+            // Note: It's important that CreateBaseOrDerivedType be generic, because that often allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
+            if (storage.Memory.Length <= 1)
+                return default;
+            int bytesSoFar = 0;
+            var span = (ReadOnlySpan<byte>)storage.Memory.Span;
+            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            T itemToReturn;
+            var typeInfo = UniqueIDToTypeMap[uniqueID];
+            if (typeInfo.numberGenericParameters > 0)
+            {
+                bytesSoFar = 0;
+                LazinatorGenericIDType genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
+                itemToReturn = (T)CreateGenericKnownID(genericID);
+            }
+            else
+            {
+                if (uniqueID == mostLikelyUniqueID)
+                {
+                    itemToReturn = funcToCreateBaseType();
+                }
+                else
+                {
+                    if (FactoriesByID.ContainsKey(uniqueID))
+                    {
+                        itemToReturn = (T)FactoriesByID[uniqueID]();
+                    }
+                    else
+                        throw new UnknownSerializedTypeException(uniqueID);
+                }
+            }
+            InitializeDeserialized(itemToReturn, storage, parent);
+            return itemToReturn;
+        }
 
         /// <summary>
         /// Create a typed Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List.
@@ -147,6 +182,16 @@ namespace Lazinator.Core
                 return null;
             int bytesSoFar = 0;
             int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
+            ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
+            InitializeDeserialized(itemToReturn, storage, parent);
+            return itemToReturn;
+        }
+        public ILazinator CreateFromBytesIncludingID(LazinatorMemory storage, ILazinator parent = null)
+        {
+            if (storage.Memory.Length <= 1)
+                return null;
+            int bytesSoFar = 0;
+            int uniqueID = ((ReadOnlySpan<byte>)storage.Memory.Span).ToDecompressedInt(ref bytesSoFar);
             ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
             InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
@@ -174,6 +219,30 @@ namespace Lazinator.Core
                 throw new UnknownSerializedTypeException(uniqueID);
             InitializeDeserialized(selfSerialized, storage, parent);
             return selfSerialized;
+        }
+        public ILazinator CreateKnownID(int uniqueID, LazinatorMemory storage, ILazinator parent = null)
+        {
+            ILazinator selfSerialized = null;
+            if (FactoriesByID.ContainsKey(uniqueID))
+                selfSerialized = FactoriesByID[uniqueID]();
+            else
+            {
+                (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
+                if (numGenericParameters > 0)
+                    selfSerialized = CreateGenericFromBytesIncludingID(storage.Memory.Span);
+            }
+            if (selfSerialized == null)
+                throw new UnknownSerializedTypeException(uniqueID);
+            InitializeDeserialized(selfSerialized, storage, parent);
+            return selfSerialized;
+        }
+
+        private void InitializeDeserialized(ILazinator lazinatorType, LazinatorMemory serializedBytes, ILazinator parent)
+        {
+            lazinatorType.LazinatorParents = new LazinatorParentsCollection(parent);
+            lazinatorType.LazinatorObjectBytes = serializedBytes.Memory;
+            lazinatorType.HasChanged = false;
+            lazinatorType.DescendantHasChanged = false;
         }
 
         private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
