@@ -160,11 +160,7 @@ namespace LazinatorTests.Examples.Structs
                 int length = Deserialize();
             }
         }
-        
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
-        {
-            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-        }
+        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public void EnsureLazinatorMemoryUpToDate()
         {

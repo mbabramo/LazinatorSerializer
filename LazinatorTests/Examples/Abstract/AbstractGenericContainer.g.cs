@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
-        public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;
         }

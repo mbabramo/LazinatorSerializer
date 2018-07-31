@@ -155,11 +155,7 @@ namespace LazinatorTests.Examples.Abstract
                 int length = Deserialize();
             }
         }
-        
-        public override ReadOnlyMemory<byte> LazinatorObjectBytes
-        {
-            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-        }
+        protected override ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public override void EnsureLazinatorMemoryUpToDate()
         {

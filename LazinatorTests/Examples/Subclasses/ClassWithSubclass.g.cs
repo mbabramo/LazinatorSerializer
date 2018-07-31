@@ -160,11 +160,7 @@ namespace LazinatorTests.Examples.Subclasses
                 int length = Deserialize();
             }
         }
-        
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
-        {
-            get => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-        }
+        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public virtual void EnsureLazinatorMemoryUpToDate()
         {

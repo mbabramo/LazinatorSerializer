@@ -81,7 +81,7 @@ namespace Lazinator.Wrappers
             set;
         }
         
-        public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;
         }

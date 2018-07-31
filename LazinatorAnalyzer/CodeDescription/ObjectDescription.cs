@@ -326,7 +326,7 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
-                        public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+                        {ProtectedIfApplicable}abstract ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
 			                get;
                         }}
@@ -491,7 +491,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
+                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage;
                         public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
                         {{
                             get => _LazinatorMemoryStorage;
