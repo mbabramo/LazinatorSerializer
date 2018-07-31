@@ -151,7 +151,7 @@ namespace Lazinator.Collections.Dictionary
             }
         }
         
-        protected LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
+        protected LazinatorMemory _LazinatorMemoryStorage;
         public virtual LazinatorMemory LazinatorMemoryStorage
         {
             get => _LazinatorMemoryStorage;
@@ -159,6 +159,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 _LazinatorMemoryStorage = value;
                 int length = Deserialize();
+                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
             }
         }
         protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;

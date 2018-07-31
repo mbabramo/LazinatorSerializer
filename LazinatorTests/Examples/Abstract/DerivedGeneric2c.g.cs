@@ -148,7 +148,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        protected LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
+        protected LazinatorMemory _LazinatorMemoryStorage;
         public override LazinatorMemory LazinatorMemoryStorage
         {
             get => _LazinatorMemoryStorage;
@@ -156,6 +156,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _LazinatorMemoryStorage = value;
                 int length = Deserialize();
+                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
             }
         }
         protected override ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;

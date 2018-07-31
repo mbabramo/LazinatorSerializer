@@ -49,8 +49,6 @@ namespace Lazinator.Buffers
         }
 
         public LazinatorMemory LazinatorMemorySlice(int position) => LazinatorMemory.Slice(position);
-        public ReadOnlyMemory<byte> Slice(int position) => LazinatorMemory.OwnedMemory.Memory.Slice(position, Position - position);
-        public ReadOnlyMemory<byte> Slice(int position, int length) => LazinatorMemory.OwnedMemory.Memory.Slice(position, length);
         
 
         public BinaryBufferWriter(int minimumSize)

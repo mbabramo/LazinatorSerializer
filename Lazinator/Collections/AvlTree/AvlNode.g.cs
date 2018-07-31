@@ -150,7 +150,7 @@ namespace Lazinator.Collections.Avl
             }
         }
         
-        LazinatorMemory _LazinatorMemoryStorage; // TODO -- use only one memory storage
+        LazinatorMemory _LazinatorMemoryStorage;
         public LazinatorMemory LazinatorMemoryStorage
         {
             get => _LazinatorMemoryStorage;
@@ -158,6 +158,7 @@ namespace Lazinator.Collections.Avl
             {
                 _LazinatorMemoryStorage = value;
                 int length = Deserialize();
+                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
             }
         }
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
