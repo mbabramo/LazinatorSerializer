@@ -177,9 +177,9 @@ namespace LazinatorTests.Tests
             Memory<byte> memory = new Memory<byte>(new byte[numPairs * (lengthExample + lengthOpenGeneric)]);
             for (int i = 0; i < numPairs; i++)
             {
-                e.LazinatorObjectBytes.CopyTo(memory.Slice(lengthSoFar));
+                e.LazinatorMemoryStorage.ReadOnlyMemory.CopyTo(memory.Slice(lengthSoFar));
                 lengthSoFar += lengthExample;
-                o.LazinatorObjectBytes.CopyTo(memory.Slice(lengthSoFar));
+                o.LazinatorMemoryStorage.ReadOnlyMemory.CopyTo(memory.Slice(lengthSoFar));
                 lengthSoFar += lengthOpenGeneric;
             }
             var results = DeserializationFactory.Instance
