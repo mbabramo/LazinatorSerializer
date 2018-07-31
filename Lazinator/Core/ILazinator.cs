@@ -34,12 +34,13 @@ namespace Lazinator.Core
         /// <summary>
         /// Initiates serialization starting from here (and optionally including descendants), using the original bytes if the object is clean and manually writing bytes if necessary.
         /// </summary>
-        /// <param name="includeChildren">Whether child objects should be included. If false, the child objects will be skipped.</param>
+        /// <param name="includeChildrenMode">Whether child objects should be included. If false, the child objects will be skipped.</param>
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
+        /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children. If false, then the returned memory will be wholly independent of the existing memory.</param>
         /// <returns></returns>
         LazinatorMemory SerializeNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
-        /// Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. This is primarily used internally by Lazinator.
+        /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
         /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>
