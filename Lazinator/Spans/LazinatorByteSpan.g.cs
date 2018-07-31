@@ -426,36 +426,12 @@ namespace Lazinator.Spans
         
         private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(Memory<byte>);
-            }
-            ReadOnlySpan<byte> span = storage.Span;
-            
-            int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
-            
-            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
-            var collectionAsSpan = collection.Span;
-            for (int i = 0; i < collectionLength; i++)
-            {
-                byte item = span.ToByte(ref bytesSoFar);
-                collectionAsSpan[i] = item;
-            }
-            
-            return collection;
+            return storage.Memory;
         }
         
         private static void ConvertToBytes_Memory_Gbyte_g(ref BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
-            var itemToConvertSpan = itemToConvert.Span;
-            int itemToConvertCount = itemToConvertSpan.Length;
-            for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
-            {
-                WriteUncompressedPrimitives.WriteByte(ref writer, itemToConvertSpan[itemIndex]);
-            }
+            writer.Write(itemToConvert.Span);
         }
-        
     }
 }

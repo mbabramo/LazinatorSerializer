@@ -1520,7 +1520,8 @@ namespace Lazinator.CodeDescription
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
                         writer.Write(itemToConvert.Span);
-                    }}");
+                    }}
+                    ");
                 }
                 else
                     sb.Append($@"
