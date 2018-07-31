@@ -310,7 +310,7 @@ namespace Lazinator.Collections
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                _LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
+                _LazinatorMemoryStorage = writer.Slice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

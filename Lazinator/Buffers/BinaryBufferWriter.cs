@@ -48,7 +48,7 @@ namespace Lazinator.Buffers
             BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
         }
 
-        public LazinatorMemory LazinatorMemorySlice(int position) => LazinatorMemory.Slice(position);
+        public LazinatorMemory Slice(int position) => LazinatorMemory.Slice(position);
         
 
         public BinaryBufferWriter(int minimumSize)
