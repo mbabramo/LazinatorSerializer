@@ -142,20 +142,24 @@ namespace LazinatorTests.Examples.Collections
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -211,7 +215,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
                         _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
                     }
                     _MyStackInt_Accessed = true;
@@ -328,7 +332,7 @@ namespace LazinatorTests.Examples.Collections
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -359,7 +363,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyStackInt, isBelievedDirty: MyStackInt_Dirty,
             isAccessed: _MyStackInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Stack_Gint_g(ref w, _MyStackInt,
@@ -376,7 +380,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Stack<int> ConvertFromBytes_Stack_Gint_g(ReadOnlyMemory<byte> storage)
+        private static Stack<int> ConvertFromBytes_Stack_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {

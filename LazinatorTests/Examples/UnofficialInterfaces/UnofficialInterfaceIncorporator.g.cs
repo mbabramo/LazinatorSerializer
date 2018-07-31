@@ -147,20 +147,24 @@ namespace LazinatorTests.Examples
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -243,7 +247,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
                         
                         _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(239, () => new Concrete5(), childData, this); 
                     }
@@ -282,7 +286,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
                         
                         _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(237, () => new Concrete3(), childData, this); 
                     }
@@ -424,7 +428,7 @@ namespace LazinatorTests.Examples
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -456,7 +460,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyOfficialObject;
                 }
-                WriteChild(ref writer, _MyOfficialObject, includeChildrenMode, _MyOfficialObject_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _MyOfficialObject, includeChildrenMode, _MyOfficialObject_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -469,7 +473,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyUnofficialObject;
                 }
-                WriteChild(ref writer, _MyUnofficialObject, includeChildrenMode, _MyUnofficialObject_Accessed, () => GetChildSlice(LazinatorObjectBytes, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _MyUnofficialObject, includeChildrenMode, _MyUnofficialObject_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

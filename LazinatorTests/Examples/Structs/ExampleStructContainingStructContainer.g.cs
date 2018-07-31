@@ -147,20 +147,24 @@ namespace LazinatorTests.Examples.Structs
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -216,11 +220,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
                         _Subcontainer = new ExampleStructContainingStruct()
                         {
                             LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                         };
                     }
                     _Subcontainer_Accessed = true;
@@ -250,10 +254,10 @@ namespace LazinatorTests.Examples.Structs
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
                         return new ExampleStructContainingStruct()
                         {
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                             IsDirty = false
                         };
                     }
@@ -361,7 +365,7 @@ namespace LazinatorTests.Examples.Structs
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -391,7 +395,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = Subcontainer;
                 }
-                WriteChild(ref writer, _Subcontainer, includeChildrenMode, _Subcontainer_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _Subcontainer, includeChildrenMode, _Subcontainer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

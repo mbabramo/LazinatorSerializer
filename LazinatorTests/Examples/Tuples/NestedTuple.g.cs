@@ -143,20 +143,24 @@ namespace LazinatorTests.Examples.Tuples
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -211,7 +215,7 @@ namespace LazinatorTests.Examples.Tuples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
                         _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
                     }
                     _MyNestedTuple_Accessed = true;
@@ -311,7 +315,7 @@ namespace LazinatorTests.Examples.Tuples
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -342,7 +346,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyNestedTuple, isBelievedDirty: _MyNestedTuple_Accessed,
             isAccessed: _MyNestedTuple_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(ref w, _MyNestedTuple,
@@ -359,13 +363,13 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion of supported collections and tuples */
         
-        private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(ReadOnlyMemory<byte> storage)
+        private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -375,7 +379,7 @@ namespace LazinatorTests.Examples.Tuples
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
                 item2 = ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(childData);
             }
             bytesSoFar += lengthCollectionMember_item2;
@@ -384,7 +388,7 @@ namespace LazinatorTests.Examples.Tuples
             int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
                 item3 = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
             }
             bytesSoFar += lengthCollectionMember_item3;
@@ -417,13 +421,13 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(ReadOnlyMemory<byte> storage)
+        private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -431,7 +435,7 @@ namespace LazinatorTests.Examples.Tuples
             int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item1 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
                 item1 = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
             }
             bytesSoFar += lengthCollectionMember_item1;
@@ -440,7 +444,7 @@ namespace LazinatorTests.Examples.Tuples
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
                 item2 = ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(childData);
             }
             bytesSoFar += lengthCollectionMember_item2;
@@ -467,13 +471,13 @@ namespace LazinatorTests.Examples.Tuples
             WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
         }
         
-        private static (uint, (int a, string b)?, Tuple<short, long>) ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(ReadOnlyMemory<byte> storage)
+        private static (uint, (int a, string b)?, Tuple<short, long>) ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -483,7 +487,7 @@ namespace LazinatorTests.Examples.Tuples
             int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
                 item2 = ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(childData);
             }
             bytesSoFar += lengthCollectionMember_item2;
@@ -492,7 +496,7 @@ namespace LazinatorTests.Examples.Tuples
             int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
                 item3 = ConvertFromBytes_Tuple_Gshort_c_C32long_g(childData);
             }
             bytesSoFar += lengthCollectionMember_item3;
@@ -528,13 +532,13 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static (int a, string b)? ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(ReadOnlyMemory<byte> storage)
+        private static (int a, string b)? ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -559,13 +563,13 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Value.Item2);
         }
         
-        private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(ReadOnlyMemory<byte> storage)
+        private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
             

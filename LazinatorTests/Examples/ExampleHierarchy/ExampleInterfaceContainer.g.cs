@@ -147,20 +147,24 @@ namespace LazinatorTests.Examples.Hierarchy
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -217,7 +221,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null);
                         
                         _ExampleByInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
                     }
@@ -256,7 +260,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
                         _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
                     }
                     _ExampleListByInterface_Accessed = true;
@@ -372,7 +376,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -402,7 +406,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     var deserialized = ExampleByInterface;
                 }
-                WriteChild(ref writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorObjectBytes, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -416,7 +420,7 @@ namespace LazinatorTests.Examples.Hierarchy
             WriteNonLazinatorObject(
             nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
             isAccessed: _ExampleListByInterface_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GIExample_g(ref w, _ExampleListByInterface,
@@ -433,7 +437,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Conversion of supported collections and tuples */
         
-        private static List<IExample> ConvertFromBytes_List_GIExample_g(ReadOnlyMemory<byte> storage)
+        private static List<IExample> ConvertFromBytes_List_GIExample_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -454,7 +458,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 else
                 {
-                    ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData);
                     collection.Add(item);
                 }

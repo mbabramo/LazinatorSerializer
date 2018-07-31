@@ -140,20 +140,24 @@ namespace Lazinator.Wrappers
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -209,7 +213,7 @@ namespace Lazinator.Wrappers
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
                         _WrappedValue = ConvertFromBytes_long_B_b(childData);
                     }
                     _WrappedValue_Accessed = true;
@@ -313,7 +317,7 @@ namespace Lazinator.Wrappers
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -334,7 +338,7 @@ namespace Lazinator.Wrappers
             {
                 var deserialized = WrappedValue;
             }
-            var serializedBytesCopy_WrappedValue = LazinatorObjectBytes;
+            var serializedBytesCopy_WrappedValue = LazinatorMemoryStorage;
             var byteIndexCopy_WrappedValue = _WrappedValue_ByteIndex;
             var byteLengthCopy_WrappedValue = _WrappedValue_ByteLength;
             var copy_WrappedValue = _WrappedValue;
@@ -357,7 +361,7 @@ namespace Lazinator.Wrappers
         
         /* Conversion of supported collections and tuples */
         
-        private static long[] ConvertFromBytes_long_B_b(ReadOnlyMemory<byte> storage)
+        private static long[] ConvertFromBytes_long_B_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {

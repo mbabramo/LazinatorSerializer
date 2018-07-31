@@ -146,20 +146,24 @@ namespace LazinatorTests.Examples
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -218,7 +222,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, false, false, null);
                         _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                     }
                     _NonLazinatorClass_Accessed = true;
@@ -248,7 +252,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, false, false, null);
                         _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData);
                     }
                     _NonLazinatorInterchangeableClass_Accessed = true;
@@ -278,7 +282,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
                         _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);
                     }
                     _NonLazinatorStruct_Accessed = true;
@@ -393,7 +397,7 @@ namespace LazinatorTests.Examples
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -415,7 +419,7 @@ namespace LazinatorTests.Examples
             {
                 var deserialized = NonLazinatorClass;
             }
-            var serializedBytesCopy_NonLazinatorClass = LazinatorObjectBytes;
+            var serializedBytesCopy_NonLazinatorClass = LazinatorMemoryStorage;
             var byteIndexCopy_NonLazinatorClass = _NonLazinatorClass_ByteIndex;
             var byteLengthCopy_NonLazinatorClass = _NonLazinatorClass_ByteLength;
             var copy_NonLazinatorClass = _NonLazinatorClass;
@@ -435,7 +439,7 @@ namespace LazinatorTests.Examples
             {
                 var deserialized = NonLazinatorInterchangeableClass;
             }
-            var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorObjectBytes;
+            var serializedBytesCopy_NonLazinatorInterchangeableClass = LazinatorMemoryStorage;
             var byteIndexCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteIndex;
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
             var copy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass;
@@ -455,7 +459,7 @@ namespace LazinatorTests.Examples
             {
                 var deserialized = NonLazinatorStruct;
             }
-            var serializedBytesCopy_NonLazinatorStruct = LazinatorObjectBytes;
+            var serializedBytesCopy_NonLazinatorStruct = LazinatorMemoryStorage;
             var byteIndexCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteIndex;
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
             var copy_NonLazinatorStruct = _NonLazinatorStruct;
@@ -476,11 +480,11 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(ReadOnlyMemory<byte> storage)
+        private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(LazinatorMemory storage)
         {
             NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass()
             {
-                LazinatorObjectBytes = storage
+                LazinatorMemoryStorage = storage
             };
             return interchange.Interchange_NonLazinatorInterchangeableClass();
         }

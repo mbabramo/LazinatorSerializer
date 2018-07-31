@@ -17,7 +17,7 @@ namespace LazinatorTests.Tests
         private static void ConfirmDeserializationFactoryWorks(DeserializationFactory df)
         {
             Example parent = new Example();
-            ReadOnlyMemory<byte> serializedBytes = new ReadOnlyMemory<byte>();
+            LazinatorMemory serializedBytes = new LazinatorMemory(new Memory<byte>());
             ILazinator selfSerialized =
                 df.CreateKnownID((int) ExampleUniqueIDs.ExampleChild, serializedBytes,
                     parent);

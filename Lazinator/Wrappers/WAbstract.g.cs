@@ -75,6 +75,12 @@ namespace Lazinator.Wrappers
             set;
         }
         
+        public abstract LazinatorMemory LazinatorMemoryStorage
+        {
+            get;
+            set;
+        }
+        
         public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;

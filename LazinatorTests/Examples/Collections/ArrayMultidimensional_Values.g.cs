@@ -142,20 +142,24 @@ namespace LazinatorTests.Examples.Collections
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -215,7 +219,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
                         _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
                     }
                     _MyArrayInt_Accessed = true;
@@ -262,7 +266,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null);
                         _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
                     }
                     _MyCrazyJaggedArray_Accessed = true;
@@ -292,7 +296,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null);
                         _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
                     }
                     _MyThreeDimArrayInt_Accessed = true;
@@ -398,7 +402,7 @@ namespace LazinatorTests.Examples.Collections
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -429,7 +433,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
             isAccessed: _MyArrayInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_int_B_c_b(ref w, _MyArrayInt,
@@ -446,7 +450,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed,
             isAccessed: _MyCrazyJaggedArray_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_int_B_b_B_c_c_b_B_c_c_c_b(ref w, _MyCrazyJaggedArray,
@@ -463,7 +467,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed,
             isAccessed: _MyThreeDimArrayInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_int_B_c_c_b(ref w, _MyThreeDimArrayInt,
@@ -480,7 +484,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static int[,] ConvertFromBytes_int_B_c_b(ReadOnlyMemory<byte> storage)
+        private static int[,] ConvertFromBytes_int_B_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -520,7 +524,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][,,][,,,] ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(ReadOnlyMemory<byte> storage)
+        private static int[][,,][,,,] ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -541,7 +545,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(childData);
                     collection[i] = item;
                 }
@@ -575,7 +579,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,][,,,] ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(ReadOnlyMemory<byte> storage)
+        private static int[,,][,,,] ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -600,7 +604,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_c_b(childData);
                     collection[i0, i1, i2] = item;
                 }
@@ -640,7 +644,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,,] ConvertFromBytes_int_B_c_c_c_b(ReadOnlyMemory<byte> storage)
+        private static int[,,,] ConvertFromBytes_int_B_c_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -690,7 +694,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,] ConvertFromBytes_int_B_c_c_b(ReadOnlyMemory<byte> storage)
+        private static int[,,] ConvertFromBytes_int_B_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {

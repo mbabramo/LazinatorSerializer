@@ -146,20 +146,24 @@ namespace Lazinator.Collections.Avl
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -255,7 +259,7 @@ namespace Lazinator.Collections.Avl
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, false, false, null);
                         
                         _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData, this); 
                     }
@@ -303,7 +307,7 @@ namespace Lazinator.Collections.Avl
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Left_ByteIndex, _Left_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Left_ByteIndex, _Left_ByteLength, false, false, null);
                         if (childData.Length == 0)
                         {
                             _Left = default;
@@ -311,7 +315,7 @@ namespace Lazinator.Collections.Avl
                         else _Left = new AvlNode<TKey, TValue>()
                         {
                             LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                         };
                     }
                     _Left_Accessed = true;
@@ -351,7 +355,7 @@ namespace Lazinator.Collections.Avl
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Right_ByteIndex, _Right_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Right_ByteIndex, _Right_ByteLength, false, false, null);
                         if (childData.Length == 0)
                         {
                             _Right = default;
@@ -359,7 +363,7 @@ namespace Lazinator.Collections.Avl
                         else _Right = new AvlNode<TKey, TValue>()
                         {
                             LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                         };
                     }
                     _Right_Accessed = true;
@@ -403,7 +407,7 @@ namespace Lazinator.Collections.Avl
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, false, false, null);
                         
                         _Value = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData, this); 
                     }
@@ -603,7 +607,7 @@ namespace Lazinator.Collections.Avl
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -635,7 +639,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = Key;
                 }
-                WriteChild(ref writer, _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Key_ByteIndex, _Key_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -648,7 +652,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = Left;
                 }
-                WriteChild(ref writer, _Left, includeChildrenMode, _Left_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Left_ByteIndex, _Left_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _Left, includeChildrenMode, _Left_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Left_ByteIndex, _Left_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -661,7 +665,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = Right;
                 }
-                WriteChild(ref writer, _Right, includeChildrenMode, _Right_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Right_ByteIndex, _Right_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _Right, includeChildrenMode, _Right_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Right_ByteIndex, _Right_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -674,7 +678,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = Value;
                 }
-                WriteChild(ref writer, _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

@@ -146,20 +146,24 @@ namespace LazinatorTests.Examples
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -214,10 +218,10 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
                         _MyExampleStruct = new ExampleStruct()
                         {
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                         };
                     }
                     _MyExampleStruct_Accessed = true;
@@ -246,10 +250,10 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
                         return new ExampleStruct()
                         {
-                            LazinatorObjectBytes = childData,
+                            LazinatorMemoryStorage = childData,
                             IsDirty = false
                         };
                     }
@@ -366,7 +370,7 @@ namespace LazinatorTests.Examples
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -390,7 +394,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyExampleStruct;
                 }
-                var serializedBytesCopy = LazinatorObjectBytes;
+                var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _MyExampleStruct_ByteIndex;
                 var byteLengthCopy = _MyExampleStruct_ByteLength;
                 WriteChild(ref writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);

@@ -151,20 +151,24 @@ namespace LazinatorTests.Examples
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -253,7 +257,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
                         
                         _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
                     }
@@ -283,7 +287,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
                         
                         _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData); 
                     }
@@ -314,7 +318,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
                         _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData);
                     }
                     _MyLazinatorList_Accessed = true;
@@ -361,7 +365,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
                         _MyListValues = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _MyListValues_Accessed = true;
@@ -391,7 +395,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
                         _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData);
                     }
                     _MyTuple_Accessed = true;
@@ -542,7 +546,7 @@ namespace LazinatorTests.Examples
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -568,7 +572,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyChild1;
                 }
-                var serializedBytesCopy = LazinatorObjectBytes;
+                var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _MyChild1_ByteIndex;
                 var byteLengthCopy = _MyChild1_ByteLength;
                 WriteChild(ref writer, _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
@@ -584,7 +588,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyChild2;
                 }
-                var serializedBytesCopy = LazinatorObjectBytes;
+                var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _MyChild2_ByteIndex;
                 var byteLengthCopy = _MyChild2_ByteLength;
                 WriteChild(ref writer, _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
@@ -598,7 +602,7 @@ namespace LazinatorTests.Examples
             {
                 var deserialized = MyLazinatorList;
             }
-            var serializedBytesCopy_MyLazinatorList = LazinatorObjectBytes;
+            var serializedBytesCopy_MyLazinatorList = LazinatorMemoryStorage;
             var byteIndexCopy_MyLazinatorList = _MyLazinatorList_ByteIndex;
             var byteLengthCopy_MyLazinatorList = _MyLazinatorList_ByteLength;
             var copy_MyLazinatorList = _MyLazinatorList;
@@ -618,7 +622,7 @@ namespace LazinatorTests.Examples
             {
                 var deserialized = MyListValues;
             }
-            var serializedBytesCopy_MyListValues = LazinatorObjectBytes;
+            var serializedBytesCopy_MyListValues = LazinatorMemoryStorage;
             var byteIndexCopy_MyListValues = _MyListValues_ByteIndex;
             var byteLengthCopy_MyListValues = _MyListValues_ByteLength;
             var copy_MyListValues = _MyListValues;
@@ -638,7 +642,7 @@ namespace LazinatorTests.Examples
             {
                 var deserialized = MyTuple;
             }
-            var serializedBytesCopy_MyTuple = LazinatorObjectBytes;
+            var serializedBytesCopy_MyTuple = LazinatorMemoryStorage;
             var byteIndexCopy_MyTuple = _MyTuple_ByteIndex;
             var byteLengthCopy_MyTuple = _MyTuple_ByteLength;
             var copy_MyTuple = _MyTuple;
@@ -661,7 +665,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion of supported collections and tuples */
         
-        private static List<Example> ConvertFromBytes_List_GExample_g(ReadOnlyMemory<byte> storage)
+        private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -682,7 +686,7 @@ namespace LazinatorTests.Examples
                 }
                 else
                 {
-                    ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                     collection.Add(item);
                 }
@@ -716,7 +720,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<int> ConvertFromBytes_List_Gint_g(ReadOnlyMemory<byte> storage)
+        private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -751,13 +755,13 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static (NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(ReadOnlyMemory<byte> storage)
+        private static (NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -765,7 +769,7 @@ namespace LazinatorTests.Examples
             int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item1 != 0)
             {
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
                 item1 = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
             }
             bytesSoFar += lengthCollectionMember_item1;

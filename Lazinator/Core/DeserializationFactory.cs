@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Lazinator.Buffers; 
+using Lazinator.Buffers;
 using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
@@ -92,41 +92,6 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns></returns>
-        public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator, new()
-        {
-            // Note: It's important that CreateBaseOrDerivedType be generic, because that often allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
-            if (storage.Length <= 1)
-                return default;
-            int bytesSoFar = 0;
-            var span = storage.Span;
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-            T itemToReturn;
-            var typeInfo = UniqueIDToTypeMap[uniqueID];
-            if (typeInfo.numberGenericParameters > 0)
-            {
-                bytesSoFar = 0;
-                LazinatorGenericIDType genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                itemToReturn = (T)CreateGenericKnownID(genericID);
-            }
-            else
-            {
-                if (uniqueID == mostLikelyUniqueID)
-                {
-                    itemToReturn = funcToCreateBaseType();
-                }
-                else
-                {
-                    if (FactoriesByID.ContainsKey(uniqueID))
-                    {
-                        itemToReturn = (T)FactoriesByID[uniqueID]();
-                    }
-                    else
-                        throw new UnknownSerializedTypeException(uniqueID);
-                }
-            }
-            InitializeDeserialized(itemToReturn, storage, parent);
-            return itemToReturn;
-        }
         public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, LazinatorMemory storage, ILazinator parent = null) where T : ILazinator, new()
         {
             // Note: It's important that CreateBaseOrDerivedType be generic, because that often allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
@@ -169,23 +134,13 @@ namespace Lazinator.Core
         /// <typeparam name="T">Type of the item to create.</typeparam>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public T CreateAbstractType<T>(ReadOnlyMemory<byte> storage, ILazinator parent = null) where T : ILazinator => (T)CreateFromBytesIncludingID(storage, parent);
+        public T CreateAbstractType<T>(LazinatorMemory storage, ILazinator parent = null) where T : ILazinator => (T)CreateFromBytesIncludingID(storage, parent);
 
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List. This assumes that the serialized bytes contain type information.
         /// </summary>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
-        public ILazinator CreateFromBytesIncludingID(ReadOnlyMemory<byte> storage, ILazinator parent = null)
-        {
-            if (storage.Length <= 1)
-                return null;
-            int bytesSoFar = 0;
-            int uniqueID = storage.Span.ToDecompressedInt(ref bytesSoFar);
-            ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
-            InitializeDeserialized(itemToReturn, storage, parent);
-            return itemToReturn;
-        }
         public ILazinator CreateFromBytesIncludingID(LazinatorMemory storage, ILazinator parent = null)
         {
             if (storage.Memory.Length <= 1)
@@ -204,22 +159,6 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public ILazinator CreateKnownID(int uniqueID, ReadOnlyMemory<byte> storage, ILazinator parent = null)
-        {
-            ILazinator selfSerialized = null;
-            if (FactoriesByID.ContainsKey(uniqueID))
-                selfSerialized = FactoriesByID[uniqueID]();
-            else
-            {
-                (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
-                if (numGenericParameters > 0)
-                    selfSerialized = CreateGenericFromBytesIncludingID(storage.Span);
-            }
-            if (selfSerialized == null)
-                throw new UnknownSerializedTypeException(uniqueID);
-            InitializeDeserialized(selfSerialized, storage, parent);
-            return selfSerialized;
-        }
         public ILazinator CreateKnownID(int uniqueID, LazinatorMemory storage, ILazinator parent = null)
         {
             ILazinator selfSerialized = null;
@@ -240,15 +179,7 @@ namespace Lazinator.Core
         private void InitializeDeserialized(ILazinator lazinatorType, LazinatorMemory serializedBytes, ILazinator parent)
         {
             lazinatorType.LazinatorParents = new LazinatorParentsCollection(parent);
-            lazinatorType.LazinatorObjectBytes = serializedBytes.Memory;
-            lazinatorType.HasChanged = false;
-            lazinatorType.DescendantHasChanged = false;
-        }
-
-        private void InitializeDeserialized(ILazinator lazinatorType, ReadOnlyMemory<byte> serializedBytes, ILazinator parent)
-        {
-            lazinatorType.LazinatorParents = new LazinatorParentsCollection(parent);
-            lazinatorType.LazinatorObjectBytes = serializedBytes;
+            lazinatorType.LazinatorMemoryStorage = serializedBytes;
             lazinatorType.HasChanged = false;
             lazinatorType.DescendantHasChanged = false;
         }
@@ -259,7 +190,7 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns>The deserialized Lazinator object</returns>
-        public T CreateBasedOnType<T>(ReadOnlyMemory<byte> storage, ILazinator parent = null)
+        public T CreateBasedOnType<T>(LazinatorMemory storage, ILazinator parent = null)
         {
             Type t = typeof(T);
             int? fixedUniqueID = GetFixedUniqueID(t);
@@ -275,14 +206,14 @@ namespace Lazinator.Core
         /// <param name="storage">The serialized bytes</param>
         /// <param name="fixedUniqueID">The fixed unique ID of a single type representing each instance stored. If null is specified, then each stored object must contain a unique ID.</param>
         /// <returns></returns>
-        public IEnumerable<ILazinator> CreateMultiple(ReadOnlyMemory<byte> storage, int? fixedUniqueID)
+        public IEnumerable<ILazinator> CreateMultiple(LazinatorMemory storage, int? fixedUniqueID)
         {
             while (true) // until "yield break"
             {
                 if (storage.Length <= 1)
                     yield break;
                 int bytesSoFar = 0;
-                int uniqueID = fixedUniqueID ?? storage.Span.ToDecompressedInt(ref bytesSoFar);
+                int uniqueID = fixedUniqueID ?? storage.ReadOnlySpan.ToDecompressedInt(ref bytesSoFar);
                 ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
                 int bytes = itemToReturn.LazinatorObjectBytes.Length;
                 storage = storage.Slice(bytes);
@@ -494,7 +425,7 @@ namespace Lazinator.Core
             else
                 l.Add(TypeToUniqueIDMap[t]);
         }
-        
+
         public Func<ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
             // NOTE: If this code causes a stack overflow error, it is likely because a property is being accessed in the constructor

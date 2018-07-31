@@ -76,10 +76,15 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
-        public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+        public abstract LazinatorMemory LazinatorMemoryStorage
         {
             get;
             set;
+        }
+        
+        public abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get;
         }
         
         public abstract void EnsureLazinatorMemoryUpToDate();

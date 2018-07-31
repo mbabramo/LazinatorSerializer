@@ -140,20 +140,24 @@ namespace Lazinator.Wrappers
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -203,7 +207,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_Value_Accessed)
                 {
-                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _Value_ByteIndex, _Value_ByteLength, true, false, null);
+                    ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null).Memory;
                     _Value = childData;
                     _Value_Accessed = true;
                 }
@@ -304,7 +308,7 @@ namespace Lazinator.Wrappers
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -325,7 +329,7 @@ namespace Lazinator.Wrappers
             {
                 var deserialized = Value;
             }
-            var serializedBytesCopy_Value = LazinatorObjectBytes;
+            var serializedBytesCopy_Value = LazinatorMemoryStorage;
             var byteIndexCopy_Value = _Value_ByteIndex;
             var byteLengthCopy_Value = _Value_ByteLength;
             var copy_Value = _Value;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Lazinator.Buffers; 
+using Lazinator.Buffers;
 using Lazinator.Core;
 using static Lazinator.Core.LazinatorUtilities;
 
@@ -16,7 +16,8 @@ namespace Lazinator.Core
         /// <summary>
         /// The bytes used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyBytes or from the parent's LazinatorObjectBytes.
         /// </summary>
-        ReadOnlyMemory<byte> LazinatorObjectBytes { get; set; }
+        LazinatorMemory LazinatorMemoryStorage { get; set; }
+        ReadOnlyMemory<byte> LazinatorObjectBytes { get; }
         /// <summary>
         /// Returns true if the Lazinator object is a struct. This is used internally by Lazinator.
         /// </summary>

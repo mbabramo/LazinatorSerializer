@@ -147,20 +147,24 @@ namespace LazinatorTests.Examples.Collections
             set
             {
                 _HierarchyBytes = value;
-                LazinatorObjectBytes = value.Memory;
+                LazinatorMemoryStorage = value;
             }
         }
         
-        protected ReadOnlyMemory<byte> LazinatorMemoryStorage;
-        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        protected LazinatorMemory _LazinatorMemoryStorage; // DEBUG -- use only one memory storage
+        public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => LazinatorMemoryStorage;
+            get => _LazinatorMemoryStorage;
             set
             {
-                LazinatorMemoryStorage = value;
+                _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
+        }
+        
+        public virtual ReadOnlyMemory<byte> LazinatorObjectBytes
+        {
+            get => LazinatorMemoryStorage.Memory;
         }
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -220,7 +224,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
                         _MyListInt = ConvertFromBytes_List_GWInt_g(childData);
                     }
                     _MyListInt_Accessed = true;
@@ -267,7 +271,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
                         _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
                     }
                     _MyListNullableByte_Accessed = true;
@@ -297,7 +301,7 @@ namespace LazinatorTests.Examples.Collections
                     }
                     else
                     {
-                        ReadOnlyMemory<byte> childData = GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
                         _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData);
                     }
                     _MyListNullableInt_Accessed = true;
@@ -403,7 +407,7 @@ namespace LazinatorTests.Examples.Collections
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                LazinatorMemoryStorage = writer.Slice(startPosition);
+                LazinatorMemoryStorage = writer.LazinatorMemorySlice(startPosition);
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -434,7 +438,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
             isAccessed: _MyListInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWInt_g(ref w, _MyListInt,
@@ -451,7 +455,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableByte, isBelievedDirty: _MyListNullableByte_Accessed,
             isAccessed: _MyListNullableByte_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWNullableByte_g(ref w, _MyListNullableByte,
@@ -468,7 +472,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableInt, isBelievedDirty: _MyListNullableInt_Accessed,
             isAccessed: _MyListNullableInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorObjectBytes, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWNullableInt_g(ref w, _MyListNullableInt,
@@ -485,7 +489,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static List<WInt> ConvertFromBytes_List_GWInt_g(ReadOnlyMemory<byte> storage)
+        private static List<WInt> ConvertFromBytes_List_GWInt_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -500,10 +504,10 @@ namespace LazinatorTests.Examples.Collections
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WInt()
                 {
-                    LazinatorObjectBytes = childData,
+                    LazinatorMemoryStorage = childData,
                 };
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
@@ -527,7 +531,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(ReadOnlyMemory<byte> storage)
+        private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -542,10 +546,10 @@ namespace LazinatorTests.Examples.Collections
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableByte()
                 {
-                    LazinatorObjectBytes = childData,
+                    LazinatorMemoryStorage = childData,
                 };
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
@@ -569,7 +573,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(ReadOnlyMemory<byte> storage)
+        private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -584,10 +588,10 @@ namespace LazinatorTests.Examples.Collections
             for (int i = 0; i < collectionLength; i++)
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
-                ReadOnlyMemory<byte> childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableInt()
                 {
-                    LazinatorObjectBytes = childData,
+                    LazinatorMemoryStorage = childData,
                 };
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;

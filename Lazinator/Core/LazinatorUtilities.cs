@@ -22,11 +22,7 @@ namespace Lazinator.Core
 
         // Delegate types. Methods matching these types must be passed into some of the methods below.
 
-        public delegate LazinatorMemory StreamManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness); // DEBUG
-
         public delegate LazinatorMemory EncodeManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-
-        public delegate ReadOnlyMemory<byte> ReturnReadOnlyMemoryDelegate(); // DEBUG
 
         public delegate LazinatorMemory ReturnLazinatorMemoryDelegate();
 
@@ -54,12 +50,12 @@ namespace Lazinator.Core
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
             // unless the original storage is definitely clean.
-            if (originalStorage.Length == 0 || 
+            if (originalStorage.Length == 0 ||
                 includeChildrenMode != originalIncludeChildrenMode ||
-                        (!isDefinitelyClean 
-                            && 
-                        (verifyCleanness || 
-                        isBelievedDirty || 
+                        (!isDefinitelyClean
+                            &&
+                        (verifyCleanness ||
+                        isBelievedDirty ||
                         (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && descendantIsBelievedDirty)
                          )
                          )
@@ -93,7 +89,7 @@ namespace Lazinator.Core
             writer.Position = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(uint));
             writer.Write(length);
-            writer.Position = afterPosition; 
+            writer.Position = afterPosition;
         }
 
         /// <summary>
@@ -121,7 +117,7 @@ namespace Lazinator.Core
             int length = (afterPosition - lengthPosition - sizeof(byte));
             if (length > 250)
                 throw new LazinatorSerializationException("Writing with byte length prefix limited to items no more than 250 bytes.");
-            writer.Write((byte) length);
+            writer.Write((byte)length);
             writer.Position = afterPosition;
         }
 
@@ -140,14 +136,14 @@ namespace Lazinator.Core
         /// <param name="parent">The parent of the object being written</param>
         public static void WriteChild<T>(ref BinaryBufferWriter writer, T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
-            ReturnReadOnlyMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
+            ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
             bool childCouldHaveChanged = childHasBeenAccessed;
-            ReadOnlyMemory<byte> childStorage = default;
+            LazinatorMemory childStorage = default;
             if (!childHasBeenAccessed && child != null)
             {
                 childStorage = getChildSliceFn();
-                if (childStorage.Length == 0)
+                if (childStorage.Memory.Length == 0)
                     childCouldHaveChanged = true; // child is an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
             }
             else
@@ -155,8 +151,8 @@ namespace Lazinator.Core
                 if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
                     // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
-                    childStorage = child.LazinatorObjectBytes;
-                    if (childStorage.Length != 0)
+                    childStorage = child.LazinatorMemoryStorage;
+                    if (childStorage.Memory.Length != 0)
                         childCouldHaveChanged = false;
                 }
             }
@@ -177,46 +173,6 @@ namespace Lazinator.Core
             }
             AddParentToChildless(child, parent);
         }
-        // DEBUG above
-        //public static void WriteChild<T>(ref BinaryBufferWriter writer, T child,
-        //    IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
-        //    ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
-        //{
-        //    bool childCouldHaveChanged = childHasBeenAccessed;
-        //    LazinatorMemory childStorage = default;
-        //    if (!childHasBeenAccessed && child != null)
-        //    {
-        //        childStorage = getChildSliceFn();
-        //        if (childStorage.Length == 0)
-        //            childCouldHaveChanged = true; // child is an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
-        //    }
-        //    else
-        //    {
-        //        if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-        //        {
-        //            // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
-        //            childStorage = child.LazinatorObjectBytes;
-        //            if (childStorage.Length != 0)
-        //                childCouldHaveChanged = false;
-        //        }
-        //    }
-        //    if (!childCouldHaveChanged)
-        //    {
-        //        childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
-        //    }
-        //    else
-        //    {
-        //        if (child == null)
-        //        {
-        //            WriteNullChild(ref writer, restrictLengthTo250Bytes, skipLength);
-        //        }
-        //        else
-        //        {
-        //            WriteChildToBinary(ref writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
-        //        }
-        //    }
-        //    AddParentToChildless(child, parent);
-        //}
 
         public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
         {
@@ -229,17 +185,17 @@ namespace Lazinator.Core
             }
         }
 
-        public static ReadOnlyMemory<byte> WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, ReadOnlyMemory<byte> childStorage)
+        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
         {
             // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
-            if (childStorage.Length == 0)
+            if (childStorage.Memory.Length == 0)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (skipLength)
-                writer.Write(childStorage.Span);
+                writer.Write(childStorage.Memory.Span);
             else if (restrictLengthTo250Bytes)
-                childStorage.Span.Write_WithByteLengthPrefix(ref writer);
+                ((ReadOnlySpan<byte>)childStorage.Memory.Span).Write_WithByteLengthPrefix(ref writer);
             else
-                childStorage.Span.Write_WithIntLengthPrefix(ref writer);
+                ((ReadOnlySpan<byte>)childStorage.Memory.Span).Write_WithIntLengthPrefix(ref writer);
             return childStorage;
         }
 
@@ -342,17 +298,17 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction"></param>
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
-            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
+            LazinatorMemory original = getChildSliceForFieldFn();
             if (!isAccessed)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.Span.Write_WithIntLengthPrefix(ref writer);
+                original.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
             }
-            else if (isBelievedDirty || original.Length == 0)
+            else if (isBelievedDirty || original.Memory.Length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
                 void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
@@ -363,9 +319,9 @@ namespace Lazinator.Core
                 if (verifyCleanness)
                 {
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original, revised);
+                    ConfirmMatch(original.Memory, revised);
                 }
-                original.Span.Write_WithIntLengthPrefix(ref writer);
+                original.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
             }
         }
 
@@ -380,10 +336,10 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction"></param>
         public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnReadOnlyMemoryDelegate getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
-            ReadOnlyMemory<byte> original = getChildSliceForFieldFn();
+            LazinatorMemory original = getChildSliceForFieldFn();
             if (!isAccessed)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
@@ -401,7 +357,7 @@ namespace Lazinator.Core
                 if (verifyCleanness)
                 {
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original, revised);
+                    ConfirmMatch(original.Memory, revised);
                 }
                 writer.Write(original.Span);
             }
@@ -447,7 +403,7 @@ namespace Lazinator.Core
         }
 
         #endregion
-        
+
         #region Enumeration
 
         /// <summary>
@@ -549,7 +505,7 @@ namespace Lazinator.Core
             {
                 string firstHierarchyTreeString = new HierarchyTree(firstWithoutChildren).ToString();
                 string secondHierarchyTreeString = new HierarchyTree(secondWithoutChildren).ToString();
-                
+
                 StringBuilder sb = new StringBuilder();
                 if (firstHierarchyTreeString == secondHierarchyTreeString)
                 {
@@ -729,21 +685,7 @@ namespace Lazinator.Core
         /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
-        public static ReadOnlyMemory<byte> GetChildSlice(ReadOnlyMemory<byte> serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength) // DEBUG
-        {
-            if (byteLength == 0)
-            {
-                return new ReadOnlyMemory<byte>();
-            }
-            if (omitLength) // length is omitted because the child takes up the full slice
-                return serializedBytes.Slice(byteOffset, byteLength);
-            if (fixedLength != null)
-                return serializedBytes.Slice(byteOffset, (int)fixedLength);
-            if (lengthInSingleByte)
-                return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
-            return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
-        }
-        static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
+        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
         public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
         {
             if (byteLength == 0)
