@@ -283,9 +283,7 @@ namespace Lazinator.CodeDescription
                         
                         protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         
-                        public abstract ILazinator CloneLazinator();
-                        
-                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false);
+                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false);
                         
                         public abstract bool HasChanged
                         {{
@@ -404,12 +402,7 @@ namespace Lazinator.CodeDescription
 
                         {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
-                        public {DerivationKeyword}ILazinator CloneLazinator()
-                        {{
-                            return CloneLazinator(OriginalIncludeChildrenMode);
-                        }}
-
-                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
+                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false)
                         {{
                             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                             var clone = new {NameIncludingGenerics}()

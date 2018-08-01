@@ -57,7 +57,7 @@ namespace Lazinator.Core
         void EnsureLazinatorMemoryUpToDate();
 
         /// <summary>
-        /// Enumerates nodes in the hierarchy based on specified parameters.
+        /// Enumerates nodes in the hierarchy, including the node at the top of the hierarchy, based on specified parameters.
         /// </summary>
         /// <param name="matchCriterion">If non-null, then a node will be yielded only if this function returns true.</param>
         /// <param name="stopExploringBelowMatch">If true, then once a matching node is found, it will be enumerated, but its dirty descendants will not be separately enumerated.</param>
@@ -108,11 +108,6 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
         void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-        /// <summary>
-        /// Primarily used internally. Deserializes the class/struct and any serialized descendants from the object's serialized bytes. This is automatically called the first time there is an attempt to read a field or child, or when LazinatorObjectBytes is set. This reads data in the header and then calls ConvertFromBytesAfterHeader.
-        /// </summary>
-        /// <returns>The number of bytes processed during deserialization</returns>
-        int Deserialize();
         /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's LazinatorObjectBytes.
         /// </summary>
