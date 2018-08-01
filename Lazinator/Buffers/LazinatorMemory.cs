@@ -9,34 +9,40 @@ namespace Lazinator.Buffers
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
-        public int BytesFilled { get; private set; }
-        public int Length => BytesFilled;
-        public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, BytesFilled);
+        public int Length { get; private set; }
+        public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
+        private LazinatorMemory _OriginalSource;
+        public LazinatorMemory OriginalSource
+        {
+            get => _OriginalSource ?? this;
+            set { _OriginalSource = value; }
+        }
 
         private HashSet<LazinatorMemory> DisposeTogether = null;
 
         #region Constructors
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, LazinatorMemory originalSource)
         {
             OwnedMemory = ownedMemory;
             StartPosition = startPosition;
-            BytesFilled = bytesFilled;
+            Length = bytesFilled;
+            OriginalSource = originalSource;
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
         {
             OwnedMemory = ownedMemory;
-            BytesFilled = bytesFilled;
+            Length = bytesFilled;
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory)
         {
             OwnedMemory = ownedMemory;
-            BytesFilled = ownedMemory.Memory.Length;
+            Length = ownedMemory.Memory.Length;
         }
 
         public LazinatorMemory(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)
@@ -61,8 +67,8 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(new Memory<byte>(array));
         }
 
-        public LazinatorMemory Slice(int position) => Slice(position, BytesFilled - position);
-        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length);
+        public LazinatorMemory Slice(int position) => Slice(position, Length - position);
+        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length, OriginalSource);
 
         #endregion
 
@@ -72,11 +78,16 @@ namespace Lazinator.Buffers
         /// Remembers an additional buffer that should be disposed when this is disposed. 
         /// </summary>
         /// <param name="additionalBuffer">The buffer to dispose with this buffer.</param>
-        public void PlanJointDisposal(LazinatorMemory additionalBuffer)
+        public void DisposeWhenOriginalSourceDisposed(LazinatorMemory additionalBuffer)
         {
-            if (DisposeTogether == null)
-                DisposeTogether = new HashSet<LazinatorMemory>();
-            DisposeTogether.Add(additionalBuffer);
+            if (OriginalSource != this)
+                OriginalSource.DisposeWhenOriginalSourceDisposed(additionalBuffer);
+            else
+            {
+                if (DisposeTogether == null)
+                    DisposeTogether = new HashSet<LazinatorMemory>();
+                DisposeTogether.Add(additionalBuffer);
+            }
         }
 
         private void FreeMemory()
@@ -93,7 +104,10 @@ namespace Lazinator.Buffers
         /// </summary>
         public void Dispose()
         {
-            FreeMemory();
+            if (OriginalSource != this)
+                OriginalSource.FreeMemory();
+            else
+                FreeMemory();
         }
 
         #endregion

@@ -385,7 +385,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }

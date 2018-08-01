@@ -408,7 +408,7 @@ namespace LazinatorTests.Examples.Tuples
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }
@@ -511,7 +511,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (TestEnum firstEnum, TestEnum anotherEnum) ConvertFromBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default;
             }
@@ -538,7 +538,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int MyFirstItem, double MySecondItem) ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default;
             }
@@ -565,7 +565,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int, double)? ConvertFromBytes__Pint_c_C32double_p_C63(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default;
             }
@@ -596,7 +596,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (uint, ExampleChild, NonLazinatorClass) ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default;
             }

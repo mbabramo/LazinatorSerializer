@@ -303,7 +303,7 @@ namespace LazinatorTests.Examples.Tuples
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }
@@ -355,7 +355,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default;
             }

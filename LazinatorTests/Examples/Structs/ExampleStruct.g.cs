@@ -534,7 +534,7 @@ namespace LazinatorTests.Examples
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }
@@ -657,7 +657,7 @@ namespace LazinatorTests.Examples
         
         private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<Example>);
             }
@@ -712,7 +712,7 @@ namespace LazinatorTests.Examples
         
         private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<int>);
             }
@@ -747,7 +747,7 @@ namespace LazinatorTests.Examples
         
         private static (NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default;
             }

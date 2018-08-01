@@ -293,7 +293,7 @@ namespace Lazinator.Collections.Avl
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Left_ByteIndex, _Left_ByteLength, false, false, null);
-                        if (childData.BytesFilled == 0)
+                        if (childData.Length == 0)
                         {
                             _Left = default;
                         }
@@ -341,7 +341,7 @@ namespace Lazinator.Collections.Avl
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Right_ByteIndex, _Right_ByteLength, false, false, null);
-                        if (childData.BytesFilled == 0)
+                        if (childData.Length == 0)
                         {
                             _Right = default;
                         }
@@ -595,7 +595,7 @@ namespace Lazinator.Collections.Avl
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }

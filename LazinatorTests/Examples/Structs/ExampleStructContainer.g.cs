@@ -504,7 +504,7 @@ namespace LazinatorTests.Examples
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }
@@ -599,7 +599,7 @@ namespace LazinatorTests.Examples
         
         private static List<ExampleStruct> ConvertFromBytes_List_GExampleStruct_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<ExampleStruct>);
             }
@@ -641,7 +641,7 @@ namespace LazinatorTests.Examples
         
         private static List<WNullableStruct<ExampleStruct>> ConvertFromBytes_List_GWNullableStruct_GExampleStruct_g_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<WNullableStruct<ExampleStruct>>);
             }

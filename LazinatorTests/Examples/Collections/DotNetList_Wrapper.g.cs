@@ -395,7 +395,7 @@ namespace LazinatorTests.Examples.Collections
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
                 {
-                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }
@@ -481,7 +481,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static List<WInt> ConvertFromBytes_List_GWInt_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<WInt>);
             }
@@ -523,7 +523,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<WNullableByte>);
             }
@@ -565,7 +565,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(LazinatorMemory storage)
         {
-            if (storage.BytesFilled == 0)
+            if (storage.Length == 0)
             {
                 return default(List<WNullableInt>);
             }

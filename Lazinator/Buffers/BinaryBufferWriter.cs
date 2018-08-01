@@ -42,7 +42,7 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
-                return new LazinatorMemory(UnderlyingMemory, 0, Position);
+                return new LazinatorMemory(UnderlyingMemory, 0, Position, null);
             }
         }
 
