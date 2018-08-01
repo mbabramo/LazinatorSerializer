@@ -138,12 +138,10 @@ namespace Lazinator.Collections
             }
         }
         
-        private bool _StorageIsHierarchyRoot;
         public LazinatorMemory HierarchyStorage
         {
             set
             {
-                _StorageIsHierarchyRoot = true;
                 LazinatorMemoryStorage = value;
             }
         }

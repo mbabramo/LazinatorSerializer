@@ -141,12 +141,10 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        private bool _StorageIsHierarchyRoot;
         public virtual LazinatorMemory HierarchyStorage
         {
             set
             {
-                _StorageIsHierarchyRoot = true;
                 LazinatorMemoryStorage = value;
             }
         }

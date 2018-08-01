@@ -136,12 +136,10 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private bool _StorageIsHierarchyRoot;
         public LazinatorMemory HierarchyStorage
         {
             set
             {
-                _StorageIsHierarchyRoot = true;
                 LazinatorMemoryStorage = value;
             }
         }

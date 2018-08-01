@@ -54,7 +54,7 @@ namespace Lazinator.Spans
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            if (_StorageIsHierarchyRoot && _LazinatorMemoryStorage.BytesFilled > 0)
+            if (StorageIsHierarchyRoot && _LazinatorMemoryStorage.BytesFilled > 0)
             {
                 LazinatorParents = default;
             }
@@ -141,13 +141,11 @@ namespace Lazinator.Spans
             }
         }
         
-        private bool _StorageIsHierarchyRoot;
-        public virtual LazinatorMemory HierarchyStorage
+        private bool StorageIsHierarchyRoot;public virtual LazinatorMemory HierarchyStorage
         {
             set
             {
-                _StorageIsHierarchyRoot = true;
-                LazinatorMemoryStorage = value;
+                StorageIsHierarchyRoot = true;LazinatorMemoryStorage = value;
             }
         }
         

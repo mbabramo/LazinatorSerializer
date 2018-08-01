@@ -140,12 +140,10 @@ namespace Lazinator.Collections.Avl
             }
         }
         
-        private bool _StorageIsHierarchyRoot;
         public LazinatorMemory HierarchyStorage
         {
             set
             {
-                _StorageIsHierarchyRoot = true;
                 LazinatorMemoryStorage = value;
             }
         }
