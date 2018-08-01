@@ -14,7 +14,6 @@ namespace Lazinator.Core
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
-        public int Length => Memory.Length;
 
         private HashSet<LazinatorMemory> DisposeTogether = null;
 

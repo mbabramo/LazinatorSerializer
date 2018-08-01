@@ -461,7 +461,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static MismatchedRecordLikeType ConvertFromBytes_MismatchedRecordLikeType(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default;
             }
@@ -488,7 +488,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default;
             }
@@ -530,7 +530,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static RecordLikeType ConvertFromBytes_RecordLikeType(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default;
             }

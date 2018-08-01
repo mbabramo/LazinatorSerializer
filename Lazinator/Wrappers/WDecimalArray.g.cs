@@ -353,7 +353,7 @@ namespace Lazinator.Wrappers
         
         private static decimal[] ConvertFromBytes_decimal_B_b(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(decimal[]);
             }

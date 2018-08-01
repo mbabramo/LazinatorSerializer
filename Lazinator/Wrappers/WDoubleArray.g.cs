@@ -353,7 +353,7 @@ namespace Lazinator.Wrappers
         
         private static double[] ConvertFromBytes_double_B_b(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(double[]);
             }

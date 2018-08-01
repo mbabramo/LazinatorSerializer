@@ -196,7 +196,7 @@ namespace Lazinator.Core
         public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
         {
             // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
-            if (childStorage == null || childStorage.Length == 0)
+            if (childStorage == null || childStorage.BytesFilled == 0)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (skipLength)
                 writer.Write(childStorage.Span);
@@ -354,7 +354,7 @@ namespace Lazinator.Core
                 // just return what we have.
                 writer.Write(original.Span);
             }
-            else if (isBelievedDirty || original.Length == 0)
+            else if (isBelievedDirty || original.BytesFilled == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
                 void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
@@ -754,7 +754,7 @@ namespace Lazinator.Core
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();
-            return (pipe, lazinator.LazinatorMemoryStorage.Length);
+            return (pipe, lazinator.LazinatorMemoryStorage.BytesFilled);
         }
 
         /// <summary>

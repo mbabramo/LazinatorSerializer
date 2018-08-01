@@ -425,7 +425,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static List<NonLazinatorClass> ConvertFromBytes_List_GNonLazinatorClass_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(List<NonLazinatorClass>);
             }

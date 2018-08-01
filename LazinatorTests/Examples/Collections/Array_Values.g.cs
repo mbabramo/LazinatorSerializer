@@ -476,7 +476,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static int[] ConvertFromBytes_int_B_b(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(int[]);
             }
@@ -511,7 +511,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static int?[] ConvertFromBytes_int_C63_B_b(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(int?[]);
             }
@@ -546,7 +546,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static int[][] ConvertFromBytes_int_B_b_B_b(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(int[][]);
             }
