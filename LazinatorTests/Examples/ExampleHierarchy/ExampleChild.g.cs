@@ -378,7 +378,12 @@ namespace LazinatorTests.Examples
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                _LazinatorMemoryStorage = writer.Slice(startPosition);
+                var newBuffer = writer.Slice(startPosition);
+                if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
+                {
+                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                }
+                _LazinatorMemoryStorage = newBuffer;
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
