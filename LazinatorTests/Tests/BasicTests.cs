@@ -41,7 +41,7 @@ namespace LazinatorTests.Tests
             // Set to old version number. This should serialize as the old version number.
             original.LazinatorObjectVersion = 2;
             original.MyOldString = "Old string";
-            var bytes = original.SerializeNewBuffer(IncludeChildrenMode.ExcludeAllChildren, false, false); // serializes as version 3
+            var bytes = original.SerializeLazinator(IncludeChildrenMode.ExcludeAllChildren, false, false); // serializes as version 3
             // Now, deserializing, but again setting to the old version.
             var stillOldVersion = new Example
             {

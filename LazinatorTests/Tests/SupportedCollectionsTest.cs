@@ -988,7 +988,7 @@ namespace LazinatorTests.Tests
                 MyRecordLikeClass = new RecordLikeClass(23, new Example() { MyChar = 'q' }),
                 MyRecordLikeType = new RecordLikeType(12, "Sam")
             };
-            LazinatorMemory serialized = original.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, false);
+            LazinatorMemory serialized = original.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
             RecordLikeContainer s2 = new RecordLikeContainer()
             {
                 HierarchyStorage = serialized
