@@ -54,10 +54,6 @@ namespace Lazinator.Spans
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            if (StorageIsHierarchyRoot && _LazinatorMemoryStorage.BytesFilled > 0)
-            {
-                LazinatorParents = default;
-            }
             PostDeserialization();
             return bytesSoFar;
         }
@@ -74,10 +70,8 @@ namespace Lazinator.Spans
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new LazinatorByteSpan()
             {
-                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            clone.LazinatorParents = default;
             clone.DeserializeLazinator(bytes);
             return clone;
         }
@@ -136,9 +130,9 @@ namespace Lazinator.Spans
             }
         }
         
-        private bool StorageIsHierarchyRoot;public virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        public virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
-            StorageIsHierarchyRoot = true;LazinatorMemoryStorage = serializedBytes;
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         protected LazinatorMemory _LazinatorMemoryStorage;

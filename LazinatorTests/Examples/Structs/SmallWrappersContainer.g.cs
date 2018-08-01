@@ -75,10 +75,8 @@ namespace LazinatorTests.Examples.Structs
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new SmallWrappersContainer()
             {
-                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            clone.LazinatorParents = default;
             clone.DeserializeLazinator(bytes);
             return clone;
         }

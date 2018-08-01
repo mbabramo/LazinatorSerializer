@@ -69,10 +69,8 @@ namespace Lazinator.Collections.Avl
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new AvlTree<TKey, TValue>()
             {
-                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            clone.LazinatorParents = default;
             clone.DeserializeLazinator(bytes);
             return clone;
         }

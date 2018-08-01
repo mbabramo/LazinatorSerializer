@@ -386,10 +386,6 @@ namespace Lazinator.CodeDescription
                         }{
                             IIF(ImplementsPostDeserialization,
                                 $@"
-                            if (StorageIsHierarchyRoot && _LazinatorMemoryStorage.BytesFilled > 0)
-                            {{
-                                LazinatorParents = default;
-                            }}
                             PostDeserialization();")
                         }
                             return bytesSoFar;
@@ -407,10 +403,8 @@ namespace Lazinator.CodeDescription
                             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
-                            clone.LazinatorParents = default;
                             clone.DeserializeLazinator(bytes);
                             return clone;
                         }}
@@ -471,11 +465,9 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
         
-                        {IIF(ImplementsPostDeserialization, $"private bool StorageIsHierarchyRoot;" +
-                        "")}public {DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
+                        public {DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
-                            {IIF(ImplementsPostDeserialization, $"StorageIsHierarchyRoot = true;" +
-                        "")}LazinatorMemoryStorage = serializedBytes;
+                            LazinatorMemoryStorage = serializedBytes;
                         }}
 
                         {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage;

@@ -75,10 +75,8 @@ namespace LazinatorTests.Examples.Subclasses
                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                 var clone = new SubclassWithinClass()
                 {
-                    LazinatorParents = LazinatorParents,
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                clone.LazinatorParents = default;
                 clone.DeserializeLazinator(bytes);
                 return clone;
             }

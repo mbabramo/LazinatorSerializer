@@ -70,10 +70,8 @@ namespace Lazinator.Collections.Dictionary
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new LazinatorDictionary<TKey, TValue>()
             {
-                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            clone.LazinatorParents = default;
             clone.DeserializeLazinator(bytes);
             return clone;
         }

@@ -73,10 +73,8 @@ namespace LazinatorTests.Examples.Hierarchy
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new RecursiveExample()
             {
-                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            clone.LazinatorParents = default;
             clone.DeserializeLazinator(bytes);
             return clone;
         }
