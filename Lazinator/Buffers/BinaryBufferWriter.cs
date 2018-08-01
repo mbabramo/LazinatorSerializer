@@ -13,12 +13,18 @@ namespace Lazinator.Buffers
     public ref struct BinaryBufferWriter
     {
         ExpandableBytes UnderlyingMemory { get; set; }
-        Span<byte> BufferSpan => UnderlyingMemory.Memory.Span;
+        Span<byte> BufferSpan => UnderlyingMemory == null ? new Span<byte>() : UnderlyingMemory.Memory.Span;
 
         public BinaryBufferWriter(int minimumSize)
         {
             UnderlyingMemory = new ExpandableBytes(minimumSize);
             _Position = 0;
+        }
+
+        private void InitializeIfNecessary()
+        {
+            if (UnderlyingMemory == null)
+                UnderlyingMemory = new ExpandableBytes();
         }
 
         /// <summary>
@@ -31,7 +37,14 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Creates LazinatorMemory equal to the underlying memory through the current position.
         /// </summary>
-        public LazinatorMemory LazinatorMemory => new LazinatorMemory(UnderlyingMemory, 0, Position);
+        public LazinatorMemory LazinatorMemory
+        {
+            get
+            {
+                InitializeIfNecessary();
+                return new LazinatorMemory(UnderlyingMemory, 0, Position);
+            }
+        }
 
         /// <summary>
         /// The position within the buffer. This is changed by the client after writing to the buffer.
@@ -71,6 +84,7 @@ namespace Lazinator.Buffers
         /// <param name="desiredBufferSize"></param>
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
+            InitializeIfNecessary();
             UnderlyingMemory.EnsureMinBufferSize(desiredBufferSize);
         }
 
@@ -152,6 +166,7 @@ namespace Lazinator.Buffers
 
         private void WriteEnlargingIfNecessary<T>(ref T value) where T : struct
         {
+            InitializeIfNecessary();
             bool success = false;
             while (!success)
             {
