@@ -61,8 +61,8 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(new Memory<byte>(array));
         }
 
-        public LazinatorMemory Slice(int position) => new LazinatorMemory(OwnedMemory, position, BytesFilled - position);
-        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, position, length);
+        public LazinatorMemory Slice(int position) => Slice(position, BytesFilled - position);
+        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length);
 
         #endregion
 
