@@ -938,7 +938,7 @@ namespace LazinatorTests.Examples.Collections
             int index = 0;
             bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
             if (isNull)
-                return null;
+            return null;
             return storage.Memory.Slice(1);
         }
         

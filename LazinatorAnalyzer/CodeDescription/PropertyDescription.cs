@@ -1477,7 +1477,13 @@ namespace Lazinator.CodeDescription
                     "itemToConvert[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
             }
 
-            if ((SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte) && Nullable)
+            if (
+                (
+                    (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName != "byte")
+                    || 
+                    SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte
+                ) 
+                && Nullable)
             {
                 // we will use a method for the Nullable, then an inner method for the non-nullable case,
                 // even though the WriteNonLazinator takes care of the nullable, so there is nothing to do 
@@ -1529,9 +1535,10 @@ namespace Lazinator.CodeDescription
                             writer.Write(itemToConvert.Value.Span);
                         }}
                         ");
-                    sb.Append($@"writer.Write(itemToConvert.Span);
-                        }}
-                        ");
+                    else
+                        sb.Append($@"writer.Write(itemToConvert.Span);
+                            }}
+                            ");
                 }
                 else
                     sb.Append($@"
