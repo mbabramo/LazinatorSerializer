@@ -15,8 +15,8 @@ namespace LazinatorTests.Tests
             var bytes = original.SerializeLazinator(includeChildren ? IncludeChildrenMode.IncludeAllChildren : IncludeChildrenMode.ExcludeAllChildren, verifyCleanness, false);
             var result = new T
             {
-                HierarchyStorage = bytes,
             };
+            result.HierarchyStorage(bytes);
 
             return result;
         }

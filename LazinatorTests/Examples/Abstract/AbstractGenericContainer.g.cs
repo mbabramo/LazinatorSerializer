@@ -70,10 +70,7 @@ namespace LazinatorTests.Examples.Abstract
         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         
-        public abstract LazinatorMemory HierarchyStorage
-        {
-            set;
-        }
+        public abstract void HierarchyStorage(LazinatorMemory serializedBytes);
         
         public abstract LazinatorMemory LazinatorMemoryStorage
         {

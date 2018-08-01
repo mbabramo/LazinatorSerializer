@@ -37,8 +37,8 @@ namespace LazinatorTests.AVL
             //{
                 var tree2 = new AvlTree<WInt, WInt>()
                 {
-                    HierarchyStorage = b
                 };
+                tree2.HierarchyStorage(b);
                 bool found = tree2.Search(firstKey, out WInt value);
                 found.Should().BeTrue();
             //}

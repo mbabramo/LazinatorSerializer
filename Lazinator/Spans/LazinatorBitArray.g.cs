@@ -79,9 +79,9 @@ namespace Lazinator.Spans
             var clone = new LazinatorBitArray()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes,
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -140,12 +140,9 @@ namespace Lazinator.Spans
             }
         }
         
-        public LazinatorMemory HierarchyStorage
+        public void HierarchyStorage(LazinatorMemory serializedBytes)
         {
-            set
-            {
-                LazinatorMemoryStorage = value;
-            }
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         LazinatorMemory _LazinatorMemoryStorage;

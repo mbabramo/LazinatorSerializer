@@ -81,9 +81,9 @@ namespace LazinatorTests.Examples.Subclasses
                 var clone = new SubclassWithinClass()
                 {
                     LazinatorParents = LazinatorParents,
-                    OriginalIncludeChildrenMode = includeChildrenMode,
-                    HierarchyStorage = bytes,
+                    OriginalIncludeChildrenMode = includeChildrenMode
                 };
+                clone.HierarchyStorage(bytes);
                 clone.LazinatorParents = default;
                 return clone;
             }
@@ -142,12 +142,9 @@ namespace LazinatorTests.Examples.Subclasses
                 }
             }
             
-            public virtual LazinatorMemory HierarchyStorage
+            public virtual void HierarchyStorage(LazinatorMemory serializedBytes)
             {
-                set
-                {
-                    LazinatorMemoryStorage = value;
-                }
+                LazinatorMemoryStorage = serializedBytes;
             }
             
             protected LazinatorMemory _LazinatorMemoryStorage;

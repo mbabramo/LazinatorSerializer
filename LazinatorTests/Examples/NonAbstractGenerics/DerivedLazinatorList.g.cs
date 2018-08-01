@@ -40,9 +40,9 @@ namespace LazinatorTests.Examples
             var clone = new DerivedLazinatorList<T>()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }

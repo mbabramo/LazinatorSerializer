@@ -39,9 +39,9 @@ namespace LazinatorTests.Examples.Collections
             var clone = new DerivedArray_Values()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }

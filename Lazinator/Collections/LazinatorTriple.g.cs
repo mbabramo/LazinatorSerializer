@@ -75,9 +75,9 @@ namespace Lazinator.Collections
             var clone = new LazinatorTriple<T, U, V>()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes,
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -136,12 +136,9 @@ namespace Lazinator.Collections
             }
         }
         
-        public virtual LazinatorMemory HierarchyStorage
+        public virtual void HierarchyStorage(LazinatorMemory serializedBytes)
         {
-            set
-            {
-                LazinatorMemoryStorage = value;
-            }
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         protected LazinatorMemory _LazinatorMemoryStorage;

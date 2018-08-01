@@ -76,9 +76,9 @@ namespace LazinatorTests.Examples.Structs
             var clone = new WrapperContainer()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes,
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -137,12 +137,9 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public virtual LazinatorMemory HierarchyStorage
+        public virtual void HierarchyStorage(LazinatorMemory serializedBytes)
         {
-            set
-            {
-                LazinatorMemoryStorage = value;
-            }
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         protected LazinatorMemory _LazinatorMemoryStorage;

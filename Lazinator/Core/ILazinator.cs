@@ -95,7 +95,7 @@ namespace Lazinator.Core
         /// </summary>
         Guid GetBinaryHashCode128();
 
-        
+
         /// <summary>
         /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
@@ -112,7 +112,7 @@ namespace Lazinator.Core
         /// <summary>
         /// The memory (generally rented from a memory pool) used to initialize a Lazinator class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
         /// </summary>
-        LazinatorMemory HierarchyStorage { set; }
+        void HierarchyStorage(LazinatorMemory serialized);
         /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyStorage or from the parent's LazinatorObjectBytes.
         /// </summary>

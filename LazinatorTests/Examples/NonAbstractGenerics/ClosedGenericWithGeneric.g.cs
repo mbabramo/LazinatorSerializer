@@ -40,9 +40,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             var clone = new ClosedGenericWithGeneric()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }

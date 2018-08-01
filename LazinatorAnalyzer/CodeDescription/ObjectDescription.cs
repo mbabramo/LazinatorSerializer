@@ -417,7 +417,7 @@ namespace Lazinator.CodeDescription
                                 LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
-                            HierarchyStorage(bytes);
+                            clone.HierarchyStorage(bytes);
                             clone.LazinatorParents = default;
                             return clone;
                         }}
@@ -550,7 +550,7 @@ namespace Lazinator.CodeDescription
                                 LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
-                            HierarchyStorage(bytes);
+                            clone.HierarchyStorage(bytes);
                             clone.LazinatorParents = default;
                             return clone;
                         }}

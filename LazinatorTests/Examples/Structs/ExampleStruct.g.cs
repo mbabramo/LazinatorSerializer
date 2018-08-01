@@ -84,9 +84,9 @@ namespace LazinatorTests.Examples
             var clone = new ExampleStruct()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes,
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -145,12 +145,9 @@ namespace LazinatorTests.Examples
             }
         }
         
-        public LazinatorMemory HierarchyStorage
+        public void HierarchyStorage(LazinatorMemory serializedBytes)
         {
-            set
-            {
-                LazinatorMemoryStorage = value;
-            }
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         LazinatorMemory _LazinatorMemoryStorage;

@@ -32,8 +32,8 @@ namespace LazinatorTests.Tests
             byte[] b = s.ToByteArray();
             Example e2 = new Example()
             {
-                HierarchyStorage = b
             };
+            e2.HierarchyStorage(b);
             ExampleEqual(e, e2).Should().BeTrue();
         }
 

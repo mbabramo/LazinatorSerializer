@@ -78,9 +78,9 @@ namespace LazinatorTests.Examples.Abstract
             var clone = new ConcreteGeneric2a()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes,
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -139,12 +139,9 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        public override LazinatorMemory HierarchyStorage
+        public override void HierarchyStorage(LazinatorMemory serializedBytes)
         {
-            set
-            {
-                LazinatorMemoryStorage = value;
-            }
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         protected LazinatorMemory _LazinatorMemoryStorage;

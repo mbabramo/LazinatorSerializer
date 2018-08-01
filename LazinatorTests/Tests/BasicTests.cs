@@ -46,16 +46,16 @@ namespace LazinatorTests.Tests
             var stillOldVersion = new Example
             {
                 LazinatorObjectVersion = 2,
-                HierarchyStorage = bytes,
             };
+            stillOldVersion.HierarchyStorage(bytes);
             stillOldVersion.MyOldString.Should().Be("Old string");
             stillOldVersion.MyNewString.Should().Be(null);
 
             var upgraded = new Example
             {
                 LazinatorObjectVersion = 3,
-                HierarchyStorage = bytes,
             };
+            upgraded.HierarchyStorage(bytes);
             upgraded.LazinatorObjectVersion.Should().Be(3);
             upgraded.MyOldString.Should().Be(null);
             upgraded.MyNewString.Should().Be("NEW Old string");

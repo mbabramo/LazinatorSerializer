@@ -80,9 +80,9 @@ namespace LazinatorTests.Examples.Hierarchy
             var clone = new ExampleInterfaceContainer()
             {
                 LazinatorParents = LazinatorParents,
-                OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyStorage = bytes,
+                OriginalIncludeChildrenMode = includeChildrenMode
             };
+            clone.HierarchyStorage(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -141,12 +141,9 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        public virtual LazinatorMemory HierarchyStorage
+        public virtual void HierarchyStorage(LazinatorMemory serializedBytes)
         {
-            set
-            {
-                LazinatorMemoryStorage = value;
-            }
+            LazinatorMemoryStorage = serializedBytes;
         }
         
         protected LazinatorMemory _LazinatorMemoryStorage;
