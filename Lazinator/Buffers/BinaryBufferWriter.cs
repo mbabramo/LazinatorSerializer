@@ -45,7 +45,7 @@ namespace Lazinator.Buffers
         Span<byte> BufferSpan;
         private void InitializeBufferSpan()
         {
-            BufferSpan = _LazinatorMemory.Span;
+            BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
         }
 
         public LazinatorMemory Slice(int position) => LazinatorMemory.Slice(position);
@@ -56,7 +56,7 @@ namespace Lazinator.Buffers
             if (minimumSize < MinMinBufferSize)
                 minimumSize = MinMinBufferSize;
             _LazinatorMemory = new LazinatorMemory(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
-            BufferSpan = _LazinatorMemory.Span;
+            BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
             Position = 0;
             Initialized = true;
         }
