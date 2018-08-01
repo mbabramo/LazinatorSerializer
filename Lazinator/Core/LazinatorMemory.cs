@@ -9,8 +9,9 @@ namespace Lazinator.Core
     public class LazinatorMemory : IMemoryOwner<byte>
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
+        public int StartPosition { get; set; }
         public int BytesFilled { get; set; }
-        public Memory<byte> Memory => OwnedMemory.Memory.Slice(0, BytesFilled);
+        public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, BytesFilled);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
@@ -18,6 +19,13 @@ namespace Lazinator.Core
         private HashSet<LazinatorMemory> DisposeTogether = null;
 
         #region Constructors
+
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled)
+        {
+            OwnedMemory = ownedMemory;
+            StartPosition = startPosition;
+            BytesFilled = bytesFilled;
+        }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
         {
