@@ -3,6 +3,7 @@ using Lazinator.Buffers;
 using Lazinator.Core;
 using Xunit;
 using System.Buffers;
+using System;
 
 namespace LazinatorTests.Tests
 {
@@ -18,6 +19,16 @@ namespace LazinatorTests.Tests
                 var bytes = rentedMemory.Memory;
                 bytes.Length.Should().BeGreaterOrEqualTo(bufferSize);
             }
+        }
+
+        [Fact]
+        public void UsingReturnedMemoryTriggersException()
+        {
+            const int bufferSize = 64 * 1024;
+            IMemoryOwner<byte> rentedMemory = LazinatorUtilities.GetRentedMemory(bufferSize);
+            rentedMemory.Dispose();
+            Action a = () => { var m = rentedMemory.Memory.Span; m[0] = 1; };
+            a.Should().Throw<ObjectDisposedException>();
         }
 
         [Fact]

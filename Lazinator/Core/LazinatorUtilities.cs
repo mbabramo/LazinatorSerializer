@@ -675,7 +675,7 @@ namespace Lazinator.Core
         public static MemoryPool<byte> LazinatorMemoryPool = MemoryPool<byte>.Shared;
 
         /// <summary>
-        /// Returns a rented memory buffer. This will be disposed when Dispose() is called on the object containing it.
+        /// Rents a memory buffer. This can be returned by calling Dispose() on the memory. 
         /// </summary>
         /// <param name="minimumSize"></param>
         /// <returns></returns>
