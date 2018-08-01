@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples.Abstract
         
         private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(List<int>);
             }

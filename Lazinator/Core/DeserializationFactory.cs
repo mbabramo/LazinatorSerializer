@@ -210,12 +210,12 @@ namespace Lazinator.Core
         {
             while (true) // until "yield break"
             {
-                if (storage.Length <= 1)
+                if (storage.BytesFilled <= 1)
                     yield break;
                 int bytesSoFar = 0;
                 int uniqueID = fixedUniqueID ?? storage.ReadOnlySpan.ToDecompressedInt(ref bytesSoFar);
                 ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
-                int bytes = itemToReturn.LazinatorMemoryStorage.Length;
+                int bytes = itemToReturn.LazinatorMemoryStorage.BytesFilled;
                 storage = storage.Slice(bytes);
                 yield return itemToReturn;
             }

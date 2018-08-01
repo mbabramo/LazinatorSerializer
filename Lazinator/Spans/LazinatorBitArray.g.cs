@@ -235,7 +235,7 @@ namespace Lazinator.Spans
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
-                        if (childData.Length == 0)
+                        if (childData.BytesFilled == 0)
                         {
                             _ByteSpan = default;
                         }

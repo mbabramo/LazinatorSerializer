@@ -170,8 +170,8 @@ namespace LazinatorTests.Tests
             };
             e.EnsureLazinatorMemoryUpToDate();
             o.EnsureLazinatorMemoryUpToDate();
-            int lengthExample = e.CloneLazinator().LazinatorMemoryStorage.Length;
-            int lengthOpenGeneric = o.CloneLazinator().LazinatorMemoryStorage.Length;
+            int lengthExample = e.CloneLazinator().LazinatorMemoryStorage.BytesFilled;
+            int lengthOpenGeneric = o.CloneLazinator().LazinatorMemoryStorage.BytesFilled;
             int lengthSoFar = 0;
             const int numPairs = 5;
             Memory<byte> memory = new Memory<byte>(new byte[numPairs * (lengthExample + lengthOpenGeneric)]);

@@ -9,6 +9,7 @@ using Lazinator.Core;
 using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
+using Lazinator.Buffers;
 
 namespace LazinatorTests.Tests
 {

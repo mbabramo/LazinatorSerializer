@@ -353,7 +353,7 @@ namespace Lazinator.Wrappers
         
         private static float[] ConvertFromBytes_float_B_b(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(float[]);
             }

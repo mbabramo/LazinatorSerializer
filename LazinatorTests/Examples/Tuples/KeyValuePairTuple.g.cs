@@ -355,7 +355,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default;
             }

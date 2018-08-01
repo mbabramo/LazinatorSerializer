@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(List<EnumWithinClass>);
             }

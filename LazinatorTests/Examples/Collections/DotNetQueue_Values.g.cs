@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static Queue<int> ConvertFromBytes_Queue_Gint_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(Queue<int>);
             }

@@ -12,79 +12,80 @@ namespace Lazinator.Buffers
 {
     public ref struct BinaryBufferWriter
     {
-        public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
+        ExpandableBytes UnderlyingMemory { get; set; }
+        Span<byte> BufferSpan => UnderlyingMemory == null ? new Span<byte>() : UnderlyingMemory.Memory.Span;
 
-        private bool Initialized;
-        private LazinatorMemory _LazinatorMemory;
+        public BinaryBufferWriter(int minimumSize)
+        {
+            UnderlyingMemory = new ExpandableBytes(minimumSize);
+            _Position = 0;
+        }
+
+        private void InitializeIfNecessary()
+        {
+            if (UnderlyingMemory == null)
+                UnderlyingMemory = new ExpandableBytes();
+        }
+
+        /// <summary>
+        /// Returns the memory in the buffer beginning at the specified position.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public LazinatorMemory Slice(int position) => LazinatorMemory.Slice(position);
+
+        /// <summary>
+        /// Creates LazinatorMemory equal to the underlying memory through the current position.
+        /// </summary>
         public LazinatorMemory LazinatorMemory
         {
             get
             {
-                if (!Initialized)
-                {
-                    _LazinatorMemory = new LazinatorMemory(LazinatorUtilities.GetRentedMemory(MinMinBufferSize), 0);
-                    InitializeBufferSpan();
-                    Initialized = true;
-                }
-                else
-                {
-                    if (Position != _LazinatorMemory.BytesFilled)
-                        _LazinatorMemory.BytesFilled = Position;
-                    return _LazinatorMemory;
-                }
-                return _LazinatorMemory;
+                InitializeIfNecessary();
+                return new LazinatorMemory(UnderlyingMemory, 0, Position);
             }
+        }
+
+        /// <summary>
+        /// The position within the buffer. This is changed by the client after writing to the buffer.
+        /// </summary>
+        private int _Position;
+        public int Position
+        {
+            get => _Position;
             set
             {
-                _LazinatorMemory = value;
-                InitializeBufferSpan();
-                Initialized = true;
+                EnsureMinBufferSize(value);
+                _Position = value;
             }
         }
 
-        Span<byte> BufferSpan;
-        private void InitializeBufferSpan()
-        {
-            BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
-        }
-
-        public LazinatorMemory Slice(int position) => LazinatorMemory.Slice(position);
-        
-
-        public BinaryBufferWriter(int minimumSize)
-        {
-            if (minimumSize < MinMinBufferSize)
-                minimumSize = MinMinBufferSize;
-            _LazinatorMemory = new LazinatorMemory(LazinatorUtilities.GetRentedMemory(minimumSize), 0);
-            BufferSpan = _LazinatorMemory.OwnedMemory.Memory.Span;
-            Position = 0;
-            Initialized = true;
-        }
-
+        /// <summary>
+        /// Free bytes that have not been written to. The client can attempt to write to these bytes directly, calling EnsureMinBufferSize if the operation fails and trying again. Then, the client must update the position.
+        /// </summary>
         public Span<byte> Free => BufferSpan.Slice(Position);
 
+        /// <summary>
+        /// The bytes written through the current position. Note that the client can change the position within the buffer.
+        /// </summary>
         public Span<byte> Written => BufferSpan.Slice(0, Position);
-        
-        public int Position { get; set; }
 
+        /// <summary>
+        /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
+        /// </summary>
         public void Clear()
         {
             Position = 0;
         }
 
+        /// <summary>
+        /// Ensures that the underlying memory is at least a specified size, copying the current memory if needed.
+        /// </summary>
+        /// <param name="desiredBufferSize"></param>
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
-            if (desiredBufferSize <= 0)
-            {
-                desiredBufferSize = BufferSpan.Length * 2;
-                if (desiredBufferSize < MinMinBufferSize)
-                    desiredBufferSize = MinMinBufferSize;
-            }
-            else if (BufferSpan.Length >= desiredBufferSize)
-                return;
-            var newLazinatorMemory = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
-            Written.CopyTo(newLazinatorMemory.Memory.Span);
-            LazinatorMemory = new LazinatorMemory(newLazinatorMemory, Position);
+            InitializeIfNecessary();
+            UnderlyingMemory.EnsureMinBufferSize(desiredBufferSize);
         }
 
         public void Write(bool value)
@@ -165,6 +166,7 @@ namespace Lazinator.Buffers
 
         private void WriteEnlargingIfNecessary<T>(ref T value) where T : struct
         {
+            InitializeIfNecessary();
             bool success = false;
             while (!success)
             {

@@ -3,19 +3,18 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.Core
+namespace Lazinator.Buffers
 {
-    [Serializable]
     public class LazinatorMemory : IMemoryOwner<byte>
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
-        public int BytesFilled { get; set; }
+        public int BytesFilled { get; private set; }
+        public int Length => BytesFilled;
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, BytesFilled);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
-        public int Length => Memory.Length;
 
         private HashSet<LazinatorMemory> DisposeTogether = null;
 
@@ -31,14 +30,12 @@ namespace Lazinator.Core
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
         {
             OwnedMemory = ownedMemory;
-            StartPosition = 0;
             BytesFilled = bytesFilled;
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory)
         {
             OwnedMemory = ownedMemory;
-            StartPosition = 0;
             BytesFilled = ownedMemory.Memory.Length;
         }
 

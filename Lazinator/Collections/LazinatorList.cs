@@ -74,7 +74,7 @@ namespace Lazinator.Collections
         private T GetSerializedContents(int index)
         {
             var byteSpan = GetListMemberSlice(index);
-            if (byteSpan.Length == 0)
+            if (byteSpan.BytesFilled == 0)
                 return default;
             T n2;
             if (FixedID == null)

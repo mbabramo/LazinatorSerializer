@@ -429,7 +429,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         private static List<IExample> ConvertFromBytes_List_GIExample_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(List<IExample>);
             }

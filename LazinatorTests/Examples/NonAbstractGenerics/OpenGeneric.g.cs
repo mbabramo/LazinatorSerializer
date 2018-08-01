@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         private static List<T> ConvertFromBytes_List_GT_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            if (storage.BytesFilled == 0)
             {
                 return default(List<T>);
             }
