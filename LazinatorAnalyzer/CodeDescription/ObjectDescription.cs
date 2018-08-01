@@ -481,13 +481,13 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
         
-                        private bool _StorageIsHierarchyRoot;
-                        public {DerivationKeyword}LazinatorMemory HierarchyStorage
+                        {IIF(ImplementsPostDeserialization, $"private bool StorageIsHierarchyRoot;" +
+                        "")}public {DerivationKeyword}LazinatorMemory HierarchyStorage
                         {{
                             set
                             {{
-                                _StorageIsHierarchyRoot = true;
-                                LazinatorMemoryStorage = value;
+                                {IIF(ImplementsPostDeserialization, $"StorageIsHierarchyRoot = true;" +
+                        "")}LazinatorMemoryStorage = value;
                             }}
                         }}
 

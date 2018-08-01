@@ -136,12 +136,12 @@ namespace Lazinator.Collections.Avl
             }
         }
         
-        private LazinatorMemory _HierarchyStorage;
+        private bool _StorageIsHierarchyRoot;
         public virtual LazinatorMemory HierarchyStorage
         {
             set
             {
-                _HierarchyStorage = value;
+                _StorageIsHierarchyRoot = true;
                 LazinatorMemoryStorage = value;
             }
         }
