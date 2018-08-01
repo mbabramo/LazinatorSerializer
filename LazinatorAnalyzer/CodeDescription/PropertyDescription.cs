@@ -1513,15 +1513,25 @@ namespace Lazinator.CodeDescription
                 else
                     writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
                 string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte" && !Nullable)
+                if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
                 {
-                    sb.Append($@"
+                    sb.AppendLine($@"
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                    {{
-                        writer.Write(itemToConvert.Span);
-                    }}
-                    ");
+                    {{");
+                    if (Nullable)
+                        sb.Append($@"if (itemToConvert == null)
+                            {{
+                                writer.Write((bool)true);
+                                return;
+                            }}
+                            writer.Write((bool)false);
+                            writer.Write(itemToConvert.Value.Span);
+                        }}
+                        ");
+                    sb.Append($@"writer.Write(itemToConvert.Span);
+                        }}
+                        ");
                 }
                 else
                     sb.Append($@"
@@ -1543,12 +1553,20 @@ namespace Lazinator.CodeDescription
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
         {
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte" && !Nullable)
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
             {
-                sb.Append( $@"
+                sb.AppendLine($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
-                    {{
-                        return storage.Memory;
+                    {{");
+                if (Nullable)
+                    sb.Append($@"int index = 0;
+                            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+                            if (isNull)
+                                return null;
+                            return storage.Memory.Slice(1);
+                        }}");
+                else
+                    sb.Append($@"return storage.Memory;
                     }}"
                     );
                 return;
