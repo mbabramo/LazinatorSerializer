@@ -40,7 +40,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyBytes = bytes
+                HierarchyStorage = bytes
             };
             clone.LazinatorParents = default;
             return clone;

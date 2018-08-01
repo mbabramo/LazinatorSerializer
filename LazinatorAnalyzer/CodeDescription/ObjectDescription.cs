@@ -315,7 +315,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
 		                
-                        public abstract LazinatorMemory HierarchyBytes
+                        public abstract LazinatorMemory HierarchyStorage
                         {{
 			                set;
                         }}
@@ -391,7 +391,7 @@ namespace Lazinator.CodeDescription
                         }{
                             IIF(ImplementsPostDeserialization,
                                 $@"
-                            if (_HierarchyBytes != null && _HierarchyBytes.BytesFilled > 0)
+                            if (StorageIsHierarchyRoot && _LazinatorMemoryStorage.BytesFilled > 0)
                             {{
                                 LazinatorParents = default;
                             }}
@@ -419,7 +419,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
-                                HierarchyBytes = bytes,
+                                HierarchyStorage = bytes,
                             }};
                             clone.LazinatorParents = default;
                             return clone;
@@ -481,12 +481,12 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
         
-                        private LazinatorMemory _HierarchyBytes;
-                        public {DerivationKeyword}LazinatorMemory HierarchyBytes
+                        private bool _StorageIsHierarchyRoot;
+                        public {DerivationKeyword}LazinatorMemory HierarchyStorage
                         {{
                             set
                             {{
-                                _HierarchyBytes = value;
+                                _StorageIsHierarchyRoot = true;
                                 LazinatorMemoryStorage = value;
                             }}
                         }}
@@ -555,7 +555,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode,
-                                HierarchyBytes = bytes
+                                HierarchyStorage = bytes
                             }};
                             clone.LazinatorParents = default;
                             return clone;

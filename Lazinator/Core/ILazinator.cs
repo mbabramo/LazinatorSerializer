@@ -12,9 +12,9 @@ namespace Lazinator.Core
         /// <summary>
         /// The memory (generally rented from a memory pool) used to initialize a Lazinator class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
         /// </summary>
-        LazinatorMemory HierarchyBytes { set; }
+        LazinatorMemory HierarchyStorage { set; }
         /// <summary>
-        /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyBytes or from the parent's LazinatorObjectBytes.
+        /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyStorage or from the parent's LazinatorObjectBytes.
         /// </summary>
         LazinatorMemory LazinatorMemoryStorage { get; set; }
         /// <summary>

@@ -79,7 +79,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyBytes = bytes,
+                HierarchyStorage = bytes,
             };
             clone.LazinatorParents = default;
             return clone;
@@ -139,12 +139,12 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private LazinatorMemory _HierarchyBytes;
-        public override LazinatorMemory HierarchyBytes
+        private LazinatorMemory _HierarchyStorage;
+        public override LazinatorMemory HierarchyStorage
         {
             set
             {
-                _HierarchyBytes = value;
+                _HierarchyStorage = value;
                 LazinatorMemoryStorage = value;
             }
         }

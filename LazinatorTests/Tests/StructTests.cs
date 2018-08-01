@@ -130,7 +130,7 @@ namespace LazinatorTests.Tests
             var s3Serialized = s3.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, true, false);
             ExampleStruct s3b = new ExampleStruct()
             {
-                HierarchyBytes = s3Serialized
+                HierarchyStorage = s3Serialized
             };
             s3b.MyLazinatorList[0].MyChar.Should().Be('y');
 

@@ -991,7 +991,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory serialized = original.SerializeNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, false);
             RecordLikeContainer s2 = new RecordLikeContainer()
             {
-                HierarchyBytes = serialized
+                HierarchyStorage = serialized
             };
             s2.MyRecordLikeClass.Age.Should().Be(23);
             s2.MyRecordLikeClass.Example.MyChar.Should().Be('q');

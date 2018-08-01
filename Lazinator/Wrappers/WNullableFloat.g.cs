@@ -74,7 +74,7 @@ namespace Lazinator.Wrappers
             {
                 LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode,
-                HierarchyBytes = bytes,
+                HierarchyStorage = bytes,
             };
             clone.LazinatorParents = default;
             return clone;
@@ -134,12 +134,12 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private LazinatorMemory _HierarchyBytes;
-        public LazinatorMemory HierarchyBytes
+        private LazinatorMemory _HierarchyStorage;
+        public LazinatorMemory HierarchyStorage
         {
             set
             {
-                _HierarchyBytes = value;
+                _HierarchyStorage = value;
                 LazinatorMemoryStorage = value;
             }
         }
