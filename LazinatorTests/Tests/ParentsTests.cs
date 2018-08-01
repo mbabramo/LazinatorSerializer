@@ -292,5 +292,23 @@ namespace LazinatorTests.Tests
             LazinatorUtilities.TopNodesOfHierarchyEqual(l1, l2, out comparison).Should().BeFalse(); // number of elements differs
         }
 
+        [Fact]
+        public void BuffersDisposedJointly()
+        {
+            Example e = GetTypicalExample(); // no memory backing yet
+            e = e.CloneLazinatorTyped(); // now there is a memory buffer
+            e.MyChild1.MyLong = -342356;
+            e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
+            e.LazinatorMemoryStorage.Dispose();
+            Action a = () =>
+            {
+                var m = e.MyChild1.LazinatorMemoryStorage.Memory;
+                m.Span[0] = 1;
+            };
+            a.Should().Throw<ObjectDisposedException>();
+        }
+
     }
 }
