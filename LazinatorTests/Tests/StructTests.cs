@@ -131,7 +131,7 @@ namespace LazinatorTests.Tests
             ExampleStruct s3b = new ExampleStruct()
             {
             };
-            s3b.HierarchyStorage(s3Serialized);
+            s3b.DeserializeLazinator(s3Serialized);
             s3b.MyLazinatorList[0].MyChar.Should().Be('y');
 
             var s4 = s.CloneLazinatorTyped();

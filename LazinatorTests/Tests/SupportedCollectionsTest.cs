@@ -992,7 +992,7 @@ namespace LazinatorTests.Tests
             RecordLikeContainer s2 = new RecordLikeContainer()
             {
             };
-            s2.HierarchyStorage(serialized);
+            s2.DeserializeLazinator(serialized);
             s2.MyRecordLikeClass.Age.Should().Be(23);
             s2.MyRecordLikeClass.Example.MyChar.Should().Be('q');
             s2.MyRecordLikeType.Age.Should().Be(12);

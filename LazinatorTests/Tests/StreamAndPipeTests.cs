@@ -33,7 +33,7 @@ namespace LazinatorTests.Tests
             Example e2 = new Example()
             {
             };
-            e2.HierarchyStorage(b);
+            e2.DeserializeLazinator(b);
             ExampleEqual(e, e2).Should().BeTrue();
         }
 

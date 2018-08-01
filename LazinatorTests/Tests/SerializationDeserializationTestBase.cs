@@ -16,7 +16,7 @@ namespace LazinatorTests.Tests
             var result = new T
             {
             };
-            result.HierarchyStorage(bytes);
+            result.DeserializeLazinator(bytes);
 
             return result;
         }

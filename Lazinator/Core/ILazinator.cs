@@ -18,6 +18,10 @@ namespace Lazinator.Core
         /// <returns></returns>
         LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
+        /// Deserializes from serialized memory. This should be called after creating an object. 
+        /// </summary>
+        void DeserializeLazinator(LazinatorMemory serialized);
+        /// <summary>
         /// Clones the class/struct by serializing, including all children, and then deserializing.
         /// </summary>
         /// <returns>A cloned copy of the class/struct</returns>
@@ -110,11 +114,7 @@ namespace Lazinator.Core
         /// <returns>The number of bytes processed during deserialization</returns>
         int Deserialize();
         /// <summary>
-        /// The memory (generally rented from a memory pool) used to initialize a Lazinator class/struct during deserialization. Header information, fields and child ISerializeds can then be read from this. This should be set when deserializing an object that represents the top of the hierarchy.
-        /// </summary>
-        void HierarchyStorage(LazinatorMemory serialized);
-        /// <summary>
-        /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from HierarchyStorage or from the parent's LazinatorObjectBytes.
+        /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's LazinatorObjectBytes.
         /// </summary>
         LazinatorMemory LazinatorMemoryStorage { get; set; }
         /// <summary>

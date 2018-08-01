@@ -86,7 +86,7 @@ namespace LazinatorTests.Examples
                 LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            clone.HierarchyStorage(bytes);
+            clone.DeserializeLazinator(bytes);
             clone.LazinatorParents = default;
             return clone;
         }
@@ -145,7 +145,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        public void HierarchyStorage(LazinatorMemory serializedBytes)
+        public void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
         }
