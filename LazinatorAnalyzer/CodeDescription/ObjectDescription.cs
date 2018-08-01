@@ -410,8 +410,8 @@ namespace Lazinator.CodeDescription
                                 LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
-                            clone.DeserializeLazinator(bytes);
                             clone.LazinatorParents = default;
+                            clone.DeserializeLazinator(bytes);
                             return clone;
                         }}
 
