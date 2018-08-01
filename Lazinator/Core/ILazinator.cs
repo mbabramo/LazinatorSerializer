@@ -30,11 +30,11 @@ namespace Lazinator.Core
         ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false);
 
         /// <summary>
-        /// Indicates whether a Lazinator object has changed since it was last deserialized (or since this property was manually changed).
+        /// Indicates whether a Lazinator object has been dirty since it was last deserialized (or since this property was manually changed). This value does not change after a full or partial serialization, while IsDirty does change.
         /// </summary>
         bool HasChanged { get; set; }
         /// <summary>
-        /// Indicates whether a descendant of a Lazinator object has changed since the object was last deserialized (or since this property was manually changed).
+        /// Indicates whether a child or other descendant of a Lazinator object has been dirty since the object was last deserialized (or since this property was manually changed).
         /// </summary>
         bool DescendantHasChanged { get; set; }
         /// <summary>
