@@ -315,10 +315,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
 		                
-                        public abstract LazinatorMemory HierarchyStorage
-                        {{
-			                set;
-                        }}
+                        public abstract void HierarchyStorage(LazinatorMemory serializedBytes);
 
                         public abstract LazinatorMemory LazinatorMemoryStorage
                         {{
@@ -418,9 +415,9 @@ namespace Lazinator.CodeDescription
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParents = LazinatorParents,
-                                OriginalIncludeChildrenMode = includeChildrenMode,
-                                HierarchyStorage = bytes,
+                                OriginalIncludeChildrenMode = includeChildrenMode
                             }};
+                            HierarchyStorage(bytes);
                             clone.LazinatorParents = default;
                             return clone;
                         }}
@@ -482,13 +479,10 @@ namespace Lazinator.CodeDescription
                         }}
         
                         {IIF(ImplementsPostDeserialization, $"private bool StorageIsHierarchyRoot;" +
-                        "")}public {DerivationKeyword}LazinatorMemory HierarchyStorage
+                        "")}public {DerivationKeyword}void HierarchyStorage(LazinatorMemory serializedBytes)
                         {{
-                            set
-                            {{
-                                {IIF(ImplementsPostDeserialization, $"StorageIsHierarchyRoot = true;" +
-                        "")}LazinatorMemoryStorage = value;
-                            }}
+                            {IIF(ImplementsPostDeserialization, $"StorageIsHierarchyRoot = true;" +
+                        "")}LazinatorMemoryStorage = serializedBytes;
                         }}
 
                         {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage;
@@ -554,9 +548,9 @@ namespace Lazinator.CodeDescription
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 LazinatorParents = LazinatorParents,
-                                OriginalIncludeChildrenMode = includeChildrenMode,
-                                HierarchyStorage = bytes
+                                OriginalIncludeChildrenMode = includeChildrenMode
                             }};
+                            HierarchyStorage(bytes);
                             clone.LazinatorParents = default;
                             return clone;
                         }}
