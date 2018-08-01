@@ -3,9 +3,8 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.Core
+namespace Lazinator.Buffers
 {
-    [Serializable]
     public class LazinatorMemory : IMemoryOwner<byte>
     {
         public readonly IMemoryOwner<byte> OwnedMemory;

@@ -70,7 +70,7 @@ namespace Lazinator.Core
             )
                 return encodeManuallyFn(includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
-            // We can use the original storage. But we still have to copy it. 
+            // We can use the original storage. But we still have to copy it into a new buffer, as requested.
             BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length);
             writer.Write(originalStorage.Span);
             return writer.LazinatorMemory;

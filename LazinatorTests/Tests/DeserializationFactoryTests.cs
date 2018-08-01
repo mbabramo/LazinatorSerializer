@@ -8,6 +8,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Abstract;
 using Lazinator.Collections;
 using System.Linq;
+using Lazinator.Buffers;
 
 namespace LazinatorTests.Tests
 {
