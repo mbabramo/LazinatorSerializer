@@ -22,17 +22,12 @@ namespace Lazinator.Core
         /// </summary>
         void DeserializeLazinator(LazinatorMemory serialized);
         /// <summary>
-        /// Clones the class/struct by serializing, including all children, and then deserializing.
-        /// </summary>
-        /// <returns>A cloned copy of the class/struct</returns>
-        ILazinator CloneLazinator();
-        /// <summary>
-        /// Clones the class/struct, possibly excluding some or all children
+        /// Clones the class/struct, possibly excluding some or all children or descendants
         /// </summary>
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
         /// <param name="updateStoredBuffer">Whether to update the stored buffer, so that both copies have the same underlying buffer, assuming that all children are being included. If false, then the original object is unchanged.</param>
         /// <returns>A cloned copy of the class/struct</returns>
-        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false);
+        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false);
 
         /// <summary>
         /// Indicates whether a Lazinator object has changed since it was last deserialized (or since this property was manually changed).
