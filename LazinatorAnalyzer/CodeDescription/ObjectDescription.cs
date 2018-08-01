@@ -880,7 +880,12 @@ namespace Lazinator.CodeDescription
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
-                _LazinatorMemoryStorage = writer.Slice(startPosition);");
+                var newBuffer = writer.Slice(startPosition);
+                if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
+                {{
+                    _LazinatorMemoryStorage.PlanJointDisposal(newBuffer);
+                }}
+                _LazinatorMemoryStorage = newBuffer;");
             sb.Append($@"}}
 ");
             sb.Append($@"}}

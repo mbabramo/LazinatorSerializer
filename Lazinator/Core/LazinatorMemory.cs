@@ -16,6 +16,10 @@ namespace Lazinator.Core
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
         public int Length => Memory.Length;
 
+        private HashSet<LazinatorMemory> DisposeTogether = null;
+
+        #region Constructors
+
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
         {
             OwnedMemory = ownedMemory;
@@ -36,12 +40,44 @@ namespace Lazinator.Core
         {
         }
 
+        #endregion
+
+        #region Conversions and slicing
+
+        public static implicit operator LazinatorMemory(Memory<byte> memory)
+        {
+            return new LazinatorMemory(memory);
+        }
+
+        public static implicit operator LazinatorMemory(byte[] array)
+        {
+            return new LazinatorMemory(new Memory<byte>(array));
+        }
+
         public LazinatorMemory Slice(int position) => new LazinatorMemory(Memory.Slice(position));
         public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(Memory.Slice(position, length));
+
+        #endregion
+
+        #region Memory management
+
+        /// <summary>
+        /// Remembers an additional buffer that should be disposed when this is disposed. 
+        /// </summary>
+        /// <param name="additionalBuffer">The buffer to dispose with this buffer.</param>
+        public void PlanJointDisposal(LazinatorMemory additionalBuffer)
+        {
+            if (DisposeTogether == null)
+                DisposeTogether = new HashSet<LazinatorMemory>();
+            DisposeTogether.Add(additionalBuffer);
+        }
 
         private void FreeMemory()
         {
             OwnedMemory.Dispose();
+            if (DisposeTogether != null)
+                foreach (LazinatorMemory m in DisposeTogether)
+                    m.Dispose();
         }
 
         /// <summary>
@@ -53,14 +89,6 @@ namespace Lazinator.Core
             FreeMemory();
         }
 
-        public static implicit operator LazinatorMemory(Memory<byte> memory)
-        {
-            return new LazinatorMemory(memory);
-        }
-
-        public static implicit operator LazinatorMemory(byte[] array)
-        {
-            return new LazinatorMemory(new Memory<byte>(array));
-        }
+        #endregion
     }
 }
