@@ -10,6 +10,7 @@ namespace Lazinator.Buffers
         public readonly IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
         public int BytesFilled { get; private set; }
+        public int Length => BytesFilled;
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, BytesFilled);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
