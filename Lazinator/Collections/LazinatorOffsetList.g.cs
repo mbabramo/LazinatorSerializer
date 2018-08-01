@@ -150,7 +150,10 @@ namespace Lazinator.Collections
             {
                 _LazinatorMemoryStorage = value;
                 int length = Deserialize();
-                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                if (length != _LazinatorMemoryStorage.Length)
+                {
+                    _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                }
             }
         }
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
