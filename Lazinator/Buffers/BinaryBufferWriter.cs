@@ -14,12 +14,11 @@ namespace Lazinator.Buffers
     {
         ExpandableBytes UnderlyingMemory { get; set; }
         Span<byte> BufferSpan => UnderlyingMemory.Memory.Span;
-        public int Position { get; set; }
 
         public BinaryBufferWriter(int minimumSize)
         {
             UnderlyingMemory = new ExpandableBytes(minimumSize);
-            Position = 0;
+            _Position = 0;
         }
 
         /// <summary>
@@ -34,14 +33,42 @@ namespace Lazinator.Buffers
         /// </summary>
         public LazinatorMemory LazinatorMemory => new LazinatorMemory(UnderlyingMemory, 0, Position);
 
+        /// <summary>
+        /// The position within the buffer. This is changed by the client after writing to the buffer.
+        /// </summary>
+        private int _Position;
+        public int Position
+        {
+            get => _Position;
+            set
+            {
+                EnsureMinBufferSize(value);
+                _Position = value;
+            }
+        }
+
+        /// <summary>
+        /// Free bytes that have not been written to. The client can attempt to write to these bytes directly, calling EnsureMinBufferSize if the operation fails and trying again. Then, the client must update the position.
+        /// </summary>
         public Span<byte> Free => BufferSpan.Slice(Position);
+
+        /// <summary>
+        /// The bytes written through the current position. Note that the client can change the position within the buffer.
+        /// </summary>
         public Span<byte> Written => BufferSpan.Slice(0, Position);
 
+        /// <summary>
+        /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
+        /// </summary>
         public void Clear()
         {
             Position = 0;
         }
 
+        /// <summary>
+        /// Ensures that the underlying memory is at least a specified size, copying the current memory if needed.
+        /// </summary>
+        /// <param name="desiredBufferSize"></param>
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
             UnderlyingMemory.EnsureMinBufferSize(desiredBufferSize);

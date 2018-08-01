@@ -9,7 +9,7 @@ namespace Lazinator.Buffers
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
-        public int BytesFilled { get; set; }
+        public int BytesFilled { get; private set; }
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, BytesFilled);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
@@ -60,8 +60,8 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(new Memory<byte>(array));
         }
 
-        public LazinatorMemory Slice(int position) => new LazinatorMemory(Memory.Slice(position));
-        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(Memory.Slice(position, length));
+        public LazinatorMemory Slice(int position) => new LazinatorMemory(OwnedMemory, position, BytesFilled - position);
+        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, position, length);
 
         #endregion
 
