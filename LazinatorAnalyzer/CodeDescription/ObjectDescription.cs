@@ -513,11 +513,14 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
                         {{
-                            {(ObjectType == LazinatorObjectType.Struct ? $@"throw new NotSupportedException(); // struct memory reference cannot be updated" : $@"if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
+                            {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (_LazinatorMemoryStorage == null)
+                            {{
+                                throw new NotSupportedException(); // struct memory reference cannot be set without cloning first
+                            }}")}if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
                             {{
                                 return;
                             }}
-                            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);")}
+                            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
                         }}
 
                         public {DerivationKeyword}int GetByteLength()
