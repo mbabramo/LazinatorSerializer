@@ -21,7 +21,7 @@ namespace Lazinator.Core
             if (node == null)
                 return;
             NonLazinatorProperties = node.EnumerateNonLazinatorProperties().ToList();
-            Children = node.GetLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
+            Children = node.EnumerateLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
         }
 
         public string ToString(Func<ILazinator, string> stringProducer = null)

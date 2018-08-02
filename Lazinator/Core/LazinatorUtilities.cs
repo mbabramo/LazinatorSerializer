@@ -428,9 +428,25 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="node">The node</param>
         /// <returns>The Lazinator children of the node along with their property names</returns>
-        public static IEnumerable<(string propertyName, ILazinator descendant)> GetLazinatorChildren(this ILazinator node)
+        public static IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorChildren(this ILazinator node, bool deserializedOnly = false)
         {
-            return node.EnumerateLazinatorDescendants(x => true, true, x => false, false, true);
+            return node.EnumerateLazinatorDescendants(x => true, true, x => false, deserializedOnly, true);
+        }
+
+        /// <summary>
+        /// Returns a dynamic object indicating the Lazinator children of a node, along with their names.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="deserializedOnly"></param>
+        /// <returns></returns>
+        public static dynamic ViewLazinatorChildren(this ILazinator node, bool deserializedOnly = false)
+        {
+            dynamic d = new System.Dynamic.ExpandoObject();
+            foreach (var childInfo in EnumerateLazinatorChildren(node, deserializedOnly))
+            {
+                ((IDictionary<String, object>)d)[childInfo.propertyName] = childInfo.descendant;
+            }
+            return d;
         }
 
         /// <summary>
@@ -451,8 +467,8 @@ namespace Lazinator.Core
                 if (TopNodesOfHierarchyEqual(firstHierarchy, secondHierarchy, out string comparison))
                 {
                     // Difference must be in a child. Find the children with the match failure.
-                    var firstHierarchyNodes = GetLazinatorChildren(firstHierarchy).ToList();
-                    var secondHierarchyNodes = GetLazinatorChildren(secondHierarchy).ToList();
+                    var firstHierarchyNodes = EnumerateLazinatorChildren(firstHierarchy).ToList();
+                    var secondHierarchyNodes = EnumerateLazinatorChildren(secondHierarchy).ToList();
                     var zipped = firstHierarchyNodes.Zip(secondHierarchyNodes, (x, y) => (x, y));
                     foreach (var pair in zipped)
                     {

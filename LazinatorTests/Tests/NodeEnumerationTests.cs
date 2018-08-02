@@ -116,6 +116,17 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ViewLazinatorChildrenWorks()
+        {
+            Example e = GetTypicalExample();
+            dynamic all = e.ViewLazinatorChildren();
+            dynamic deserializedOnly = e.ViewLazinatorChildren(true);
+            e = e.CloneLazinatorTyped();
+            all = e.ViewLazinatorChildren();
+            deserializedOnly = e.ViewLazinatorChildren(true);
+        }
+
+        [Fact]
         public void LazinatorListEnumerateNodesWorks()
         {
             LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
