@@ -143,12 +143,18 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void WrappersHashProperly()
+        public void WrappersAndStructsHashProperly()
         {
             WString a = "a";
             WString b = "b";
             uint aHash = a.GetBinaryHashCode32();
             uint bHash = b.GetBinaryHashCode32();
+            aHash.Should().NotBe(bHash);
+
+            a = a.CloneLazinatorTyped();
+            b = b.CloneLazinatorTyped();
+            aHash = a.GetBinaryHashCode32();
+            bHash = b.GetBinaryHashCode32();
             aHash.Should().NotBe(bHash);
         }
 
