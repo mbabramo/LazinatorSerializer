@@ -350,9 +350,34 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
-                    string hash32 = NonbinaryHash ? "return (uint) GetHashCode();" :
-                            $@"EnsureLazinatorMemoryUpToDate();
+
+                    string hashCore32 = ObjectType == LazinatorObjectType.Struct
+                        ? 
+                        $@"var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                            return FarmhashByteSpans.Hash32(result.Span);" 
+                            : 
+                        $@"EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);";
+
+                    string hash32 = NonbinaryHash ? "return (uint) GetHashCode();" :
+                            hashCore32;
+
+                    string hash64 = ObjectType == LazinatorObjectType.Struct
+                        ?
+                        $@"var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                            return FarmhashByteSpans.Hash64(result.Span);"
+                            :
+                        $@"EnsureLazinatorMemoryUpToDate();
+                            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);";
+
+
+                    string hash128 = ObjectType == LazinatorObjectType.Struct
+                        ?
+                        $@"var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                            return FarmhashByteSpans.Hash128(result.Span);"
+                            :
+                        $@"EnsureLazinatorMemoryUpToDate();
+                            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);";
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
@@ -488,11 +513,11 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
                         {{
-                            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
+                            {(ObjectType == LazinatorObjectType.Struct ? $@"throw new NotSupportedException(); // struct memory reference cannot be updated" : $@"if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
                             {{
                                 return;
                             }}
-                            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+                            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);")}
                         }}
 
                         public {DerivationKeyword}int GetByteLength()
@@ -508,14 +533,12 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}ulong GetBinaryHashCode64()
                         {{
-                            EnsureLazinatorMemoryUpToDate();
-                            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
+                            {hash64}
                         }}
 
                         public {DerivationKeyword}Guid GetBinaryHashCode128()
                         {{
-                            EnsureLazinatorMemoryUpToDate();
-                            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+                            {hash128}
                         }}
 
                         /* Property definitions */
