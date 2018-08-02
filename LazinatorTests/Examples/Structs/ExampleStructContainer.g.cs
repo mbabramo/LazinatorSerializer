@@ -405,7 +405,7 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IntWrapper_Accessed) && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))))
             {
                 yield return ("IntWrapper", default);
             }
@@ -416,7 +416,7 @@ namespace LazinatorTests.Examples
                     yield return ("IntWrapper", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStruct_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))))
             {
                 yield return ("MyExampleStruct", default);
             }

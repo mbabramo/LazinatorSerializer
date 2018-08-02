@@ -316,7 +316,7 @@ namespace Lazinator.Collections
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item1_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))))
             {
                 yield return ("Item1", default);
             }
@@ -327,7 +327,7 @@ namespace Lazinator.Collections
                     yield return ("Item1", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item2_Accessed) && (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))))
             {
                 yield return ("Item2", default);
             }

@@ -743,7 +743,7 @@ namespace LazinatorTests.Examples
                     yield return ("IncludableChild", toYield);
                 }
             }
-            if (enumerateNulls && (MyChild1 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild1_Accessed) && (MyChild1 == null))
             {
                 yield return ("MyChild1", default);
             }
@@ -754,7 +754,7 @@ namespace LazinatorTests.Examples
                     yield return ("MyChild1", toYield);
                 }
             }
-            if (enumerateNulls && (MyChild2 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && (MyChild2 == null))
             {
                 yield return ("MyChild2", default);
             }
@@ -765,7 +765,7 @@ namespace LazinatorTests.Examples
                     yield return ("MyChild2", toYield);
                 }
             }
-            if (enumerateNulls && (MyChild2Previous == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2Previous_Accessed) && (MyChild2Previous == null))
             {
                 yield return ("MyChild2Previous", default);
             }
@@ -776,7 +776,7 @@ namespace LazinatorTests.Examples
                     yield return ("MyChild2Previous", toYield);
                 }
             }
-            if (enumerateNulls && (MyInterfaceImplementer == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyInterfaceImplementer_Accessed) && (MyInterfaceImplementer == null))
             {
                 yield return ("MyInterfaceImplementer", default);
             }
@@ -787,7 +787,7 @@ namespace LazinatorTests.Examples
                     yield return ("MyInterfaceImplementer", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))))
             {
                 yield return ("WrappedInt", default);
             }
@@ -798,7 +798,7 @@ namespace LazinatorTests.Examples
                     yield return ("WrappedInt", toYield);
                 }
             }
-            if (enumerateNulls && (ExcludableChild == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExcludableChild_Accessed) && (ExcludableChild == null))
             {
                 yield return ("ExcludableChild", default);
             }

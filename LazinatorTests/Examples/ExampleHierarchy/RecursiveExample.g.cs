@@ -294,7 +294,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (RecursiveClass == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveClass_Accessed) && (RecursiveClass == null))
             {
                 yield return ("RecursiveClass", default);
             }
@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     yield return ("RecursiveClass", toYield);
                 }
             }
-            if (enumerateNulls && (RecursiveInterface == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && (RecursiveInterface == null))
             {
                 yield return ("RecursiveInterface", default);
             }

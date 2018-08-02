@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))))
             {
                 yield return ("WrappedInt", default);
             }

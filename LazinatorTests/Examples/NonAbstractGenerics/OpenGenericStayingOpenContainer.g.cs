@@ -420,7 +420,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (ClosedGenericBase == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericBase_Accessed) && (ClosedGenericBase == null))
             {
                 yield return ("ClosedGenericBase", default);
             }
@@ -431,7 +431,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     yield return ("ClosedGenericBase", toYield);
                 }
             }
-            if (enumerateNulls && (ClosedGenericFloat == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericFloat_Accessed) && (ClosedGenericFloat == null))
             {
                 yield return ("ClosedGenericFloat", default);
             }
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     yield return ("ClosedGenericFloat", toYield);
                 }
             }
-            if (enumerateNulls && (ClosedGenericFromBaseWithBase == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericFromBaseWithBase_Accessed) && (ClosedGenericFromBaseWithBase == null))
             {
                 yield return ("ClosedGenericFromBaseWithBase", default);
             }
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     yield return ("ClosedGenericFromBaseWithBase", toYield);
                 }
             }
-            if (enumerateNulls && (ClosedGenericInterface == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericInterface_Accessed) && (ClosedGenericInterface == null))
             {
                 yield return ("ClosedGenericInterface", default);
             }
@@ -464,7 +464,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     yield return ("ClosedGenericInterface", toYield);
                 }
             }
-            if (enumerateNulls && (ClosedGenericNonexclusiveInterface == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericNonexclusiveInterface_Accessed) && (ClosedGenericNonexclusiveInterface == null))
             {
                 yield return ("ClosedGenericNonexclusiveInterface", default);
             }

@@ -454,7 +454,7 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (ANonSkippableEarlierExample == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ANonSkippableEarlierExample_Accessed) && (ANonSkippableEarlierExample == null))
             {
                 yield return ("ANonSkippableEarlierExample", default);
             }
@@ -465,7 +465,7 @@ namespace LazinatorTests.Examples
                     yield return ("ANonSkippableEarlierExample", toYield);
                 }
             }
-            if (enumerateNulls && (Example == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example_Accessed) && (Example == null))
             {
                 yield return ("Example", default);
             }
@@ -476,7 +476,7 @@ namespace LazinatorTests.Examples
                     yield return ("Example", toYield);
                 }
             }
-            if (enumerateNulls && (Example2 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example2_Accessed) && (Example2 == null))
             {
                 yield return ("Example2", default);
             }
@@ -487,7 +487,7 @@ namespace LazinatorTests.Examples
                     yield return ("Example2", toYield);
                 }
             }
-            if (enumerateNulls && (Example3 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example3_Accessed) && (Example3 == null))
             {
                 yield return ("Example3", default);
             }

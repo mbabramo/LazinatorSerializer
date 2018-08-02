@@ -267,7 +267,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (Buckets == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Buckets_Accessed) && (Buckets == null))
             {
                 yield return ("Buckets", default);
             }

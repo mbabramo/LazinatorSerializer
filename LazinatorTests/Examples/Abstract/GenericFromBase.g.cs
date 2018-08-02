@@ -108,7 +108,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 yield return inheritedYield;
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))))
             {
                 yield return ("MyT", default);
             }

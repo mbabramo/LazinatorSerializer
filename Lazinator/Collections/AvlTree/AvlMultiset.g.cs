@@ -268,7 +268,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (UnderlyingSet == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _UnderlyingSet_Accessed) && (UnderlyingSet == null))
             {
                 yield return ("UnderlyingSet", default);
             }

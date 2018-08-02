@@ -316,7 +316,7 @@ namespace Lazinator.Collections
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (FourByteItems == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _FourByteItems_Accessed) && (FourByteItems == null))
             {
                 yield return ("FourByteItems", default);
             }
@@ -327,7 +327,7 @@ namespace Lazinator.Collections
                     yield return ("FourByteItems", toYield);
                 }
             }
-            if (enumerateNulls && (TwoByteItems == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && (TwoByteItems == null))
             {
                 yield return ("TwoByteItems", default);
             }

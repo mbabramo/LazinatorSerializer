@@ -314,7 +314,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (Keys == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Keys_Accessed) && (Keys == null))
             {
                 yield return ("Keys", default);
             }
@@ -325,7 +325,7 @@ namespace Lazinator.Collections.Dictionary
                     yield return ("Keys", toYield);
                 }
             }
-            if (enumerateNulls && (Values == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Values_Accessed) && (Values == null))
             {
                 yield return ("Values", default);
             }

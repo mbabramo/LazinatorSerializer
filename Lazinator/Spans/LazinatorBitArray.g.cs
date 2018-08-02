@@ -292,7 +292,7 @@ namespace Lazinator.Spans
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (ByteSpan == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ByteSpan_Accessed) && (ByteSpan == null))
             {
                 yield return ("ByteSpan", default);
             }

@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (ExampleByInterface == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExampleByInterface_Accessed) && (ExampleByInterface == null))
             {
                 yield return ("ExampleByInterface", default);
             }

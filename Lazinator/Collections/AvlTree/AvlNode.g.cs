@@ -450,7 +450,7 @@ namespace Lazinator.Collections.Avl
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Key_Accessed) && (System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))))
             {
                 yield return ("Key", default);
             }
@@ -461,7 +461,7 @@ namespace Lazinator.Collections.Avl
                     yield return ("Key", toYield);
                 }
             }
-            if (enumerateNulls && (Left == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Left_Accessed) && (Left == null))
             {
                 yield return ("Left", default);
             }
@@ -472,7 +472,7 @@ namespace Lazinator.Collections.Avl
                     yield return ("Left", toYield);
                 }
             }
-            if (enumerateNulls && (Right == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Right_Accessed) && (Right == null))
             {
                 yield return ("Right", default);
             }
@@ -483,7 +483,7 @@ namespace Lazinator.Collections.Avl
                     yield return ("Right", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))))
             {
                 yield return ("Value", default);
             }

@@ -251,7 +251,7 @@ namespace Lazinator.Collections.Avl
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (Root == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Root_Accessed) && (Root == null))
             {
                 yield return ("Root", default);
             }

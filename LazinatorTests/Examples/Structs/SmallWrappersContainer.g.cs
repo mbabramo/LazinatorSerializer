@@ -767,7 +767,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (ListWrappedBytes == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ListWrappedBytes_Accessed) && (ListWrappedBytes == null))
             {
                 yield return ("ListWrappedBytes", default);
             }
@@ -778,7 +778,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("ListWrappedBytes", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedBool_Accessed) && (System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))))
             {
                 yield return ("WrappedBool", default);
             }
@@ -789,7 +789,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedBool", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedByte_Accessed) && (System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))))
             {
                 yield return ("WrappedByte", default);
             }
@@ -800,7 +800,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedByte", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedChar_Accessed) && (System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))))
             {
                 yield return ("WrappedChar", default);
             }
@@ -811,7 +811,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedChar", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableBool_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))))
             {
                 yield return ("WrappedNullableBool", default);
             }
@@ -822,7 +822,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedNullableBool", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableByte_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))))
             {
                 yield return ("WrappedNullableByte", default);
             }
@@ -833,7 +833,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedNullableByte", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableChar_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))))
             {
                 yield return ("WrappedNullableChar", default);
             }
@@ -844,7 +844,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedNullableChar", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableSByte_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))))
             {
                 yield return ("WrappedNullableSByte", default);
             }
@@ -855,7 +855,7 @@ namespace LazinatorTests.Examples.Structs
                     yield return ("WrappedNullableSByte", toYield);
                 }
             }
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedSByte_Accessed) && (System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))))
             {
                 yield return ("WrappedSByte", default);
             }

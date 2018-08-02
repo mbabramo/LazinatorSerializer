@@ -416,7 +416,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (Example2 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example2_Accessed) && (Example2 == null))
             {
                 yield return ("Example2", default);
             }
@@ -427,7 +427,7 @@ namespace LazinatorTests.Examples.Abstract
                     yield return ("Example2", toYield);
                 }
             }
-            if (enumerateNulls && (Example3 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example3_Accessed) && (Example3 == null))
             {
                 yield return ("Example3", default);
             }

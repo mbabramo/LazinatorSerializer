@@ -317,7 +317,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (LazinatorExample == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _LazinatorExample_Accessed) && (LazinatorExample == null))
             {
                 yield return ("LazinatorExample", default);
             }

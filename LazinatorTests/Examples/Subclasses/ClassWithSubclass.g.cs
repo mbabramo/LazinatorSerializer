@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (SubclassInstance1 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance1_Accessed) && (SubclassInstance1 == null))
             {
                 yield return ("SubclassInstance1", default);
             }
@@ -318,7 +318,7 @@ namespace LazinatorTests.Examples.Subclasses
                     yield return ("SubclassInstance1", toYield);
                 }
             }
-            if (enumerateNulls && (SubclassInstance2 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance2_Accessed) && (SubclassInstance2 == null))
             {
                 yield return ("SubclassInstance2", default);
             }

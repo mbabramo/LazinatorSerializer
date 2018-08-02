@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))))
             {
                 yield return ("MyT", default);
             }
