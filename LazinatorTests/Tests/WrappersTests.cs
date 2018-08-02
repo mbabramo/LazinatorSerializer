@@ -142,5 +142,15 @@ namespace LazinatorTests.Tests
 
         }
 
+        [Fact]
+        public void WrappersHashProperly()
+        {
+            WString a = "a";
+            WString b = "b";
+            uint aHash = a.GetBinaryHashCode32();
+            uint bHash = b.GetBinaryHashCode32();
+            aHash.Should().NotBe(bHash);
+        }
+
     }
 }

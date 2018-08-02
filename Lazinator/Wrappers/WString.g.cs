@@ -165,8 +165,9 @@ namespace Lazinator.Wrappers
         
         public uint GetBinaryHashCode32()
         {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
+            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            //EnsureLazinatorMemoryUpToDate();
+            return FarmhashByteSpans.Hash32(result.Span);
         }
         
         public ulong GetBinaryHashCode64()
