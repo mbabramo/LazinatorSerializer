@@ -732,7 +732,7 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (IncludableChild == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IncludableChild_Accessed) && (IncludableChild == null))
             {
                 yield return ("IncludableChild", default);
             }
