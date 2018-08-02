@@ -906,12 +906,18 @@ namespace Lazinator.CodeDescription
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
-                var newBuffer = writer.Slice(startPosition);
-                if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
+                if (_LazinatorMemoryStorage != null)
                 {{
-                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
+                    if (LazinatorParents.Any())
+                    {{
+                        _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
+                    }}
+                    _LazinatorMemoryStorage.CopyFrom(newBuffer);
                 }}
-                _LazinatorMemoryStorage = newBuffer;");
+                else
+                {{
+                    _LazinatorMemoryStorage = newBuffer;
+                }}");
             sb.Append($@"}}
 ");
             sb.Append($@"}}
