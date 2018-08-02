@@ -153,9 +153,10 @@ namespace LazinatorTests.Tests
 
             a = a.CloneLazinatorTyped();
             b = b.CloneLazinatorTyped();
-            aHash = a.GetBinaryHashCode32();
-            bHash = b.GetBinaryHashCode32();
-            aHash.Should().NotBe(bHash);
+            uint aHash2 = a.GetBinaryHashCode32();
+            uint bHash2 = b.GetBinaryHashCode32();
+            aHash2.Should().Be(aHash);
+            bHash2.Should().Be(bHash);
         }
 
     }

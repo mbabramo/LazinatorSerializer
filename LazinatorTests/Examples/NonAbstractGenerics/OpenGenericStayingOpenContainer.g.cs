@@ -159,6 +159,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual void EnsureLazinatorMemoryUpToDate()
         {
+            
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;

@@ -508,8 +508,9 @@ namespace Lazinator.CodeDescription
                         {{
                             {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (_LazinatorMemoryStorage == null)
                             {{
-                                throw new NotSupportedException(); // struct memory reference cannot be set without cloning first
-                            }}")}if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
+                                throw new NotSupportedException(""Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead.""); 
+                            }}")}
+                            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
                             {{
                                 return;
                             }}

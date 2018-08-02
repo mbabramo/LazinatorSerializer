@@ -153,6 +153,7 @@ namespace Lazinator.Spans
         
         public virtual void EnsureLazinatorMemoryUpToDate()
         {
+            
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;

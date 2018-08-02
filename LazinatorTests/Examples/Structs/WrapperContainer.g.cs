@@ -153,6 +153,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual void EnsureLazinatorMemoryUpToDate()
         {
+            
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;

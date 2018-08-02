@@ -154,6 +154,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void EnsureLazinatorMemoryUpToDate()
         {
+            
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;

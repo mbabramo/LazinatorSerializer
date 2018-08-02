@@ -156,7 +156,15 @@ namespace LazinatorTests.Examples
         
         public void EnsureLazinatorMemoryUpToDate()
         {
-            throw new NotSupportedException(); // struct memory reference cannot be updated
+            if (_LazinatorMemoryStorage == null)
+            {
+                throw new NotSupportedException(); // struct memory reference cannot be set without cloning first
+            }
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
+            {
+                return;
+            }
+            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
         }
         
         public int GetByteLength()
@@ -167,20 +175,44 @@ namespace LazinatorTests.Examples
         
         public uint GetBinaryHashCode32()
         {
-            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-            return FarmhashByteSpans.Hash32(result.Span);
+            if (_LazinatorMemoryStorage == null)
+            {
+                var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                return FarmhashByteSpans.Hash32(result.Span);
+            }
+            else
+            {
+                EnsureLazinatorMemoryUpToDate();
+                return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
+            }
         }
         
         public ulong GetBinaryHashCode64()
         {
-            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-            return FarmhashByteSpans.Hash64(result.Span);
+            if (_LazinatorMemoryStorage == null)
+            {
+                var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                return FarmhashByteSpans.Hash64(result.Span);
+            }
+            else
+            {
+                EnsureLazinatorMemoryUpToDate();
+                return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
+            }
         }
         
         public Guid GetBinaryHashCode128()
         {
-            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-            return FarmhashByteSpans.Hash128(result.Span);
+            if (_LazinatorMemoryStorage == null)
+            {
+                var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                return FarmhashByteSpans.Hash128(result.Span);
+            }
+            else
+            {
+                EnsureLazinatorMemoryUpToDate();
+                return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+            }
         }
         
         /* Property definitions */

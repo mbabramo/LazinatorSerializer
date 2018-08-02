@@ -154,6 +154,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual void EnsureLazinatorMemoryUpToDate()
         {
+            
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
             {
                 return;
