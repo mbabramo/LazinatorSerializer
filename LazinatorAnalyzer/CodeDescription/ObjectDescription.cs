@@ -906,6 +906,7 @@ namespace Lazinator.CodeDescription
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
+                var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {{
                     if (LazinatorParents.Any())
