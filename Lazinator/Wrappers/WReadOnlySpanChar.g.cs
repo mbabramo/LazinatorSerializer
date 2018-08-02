@@ -150,11 +150,7 @@ namespace Lazinator.Wrappers
         
         public void EnsureLazinatorMemoryUpToDate()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0)
-            {
-                return;
-            }
-            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorObjectBytes, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+            throw new NotSupportedException(); // struct memory reference cannot be updated
         }
         
         public int GetByteLength()
@@ -165,20 +161,20 @@ namespace Lazinator.Wrappers
         
         public uint GetBinaryHashCode32()
         {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
+            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            return FarmhashByteSpans.Hash32(result.Span);
         }
         
         public ulong GetBinaryHashCode64()
         {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
+            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            return FarmhashByteSpans.Hash64(result.Span);
         }
         
         public Guid GetBinaryHashCode128()
         {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            return FarmhashByteSpans.Hash128(result.Span);
         }
         
         /* Property definitions */
