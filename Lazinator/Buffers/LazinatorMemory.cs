@@ -7,7 +7,7 @@ namespace Lazinator.Buffers
 {
     public class LazinatorMemory : IMemoryOwner<byte>
     {
-        public readonly IMemoryOwner<byte> OwnedMemory;
+        public IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
         public int Length { get; private set; }
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
@@ -51,6 +51,14 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(byte[] array) : this(new SimpleMemoryOwner<byte>(new Memory<byte>(array)), array.Length)
         {
+        }
+
+        public void CopyFrom(LazinatorMemory existingMemoryToCopy)
+        {
+            OwnedMemory = existingMemoryToCopy.OwnedMemory;
+            StartPosition = existingMemoryToCopy.StartPosition;
+            Length = existingMemoryToCopy.Length;
+            OriginalSource = existingMemoryToCopy.OriginalSource;
         }
 
         #endregion
