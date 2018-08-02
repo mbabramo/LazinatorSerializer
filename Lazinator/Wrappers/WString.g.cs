@@ -131,7 +131,7 @@ namespace Lazinator.Wrappers
         {
             LazinatorMemoryStorage = serializedBytes;
         }
-        
+
         LazinatorMemory _LazinatorMemoryStorage;
         public LazinatorMemory LazinatorMemoryStorage
         {
@@ -284,11 +284,18 @@ namespace Lazinator.Wrappers
                 }
                 
                 var newBuffer = writer.Slice(startPosition);
-                if (_LazinatorMemoryStorage != null && LazinatorParents.Any())
+                if (_LazinatorMemoryStorage != null)
                 {
-                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
+                    if (LazinatorParents.Any())
+                    {
+                        _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
+                    }
+                    _LazinatorMemoryStorage.CopyFrom(newBuffer);
                 }
-                _LazinatorMemoryStorage = newBuffer;
+                else
+                {
+                    _LazinatorMemoryStorage = newBuffer;
+                }
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

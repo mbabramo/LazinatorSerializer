@@ -150,6 +150,9 @@ namespace LazinatorTests.Tests
             uint aHash = a.GetBinaryHashCode32();
             uint bHash = b.GetBinaryHashCode32();
             aHash.Should().NotBe(bHash);
+            ulong aHash2 = a.GetBinaryHashCode64();
+            ulong bHash2 = b.GetBinaryHashCode64();
+            aHash2.Should().NotBe(bHash2);
         }
 
     }
