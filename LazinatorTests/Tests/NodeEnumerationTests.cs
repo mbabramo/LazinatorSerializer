@@ -11,6 +11,7 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Support;
+using System.Dynamic;
 
 namespace LazinatorTests.Tests
 {
@@ -118,12 +119,22 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ViewLazinatorChildrenWorks()
         {
+            int GetCount(ExpandoObject eo)
+            {
+                return ((IDictionary<string, object>)eo).Count;
+            }
+
             Example e = GetTypicalExample();
-            dynamic all = e.ViewLazinatorChildren();
             dynamic deserializedOnly = e.ViewLazinatorChildren(true);
+            dynamic all = e.ViewLazinatorChildren();
+            (GetCount(all) > GetCount(deserializedOnly)).Should().BeTrue();
+            (GetCount(deserializedOnly) > 1).Should().BeTrue();
             e = e.CloneLazinatorTyped();
-            all = e.ViewLazinatorChildren();
+            var loaded = e.MyChild1;
             deserializedOnly = e.ViewLazinatorChildren(true);
+            GetCount(deserializedOnly).Should().Be(1);
+            all = e.ViewLazinatorChildren();
+            (GetCount(all) > 1).Should().BeTrue();
         }
 
         [Fact]
