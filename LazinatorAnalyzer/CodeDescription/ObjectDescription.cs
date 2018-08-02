@@ -352,32 +352,25 @@ namespace Lazinator.CodeDescription
                                     ";
 
                     string hashCore32 = ObjectType == LazinatorObjectType.Struct
-                        ? 
-                        $@"var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                            return FarmhashByteSpans.Hash32(result.Span);" 
+                        ?
+                        $@"if (_LazinatorMemoryStorage == null)
+                        {{
+                            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                            return FarmhashByteSpans.Hash32(result.Span);
+                        }}
+                        else
+                        {{
+                            EnsureLazinatorMemoryUpToDate();
+                            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
+                        }}"
                             : 
                         $@"EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);";
 
                     string hash32 = NonbinaryHash ? "return (uint) GetHashCode();" :
                             hashCore32;
-
-                    string hash64 = ObjectType == LazinatorObjectType.Struct
-                        ?
-                        $@"var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                            return FarmhashByteSpans.Hash64(result.Span);"
-                            :
-                        $@"EnsureLazinatorMemoryUpToDate();
-                            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);";
-
-
-                    string hash128 = ObjectType == LazinatorObjectType.Struct
-                        ?
-                        $@"var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                            return FarmhashByteSpans.Hash128(result.Span);"
-                            :
-                        $@"EnsureLazinatorMemoryUpToDate();
-                            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);";
+                    string hash64 = hashCore32.Replace("32", "64");
+                    string hash128 = hashCore32.Replace("32", "128");
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
