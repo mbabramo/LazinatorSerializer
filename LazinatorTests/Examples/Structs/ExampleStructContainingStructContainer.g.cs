@@ -283,7 +283,10 @@ namespace LazinatorTests.Examples.Structs
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(Subcontainer, default(ExampleStructContainingStruct))) || (_Subcontainer_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(_Subcontainer, default(ExampleStructContainingStruct))))
             {
-                yield return ("Subcontainer", Subcontainer);
+                if (matchCriterion(_Subcontainer))
+                {
+                    yield return ("Subcontainer", Subcontainer);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Subcontainer))
                 {

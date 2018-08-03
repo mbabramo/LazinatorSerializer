@@ -739,7 +739,9 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
             {
                 if (matchCriterion(_IncludableChild))
+                {
                     yield return ("IncludableChild", IncludableChild);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(IncludableChild))
                 {
@@ -755,7 +757,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
             {
-                yield return ("MyChild1", MyChild1);
+                if (matchCriterion(_MyChild1))
+                {
+                    yield return ("MyChild1", MyChild1);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyChild1))
                 {
@@ -771,7 +776,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
             {
-                yield return ("MyChild2", MyChild2);
+                if (matchCriterion(_MyChild2))
+                {
+                    yield return ("MyChild2", MyChild2);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyChild2))
                 {
@@ -787,7 +795,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || (_MyChild2Previous_Accessed && _MyChild2Previous != null))
             {
-                yield return ("MyChild2Previous", MyChild2Previous);
+                if (matchCriterion(_MyChild2Previous))
+                {
+                    yield return ("MyChild2Previous", MyChild2Previous);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyChild2Previous))
                 {
@@ -803,7 +814,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
             {
-                yield return ("MyInterfaceImplementer", MyInterfaceImplementer);
+                if (matchCriterion(_MyInterfaceImplementer))
+                {
+                    yield return ("MyInterfaceImplementer", MyInterfaceImplementer);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyInterfaceImplementer))
                 {
@@ -819,7 +833,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
             {
-                yield return ("WrappedInt", WrappedInt);
+                if (matchCriterion(_WrappedInt))
+                {
+                    yield return ("WrappedInt", WrappedInt);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(WrappedInt))
                 {
@@ -835,7 +852,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || (_ExcludableChild_Accessed && _ExcludableChild != null))
             {
-                yield return ("ExcludableChild", ExcludableChild);
+                if (matchCriterion(_ExcludableChild))
+                {
+                    yield return ("ExcludableChild", ExcludableChild);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ExcludableChild))
                 {

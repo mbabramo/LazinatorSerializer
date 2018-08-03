@@ -313,7 +313,10 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
             {
-                yield return ("SubclassInstance1", SubclassInstance1);
+                if (matchCriterion(_SubclassInstance1))
+                {
+                    yield return ("SubclassInstance1", SubclassInstance1);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(SubclassInstance1))
                 {
@@ -329,7 +332,10 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
             {
-                yield return ("SubclassInstance2", SubclassInstance2);
+                if (matchCriterion(_SubclassInstance2))
+                {
+                    yield return ("SubclassInstance2", SubclassInstance2);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(SubclassInstance2))
                 {

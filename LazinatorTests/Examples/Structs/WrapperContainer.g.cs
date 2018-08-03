@@ -279,7 +279,10 @@ namespace LazinatorTests.Examples.Structs
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
             {
-                yield return ("WrappedInt", WrappedInt);
+                if (matchCriterion(_WrappedInt))
+                {
+                    yield return ("WrappedInt", WrappedInt);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(WrappedInt))
                 {

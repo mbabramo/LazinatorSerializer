@@ -454,7 +454,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
             {
-                yield return ("MyChild1", MyChild1);
+                if (matchCriterion(_MyChild1))
+                {
+                    yield return ("MyChild1", MyChild1);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyChild1))
                 {
@@ -470,7 +473,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
             {
-                yield return ("MyChild2", MyChild2);
+                if (matchCriterion(_MyChild2))
+                {
+                    yield return ("MyChild2", MyChild2);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyChild2))
                 {

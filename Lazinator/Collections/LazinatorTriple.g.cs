@@ -376,7 +376,10 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) || (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T))))
             {
-                yield return ("Item1", Item1);
+                if (matchCriterion(_Item1))
+                {
+                    yield return ("Item1", Item1);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Item1))
                 {
@@ -392,7 +395,10 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U))))
             {
-                yield return ("Item2", Item2);
+                if (matchCriterion(_Item2))
+                {
+                    yield return ("Item2", Item2);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Item2))
                 {
@@ -408,7 +414,10 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V))))
             {
-                yield return ("Item3", Item3);
+                if (matchCriterion(_Item3))
+                {
+                    yield return ("Item3", Item3);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Item3))
                 {

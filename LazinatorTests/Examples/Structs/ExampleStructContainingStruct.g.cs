@@ -306,7 +306,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
             {
-                yield return ("MyExampleStruct", MyExampleStruct);
+                if (matchCriterion(_MyExampleStruct))
+                {
+                    yield return ("MyExampleStruct", MyExampleStruct);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyExampleStruct))
                 {

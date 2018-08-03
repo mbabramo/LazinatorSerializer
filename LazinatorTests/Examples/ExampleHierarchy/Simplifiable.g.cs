@@ -460,7 +460,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
             {
-                yield return ("ANonSkippableEarlierExample", ANonSkippableEarlierExample);
+                if (matchCriterion(_ANonSkippableEarlierExample))
+                {
+                    yield return ("ANonSkippableEarlierExample", ANonSkippableEarlierExample);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ANonSkippableEarlierExample))
                 {
@@ -476,7 +479,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
-                yield return ("Example", Example);
+                if (matchCriterion(_Example))
+                {
+                    yield return ("Example", Example);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Example))
                 {
@@ -492,7 +498,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
-                yield return ("Example2", Example2);
+                if (matchCriterion(_Example2))
+                {
+                    yield return ("Example2", Example2);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Example2))
                 {
@@ -508,7 +517,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
-                yield return ("Example3", Example3);
+                if (matchCriterion(_Example3))
+                {
+                    yield return ("Example3", Example3);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Example3))
                 {

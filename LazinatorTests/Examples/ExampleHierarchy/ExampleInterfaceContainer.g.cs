@@ -292,7 +292,10 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
             {
-                yield return ("ExampleByInterface", ExampleByInterface);
+                if (matchCriterion(_ExampleByInterface))
+                {
+                    yield return ("ExampleByInterface", ExampleByInterface);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ExampleByInterface))
                 {

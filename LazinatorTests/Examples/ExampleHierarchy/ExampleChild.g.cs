@@ -305,7 +305,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
             {
-                yield return ("MyWrapperContainer", MyWrapperContainer);
+                if (matchCriterion(_MyWrapperContainer))
+                {
+                    yield return ("MyWrapperContainer", MyWrapperContainer);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyWrapperContainer))
                 {

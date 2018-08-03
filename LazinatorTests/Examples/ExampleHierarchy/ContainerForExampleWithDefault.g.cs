@@ -255,7 +255,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
-                yield return ("Example", Example);
+                if (matchCriterion(_Example))
+                {
+                    yield return ("Example", Example);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Example))
                 {

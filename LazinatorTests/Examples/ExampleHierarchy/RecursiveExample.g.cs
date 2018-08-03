@@ -300,7 +300,10 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
             {
-                yield return ("RecursiveClass", RecursiveClass);
+                if (matchCriterion(_RecursiveClass))
+                {
+                    yield return ("RecursiveClass", RecursiveClass);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(RecursiveClass))
                 {
@@ -316,7 +319,10 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
             {
-                yield return ("RecursiveInterface", RecursiveInterface);
+                if (matchCriterion(_RecursiveInterface))
+                {
+                    yield return ("RecursiveInterface", RecursiveInterface);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(RecursiveInterface))
                 {

@@ -456,7 +456,10 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) || (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey))))
             {
-                yield return ("Key", Key);
+                if (matchCriterion(_Key))
+                {
+                    yield return ("Key", Key);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Key))
                 {
@@ -472,7 +475,10 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && Left != null) || (_Left_Accessed && _Left != null))
             {
-                yield return ("Left", Left);
+                if (matchCriterion(_Left))
+                {
+                    yield return ("Left", Left);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Left))
                 {
@@ -488,7 +494,10 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && Right != null) || (_Right_Accessed && _Right != null))
             {
-                yield return ("Right", Right);
+                if (matchCriterion(_Right))
+                {
+                    yield return ("Right", Right);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Right))
                 {
@@ -504,7 +513,10 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue))))
             {
-                yield return ("Value", Value);
+                if (matchCriterion(_Value))
+                {
+                    yield return ("Value", Value);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Value))
                 {

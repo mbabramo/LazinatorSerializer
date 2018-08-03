@@ -282,7 +282,10 @@ namespace LazinatorTests.Examples.Structs
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(ExampleStructWithoutClass, default(ExampleStructWithoutClass))) || (_ExampleStructWithoutClass_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(_ExampleStructWithoutClass, default(ExampleStructWithoutClass))))
             {
-                yield return ("ExampleStructWithoutClass", ExampleStructWithoutClass);
+                if (matchCriterion(_ExampleStructWithoutClass))
+                {
+                    yield return ("ExampleStructWithoutClass", ExampleStructWithoutClass);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ExampleStructWithoutClass))
                 {

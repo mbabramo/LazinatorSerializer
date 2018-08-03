@@ -323,7 +323,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
-                yield return ("LazinatorExample", LazinatorExample);
+                if (matchCriterion(_LazinatorExample))
+                {
+                    yield return ("LazinatorExample", LazinatorExample);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(LazinatorExample))
                 {

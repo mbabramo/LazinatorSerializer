@@ -426,7 +426,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else if ((!exploreOnlyDeserializedChildren && ClosedGenericBase != null) || (_ClosedGenericBase_Accessed && _ClosedGenericBase != null))
             {
-                yield return ("ClosedGenericBase", ClosedGenericBase);
+                if (matchCriterion(_ClosedGenericBase))
+                {
+                    yield return ("ClosedGenericBase", ClosedGenericBase);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ClosedGenericBase))
                 {
@@ -442,7 +445,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else if ((!exploreOnlyDeserializedChildren && ClosedGenericFloat != null) || (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null))
             {
-                yield return ("ClosedGenericFloat", ClosedGenericFloat);
+                if (matchCriterion(_ClosedGenericFloat))
+                {
+                    yield return ("ClosedGenericFloat", ClosedGenericFloat);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ClosedGenericFloat))
                 {
@@ -458,7 +464,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else if ((!exploreOnlyDeserializedChildren && ClosedGenericFromBaseWithBase != null) || (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null))
             {
-                yield return ("ClosedGenericFromBaseWithBase", ClosedGenericFromBaseWithBase);
+                if (matchCriterion(_ClosedGenericFromBaseWithBase))
+                {
+                    yield return ("ClosedGenericFromBaseWithBase", ClosedGenericFromBaseWithBase);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ClosedGenericFromBaseWithBase))
                 {
@@ -474,7 +483,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else if ((!exploreOnlyDeserializedChildren && ClosedGenericInterface != null) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null))
             {
-                yield return ("ClosedGenericInterface", ClosedGenericInterface);
+                if (matchCriterion(_ClosedGenericInterface))
+                {
+                    yield return ("ClosedGenericInterface", ClosedGenericInterface);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ClosedGenericInterface))
                 {
@@ -490,7 +502,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else if ((!exploreOnlyDeserializedChildren && ClosedGenericNonexclusiveInterface != null) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null))
             {
-                yield return ("ClosedGenericNonexclusiveInterface", ClosedGenericNonexclusiveInterface);
+                if (matchCriterion(_ClosedGenericNonexclusiveInterface))
+                {
+                    yield return ("ClosedGenericNonexclusiveInterface", ClosedGenericNonexclusiveInterface);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ClosedGenericNonexclusiveInterface))
                 {

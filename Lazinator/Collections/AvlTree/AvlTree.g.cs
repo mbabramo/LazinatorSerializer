@@ -257,7 +257,10 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && Root != null) || (_Root_Accessed && _Root != null))
             {
-                yield return ("Root", Root);
+                if (matchCriterion(_Root))
+                {
+                    yield return ("Root", Root);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Root))
                 {

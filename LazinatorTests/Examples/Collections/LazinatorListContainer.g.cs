@@ -283,7 +283,10 @@ namespace LazinatorTests.Examples.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
             {
-                yield return ("MyList", MyList);
+                if (matchCriterion(_MyList))
+                {
+                    yield return ("MyList", MyList);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyList))
                 {

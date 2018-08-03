@@ -411,7 +411,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
             {
-                yield return ("IntWrapper", IntWrapper);
+                if (matchCriterion(_IntWrapper))
+                {
+                    yield return ("IntWrapper", IntWrapper);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(IntWrapper))
                 {
@@ -427,7 +430,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
             {
-                yield return ("MyExampleStruct", MyExampleStruct);
+                if (matchCriterion(_MyExampleStruct))
+                {
+                    yield return ("MyExampleStruct", MyExampleStruct);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyExampleStruct))
                 {

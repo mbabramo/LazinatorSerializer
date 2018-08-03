@@ -273,7 +273,10 @@ namespace Lazinator.Collections.Dictionary
             }
             else if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
             {
-                yield return ("Buckets", Buckets);
+                if (matchCriterion(_Buckets))
+                {
+                    yield return ("Buckets", Buckets);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Buckets))
                 {

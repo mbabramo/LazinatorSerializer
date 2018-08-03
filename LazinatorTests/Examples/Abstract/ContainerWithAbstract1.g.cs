@@ -259,7 +259,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
             {
-                yield return ("AbstractProperty", AbstractProperty);
+                if (matchCriterion(_AbstractProperty))
+                {
+                    yield return ("AbstractProperty", AbstractProperty);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(AbstractProperty))
                 {

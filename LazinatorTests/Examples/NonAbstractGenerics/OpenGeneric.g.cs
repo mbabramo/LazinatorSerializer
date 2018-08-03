@@ -302,7 +302,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
             {
-                yield return ("MyT", MyT);
+                if (matchCriterion(_MyT))
+                {
+                    yield return ("MyT", MyT);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyT))
                 {

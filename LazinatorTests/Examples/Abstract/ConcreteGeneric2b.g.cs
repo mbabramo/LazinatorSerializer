@@ -349,7 +349,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
-                yield return ("MyT", MyT);
+                if (matchCriterion(_MyT))
+                {
+                    yield return ("MyT", MyT);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyT))
                 {
@@ -365,7 +368,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
-                yield return ("LazinatorExample", LazinatorExample);
+                if (matchCriterion(_LazinatorExample))
+                {
+                    yield return ("LazinatorExample", LazinatorExample);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(LazinatorExample))
                 {

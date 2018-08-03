@@ -715,12 +715,12 @@ namespace Lazinator.CodeDescription
                                 }}
                                 else if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{
-                                    if (matchCriterion(_{propertyName}))
+                                    bool isMatch = matchCriterion({propertyName});
+                                    if (isMatch)
                                     {{
                                         yield return (""{propertyName}"", {propertyName});
                                     }}
-
-                                    if (!stopExploringBelowMatch || !matchCriterion({propertyName}))
+                                    if (!stopExploringBelowMatch || !isMatch)
                                     {{
                                         foreach (var toYield in {propertyName}.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{

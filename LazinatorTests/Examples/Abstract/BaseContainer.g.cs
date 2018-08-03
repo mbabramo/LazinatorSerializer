@@ -259,7 +259,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
             {
-                yield return ("MyBase", MyBase);
+                if (matchCriterion(_MyBase))
+                {
+                    yield return ("MyBase", MyBase);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyBase))
                 {

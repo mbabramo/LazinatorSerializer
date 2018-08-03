@@ -422,7 +422,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
-                yield return ("Example2", Example2);
+                if (matchCriterion(_Example2))
+                {
+                    yield return ("Example2", Example2);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Example2))
                 {
@@ -438,7 +441,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
-                yield return ("Example3", Example3);
+                if (matchCriterion(_Example3))
+                {
+                    yield return ("Example3", Example3);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Example3))
                 {

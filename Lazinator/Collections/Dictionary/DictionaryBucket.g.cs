@@ -320,7 +320,10 @@ namespace Lazinator.Collections.Dictionary
             }
             else if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
             {
-                yield return ("Keys", Keys);
+                if (matchCriterion(_Keys))
+                {
+                    yield return ("Keys", Keys);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Keys))
                 {
@@ -336,7 +339,10 @@ namespace Lazinator.Collections.Dictionary
             }
             else if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
             {
-                yield return ("Values", Values);
+                if (matchCriterion(_Values))
+                {
+                    yield return ("Values", Values);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Values))
                 {

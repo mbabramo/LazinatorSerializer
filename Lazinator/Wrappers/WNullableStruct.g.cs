@@ -291,7 +291,10 @@ namespace Lazinator.Wrappers
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T))))
             {
-                yield return ("NonNullValue", NonNullValue);
+                if (matchCriterion(_NonNullValue))
+                {
+                    yield return ("NonNullValue", NonNullValue);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(NonNullValue))
                 {

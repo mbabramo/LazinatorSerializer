@@ -322,7 +322,10 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
-                yield return ("FourByteItems", FourByteItems);
+                if (matchCriterion(_FourByteItems))
+                {
+                    yield return ("FourByteItems", FourByteItems);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(FourByteItems))
                 {
@@ -338,7 +341,10 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
             {
-                yield return ("TwoByteItems", TwoByteItems);
+                if (matchCriterion(_TwoByteItems))
+                {
+                    yield return ("TwoByteItems", TwoByteItems);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(TwoByteItems))
                 {

@@ -327,7 +327,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
             {
-                yield return ("MyOfficialObject", MyOfficialObject);
+                if (matchCriterion(_MyOfficialObject))
+                {
+                    yield return ("MyOfficialObject", MyOfficialObject);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyOfficialObject))
                 {
@@ -343,7 +346,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
             {
-                yield return ("MyUnofficialObject", MyUnofficialObject);
+                if (matchCriterion(_MyUnofficialObject))
+                {
+                    yield return ("MyUnofficialObject", MyUnofficialObject);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(MyUnofficialObject))
                 {

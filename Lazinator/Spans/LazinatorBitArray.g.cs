@@ -298,7 +298,10 @@ namespace Lazinator.Spans
             }
             else if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
             {
-                yield return ("ByteSpan", ByteSpan);
+                if (matchCriterion(_ByteSpan))
+                {
+                    yield return ("ByteSpan", ByteSpan);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(ByteSpan))
                 {

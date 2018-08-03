@@ -259,7 +259,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
             {
-                yield return ("Item", Item);
+                if (matchCriterion(_Item))
+                {
+                    yield return ("Item", Item);
+                }
                 
                 if (!stopExploringBelowMatch || !matchCriterion(Item))
                 {
