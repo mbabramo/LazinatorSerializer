@@ -259,12 +259,12 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
             {
-                if (matchCriterion(_MyBase))
+                bool isMatch = matchCriterion == null || matchCriterion(MyBase);
+                if (isMatch)
                 {
                     yield return ("MyBase", MyBase);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(MyBase))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in MyBase.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

@@ -256,12 +256,12 @@ namespace LazinatorTests.Examples.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
             {
-                if (matchCriterion(_MyList))
+                bool isMatch = matchCriterion == null || matchCriterion(MyList);
+                if (isMatch)
                 {
                     yield return ("MyList", MyList);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(MyList))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in MyList.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

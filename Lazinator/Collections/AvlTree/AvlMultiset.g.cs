@@ -274,12 +274,12 @@ namespace Lazinator.Collections.AvlTree
             }
             else if ((!exploreOnlyDeserializedChildren && UnderlyingSet != null) || (_UnderlyingSet_Accessed && _UnderlyingSet != null))
             {
-                if (matchCriterion(_UnderlyingSet))
+                bool isMatch = matchCriterion == null || matchCriterion(UnderlyingSet);
+                if (isMatch)
                 {
                     yield return ("UnderlyingSet", UnderlyingSet);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(UnderlyingSet))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in UnderlyingSet.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

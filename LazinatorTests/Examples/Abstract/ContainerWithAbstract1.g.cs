@@ -259,12 +259,12 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
             {
-                if (matchCriterion(_AbstractProperty))
+                bool isMatch = matchCriterion == null || matchCriterion(AbstractProperty);
+                if (isMatch)
                 {
                     yield return ("AbstractProperty", AbstractProperty);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(AbstractProperty))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in AbstractProperty.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

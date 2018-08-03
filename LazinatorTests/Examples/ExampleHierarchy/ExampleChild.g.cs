@@ -305,12 +305,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
             {
-                if (matchCriterion(_MyWrapperContainer))
+                bool isMatch = matchCriterion == null || matchCriterion(MyWrapperContainer);
+                if (isMatch)
                 {
                     yield return ("MyWrapperContainer", MyWrapperContainer);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(MyWrapperContainer))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in MyWrapperContainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

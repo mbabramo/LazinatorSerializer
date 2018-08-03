@@ -298,12 +298,12 @@ namespace Lazinator.Spans
             }
             else if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
             {
-                if (matchCriterion(_ByteSpan))
+                bool isMatch = matchCriterion == null || matchCriterion(ByteSpan);
+                if (isMatch)
                 {
                     yield return ("ByteSpan", ByteSpan);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(ByteSpan))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

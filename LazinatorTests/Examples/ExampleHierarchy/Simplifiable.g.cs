@@ -460,12 +460,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
             {
-                if (matchCriterion(_ANonSkippableEarlierExample))
+                bool isMatch = matchCriterion == null || matchCriterion(ANonSkippableEarlierExample);
+                if (isMatch)
                 {
                     yield return ("ANonSkippableEarlierExample", ANonSkippableEarlierExample);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(ANonSkippableEarlierExample))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in ANonSkippableEarlierExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -479,12 +479,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
-                if (matchCriterion(_Example))
+                bool isMatch = matchCriterion == null || matchCriterion(Example);
+                if (isMatch)
                 {
                     yield return ("Example", Example);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Example))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Example.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -498,12 +498,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
-                if (matchCriterion(_Example2))
+                bool isMatch = matchCriterion == null || matchCriterion(Example2);
+                if (isMatch)
                 {
                     yield return ("Example2", Example2);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Example2))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Example2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -517,12 +517,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
-                if (matchCriterion(_Example3))
+                bool isMatch = matchCriterion == null || matchCriterion(Example3);
+                if (isMatch)
                 {
                     yield return ("Example3", Example3);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Example3))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Example3.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

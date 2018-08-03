@@ -327,12 +327,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
             {
-                if (matchCriterion(_MyOfficialObject))
+                bool isMatch = matchCriterion == null || matchCriterion(MyOfficialObject);
+                if (isMatch)
                 {
                     yield return ("MyOfficialObject", MyOfficialObject);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(MyOfficialObject))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in MyOfficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -346,12 +346,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
             {
-                if (matchCriterion(_MyUnofficialObject))
+                bool isMatch = matchCriterion == null || matchCriterion(MyUnofficialObject);
+                if (isMatch)
                 {
                     yield return ("MyUnofficialObject", MyUnofficialObject);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(MyUnofficialObject))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in MyUnofficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

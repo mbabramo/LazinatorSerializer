@@ -273,12 +273,12 @@ namespace Lazinator.Collections.Dictionary
             }
             else if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
             {
-                if (matchCriterion(_Buckets))
+                bool isMatch = matchCriterion == null || matchCriterion(Buckets);
+                if (isMatch)
                 {
                     yield return ("Buckets", Buckets);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Buckets))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Buckets.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

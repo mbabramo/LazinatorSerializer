@@ -456,12 +456,12 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) || (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey))))
             {
-                if (matchCriterion(_Key))
+                bool isMatch = matchCriterion == null || matchCriterion(Key);
+                if (isMatch)
                 {
                     yield return ("Key", Key);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Key))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Key.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -475,12 +475,12 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && Left != null) || (_Left_Accessed && _Left != null))
             {
-                if (matchCriterion(_Left))
+                bool isMatch = matchCriterion == null || matchCriterion(Left);
+                if (isMatch)
                 {
                     yield return ("Left", Left);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Left))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Left.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -494,12 +494,12 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && Right != null) || (_Right_Accessed && _Right != null))
             {
-                if (matchCriterion(_Right))
+                bool isMatch = matchCriterion == null || matchCriterion(Right);
+                if (isMatch)
                 {
                     yield return ("Right", Right);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Right))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Right.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -513,12 +513,12 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue))))
             {
-                if (matchCriterion(_Value))
+                bool isMatch = matchCriterion == null || matchCriterion(Value);
+                if (isMatch)
                 {
                     yield return ("Value", Value);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Value))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Value.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

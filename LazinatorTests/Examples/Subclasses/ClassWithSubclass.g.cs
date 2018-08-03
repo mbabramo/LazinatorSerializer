@@ -313,12 +313,12 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
             {
-                if (matchCriterion(_SubclassInstance1))
+                bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance1);
+                if (isMatch)
                 {
                     yield return ("SubclassInstance1", SubclassInstance1);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(SubclassInstance1))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in SubclassInstance1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -332,12 +332,12 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
             {
-                if (matchCriterion(_SubclassInstance2))
+                bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance2);
+                if (isMatch)
                 {
                     yield return ("SubclassInstance2", SubclassInstance2);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(SubclassInstance2))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in SubclassInstance2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

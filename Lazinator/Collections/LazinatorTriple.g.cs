@@ -376,12 +376,12 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) || (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T))))
             {
-                if (matchCriterion(_Item1))
+                bool isMatch = matchCriterion == null || matchCriterion(Item1);
+                if (isMatch)
                 {
                     yield return ("Item1", Item1);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Item1))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Item1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -395,12 +395,12 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U))))
             {
-                if (matchCriterion(_Item2))
+                bool isMatch = matchCriterion == null || matchCriterion(Item2);
+                if (isMatch)
                 {
                     yield return ("Item2", Item2);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Item2))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Item2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -414,12 +414,12 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V))))
             {
-                if (matchCriterion(_Item3))
+                bool isMatch = matchCriterion == null || matchCriterion(Item3);
+                if (isMatch)
                 {
                     yield return ("Item3", Item3);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Item3))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Item3.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

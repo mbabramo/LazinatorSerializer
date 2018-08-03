@@ -411,12 +411,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
             {
-                if (matchCriterion(_IntWrapper))
+                bool isMatch = matchCriterion == null || matchCriterion(IntWrapper);
+                if (isMatch)
                 {
                     yield return ("IntWrapper", IntWrapper);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(IntWrapper))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in IntWrapper.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -430,12 +430,12 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
             {
-                if (matchCriterion(_MyExampleStruct))
+                bool isMatch = matchCriterion == null || matchCriterion(MyExampleStruct);
+                if (isMatch)
                 {
                     yield return ("MyExampleStruct", MyExampleStruct);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(MyExampleStruct))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

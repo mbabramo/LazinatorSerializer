@@ -282,12 +282,12 @@ namespace LazinatorTests.Examples.Structs
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(ExampleStructWithoutClass, default(ExampleStructWithoutClass))) || (_ExampleStructWithoutClass_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(_ExampleStructWithoutClass, default(ExampleStructWithoutClass))))
             {
-                if (matchCriterion(_ExampleStructWithoutClass))
+                bool isMatch = matchCriterion == null || matchCriterion(ExampleStructWithoutClass);
+                if (isMatch)
                 {
                     yield return ("ExampleStructWithoutClass", ExampleStructWithoutClass);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(ExampleStructWithoutClass))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in ExampleStructWithoutClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

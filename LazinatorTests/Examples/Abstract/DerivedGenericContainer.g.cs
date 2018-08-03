@@ -259,12 +259,12 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
             {
-                if (matchCriterion(_Item))
+                bool isMatch = matchCriterion == null || matchCriterion(Item);
+                if (isMatch)
                 {
                     yield return ("Item", Item);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Item))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Item.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

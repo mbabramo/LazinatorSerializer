@@ -322,12 +322,12 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
-                if (matchCriterion(_FourByteItems))
+                bool isMatch = matchCriterion == null || matchCriterion(FourByteItems);
+                if (isMatch)
                 {
                     yield return ("FourByteItems", FourByteItems);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(FourByteItems))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in FourByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -341,12 +341,12 @@ namespace Lazinator.Collections
             }
             else if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
             {
-                if (matchCriterion(_TwoByteItems))
+                bool isMatch = matchCriterion == null || matchCriterion(TwoByteItems);
+                if (isMatch)
                 {
                     yield return ("TwoByteItems", TwoByteItems);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(TwoByteItems))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in TwoByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

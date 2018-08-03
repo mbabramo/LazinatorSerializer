@@ -300,12 +300,12 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
             {
-                if (matchCriterion(_RecursiveClass))
+                bool isMatch = matchCriterion == null || matchCriterion(RecursiveClass);
+                if (isMatch)
                 {
                     yield return ("RecursiveClass", RecursiveClass);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(RecursiveClass))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in RecursiveClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
@@ -319,12 +319,12 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
             {
-                if (matchCriterion(_RecursiveInterface))
+                bool isMatch = matchCriterion == null || matchCriterion(RecursiveInterface);
+                if (isMatch)
                 {
                     yield return ("RecursiveInterface", RecursiveInterface);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(RecursiveInterface))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in RecursiveInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

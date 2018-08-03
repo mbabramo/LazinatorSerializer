@@ -279,12 +279,12 @@ namespace LazinatorTests.Examples.Structs
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
             {
-                if (matchCriterion(_WrappedInt))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
+                if (isMatch)
                 {
                     yield return ("WrappedInt", WrappedInt);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(WrappedInt))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {

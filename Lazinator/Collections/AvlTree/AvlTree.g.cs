@@ -257,12 +257,12 @@ namespace Lazinator.Collections.Avl
             }
             else if ((!exploreOnlyDeserializedChildren && Root != null) || (_Root_Accessed && _Root != null))
             {
-                if (matchCriterion(_Root))
+                bool isMatch = matchCriterion == null || matchCriterion(Root);
+                if (isMatch)
                 {
                     yield return ("Root", Root);
                 }
-                
-                if (!stopExploringBelowMatch || !matchCriterion(Root))
+                if (!stopExploringBelowMatch || !isMatch)
                 {
                     foreach (var toYield in Root.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
