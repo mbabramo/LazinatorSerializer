@@ -714,9 +714,10 @@ namespace Lazinator.CodeDescription
                                 }}
                                 else if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{
-                                    foreach (ILazinator toYield in {property.PropertyName}.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                    yield return (""{property.PropertyName}"", {property.PropertyName});
+                                    foreach (var toYield in {property.PropertyName}.EnumerateLazinatorDescedants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                     {{
-                                        yield return (""{property.PropertyName}"", toYield);
+                                        yield return (""{property.PropertyName}"" + toYield.propertyName, toYield.descendant);
                                     }}
                                 }}
     ");
