@@ -461,9 +461,13 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
             {
                 yield return ("ANonSkippableEarlierExample", ANonSkippableEarlierExample);
-                foreach (var toYield in ANonSkippableEarlierExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(ANonSkippableEarlierExample))
                 {
-                    yield return ("ANonSkippableEarlierExample" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in ANonSkippableEarlierExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("ANonSkippableEarlierExample" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example_Accessed) && (Example == null))
@@ -473,9 +477,13 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
                 yield return ("Example", Example);
-                foreach (var toYield in Example.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Example))
                 {
-                    yield return ("Example" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Example.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Example" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example2_Accessed) && (Example2 == null))
@@ -485,9 +493,13 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
                 yield return ("Example2", Example2);
-                foreach (var toYield in Example2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Example2))
                 {
-                    yield return ("Example2" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Example2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Example2" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example3_Accessed) && (Example3 == null))
@@ -497,9 +509,13 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
                 yield return ("Example3", Example3);
-                foreach (var toYield in Example3.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Example3))
                 {
-                    yield return ("Example3" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Example3.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Example3" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

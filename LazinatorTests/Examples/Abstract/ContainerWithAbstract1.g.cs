@@ -260,9 +260,13 @@ namespace LazinatorTests.Examples.Abstract
             else if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
             {
                 yield return ("AbstractProperty", AbstractProperty);
-                foreach (var toYield in AbstractProperty.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(AbstractProperty))
                 {
-                    yield return ("AbstractProperty" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in AbstractProperty.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("AbstractProperty" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

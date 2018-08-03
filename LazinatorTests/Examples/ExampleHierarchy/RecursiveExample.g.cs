@@ -301,9 +301,13 @@ namespace LazinatorTests.Examples.Hierarchy
             else if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
             {
                 yield return ("RecursiveClass", RecursiveClass);
-                foreach (var toYield in RecursiveClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(RecursiveClass))
                 {
-                    yield return ("RecursiveClass" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in RecursiveClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("RecursiveClass" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && (RecursiveInterface == null))
@@ -313,9 +317,13 @@ namespace LazinatorTests.Examples.Hierarchy
             else if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
             {
                 yield return ("RecursiveInterface", RecursiveInterface);
-                foreach (var toYield in RecursiveInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(RecursiveInterface))
                 {
-                    yield return ("RecursiveInterface" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in RecursiveInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("RecursiveInterface" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

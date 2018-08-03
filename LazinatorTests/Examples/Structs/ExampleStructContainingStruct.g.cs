@@ -307,9 +307,13 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
             {
                 yield return ("MyExampleStruct", MyExampleStruct);
-                foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(MyExampleStruct))
                 {
-                    yield return ("MyExampleStruct" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("MyExampleStruct" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

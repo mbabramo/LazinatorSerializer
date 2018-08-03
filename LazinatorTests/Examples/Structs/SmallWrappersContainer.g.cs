@@ -774,9 +774,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
                 yield return ("ListWrappedBytes", ListWrappedBytes);
-                foreach (var toYield in ListWrappedBytes.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(ListWrappedBytes))
                 {
-                    yield return ("ListWrappedBytes" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in ListWrappedBytes.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("ListWrappedBytes" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedBool_Accessed) && (System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))))
@@ -786,9 +790,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))) || (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool))))
             {
                 yield return ("WrappedBool", WrappedBool);
-                foreach (var toYield in WrappedBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedBool))
                 {
-                    yield return ("WrappedBool" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedBool" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedByte_Accessed) && (System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))))
@@ -798,9 +806,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))) || (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte))))
             {
                 yield return ("WrappedByte", WrappedByte);
-                foreach (var toYield in WrappedByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedByte))
                 {
-                    yield return ("WrappedByte" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedByte" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedChar_Accessed) && (System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))))
@@ -810,9 +822,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))) || (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar))))
             {
                 yield return ("WrappedChar", WrappedChar);
-                foreach (var toYield in WrappedChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedChar))
                 {
-                    yield return ("WrappedChar" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedChar" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableBool_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))))
@@ -822,9 +838,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))) || (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool))))
             {
                 yield return ("WrappedNullableBool", WrappedNullableBool);
-                foreach (var toYield in WrappedNullableBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedNullableBool))
                 {
-                    yield return ("WrappedNullableBool" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedNullableBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedNullableBool" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableByte_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))))
@@ -834,9 +854,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))) || (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte))))
             {
                 yield return ("WrappedNullableByte", WrappedNullableByte);
-                foreach (var toYield in WrappedNullableByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedNullableByte))
                 {
-                    yield return ("WrappedNullableByte" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedNullableByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedNullableByte" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableChar_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))))
@@ -846,9 +870,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))) || (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar))))
             {
                 yield return ("WrappedNullableChar", WrappedNullableChar);
-                foreach (var toYield in WrappedNullableChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedNullableChar))
                 {
-                    yield return ("WrappedNullableChar" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedNullableChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedNullableChar" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableSByte_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))))
@@ -858,9 +886,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))) || (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte))))
             {
                 yield return ("WrappedNullableSByte", WrappedNullableSByte);
-                foreach (var toYield in WrappedNullableSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedNullableSByte))
                 {
-                    yield return ("WrappedNullableSByte" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedNullableSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedNullableSByte" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedSByte_Accessed) && (System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))))
@@ -870,9 +902,13 @@ namespace LazinatorTests.Examples.Structs
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))) || (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte))))
             {
                 yield return ("WrappedSByte", WrappedSByte);
-                foreach (var toYield in WrappedSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(WrappedSByte))
                 {
-                    yield return ("WrappedSByte" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in WrappedSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("WrappedSByte" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

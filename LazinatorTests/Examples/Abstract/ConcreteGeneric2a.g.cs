@@ -324,9 +324,13 @@ namespace LazinatorTests.Examples.Abstract
             else if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
                 yield return ("LazinatorExample", LazinatorExample);
-                foreach (var toYield in LazinatorExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(LazinatorExample))
                 {
-                    yield return ("LazinatorExample" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in LazinatorExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("LazinatorExample" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

@@ -274,9 +274,13 @@ namespace Lazinator.Collections.Dictionary
             else if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
             {
                 yield return ("Buckets", Buckets);
-                foreach (var toYield in Buckets.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Buckets))
                 {
-                    yield return ("Buckets" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Buckets.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Buckets" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

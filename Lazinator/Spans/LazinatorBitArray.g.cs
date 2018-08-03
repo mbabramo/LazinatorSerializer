@@ -299,9 +299,13 @@ namespace Lazinator.Spans
             else if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
             {
                 yield return ("ByteSpan", ByteSpan);
-                foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(ByteSpan))
                 {
-                    yield return ("ByteSpan" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("ByteSpan" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

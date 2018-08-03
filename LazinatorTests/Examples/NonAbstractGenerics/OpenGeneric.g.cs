@@ -303,9 +303,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
             {
                 yield return ("MyT", MyT);
-                foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(MyT))
                 {
-                    yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

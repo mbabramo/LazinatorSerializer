@@ -708,19 +708,23 @@ namespace Lazinator.CodeDescription
                 {
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
-                        sb.Append($@"if (enumerateNulls && (!exploreOnlyDeserializedChildren || _{property.PropertyName}_Accessed) && ({property.GetNullCheck()}))
+                        string propertyName = property.PropertyName;
+                        sb.Append($@"if (enumerateNulls && (!exploreOnlyDeserializedChildren || _{propertyName}_Accessed) && ({property.GetNullCheck()}))
                                 {{
-                                    yield return (""{property.PropertyName}"", default);
+                                    yield return (""{propertyName}"", default);
                                 }}
                                 else if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{
-                                    yield return (""{property.PropertyName}"", {property.PropertyName});
-
-                                    if (!stopExploringBelowMatch || !matchCriterion({property.PropertyName}))
+                                    if (matchCriterion(_{propertyName}))
                                     {{
-                                        foreach (var toYield in {property.PropertyName}.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                        yield return (""{propertyName}"", {propertyName});
+                                    }}
+
+                                    if (!stopExploringBelowMatch || !matchCriterion({propertyName}))
+                                    {{
+                                        foreach (var toYield in {propertyName}.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{
-                                            yield return (""{property.PropertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
+                                            yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
                                     }}
                                 }}

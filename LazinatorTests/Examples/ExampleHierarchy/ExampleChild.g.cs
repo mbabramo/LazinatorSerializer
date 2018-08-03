@@ -306,9 +306,13 @@ namespace LazinatorTests.Examples
             else if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
             {
                 yield return ("MyWrapperContainer", MyWrapperContainer);
-                foreach (var toYield in MyWrapperContainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(MyWrapperContainer))
                 {
-                    yield return ("MyWrapperContainer" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in MyWrapperContainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("MyWrapperContainer" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

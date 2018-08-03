@@ -377,9 +377,13 @@ namespace Lazinator.Collections
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) || (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T))))
             {
                 yield return ("Item1", Item1);
-                foreach (var toYield in Item1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Item1))
                 {
-                    yield return ("Item1" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Item1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Item1" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item2_Accessed) && (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))))
@@ -389,9 +393,13 @@ namespace Lazinator.Collections
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U))))
             {
                 yield return ("Item2", Item2);
-                foreach (var toYield in Item2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Item2))
                 {
-                    yield return ("Item2" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Item2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Item2" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item3_Accessed) && (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))))
@@ -401,9 +409,13 @@ namespace Lazinator.Collections
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V))))
             {
                 yield return ("Item3", Item3);
-                foreach (var toYield in Item3.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(Item3))
                 {
-                    yield return ("Item3" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in Item3.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("Item3" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

@@ -350,9 +350,13 @@ namespace LazinatorTests.Examples.Abstract
             else if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 yield return ("MyT", MyT);
-                foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(MyT))
                 {
-                    yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _LazinatorExample_Accessed) && (LazinatorExample == null))
@@ -362,9 +366,13 @@ namespace LazinatorTests.Examples.Abstract
             else if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
                 yield return ("LazinatorExample", LazinatorExample);
-                foreach (var toYield in LazinatorExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(LazinatorExample))
                 {
-                    yield return ("LazinatorExample" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in LazinatorExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("LazinatorExample" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;

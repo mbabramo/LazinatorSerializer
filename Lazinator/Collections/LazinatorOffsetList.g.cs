@@ -323,9 +323,13 @@ namespace Lazinator.Collections
             else if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
                 yield return ("FourByteItems", FourByteItems);
-                foreach (var toYield in FourByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(FourByteItems))
                 {
-                    yield return ("FourByteItems" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in FourByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("FourByteItems" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && (TwoByteItems == null))
@@ -335,9 +339,13 @@ namespace Lazinator.Collections
             else if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
             {
                 yield return ("TwoByteItems", TwoByteItems);
-                foreach (var toYield in TwoByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                
+                if (!stopExploringBelowMatch || !matchCriterion(TwoByteItems))
                 {
-                    yield return ("TwoByteItems" + "." + toYield.propertyName, toYield.descendant);
+                    foreach (var toYield in TwoByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return ("TwoByteItems" + "." + toYield.propertyName, toYield.descendant);
+                    }
                 }
             }
             yield break;
