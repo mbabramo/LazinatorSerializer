@@ -320,9 +320,10 @@ namespace Lazinator.Collections.Dictionary
             }
             else if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
             {
-                foreach (ILazinator toYield in Keys.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("Keys", Keys);
+                foreach (var toYield in Keys.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("Keys", toYield);
+                    yield return ("Keys" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Values_Accessed) && (Values == null))
@@ -331,9 +332,10 @@ namespace Lazinator.Collections.Dictionary
             }
             else if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
             {
-                foreach (ILazinator toYield in Values.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("Values", Values);
+                foreach (var toYield in Values.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("Values", toYield);
+                    yield return ("Values" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

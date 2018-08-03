@@ -292,9 +292,10 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
             {
-                foreach (ILazinator toYield in ExampleByInterface.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("ExampleByInterface", ExampleByInterface);
+                foreach (var toYield in ExampleByInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("ExampleByInterface", toYield);
+                    yield return ("ExampleByInterface" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

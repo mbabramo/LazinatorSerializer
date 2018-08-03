@@ -291,9 +291,10 @@ namespace Lazinator.Wrappers
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T))))
             {
-                foreach (ILazinator toYield in NonNullValue.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("NonNullValue", NonNullValue);
+                foreach (var toYield in NonNullValue.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("NonNullValue", toYield);
+                    yield return ("NonNullValue" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

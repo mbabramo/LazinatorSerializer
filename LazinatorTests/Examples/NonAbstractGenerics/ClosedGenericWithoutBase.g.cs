@@ -272,9 +272,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && ItemU != null) || (_ItemU_Accessed && _ItemU != null))
             {
-                foreach (ILazinator toYield in ItemU.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("ItemU", ItemU);
+                foreach (var toYield in ItemU.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("ItemU", toYield);
+                    yield return ("ItemU" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

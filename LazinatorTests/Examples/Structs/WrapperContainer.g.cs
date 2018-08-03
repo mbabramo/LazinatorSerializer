@@ -279,9 +279,10 @@ namespace LazinatorTests.Examples.Structs
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
             {
-                foreach (ILazinator toYield in WrappedInt.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("WrappedInt", WrappedInt);
+                foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedInt", toYield);
+                    yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

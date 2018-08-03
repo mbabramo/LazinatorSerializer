@@ -411,9 +411,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
             {
-                foreach (ILazinator toYield in IntWrapper.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("IntWrapper", IntWrapper);
+                foreach (var toYield in IntWrapper.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("IntWrapper", toYield);
+                    yield return ("IntWrapper" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStruct_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))))
@@ -422,9 +423,10 @@ namespace LazinatorTests.Examples
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
             {
-                foreach (ILazinator toYield in MyExampleStruct.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("MyExampleStruct", MyExampleStruct);
+                foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("MyExampleStruct", toYield);
+                    yield return ("MyExampleStruct" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

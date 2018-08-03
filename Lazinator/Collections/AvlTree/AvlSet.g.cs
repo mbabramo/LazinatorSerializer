@@ -274,9 +274,10 @@ namespace Lazinator.Collections.AvlTree
             }
             else if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
-                foreach (ILazinator toYield in UnderlyingTree.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("UnderlyingTree", UnderlyingTree);
+                foreach (var toYield in UnderlyingTree.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("UnderlyingTree", toYield);
+                    yield return ("UnderlyingTree" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

@@ -114,9 +114,10 @@ namespace LazinatorTests.Examples.Abstract
             }
             else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
             {
-                foreach (ILazinator toYield in MyT.EnumerateLazinatorNodes(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                yield return ("MyT", MyT);
+                foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("MyT", toYield);
+                    yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;
