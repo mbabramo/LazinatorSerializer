@@ -108,6 +108,7 @@ namespace LazinatorTests.Tests
         }
 
 
+
         [Fact]
         public void DirtinessWorksAfterEnsureUpToDate()
         {
@@ -150,6 +151,12 @@ namespace LazinatorTests.Tests
             clone.DescendantHasChanged.Should().BeFalse();
             clone.MyChild1.MyWrapperContainer.DescendantHasChanged.Should().BeFalse();
             clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeFalse();
+
+            var clone2 = hierarchy.CloneLazinatorTyped();
+            clone2.MyChild1.MyWrapperContainer.WrappedInt = 25;
+            clone2.MyChild1.MyWrapperContainer.EnsureLazinatorMemoryUpToDate();
+            var clone3 = clone2.CloneLazinatorTyped();
+            clone3.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(25);
 
         }
 

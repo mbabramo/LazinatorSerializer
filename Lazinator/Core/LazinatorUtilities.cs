@@ -152,13 +152,14 @@ namespace Lazinator.Core
             {
                 childStorage = getChildSliceFn();
                 if (childStorage.Memory.Length == 0)
-                    childCouldHaveChanged = true; // child is an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
+                    childCouldHaveChanged = true; // child might be an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
             }
             else
             {
-                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren) 
                 {
-                    // this may not be the same as the getChildSliceFn(), because the buffer may have been updated if the same object appears more than once in the object hierarchy 
+                    // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to EnsureLazinatorMemoryUpToDate.
                     childStorage = child.LazinatorMemoryStorage;
                     if (childStorage.Memory.Length != 0)
                         childCouldHaveChanged = false;
