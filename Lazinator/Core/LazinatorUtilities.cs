@@ -698,6 +698,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static IMemoryOwner<byte> GetRentedMemory(int minimumSize)
         {
+            return new SimpleMemoryOwner<byte>(new byte[minimumSize * 2]); // DEBUG
             return LazinatorMemoryPool.Rent(minimumSize);
         }
 
