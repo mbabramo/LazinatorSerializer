@@ -390,16 +390,9 @@ namespace Lazinator.Wrappers
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {
-                    //DEBUGif (LazinatorParents.Any())
-                    {
-                        _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
-                    }
-                    _LazinatorMemoryStorage = newBuffer;
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
-                else
-                {
-                    _LazinatorMemoryStorage = newBuffer;
-                }
+                _LazinatorMemoryStorage = newBuffer;
             }
         }
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

@@ -912,21 +912,13 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{");
             sb.AppendLine(postEncodingDirtinessReset);
-            // DEBUG
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {{
-                    //DEBUGif (LazinatorParents.Any())
-                    {{
-                        _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
-                    }}
-                    _LazinatorMemoryStorage = newBuffer;
+                     _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }}
-                else
-                {{
-                    _LazinatorMemoryStorage = newBuffer;
-                }}");
+                _LazinatorMemoryStorage = newBuffer;");
             sb.Append($@"}}
 ");
             sb.Append($@"}}

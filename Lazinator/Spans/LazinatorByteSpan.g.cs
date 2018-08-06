@@ -338,16 +338,9 @@ namespace Lazinator.Spans
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {
-                    //DEBUGif (LazinatorParents.Any())
-                    {
-                        _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
-                    }
-                    _LazinatorMemoryStorage = newBuffer;
+                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                 }
-                else
-                {
-                    _LazinatorMemoryStorage = newBuffer;
-                }
+                _LazinatorMemoryStorage = newBuffer;
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
