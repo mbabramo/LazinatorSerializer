@@ -45,7 +45,8 @@ namespace Lazinator.Buffers
             CurrentBuffer.Memory.Span.CopyTo(newBuffer.Memory.Span);
             var oldBuffer = CurrentBuffer;
             CurrentBuffer = newBuffer;
-            oldBuffer.Dispose();
+            debug; // so, the problem is that we can't dispose of the old buffer, because it's possible that the old buffer is actually being used somewhere. it would be nice to know at this point whether the old buffer in fact has been saved. But I don't think we can. So, we need to save the old buffer and arrange to dispose it with the new buffer.
+            // DEBUG oldBuffer.Dispose();
         }
 
         public void Dispose()
