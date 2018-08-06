@@ -5,27 +5,19 @@ using System.Text;
 
 namespace Lazinator.Buffers
 {
-    public class LazinatorMemory : IMemoryOwner<byte>
+    public class LazinatorMemory : JointlyDisposableMemory
     {
         public IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
         public int Length { get; private set; }
-        public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
+        public override Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
-        private LazinatorMemory _OriginalSource;
-        public LazinatorMemory OriginalSource
-        {
-            get => _OriginalSource ?? this;
-            set { _OriginalSource = value; }
-        }
-
-        private HashSet<LazinatorMemory> DisposeTogether = null;
 
         #region Constructors
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, LazinatorMemory originalSource)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, JointlyDisposableMemory originalSource)
         {
             OwnedMemory = ownedMemory;
             StartPosition = startPosition;
@@ -61,6 +53,12 @@ namespace Lazinator.Buffers
             OriginalSource = existingMemoryToCopy.OriginalSource;
         }
 
+        public override void Dispose()
+        {
+            base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
+            OwnedMemory.Dispose();
+        }
+
         #endregion
 
         #region Conversions and slicing
@@ -80,44 +78,5 @@ namespace Lazinator.Buffers
 
         #endregion
 
-        #region Memory management
-
-        /// <summary>
-        /// Remembers an additional buffer that should be disposed when this is disposed. 
-        /// </summary>
-        /// <param name="additionalBuffer">The buffer to dispose with this buffer.</param>
-        public void DisposeWhenOriginalSourceDisposed(LazinatorMemory additionalBuffer)
-        {
-            if (OriginalSource != this)
-                OriginalSource.DisposeWhenOriginalSourceDisposed(additionalBuffer);
-            else
-            {
-                if (DisposeTogether == null)
-                    DisposeTogether = new HashSet<LazinatorMemory>();
-                DisposeTogether.Add(additionalBuffer);
-            }
-        }
-
-        private void FreeMemory()
-        {
-            OwnedMemory.Dispose();
-            if (DisposeTogether != null)
-                foreach (LazinatorMemory m in DisposeTogether)
-                    m.Dispose();
-        }
-
-        /// <summary>
-        /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
-        /// without calling this, but it will be less efficient.
-        /// </summary>
-        public void Dispose()
-        {
-            if (OriginalSource != this)
-                OriginalSource.FreeMemory();
-            else
-                FreeMemory();
-        }
-
-        #endregion
     }
 }
