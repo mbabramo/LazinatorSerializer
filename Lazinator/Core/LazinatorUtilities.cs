@@ -698,7 +698,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static IMemoryOwner<byte> GetRentedMemory(int minimumSize)
         {
-            return new SimpleMemoryOwner<byte>(new byte[minimumSize * 2]); // DEBUG
+            // The following code could alternatively be used if array pooling is not needed: return new SimpleMemoryOwner<byte>(new byte[minimumSize * 2]);
             return LazinatorMemoryPool.Rent(minimumSize);
         }
 

@@ -138,11 +138,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {
-                    if (LazinatorParents.Any())
+                    //DEBUGif (LazinatorParents.Any())
                     {
                         _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
                     }
-                    _LazinatorMemoryStorage.CopyFrom(newBuffer);
+                    _LazinatorMemoryStorage = newBuffer;
                 }
                 else
                 {
