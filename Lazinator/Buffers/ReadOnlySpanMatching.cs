@@ -11,10 +11,8 @@ namespace Lazinator.Buffers
         {
             if (other.Length != one.Length)
                 return false;
-            for (int i = 0; i < one.Length; i++)
-                if (one[i] != other[i])
-                    return false;
-            return true;
+
+            return System.MemoryExtensions.SequenceEqual<byte>(one, other);
         }
 
         public static int FindFirstNonMatch(this ReadOnlySpan<byte> one, ReadOnlySpan<byte> other)
