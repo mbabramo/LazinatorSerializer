@@ -25,6 +25,8 @@ namespace Lazinator.Buffers
         {
             CurrentBuffer = LazinatorUtilities.GetRentedMemory(Math.Max(minBufferSize, MinMinBufferSize));
             OriginalSource = originalSource;
+            if (OriginalSource != null)
+                OriginalSource.DisposeWithThis(this);
         }
 
         public ExpandableBytes(IMemoryOwner<byte> initialBuffer)

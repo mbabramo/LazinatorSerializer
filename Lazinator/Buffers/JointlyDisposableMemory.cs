@@ -29,7 +29,8 @@ namespace Lazinator.Buffers
                 else
                     _OriginalSource = value;
                 while (_OriginalSource?.OriginalSource != null)
-                    _OriginalSource = _OriginalSource.OriginalSource; 
+                    _OriginalSource = _OriginalSource.OriginalSource;
+                System.Diagnostics.Debug.WriteLine($"JointlyDisposableMemory {DEBUG_ID} original source {_OriginalSource?.DEBUG_ID}");
             }
         }
 
@@ -46,6 +47,8 @@ namespace Lazinator.Buffers
         /// <param name="additionalBuffer">The buffer to dispose with this buffer.</param>
         public void DisposeWithThis(IMemoryOwner<byte> additionalBuffer)
         {
+            if (additionalBuffer is LazinatorMemory lazinatorMemory && lazinatorMemory.OwnedMemory != null)
+                additionalBuffer = lazinatorMemory.OwnedMemory;
             if (OriginalSource != null)
                 OriginalSource.DisposeWithThis(additionalBuffer);
             else
@@ -53,6 +56,7 @@ namespace Lazinator.Buffers
                 if (DisposeTogether == null)
                     DisposeTogether = new HashSet<IMemoryOwner<byte>>();
                 DisposeTogether.Add(additionalBuffer);
+                System.Diagnostics.Debug.WriteLine($"Dispose with {DEBUG_ID}: {String.Join(", ", DisposeTogether.Where(x => x is JointlyDisposableMemory).Select(x => ((JointlyDisposableMemory)x).DEBUG_ID))}");
             }
         }
 
@@ -76,18 +80,23 @@ namespace Lazinator.Buffers
         /// This is useful when cloning a Lazinator object, if the clone should survive the disposal of the object
         /// from which it is cloned.
         /// </summary>
-        public void DisposeIndependently()
+        public virtual void DisposeIndependently()
         {
             if (OriginalSource != null)
             {
-                OriginalSource.DoNotDisposeWithThis(this);
+                IMemoryOwner<byte> buffer;
+                if (this is LazinatorMemory lazinatorMemory)
+                    buffer = lazinatorMemory.OwnedMemory ?? this;
+                else
+                    buffer = this;
+                OriginalSource.DoNotDisposeWithThis(buffer);
             }
         }
 
         /// <summary>
-        /// Indicate whether this class has triggered disposal at the original source. In that case, we avoid an infinite loop by not doing so again.
+        /// Indicate whether disposing has been initiating to avoid infinite loops.
         /// </summary>
-        bool _disposingOriginalSource = false;
+        bool _disposingInitiated = false;
 
         /// <summary>
         /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
@@ -96,17 +105,16 @@ namespace Lazinator.Buffers
         public virtual void Dispose()
         {
             System.Diagnostics.Debug.WriteLine($"DEBUG Disposing {DEBUG_ID}");
-            if (!_disposingOriginalSource)
+            if (!_disposingInitiated)
             {
+                _disposingInitiated = true;
                 if (OriginalSource != null)
                 {
-                    _disposingOriginalSource = true;
                     OriginalSource.Dispose();
                 }
                 if (DisposeTogether != null)
                     foreach (JointlyDisposableMemory m in DisposeTogether)
                         m.Dispose();
-                _disposingOriginalSource = false;
             }
         }
 

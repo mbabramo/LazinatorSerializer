@@ -53,12 +53,12 @@ namespace Lazinator.Core
         /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
         /// <param name="encodeManuallyFn">The function that completes the conversion to bytes, without considering using the original storage for the item as a whole.</param>
         /// <returns></returns>
-        public static LazinatorMemory EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, ReadOnlyMemory<byte> originalStorage, EncodeManuallyDelegate encodeManuallyFn, bool updateStoredBuffer)
+        public static LazinatorMemory EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, EncodeManuallyDelegate encodeManuallyFn, bool updateStoredBuffer)
         {
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
             // unless the original storage is definitely clean.
-            if (originalStorage.Length == 0 ||
+            if (originalStorage == null || originalStorage.Length == 0 ||
                 includeChildrenMode != originalIncludeChildrenMode ||
                         (!isDefinitelyClean
                             &&
@@ -71,7 +71,7 @@ namespace Lazinator.Core
                 return encodeManuallyFn(includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length, null); // DEBUG DEBUG -- must fix to use the original storage as the original source, but then we need this to be LazinatorMemory instead of ReadOnlyMemory<byte> (and we should pass null if the underlying memory is empty memory).
+            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage?.Length ?? 0, originalStorage); 
             writer.Write(originalStorage.Span);
             return writer.LazinatorMemory;
         }
