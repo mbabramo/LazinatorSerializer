@@ -8,16 +8,6 @@ namespace Lazinator.Buffers
 {
     public abstract class JointlyDisposableMemory : IMemoryOwner<byte>
     {
-
-        static int DEBUG_Count = 0;
-        public int DEBUG_ID;
-
-        public JointlyDisposableMemory()
-        {
-            DEBUG_ID = DEBUG_Count;
-            System.Diagnostics.Debug.WriteLine($"JointlyDisposableMemory {DEBUG_Count++}");
-        }
-
         private JointlyDisposableMemory _OriginalSource;
         public JointlyDisposableMemory OriginalSource
         {
@@ -30,7 +20,6 @@ namespace Lazinator.Buffers
                     _OriginalSource = value;
                 while (_OriginalSource?.OriginalSource != null)
                     _OriginalSource = _OriginalSource.OriginalSource;
-                System.Diagnostics.Debug.WriteLine($"JointlyDisposableMemory {DEBUG_ID} original source {_OriginalSource?.DEBUG_ID}");
             }
         }
 
@@ -56,7 +45,6 @@ namespace Lazinator.Buffers
                 if (DisposeTogether == null)
                     DisposeTogether = new HashSet<IMemoryOwner<byte>>();
                 DisposeTogether.Add(additionalBuffer);
-                System.Diagnostics.Debug.WriteLine($"Dispose with {DEBUG_ID}: {String.Join(", ", DisposeTogether.Where(x => x is JointlyDisposableMemory).Select(x => ((JointlyDisposableMemory)x).DEBUG_ID))}");
             }
         }
 
@@ -104,7 +92,6 @@ namespace Lazinator.Buffers
         /// </summary>
         public virtual void Dispose()
         {
-            System.Diagnostics.Debug.WriteLine($"DEBUG Disposing {DEBUG_ID}");
             if (!_disposingInitiated)
             {
                 _disposingInitiated = true;

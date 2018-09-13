@@ -313,8 +313,6 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BuffersDisposedJointly_WhenChildDisposed()
         {
-            // DEBUG disposing the child does not cause a disposal of the parent
-            // ideally, it probably should
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             e.MyChild1.MyLong = -342356;
@@ -346,7 +344,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void BuffersDisposedJointly_CloneCanBeIndependentOfOriginal()
+        public void BuffersDisposedJointly_CloneCanBeMadeIndependentOfOriginal()
         {
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer

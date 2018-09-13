@@ -23,7 +23,6 @@ namespace Lazinator.Buffers
             StartPosition = startPosition;
             Length = bytesFilled;
             OriginalSource = originalSource;
-            System.Diagnostics.Debug.WriteLine($"LazinatorMemory {DEBUG_ID} original {originalSource?.DEBUG_ID}");
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
