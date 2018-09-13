@@ -277,7 +277,7 @@ namespace Lazinator.Collections
 
         public virtual void RemoveAt(int index)
         {
-            CreateUnderlyingListIfNecessary();
+            FullyDeserializeIfNecessary();
             ((IList<T>)UnderlyingList).RemoveAt(index);
             if (!FullyDeserialized)
                 ItemsAccessedBeforeFullyDeserialized.RemoveAt(index);

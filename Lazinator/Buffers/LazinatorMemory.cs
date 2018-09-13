@@ -17,15 +17,16 @@ namespace Lazinator.Buffers
 
         #region Constructors
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, JointlyDisposableMemory originalSource)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, JointlyDisposableMemory originalSource) : base()
         {
             OwnedMemory = ownedMemory;
             StartPosition = startPosition;
             Length = bytesFilled;
             OriginalSource = originalSource;
+            System.Diagnostics.Debug.WriteLine($"LazinatorMemory {DEBUG_ID} original {originalSource.DEBUG_ID}");
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
         {
             OwnedMemory = ownedMemory;
             Length = bytesFilled;

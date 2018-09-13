@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lazinator.Buffers
 {
     public abstract class JointlyDisposableMemory : IMemoryOwner<byte>
     {
+
+        static int DEBUG_Count = 0;
+        public int DEBUG_ID;
+
+        public JointlyDisposableMemory()
+        {
+            DEBUG_ID = DEBUG_Count;
+            System.Diagnostics.Debug.WriteLine($"JointlyDisposableMemory {DEBUG_Count++}");
+        }
 
         private JointlyDisposableMemory _OriginalSource;
         public JointlyDisposableMemory OriginalSource
@@ -39,16 +49,29 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
+        /// Indicate whether this class has triggered disposal at the original source. In that case, we avoid an infinite loop by not doing so again.
+        /// </summary>
+        bool _disposingOriginalSource = false;
+
+        /// <summary>
         /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
         /// without calling this, but it will be less efficient.
         /// </summary>
         public virtual void Dispose()
         {
-            if (OriginalSource != this)
-                OriginalSource.Dispose();
-            if (DisposeTogether != null)
-                foreach (JointlyDisposableMemory m in DisposeTogether)
-                    m.Dispose();
+            System.Diagnostics.Debug.WriteLine($"DEBUG Disposing {DEBUG_ID}");
+            if (!_disposingOriginalSource)
+            {
+                if (OriginalSource != this)
+                {
+                    _disposingOriginalSource = true;
+                    OriginalSource.Dispose();
+                }
+                if (DisposeTogether != null)
+                    foreach (JointlyDisposableMemory m in DisposeTogether)
+                        m.Dispose();
+                _disposingOriginalSource = false;
+            }
         }
 
         #endregion

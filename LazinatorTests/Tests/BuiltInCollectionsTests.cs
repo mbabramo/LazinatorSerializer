@@ -226,11 +226,14 @@ namespace LazinatorTests.Tests
             NoContainer
         }
 
-        [InlineData(ContainerForLazinatorList.GenericContainer)]
-        [InlineData(ContainerForLazinatorList.NonGenericContainer)]
-        [InlineData(ContainerForLazinatorList.NoContainer)]
+        [InlineData(ContainerForLazinatorList.GenericContainer, true)]
+        [InlineData(ContainerForLazinatorList.NonGenericContainer, true)]
+        [InlineData(ContainerForLazinatorList.NoContainer, true)]
+        [InlineData(ContainerForLazinatorList.GenericContainer, false)]
+        [InlineData(ContainerForLazinatorList.NonGenericContainer, false)]
+        [InlineData(ContainerForLazinatorList.NoContainer, false)]
         [Theory]
-        public void LazinatorListWorks(ContainerForLazinatorList containerOption)
+        public void LazinatorListWorks(ContainerForLazinatorList containerOption, bool cloneAfterEachStep)
         {
             LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
             {
@@ -327,9 +330,8 @@ namespace LazinatorTests.Tests
                 foreach (var zip in zipped)
                     ExampleChildEqual(zip.a, zip.b).Should().BeTrue();
             }
-            void CheckBeforeAndAfterSerialization()
+            void CloneList()
             {
-                CheckList();
 
                 switch (containerOption)
                 {
@@ -343,8 +345,14 @@ namespace LazinatorTests.Tests
                         genericContainer = genericContainer.CloneLazinatorTyped();
                         break;
                 }
-
+            }
+            void CheckBeforeAndAfterSerialization()
+            {
                 CheckList();
+                CloneList();
+                CheckList();
+                if (cloneAfterEachStep)
+                    CloneList();
             }
 
             CheckBeforeAndAfterSerialization();

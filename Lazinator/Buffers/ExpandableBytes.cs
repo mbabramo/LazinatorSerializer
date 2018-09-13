@@ -17,13 +17,14 @@ namespace Lazinator.Buffers
 
         public override Memory<byte> Memory => CurrentBuffer.Memory;
         
-        public ExpandableBytes() : this(MinMinBufferSize)
+        public ExpandableBytes() : this(MinMinBufferSize, null)
         {
         }
 
-        public ExpandableBytes(int minBufferSize)
+        public ExpandableBytes(int minBufferSize, JointlyDisposableMemory originalSource)
         {
             CurrentBuffer = LazinatorUtilities.GetRentedMemory(Math.Max(minBufferSize, MinMinBufferSize));
+            OriginalSource = originalSource;
         }
 
         public ExpandableBytes(IMemoryOwner<byte> initialBuffer)

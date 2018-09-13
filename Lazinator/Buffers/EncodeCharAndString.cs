@@ -98,7 +98,7 @@ namespace Lazinator.Buffers
             if (length == -1)
                 return null;
             ReadOnlySpan<byte> source = b.Slice(index, length);
-            BinaryBufferWriter decompressionBuffer = new BinaryBufferWriter(4096); // rent a buffer
+            BinaryBufferWriter decompressionBuffer = new BinaryBufferWriter(4096, null); // rent a buffer
             bool success = false;
             const int maxTries = 1000;
             int tryNum = 0;

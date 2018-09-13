@@ -15,9 +15,9 @@ namespace Lazinator.Buffers
         ExpandableBytes UnderlyingMemory { get; set; }
         Span<byte> BufferSpan => UnderlyingMemory == null ? new Span<byte>() : UnderlyingMemory.Memory.Span;
 
-        public BinaryBufferWriter(int minimumSize)
+        public BinaryBufferWriter(int minimumSize, JointlyDisposableMemory originalSource)
         {
-            UnderlyingMemory = new ExpandableBytes(minimumSize);
+            UnderlyingMemory = new ExpandableBytes(minimumSize, originalSource);
             _Position = 0;
         }
 
@@ -42,7 +42,7 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
-                return new LazinatorMemory(UnderlyingMemory, 0, Position, null);
+                return new LazinatorMemory(UnderlyingMemory, 0, Position, UnderlyingMemory);
             }
         }
 

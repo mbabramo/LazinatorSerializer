@@ -310,5 +310,25 @@ namespace LazinatorTests.Tests
             a.Should().Throw<ObjectDisposedException>();
         }
 
+        [Fact]
+        public void BuffersDisposedJointly_WhenChildDisposed()
+        {
+            // DEBUG disposing the child does not cause a disposal of the parent
+            // ideally, it probably should
+            Example e = GetTypicalExample(); // no memory backing yet
+            e = e.CloneLazinatorTyped(); // now there is a memory buffer
+            e.MyChild1.MyLong = -342356;
+            e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
+            e.MyChild1.LazinatorMemoryStorage.Dispose();
+            Action a = () =>
+            {
+                var m = e.LazinatorMemoryStorage.Memory;
+                m.Span[0] = 1;
+            };
+            a.Should().Throw<ObjectDisposedException>();
+        }
+
     }
 }
