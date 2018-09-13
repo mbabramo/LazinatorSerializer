@@ -44,9 +44,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public async Task CanParseSupportedCollections()
         {
-            LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(DotNetList_SelfSerialized));
+            LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(DotNetList_Lazinator));
 
-            string interfaceName = "IDotNetList_SelfSerialized";
+            string interfaceName = "IDotNetList_Lazinator";
             var interfaceSymbol = lazinatorFiles.LookupSymbol(interfaceName);
             var properties = lazinatorFiles.PropertiesForType[interfaceSymbol];
             var property = properties.First().Property;
@@ -124,8 +124,8 @@ namespace LazinatorTests.Tests
             List<(string project, string mainFolder, string subfolder, string filename)> fileinfos = new List<(string project, string mainFolder, string subfolder, string filename)>()
             {
                 ("Lazinator", "/Attributes/", "", "LazinatorAttribute"),
-                ("LazinatorTests", "/Examples/", "Collections/", "DotNetList_SelfSerialized"),
-                ("LazinatorTests", "/Examples/", "Collections/", "IDotNetList_SelfSerialized"),
+                ("LazinatorTests", "/Examples/", "Collections/", "DotNetList_Lazinator"),
+                ("LazinatorTests", "/Examples/", "Collections/", "IDotNetList_Lazinator"),
                 ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "Example"),
                 ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "IExample"),
                 ("LazinatorTests", "/Examples/", "ExampleHierarchy/", "ExampleChild"),

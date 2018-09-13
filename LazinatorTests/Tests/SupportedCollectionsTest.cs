@@ -223,9 +223,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinator_Null()
         {
-            DotNetList_SelfSerialized GetObject()
+            DotNetList_Lazinator GetObject()
             {
-                return new DotNetList_SelfSerialized()
+                return new DotNetList_Lazinator()
                 {
                     MyListSerialized = null,
                 };
@@ -241,9 +241,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinator_Empty()
         {
-            DotNetList_SelfSerialized GetObject()
+            DotNetList_Lazinator GetObject()
             {
-                return new DotNetList_SelfSerialized()
+                return new DotNetList_Lazinator()
                 {
                     MyListSerialized = new List<ExampleChild>()
                 };
@@ -379,11 +379,11 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorDotNetQueueSelfSerialized()
+        public void LazinatorDotNetQueueLazinator()
         {
-            DotNetQueue_SelfSerialized GetObject()
+            DotNetQueue_Lazinator GetObject()
             {
-                return new DotNetQueue_SelfSerialized()
+                return new DotNetQueue_Lazinator()
                 {
                     MyQueueSerialized = new Queue<ExampleChild>(new[] { new ExampleChild() { MyLong = 3 }, new ExampleChild() { MyLong = 4 }, new ExampleChild() { MyLong = 5 } })
                 };
@@ -397,11 +397,11 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorDotNetQueueSelfSerializedEmpty()
+        public void LazinatorDotNetQueueLazinatorEmpty()
         {
-            DotNetQueue_SelfSerialized GetObject()
+            DotNetQueue_Lazinator GetObject()
             {
-                return new DotNetQueue_SelfSerialized()
+                return new DotNetQueue_Lazinator()
                 {
                     MyQueueSerialized = new Queue<ExampleChild>()
                 };
@@ -597,9 +597,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetHashSetOfSerializedItems()
         {
-            DotNetHashSet_SelfSerialized GetObject(int thirdItemIndex)
+            DotNetHashSet_Lazinator GetObject(int thirdItemIndex)
             {
-                return new DotNetHashSet_SelfSerialized()
+                return new DotNetHashSet_Lazinator()
                 {
                     MyHashSetSerialized = new HashSet<ExampleChild>()
                     {
@@ -631,9 +631,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListOfSerializedItems()
         {
-            DotNetList_SelfSerialized GetObject(int thirdItemIndex)
+            DotNetList_Lazinator GetObject(int thirdItemIndex)
             {
-                return new DotNetList_SelfSerialized()
+                return new DotNetList_Lazinator()
                 {
                     MyListSerialized = new List<ExampleChild>()
                     {
@@ -677,9 +677,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetDictionaryOfSerializedItems()
         {
-            Dictionary_Values_SelfSerialized GetObject()
+            Dictionary_Values_Lazinator GetObject()
             {
-                return new Dictionary_Values_SelfSerialized()
+                return new Dictionary_Values_Lazinator()
                 {
                     MyDictionary = new Dictionary<int, ExampleChild>()
                     {
@@ -710,9 +710,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetSortedDictionaryOfSerializedItems()
         {
-            Dictionary_Values_SelfSerialized GetObject()
+            Dictionary_Values_Lazinator GetObject()
             {
-                return new Dictionary_Values_SelfSerialized()
+                return new Dictionary_Values_Lazinator()
                 {
                     MySortedDictionary = new SortedDictionary<int, ExampleChild>()
                     {
@@ -744,9 +744,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetSortedListOfSerializedItems()
         {
-            Dictionary_Values_SelfSerialized GetObject()
+            Dictionary_Values_Lazinator GetObject()
             {
-                return new Dictionary_Values_SelfSerialized()
+                return new Dictionary_Values_Lazinator()
                 {
                     MySortedList = new SortedList<int, ExampleChild>()
                     {

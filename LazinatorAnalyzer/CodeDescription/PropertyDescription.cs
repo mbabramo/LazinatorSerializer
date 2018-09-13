@@ -1234,9 +1234,9 @@ namespace Lazinator.CodeDescription
             {
                 // Finally, the main code for writing a serialized or non serialized object.
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                    AppendPropertyWriteString_SelfSerialized(sb);
+                    AppendPropertyWriteString_Lazinator(sb);
                 else
-                    AppendPropertyWriteString_NonSelfSerialized(sb);
+                    AppendPropertyWriteString_NonLazinator(sb);
             }
             if (SkipCondition != null)
                 sb.AppendLine($@"}}");
@@ -1248,7 +1248,7 @@ namespace Lazinator.CodeDescription
                                 }}");
         }
 
-        private void AppendPropertyWriteString_NonSelfSerialized(CodeStringBuilder sb)
+        private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
@@ -1288,7 +1288,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private void AppendPropertyWriteString_SelfSerialized(CodeStringBuilder sb)
+        private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {

@@ -163,7 +163,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessWorksAfterDotNetCollectionConverted()
         {
-            DotNetHashSet_SelfSerialized l = new DotNetHashSet_SelfSerialized();
+            DotNetHashSet_Lazinator l = new DotNetHashSet_Lazinator();
             l.MyHashSetSerialized = new HashSet<ExampleChild>();
             l.MyHashSetSerialized.Add(new ExampleChild());
             l.EnsureLazinatorMemoryUpToDate();
