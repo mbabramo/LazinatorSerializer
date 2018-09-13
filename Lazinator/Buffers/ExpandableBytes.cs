@@ -46,7 +46,7 @@ namespace Lazinator.Buffers
             CurrentBuffer.Memory.Span.CopyTo(newBuffer.Memory.Span);
             var oldBuffer = CurrentBuffer;
             CurrentBuffer = newBuffer;
-            DisposeWhenOriginalSourceDisposed(oldBuffer); // keep the old buffer around for now, because we might already have saved memory from it, but when this is disposed, we'll dispose the old buffer as well
+            DisposeWithThis(oldBuffer); // keep the old buffer around for now, because we might already have saved memory from it, but when this is disposed, we'll dispose the old buffer as well
         }
 
         public override void Dispose()

@@ -21,8 +21,16 @@ namespace Lazinator.Buffers
         private JointlyDisposableMemory _OriginalSource;
         public JointlyDisposableMemory OriginalSource
         {
-            get => _OriginalSource ?? this;
-            set { _OriginalSource = value; }
+            get => _OriginalSource;
+            set
+            {
+                if (value == this)
+                    _OriginalSource = null;
+                else
+                    _OriginalSource = value;
+                while (_OriginalSource?.OriginalSource != null)
+                    _OriginalSource = _OriginalSource.OriginalSource; 
+            }
         }
 
         private HashSet<IMemoryOwner<byte>> DisposeTogether = null;
@@ -36,15 +44,43 @@ namespace Lazinator.Buffers
         /// Remembers an additional buffer that should be disposed when this is disposed. 
         /// </summary>
         /// <param name="additionalBuffer">The buffer to dispose with this buffer.</param>
-        public void DisposeWhenOriginalSourceDisposed(IMemoryOwner<byte> additionalBuffer)
+        public void DisposeWithThis(IMemoryOwner<byte> additionalBuffer)
         {
-            if (OriginalSource != this)
-                OriginalSource.DisposeWhenOriginalSourceDisposed(additionalBuffer);
+            if (OriginalSource != null)
+                OriginalSource.DisposeWithThis(additionalBuffer);
             else
             {
                 if (DisposeTogether == null)
                     DisposeTogether = new HashSet<IMemoryOwner<byte>>();
                 DisposeTogether.Add(additionalBuffer);
+            }
+        }
+
+        /// <summary>
+        /// Specifies that when this is disposed, the buffer should not be disposed with it. 
+        /// </summary>
+        /// <param name="buffer"></param>
+        public void DoNotDisposeWithThis(IMemoryOwner<byte> buffer)
+        {
+            if (OriginalSource != null)
+                OriginalSource.DisposeWithThis(buffer);
+            else
+            {
+                if (DisposeTogether != null)
+                    DisposeTogether.Remove(buffer);
+            }
+        }
+
+        /// <summary>
+        /// Indicates that memory disposal for this object should be handled independently from any object from which it was created.
+        /// This is useful when cloning a Lazinator object, if the clone should survive the disposal of the object
+        /// from which it is cloned.
+        /// </summary>
+        public void DisposeIndependently()
+        {
+            if (OriginalSource != null)
+            {
+                OriginalSource.DoNotDisposeWithThis(this);
             }
         }
 
@@ -62,7 +98,7 @@ namespace Lazinator.Buffers
             System.Diagnostics.Debug.WriteLine($"DEBUG Disposing {DEBUG_ID}");
             if (!_disposingOriginalSource)
             {
-                if (OriginalSource != this)
+                if (OriginalSource != null)
                 {
                     _disposingOriginalSource = true;
                     OriginalSource.Dispose();

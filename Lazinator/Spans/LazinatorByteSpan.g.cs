@@ -338,7 +338,7 @@ namespace Lazinator.Spans
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {
-                    _LazinatorMemoryStorage.DisposeWhenOriginalSourceDisposed(newBuffer);
+                    _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }

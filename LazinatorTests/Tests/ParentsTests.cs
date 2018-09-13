@@ -330,5 +330,51 @@ namespace LazinatorTests.Tests
             a.Should().Throw<ObjectDisposedException>();
         }
 
+        [Fact]
+        public void BuffersDisposedJointly_DisposingOriginalDisposesClone()
+        {
+            Example e = GetTypicalExample(); // no memory backing yet
+            e = e.CloneLazinatorTyped(); // now there is a memory buffer
+            var e2 = e.CloneLazinatorTyped();
+            e.LazinatorMemoryStorage.Dispose();
+            Action a = () =>
+            {
+                var m = e2.LazinatorMemoryStorage.Memory;
+                m.Span[0] = 1;
+            };
+            a.Should().Throw<ObjectDisposedException>();
+        }
+
+        [Fact]
+        public void BuffersDisposedJointly_CloneCanBeIndependentOfOriginal()
+        {
+            Example e = GetTypicalExample(); // no memory backing yet
+            e = e.CloneLazinatorTyped(); // now there is a memory buffer
+            var e2 = e.CloneLazinatorTyped();
+            e2.LazinatorMemoryStorage.DisposeIndependently();
+            e.LazinatorMemoryStorage.Dispose();
+            Action a = () =>
+            {
+                var m = e2.LazinatorMemoryStorage.Memory;
+                m.Span[0] = 1;
+            };
+            a.Should().NotThrow<ObjectDisposedException>();
+        }
+
+        [Fact]
+        public void BuffersDisposedJointly_DisposingCloneDisposesOriginal()
+        {
+            Example e = GetTypicalExample(); // no memory backing yet
+            e = e.CloneLazinatorTyped(); // now there is a memory buffer
+            var e2 = e.CloneLazinatorTyped();
+            e2.LazinatorMemoryStorage.Dispose();
+            Action a = () =>
+            {
+                var m = e.LazinatorMemoryStorage.Memory;
+                m.Span[0] = 1;
+            };
+            a.Should().Throw<ObjectDisposedException>();
+        }
+
     }
 }
