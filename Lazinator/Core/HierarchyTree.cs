@@ -1,5 +1,6 @@
 ﻿using Lazinator.Support;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,7 +53,18 @@ namespace Lazinator.Core
                     sb.Append(" ");
                 sb.Append(property.propertyName);
                 sb.Append(": ");
-                sb.AppendLine(property.propertyValue == null ? "NULL" : property.propertyValue.ToString());
+                if (property.propertyValue == null)
+                    sb.AppendLine("NULL");
+                else
+                {
+                    if (property.propertyValue is IEnumerable enumerable && !(property.propertyValue is string))
+                    {
+                        var enumerated = enumerable.OfType<object>();
+                        sb.AppendLine(String.Join(", ", enumerated));
+                    }
+                    else
+                        sb.AppendLine(property.propertyValue.ToString());
+                }
             }
             foreach (var child in Children)
                 child.subtree.BuildString(sb, child.childName, stringProducer, tabs + 1);
