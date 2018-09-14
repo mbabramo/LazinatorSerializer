@@ -956,7 +956,7 @@ namespace LazinatorTests.Examples.Structs
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _ListWrappedBytes = default;
             _WrappedBool = default;

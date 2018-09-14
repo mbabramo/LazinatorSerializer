@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyListSerialized = default;
             _MyListSerialized_Accessed = false;

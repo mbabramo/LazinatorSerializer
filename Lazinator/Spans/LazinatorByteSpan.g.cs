@@ -279,7 +279,7 @@ namespace Lazinator.Spans
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _ReadOnly = default;
             _ReadOrWrite = default;

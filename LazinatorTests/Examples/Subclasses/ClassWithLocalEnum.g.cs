@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Subclasses
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyEnumList = default;
             _MyEnumList_Accessed = false;

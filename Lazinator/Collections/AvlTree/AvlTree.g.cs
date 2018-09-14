@@ -280,7 +280,7 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _Root = default;
             _Root_Accessed = false;

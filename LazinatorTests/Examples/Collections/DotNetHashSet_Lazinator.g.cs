@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyHashSetSerialized = default;
             _MyHashSetSerialized_Accessed = false;

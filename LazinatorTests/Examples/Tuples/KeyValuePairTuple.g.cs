@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyKeyValuePairSerialized = default;
             _MyKeyValuePairSerialized_Accessed = false;

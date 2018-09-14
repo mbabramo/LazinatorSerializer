@@ -50,6 +50,10 @@ namespace Lazinator.Core
         /// Internally serializes the Lazinator, if it has changed, and resets dirtiness properties (but not HasChanged). This does not need to be called manually before serialization.
         /// </summary>
         void EnsureLazinatorMemoryUpToDate();
+        /// <summary>
+        /// Removes any native .Net objects, including those previously deserialized. Subsequent access to properties will thus be satisfied through the Lazinator memory storage. Typically, this is preceded by a call to EnsureLazinatorMemoryUpToDate; otherwise, this has the effect of reverting to the last point at which the memory was up to date (e.g., initial deserialization or when a hash was obtained).
+        /// </summary>
+        // DEBUG void FreeInMemoryObjects();
 
         /// <summary>
         /// Enumerates nodes in the hierarchy, including the node at the top of the hierarchy, based on specified parameters.

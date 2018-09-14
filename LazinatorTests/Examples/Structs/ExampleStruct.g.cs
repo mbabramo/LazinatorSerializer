@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _MyChild1 = default;
             _MyChild2 = default;

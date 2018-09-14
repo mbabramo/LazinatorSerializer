@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Structs
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _ExampleStructWithoutClass = default;
             _ExampleStructWithoutClass_Accessed = false;

@@ -319,7 +319,7 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyMismatchedRecordLikeType = default;
             _MyRecordLikeClass = default;

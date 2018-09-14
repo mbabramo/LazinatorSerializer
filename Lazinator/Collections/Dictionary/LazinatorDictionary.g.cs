@@ -297,7 +297,7 @@ namespace Lazinator.Collections.Dictionary
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _Buckets = default;
             _Buckets_Accessed = false;

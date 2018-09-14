@@ -894,7 +894,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _IncludableChild = default;
             _MyChild1 = default;

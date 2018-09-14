@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyListNonLazinatorType = default;
             _MyListNonLazinatorType2 = default;

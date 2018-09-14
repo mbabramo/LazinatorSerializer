@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.NonLazinator
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             
             IsDirty = false;

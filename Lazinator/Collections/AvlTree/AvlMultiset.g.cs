@@ -298,7 +298,7 @@ namespace Lazinator.Collections.AvlTree
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _UnderlyingSet = default;
             _UnderlyingSet_Accessed = false;

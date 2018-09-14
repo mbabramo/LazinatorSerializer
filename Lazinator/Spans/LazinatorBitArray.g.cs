@@ -323,7 +323,7 @@ namespace Lazinator.Spans
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _ByteSpan = default;
             _ByteSpan_Accessed = false;

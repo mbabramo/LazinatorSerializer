@@ -303,14 +303,12 @@ namespace Lazinator.Collections
             }
         }
         
-        
-        
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MainListSerialized = default;
             _Offsets = default;

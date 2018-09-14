@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Structs
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _Subcontainer = default;
             _Subcontainer_Accessed = false;

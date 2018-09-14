@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyNestedTuple = default;
             _MyNestedTuple_Accessed = false;

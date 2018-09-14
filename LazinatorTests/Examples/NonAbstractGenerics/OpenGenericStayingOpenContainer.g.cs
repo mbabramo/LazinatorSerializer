@@ -529,7 +529,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _ClosedGenericBase = default;
             _ClosedGenericFloat = default;

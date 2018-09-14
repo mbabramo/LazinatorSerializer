@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyListT = default;
             _MyListT_Accessed = false;

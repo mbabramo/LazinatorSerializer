@@ -350,7 +350,7 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyTupleSerialized = default;
             _MyTupleSerialized2 = default;

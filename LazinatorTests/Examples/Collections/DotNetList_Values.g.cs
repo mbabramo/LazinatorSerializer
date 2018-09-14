@@ -403,7 +403,7 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyLinkedListInt = default;
             _MyListInt = default;

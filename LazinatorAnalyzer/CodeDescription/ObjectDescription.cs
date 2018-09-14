@@ -646,7 +646,7 @@ namespace Lazinator.CodeDescription
                 resetAccessed += $@"false;";
 
             sb.AppendLine($@"
-                {ProtectedIfApplicable}{DerivationKeyword}void FreeInMemoryObjects()
+                public {DerivationKeyword}void FreeInMemoryObjects()
                 {{
                     {IIF(IsDerivedFromNonAbstractLazinator, $@"base.FreeInMemoryObjects();
                     ")}{resetStorage}{resetAccessed}

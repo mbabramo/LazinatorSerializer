@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _MyExampleStruct = default;
             _MyExampleStruct_Accessed = false;

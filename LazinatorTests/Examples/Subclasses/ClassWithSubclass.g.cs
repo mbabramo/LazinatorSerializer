@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Subclasses
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _SubclassInstance1 = default;
             _SubclassInstance2 = default;

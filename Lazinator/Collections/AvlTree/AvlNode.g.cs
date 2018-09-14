@@ -541,7 +541,7 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _Left = default;
             _Right = default;

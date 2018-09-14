@@ -364,7 +364,7 @@ namespace Lazinator.Collections.Dictionary
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _Keys = default;
             _Values = default;

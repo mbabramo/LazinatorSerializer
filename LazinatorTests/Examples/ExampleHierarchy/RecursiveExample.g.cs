@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.Hierarchy
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _RecursiveClass = default;
             _RecursiveInterface = default;

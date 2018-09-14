@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Structs
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _WrappedInt = default;
             _WrappedInt_Accessed = false;

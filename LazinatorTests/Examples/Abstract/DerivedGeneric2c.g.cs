@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        protected override void FreeInMemoryObjects()
+        public override void FreeInMemoryObjects()
         {
             
             IsDirty = false;

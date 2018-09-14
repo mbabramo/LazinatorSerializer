@@ -282,7 +282,7 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _Item = default;
             _Item_Accessed = false;

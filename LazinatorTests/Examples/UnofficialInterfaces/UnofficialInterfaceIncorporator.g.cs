@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyOfficialObject = default;
             _MyUnofficialObject = default;

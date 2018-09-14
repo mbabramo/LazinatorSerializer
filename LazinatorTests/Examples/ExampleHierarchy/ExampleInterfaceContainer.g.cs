@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples.Hierarchy
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _ExampleByInterface = default;
             _ExampleListByInterface = default;

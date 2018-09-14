@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _MyStackInt = default;
             _MyStackInt_Accessed = false;

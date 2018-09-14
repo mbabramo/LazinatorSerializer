@@ -55,7 +55,7 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        protected override void FreeInMemoryObjects()
+        public override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();
             

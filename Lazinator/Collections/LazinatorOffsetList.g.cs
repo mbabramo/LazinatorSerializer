@@ -365,7 +365,7 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _FourByteItems = default;
             _TwoByteItems = default;

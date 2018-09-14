@@ -289,7 +289,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             
             IsDirty = false;

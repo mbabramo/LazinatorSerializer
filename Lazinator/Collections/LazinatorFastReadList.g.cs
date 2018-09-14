@@ -245,7 +245,7 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _ReadOnlyBytes = default;
             _ReadOnlyBytes_Accessed = false;

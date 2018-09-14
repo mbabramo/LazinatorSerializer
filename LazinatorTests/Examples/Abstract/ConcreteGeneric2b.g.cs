@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        protected override void FreeInMemoryObjects()
+        public override void FreeInMemoryObjects()
         {
             _MyT = default;
             _LazinatorExample = default;

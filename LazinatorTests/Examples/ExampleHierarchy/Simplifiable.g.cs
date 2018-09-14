@@ -549,7 +549,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        protected virtual void FreeInMemoryObjects()
+        public virtual void FreeInMemoryObjects()
         {
             _ANonSkippableEarlierExample = default;
             _Example = default;

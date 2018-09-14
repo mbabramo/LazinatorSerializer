@@ -248,7 +248,7 @@ namespace Lazinator.Wrappers
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             
             IsDirty = false;

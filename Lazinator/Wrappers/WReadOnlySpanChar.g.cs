@@ -268,7 +268,7 @@ namespace Lazinator.Wrappers
             yield break;
         }
         
-        void FreeInMemoryObjects()
+        public void FreeInMemoryObjects()
         {
             _Value = default;
             _Value_Accessed = false;
