@@ -298,6 +298,7 @@ namespace LazinatorTests.Examples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ItemU = default;
             _ItemU_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -270,6 +270,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyQueueInt = default;
             _MyQueueInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

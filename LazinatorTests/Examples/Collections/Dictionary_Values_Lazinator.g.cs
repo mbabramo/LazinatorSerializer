@@ -319,6 +319,9 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyDictionary = default;
+            _MySortedDictionary = default;
+            _MySortedList = default;
             _MyDictionary_Accessed = _MySortedDictionary_Accessed = _MySortedList_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

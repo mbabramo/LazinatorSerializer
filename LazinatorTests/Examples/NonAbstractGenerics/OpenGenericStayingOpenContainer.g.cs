@@ -531,6 +531,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ClosedGenericBase = default;
+            _ClosedGenericFloat = default;
+            _ClosedGenericFromBaseWithBase = default;
+            _ClosedGenericInterface = default;
+            _ClosedGenericNonexclusiveInterface = default;
             _ClosedGenericBase_Accessed = _ClosedGenericFloat_Accessed = _ClosedGenericFromBaseWithBase_Accessed = _ClosedGenericInterface_Accessed = _ClosedGenericNonexclusiveInterface_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

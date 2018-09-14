@@ -105,6 +105,7 @@ namespace LazinatorTests.Examples.Abstract
         protected override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();
+            _IntList6 = default;
             _IntList6_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

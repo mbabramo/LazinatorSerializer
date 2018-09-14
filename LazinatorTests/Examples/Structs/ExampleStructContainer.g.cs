@@ -458,6 +458,10 @@ namespace LazinatorTests.Examples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _IntWrapper = default;
+            _MyExampleStruct = default;
+            _MyListExampleStruct = default;
+            _MyListNullableExampleStruct = default;
             _IntWrapper_Accessed = _MyExampleStruct_Accessed = _MyListExampleStruct_Accessed = _MyListNullableExampleStruct_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

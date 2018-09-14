@@ -958,6 +958,15 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ListWrappedBytes = default;
+            _WrappedBool = default;
+            _WrappedByte = default;
+            _WrappedChar = default;
+            _WrappedNullableBool = default;
+            _WrappedNullableByte = default;
+            _WrappedNullableChar = default;
+            _WrappedNullableSByte = default;
+            _WrappedSByte = default;
             _ListWrappedBytes_Accessed = _WrappedBool_Accessed = _WrappedByte_Accessed = _WrappedChar_Accessed = _WrappedNullableBool_Accessed = _WrappedNullableByte_Accessed = _WrappedNullableChar_Accessed = _WrappedNullableSByte_Accessed = _WrappedSByte_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -367,6 +367,8 @@ namespace Lazinator.Collections
         
         void FreeInMemoryObjects()
         {
+            _FourByteItems = default;
+            _TwoByteItems = default;
             _FourByteItems_Accessed = _TwoByteItems_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

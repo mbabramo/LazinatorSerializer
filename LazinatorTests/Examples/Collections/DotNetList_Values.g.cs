@@ -405,6 +405,10 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyLinkedListInt = default;
+            _MyListInt = default;
+            _MyListInt2 = default;
+            _MySortedSetInt = default;
             _MyLinkedListInt_Accessed = _MyListInt_Accessed = _MyListInt2_Accessed = _MySortedSetInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

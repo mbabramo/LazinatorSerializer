@@ -253,6 +253,7 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyNestedTuple = default;
             _MyNestedTuple_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -345,6 +345,8 @@ namespace LazinatorTests.Examples.Hierarchy
         
         protected virtual void FreeInMemoryObjects()
         {
+            _RecursiveClass = default;
+            _RecursiveInterface = default;
             _RecursiveClass_Accessed = _RecursiveInterface_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

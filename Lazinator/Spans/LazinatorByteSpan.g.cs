@@ -281,6 +281,8 @@ namespace Lazinator.Spans
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ReadOnly = default;
+            _ReadOrWrite = default;
             _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

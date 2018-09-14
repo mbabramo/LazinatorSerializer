@@ -123,6 +123,7 @@ namespace LazinatorTests.Examples.Collections
         protected override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();
+            _MyArrayInt_DerivedLevel = default;
             _MyArrayInt_DerivedLevel_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -352,6 +352,10 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _EnumTuple = default;
+            _MyNamedTuple = default;
+            _MyNullableTuple = default;
+            _MyValueTupleSerialized = default;
             _EnumTuple_Accessed = _MyNamedTuple_Accessed = _MyNullableTuple_Accessed = _MyValueTupleSerialized_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

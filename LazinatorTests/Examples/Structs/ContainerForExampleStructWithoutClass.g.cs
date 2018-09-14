@@ -307,6 +307,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ExampleStructWithoutClass = default;
             _ExampleStructWithoutClass_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

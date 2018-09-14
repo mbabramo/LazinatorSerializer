@@ -280,6 +280,7 @@ namespace LazinatorTests.Examples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _Example = default;
             _Example_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

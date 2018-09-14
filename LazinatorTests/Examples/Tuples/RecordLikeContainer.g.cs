@@ -321,6 +321,9 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyMismatchedRecordLikeType = default;
+            _MyRecordLikeClass = default;
+            _MyRecordLikeType = default;
             _MyMismatchedRecordLikeType_Accessed = _MyRecordLikeClass_Accessed = _MyRecordLikeType_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

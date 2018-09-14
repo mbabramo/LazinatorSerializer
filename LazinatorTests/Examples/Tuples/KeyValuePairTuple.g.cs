@@ -253,6 +253,7 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyKeyValuePairSerialized = default;
             _MyKeyValuePairSerialized_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

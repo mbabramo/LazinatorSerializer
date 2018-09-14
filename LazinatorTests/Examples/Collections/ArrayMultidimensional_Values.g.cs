@@ -336,6 +336,9 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyArrayInt = default;
+            _MyCrazyJaggedArray = default;
+            _MyThreeDimArrayInt = default;
             _MyArrayInt_Accessed = _MyCrazyJaggedArray_Accessed = _MyThreeDimArrayInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

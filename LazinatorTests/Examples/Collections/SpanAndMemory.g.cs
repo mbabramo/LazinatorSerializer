@@ -574,6 +574,18 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyMemoryByte = default;
+            _MyMemoryInt = default;
+            _MyNullableMemoryByte = default;
+            _MyNullableMemoryInt = default;
+            _MyNullableReadOnlyMemoryInt = default;
+            _MyReadOnlyMemoryByte = default;
+            _MyReadOnlyMemoryChar = default;
+            _MyReadOnlyMemoryInt = default;
+            _MyReadOnlySpanByte = default;
+            _MyReadOnlySpanChar = default;
+            _MyReadOnlySpanDateTime = default;
+            _MyReadOnlySpanLong = default;
             _MyMemoryByte_Accessed = _MyMemoryInt_Accessed = _MyNullableMemoryByte_Accessed = _MyNullableMemoryInt_Accessed = _MyNullableReadOnlyMemoryInt_Accessed = _MyReadOnlyMemoryByte_Accessed = _MyReadOnlyMemoryChar_Accessed = _MyReadOnlyMemoryInt_Accessed = _MyReadOnlySpanByte_Accessed = _MyReadOnlySpanChar_Accessed = _MyReadOnlySpanDateTime_Accessed = _MyReadOnlySpanLong_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

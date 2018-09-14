@@ -284,6 +284,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyBase = default;
             _MyBase_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

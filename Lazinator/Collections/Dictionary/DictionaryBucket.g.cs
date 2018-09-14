@@ -366,6 +366,8 @@ namespace Lazinator.Collections.Dictionary
         
         protected virtual void FreeInMemoryObjects()
         {
+            _Keys = default;
+            _Values = default;
             _Keys_Accessed = _Values_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

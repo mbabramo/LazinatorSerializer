@@ -318,6 +318,8 @@ namespace LazinatorTests.Examples.Hierarchy
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ExampleByInterface = default;
+            _ExampleListByInterface = default;
             _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

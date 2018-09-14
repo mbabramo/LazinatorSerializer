@@ -300,6 +300,7 @@ namespace Lazinator.Collections.AvlTree
         
         protected virtual void FreeInMemoryObjects()
         {
+            _UnderlyingTree = default;
             _UnderlyingTree_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

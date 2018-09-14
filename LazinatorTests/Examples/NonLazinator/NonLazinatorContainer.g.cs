@@ -349,6 +349,9 @@ namespace LazinatorTests.Examples
         
         void FreeInMemoryObjects()
         {
+            _NonLazinatorClass = default;
+            _NonLazinatorInterchangeableClass = default;
+            _NonLazinatorStruct = default;
             _NonLazinatorClass_Accessed = _NonLazinatorInterchangeableClass_Accessed = _NonLazinatorStruct_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

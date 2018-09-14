@@ -120,6 +120,7 @@ namespace LazinatorTests.Examples.Collections
         protected override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();
+            _MyLevel2ListNestedNonLazinatorType = default;
             _MyLevel2ListNestedNonLazinatorType_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

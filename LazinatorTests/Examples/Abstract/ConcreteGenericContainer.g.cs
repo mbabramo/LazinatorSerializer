@@ -280,6 +280,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void FreeInMemoryObjects()
         {
+            _Item = default;
             _Item_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

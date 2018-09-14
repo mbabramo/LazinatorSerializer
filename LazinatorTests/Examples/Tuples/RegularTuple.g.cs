@@ -352,6 +352,10 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyTupleSerialized = default;
+            _MyTupleSerialized2 = default;
+            _MyTupleSerialized3 = default;
+            _MyTupleSerialized4 = default;
             _MyTupleSerialized_Accessed = _MyTupleSerialized2_Accessed = _MyTupleSerialized3_Accessed = _MyTupleSerialized4_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

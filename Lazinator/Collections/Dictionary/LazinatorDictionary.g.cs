@@ -299,6 +299,7 @@ namespace Lazinator.Collections.Dictionary
         
         protected virtual void FreeInMemoryObjects()
         {
+            _Buckets = default;
             _Buckets_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

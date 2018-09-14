@@ -504,6 +504,11 @@ namespace LazinatorTests.Examples
         
         void FreeInMemoryObjects()
         {
+            _MyChild1 = default;
+            _MyChild2 = default;
+            _MyLazinatorList = default;
+            _MyListValues = default;
+            _MyTuple = default;
             _MyChild1_Accessed = _MyChild2_Accessed = _MyLazinatorList_Accessed = _MyListValues_Accessed = _MyTuple_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -359,6 +359,8 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void FreeInMemoryObjects()
         {
+            _SubclassInstance1 = default;
+            _SubclassInstance2 = default;
             _SubclassInstance1_Accessed = _SubclassInstance2_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

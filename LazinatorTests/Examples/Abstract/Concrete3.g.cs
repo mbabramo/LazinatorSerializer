@@ -473,6 +473,11 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void FreeInMemoryObjects()
         {
+            _Example2 = default;
+            _Example3 = default;
+            _IntList1 = default;
+            _IntList2 = default;
+            _IntList3 = default;
             _Example2_Accessed = _Example3_Accessed = _IntList1_Accessed = _IntList2_Accessed = _IntList3_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

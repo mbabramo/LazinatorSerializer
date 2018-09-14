@@ -312,6 +312,8 @@ namespace Lazinator.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MainListSerialized = default;
+            _Offsets = default;
             _MainListSerialized_Accessed = _Offsets_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

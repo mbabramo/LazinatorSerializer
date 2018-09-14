@@ -308,6 +308,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void FreeInMemoryObjects()
         {
+            _Subcontainer = default;
             _Subcontainer_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

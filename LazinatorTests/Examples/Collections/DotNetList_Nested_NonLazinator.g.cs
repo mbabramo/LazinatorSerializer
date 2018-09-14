@@ -253,6 +253,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyListNestedNonLazinatorType = default;
             _MyListNestedNonLazinatorType_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -333,6 +333,8 @@ namespace LazinatorTests.Examples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ByteSpan = default;
+            _MyWrapperContainer = default;
             _ByteSpan_Accessed = _MyWrapperContainer_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

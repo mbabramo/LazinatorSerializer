@@ -551,6 +551,10 @@ namespace LazinatorTests.Examples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _ANonSkippableEarlierExample = default;
+            _Example = default;
+            _Example2 = default;
+            _Example3 = default;
             _ANonSkippableEarlierExample_Accessed = _Example_Accessed = _Example2_Accessed = _Example3_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -341,6 +341,9 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyListInt = default;
+            _MyListNullableByte = default;
+            _MyListNullableInt = default;
             _MyListInt_Accessed = _MyListNullableByte_Accessed = _MyListNullableInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

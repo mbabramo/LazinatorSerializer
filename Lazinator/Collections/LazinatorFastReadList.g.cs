@@ -247,6 +247,7 @@ namespace Lazinator.Collections
         
         void FreeInMemoryObjects()
         {
+            _ReadOnlyBytes = default;
             _ReadOnlyBytes_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

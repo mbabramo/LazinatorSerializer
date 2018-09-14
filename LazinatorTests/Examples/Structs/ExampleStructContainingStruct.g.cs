@@ -331,6 +331,7 @@ namespace LazinatorTests.Examples
         
         void FreeInMemoryObjects()
         {
+            _MyExampleStruct = default;
             _MyExampleStruct_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

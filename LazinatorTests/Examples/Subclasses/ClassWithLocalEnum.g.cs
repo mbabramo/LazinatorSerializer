@@ -270,6 +270,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyEnumList = default;
             _MyEnumList_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

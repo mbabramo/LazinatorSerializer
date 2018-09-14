@@ -325,6 +325,7 @@ namespace Lazinator.Spans
         
         void FreeInMemoryObjects()
         {
+            _ByteSpan = default;
             _ByteSpan_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

@@ -271,6 +271,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyListSerialized = default;
             _MyListSerialized_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

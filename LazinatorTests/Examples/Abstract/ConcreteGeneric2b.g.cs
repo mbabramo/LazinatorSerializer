@@ -398,6 +398,8 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void FreeInMemoryObjects()
         {
+            _MyT = default;
+            _LazinatorExample = default;
             _MyT_Accessed = _LazinatorExample_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

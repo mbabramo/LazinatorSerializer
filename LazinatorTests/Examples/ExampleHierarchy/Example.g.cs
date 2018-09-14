@@ -896,6 +896,14 @@ namespace LazinatorTests.Examples
         
         protected virtual void FreeInMemoryObjects()
         {
+            _IncludableChild = default;
+            _MyChild1 = default;
+            _MyChild2 = default;
+            _MyChild2Previous = default;
+            _MyInterfaceImplementer = default;
+            _MyNonLazinatorChild = default;
+            _WrappedInt = default;
+            _ExcludableChild = default;
             _IncludableChild_Accessed = _MyChild1_Accessed = _MyChild2_Accessed = _MyChild2Previous_Accessed = _MyInterfaceImplementer_Accessed = _MyNonLazinatorChild_Accessed = _WrappedInt_Accessed = _ExcludableChild_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

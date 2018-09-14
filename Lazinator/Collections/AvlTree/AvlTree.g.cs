@@ -282,6 +282,7 @@ namespace Lazinator.Collections.Avl
         
         protected virtual void FreeInMemoryObjects()
         {
+            _Root = default;
             _Root_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

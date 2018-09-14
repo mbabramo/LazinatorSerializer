@@ -253,6 +253,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyHashSetSerialized = default;
             _MyHashSetSerialized_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

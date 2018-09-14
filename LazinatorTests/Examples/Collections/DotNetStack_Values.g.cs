@@ -270,6 +270,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void FreeInMemoryObjects()
         {
+            _MyStackInt = default;
             _MyStackInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

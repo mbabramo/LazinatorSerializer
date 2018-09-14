@@ -304,6 +304,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void FreeInMemoryObjects()
         {
+            _WrappedInt = default;
             _WrappedInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
