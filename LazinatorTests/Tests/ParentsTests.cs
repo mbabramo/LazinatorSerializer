@@ -344,7 +344,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void BuffersDisposedJointly_CloneCanBeMadeIndependentOfOriginal()
+        public void BuffersDisposedJointly_DisposeCloneIndependently()
         {
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer

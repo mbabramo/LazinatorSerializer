@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
+        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false, bool disposeCloneIndependently = false)
         {
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
             var clone = new DerivedArray_Values()
@@ -42,6 +42,10 @@ namespace LazinatorTests.Examples.Collections
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
             clone.DeserializeLazinator(bytes);
+            if (disposeCloneIndependently)
+            {
+                clone.LazinatorMemoryStorage.DisposeIndependently();
+            }
             clone.LazinatorParents = default;
             return clone;
         }

@@ -284,7 +284,7 @@ namespace Lazinator.CodeDescription
                         
                         protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         
-                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false);
+                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false, bool disposeCloneIndependently = false);
                         
                         public abstract bool HasChanged
                         {{
@@ -418,7 +418,7 @@ namespace Lazinator.CodeDescription
 
                         {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
-                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false)
+                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false, bool disposeCloneIndependently = false)
                         {{
                             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                             var clone = new {NameIncludingGenerics}()
@@ -426,6 +426,10 @@ namespace Lazinator.CodeDescription
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
                             clone.DeserializeLazinator(bytes);
+                            if (disposeCloneIndependently)
+                            {{
+                                clone.LazinatorMemoryStorage.DisposeIndependently();
+                            }}
                             return clone;
                         }}
 
@@ -552,7 +556,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.Append($@"        /* Clone overrides */
 
-                        {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false)
+                        {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false, bool disposeCloneIndependently = false)
                         {{
                             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
                             var clone = new {NameIncludingGenerics}()
@@ -561,6 +565,10 @@ namespace Lazinator.CodeDescription
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
                             clone.DeserializeLazinator(bytes);
+                            if (disposeCloneIndependently)
+                            {{
+                                clone.LazinatorMemoryStorage.DisposeIndependently();
+                            }}
                             clone.LazinatorParents = default;
                             return clone;
                         }}

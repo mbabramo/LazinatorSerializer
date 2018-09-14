@@ -663,11 +663,11 @@ namespace Lazinator.Core
         /// <param name="lazinator">The lazinator object</param>
         /// <param name="disposeIndependently">If true, the memory use for the clone will be managed entirely separately from the memory used for the original.</param>
         /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneLazinatorTyped<T>(this T lazinator, bool disposeIndependently = false) where T : ILazinator
+        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, bool updateStoredBuffer = false, bool disposeIndependently = false) where T : ILazinator
         {
             if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
                 return default(T);
-            T clone = (T)lazinator.CloneLazinator();
+            T clone = (T)lazinator.CloneLazinator(includeChildrenMode, updateStoredBuffer);
             if (disposeIndependently)
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             return clone;
