@@ -34,16 +34,16 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, bool updateStoredBuffer = false, bool disposeCloneIndependently = false)
+        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
         {
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, updateStoredBuffer);
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
             var clone = new Derived_DotNetList_Nested_NonLazinator()
             {
                 LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
             clone.DeserializeLazinator(bytes);
-            if (disposeCloneIndependently)
+            if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
             {
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             }
