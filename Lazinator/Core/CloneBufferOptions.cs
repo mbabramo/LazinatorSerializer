@@ -7,7 +7,6 @@ namespace Lazinator.Core
     /// <summary>
     /// Options to determine the relationship between the buffers of the original object and the cloned object
     /// </summary>
-    debug; // must implement -- also change names of CloneLazinator and CloneLazinatorTyped
     public enum CloneBufferOptions
     {
         /// <summary>
