@@ -12,7 +12,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants" })]
+    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects" })]
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T>, ILazinatorList where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;
@@ -354,6 +354,14 @@ namespace Lazinator.Collections
                 }
             }
             yield break;
+        }
+
+        public void OnFreeInMemoryObjects()
+        {
+            FullyDeserialized = false;
+            UnderlyingList = null;
+            ItemsAccessedBeforeFullyDeserialized = null;
+            CountWhenDeserialized = -1;
         }
 
     }

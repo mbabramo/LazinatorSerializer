@@ -63,6 +63,7 @@ namespace Lazinator.Collections
             DescendantIsDirty = false;
             HasChanged = false;
             DescendantHasChanged = false;
+            OnFreeInMemoryObjects();
         }
         
         /* Conversion */

@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples
             DescendantIsDirty = false;
             HasChanged = false;
             DescendantHasChanged = false;
+            OnFreeInMemoryObjects();
         }
         
         /* Conversion */
