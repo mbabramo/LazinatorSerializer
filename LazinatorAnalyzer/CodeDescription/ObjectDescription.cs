@@ -635,9 +635,11 @@ namespace Lazinator.CodeDescription
 
         private void AppendResetProperties(CodeStringBuilder sb)
         {
-            string resetAccessed = "";
+            string resetAccessed = "", resetStorage = "";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNotPrimitiveOrOpenGeneric))
             {
+                resetStorage += $@"_{property.PropertyName} = default;
+                        ";
                 resetAccessed += $"_{property.PropertyName}_Accessed = ";
             }
             if (resetAccessed != "")
@@ -647,7 +649,7 @@ namespace Lazinator.CodeDescription
                 {ProtectedIfApplicable}{DerivationKeyword}void FreeInMemoryObjects()
                 {{
                     {IIF(IsDerivedFromNonAbstractLazinator, $@"base.FreeInMemoryObjects();
-                    ")}{resetAccessed}
+                    ")}{resetStorage}{resetAccessed}
                     IsDirty = false;
                     DescendantIsDirty = false;
                     HasChanged = false;
