@@ -303,6 +303,8 @@ namespace Lazinator.Collections
             }
         }
         
+        
+        
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
             yield break;
