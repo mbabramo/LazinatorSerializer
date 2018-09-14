@@ -575,7 +575,7 @@ namespace Lazinator.CodeDescription
                 .Where(property =>
                     property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
                     property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
-                    property.PropertyType == LazinatorPropertyType.NonSelfSerializingType ||
+                    property.PropertyType == LazinatorPropertyType.NonLazinator ||
                     property.PropertyType == LazinatorPropertyType.SupportedCollection ||
                     property.PropertyType == LazinatorPropertyType.SupportedTuple ||
                     property.PropertyType == LazinatorPropertyType.OpenGenericParameter)
@@ -877,7 +877,7 @@ namespace Lazinator.CodeDescription
         {
             var propertiesSupportedCollections = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedCollection).ToList();
             var propertiesSupportedTuples = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.SupportedTuple).ToList();
-            var propertiesNonSerialized = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonSelfSerializingType).ToList();
+            var propertiesNonSerialized = PropertiesToDefineThisLevel.Where(x => x.PropertyType == LazinatorPropertyType.NonLazinator).ToList();
 
             GetSupportedConversions(sb, propertiesSupportedCollections, propertiesSupportedTuples, propertiesNonSerialized);
         }
@@ -1005,7 +1005,7 @@ namespace Lazinator.CodeDescription
                     }
                     else if (property.TrackDirtinessNonSerialized)
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
-                    else if (property.PropertyType == LazinatorPropertyType.NonSelfSerializingType || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
+                    else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}})"");");
                     else
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{_{property.PropertyName}}}"");");

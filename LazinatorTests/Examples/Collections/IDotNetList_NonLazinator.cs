@@ -3,8 +3,8 @@ using Lazinator.Attributes;
 
 namespace LazinatorTests.Examples.Collections
 {
-    [Lazinator((int)ExampleUniqueIDs.DotNetList_NonSelfSerializable)]
-    public interface IDotNetList_NonSelfSerializable
+    [Lazinator((int)ExampleUniqueIDs.DotNetList_NonLazinator)]
+    public interface IDotNetList_NonLazinator
     {
         List<NonLazinatorClass> MyListNonLazinatorType { get; set; }
         bool MyListNonLazinatorType_Dirty { get; set; }

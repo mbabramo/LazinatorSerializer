@@ -836,9 +836,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListOfNonSerializedItems()
         {
-            DotNetList_NonSelfSerializable GetNonObject(int thirdItemIndex)
+            DotNetList_NonLazinator GetNonObject(int thirdItemIndex)
             {
-                return new DotNetList_NonSelfSerializable()
+                return new DotNetList_NonLazinator()
                 {
                     MyListNonLazinatorType = new List<NonLazinatorClass>()
                     {
@@ -886,9 +886,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetNestedListOfNonSerializedItems()
         {
-            DotNetList_Nested_NonSelfSerializable GetNestedList(int index)
+            DotNetList_Nested_NonLazinator GetNestedList(int index)
             {
-                return new DotNetList_Nested_NonSelfSerializable()
+                return new DotNetList_Nested_NonLazinator()
                 {
                     MyListNestedNonLazinatorType = new List<List<NonLazinatorClass>>()
                     {
@@ -935,9 +935,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDerivedDotNetNestedListOfNonSerializedItems()
         {
-            Derived_DotNetList_Nested_NonSelfSerializable GetNestedList(int index)
+            Derived_DotNetList_Nested_NonLazinator GetNestedList(int index)
             {
-                return new Derived_DotNetList_Nested_NonSelfSerializable()
+                return new Derived_DotNetList_Nested_NonLazinator()
                 {
                     MyLevel2ListNestedNonLazinatorType = new List<List<NonLazinatorClass>>()
                     {
@@ -982,7 +982,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void SelfSerializationRecordLikeTypes()
+        public void LazinatorSerializationRecordLikeTypes()
         {
             RecordLikeContainer original = new RecordLikeContainer()
             {

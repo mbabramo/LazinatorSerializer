@@ -53,7 +53,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void SelfSerializationUpdatesNonSerializedTypeProperly()
+        public void LazinatorSerializationUpdatesNonSerializedTypeProperly()
         {
             var hierarchy = GetTypicalExample();
             var copy = GetTypicalExample();

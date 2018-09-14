@@ -30,7 +30,7 @@ using LazinatorTests.Examples.Subclasses;
 
 namespace LazinatorTests.Tests
 {
-    public class LazinatorCodeGenTest
+    public class CodeGenTest
     {
         [Fact]
         public void CodeStringBuilderWorks()
@@ -244,9 +244,9 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(UnofficialInterfaceIncorporator), "LazinatorTests", "/Examples/", "UnofficialInterfaces/", ws);
             await CompleteGenerateCode(typeof(Dictionary_Values_Lazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetHashSet_Lazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
-            await CompleteGenerateCode(typeof(DotNetList_Nested_NonSelfSerializable), "LazinatorTests", "/Examples/", "Collections/", ws);
-            await CompleteGenerateCode(typeof(Derived_DotNetList_Nested_NonSelfSerializable), "LazinatorTests", "/Examples/", "Collections/", ws);
-            await CompleteGenerateCode(typeof(DotNetList_NonSelfSerializable), "LazinatorTests", "/Examples/", "Collections/", ws);
+            await CompleteGenerateCode(typeof(DotNetList_Nested_NonLazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
+            await CompleteGenerateCode(typeof(Derived_DotNetList_Nested_NonLazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
+            await CompleteGenerateCode(typeof(DotNetList_NonLazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetList_Lazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetList_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DotNetList_Wrapper), "LazinatorTests", "/Examples/", "Collections/", ws);

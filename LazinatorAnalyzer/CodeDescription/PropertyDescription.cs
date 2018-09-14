@@ -50,7 +50,7 @@ namespace Lazinator.CodeDescription
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
-        internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonSelfSerializingType || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
+        internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
         private bool UseFullyQualifiedNames => (ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
@@ -343,7 +343,7 @@ namespace Lazinator.CodeDescription
 
             bool isSelfSerializable = isRecursiveDefinition || isILazinator;
             if (isSelfSerializable)
-                SetSelfSerializablePropertyType(namedTypeSymbol);
+                SetLazinatorPropertyType(namedTypeSymbol);
             else
             {
                 // look for supported collections and tuples
@@ -363,7 +363,7 @@ namespace Lazinator.CodeDescription
         private void SetNonserializedTypeNameAndPropertyType(INamedTypeSymbol t)
         {
             Nullable = t.TypeKind == TypeKind.Class;
-            PropertyType = LazinatorPropertyType.NonSelfSerializingType;
+            PropertyType = LazinatorPropertyType.NonLazinator;
             InterchangeTypeName = ContainingObjectDescription.Compilation.Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = ContainingObjectDescription.Compilation.Config?.GetDirectConverterTypeName(t);
             string fullyQualifiedTypeName = t.GetFullyQualifiedNameWithoutGlobal();
@@ -444,7 +444,7 @@ namespace Lazinator.CodeDescription
                 PropertyType = LazinatorPropertyType.PrimitiveTypeNullable;
         }
 
-        private void SetSelfSerializablePropertyType(INamedTypeSymbol t)
+        private void SetLazinatorPropertyType(INamedTypeSymbol t)
         {
             try
             {
@@ -2026,7 +2026,7 @@ namespace Lazinator.CodeDescription
 
         public void AppendInterchangeTypes(CodeStringBuilder sb, HashSet<string> alreadyGenerated)
         {
-            if (PropertyType != LazinatorPropertyType.NonSelfSerializingType || !HasInterchangeType)
+            if (PropertyType != LazinatorPropertyType.NonLazinator || !HasInterchangeType)
                 return;
 
             if (alreadyGenerated.Contains(AppropriatelyQualifiedTypeNameEncodable))

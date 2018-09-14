@@ -10,7 +10,7 @@ namespace Lazinator.CodeDescription
         PrimitiveTypeNullable,
         LazinatorClassOrInterface,
         LazinatorStruct,
-        NonSelfSerializingType,
+        NonLazinator,
         SupportedCollection,
         SupportedTuple,
         OpenGenericParameter

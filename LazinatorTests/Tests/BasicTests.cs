@@ -16,7 +16,7 @@ namespace LazinatorTests.Tests
     public class BasicTests : SerializationDeserializationTestBase
     {
         [Fact]
-        public void BasicSelfSerializationWorks()
+        public void BasicLazinatorSerializationWorks()
         {
             var original = GetTypicalExample();
             var copy = GetTypicalExample();
@@ -25,7 +25,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void SelfSerializationCanSetChildToNull()
+        public void LazinatorSerializationCanSetChildToNull()
         {
             var original = GetTypicalExample();
             var result = original.CloneLazinatorTyped();
@@ -35,7 +35,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void SelfSerializationVersionUpgradeWorks()
+        public void LazinatorSerializationVersionUpgradeWorks()
         {
             var original = GetTypicalExample();
             // Set to old version number. This should serialize as the old version number.
@@ -120,7 +120,7 @@ namespace LazinatorTests.Tests
 
 
         [Fact]
-        public void SelfSerializationRecognizesUpdates()
+        public void LazinatorSerializationRecognizesUpdates()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
             var original = GetHierarchy(0, 1, 2, 0, 0);
