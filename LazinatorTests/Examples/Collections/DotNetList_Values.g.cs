@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -403,7 +403,7 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _MyLinkedListInt_Accessed = _MyListInt_Accessed = _MyListInt2_Accessed = _MySortedSetInt_Accessed = false;
             IsDirty = false;

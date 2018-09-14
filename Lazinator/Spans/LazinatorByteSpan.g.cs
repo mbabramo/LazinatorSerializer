@@ -37,7 +37,7 @@ namespace Lazinator.Spans
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -279,7 +279,7 @@ namespace Lazinator.Spans
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _ReadOnly_Accessed = _ReadOrWrite_Accessed = false;
             IsDirty = false;

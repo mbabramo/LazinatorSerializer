@@ -82,9 +82,9 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        protected override void ResetAccessedProperties()
+        protected override void FreeInMemoryObjects()
         {
-            base.ResetAccessedProperties();
+            base.FreeInMemoryObjects();
             
             IsDirty = false;
             DescendantIsDirty = false;

@@ -42,7 +42,7 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -364,7 +364,7 @@ namespace Lazinator.Collections.Dictionary
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _Keys_Accessed = _Values_Accessed = false;
             IsDirty = false;

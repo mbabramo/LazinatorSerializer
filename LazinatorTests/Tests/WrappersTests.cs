@@ -137,7 +137,7 @@ namespace LazinatorTests.Tests
             var wrappedInt = e.WrappedInt;
             wrappedInt.WrappedValue.Should().Be(1000);
             var clone = e.CloneLazinatorTyped();
-            clone.IsDirty.Should().BeFalse(); // even though WrapperContainer constructor executes, the ResetAccessedProperties method will set IsDirty = false
+            clone.IsDirty.Should().BeFalse(); // even though WrapperContainer constructor executes, the FreeInMemoryObjects method will set IsDirty = false
             clone.WrappedInt.WrappedValue.Should().Be(1000);
 
         }

@@ -380,7 +380,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}int Deserialize()
                         {{
-                            ResetAccessedProperties();
+                            FreeInMemoryObjects();
                             int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
                             if (span.Length == 0)
@@ -629,7 +629,7 @@ namespace Lazinator.CodeDescription
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
-                        {ProtectedIfApplicable}abstract void ResetAccessedProperties();
+                        {ProtectedIfApplicable}abstract void FreeInMemoryObjects();
 ");
         }
 
@@ -644,9 +644,9 @@ namespace Lazinator.CodeDescription
                 resetAccessed += $@"false;";
 
             sb.AppendLine($@"
-                {ProtectedIfApplicable}{DerivationKeyword}void ResetAccessedProperties()
+                {ProtectedIfApplicable}{DerivationKeyword}void FreeInMemoryObjects()
                 {{
-                    {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ResetAccessedProperties();
+                    {IIF(IsDerivedFromNonAbstractLazinator, $@"base.FreeInMemoryObjects();
                     ")}{resetAccessed}
                     IsDirty = false;
                     DescendantIsDirty = false;

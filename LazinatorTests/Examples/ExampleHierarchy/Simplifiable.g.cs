@@ -41,7 +41,7 @@ namespace LazinatorTests.Examples
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -549,7 +549,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _ANonSkippableEarlierExample_Accessed = _Example_Accessed = _Example2_Accessed = _Example3_Accessed = false;
             IsDirty = false;

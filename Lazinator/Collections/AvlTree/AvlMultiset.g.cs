@@ -39,7 +39,7 @@ namespace Lazinator.Collections.AvlTree
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -298,7 +298,7 @@ namespace Lazinator.Collections.AvlTree
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _UnderlyingSet_Accessed = false;
             IsDirty = false;

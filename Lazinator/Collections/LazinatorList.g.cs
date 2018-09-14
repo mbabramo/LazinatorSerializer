@@ -37,7 +37,7 @@ namespace Lazinator.Collections
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -310,7 +310,7 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _MainListSerialized_Accessed = _Offsets_Accessed = false;
             IsDirty = false;

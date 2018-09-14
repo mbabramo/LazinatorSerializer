@@ -41,7 +41,7 @@ namespace Lazinator.Collections
         
         public int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -245,7 +245,7 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        void ResetAccessedProperties()
+        void FreeInMemoryObjects()
         {
             _ReadOnlyBytes_Accessed = false;
             IsDirty = false;

@@ -41,7 +41,7 @@ namespace Lazinator.Collections.Avl
         
         public int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -541,7 +541,7 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
-        void ResetAccessedProperties()
+        void FreeInMemoryObjects()
         {
             _Left_Accessed = _Right_Accessed = false;
             IsDirty = false;

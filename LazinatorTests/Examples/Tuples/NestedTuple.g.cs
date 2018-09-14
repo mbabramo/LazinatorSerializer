@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _MyNestedTuple_Accessed = false;
             IsDirty = false;

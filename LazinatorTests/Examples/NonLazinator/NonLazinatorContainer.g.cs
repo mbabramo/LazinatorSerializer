@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples
         
         public int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -347,7 +347,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        void ResetAccessedProperties()
+        void FreeInMemoryObjects()
         {
             _NonLazinatorClass_Accessed = _NonLazinatorInterchangeableClass_Accessed = _NonLazinatorStruct_Accessed = false;
             IsDirty = false;

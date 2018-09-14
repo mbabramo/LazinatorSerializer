@@ -96,9 +96,9 @@ namespace LazinatorTests.Tests
         public void PropertyChangedInConstructorSerializes()
         {
             // Concrete3's constructor sets Example2 and Example3 to null. This means that their _Accessed fields will be true.
-            // When we deserialize ContainerWithAbstract1, we also deserialize Concrete3. If we did not call ResetAccessedProperties,
+            // When we deserialize ContainerWithAbstract1, we also deserialize Concrete3. If we did not call FreeInMemoryObjects,
             // then when we access Example2, it would appear that no deserialization is necessary, and Example2 will stay at its null value.
-            // Both of the following examples fail without ResetAccessedProperties().
+            // Both of the following examples fail without FreeInMemoryObjects().
 
             var concrete = new Concrete3()
             {

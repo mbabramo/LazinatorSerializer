@@ -161,9 +161,9 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        protected override void ResetAccessedProperties()
+        protected override void FreeInMemoryObjects()
         {
-            base.ResetAccessedProperties();
+            base.FreeInMemoryObjects();
             _IntList4_Accessed = _IntList5_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;

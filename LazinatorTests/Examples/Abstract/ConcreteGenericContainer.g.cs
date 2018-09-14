@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -278,7 +278,7 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        protected override void ResetAccessedProperties()
+        protected override void FreeInMemoryObjects()
         {
             _Item_Accessed = false;
             IsDirty = false;

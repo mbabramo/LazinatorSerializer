@@ -37,7 +37,7 @@ namespace Lazinator.Wrappers
         
         public int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -268,7 +268,7 @@ namespace Lazinator.Wrappers
             yield break;
         }
         
-        void ResetAccessedProperties()
+        void FreeInMemoryObjects()
         {
             _Value_Accessed = false;
             IsDirty = false;

@@ -42,7 +42,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples.Hierarchy
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _ExampleByInterface_Accessed = _ExampleListByInterface_Accessed = false;
             IsDirty = false;

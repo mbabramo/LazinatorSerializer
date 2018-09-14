@@ -41,7 +41,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual int Deserialize()
         {
-            ResetAccessedProperties();
+            FreeInMemoryObjects();
             int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             if (span.Length == 0)
@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             yield break;
         }
         
-        protected virtual void ResetAccessedProperties()
+        protected virtual void FreeInMemoryObjects()
         {
             _MyListT_Accessed = false;
             IsDirty = false;

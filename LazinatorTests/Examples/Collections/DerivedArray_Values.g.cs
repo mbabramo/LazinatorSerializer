@@ -120,9 +120,9 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        protected override void ResetAccessedProperties()
+        protected override void FreeInMemoryObjects()
         {
-            base.ResetAccessedProperties();
+            base.FreeInMemoryObjects();
             _MyArrayInt_DerivedLevel_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
