@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Abstract
         }
         
         public abstract void EnsureLazinatorMemoryUpToDate();
+        public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
         public abstract uint GetBinaryHashCode32();
         public abstract ulong GetBinaryHashCode64();
@@ -106,7 +107,6 @@ namespace LazinatorTests.Examples.Abstract
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         protected abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
-        protected abstract void FreeInMemoryObjects();
         
     }
 }

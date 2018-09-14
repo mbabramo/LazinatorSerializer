@@ -327,6 +327,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void EnsureLazinatorMemoryUpToDate();
+                        public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
                         public abstract uint GetBinaryHashCode32();
                         public abstract ulong GetBinaryHashCode64();
@@ -629,7 +630,6 @@ namespace Lazinator.CodeDescription
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
-                        {ProtectedIfApplicable}abstract void FreeInMemoryObjects();
 ");
         }
 
