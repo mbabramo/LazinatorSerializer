@@ -19,12 +19,12 @@ namespace LazinatorTests.Tests
         {
             Example parent = new Example();
             LazinatorMemory serializedBytes = new LazinatorMemory(new Memory<byte>());
-            ILazinator selfSerialized =
+            ILazinator lazinatorObject =
                 df.CreateKnownID((int) ExampleUniqueIDs.ExampleChild, serializedBytes,
                     parent);
-            selfSerialized.Should().NotBeNull();
-            selfSerialized.LazinatorMemoryStorage.Should().Be(serializedBytes);
-            selfSerialized.LazinatorParents.Should().Be(parent);
+            lazinatorObject.Should().NotBeNull();
+            lazinatorObject.LazinatorMemoryStorage.Should().Be(serializedBytes);
+            lazinatorObject.LazinatorParents.Should().Be(parent);
         }
 
         [Fact]

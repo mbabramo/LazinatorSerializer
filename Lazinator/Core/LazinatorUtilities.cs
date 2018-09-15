@@ -76,10 +76,10 @@ namespace Lazinator.Core
             return writer.LazinatorMemory;
         }
 
-        public static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T selfSerialized, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator, new()
+        public static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator, new()
         {
-            BinaryBufferWriter writer = new BinaryBufferWriter(ExpandableBytes.MinMinBufferSize, selfSerialized.LazinatorMemoryStorage);
-            selfSerialized.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            BinaryBufferWriter writer = new BinaryBufferWriter(ExpandableBytes.MinMinBufferSize, lazinatorObject.LazinatorMemoryStorage);
+            lazinatorObject.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
 

@@ -161,19 +161,19 @@ namespace Lazinator.Core
         /// <returns>The deserialized Lazinator object</returns>
         public ILazinator CreateKnownID(int uniqueID, LazinatorMemory storage, ILazinator parent = null)
         {
-            ILazinator selfSerialized = null;
+            ILazinator lazinatorObject = null;
             if (FactoriesByID.ContainsKey(uniqueID))
-                selfSerialized = FactoriesByID[uniqueID]();
+                lazinatorObject = FactoriesByID[uniqueID]();
             else
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                    selfSerialized = CreateGenericFromBytesIncludingID(storage.Memory.Span);
+                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.Memory.Span);
             }
-            if (selfSerialized == null)
+            if (lazinatorObject == null)
                 throw new UnknownSerializedTypeException(uniqueID);
-            InitializeDeserialized(selfSerialized, storage, parent);
-            return selfSerialized;
+            InitializeDeserialized(lazinatorObject, storage, parent);
+            return lazinatorObject;
         }
 
         private void InitializeDeserialized(ILazinator lazinatorType, LazinatorMemory serializedBytes, ILazinator parent)
