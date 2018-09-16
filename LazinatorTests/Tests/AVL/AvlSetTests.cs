@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Lazinator.Collections.Avl;
-using Lazinator.Collections.AvlTree;
 using Lazinator.Support;
 using Lazinator.Wrappers;
 

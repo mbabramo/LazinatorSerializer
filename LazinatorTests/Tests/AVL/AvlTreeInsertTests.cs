@@ -56,7 +56,10 @@ namespace LazinatorTests.AVL
                 if (i >= treeSize)
                     result.Should().Be(null);
                 else
+                {
                     result.Key.Should().Be(i + 1);
+                    tree[i].Should().Be(result); // confirm indexing works
+                }
             }
 	    }
 
@@ -73,9 +76,12 @@ namespace LazinatorTests.AVL
 	            var result = tree.Skip(i).FirstOrDefault();
 	            if (i >= treeSize)
 	                result.Should().Be(null);
-	            else
-	                result.Key.Should().Be(i + 1);
-	        }
+                else
+                {
+                    result.Key.Should().Be(i + 1);
+                    tree[i].Should().Be(result); // confirm indexing works
+                }
+            }
 	    }
 
         private AvlTree<WInt, WByte> BuildTreeInRandomOrder(int insertions)

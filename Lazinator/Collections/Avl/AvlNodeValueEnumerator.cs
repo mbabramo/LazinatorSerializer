@@ -1,21 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Lazinator.Collections.Avl;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
-namespace Lazinator.Collections.AvlTree
+namespace Lazinator.Collections.Avl
 {
-    public sealed class AvlMultisetEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, new()
+    public sealed class AvlNodeValueEnumerator<TValue> : IEnumerator<TValue> where TValue : ILazinator, new()
     {
-        private AvlNodeKeyEnumerator<LazinatorTuple<TKey, WInt>> UnderlyingEnumerator;
+        private AvlNodeEnumerator<WByte, TValue> UnderlyingEnumerator;
 
-        public AvlMultisetEnumerator(AvlNodeKeyEnumerator<LazinatorTuple<TKey, WInt>> underlyingEnumerator)
+        public AvlNodeValueEnumerator(AvlNodeEnumerator<WByte, TValue> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }
 
-        public TKey Current => UnderlyingEnumerator.Current.Item1;
+        public TValue Current => UnderlyingEnumerator.Current.Value;
 
         object IEnumerator.Current => Current;
 

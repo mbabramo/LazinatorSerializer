@@ -66,5 +66,6 @@ namespace Lazinator.Collections
         LazinatorQueue,
         LazinatorStack,
         LazinatorArray,
+        AvlList,
     }
 }

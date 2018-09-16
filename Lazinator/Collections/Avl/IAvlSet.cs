@@ -6,7 +6,7 @@ using Lazinator.Collections.Avl;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
-namespace Lazinator.Collections.AvlTree
+namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlSet)]
     interface IAvlSet<TKey> where TKey : ILazinator, new()

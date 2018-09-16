@@ -5,7 +5,7 @@ using Lazinator.Attributes;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
-namespace Lazinator.Collections.AvlTree
+namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlMultiset)]
     interface IAvlMultiset<T> where T : ILazinator, new()

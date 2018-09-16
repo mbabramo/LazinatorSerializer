@@ -13,7 +13,6 @@ using Lazinator.Wrappers;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using Lazinator.Collections.Avl;
-using Lazinator.Collections.AvlTree;
 using Lazinator.Collections.Dictionary;
 using Lazinator.Spans;
 using LazinatorAnalyzer.Settings;
@@ -134,10 +133,11 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(AvlSet<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
-            await CompleteGenerateCode(typeof(AvlMultiset<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
-            await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
-            await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "AvlTree/", ws);
+            await CompleteGenerateCode(typeof(AvlList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlSet<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlMultiset<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(WAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WBool), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
@@ -276,7 +276,7 @@ public class MyOtherClass
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections",
-                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections/AvlTree",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections/Avl",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Spans",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",

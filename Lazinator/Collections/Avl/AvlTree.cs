@@ -31,6 +31,23 @@ namespace Lazinator.Collections.Avl
             _comparer = comparer;
         }
 
+        public AvlNode<TKey, TValue> this[int i]
+        {
+            get
+            {
+                ConfirmInRange(i);
+                return Skip(i).First();
+            }
+        }
+
+        private void ConfirmInRange(int i)
+        {
+            if (i < 0 || i >= Count)
+                throw new ArgumentOutOfRangeException();
+        }
+
+        public int Count => Root.Count;
+
         public IEnumerable<AvlNode<TKey, TValue>> Skip(int i)
         {
             var enumerator = new AvlNodeEnumerator<TKey, TValue>(Root);
@@ -97,9 +114,9 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public bool Insert(TKey key, TValue value)
+        public bool Insert(TKey key, TValue value, int? nodeIndex = null)
         {
-            bool returnVal = InsertHelper(key, value);
+            bool returnVal = InsertHelper(key, value, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
@@ -108,64 +125,86 @@ namespace Lazinator.Collections.Avl
             return returnVal;
         }
 
-        private bool InsertHelper(TKey key, TValue value)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key">The key to insert.</param>
+        /// <param name="value">The value to insert</param>
+        /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
+        /// <returns></returns>
+        private bool InsertHelper(TKey key, TValue value, int? nodeIndex = null)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
-			{
-			    node.NodeVisitedDuringChange = true;
+            {
+                node.NodeVisitedDuringChange = true;
 
-				int compare = _comparer.Compare(key, node.Key);
+                int compare = CompareKeyOrIndexToNode(key, nodeIndex, node);
 
-				if (compare < 0)
-				{
-					AvlNode<TKey, TValue> left = node.Left;
+                if (compare < 0)
+                {
+                    AvlNode<TKey, TValue> left = node.Left;
 
-					if (left == null)
-					{
-						node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
+                    if (left == null)
+                    {
+                        node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
 
-						InsertBalance(node, 1);
+                        InsertBalance(node, 1);
 
-						return true;
-					}
-					else
-					{
-						node = left;
-					}
-				}
-				else if (compare > 0)
-				{
-					AvlNode<TKey, TValue> right = node.Right;
+                        return true;
+                    }
+                    else
+                    {
+                        node = left;
+                    }
+                }
+                else if (compare > 0)
+                {
+                    AvlNode<TKey, TValue> right = node.Right;
 
-					if (right == null)
-					{
-						node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true};
+                    if (right == null)
+                    {
+                        node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
 
-						InsertBalance(node, -1);
+                        InsertBalance(node, -1);
 
-						return true;
-					}
-					else
-					{
-						node = right;
-					}
-				}
-				else
-				{
-					node.Value = value;
+                        return true;
+                    }
+                    else
+                    {
+                        node = right;
+                    }
+                }
+                else
+                {
+                    node.Value = value;
 
-					return false;
-				}
-			}
-			
-			Root = new AvlNode<TKey, TValue> { Key = key, Value = value, NodeVisitedDuringChange = true };
+                    return false;
+                }
+            }
+
+            Root = new AvlNode<TKey, TValue> { Key = key, Value = value, NodeVisitedDuringChange = true };
 
 			return true;
 		}
 
-		private void InsertBalance(AvlNode<TKey, TValue> node, int balance)
+        private int CompareKeyOrIndexToNode(TKey key, int? nodeIndex, AvlNode<TKey, TValue> node)
+        {
+            int compare;
+            if (nodeIndex is int index)
+            {
+                if (index <= node.Count)
+                    compare = -1;
+                else
+                    compare = 1;
+            }
+            else
+                compare = _comparer.Compare(key, node.Key);
+            return compare;
+        }
+
+        private void InsertBalance(AvlNode<TKey, TValue> node, int balance)
 		{
 			while (node != null)
 			{
@@ -421,9 +460,9 @@ namespace Lazinator.Collections.Avl
 			return rightLeft;
 		}
 
-        public bool Delete(TKey key)
+        public bool Delete(TKey key, int? nodeIndex = null)
         {
-            bool returnVal = DeleteHelper(key);
+            bool returnVal = DeleteHelper(key, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
@@ -432,7 +471,7 @@ namespace Lazinator.Collections.Avl
             return returnVal;
         }
 
-		private bool DeleteHelper(TKey key)
+		private bool DeleteHelper(TKey key, int? nodeIndex)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
@@ -440,11 +479,12 @@ namespace Lazinator.Collections.Avl
 			{
 			    node.NodeVisitedDuringChange = true;
 
-				if (_comparer.Compare(key, node.Key) < 0)
+                int compare = CompareKeyOrIndexToNode(key, nodeIndex, node);
+                if (compare < 0)
 				{
 					node = node.Left;
 				}
-				else if (_comparer.Compare(key, node.Key) > 0)
+				else if (compare > 0)
 				{
 					node = node.Right;
 				}

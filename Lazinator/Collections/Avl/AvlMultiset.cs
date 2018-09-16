@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Lazinator.Collections.Avl;
 using Lazinator.Core;
 using Lazinator.Support;
 using Lazinator.Wrappers;
 
-namespace Lazinator.Collections.AvlTree
+namespace Lazinator.Collections.Avl
 {
     public partial class AvlMultiset<T> : IAvlMultiset<T>, IEnumerable<T> where T : ILazinator, new()
     {
