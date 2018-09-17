@@ -46,7 +46,7 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentOutOfRangeException();
         }
 
-        public int Count => Root.Count;
+        public int Count => Root?.Count ?? 0;
 
         public IEnumerable<AvlNode<TKey, TValue>> Skip(int i)
         {
@@ -142,7 +142,7 @@ namespace Lazinator.Collections.Avl
 
                 int compare = CompareKeyOrIndexToNode(key, nodeIndex, node);
 
-                if (compare < 0)
+                if (compare < 0 || (compare == 0 && nodeIndex != null))
                 {
                     AvlNode<TKey, TValue> left = node.Left;
 
@@ -161,7 +161,13 @@ namespace Lazinator.Collections.Avl
                 }
                 else if (compare > 0)
                 {
-                    AvlNode<TKey, TValue> right = node.Right;
+                    // adjust the node index that we are looking for, since we have now skipped the left nodes.
+                    // for example, suppose we are at node 100 and looking for node 200. When we go to the right, 
+                    // we'll be at node 101, so we want to look for node 100 within that subtree. 
+                    if (nodeIndex != null)
+                        nodeIndex -= (node.Left?.Count ?? 0) + 1;
+
+                    AvlNode <TKey, TValue> right = node.Right;
 
                     if (right == null)
                     {
@@ -194,7 +200,10 @@ namespace Lazinator.Collections.Avl
             int compare;
             if (nodeIndex is int index)
             {
-                if (index <= node.Count)
+                int actualNodeIndex = (node.Left?.Count ?? 0);
+                if (index == actualNodeIndex)
+                    compare = 0;
+                else if (index < actualNodeIndex)
                     compare = -1;
                 else
                     compare = 1;
@@ -485,8 +494,10 @@ namespace Lazinator.Collections.Avl
 					node = node.Left;
 				}
 				else if (compare > 0)
-				{
-					node = node.Right;
+                {
+                    if (nodeIndex != null)
+                        nodeIndex -= (node.Left?.Count ?? 0) + 1;
+                    node = node.Right;
 				}
 				else
 				{
