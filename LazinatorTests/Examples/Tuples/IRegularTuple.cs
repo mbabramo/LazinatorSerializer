@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Lazinator.Attributes;
 
 namespace LazinatorTests.Examples.Tuples
@@ -10,5 +11,6 @@ namespace LazinatorTests.Examples.Tuples
         Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2 { get; set; }
         Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3 { get; set; }
         Tuple<int, ExampleStruct> MyTupleSerialized4 { get; set; }
+        List<Tuple<uint, ExampleChild, NonLazinatorClass>> MyListTuple { get; set; }
     }
 }

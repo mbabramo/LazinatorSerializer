@@ -834,6 +834,39 @@ namespace LazinatorTests.Tests
 
 
         [Fact]
+        public void ListRegularTuple()
+        {
+            RegularTuple GetObject()
+            {
+                return new RegularTuple()
+                {
+                    MyListTuple = new List<Tuple<uint, ExampleChild, NonLazinatorClass>>()
+                    {
+                        new Tuple<uint, ExampleChild, NonLazinatorClass>(3, GetExampleChild(0),
+                        GetNonLazinatorType(0)),
+                        new Tuple<uint, ExampleChild, NonLazinatorClass>(4, GetExampleChild(1),
+                        GetNonLazinatorType(1)),
+                        new Tuple<uint, ExampleChild, NonLazinatorClass>(4, GetExampleChild(2),
+                        GetNonLazinatorType(2)),
+                    }
+                };
+            }
+
+            var original = GetObject();
+            var result = original.CloneLazinatorTyped();
+
+            for (int i = 0; i < 3; i++)
+            {
+                result.MyListTuple[i].Item1.Should().Be(original.MyListTuple[i].Item1);
+                ExampleChildEqual(result.MyListTuple[i].Item2, original.MyListTuple[i].Item2)
+                    .Should().BeTrue();
+                NonLazinatorTypeEqual(result.MyListTuple[i].Item3, original.MyListTuple[i].Item3)
+                    .Should().BeTrue();
+            }
+        }
+
+
+        [Fact]
         public void LazinatorDotNetListOfNonSerializedItems()
         {
             DotNetList_NonLazinator GetNonObject(int thirdItemIndex)
