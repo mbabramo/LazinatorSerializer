@@ -1333,26 +1333,26 @@ namespace Lazinator.CodeDescription
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
-                AppendReadOnlySpan_SerializeExistingBuffer(sb);
+                AppendReadOnlySpan_ConvertToBytes(sb);
                 return;
             }
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte)
             {
-                AppendReadOnlyMemory_SerializeExistingBuffer(sb);
+                AppendReadOnlyMemory_ConvertToBytes(sb);
                 return;
             }
 
             AppendSupportedCollection_ConvertFromBytes(sb);
-            AppendSupportedCollection_SerializeExistingBuffer(sb);
+            AppendSupportedCollection_ConvertToBytes(sb);
 
             RecursivelyAppendConversionMethods(sb, alreadyGenerated);
         }
 
-        private void AppendReadOnlySpan_SerializeExistingBuffer(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_SerializeExistingBuffer(sb, true);
+        private void AppendReadOnlySpan_ConvertToBytes(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_ConvertToBytes(sb, true);
 
-        private void AppendReadOnlyMemory_SerializeExistingBuffer(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_SerializeExistingBuffer(sb, false);
+        private void AppendReadOnlyMemory_ConvertToBytes(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_ConvertToBytes(sb, false);
 
-        private void AppendReadOnlySpanOrMemory_SerializeExistingBuffer(CodeStringBuilder sb, bool isSpan)
+        private void AppendReadOnlySpanOrMemory_ConvertToBytes(CodeStringBuilder sb, bool isSpan)
         {
             // this method is used within classes, but not within structs
             if (ContainingObjectDescription.ObjectType != LazinatorObjectType.Class)
@@ -1373,7 +1373,7 @@ namespace Lazinator.CodeDescription
                     ");
         }
 
-        private void AppendSupportedCollection_SerializeExistingBuffer(CodeStringBuilder sb)
+        private void AppendSupportedCollection_ConvertToBytes(CodeStringBuilder sb)
         {
             bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
 
@@ -1403,7 +1403,6 @@ namespace Lazinator.CodeDescription
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
             {
-                forStatement = $@"itemToConvertSpan = itemToConvert.Span;foreach (var item in itemToConvert)";
                 forStatement =
                         $@"var itemToConvertSpan = itemToConvert.Span;
                         int itemToConvertCount = itemToConvertSpan.{lengthWord};
