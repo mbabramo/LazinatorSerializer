@@ -16,7 +16,7 @@ namespace Lazinator.CodeDescription
     public class PropertyDescription
     {
         #region Properties
-        
+
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class;
@@ -26,7 +26,7 @@ namespace Lazinator.CodeDescription
         private int UniqueIDForLazinatorType { get; set; }
         internal IPropertySymbol PropertySymbol { get; set; }
         private ITypeSymbol TypeSymbolIfNoProperty { get; set; }
-        private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol) PropertySymbol.Type : (ITypeSymbol) TypeSymbolIfNoProperty;
+        private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol)PropertySymbol.Type : (ITypeSymbol)TypeSymbolIfNoProperty;
         internal bool GenericConstrainedToClass => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasReferenceTypeConstraint;
         internal bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
         private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
@@ -83,7 +83,7 @@ namespace Lazinator.CodeDescription
         /* Inner properties */
         private List<PropertyDescription> InnerProperties { get; set; }
         private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
-        internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable , ".Value");
+        internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable, ".Value");
 
         /* Conversion */
         private string InterchangeTypeName { get; set; }
@@ -120,7 +120,7 @@ namespace Lazinator.CodeDescription
                     {{
                         writer.Write((byte)0);
                     }}";
-                    
+
         private bool IncludableWhenExcludingMostChildren { get; set; }
         private bool ExcludableWhenIncludingMostChildren { get; set; }
         private bool AllowLazinatorInNonLazinator { get; set; }
@@ -154,7 +154,7 @@ namespace Lazinator.CodeDescription
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
-            
+
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
                 throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} must include a get method.");
@@ -222,7 +222,7 @@ namespace Lazinator.CodeDescription
             AllowLazinatorInNonLazinator = allowLazinatorInNonLazinator != null;
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
-            CloneSkipIfAttribute skipIf = UserAttributes.OfType<CloneSkipIfAttribute>().FirstOrDefault(); 
+            CloneSkipIfAttribute skipIf = UserAttributes.OfType<CloneSkipIfAttribute>().FirstOrDefault();
             if (skipIf != null)
             {
                 SkipCondition = skipIf.SkipCondition;
@@ -273,14 +273,14 @@ namespace Lazinator.CodeDescription
         #endregion
 
         #region Property type
-        
+
         private static readonly string[] SupportedAsPrimitives = new string[]
             {"bool", "byte", "sbyte", "char", "short", "ushort", "int", "uint", "long", "ulong", "string", "DateTime", "TimeSpan", "Guid", "float", "double", "decimal"};
 
         private void SetPropertyType(ITypeSymbol typeSymbol)
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
-            
+
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
                 Nullable = true;
@@ -288,7 +288,7 @@ namespace Lazinator.CodeDescription
                 DerivationKeyword = "virtual ";
                 return;
             }
-            
+
             Nullable = IsNullableType(namedTypeSymbol);
             if (Nullable)
             {
@@ -378,13 +378,13 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public string GetNullCheck()
+        public string GetNullCheck(string propertyName)
         {
             string nullCheck;
             if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
             else
-                nullCheck = $"{PropertyName} == null";
+                nullCheck = $"{propertyName} == null";
             return nullCheck;
         }
 
@@ -861,7 +861,7 @@ namespace Lazinator.CodeDescription
                                 }}")}";
 
             string recreation;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct 
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct
                 || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && ContainingObjectDescription.IsSealed))
             {
                 // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
@@ -996,7 +996,7 @@ namespace Lazinator.CodeDescription
 ");
             }
 
-           if (TrackDirtinessNonSerialized)
+            if (TrackDirtinessNonSerialized)
                 AppendDirtinessTracking(sb);
         }
 
@@ -1376,8 +1376,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendSupportedCollection_ConvertToBytes(CodeStringBuilder sb)
         {
-            string lengthWord, itemString, itemStringSetup, forStatement;
-            GetForStatementAndItemString(out lengthWord, out itemString, out itemStringSetup, out forStatement);
+            string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
+            GetItemAccessStrings(out lengthWord, out itemString, out itemStringSetup, out forStatement, out cloneString);
 
             if (
                 (
@@ -1465,54 +1465,48 @@ namespace Lazinator.CodeDescription
             PropertyDescription innerProperty = InnerProperties[0];
             string collectionAddItem, collectionAddNull;
             innerProperty.GetSupportedCollectionAddCommands(this, out collectionAddItem, out collectionAddNull);
+            collectionAddItem = collectionAddItem.Replace("item ", "item2 ").Replace("item;", "item2;").Replace("item)", "item2)");
             string creationText = GetCreationText();
 
-            string lengthWord, itemString, itemStringSetup, forStatement;
-            GetForStatementAndItemString(out lengthWord, out itemString, out itemStringSetup, out forStatement);
-            string cloneString = innerProperty.GetCloneString(itemString);
+            string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
+            GetItemAccessStrings(out lengthWord, out itemString, out itemStringSetup, out forStatement, out cloneString, "itemToClone");
+            
+            if (innerProperty.AppropriatelyQualifiedTypeName == "WNullableStruct<ExampleStruct>")
+            {
+                var DEBUG = 0;
+            }
+
+            if (Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte))
+                lengthWord = $"Value.{lengthWord}";
 
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert)
+                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if ({GetNullCheck("itemToClone")})
                         {{
                             return default;
                         }}
                         ")}
-                        int collectionLength = itemToConvert.{lengthWord};
+                        int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
                         {creationText}
                         {forStatement}
                         {{
-                            if ({itemString} == default({innerProperty.AppropriatelyQualifiedTypeName}))
+                            {IIF(innerProperty.Nullable, $@"if ({innerProperty.GetNullCheck(itemString)})
                             {{
                                 {collectionAddNull}
                             }}
                             else
                             {{
-                                var item = ({innerProperty.AppropriatelyQualifiedTypeName}) {cloneString};
-                                {collectionAddItem}
-                            }}
+                                ")}var item2 = {cloneString};
+                                {collectionAddItem}{IIF(innerProperty.Nullable, $@"
+                            }}")}
                         }}
                         return collection;
                     }}
 ");
         }
 
-        private string GetCloneString(string itemString)
-        {
-            string cloneString;
-            if (IsLazinator)
-                cloneString = $"{itemString}?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer)";
-            else if (SupportedCollectionType != null || SupportedTupleType != null)
-                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString})";
-            else if (IsPrimitive || IsNonLazinatorType)
-                cloneString = itemString;
-            else
-                throw new NotImplementedException();
-            return cloneString;
-        }
-
-        private void GetForStatementAndItemString(out string lengthWord, out string itemString, out string itemStringSetup, out string forStatement)
+        private void GetItemAccessStrings(out string lengthWord, out string itemString, out string itemStringSetup, out string forStatement, out string cloneString, string itemAccessName = "itemToConvert")
         {
             bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
             if (SupportedCollectionType == LazinatorSupportedCollectionType.List || SupportedCollectionType == LazinatorSupportedCollectionType.SortedSet || SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList ||
@@ -1529,28 +1523,28 @@ namespace Lazinator.CodeDescription
                 lengthWord = "Length";
             }
             else
-                throw new NotImplementedException();
+                lengthWord = null;
             itemStringSetup = "";
             if (SupportedCollectionType == LazinatorSupportedCollectionType.HashSet || SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
-                forStatement = $@"foreach (var item in itemToConvert)";
+                forStatement = $@"foreach (var item in {itemAccessName})";
                 itemString = "item"; // can't index into hash set
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
             {
                 forStatement =
-                        $@"var itemToConvertSpan = itemToConvert.Span;
-                        int itemToConvertCount = itemToConvertSpan.{lengthWord};
-                        for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                        $@"var {itemAccessName}Span = {itemAccessName}{IIF(Nullable, ".Value")}.Span;
+                        int {itemAccessName}Count = {itemAccessName}Span.{lengthWord};
+                        for (int itemIndex = 0; itemIndex < {itemAccessName}Count; itemIndex++)";
                 itemString =
-                    "itemToConvertSpan[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
+                    $"{itemAccessName}Span[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
             }
             else if (ArrayRank > 1)
             { // normal rank arrays can be handled separately
                 StringBuilder arrayStringBuilder = new StringBuilder();
                 int i = 0;
                 for (i = 0; i < ArrayRank; i++)
-                    arrayStringBuilder.AppendLine($"int length{i} = itemToConvert.GetLength({i});");
+                    arrayStringBuilder.AppendLine($"int length{i} = {itemAccessName}.GetLength({i});");
                 for (i = 0; i < ArrayRank; i++)
                 {
                     string stringForRank = $"for (int itemIndex{i} = 0; itemIndex{i} < length{i}; itemIndex{i}++)";
@@ -1563,32 +1557,32 @@ namespace Lazinator.CodeDescription
                 forStatement = arrayStringBuilder.ToString();
 
                 string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"itemIndex{j}")));
-                itemString = $"itemToConvert[{innerArrayText}]";
+                itemString = $"{itemAccessName}[{innerArrayText}]";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
             {
                 forStatement =
-                    $@"int itemToConvertCount = itemToConvert.{lengthWord};
-                        var q = System.Linq.Enumerable.ToList(itemToConvert);
-                        for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                    $@"int {itemAccessName}Count = {itemAccessName}.{lengthWord};
+                        var q = System.Linq.Enumerable.ToList({itemAccessName});
+                        for (int itemIndex = 0; itemIndex < {itemAccessName}Count; itemIndex++)";
                 itemString =
                     "q[itemIndex]";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
                 forStatement =
-                    $@"int itemToConvertCount = itemToConvert.{lengthWord};
-                        for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                    $@"int {itemAccessName}Count = {itemAccessName}.{lengthWord};
+                        for (int itemIndex = 0; itemIndex < {itemAccessName}Count; itemIndex++)";
                 itemString =
-                    "System.Linq.Enumerable.ElementAt(itemToConvert, itemIndex)";
+                    $"System.Linq.Enumerable.ElementAt({itemAccessName}, itemIndex)";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
                 forStatement =
-                    $@"int itemToConvertCount = itemToConvert.{lengthWord};
-                        var stackReversed = System.Linq.Enumerable.ToList(itemToConvert);
+                    $@"int {itemAccessName}Count = {itemAccessName}.{lengthWord};
+                        var stackReversed = System.Linq.Enumerable.ToList({itemAccessName});
                         stackReversed.Reverse();
-                        for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                        for (int itemIndex = 0; itemIndex < {itemAccessName}Count; itemIndex++)";
                 itemString =
                     "stackReversed[itemIndex]";
             }
@@ -1596,20 +1590,41 @@ namespace Lazinator.CodeDescription
             {
 
                 forStatement =
-                    $@"int itemToConvertCount = itemToConvert.{lengthWord};
-                        var sortedSet = System.Linq.Enumerable.ToList(itemToConvert);
-                        for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                    $@"int {itemAccessName}Count = {itemAccessName}.{lengthWord};
+                        var sortedSet = System.Linq.Enumerable.ToList({itemAccessName});
+                        for (int itemIndex = 0; itemIndex < {itemAccessName}Count; itemIndex++)";
                 itemString =
                     "sortedSet[itemIndex]";
             }
             else
             {
                 forStatement =
-                        $@"int itemToConvertCount = itemToConvert.{lengthWord};
-                        for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)";
+                        $@"int {itemAccessName}Count = {itemAccessName}.{lengthWord};
+                        for (int itemIndex = 0; itemIndex < {itemAccessName}Count; itemIndex++)";
                 itemString =
-                    "itemToConvert[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
+                    $"{itemAccessName}[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
             }
+
+            cloneString = InnerProperties[0].GetCloneString(itemString);
+        }
+
+        private string GetCloneString(string itemString)
+        {
+            string cloneString;
+            if (IsLazinator)
+            {
+                if (IsLazinatorStruct)
+                    cloneString = $"{itemString}.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer)";
+                else
+                    cloneString = $"{itemString}?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer)";
+            }
+            else if (SupportedCollectionType != null || SupportedTupleType != null)
+                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString})";
+            else if (IsPrimitive || IsNonLazinatorType)
+                cloneString = itemString;
+            else
+                throw new NotImplementedException();
+            return $"({AppropriatelyQualifiedTypeName}) " + cloneString;
         }
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
@@ -1651,7 +1666,7 @@ namespace Lazinator.CodeDescription
                 arrayStringBuilder = new StringBuilder();
                 for (int i = 0; i < ArrayRank; i++)
                 {
-                    string forStatementCommandPart = $"for (int i{i} = 0; i{i} < collectionLength{i}; i{i}++)";
+                    string forStatementCommandPart = $"for (int itemIndex{i} = 0; itemIndex{i} < collectionLength{i}; itemIndex{i}++)";
                     if (i == ArrayRank - 1)
                         arrayStringBuilder.Append(forStatementCommandPart);
                     else
@@ -1662,7 +1677,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 readCollectionLengthCommand = $"int collectionLength = span.ToDecompressedInt(ref bytesSoFar);";
-                forStatementCommand = $"for (int i = 0; i < collectionLength; i++)";
+                forStatementCommand = $"for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)";
             }
 
             PropertyDescription innerProperty = InnerProperties[0];
@@ -1824,21 +1839,21 @@ namespace Lazinator.CodeDescription
             {
                 if (outerProperty.ArrayRank == 1)
                 {
-                    collectionAddItem = "collection[i] = item;";
-                    collectionAddNull = $"collection[i] = default({AppropriatelyQualifiedTypeName});";
+                    collectionAddItem = "collection[itemIndex] = item;";
+                    collectionAddNull = $"collection[itemIndex] = default({AppropriatelyQualifiedTypeName});";
                 }
                 else
                 {
 
-                    string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"i{j}")));
+                    string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"itemIndex{j}")));
                     collectionAddItem = $"collection[{innerArrayText}] = item;";
                     collectionAddNull = $"collection[{innerArrayText}] = default({AppropriatelyQualifiedTypeName});";
                 }
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
             {
-                collectionAddItem = "collectionAsSpan[i] = item;";
-                collectionAddNull = $"collectionAsSpan[i] = default({AppropriatelyQualifiedTypeName});";
+                collectionAddItem = "collectionAsSpan[itemIndex] = item;";
+                collectionAddNull = $"collectionAsSpan[itemIndex] = default({AppropriatelyQualifiedTypeName});";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
@@ -1995,6 +2010,8 @@ namespace Lazinator.CodeDescription
 
             sb.AppendLine($"}}");
 
+            AppendSupportedTupleCloneMethod(sb);
+
             RecursivelyAppendConversionMethods(sb, alreadyGenerated);
         }
 
@@ -2083,6 +2100,41 @@ namespace Lazinator.CodeDescription
                             WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});
                         }};");
             }
+        }
+
+        private void AppendSupportedTupleCloneMethod(CodeStringBuilder sb)
+        {
+            string[] itemStrings = null;
+            switch (SupportedTupleType)
+            {
+                case LazinatorSupportedTupleType.KeyValuePair:
+                    itemStrings = new string[] { "Key", "Value" };
+                    break;
+                case LazinatorSupportedTupleType.RecordLikeType:
+                    itemStrings = InnerProperties.Select(x => x.PropertyName).ToArray();
+                    break;
+                case LazinatorSupportedTupleType.Tuple:
+                case LazinatorSupportedTupleType.ValueTuple:
+                    itemStrings = Enumerable.Range(1, InnerProperties.Count).Select(x => $"Item{x}").ToArray();
+                    break;
+
+            }
+            // zip the inner properties and item strings, then get the clone string using each corresponding item, and then join into a string.
+            string propertyAccess = Nullable ? "itemToConvert?." : "itemToConvert.";
+            string innerClones = String.Join(",", 
+                InnerProperties
+                    .Zip(
+                        itemStrings, 
+                        (x, y) => new { InnerProperty = x, ItemString = propertyAccess + y })
+                    .Select(z => z.InnerProperty.GetCloneString(z.ItemString))
+                );
+            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}({innerClones})";
+            sb.Append($@"
+                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert)
+                    {{
+                        return {creationText};
+                    }}
+            ");
         }
 
         #endregion
