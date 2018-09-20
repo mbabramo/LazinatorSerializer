@@ -2125,7 +2125,7 @@ namespace Lazinator.CodeDescription
                 InnerProperties
                     .Zip(
                         itemStrings, 
-                        (x, y) => new { InnerProperty = x, ItemString = propertyAccess + y })
+                        (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")"})
                     .Select(z => z.InnerProperty.GetCloneString(z.ItemString))
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}({innerClones})";

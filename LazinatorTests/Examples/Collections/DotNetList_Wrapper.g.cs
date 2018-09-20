@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<WInt> collection = new List<WInt>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -532,6 +532,24 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static List<WInt> Clone_List_GWInt_g(List<WInt> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<WInt> collection = new List<WInt>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (WInt) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(item2);
+            }
+            return collection;
+        }
+        
         private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -544,7 +562,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<WNullableByte> collection = new List<WNullableByte>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -574,6 +592,24 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static List<WNullableByte> Clone_List_GWNullableByte_g(List<WNullableByte> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<WNullableByte> collection = new List<WNullableByte>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (WNullableByte) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(item2);
+            }
+            return collection;
+        }
+        
         private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -586,7 +622,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<WNullableInt> collection = new List<WNullableInt>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -614,6 +650,24 @@ namespace LazinatorTests.Examples.Collections
                 void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
+        }
+        
+        private static List<WNullableInt> Clone_List_GWNullableInt_g(List<WNullableInt> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<WNullableInt> collection = new List<WNullableInt>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (WNullableInt) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(item2);
+            }
+            return collection;
         }
         
     }

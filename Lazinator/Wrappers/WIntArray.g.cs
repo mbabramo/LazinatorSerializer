@@ -399,10 +399,10 @@ namespace Lazinator.Wrappers
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             int[] collection = new int[collectionLength];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collection[i] = item;
+                collection[itemIndex] = item;
             }
             
             return collection;
@@ -420,6 +420,24 @@ namespace Lazinator.Wrappers
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex]);
             }
+        }
+        
+        private static int[] Clone_int_B_b(int[] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int[] collection = new int[collectionLength];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToClone[itemIndex];
+                collection[itemIndex] = item2;
+            }
+            return collection;
         }
         
     }

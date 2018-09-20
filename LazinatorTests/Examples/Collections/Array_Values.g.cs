@@ -497,10 +497,10 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             int[] collection = new int[collectionLength];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collection[i] = item;
+                collection[itemIndex] = item;
             }
             
             return collection;
@@ -520,6 +520,24 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static int[] Clone_int_B_b(int[] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int[] collection = new int[collectionLength];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToClone[itemIndex];
+                collection[itemIndex] = item2;
+            }
+            return collection;
+        }
+        
         private static int?[] ConvertFromBytes_int_C63_B_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -532,10 +550,10 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             int?[] collection = new int?[collectionLength];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int? item = span.ToDecompressedNullableInt(ref bytesSoFar);
-                collection[i] = item;
+                collection[itemIndex] = item;
             }
             
             return collection;
@@ -555,6 +573,31 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static int?[] Clone_int_C63_B_b(int?[] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int?[] collection = new int?[collectionLength];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection[itemIndex] = default(int?);
+                }
+                else
+                {
+                    var item2 = (int?) itemToClone[itemIndex];
+                    collection[itemIndex] = item2;
+                }
+            }
+            return collection;
+        }
+        
         private static int[][] ConvertFromBytes_int_B_b_B_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -567,18 +610,18 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             int[][] collection = new int[collectionLength][];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection[i] = default(int[]);
+                    collection[itemIndex] = default(int[]);
                 }
                 else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_b(childData);
-                    collection[i] = item;
+                    collection[itemIndex] = item;
                 }
                 bytesSoFar += lengthCollectionMember;
             }
@@ -608,6 +651,31 @@ namespace LazinatorTests.Examples.Collections
                 }
                 
             }
+        }
+        
+        private static int[][] Clone_int_B_b_B_b(int[][] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int[][] collection = new int[collectionLength][];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection[itemIndex] = default(int[]);
+                }
+                else
+                {
+                    var item2 = (int[]) Clone_int_B_b(itemToClone[itemIndex]);
+                    collection[itemIndex] = item2;
+                }
+            }
+            return collection;
         }
         
     }

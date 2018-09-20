@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             Stack<int> collection = new Stack<int>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.Push(item);
@@ -414,6 +414,26 @@ namespace LazinatorTests.Examples.Collections
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, stackReversed[itemIndex]);
             }
+        }
+        
+        private static Stack<int> Clone_Stack_Gint_g(Stack<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            Stack<int> collection = new Stack<int>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            var stackReversed = System.Linq.Enumerable.ToList(itemToClone);
+            stackReversed.Reverse();
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) stackReversed[itemIndex];
+                collection.Push(item2);
+            }
+            return collection;
         }
         
     }

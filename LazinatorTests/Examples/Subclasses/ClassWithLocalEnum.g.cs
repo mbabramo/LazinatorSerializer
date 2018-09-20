@@ -393,7 +393,7 @@ namespace LazinatorTests.Examples.Subclasses
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass item = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
                 collection.Add(item);
@@ -414,6 +414,24 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) itemToConvert[itemIndex]);
             }
+        }
+        
+        private static List<EnumWithinClass> Clone_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass) itemToClone[itemIndex];
+                collection.Add(item2);
+            }
+            return collection;
         }
         
     }

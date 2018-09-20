@@ -445,7 +445,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<NonLazinatorClass> collection = new List<NonLazinatorClass>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -486,6 +486,31 @@ namespace LazinatorTests.Examples.Collections
                 }
                 
             }
+        }
+        
+        private static List<NonLazinatorClass> Clone_List_GNonLazinatorClass_g(List<NonLazinatorClass> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<NonLazinatorClass> collection = new List<NonLazinatorClass>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection.Add(default(NonLazinatorClass));
+                }
+                else
+                {
+                    var item2 = (NonLazinatorClass) itemToClone[itemIndex];
+                    collection.Add(item2);
+                }
+            }
+            return collection;
         }
         
     }

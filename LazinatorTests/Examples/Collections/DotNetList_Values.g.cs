@@ -586,7 +586,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             LinkedList<int> collection = new LinkedList<int>();
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.AddLast(item);
@@ -609,6 +609,24 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static LinkedList<int> Clone_LinkedList_Gint_g(LinkedList<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            LinkedList<int> collection = new LinkedList<int>();
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) System.Linq.Enumerable.ElementAt(itemToClone, itemIndex);
+                collection.AddLast(item2);
+            }
+            return collection;
+        }
+        
         private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -621,7 +639,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<int> collection = new List<int>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.Add(item);
@@ -644,6 +662,24 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<int> collection = new List<int>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToClone[itemIndex];
+                collection.Add(item2);
+            }
+            return collection;
+        }
+        
         private static SortedSet<int> ConvertFromBytes_SortedSet_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -656,7 +692,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             SortedSet<int> collection = new SortedSet<int>();
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.Add(item);
@@ -678,6 +714,25 @@ namespace LazinatorTests.Examples.Collections
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, sortedSet[itemIndex]);
             }
+        }
+        
+        private static SortedSet<int> Clone_SortedSet_Gint_g(SortedSet<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            SortedSet<int> collection = new SortedSet<int>();
+            int itemToCloneCount = itemToClone.Count;
+            var sortedSet = System.Linq.Enumerable.ToList(itemToClone);
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) sortedSet[itemIndex];
+                collection.Add(item2);
+            }
+            return collection;
         }
         
     }

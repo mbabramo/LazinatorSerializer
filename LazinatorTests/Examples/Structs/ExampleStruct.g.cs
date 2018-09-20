@@ -725,7 +725,7 @@ namespace LazinatorTests.Examples
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<Example> collection = new List<Example>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -768,6 +768,31 @@ namespace LazinatorTests.Examples
             }
         }
         
+        private static List<Example> Clone_List_GExample_g(List<Example> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<Example> collection = new List<Example>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection.Add(default(Example));
+                }
+                else
+                {
+                    var item2 = (Example) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(item2);
+                }
+            }
+            return collection;
+        }
+        
         private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -780,7 +805,7 @@ namespace LazinatorTests.Examples
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<int> collection = new List<int>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.Add(item);
@@ -801,6 +826,24 @@ namespace LazinatorTests.Examples
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex]);
             }
+        }
+        
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<int> collection = new List<int>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToClone[itemIndex];
+                collection.Add(item2);
+            }
+            return collection;
         }
         
         private static (NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(LazinatorMemory storage)
@@ -843,6 +886,11 @@ namespace LazinatorTests.Examples
             }
             
             CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.Item2);
+        }
+        
+        private static (NonLazinatorClass myitem1, int? myitem2) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p((NonLazinatorClass myitem1, int? myitem2) itemToConvert)
+        {
+            return ((NonLazinatorClass) itemToConvert.Item1,(int?) itemToConvert.Item2);
         }
         
     }

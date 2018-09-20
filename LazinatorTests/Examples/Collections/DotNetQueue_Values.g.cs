@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             Queue<int> collection = new Queue<int>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.Enqueue(item);
@@ -413,6 +413,25 @@ namespace LazinatorTests.Examples.Collections
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, q[itemIndex]);
             }
+        }
+        
+        private static Queue<int> Clone_Queue_Gint_g(Queue<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            Queue<int> collection = new Queue<int>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            var q = System.Linq.Enumerable.ToList(itemToClone);
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) q[itemIndex];
+                collection.Enqueue(item2);
+            }
+            return collection;
         }
         
     }

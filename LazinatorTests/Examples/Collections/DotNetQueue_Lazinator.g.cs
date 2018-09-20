@@ -378,7 +378,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             Queue<ExampleChild> collection = new Queue<ExampleChild>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -420,6 +420,32 @@ namespace LazinatorTests.Examples.Collections
                 }
                 
             }
+        }
+        
+        private static Queue<ExampleChild> Clone_Queue_GExampleChild_g(Queue<ExampleChild> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            Queue<ExampleChild> collection = new Queue<ExampleChild>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            var q = System.Linq.Enumerable.ToList(itemToClone);
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (q[itemIndex] == null)
+                {
+                    collection.Enqueue(default(ExampleChild));
+                }
+                else
+                {
+                    var item2 = (ExampleChild) q[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Enqueue(item2);
+                }
+            }
+            return collection;
         }
         
     }

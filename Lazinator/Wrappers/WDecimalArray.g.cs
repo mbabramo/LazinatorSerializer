@@ -399,10 +399,10 @@ namespace Lazinator.Wrappers
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             decimal[] collection = new decimal[collectionLength];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 decimal item = span.ToDecompressedDecimal(ref bytesSoFar);
-                collection[i] = item;
+                collection[itemIndex] = item;
             }
             
             return collection;
@@ -420,6 +420,24 @@ namespace Lazinator.Wrappers
             {
                 CompressedDecimal.WriteCompressedDecimal(ref writer, itemToConvert[itemIndex]);
             }
+        }
+        
+        private static decimal[] Clone_decimal_B_b(decimal[] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            decimal[] collection = new decimal[collectionLength];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (decimal) itemToClone[itemIndex];
+                collection[itemIndex] = item2;
+            }
+            return collection;
         }
         
     }

@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Abstract
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<int> collection = new List<int>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
                 collection.Add(item);
@@ -234,6 +234,24 @@ namespace LazinatorTests.Examples.Abstract
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex]);
             }
+        }
+        
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<int> collection = new List<int>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToClone[itemIndex];
+                collection.Add(item2);
+            }
+            return collection;
         }
         
     }

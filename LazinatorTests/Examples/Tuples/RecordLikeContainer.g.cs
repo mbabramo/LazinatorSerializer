@@ -497,6 +497,11 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
         }
         
+        private static MismatchedRecordLikeType Clone_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert)
+        {
+            return new MismatchedRecordLikeType((int) itemToConvert.Age,(string) itemToConvert.Name);
+        }
+        
         private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -539,6 +544,11 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
+        private static RecordLikeClass Clone_RecordLikeClass(RecordLikeClass itemToConvert)
+        {
+            return new RecordLikeClass((int) itemToConvert.Age,(Example) itemToConvert.Example?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+        }
+        
         private static RecordLikeType ConvertFromBytes_RecordLikeType(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -564,6 +574,11 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
             
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
+        }
+        
+        private static RecordLikeType Clone_RecordLikeType(RecordLikeType itemToConvert)
+        {
+            return new RecordLikeType((int) itemToConvert.Age,(string) itemToConvert.Name);
         }
         
     }

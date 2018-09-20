@@ -430,5 +430,21 @@ namespace Lazinator.Spans
             writer.Write(itemToConvert.Span);
         }
         
+        private static Memory<byte> Clone_Memory_Gbyte_g(Memory<byte> itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Length;
+            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
+        }
+        
     }
 }

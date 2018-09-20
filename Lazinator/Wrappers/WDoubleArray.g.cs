@@ -399,10 +399,10 @@ namespace Lazinator.Wrappers
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             double[] collection = new double[collectionLength];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 double item = span.ToDouble(ref bytesSoFar);
-                collection[i] = item;
+                collection[itemIndex] = item;
             }
             
             return collection;
@@ -420,6 +420,24 @@ namespace Lazinator.Wrappers
             {
                 WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert[itemIndex]);
             }
+        }
+        
+        private static double[] Clone_double_B_b(double[] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            double[] collection = new double[collectionLength];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (double) itemToClone[itemIndex];
+                collection[itemIndex] = item2;
+            }
+            return collection;
         }
         
     }

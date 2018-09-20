@@ -481,7 +481,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<T> collection = new List<T>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -522,6 +522,31 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 
             }
+        }
+        
+        private static List<T> Clone_List_GT_g(List<T> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<T> collection = new List<T>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
+                {
+                    collection.Add(default(T));
+                }
+                else
+                {
+                    var item2 = (T) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(item2);
+                }
+            }
+            return collection;
         }
         
     }

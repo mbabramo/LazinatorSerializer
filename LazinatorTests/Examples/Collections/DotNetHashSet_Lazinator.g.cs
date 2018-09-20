@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             HashSet<ExampleChild> collection = new HashSet<ExampleChild>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -414,6 +414,30 @@ namespace LazinatorTests.Examples.Collections
                 }
                 
             }
+        }
+        
+        private static HashSet<ExampleChild> Clone_HashSet_GExampleChild_g(HashSet<ExampleChild> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            HashSet<ExampleChild> collection = new HashSet<ExampleChild>(collectionLength);
+            foreach (var item in itemToClone)
+            {
+                if (item == null)
+                {
+                    collection.Add(default(ExampleChild));
+                }
+                else
+                {
+                    var item2 = (ExampleChild) item?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(item2);
+                }
+            }
+            return collection;
         }
         
     }

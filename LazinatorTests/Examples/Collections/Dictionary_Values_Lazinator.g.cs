@@ -480,7 +480,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             Dictionary<int, ExampleChild> collection = new Dictionary<int, ExampleChild>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -504,6 +504,23 @@ namespace LazinatorTests.Examples.Collections
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
+        }
+        
+        private static Dictionary<int, ExampleChild> Clone_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            Dictionary<int, ExampleChild> collection = new Dictionary<int, ExampleChild>(collectionLength);
+            foreach (var item in itemToClone)
+            {
+                var item2 = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item);
+                collection.Add(item.Key, item.Value);
+            }
+            return collection;
         }
         
         private static KeyValuePair<int, ExampleChild> ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
@@ -548,6 +565,11 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
+        private static KeyValuePair<int, ExampleChild> Clone_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert)
+        {
+            return new KeyValuePair<int, ExampleChild>((int) itemToConvert.Key,(ExampleChild) itemToConvert.Value?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+        }
+        
         private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -560,7 +582,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             SortedDictionary<int, ExampleChild> collection = new SortedDictionary<int, ExampleChild>();
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -586,6 +608,23 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static SortedDictionary<int, ExampleChild> Clone_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            SortedDictionary<int, ExampleChild> collection = new SortedDictionary<int, ExampleChild>();
+            foreach (var item in itemToClone)
+            {
+                var item2 = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item);
+                collection.Add(item.Key, item.Value);
+            }
+            return collection;
+        }
+        
         private static SortedList<int, ExampleChild> ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -598,7 +637,7 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             SortedList<int, ExampleChild> collection = new SortedList<int, ExampleChild>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -622,6 +661,23 @@ namespace LazinatorTests.Examples.Collections
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
+        }
+        
+        private static SortedList<int, ExampleChild> Clone_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            SortedList<int, ExampleChild> collection = new SortedList<int, ExampleChild>(collectionLength);
+            foreach (var item in itemToClone)
+            {
+                var item2 = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item);
+                collection.Add(item.Key, item.Value);
+            }
+            return collection;
         }
         
     }

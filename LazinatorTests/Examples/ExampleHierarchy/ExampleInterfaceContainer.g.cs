@@ -458,7 +458,7 @@ namespace LazinatorTests.Examples.Hierarchy
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<IExample> collection = new List<IExample>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -499,6 +499,31 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 
             }
+        }
+        
+        private static List<IExample> Clone_List_GIExample_g(List<IExample> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<IExample> collection = new List<IExample>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection.Add(default(IExample));
+                }
+                else
+                {
+                    var item2 = (IExample) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(item2);
+                }
+            }
+            return collection;
         }
         
     }

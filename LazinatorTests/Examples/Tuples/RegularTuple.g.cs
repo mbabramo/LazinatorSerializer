@@ -586,7 +586,7 @@ namespace LazinatorTests.Examples.Tuples
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<Tuple<uint, ExampleChild, NonLazinatorClass>> collection = new List<Tuple<uint, ExampleChild, NonLazinatorClass>>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
@@ -627,6 +627,31 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 
             }
+        }
+        
+        private static List<Tuple<uint, ExampleChild, NonLazinatorClass>> Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(List<Tuple<uint, ExampleChild, NonLazinatorClass>> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<Tuple<uint, ExampleChild, NonLazinatorClass>> collection = new List<Tuple<uint, ExampleChild, NonLazinatorClass>>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection.Add(default(Tuple<uint, ExampleChild, NonLazinatorClass>));
+                }
+                else
+                {
+                    var item2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex]);
+                    collection.Add(item2);
+                }
+            }
+            return collection;
         }
         
         private static Tuple<uint, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(LazinatorMemory storage)
@@ -694,6 +719,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
+        private static Tuple<uint, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert)
+        {
+            return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) itemToConvert?.Item1,(ExampleChild) itemToConvert?.Item2?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) itemToConvert?.Item3);
+        }
+        
         private static Tuple<uint?, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -759,6 +789,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
+        private static Tuple<uint?, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert)
+        {
+            return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) itemToConvert?.Item1,(ExampleChild) itemToConvert?.Item2?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) itemToConvert?.Item3);
+        }
+        
         private static Tuple<int, ExampleStruct> ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -799,6 +834,11 @@ namespace LazinatorTests.Examples.Tuples
             
             void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
+        }
+        
+        private static Tuple<int, ExampleStruct> Clone_Tuple_Gint_c_C32ExampleStruct_g(Tuple<int, ExampleStruct> itemToConvert)
+        {
+            return new Tuple<int, ExampleStruct>((int) itemToConvert?.Item1,(ExampleStruct) itemToConvert?.Item2.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
         }
         
     }

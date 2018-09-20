@@ -498,11 +498,11 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength1 = span.ToDecompressedInt(ref bytesSoFar);
             
             int[,] collection = new int[collectionLength0, collectionLength1];
-            for (int i0 = 0; i0 < collectionLength0; i0++)
-            for (int i1 = 0; i1 < collectionLength1; i1++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collection[i0, i1] = item;
+                collection[itemIndex0, itemIndex1] = item;
             }
             
             return collection;
@@ -525,6 +525,28 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static int[,] Clone_int_B_c_b(int[,] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int collectionLength0 = itemToClone.GetLength(0);
+            int collectionLength1 = itemToClone.GetLength(1);
+            int[,] collection = new int[collectionLength0, collectionLength1];
+            int length0 = itemToClone.GetLength(0);
+            int length1 = itemToClone.GetLength(1);
+            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
+            {
+                var item2 = (int) itemToClone[itemIndex0, itemIndex1];
+                collection[itemIndex0, itemIndex1] = item2;
+            }
+            return collection;
+        }
+        
         private static int[][,,][,,,] ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -537,18 +559,18 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             int[][,,][,,,] collection = new int[collectionLength][,,][,,,];
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection[i] = default(int[,,][,,,]);
+                    collection[itemIndex] = default(int[,,][,,,]);
                 }
                 else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(childData);
-                    collection[i] = item;
+                    collection[itemIndex] = item;
                 }
                 bytesSoFar += lengthCollectionMember;
             }
@@ -580,6 +602,31 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static int[][,,][,,,] Clone_int_B_b_B_c_c_b_B_c_c_c_b(int[][,,][,,,] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int[][,,][,,,] collection = new int[collectionLength][,,][,,,];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (itemToClone[itemIndex] == null)
+                {
+                    collection[itemIndex] = default(int[,,][,,,]);
+                }
+                else
+                {
+                    var item2 = (int[,,][,,,]) Clone_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex]);
+                    collection[itemIndex] = item2;
+                }
+            }
+            return collection;
+        }
+        
         private static int[,,][,,,] ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -594,20 +641,20 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength2 = span.ToDecompressedInt(ref bytesSoFar);
             
             int[,,][,,,] collection = new int[collectionLength0, collectionLength1, collectionLength2][,,,];
-            for (int i0 = 0; i0 < collectionLength0; i0++)
-            for (int i1 = 0; i1 < collectionLength1; i1++)
-            for (int i2 = 0; i2 < collectionLength2; i2++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection[i0, i1, i2] = default(int[,,,]);
+                    collection[itemIndex0, itemIndex1, itemIndex2] = default(int[,,,]);
                 }
                 else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_c_b(childData);
-                    collection[i0, i1, i2] = item;
+                    collection[itemIndex0, itemIndex1, itemIndex2] = item;
                 }
                 bytesSoFar += lengthCollectionMember;
             }
@@ -645,6 +692,38 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static int[,,][,,,] Clone_int_B_c_c_b_B_c_c_c_b(int[,,][,,,] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int collectionLength0 = itemToClone.GetLength(0);
+            int collectionLength1 = itemToClone.GetLength(1);
+            int collectionLength2 = itemToClone.GetLength(2);
+            int[,,][,,,] collection = new int[collectionLength0, collectionLength1, collectionLength2][,,,];
+            int length0 = itemToClone.GetLength(0);
+            int length1 = itemToClone.GetLength(1);
+            int length2 = itemToClone.GetLength(2);
+            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            {
+                if (itemToClone[itemIndex0, itemIndex1, itemIndex2] == null)
+                {
+                    collection[itemIndex0, itemIndex1, itemIndex2] = default(int[,,,]);
+                }
+                else
+                {
+                    var item2 = (int[,,,]) Clone_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2]);
+                    collection[itemIndex0, itemIndex1, itemIndex2] = item2;
+                }
+            }
+            return collection;
+        }
+        
         private static int[,,,] ConvertFromBytes_int_B_c_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -660,13 +739,13 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength3 = span.ToDecompressedInt(ref bytesSoFar);
             
             int[,,,] collection = new int[collectionLength0, collectionLength1, collectionLength2, collectionLength3];
-            for (int i0 = 0; i0 < collectionLength0; i0++)
-            for (int i1 = 0; i1 < collectionLength1; i1++)
-            for (int i2 = 0; i2 < collectionLength2; i2++)
-            for (int i3 = 0; i3 < collectionLength3; i3++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
+            for (int itemIndex3 = 0; itemIndex3 < collectionLength3; itemIndex3++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collection[i0, i1, i2, i3] = item;
+                collection[itemIndex0, itemIndex1, itemIndex2, itemIndex3] = item;
             }
             
             return collection;
@@ -695,6 +774,34 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static int[,,,] Clone_int_B_c_c_c_b(int[,,,] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int collectionLength0 = itemToClone.GetLength(0);
+            int collectionLength1 = itemToClone.GetLength(1);
+            int collectionLength2 = itemToClone.GetLength(2);
+            int collectionLength3 = itemToClone.GetLength(3);
+            int[,,,] collection = new int[collectionLength0, collectionLength1, collectionLength2, collectionLength3];
+            int length0 = itemToClone.GetLength(0);
+            int length1 = itemToClone.GetLength(1);
+            int length2 = itemToClone.GetLength(2);
+            int length3 = itemToClone.GetLength(3);
+            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            for (int itemIndex3 = 0; itemIndex3 < length3; itemIndex3++)
+            {
+                var item2 = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2, itemIndex3];
+                collection[itemIndex0, itemIndex1, itemIndex2, itemIndex3] = item2;
+            }
+            return collection;
+        }
+        
         private static int[,,] ConvertFromBytes_int_B_c_c_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -709,12 +816,12 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength2 = span.ToDecompressedInt(ref bytesSoFar);
             
             int[,,] collection = new int[collectionLength0, collectionLength1, collectionLength2];
-            for (int i0 = 0; i0 < collectionLength0; i0++)
-            for (int i1 = 0; i1 < collectionLength1; i1++)
-            for (int i2 = 0; i2 < collectionLength2; i2++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collection[i0, i1, i2] = item;
+                collection[itemIndex0, itemIndex1, itemIndex2] = item;
             }
             
             return collection;
@@ -738,6 +845,31 @@ namespace LazinatorTests.Examples.Collections
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2]);
             }
+        }
+        
+        private static int[,,] Clone_int_B_c_c_b(int[,,] itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Length;
+            int collectionLength0 = itemToClone.GetLength(0);
+            int collectionLength1 = itemToClone.GetLength(1);
+            int collectionLength2 = itemToClone.GetLength(2);
+            int[,,] collection = new int[collectionLength0, collectionLength1, collectionLength2];
+            int length0 = itemToClone.GetLength(0);
+            int length1 = itemToClone.GetLength(1);
+            int length2 = itemToClone.GetLength(2);
+            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            {
+                var item2 = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2];
+                collection[itemIndex0, itemIndex1, itemIndex2] = item2;
+            }
+            return collection;
         }
         
     }

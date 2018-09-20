@@ -420,6 +420,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
+        private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> itemToConvert)
+        {
+            return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) itemToConvert?.Item1,((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) Clone__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(itemToConvert?.Item2 ?? default),(NonLazinatorClass) itemToConvert?.Item3);
+        }
+        
         private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -468,6 +473,11 @@ namespace LazinatorTests.Examples.Tuples
             
             void actionItem2(ref BinaryBufferWriter w) => ConvertToBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(ref w, itemToConvert.Item2, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
+        }
+        
+        private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) Clone__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) itemToConvert)
+        {
+            return ((ExampleChild) itemToConvert.Item1?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),((uint, (int a, string b)?, Tuple<short, long>)) Clone__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(itemToConvert.Item2));
         }
         
         private static (uint, (int a, string b)?, Tuple<short, long>) ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(LazinatorMemory storage)
@@ -531,6 +541,11 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
+        private static (uint, (int a, string b)?, Tuple<short, long>) Clone__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p((uint, (int a, string b)?, Tuple<short, long>) itemToConvert)
+        {
+            return ((uint) itemToConvert.Item1,((int a, string b)?) Clone__Pint_C32a_c_C32string_C32b_p_C63(itemToConvert.Item2),(Tuple<short, long>) Clone_Tuple_Gshort_c_C32long_g(itemToConvert.Item3));
+        }
+        
         private static (int a, string b)? ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -562,6 +577,11 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Value.Item2);
         }
         
+        private static (int a, string b)? Clone__Pint_C32a_c_C32string_C32b_p_C63((int a, string b)? itemToConvert)
+        {
+            return ((int) itemToConvert?.Item1,(string) itemToConvert?.Item2);
+        }
+        
         private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -591,6 +611,11 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedShort(ref writer, itemToConvert.Item1);
             
             CompressedIntegralTypes.WriteCompressedLong(ref writer, itemToConvert.Item2);
+        }
+        
+        private static Tuple<short, long> Clone_Tuple_Gshort_c_C32long_g(Tuple<short, long> itemToConvert)
+        {
+            return new Tuple<short, long>((short) itemToConvert?.Item1,(long) itemToConvert?.Item2);
         }
         
     }

@@ -913,6 +913,22 @@ namespace LazinatorTests.Examples.Collections
             writer.Write(itemToConvert.Span);
         }
         
+        private static Memory<byte> Clone_Memory_Gbyte_g(Memory<byte> itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Length;
+            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
+        }
+        
         private static Memory<int> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -926,10 +942,10 @@ namespace LazinatorTests.Examples.Collections
             
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collectionAsSpan[i] = item;
+                collectionAsSpan[itemIndex] = item;
             }
             
             return collection;
@@ -944,6 +960,22 @@ namespace LazinatorTests.Examples.Collections
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvertSpan[itemIndex]);
             }
+        }
+        
+        private static Memory<int> Clone_Memory_Gint_g(Memory<int> itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Length;
+            Memory<int> collection = new Memory<int>(new int[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
         }
         
         private static Memory<byte>? ConvertFromBytes_Memory_Gbyte_g_C63(LazinatorMemory storage)
@@ -966,6 +998,22 @@ namespace LazinatorTests.Examples.Collections
             writer.Write(itemToConvert.Value.Span);
         }
         
+        private static Memory<byte>? Clone_Memory_Gbyte_g_C63(Memory<byte>? itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Value.Length;
+            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Value.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
+        }
+        
         private static Memory<int>? ConvertFromBytes_Memory_Gint_g_C63(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -979,10 +1027,10 @@ namespace LazinatorTests.Examples.Collections
             
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collectionAsSpan[i] = item;
+                collectionAsSpan[itemIndex] = item;
             }
             
             return collection;
@@ -995,6 +1043,22 @@ namespace LazinatorTests.Examples.Collections
                 return;
             }
             ConvertToBytes_Memory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+        }
+        
+        private static Memory<int>? Clone_Memory_Gint_g_C63(Memory<int>? itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Value.Length;
+            Memory<int> collection = new Memory<int>(new int[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Value.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
         }
         
         private static ReadOnlyMemory<int>? ConvertFromBytes_ReadOnlyMemory_Gint_g_C63(LazinatorMemory storage)
@@ -1010,10 +1074,10 @@ namespace LazinatorTests.Examples.Collections
             
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collectionAsSpan[i] = item;
+                collectionAsSpan[itemIndex] = item;
             }
             
             return collection;
@@ -1026,6 +1090,22 @@ namespace LazinatorTests.Examples.Collections
                 return;
             }
             ConvertToBytes_ReadOnlyMemory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+        }
+        
+        private static ReadOnlyMemory<int>? Clone_ReadOnlyMemory_Gint_g_C63(ReadOnlyMemory<int>? itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Value.Length;
+            Memory<int> collection = new Memory<int>(new int[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Value.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
         }
         
         private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -1050,10 +1130,10 @@ namespace LazinatorTests.Examples.Collections
             
             Memory<char> collection = new Memory<char>(new char[collectionLength]);
             var collectionAsSpan = collection.Span;
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 char item = span.ToChar(ref bytesSoFar);
-                collectionAsSpan[i] = item;
+                collectionAsSpan[itemIndex] = item;
             }
             
             return collection;
@@ -1070,6 +1150,22 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
+        private static ReadOnlyMemory<char> Clone_ReadOnlyMemory_Gchar_g(ReadOnlyMemory<char> itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Length;
+            Memory<char> collection = new Memory<char>(new char[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (char) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
+        }
+        
         private static ReadOnlyMemory<int> ConvertFromBytes_ReadOnlyMemory_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -1083,10 +1179,10 @@ namespace LazinatorTests.Examples.Collections
             
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int item = span.ToDecompressedInt(ref bytesSoFar);
-                collectionAsSpan[i] = item;
+                collectionAsSpan[itemIndex] = item;
             }
             
             return collection;
@@ -1101,6 +1197,22 @@ namespace LazinatorTests.Examples.Collections
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvertSpan[itemIndex]);
             }
+        }
+        
+        private static ReadOnlyMemory<int> Clone_ReadOnlyMemory_Gint_g(ReadOnlyMemory<int> itemToClone)
+        {
+            
+            int collectionLength = itemToClone.Length;
+            Memory<int> collection = new Memory<int>(new int[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = item2;
+            }
+            return collection;
         }
         
         private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)

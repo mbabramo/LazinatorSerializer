@@ -639,7 +639,7 @@ namespace LazinatorTests.Examples
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<ExampleStruct> collection = new List<ExampleStruct>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -669,6 +669,24 @@ namespace LazinatorTests.Examples
             }
         }
         
+        private static List<ExampleStruct> Clone_List_GExampleStruct_g(List<ExampleStruct> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<ExampleStruct> collection = new List<ExampleStruct>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (ExampleStruct) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(item2);
+            }
+            return collection;
+        }
+        
         private static List<WNullableStruct<ExampleStruct>> ConvertFromBytes_List_GWNullableStruct_GExampleStruct_g_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
@@ -681,7 +699,7 @@ namespace LazinatorTests.Examples
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
             List<WNullableStruct<ExampleStruct>> collection = new List<WNullableStruct<ExampleStruct>>(collectionLength);
-            for (int i = 0; i < collectionLength; i++)
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
@@ -709,6 +727,24 @@ namespace LazinatorTests.Examples
                 void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
+        }
+        
+        private static List<WNullableStruct<ExampleStruct>> Clone_List_GWNullableStruct_GExampleStruct_g_g(List<WNullableStruct<ExampleStruct>> itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default;
+            }
+            
+            int collectionLength = itemToClone.Count;
+            List<WNullableStruct<ExampleStruct>> collection = new List<WNullableStruct<ExampleStruct>>(collectionLength);
+            int itemToCloneCount = itemToClone.Count;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var item2 = (WNullableStruct<ExampleStruct>) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(item2);
+            }
+            return collection;
         }
         
     }
