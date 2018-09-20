@@ -50,7 +50,7 @@ namespace Lazinator.CodeDescription
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
-        internal bool IsNonSerializedType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
+        internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         /* Names */
         private bool UseFullyQualifiedNames => (ContainingObjectDescription.Compilation.Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
@@ -848,7 +848,7 @@ namespace Lazinator.CodeDescription
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
 
-            string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonSerializedType && TrackDirtinessNonSerialized, $@"
+            string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         _{PropertyName}_Dirty = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass, $@"
@@ -947,7 +947,7 @@ namespace Lazinator.CodeDescription
                         {recreation}
                     }}
                     _{PropertyName}_Accessed = true;
-                }}{IIF(IsNonSerializedType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol), $@"
+                }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol), $@"
                     IsDirty = true;")} 
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
@@ -955,7 +955,7 @@ namespace Lazinator.CodeDescription
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
                 IsDirty = true;
                 DescendantIsDirty = true;
-                _{PropertyName} = value;{IIF(IsNonSerializedType && TrackDirtinessNonSerialized, $@"
+                _{PropertyName} = value;{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                 _{PropertyName}_Dirty = true;")}
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
@@ -1344,6 +1344,7 @@ namespace Lazinator.CodeDescription
 
             AppendSupportedCollection_ConvertFromBytes(sb);
             AppendSupportedCollection_ConvertToBytes(sb);
+            AppendSupportedCollection_Clone(sb);
 
             RecursivelyAppendConversionMethods(sb, alreadyGenerated);
         }
@@ -1375,9 +1376,145 @@ namespace Lazinator.CodeDescription
 
         private void AppendSupportedCollection_ConvertToBytes(CodeStringBuilder sb)
         {
-            bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
+            string lengthWord, itemString, itemStringSetup, forStatement;
+            GetForStatementAndItemString(out lengthWord, out itemString, out itemStringSetup, out forStatement);
 
-            string lengthWord;
+            if (
+                (
+                    (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName != "byte")
+                    ||
+                    SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte
+                )
+                && Nullable)
+            {
+                // we will use a method for the Nullable, then an inner method for the non-nullable case,
+                // even though the WriteNonLazinator takes care of the nullable, so there is nothing to do 
+                // but call the inner method.
+                sb.Append($@"
+
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    {{
+                        if (itemToConvert == null)
+                        {{
+                            return;
+                        }}
+                        {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    }}
+");
+            }
+            else
+            {
+                string writeCollectionLengthCommand;
+                if (ArrayRank > 1)
+                {
+                    StringBuilder arrayStringBuilder = new StringBuilder();
+                    for (int i = 0; i < ArrayRank; i++)
+                    {
+                        string writeLengthForRankString = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength({i}));";
+                        if (i < ArrayRank - 1)
+                            arrayStringBuilder.AppendLine(writeLengthForRankString);
+                        else
+                            arrayStringBuilder.Append(writeLengthForRankString);
+                    }
+                    writeCollectionLengthCommand = arrayStringBuilder.ToString();
+                }
+                else
+                    writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
+                string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
+                if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
+                {
+                    sb.AppendLine($@"
+
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    {{");
+                    if (Nullable)
+                        sb.Append($@"if (itemToConvert == null)
+                            {{
+                                writer.Write((bool)true);
+                                return;
+                            }}
+                            writer.Write((bool)false);
+                            writer.Write(itemToConvert.Value.Span);
+                        }}
+                        ");
+                    else
+                        sb.Append($@"writer.Write(itemToConvert.Span);
+                            }}
+                            ");
+                }
+                else
+                    sb.Append($@"
+
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                    {{
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
+                        {{
+                            return;
+                        }}
+                        ")}{writeCollectionLengthCommand}
+                        {forStatement}
+                        {{{itemStringSetup}{writeCommand}
+                        }}
+                    }}
+");
+            }
+        }
+
+        private void AppendSupportedCollection_Clone(CodeStringBuilder sb)
+        {
+            PropertyDescription innerProperty = InnerProperties[0];
+            string collectionAddItem, collectionAddNull;
+            innerProperty.GetSupportedCollectionAddCommands(this, out collectionAddItem, out collectionAddNull);
+            string creationText = GetCreationText();
+
+            string lengthWord, itemString, itemStringSetup, forStatement;
+            GetForStatementAndItemString(out lengthWord, out itemString, out itemStringSetup, out forStatement);
+            string cloneString = innerProperty.GetCloneString(itemString);
+
+            sb.Append($@"
+                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert)
+                    {{
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
+                        {{
+                            return default;
+                        }}
+                        ")}
+                        int collectionLength = itemToConvert.{lengthWord};
+                        {creationText}
+                        {forStatement}
+                        {{
+                            if ({itemString} == default({innerProperty.AppropriatelyQualifiedTypeName}))
+                            {{
+                                {collectionAddNull}
+                            }}
+                            else
+                            {{
+                                var item = ({innerProperty.AppropriatelyQualifiedTypeName}) {cloneString};
+                                {collectionAddItem}
+                            }}
+                        }}
+                        return collection;
+                    }}
+");
+        }
+
+        private string GetCloneString(string itemString)
+        {
+            string cloneString;
+            if (IsLazinator)
+                cloneString = $"{itemString}?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer)";
+            else if (SupportedCollectionType != null || SupportedTupleType != null)
+                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString})";
+            else if (IsPrimitive || IsNonLazinatorType)
+                cloneString = itemString;
+            else
+                throw new NotImplementedException();
+            return cloneString;
+        }
+
+        private void GetForStatementAndItemString(out string lengthWord, out string itemString, out string itemStringSetup, out string forStatement)
+        {
+            bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
             if (SupportedCollectionType == LazinatorSupportedCollectionType.List || SupportedCollectionType == LazinatorSupportedCollectionType.SortedSet || SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList ||
                 SupportedCollectionType == LazinatorSupportedCollectionType.HashSet || SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList || SupportedCollectionType == LazinatorSupportedCollectionType.Queue || SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
@@ -1393,9 +1530,7 @@ namespace Lazinator.CodeDescription
             }
             else
                 throw new NotImplementedException();
-
-
-            string itemString, itemStringSetup = "", forStatement;
+            itemStringSetup = "";
             if (SupportedCollectionType == LazinatorSupportedCollectionType.HashSet || SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
                 forStatement = $@"foreach (var item in itemToConvert)";
@@ -1475,86 +1610,6 @@ namespace Lazinator.CodeDescription
                 itemString =
                     "itemToConvert[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
             }
-
-            if (
-                (
-                    (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName != "byte")
-                    || 
-                    SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte
-                ) 
-                && Nullable)
-            {
-                // we will use a method for the Nullable, then an inner method for the non-nullable case,
-                // even though the WriteNonLazinator takes care of the nullable, so there is nothing to do 
-                // but call the inner method.
-                sb.Append($@"
-
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                    {{
-                        if (itemToConvert == null)
-                        {{
-                            return;
-                        }}
-                        {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    }}
-");
-            }
-            else
-            {
-                string writeCollectionLengthCommand;
-                if (ArrayRank > 1)
-                {
-                    StringBuilder arrayStringBuilder = new StringBuilder();
-                    for (int i = 0; i < ArrayRank; i++)
-                    {
-                        string writeLengthForRankString = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength({i}));";
-                        if (i < ArrayRank - 1)
-                            arrayStringBuilder.AppendLine(writeLengthForRankString);
-                        else
-                            arrayStringBuilder.Append(writeLengthForRankString);
-                    }
-                    writeCollectionLengthCommand = arrayStringBuilder.ToString();
-                }
-                else
-                    writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
-                string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
-                {
-                    sb.AppendLine($@"
-
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                    {{");
-                    if (Nullable)
-                        sb.Append($@"if (itemToConvert == null)
-                            {{
-                                writer.Write((bool)true);
-                                return;
-                            }}
-                            writer.Write((bool)false);
-                            writer.Write(itemToConvert.Value.Span);
-                        }}
-                        ");
-                    else
-                        sb.Append($@"writer.Write(itemToConvert.Span);
-                            }}
-                            ");
-                }
-                else
-                    sb.Append($@"
-
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                    {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
-                        {{
-                            return;
-                        }}
-                        ")}{writeCollectionLengthCommand}
-                        {forStatement}
-                        {{{itemStringSetup}{writeCommand}
-                        }}
-                    }}
-");
-            }
         }
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
@@ -1578,45 +1633,7 @@ namespace Lazinator.CodeDescription
                 return;
             }
 
-            string creationText;
-            bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.List ||
-                SupportedCollectionType == LazinatorSupportedCollectionType.HashSet ||
-                SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary ||
-                SupportedCollectionType == LazinatorSupportedCollectionType.SortedList ||
-                SupportedCollectionType == LazinatorSupportedCollectionType.Queue ||
-                SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
-            {
-                creationText = $"{AppropriatelyQualifiedTypeName} collection = new {AppropriatelyQualifiedTypeName}(collectionLength);";
-            }
-            else if (SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedSet || SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
-            {
-                creationText = $"{AppropriatelyQualifiedTypeName} collection = new {AppropriatelyQualifiedTypeName}();"; // can't initialize collection length
-            }
-            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
-            {
-                creationText =
-                    $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
-                            var collectionAsSpan = collection.Span;"; // for now, create array on the heap
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
-                    creationText = creationText.Replace("ReadOnlyMemory<", "Memory<"); // we must use Memory here so that it can be assigned to
-            }
-            else if (isArray)
-            {
-                if (ArrayRank == 1)
-                {
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]");
-                    creationText = $"{AppropriatelyQualifiedTypeName} collection = new {newExpression};";
-                }
-                else
-                {
-                    string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"collectionLength{j}")));
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[{innerArrayText}]");
-                    creationText = $"{AppropriatelyQualifiedTypeName} collection = new {newExpression};";
-                }
-            }
-            else
-                throw new NotImplementedException();
+            string creationText = GetCreationText();
 
             string readCollectionLengthCommand = null, forStatementCommand = null;
             if (ArrayRank > 1)
@@ -1672,6 +1689,50 @@ namespace Lazinator.CodeDescription
                     }}");
         }
 
+        private string GetCreationText()
+        {
+            string creationText;
+            bool isArray = SupportedCollectionType == LazinatorSupportedCollectionType.Array;
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.List ||
+                SupportedCollectionType == LazinatorSupportedCollectionType.HashSet ||
+                SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary ||
+                SupportedCollectionType == LazinatorSupportedCollectionType.SortedList ||
+                SupportedCollectionType == LazinatorSupportedCollectionType.Queue ||
+                SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
+            {
+                creationText = $"{AppropriatelyQualifiedTypeName} collection = new {AppropriatelyQualifiedTypeName}(collectionLength);";
+            }
+            else if (SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedSet || SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
+            {
+                creationText = $"{AppropriatelyQualifiedTypeName} collection = new {AppropriatelyQualifiedTypeName}();"; // can't initialize collection length
+            }
+            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            {
+                creationText =
+                    $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
+                            var collectionAsSpan = collection.Span;"; // for now, create array on the heap
+                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+                    creationText = creationText.Replace("ReadOnlyMemory<", "Memory<"); // we must use Memory here so that it can be assigned to
+            }
+            else if (isArray)
+            {
+                if (ArrayRank == 1)
+                {
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]");
+                    creationText = $"{AppropriatelyQualifiedTypeName} collection = new {newExpression};";
+                }
+                else
+                {
+                    string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"collectionLength{j}")));
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[{innerArrayText}]");
+                    creationText = $"{AppropriatelyQualifiedTypeName} collection = new {newExpression};";
+                }
+            }
+            else
+                throw new NotImplementedException();
+            return creationText;
+        }
+
         private void CheckForLazinatorInNonLazinator(PropertyDescription innerProperty)
         {
             if (innerProperty.IsLazinator && (Config?.ProhibitLazinatorInNonLazinator ?? false) && !OutmostPropertyDescription.AllowLazinatorInNonLazinator)
@@ -1691,57 +1752,12 @@ namespace Lazinator.CodeDescription
         private string GetSupportedCollectionReadCommands(PropertyDescription outerProperty)
         {
             string collectionAddItem, collectionAddNull;
-            if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Array)
-            {
-                if (outerProperty.ArrayRank == 1)
-                {
-                    collectionAddItem = "collection[i] = item;";
-                    collectionAddNull = $"collection[i] = default({AppropriatelyQualifiedTypeName});";
-                }
-                else
-                {
-
-                    string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"i{j}")));
-                    collectionAddItem = $"collection[{innerArrayText}] = item;";
-                    collectionAddNull = $"collection[{innerArrayText}] = default({AppropriatelyQualifiedTypeName});";
-                }
-            }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
-            {
-                collectionAddItem = "collectionAsSpan[i] = item;";
-                collectionAddNull = $"collectionAsSpan[i] = default({AppropriatelyQualifiedTypeName});";
-            }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
-            {
-                // the outer type is a dictionary
-                collectionAddItem = "collection.Add(item.Key, item.Value);";
-                collectionAddNull = ""; // no null entries in dictionary
-            }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
-            {
-                collectionAddItem = "collection.Enqueue(item);";
-                collectionAddNull = $"collection.Enqueue(default({AppropriatelyQualifiedTypeName}));";
-            }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
-            {
-                collectionAddItem = "collection.Push(item);";
-                collectionAddNull = $"collection.Push(default({AppropriatelyQualifiedTypeName}));";
-            }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
-            {
-                collectionAddItem = "collection.AddLast(item);";
-                collectionAddNull = $"collection.AddLast(default({AppropriatelyQualifiedTypeName}));";
-            }
-            else
-            {
-                collectionAddItem = "collection.Add(item);";
-                collectionAddNull = $"collection.Add(default({AppropriatelyQualifiedTypeName}));";
-            }
+            GetSupportedCollectionAddCommands(outerProperty, out collectionAddItem, out collectionAddNull);
             if (IsPrimitive)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);
                         {collectionAddItem}");
-            else if (IsNonSerializedType)
+            else if (IsNonLazinatorType)
             {
                 if (Nullable)
                     return ($@"
@@ -1802,6 +1818,56 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        private void GetSupportedCollectionAddCommands(PropertyDescription outerProperty, out string collectionAddItem, out string collectionAddNull)
+        {
+            if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Array)
+            {
+                if (outerProperty.ArrayRank == 1)
+                {
+                    collectionAddItem = "collection[i] = item;";
+                    collectionAddNull = $"collection[i] = default({AppropriatelyQualifiedTypeName});";
+                }
+                else
+                {
+
+                    string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"i{j}")));
+                    collectionAddItem = $"collection[{innerArrayText}] = item;";
+                    collectionAddNull = $"collection[{innerArrayText}] = default({AppropriatelyQualifiedTypeName});";
+                }
+            }
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            {
+                collectionAddItem = "collectionAsSpan[i] = item;";
+                collectionAddNull = $"collectionAsSpan[i] = default({AppropriatelyQualifiedTypeName});";
+            }
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
+            {
+                // the outer type is a dictionary
+                collectionAddItem = "collection.Add(item.Key, item.Value);";
+                collectionAddNull = ""; // no null entries in dictionary
+            }
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
+            {
+                collectionAddItem = "collection.Enqueue(item);";
+                collectionAddNull = $"collection.Enqueue(default({AppropriatelyQualifiedTypeName}));";
+            }
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
+            {
+                collectionAddItem = "collection.Push(item);";
+                collectionAddNull = $"collection.Push(default({AppropriatelyQualifiedTypeName}));";
+            }
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
+            {
+                collectionAddItem = "collection.AddLast(item);";
+                collectionAddNull = $"collection.AddLast(default({AppropriatelyQualifiedTypeName}));";
+            }
+            else
+            {
+                collectionAddItem = "collection.Add(item);";
+                collectionAddNull = $"collection.Add(default({AppropriatelyQualifiedTypeName}));";
+            }
+        }
+
         private string GetSupportedCollectionWriteCommands(string itemString)
         {
             string GetSupportedCollectionWriteCommandsHelper()
@@ -1809,7 +1875,7 @@ namespace Lazinator.CodeDescription
                 if (IsPrimitive)
                     return ($@"
                     {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemString});");
-                else if (IsNonSerializedType)
+                else if (IsNonLazinatorType)
                     return ($@"
                     void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemString}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
@@ -1937,7 +2003,7 @@ namespace Lazinator.CodeDescription
             if (IsPrimitive)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);");
-            else if (IsNonSerializedType)
+            else if (IsNonLazinatorType)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = default;
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
@@ -1982,7 +2048,7 @@ namespace Lazinator.CodeDescription
             if (IsPrimitive)
                 return ($@"
                         {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
-            else if (IsNonSerializedType)
+            else if (IsNonLazinatorType)
             {
                 if (Nullable)
                     return ($@"

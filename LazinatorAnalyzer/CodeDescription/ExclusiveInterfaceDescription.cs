@@ -147,7 +147,7 @@ namespace Lazinator.CodeDescription
                 if (match == null)
                     throw new LazinatorCodeGenException(
                         $"Property ending with _Dirty must have a corresponding property without the ending.");
-                if (!match.IsNonSerializedType)
+                if (!match.IsNonLazinatorType)
                     throw new LazinatorCodeGenException(
                         $"Property ending with _Dirty must correspond to a nonserialized property without the ending (not to a Lazinator or primitive type).");
                 match.TrackDirtinessNonSerialized = true;
