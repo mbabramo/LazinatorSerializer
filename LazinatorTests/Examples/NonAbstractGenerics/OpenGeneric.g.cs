@@ -542,8 +542,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 else
                 {
-                    var item2 = (T) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                    collection.Add(item2);
+                    var itemCopied = (T) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(itemCopied);
                 }
             }
             return collection;

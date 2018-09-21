@@ -428,8 +428,8 @@ namespace LazinatorTests.Examples.Subclasses
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass) itemToClone[itemIndex];
-                collection.Add(item2);
+                var itemCopied = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass) itemToClone[itemIndex];
+                collection.Add(itemCopied);
             }
             return collection;
         }

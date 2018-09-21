@@ -433,8 +433,8 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var item2 = (ExampleChild) item?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                    collection.Add(item2);
+                    var itemCopied = (ExampleChild) item?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(itemCopied);
                 }
             }
             return collection;

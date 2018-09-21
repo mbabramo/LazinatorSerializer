@@ -248,8 +248,8 @@ namespace LazinatorTests.Examples.Abstract
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToClone[itemIndex];
-                collection.Add(item2);
+                var itemCopied = (int) itemToClone[itemIndex];
+                collection.Add(itemCopied);
             }
             return collection;
         }

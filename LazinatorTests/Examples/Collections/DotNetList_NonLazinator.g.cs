@@ -506,8 +506,8 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var item2 = (NonLazinatorClass) itemToClone[itemIndex];
-                    collection.Add(item2);
+                    var itemCopied = (NonLazinatorClass) itemToClone[itemIndex];
+                    collection.Add(itemCopied);
                 }
             }
             return collection;

@@ -435,8 +435,8 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var item2 = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(itemToClone[itemIndex]);
-                    collection.Add(item2);
+                    var itemCopied = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(itemToClone[itemIndex]);
+                    collection.Add(itemCopied);
                 }
             }
             return collection;
@@ -515,8 +515,8 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var item2 = (NonLazinatorClass) itemToClone[itemIndex];
-                    collection.Add(item2);
+                    var itemCopied = (NonLazinatorClass) itemToClone[itemIndex];
+                    collection.Add(itemCopied);
                 }
             }
             return collection;

@@ -647,8 +647,8 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 else
                 {
-                    var item2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex]);
-                    collection.Add(item2);
+                    var itemCopied = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex]);
+                    collection.Add(itemCopied);
                 }
             }
             return collection;

@@ -681,8 +681,8 @@ namespace LazinatorTests.Examples
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (ExampleStruct) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                collection.Add(item2);
+                var itemCopied = (ExampleStruct) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(itemCopied);
             }
             return collection;
         }
@@ -741,8 +741,8 @@ namespace LazinatorTests.Examples
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (WNullableStruct<ExampleStruct>) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                collection.Add(item2);
+                var itemCopied = (WNullableStruct<ExampleStruct>) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                collection.Add(itemCopied);
             }
             return collection;
         }

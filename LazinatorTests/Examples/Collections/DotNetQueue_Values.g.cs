@@ -428,8 +428,8 @@ namespace LazinatorTests.Examples.Collections
             var q = System.Linq.Enumerable.ToList(itemToClone);
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) q[itemIndex];
-                collection.Enqueue(item2);
+                var itemCopied = (int) q[itemIndex];
+                collection.Enqueue(itemCopied);
             }
             return collection;
         }

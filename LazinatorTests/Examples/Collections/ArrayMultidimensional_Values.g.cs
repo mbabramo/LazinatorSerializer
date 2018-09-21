@@ -539,8 +539,8 @@ namespace LazinatorTests.Examples.Collections
             for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
             for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
             {
-                var item2 = (int) itemToClone[itemIndex0, itemIndex1];
-                collection[itemIndex0, itemIndex1] = item2;
+                var itemCopied = (int) itemToClone[itemIndex0, itemIndex1];
+                collection[itemIndex0, itemIndex1] = itemCopied;
             }
             return collection;
         }
@@ -618,8 +618,8 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var item2 = (int[,,][,,,]) Clone_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex]);
-                    collection[itemIndex] = item2;
+                    var itemCopied = (int[,,][,,,]) Clone_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex]);
+                    collection[itemIndex] = itemCopied;
                 }
             }
             return collection;
@@ -712,8 +712,8 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var item2 = (int[,,,]) Clone_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2]);
-                    collection[itemIndex0, itemIndex1, itemIndex2] = item2;
+                    var itemCopied = (int[,,,]) Clone_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2]);
+                    collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;
                 }
             }
             return collection;
@@ -787,8 +787,8 @@ namespace LazinatorTests.Examples.Collections
             for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             for (int itemIndex3 = 0; itemIndex3 < collectionLength3; itemIndex3++)
             {
-                var item2 = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2, itemIndex3];
-                collection[itemIndex0, itemIndex1, itemIndex2, itemIndex3] = item2;
+                var itemCopied = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2, itemIndex3];
+                collection[itemIndex0, itemIndex1, itemIndex2, itemIndex3] = itemCopied;
             }
             return collection;
         }
@@ -854,8 +854,8 @@ namespace LazinatorTests.Examples.Collections
             for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
             for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
-                var item2 = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2];
-                collection[itemIndex0, itemIndex1, itemIndex2] = item2;
+                var itemCopied = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2];
+                collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;
             }
             return collection;
         }

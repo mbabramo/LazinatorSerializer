@@ -519,8 +519,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 else
                 {
-                    var item2 = (IExample) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                    collection.Add(item2);
+                    var itemCopied = (IExample) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(itemCopied);
                 }
             }
             return collection;

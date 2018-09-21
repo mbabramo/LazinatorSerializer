@@ -923,8 +923,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (byte) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }
@@ -972,8 +972,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }
@@ -1008,8 +1008,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (byte) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }
@@ -1055,8 +1055,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }
@@ -1102,8 +1102,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }
@@ -1160,8 +1160,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (char) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (char) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }
@@ -1209,8 +1209,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }

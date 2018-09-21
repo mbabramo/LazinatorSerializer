@@ -472,8 +472,8 @@ namespace Lazinator.Collections
             int itemToCloneCount = itemToCloneSpan.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (byte) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = item2;
+                var itemCopied = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
             }
             return collection;
         }

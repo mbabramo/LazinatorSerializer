@@ -621,8 +621,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) System.Linq.Enumerable.ElementAt(itemToClone, itemIndex);
-                collection.AddLast(item2);
+                var itemCopied = (int) System.Linq.Enumerable.ElementAt(itemToClone, itemIndex);
+                collection.AddLast(itemCopied);
             }
             return collection;
         }
@@ -674,8 +674,8 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToClone[itemIndex];
-                collection.Add(item2);
+                var itemCopied = (int) itemToClone[itemIndex];
+                collection.Add(itemCopied);
             }
             return collection;
         }
@@ -729,8 +729,8 @@ namespace LazinatorTests.Examples.Collections
             var sortedSet = System.Linq.Enumerable.ToList(itemToClone);
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) sortedSet[itemIndex];
-                collection.Add(item2);
+                var itemCopied = (int) sortedSet[itemIndex];
+                collection.Add(itemCopied);
             }
             return collection;
         }

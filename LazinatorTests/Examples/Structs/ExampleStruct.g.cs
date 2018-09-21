@@ -786,8 +786,8 @@ namespace LazinatorTests.Examples
                 }
                 else
                 {
-                    var item2 = (Example) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                    collection.Add(item2);
+                    var itemCopied = (Example) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    collection.Add(itemCopied);
                 }
             }
             return collection;
@@ -840,8 +840,8 @@ namespace LazinatorTests.Examples
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) itemToClone[itemIndex];
-                collection.Add(item2);
+                var itemCopied = (int) itemToClone[itemIndex];
+                collection.Add(itemCopied);
             }
             return collection;
         }

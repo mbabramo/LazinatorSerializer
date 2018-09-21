@@ -434,8 +434,8 @@ namespace Lazinator.Wrappers
             int itemToCloneCount = itemToClone.Length;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (double) itemToClone[itemIndex];
-                collection[itemIndex] = item2;
+                var itemCopied = (double) itemToClone[itemIndex];
+                collection[itemIndex] = itemCopied;
             }
             return collection;
         }

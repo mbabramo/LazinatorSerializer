@@ -430,8 +430,8 @@ namespace LazinatorTests.Examples.Collections
             stackReversed.Reverse();
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var item2 = (int) stackReversed[itemIndex];
-                collection.Push(item2);
+                var itemCopied = (int) stackReversed[itemIndex];
+                collection.Push(itemCopied);
             }
             return collection;
         }
