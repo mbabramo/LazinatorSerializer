@@ -1465,7 +1465,7 @@ namespace Lazinator.CodeDescription
             PropertyDescription innerProperty = InnerProperties[0];
             string collectionAddItem, collectionAddNull;
             innerProperty.GetSupportedCollectionAddCommands(this, out collectionAddItem, out collectionAddNull);
-            collectionAddItem = collectionAddItem.Replace("item ", "item2 ").Replace("item;", "item2;").Replace("item)", "item2)");
+            collectionAddItem = collectionAddItem.Replace("item ", "itemCopied ").Replace("item;", "itemCopied;").Replace("item)", "itemCopied)");
             string creationText = GetCreationText();
 
             string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
@@ -1494,7 +1494,7 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                ")}var item2 = {cloneString};
+                                ")}var itemCopied = {cloneString};
                                 {collectionAddItem}{IIF(innerProperty.Nullable, $@"
                             }}")}
                         }}
