@@ -284,7 +284,9 @@ namespace Lazinator.CodeDescription
                         protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer);
-                        
+
+                        protected abstract void AssignCloneProperties(ILazinator clone);
+
                         public abstract bool HasChanged
                         {{
 			                get;
@@ -576,6 +578,13 @@ namespace Lazinator.CodeDescription
                             }}
                             clone.LazinatorParents = default;
                             return clone;
+                        }}
+
+                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties(ILazinator clone)
+                        {{
+                            {IIF(IsDerivedFromNonAbstractLazinator, $@"base.CloneWithoutBuffer(clone);
+                    ")}
+                            {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
                         }}";
         }
 
