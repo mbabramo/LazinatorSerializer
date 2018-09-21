@@ -1346,11 +1346,13 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
                 AppendReadOnlySpan_ConvertToBytes(sb);
+                AppendReadOnlySpanOrMemory_Clone(sb);
                 return;
             }
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte)
             {
                 AppendReadOnlyMemory_ConvertToBytes(sb);
+                AppendReadOnlySpanOrMemory_Clone(sb);
                 return;
             }
 
@@ -1359,6 +1361,22 @@ namespace Lazinator.CodeDescription
             AppendSupportedCollection_Clone(sb);
 
             RecursivelyAppendConversionMethods(sb, alreadyGenerated);
+        }
+
+        private void AppendReadOnlySpanOrMemory_Clone(CodeStringBuilder sb)
+        {
+            bool isMemory = AppropriatelyQualifiedTypeName.StartsWith("Memory") || AppropriatelyQualifiedTypeName.StartsWith("ReadOnlyMemory");
+            string memoryOrSpanWord = isMemory ? "Memory" : "Span";
+            string innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
+            string source = (innerFullType == "byte") ? "itemToClone" : $"MemoryMarshal.Cast<{innerFullType}, byte>(itemToClone)";
+            string toReturn = (innerFullType == "byte") ? "clone" : $"MemoryMarshal.Cast<byte, {innerFullType}>(clone)";
+
+            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
+            {{
+                var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length]);
+                {source}.CopyTo(clone);
+                return {toReturn};
+            }}");
         }
 
         private void AppendReadOnlySpan_ConvertToBytes(CodeStringBuilder sb) => AppendReadOnlySpanOrMemory_ConvertToBytes(sb, true);
@@ -1738,7 +1756,7 @@ namespace Lazinator.CodeDescription
             {
                 creationText = $"{AppropriatelyQualifiedTypeName} collection = new {AppropriatelyQualifiedTypeName}();"; // can't initialize collection length
             }
-            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
                 creationText =
                     $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
@@ -2138,11 +2156,11 @@ namespace Lazinator.CodeDescription
             }
             // zip the inner properties and item strings, then get the clone string using each corresponding item, and then join into a string.
             string propertyAccess = Nullable ? "itemToConvert?." : "itemToConvert.";
-            string innerClones = String.Join(",", 
+            string innerClones = String.Join(",",
                 InnerProperties
                     .Zip(
-                        itemStrings, 
-                        (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")"})
+                        itemStrings,
+                        (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
                     .Select(z => z.InnerProperty.GetCloneString(z.ItemString))
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}({innerClones})";
@@ -2155,7 +2173,7 @@ namespace Lazinator.CodeDescription
         }
 
         #endregion
-        
+
         #region Interchange types
 
         public void AppendInterchangeTypes(CodeStringBuilder sb, HashSet<string> alreadyGenerated)
