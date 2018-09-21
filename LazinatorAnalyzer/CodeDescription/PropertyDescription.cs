@@ -1470,14 +1470,11 @@ namespace Lazinator.CodeDescription
 
             string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
             GetItemAccessStrings(out lengthWord, out itemString, out itemStringSetup, out forStatement, out cloneString, "itemToClone");
-            
-            if (innerProperty.AppropriatelyQualifiedTypeName == "WNullableStruct<ExampleStruct>")
-            {
-                var DEBUG = 0;
-            }
 
             if (Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte))
                 lengthWord = $"Value.{lengthWord}";
+            if (ArrayRank > 1)
+                forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
@@ -1504,6 +1501,14 @@ namespace Lazinator.CodeDescription
                         return collection;
                     }}
 ");
+        }
+
+        private static string DeleteLines(string input, int linesToSkip)
+        {
+            int startIndex = 0;
+            for (int i = 0; i < linesToSkip; ++i)
+                startIndex = input.IndexOf('\n', startIndex) + 1;
+            return input.Substring(startIndex);
         }
 
         private void GetItemAccessStrings(out string lengthWord, out string itemString, out string itemStringSetup, out string forStatement, out string cloneString, string itemAccessName = "itemToConvert")
@@ -1544,10 +1549,10 @@ namespace Lazinator.CodeDescription
                 StringBuilder arrayStringBuilder = new StringBuilder();
                 int i = 0;
                 for (i = 0; i < ArrayRank; i++)
-                    arrayStringBuilder.AppendLine($"int length{i} = {itemAccessName}.GetLength({i});");
+                    arrayStringBuilder.AppendLine($"int collectionLength{i} = {itemAccessName}.GetLength({i});");
                 for (i = 0; i < ArrayRank; i++)
                 {
-                    string stringForRank = $"for (int itemIndex{i} = 0; itemIndex{i} < length{i}; itemIndex{i}++)";
+                    string stringForRank = $"for (int itemIndex{i} = 0; itemIndex{i} < collectionLength{i}; itemIndex{i}++)";
                     if (i == ArrayRank - 1)
                         arrayStringBuilder.Append(stringForRank);
                     else
