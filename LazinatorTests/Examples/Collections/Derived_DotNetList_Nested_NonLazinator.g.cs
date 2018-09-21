@@ -34,12 +34,11 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
+        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
         {
             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
             var clone = new Derived_DotNetList_Nested_NonLazinator()
             {
-                LazinatorParents = LazinatorParents,
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
             clone.DeserializeLazinator(bytes);
@@ -48,6 +47,10 @@ namespace LazinatorTests.Examples.Collections
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             }
             clone.LazinatorParents = default;
+            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+            {
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
+            }
             return clone;
         }
         

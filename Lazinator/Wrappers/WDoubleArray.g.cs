@@ -74,6 +74,11 @@ namespace Lazinator.Wrappers
             {
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             }
+            clone.LazinatorParents = default;
+            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+            {
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
+            }
             return clone;
         }
         

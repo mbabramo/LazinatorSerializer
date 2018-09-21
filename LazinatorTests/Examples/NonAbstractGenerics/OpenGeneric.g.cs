@@ -80,6 +80,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             }
+            clone.LazinatorParents = default;
+            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+            {
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
+            }
             return clone;
         }
         

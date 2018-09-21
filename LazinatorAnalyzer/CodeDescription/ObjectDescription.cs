@@ -558,13 +558,16 @@ namespace Lazinator.CodeDescription
                             {{
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
+                            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                            {{
+                                clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                            }}
                             clone.DeserializeLazinator(bytes);
                             if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
                             {{
                                 clone.LazinatorMemoryStorage.DisposeIndependently();
                             }}
                             clone.LazinatorParents = default;
-                            clone.LazinatorObjectVersion = LazinatorObjectVersion;
                             return clone;
                         }}";
         }
