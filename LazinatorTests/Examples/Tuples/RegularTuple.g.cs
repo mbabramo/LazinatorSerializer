@@ -721,7 +721,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<uint, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert)
         {
-            return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) itemToConvert?.Item1,(ExampleChild) itemToConvert?.Item2?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) itemToConvert?.Item3);
+            return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) (itemToConvert?.Item2)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<uint?, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(LazinatorMemory storage)
@@ -791,7 +791,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<uint?, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert)
         {
-            return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) itemToConvert?.Item1,(ExampleChild) itemToConvert?.Item2?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) itemToConvert?.Item3);
+            return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) (itemToConvert?.Item2)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<int, ExampleStruct> ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(LazinatorMemory storage)
@@ -838,7 +838,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<int, ExampleStruct> Clone_Tuple_Gint_c_C32ExampleStruct_g(Tuple<int, ExampleStruct> itemToConvert)
         {
-            return new Tuple<int, ExampleStruct>((int) itemToConvert?.Item1,(ExampleStruct) itemToConvert?.Item2.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new Tuple<int, ExampleStruct>((int) (itemToConvert?.Item1 ?? default),(ExampleStruct) (itemToConvert?.Item2 ?? default).CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
         }
         
     }

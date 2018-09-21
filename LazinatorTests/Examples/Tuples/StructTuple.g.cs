@@ -550,7 +550,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (TestEnum firstEnum, TestEnum anotherEnum) Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p((TestEnum firstEnum, TestEnum anotherEnum) itemToConvert)
         {
-            return ((TestEnum) itemToConvert.Item1,(TestEnum) itemToConvert.Item2);
+            return ((TestEnum) (itemToConvert.Item1),(TestEnum) (itemToConvert.Item2));
         }
         
         private static (int MyFirstItem, double MySecondItem) ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(LazinatorMemory storage)
@@ -582,7 +582,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int MyFirstItem, double MySecondItem) Clone__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p((int MyFirstItem, double MySecondItem) itemToConvert)
         {
-            return ((int) itemToConvert.Item1,(double) itemToConvert.Item2);
+            return ((int) (itemToConvert.Item1),(double) (itemToConvert.Item2));
         }
         
         private static (int, double)? ConvertFromBytes__Pint_c_C32double_p_C63(LazinatorMemory storage)
@@ -618,7 +618,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int, double)? Clone__Pint_c_C32double_p_C63((int, double)? itemToConvert)
         {
-            return ((int) itemToConvert?.Item1,(double) itemToConvert?.Item2);
+            return ((int) (itemToConvert?.Item1 ?? default),(double) (itemToConvert?.Item2 ?? default));
         }
         
         private static (uint, ExampleChild, NonLazinatorClass) ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(LazinatorMemory storage)
@@ -684,7 +684,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (uint, ExampleChild, NonLazinatorClass) Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p((uint, ExampleChild, NonLazinatorClass) itemToConvert)
         {
-            return ((uint) itemToConvert.Item1,(ExampleChild) itemToConvert.Item2?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) itemToConvert.Item3);
+            return ((uint) (itemToConvert.Item1),(ExampleChild) (itemToConvert.Item2)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert.Item3));
         }
         
     }

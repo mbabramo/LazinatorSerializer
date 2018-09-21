@@ -422,7 +422,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> itemToConvert)
         {
-            return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) itemToConvert?.Item1,((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) Clone__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(itemToConvert?.Item2 ?? default),(NonLazinatorClass) itemToConvert?.Item3);
+            return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) (itemToConvert?.Item1),((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) Clone__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(LazinatorMemory storage)
@@ -477,7 +477,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) Clone__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) itemToConvert)
         {
-            return ((ExampleChild) itemToConvert.Item1?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),((uint, (int a, string b)?, Tuple<short, long>)) Clone__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(itemToConvert.Item2));
+            return ((ExampleChild) (itemToConvert.Item1)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),((uint, (int a, string b)?, Tuple<short, long>)) Clone__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p((itemToConvert.Item2)));
         }
         
         private static (uint, (int a, string b)?, Tuple<short, long>) ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p(LazinatorMemory storage)
@@ -543,7 +543,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (uint, (int a, string b)?, Tuple<short, long>) Clone__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p((uint, (int a, string b)?, Tuple<short, long>) itemToConvert)
         {
-            return ((uint) itemToConvert.Item1,((int a, string b)?) Clone__Pint_C32a_c_C32string_C32b_p_C63(itemToConvert.Item2),(Tuple<short, long>) Clone_Tuple_Gshort_c_C32long_g(itemToConvert.Item3));
+            return ((uint) (itemToConvert.Item1),((int a, string b)?) Clone__Pint_C32a_c_C32string_C32b_p_C63((itemToConvert.Item2)),(Tuple<short, long>) Clone_Tuple_Gshort_c_C32long_g((itemToConvert.Item3)));
         }
         
         private static (int a, string b)? ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_C63(LazinatorMemory storage)
@@ -579,7 +579,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int a, string b)? Clone__Pint_C32a_c_C32string_C32b_p_C63((int a, string b)? itemToConvert)
         {
-            return ((int) itemToConvert?.Item1,(string) itemToConvert?.Item2);
+            return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2 ?? default));
         }
         
         private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)
@@ -615,7 +615,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<short, long> Clone_Tuple_Gshort_c_C32long_g(Tuple<short, long> itemToConvert)
         {
-            return new Tuple<short, long>((short) itemToConvert?.Item1,(long) itemToConvert?.Item2);
+            return new Tuple<short, long>((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
         }
         
     }

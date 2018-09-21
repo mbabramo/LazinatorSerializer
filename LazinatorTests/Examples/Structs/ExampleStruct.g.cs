@@ -890,7 +890,7 @@ namespace LazinatorTests.Examples
         
         private static (NonLazinatorClass myitem1, int? myitem2) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p((NonLazinatorClass myitem1, int? myitem2) itemToConvert)
         {
-            return ((NonLazinatorClass) itemToConvert.Item1,(int?) itemToConvert.Item2);
+            return ((NonLazinatorClass) (itemToConvert.Item1),(int?) (itemToConvert.Item2));
         }
         
     }

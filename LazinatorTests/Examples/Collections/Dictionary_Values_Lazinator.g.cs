@@ -567,7 +567,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static KeyValuePair<int, ExampleChild> Clone_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert)
         {
-            return new KeyValuePair<int, ExampleChild>((int) itemToConvert.Key,(ExampleChild) itemToConvert.Value?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) (itemToConvert.Value)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
         }
         
         private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(LazinatorMemory storage)

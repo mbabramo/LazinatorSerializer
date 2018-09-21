@@ -406,7 +406,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static KeyValuePair<uint, ExampleChild> Clone_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<uint, ExampleChild> itemToConvert)
         {
-            return new KeyValuePair<uint, ExampleChild>((uint) itemToConvert.Key,(ExampleChild) itemToConvert.Value?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new KeyValuePair<uint, ExampleChild>((uint) (itemToConvert.Key),(ExampleChild) (itemToConvert.Value)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
         }
         
     }

@@ -499,7 +499,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static MismatchedRecordLikeType Clone_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert)
         {
-            return new MismatchedRecordLikeType((int) itemToConvert.Age,(string) itemToConvert.Name);
+            return new MismatchedRecordLikeType((int) (itemToConvert.Age),(string) (itemToConvert.Name));
         }
         
         private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
@@ -546,7 +546,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static RecordLikeClass Clone_RecordLikeClass(RecordLikeClass itemToConvert)
         {
-            return new RecordLikeClass((int) itemToConvert.Age,(Example) itemToConvert.Example?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new RecordLikeClass((int) (itemToConvert.Age),(Example) (itemToConvert.Example)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
         }
         
         private static RecordLikeType ConvertFromBytes_RecordLikeType(LazinatorMemory storage)
@@ -578,7 +578,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static RecordLikeType Clone_RecordLikeType(RecordLikeType itemToConvert)
         {
-            return new RecordLikeType((int) itemToConvert.Age,(string) itemToConvert.Name);
+            return new RecordLikeType((int) (itemToConvert.Age),(string) (itemToConvert.Name));
         }
         
     }
