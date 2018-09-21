@@ -62,21 +62,21 @@ namespace Lazinator.Wrappers
         
         public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
         {
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
             var clone = new WChar()
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
+            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+            {
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
+            }
+            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
             clone.DeserializeLazinator(bytes);
             if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
             {
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             }
             clone.LazinatorParents = default;
-            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-            {
-                clone.LazinatorObjectVersion = LazinatorObjectVersion;
-            }
             return clone;
         }
         

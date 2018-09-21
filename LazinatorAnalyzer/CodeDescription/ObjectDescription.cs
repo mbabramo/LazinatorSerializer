@@ -553,7 +553,6 @@ namespace Lazinator.CodeDescription
         {
             return $@"public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
                         {{
-                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
                                 OriginalIncludeChildrenMode = includeChildrenMode
@@ -562,6 +561,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                             }}
+                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
                             clone.DeserializeLazinator(bytes);
                             if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
                             {{
