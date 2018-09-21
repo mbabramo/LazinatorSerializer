@@ -72,11 +72,18 @@ namespace Lazinator.Wrappers
             {
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
             }
-            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
-            clone.DeserializeLazinator(bytes);
-            if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
+            
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone.LazinatorMemoryStorage.DisposeIndependently();
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
+                clone.DeserializeLazinator(bytes);
+                if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
+                {
+                    clone.LazinatorMemoryStorage.DisposeIndependently();
+                }
             }
             clone.LazinatorParents = default;
             return clone;
