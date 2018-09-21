@@ -1318,6 +1318,18 @@ namespace Lazinator.CodeDescription
                     ";
         }
 
+        public void AppendCopyPropertyToClone(CodeStringBuilder sb)
+        {
+            string copyInstruction = "";
+            if (IsLazinator)
+                copyInstruction = $"typedClone.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
+            else if (IsPrimitive || PropertyType == LazinatorPropertyType.NonLazinator)
+                copyInstruction = $"typedClone.{PropertyName} = {PropertyName};";
+            else if (PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
+                copyInstruction = $"typedClone.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
+            sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
+        }
+
         #endregion
 
         #region Supported collections

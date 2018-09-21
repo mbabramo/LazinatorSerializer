@@ -285,7 +285,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer);
 
-                        protected abstract void AssignCloneProperties(ILazinator clone);
+                        protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
 
                         public abstract bool HasChanged
                         {{
@@ -566,6 +566,7 @@ namespace Lazinator.CodeDescription
                             
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
+                                AssignCloneProperties(clone, includeChildrenMode);
                             }}
                             else
                             {{
@@ -580,12 +581,25 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties(ILazinator clone)
+                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
                         {{
-                            {IIF(IsDerivedFromNonAbstractLazinator, $@"base.CloneWithoutBuffer(clone);
+                            {IIF(IsDerivedFromNonAbstractLazinator, $@"base.AssignCloneProperties(clone, includeChildrenMode);
                     ")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
+                            {AppendCloneProperties()}
                         }}";
+
+        }
+
+
+        private string AppendCloneProperties()
+        {
+            CodeStringBuilder sb = new CodeStringBuilder();
+            foreach (var property in PropertiesToDefineThisLevel)
+            {
+                property.AppendCopyPropertyToClone(sb);
+            }
+            return sb.ToString();
         }
 
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
