@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples
             {
                 clone.LazinatorMemoryStorage.DisposeIndependently();
             }
+            clone.LazinatorObjectVersion = LazinatorObjectVersion;
             return clone;
         }
         

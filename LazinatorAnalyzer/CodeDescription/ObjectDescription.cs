@@ -266,8 +266,7 @@ namespace Lazinator.CodeDescription
             string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(false, true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
-
-
+            string cloneMethod = GetCloneMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
             {
@@ -365,7 +364,7 @@ namespace Lazinator.CodeDescription
                             EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
                         }}"
-                            : 
+                            :
                         $@"EnsureLazinatorMemoryUpToDate();
                             return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);";
 
@@ -418,20 +417,7 @@ namespace Lazinator.CodeDescription
 
                         {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
-                        public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
-                        {{
-                            LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
-                            var clone = new {NameIncludingGenerics}()
-                            {{
-                                OriginalIncludeChildrenMode = includeChildrenMode
-                            }};
-                            clone.DeserializeLazinator(bytes);
-                            if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
-                            {{
-                                clone.LazinatorMemoryStorage.DisposeIndependently();
-                            }}
-                            return clone;
-                        }}
+                        {cloneMethod}
 
                         public {DerivationKeyword}bool HasChanged {{ get; set; }}
 
@@ -556,12 +542,20 @@ namespace Lazinator.CodeDescription
             {
                 sb.Append($@"        /* Clone overrides */
 
-                        {constructor}public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
+                        {constructor}{cloneMethod}
+
+                        /* Properties */
+");
+            }
+        }
+
+        private string GetCloneMethod()
+        {
+            return $@"public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
                         {{
                             LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, cloneBufferOptions == CloneBufferOptions.SharedBuffer);
                             var clone = new {NameIncludingGenerics}()
                             {{
-                                LazinatorParents = LazinatorParents,
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
                             clone.DeserializeLazinator(bytes);
@@ -570,12 +564,9 @@ namespace Lazinator.CodeDescription
                                 clone.LazinatorMemoryStorage.DisposeIndependently();
                             }}
                             clone.LazinatorParents = default;
+                            clone.LazinatorObjectVersion = LazinatorObjectVersion;
                             return clone;
-                        }}
-
-                        /* Properties */
-");
-            }
+                        }}";
         }
 
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
