@@ -516,10 +516,10 @@ namespace LazinatorTests.Examples.Collections
             }
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
-            int length0 = itemToConvert.GetLength(0);
-            int length1 = itemToConvert.GetLength(1);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
+            int collectionLength0 = itemToConvert.GetLength(0);
+            int collectionLength1 = itemToConvert.GetLength(1);
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1]);
             }
@@ -536,10 +536,8 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
             int[,] collection = new int[collectionLength0, collectionLength1];
-            int length0 = itemToClone.GetLength(0);
-            int length1 = itemToClone.GetLength(1);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
             {
                 var item2 = (int) itemToClone[itemIndex0, itemIndex1];
                 collection[itemIndex0, itemIndex1] = item2;
@@ -671,12 +669,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(2));
-            int length0 = itemToConvert.GetLength(0);
-            int length1 = itemToConvert.GetLength(1);
-            int length2 = itemToConvert.GetLength(2);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
-            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            int collectionLength0 = itemToConvert.GetLength(0);
+            int collectionLength1 = itemToConvert.GetLength(1);
+            int collectionLength2 = itemToConvert.GetLength(2);
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
                 if (itemToConvert[itemIndex0, itemIndex1, itemIndex2] == default(int[,,,]))
                 {
@@ -704,12 +702,9 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength1 = itemToClone.GetLength(1);
             int collectionLength2 = itemToClone.GetLength(2);
             int[,,][,,,] collection = new int[collectionLength0, collectionLength1, collectionLength2][,,,];
-            int length0 = itemToClone.GetLength(0);
-            int length1 = itemToClone.GetLength(1);
-            int length2 = itemToClone.GetLength(2);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
-            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
                 if (itemToClone[itemIndex0, itemIndex1, itemIndex2] == null)
                 {
@@ -761,14 +756,14 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(2));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(3));
-            int length0 = itemToConvert.GetLength(0);
-            int length1 = itemToConvert.GetLength(1);
-            int length2 = itemToConvert.GetLength(2);
-            int length3 = itemToConvert.GetLength(3);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
-            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
-            for (int itemIndex3 = 0; itemIndex3 < length3; itemIndex3++)
+            int collectionLength0 = itemToConvert.GetLength(0);
+            int collectionLength1 = itemToConvert.GetLength(1);
+            int collectionLength2 = itemToConvert.GetLength(2);
+            int collectionLength3 = itemToConvert.GetLength(3);
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
+            for (int itemIndex3 = 0; itemIndex3 < collectionLength3; itemIndex3++)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2, itemIndex3]);
             }
@@ -787,14 +782,10 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength2 = itemToClone.GetLength(2);
             int collectionLength3 = itemToClone.GetLength(3);
             int[,,,] collection = new int[collectionLength0, collectionLength1, collectionLength2, collectionLength3];
-            int length0 = itemToClone.GetLength(0);
-            int length1 = itemToClone.GetLength(1);
-            int length2 = itemToClone.GetLength(2);
-            int length3 = itemToClone.GetLength(3);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
-            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
-            for (int itemIndex3 = 0; itemIndex3 < length3; itemIndex3++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
+            for (int itemIndex3 = 0; itemIndex3 < collectionLength3; itemIndex3++)
             {
                 var item2 = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2, itemIndex3];
                 collection[itemIndex0, itemIndex1, itemIndex2, itemIndex3] = item2;
@@ -836,12 +827,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(0));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(1));
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.GetLength(2));
-            int length0 = itemToConvert.GetLength(0);
-            int length1 = itemToConvert.GetLength(1);
-            int length2 = itemToConvert.GetLength(2);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
-            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            int collectionLength0 = itemToConvert.GetLength(0);
+            int collectionLength1 = itemToConvert.GetLength(1);
+            int collectionLength2 = itemToConvert.GetLength(2);
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert[itemIndex0, itemIndex1, itemIndex2]);
             }
@@ -859,12 +850,9 @@ namespace LazinatorTests.Examples.Collections
             int collectionLength1 = itemToClone.GetLength(1);
             int collectionLength2 = itemToClone.GetLength(2);
             int[,,] collection = new int[collectionLength0, collectionLength1, collectionLength2];
-            int length0 = itemToClone.GetLength(0);
-            int length1 = itemToClone.GetLength(1);
-            int length2 = itemToClone.GetLength(2);
-            for (int itemIndex0 = 0; itemIndex0 < length0; itemIndex0++)
-            for (int itemIndex1 = 0; itemIndex1 < length1; itemIndex1++)
-            for (int itemIndex2 = 0; itemIndex2 < length2; itemIndex2++)
+            for (int itemIndex0 = 0; itemIndex0 < collectionLength0; itemIndex0++)
+            for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
+            for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
                 var item2 = (int) itemToClone[itemIndex0, itemIndex1, itemIndex2];
                 collection[itemIndex0, itemIndex1, itemIndex2] = item2;
