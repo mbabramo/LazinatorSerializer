@@ -76,6 +76,7 @@ namespace LazinatorTests.Examples.Abstract
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -88,6 +89,27 @@ namespace LazinatorTests.Examples.Abstract
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            Concrete3 typedClone = (Concrete3) clone;
+            typedClone.String1 = String1;
+            typedClone.String2 = String2;
+            typedClone.String3 = String3;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Example2 = (Example2 == null) ? default(Example) : (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            typedClone.IntList1 = Clone_List_Gint_g(IntList1);
+            typedClone.IntList2 = Clone_List_Gint_g(IntList2);
+            typedClone.IntList3 = Clone_List_Gint_g(IntList3);
+            
         }
         
         public override bool HasChanged { get; set; }

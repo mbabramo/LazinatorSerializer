@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -94,6 +95,60 @@ namespace LazinatorTests.Examples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            Example typedClone = (Example) clone;
+            typedClone.MyNullableDouble = MyNullableDouble;
+            typedClone.MyBool = MyBool;
+            typedClone.MyChar = MyChar;
+            typedClone.MyDateTime = MyDateTime;
+            if (LazinatorObjectVersion >= 3) 
+            {
+                typedClone.MyNewString = MyNewString;
+            }
+            typedClone.MyNullableDecimal = MyNullableDecimal;
+            typedClone.MyNullableTimeSpan = MyNullableTimeSpan;
+            if (LazinatorObjectVersion < 3) 
+            {
+                typedClone.MyOldString = MyOldString;
+            }
+            typedClone.MyString = MyString;
+            typedClone.MyTestEnum = MyTestEnum;
+            typedClone.MyTestEnumByteNullable = MyTestEnumByteNullable;
+            typedClone.MyUint = MyUint;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            {
+                typedClone.IncludableChild = (IncludableChild == null) ? default(ExampleChild) : (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
+            {
+                typedClone.MyChild2Previous = (MyChild2Previous == null) ? default(ExampleChild) : (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.MyInterfaceImplementer = (MyInterfaceImplementer == null) ? default(IExampleNonexclusiveInterface) : (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            typedClone.MyNonLazinatorChild = MyNonLazinatorChild;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.WrappedInt = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
+            {
+                typedClone.ExcludableChild = (ExcludableChild == null) ? default(ExampleChild) : (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public virtual bool HasChanged { get; set; }

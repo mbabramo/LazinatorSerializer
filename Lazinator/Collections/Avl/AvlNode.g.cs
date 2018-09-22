@@ -81,6 +81,7 @@ namespace Lazinator.Collections.Avl
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,31 @@ namespace Lazinator.Collections.Avl
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            AvlNode<TKey, TValue> typedClone = (AvlNode<TKey, TValue>) clone;
+            typedClone.Balance = Balance;
+            typedClone.Count = Count;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Key = (System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) ? default(TKey) : (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Left = (Left == null) ? default(AvlNode<TKey, TValue>) : (AvlNode<TKey, TValue>) Left.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Right = (Right == null) ? default(AvlNode<TKey, TValue>) : (AvlNode<TKey, TValue>) Right.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Value = (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) ? default(TValue) : (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public bool HasChanged { get; set; }

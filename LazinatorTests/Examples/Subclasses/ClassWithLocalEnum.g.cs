@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,15 @@ namespace LazinatorTests.Examples.Subclasses
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ClassWithLocalEnum typedClone = (ClassWithLocalEnum) clone;
+            typedClone.MyEnum = MyEnum;
+            typedClone.MyEnumList = Clone_List_GEnumWithinClass_g(MyEnumList);
+            
         }
         
         public virtual bool HasChanged { get; set; }

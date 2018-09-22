@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -59,6 +60,16 @@ namespace LazinatorTests.Examples.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            base.AssignCloneProperties(clone, includeChildrenMode);
+            
+            Derived_DotNetList_Nested_NonLazinator typedClone = (Derived_DotNetList_Nested_NonLazinator) clone;
+            typedClone.MyLevel2Int = MyLevel2Int;
+            typedClone.MyLevel2ListNestedNonLazinatorType = Clone_List_GList_GNonLazinatorClass_g_g(MyLevel2ListNestedNonLazinatorType);
+            
         }
         
         /* Properties */

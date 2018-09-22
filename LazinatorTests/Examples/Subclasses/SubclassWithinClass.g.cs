@@ -83,6 +83,7 @@ namespace LazinatorTests.Examples.Subclasses
                 
                 if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                 {
+                    AssignCloneProperties(clone, includeChildrenMode);
                 }
                 else
                 {
@@ -95,6 +96,14 @@ namespace LazinatorTests.Examples.Subclasses
                 }
                 clone.LazinatorParents = default;
                 return clone;
+            }
+            
+            protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+            {
+                
+                SubclassWithinClass typedClone = (SubclassWithinClass) clone;
+                typedClone.StringWithinSubclass = StringWithinSubclass;
+                
             }
             
             public virtual bool HasChanged { get; set; }

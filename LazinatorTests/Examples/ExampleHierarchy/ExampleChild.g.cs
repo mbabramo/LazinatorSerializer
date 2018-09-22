@@ -78,6 +78,7 @@ namespace LazinatorTests.Examples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -90,6 +91,20 @@ namespace LazinatorTests.Examples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ExampleChild typedClone = (ExampleChild) clone;
+            typedClone.MyLong = MyLong;
+            typedClone.MyShort = MyShort;
+            typedClone.ByteSpan = Clone_ReadOnlySpan_Gbyte_g(ByteSpan);
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.MyWrapperContainer = (MyWrapperContainer == null) ? default(WrapperContainer) : (WrapperContainer) MyWrapperContainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public virtual bool HasChanged { get; set; }
@@ -484,6 +499,12 @@ namespace LazinatorTests.Examples
             {
                 writer.Write(toConvert[i]);
             }
+        }
+        private static ReadOnlySpan<byte> Clone_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone)
+        {
+            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            itemToClone.CopyTo(clone);
+            return clone;
         }
         
     }

@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,35 @@ namespace LazinatorTests.Examples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            Simplifiable typedClone = (Simplifiable) clone;
+            typedClone.MyIntsAre3 = MyIntsAre3;
+            typedClone.Example2Char = Example2Char;
+            typedClone.Example3IsNull = Example3IsNull;
+            typedClone.ExampleHasDefaultValue = ExampleHasDefaultValue;
+            typedClone.MyInt = MyInt;
+            typedClone.MyOtherInt = MyOtherInt;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.ANonSkippableEarlierExample = (ANonSkippableEarlierExample == null) ? default(Example) : (Example) ANonSkippableEarlierExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Example = (Example == null) ? default(Example) : (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion >= 4) 
+            {
+                typedClone.Example2 = (Example2 == null) ? default(Example) : (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public virtual bool HasChanged { get; set; }

@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Abstract
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,13 @@ namespace LazinatorTests.Examples.Abstract
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            Base typedClone = (Base) clone;
+            
         }
         
         public virtual bool HasChanged { get; set; }

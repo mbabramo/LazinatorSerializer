@@ -78,6 +78,7 @@ namespace Lazinator.Spans
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -90,6 +91,15 @@ namespace Lazinator.Spans
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            LazinatorByteSpan typedClone = (LazinatorByteSpan) clone;
+            typedClone.ReadOnly = Clone_ReadOnlySpan_Gbyte_g(ReadOnly);
+            typedClone.ReadOrWrite = Clone_Memory_Gbyte_g(ReadOrWrite);
+            
         }
         
         public virtual bool HasChanged { get; set; }
@@ -430,6 +440,12 @@ namespace Lazinator.Spans
             {
                 writer.Write(toConvert[i]);
             }
+        }
+        private static ReadOnlySpan<byte> Clone_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone)
+        {
+            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            itemToClone.CopyTo(clone);
+            return clone;
         }
         
         private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)

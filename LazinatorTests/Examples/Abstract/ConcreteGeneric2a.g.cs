@@ -80,6 +80,7 @@ namespace LazinatorTests.Examples.Abstract
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -92,6 +93,22 @@ namespace LazinatorTests.Examples.Abstract
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ConcreteGeneric2a typedClone = (ConcreteGeneric2a) clone;
+            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;
+            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;
+            typedClone.MyT = MyT;
+            typedClone.MyUnofficialInt = MyUnofficialInt;
+            typedClone.AnotherProperty = AnotherProperty;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.LazinatorExample = (LazinatorExample == null) ? default(Example) : (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public override bool HasChanged { get; set; }

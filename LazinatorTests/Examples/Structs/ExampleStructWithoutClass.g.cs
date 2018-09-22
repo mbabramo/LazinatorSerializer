@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Structs
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,14 @@ namespace LazinatorTests.Examples.Structs
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ExampleStructWithoutClass typedClone = (ExampleStructWithoutClass) clone;
+            typedClone.MyInt = MyInt;
+            
         }
         
         public bool HasChanged { get; set; }

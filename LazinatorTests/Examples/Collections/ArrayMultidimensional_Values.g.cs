@@ -77,6 +77,7 @@ namespace LazinatorTests.Examples.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -89,6 +90,16 @@ namespace LazinatorTests.Examples.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ArrayMultidimensional_Values typedClone = (ArrayMultidimensional_Values) clone;
+            typedClone.MyArrayInt = Clone_int_B_c_b(MyArrayInt);
+            typedClone.MyCrazyJaggedArray = Clone_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray);
+            typedClone.MyThreeDimArrayInt = Clone_int_B_c_c_b(MyThreeDimArrayInt);
+            
         }
         
         public virtual bool HasChanged { get; set; }

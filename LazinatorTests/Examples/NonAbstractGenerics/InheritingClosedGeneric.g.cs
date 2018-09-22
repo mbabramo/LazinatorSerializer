@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -59,6 +60,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            base.AssignCloneProperties(clone, includeChildrenMode);
+            
+            InheritingClosedGeneric typedClone = (InheritingClosedGeneric) clone;
+            typedClone.YetAnotherInt = YetAnotherInt;
+            
         }
         
         /* Properties */

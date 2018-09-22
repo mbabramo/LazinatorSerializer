@@ -78,6 +78,7 @@ namespace LazinatorTests.Examples.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -90,6 +91,16 @@ namespace LazinatorTests.Examples.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            Dictionary_Values_Lazinator typedClone = (Dictionary_Values_Lazinator) clone;
+            typedClone.MyDictionary = Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary);
+            typedClone.MySortedDictionary = Clone_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary);
+            typedClone.MySortedList = Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList);
+            
         }
         
         public virtual bool HasChanged { get; set; }

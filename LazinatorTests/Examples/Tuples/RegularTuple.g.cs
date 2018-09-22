@@ -78,6 +78,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -90,6 +91,18 @@ namespace LazinatorTests.Examples.Tuples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            RegularTuple typedClone = (RegularTuple) clone;
+            typedClone.MyListTuple = Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple);
+            typedClone.MyTupleSerialized = Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized);
+            typedClone.MyTupleSerialized2 = Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2);
+            typedClone.MyTupleSerialized3 = Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3);
+            typedClone.MyTupleSerialized4 = Clone_Tuple_Gint_c_C32ExampleStruct_g(MyTupleSerialized4);
+            
         }
         
         public virtual bool HasChanged { get; set; }

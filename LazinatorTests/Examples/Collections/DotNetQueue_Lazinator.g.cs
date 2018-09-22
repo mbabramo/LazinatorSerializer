@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -94,6 +95,14 @@ namespace LazinatorTests.Examples.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            DotNetQueue_Lazinator typedClone = (DotNetQueue_Lazinator) clone;
+            typedClone.MyQueueSerialized = Clone_Queue_GExampleChild_g(MyQueueSerialized);
+            
         }
         
         public virtual bool HasChanged { get; set; }

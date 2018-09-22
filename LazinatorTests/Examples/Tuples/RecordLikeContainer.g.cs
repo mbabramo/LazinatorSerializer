@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -94,6 +95,16 @@ namespace LazinatorTests.Examples.Tuples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            RecordLikeContainer typedClone = (RecordLikeContainer) clone;
+            typedClone.MyMismatchedRecordLikeType = Clone_MismatchedRecordLikeType(MyMismatchedRecordLikeType);
+            typedClone.MyRecordLikeClass = Clone_RecordLikeClass(MyRecordLikeClass);
+            typedClone.MyRecordLikeType = Clone_RecordLikeType(MyRecordLikeType);
+            
         }
         
         public virtual bool HasChanged { get; set; }

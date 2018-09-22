@@ -46,6 +46,7 @@ namespace LazinatorTests.Examples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -58,6 +59,15 @@ namespace LazinatorTests.Examples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            base.AssignCloneProperties(clone, includeChildrenMode);
+            
+            ExampleChildInherited typedClone = (ExampleChildInherited) clone;
+            typedClone.MyInt = MyInt;
+            
         }
         
         /* Properties */

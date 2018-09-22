@@ -46,6 +46,7 @@ namespace LazinatorTests.Examples.Abstract
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -58,6 +59,18 @@ namespace LazinatorTests.Examples.Abstract
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            base.AssignCloneProperties(clone, includeChildrenMode);
+            
+            Concrete5 typedClone = (Concrete5) clone;
+            typedClone.String4 = String4;
+            typedClone.String5 = String5;
+            typedClone.IntList4 = Clone_List_Gint_g(IntList4);
+            typedClone.IntList5 = Clone_List_Gint_g(IntList5);
+            
         }
         
         /* Properties */

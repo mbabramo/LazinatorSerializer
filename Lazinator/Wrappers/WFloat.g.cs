@@ -75,6 +75,7 @@ namespace Lazinator.Wrappers
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -87,6 +88,14 @@ namespace Lazinator.Wrappers
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            WFloat typedClone = (WFloat) clone;
+            typedClone.WrappedValue = WrappedValue;
+            
         }
         
         public bool HasChanged { get; set; }

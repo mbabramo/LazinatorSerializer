@@ -81,6 +81,7 @@ namespace Lazinator.Spans
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,19 @@ namespace Lazinator.Spans
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            LazinatorBitArray typedClone = (LazinatorBitArray) clone;
+            typedClone._version = _version;
+            typedClone.m_length = m_length;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.ByteSpan = (ByteSpan == null) ? default(LazinatorByteSpan) : (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public bool HasChanged { get; set; }

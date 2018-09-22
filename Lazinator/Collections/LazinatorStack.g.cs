@@ -46,6 +46,7 @@ namespace Lazinator.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -58,6 +59,14 @@ namespace Lazinator.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            base.AssignCloneProperties(clone, includeChildrenMode);
+            
+            LazinatorStack<T> typedClone = (LazinatorStack<T>) clone;
+            
         }
         
         /* Properties */

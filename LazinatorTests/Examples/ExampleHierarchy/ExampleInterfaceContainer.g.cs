@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Hierarchy
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -94,6 +95,18 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ExampleInterfaceContainer typedClone = (ExampleInterfaceContainer) clone;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            {
+                typedClone.ExampleByInterface = (ExampleByInterface == null) ? default(IExample) : (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            typedClone.ExampleListByInterface = Clone_List_GIExample_g(ExampleListByInterface);
+            
         }
         
         public virtual bool HasChanged { get; set; }

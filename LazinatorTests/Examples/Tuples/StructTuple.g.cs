@@ -78,6 +78,7 @@ namespace LazinatorTests.Examples.Tuples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -90,6 +91,17 @@ namespace LazinatorTests.Examples.Tuples
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            StructTuple typedClone = (StructTuple) clone;
+            typedClone.EnumTuple = Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(EnumTuple);
+            typedClone.MyNamedTuple = Clone__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(MyNamedTuple);
+            typedClone.MyNullableTuple = Clone__Pint_c_C32double_p_C63(MyNullableTuple);
+            typedClone.MyValueTupleSerialized = Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(MyValueTupleSerialized);
+            
         }
         
         public virtual bool HasChanged { get; set; }

@@ -85,6 +85,7 @@ namespace Lazinator.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -97,6 +98,21 @@ namespace Lazinator.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            LazinatorOffsetList typedClone = (LazinatorOffsetList) clone;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.FourByteItems = (FourByteItems == null) ? default(LazinatorFastReadList<int>) : (LazinatorFastReadList<int>) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.TwoByteItems = (TwoByteItems == null) ? default(LazinatorFastReadList<short>) : (LazinatorFastReadList<short>) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public bool HasChanged { get; set; }

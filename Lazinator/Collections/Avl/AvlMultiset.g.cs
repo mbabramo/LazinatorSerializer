@@ -79,6 +79,7 @@ namespace Lazinator.Collections.Avl
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -91,6 +92,18 @@ namespace Lazinator.Collections.Avl
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            AvlMultiset<T> typedClone = (AvlMultiset<T>) clone;
+            typedClone.NumItemsAdded = NumItemsAdded;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.UnderlyingSet = (UnderlyingSet == null) ? default(AvlSet<LazinatorTuple<T, WInt>>) : (AvlSet<LazinatorTuple<T, WInt>>) UnderlyingSet.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public virtual bool HasChanged { get; set; }

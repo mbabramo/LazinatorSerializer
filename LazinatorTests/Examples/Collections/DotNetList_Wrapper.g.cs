@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Collections
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -94,6 +95,16 @@ namespace LazinatorTests.Examples.Collections
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            DotNetList_Wrapper typedClone = (DotNetList_Wrapper) clone;
+            typedClone.MyListInt = Clone_List_GWInt_g(MyListInt);
+            typedClone.MyListNullableByte = Clone_List_GWNullableByte_g(MyListNullableByte);
+            typedClone.MyListNullableInt = Clone_List_GWNullableInt_g(MyListNullableInt);
+            
         }
         
         public virtual bool HasChanged { get; set; }

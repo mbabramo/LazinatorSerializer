@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -93,6 +94,22 @@ namespace LazinatorTests.Examples.Subclasses
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            ClassWithSubclass typedClone = (ClassWithSubclass) clone;
+            typedClone.IntWithinSuperclass = IntWithinSuperclass;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.SubclassInstance1 = (SubclassInstance1 == null) ? default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) : (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.SubclassInstance2 = (SubclassInstance2 == null) ? default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) : (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public virtual bool HasChanged { get; set; }

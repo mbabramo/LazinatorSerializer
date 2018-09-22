@@ -75,6 +75,7 @@ namespace Lazinator.Wrappers
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -87,6 +88,14 @@ namespace Lazinator.Wrappers
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            WReadOnlySpanChar typedClone = (WReadOnlySpanChar) clone;
+            typedClone.Value = Clone_ReadOnlySpan_Gchar_g(Value);
+            
         }
         
         public bool HasChanged { get; set; }
@@ -389,6 +398,12 @@ namespace Lazinator.Wrappers
         }
         
         /* Conversion of supported collections and tuples */
+        private static ReadOnlySpan<char> Clone_ReadOnlySpan_Gchar_g(ReadOnlySpan<char> itemToClone)
+        {
+            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            MemoryMarshal.Cast<char, byte>(itemToClone).CopyTo(clone);
+            return MemoryMarshal.Cast<byte, char>(clone);
+        }
         
     }
 }

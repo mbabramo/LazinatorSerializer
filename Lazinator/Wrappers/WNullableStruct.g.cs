@@ -77,6 +77,7 @@ namespace Lazinator.Wrappers
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
@@ -89,6 +90,18 @@ namespace Lazinator.Wrappers
             }
             clone.LazinatorParents = default;
             return clone;
+        }
+        
+        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            WNullableStruct<T> typedClone = (WNullableStruct<T>) clone;
+            typedClone.HasValue = HasValue;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.NonNullValue = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) ? default(T) : (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
         }
         
         public bool HasChanged { get; set; }
