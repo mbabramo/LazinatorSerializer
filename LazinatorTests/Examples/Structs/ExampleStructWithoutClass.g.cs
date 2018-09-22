@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples.Structs
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                AssignCloneProperties(clone, includeChildrenMode);
+                AssignCloneProperties(ref clone, includeChildrenMode);
             }
             else
             {
@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref ExampleStructWithoutClass clone, IncludeChildrenMode includeChildrenMode)
         {
             
             ExampleStructWithoutClass typedClone = (ExampleStructWithoutClass) clone;

@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                AssignCloneProperties(clone, includeChildrenMode);
+                AssignCloneProperties(ref clone, includeChildrenMode);
             }
             else
             {
@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref NonLazinatorInterchangeClass clone, IncludeChildrenMode includeChildrenMode)
         {
             
             NonLazinatorInterchangeClass typedClone = (NonLazinatorInterchangeClass) clone;

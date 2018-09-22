@@ -73,7 +73,7 @@ namespace Lazinator.Wrappers
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                AssignCloneProperties(clone, includeChildrenMode);
+                AssignCloneProperties(ref clone, includeChildrenMode);
             }
             else
             {
@@ -88,7 +88,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref WGuid clone, IncludeChildrenMode includeChildrenMode)
         {
             
             WGuid typedClone = (WGuid) clone;
