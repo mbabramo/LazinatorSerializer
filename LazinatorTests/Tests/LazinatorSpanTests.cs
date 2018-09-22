@@ -11,50 +11,53 @@ namespace LazinatorTests.Tests
     public class LazinatorSpanTests
     {
 
+        static char[] chars = "Hello, world".ToCharArray();
+
+        static DateTime now = DateTime.Now;
+
+        public static SpanAndMemory GetSpanAndMemory(bool emptySpans)
+        {
+            if (emptySpans)
+                return new SpanAndMemory
+                {
+                    MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { }),
+                    MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(new char[] { }),
+                    MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { }),
+                    MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
+                    MyReadOnlySpanChar = new ReadOnlySpan<char>(new char[] { }),
+                    MyReadOnlySpanDateTime = new Span<DateTime>(), // should also work with no array
+                    MyReadOnlySpanLong = new Span<long>(new long[] { }),
+                    MyMemoryByte = new Memory<byte>(new byte[] { }),
+                    MyMemoryInt = new Memory<int>(new int[] { }),
+                    MyNullableMemoryByte = new Memory<byte>(new byte[] { }),
+                    MyNullableMemoryInt = new Memory<int>(new int[] { }),
+                    MyNullableReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { })
+
+                };
+            return new SpanAndMemory
+            {
+                MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(chars),
+                MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 }),
+                MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
+                MyReadOnlySpanChar = new ReadOnlySpan<char>(chars),
+                MyReadOnlySpanDateTime = new Span<DateTime>(new DateTime[] { now }),
+                MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue }),
+                MyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                MyMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
+                MyNullableMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                MyNullableMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
+                MyNullableReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 })
+            };
+        }
+
         [Fact]
         public void LazinatorSpansAndMemory()
         {
-            var chars = "Hello, world".ToCharArray();
+            
 
-            var now = DateTime.Now;
-            SpanAndMemory GetObject(bool emptySpans)
-            {
-                if (emptySpans)
-                    return new SpanAndMemory
-                    {
-                        MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { }),
-                        MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(new char[] { }),
-                        MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { }),
-                        MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
-                        MyReadOnlySpanChar = new ReadOnlySpan<char>(new char[] { }),
-                        MyReadOnlySpanDateTime = new Span<DateTime>(), // should also work with no array
-                        MyReadOnlySpanLong = new Span<long>(new long[] { }),
-                        MyMemoryByte = new Memory<byte>(new byte[] { }),
-                        MyMemoryInt = new Memory<int>(new int[] { }),
-                        MyNullableMemoryByte = new Memory<byte>(new byte[] { }),
-                        MyNullableMemoryInt = new Memory<int>(new int[] { }),
-                        MyNullableReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { })
-
-                    };
-                return new SpanAndMemory
-                {
-                    MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
-                    MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(chars),
-                    MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 }),
-                    MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
-                    MyReadOnlySpanChar = new ReadOnlySpan<char>(chars),
-                    MyReadOnlySpanDateTime = new Span<DateTime>(new DateTime[] { now }),
-                    MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue }),
-                    MyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
-                    MyMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
-                    MyNullableMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
-                    MyNullableMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
-                    MyNullableReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 })
-                };
-            }
-
-            var original = GetObject(false);
-            var copy = GetObject(false);
+            var original = GetSpanAndMemory(false);
+            var copy = GetSpanAndMemory(false);
             for (int i = 0; i < 3; i++)
             {
                 var result = copy.CloneLazinatorTyped();
@@ -85,8 +88,8 @@ namespace LazinatorTests.Tests
                 copy = result;
             }
 
-            original = GetObject(true);
-            copy = GetObject(true);
+            original = GetSpanAndMemory(true);
+            copy = GetSpanAndMemory(true);
             for (int i = 0; i < 3; i++)
             {
                 var result = copy.CloneLazinatorTyped();
