@@ -566,7 +566,7 @@ namespace Lazinator.CodeDescription
                             
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                AssignCloneProperties(clone, includeChildrenMode);
+                                AssignCloneProperties({IIF(ObjectType == LazinatorObjectType.Struct, "ref ")}clone, includeChildrenMode);
                             }}
                             else
                             {{
@@ -581,7 +581,7 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties({((ObjectType == LazinatorObjectType.Struct) ? $"ref {NameIncludingGenerics}" : "ILazinator")} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {IIF(IsDerivedFromNonAbstractLazinator, $@"base.AssignCloneProperties(clone, includeChildrenMode);
                     ")}
