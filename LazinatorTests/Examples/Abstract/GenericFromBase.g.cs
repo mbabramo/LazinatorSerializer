@@ -64,13 +64,11 @@ namespace LazinatorTests.Examples.Abstract
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
-            
             GenericFromBase<T> typedClone = (GenericFromBase<T>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.MyT = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         /* Properties */

@@ -92,10 +92,7 @@ namespace Lazinator.Wrappers
         
         void AssignCloneProperties(ref WDecimalArray clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            WDecimalArray typedClone = (WDecimalArray) clone;
-            typedClone.WrappedValue = Clone_decimal_B_b(WrappedValue);
-            
+            clone.WrappedValue = Clone_decimal_B_b(WrappedValue);
         }
         
         public bool HasChanged { get; set; }

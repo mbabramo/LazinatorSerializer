@@ -98,12 +98,9 @@ namespace LazinatorTests.Examples
         
         void AssignCloneProperties(ref NonLazinatorContainer clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            NonLazinatorContainer typedClone = (NonLazinatorContainer) clone;
-            typedClone.NonLazinatorClass = NonLazinatorClass;
-            typedClone.NonLazinatorInterchangeableClass = NonLazinatorInterchangeableClass;
-            typedClone.NonLazinatorStruct = NonLazinatorStruct;
-            
+            clone.NonLazinatorClass = NonLazinatorClass;
+            clone.NonLazinatorInterchangeableClass = NonLazinatorInterchangeableClass;
+            clone.NonLazinatorStruct = NonLazinatorStruct;
         }
         
         public bool HasChanged { get; set; }

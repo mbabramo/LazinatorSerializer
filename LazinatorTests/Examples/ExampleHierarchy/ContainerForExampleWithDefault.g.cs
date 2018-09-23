@@ -94,13 +94,11 @@ namespace LazinatorTests.Examples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             ContainerForExampleWithDefault typedClone = (ContainerForExampleWithDefault) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.Example = (Example == null) ? default(Example) : (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

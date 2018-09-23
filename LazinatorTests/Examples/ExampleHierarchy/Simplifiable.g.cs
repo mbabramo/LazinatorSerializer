@@ -98,7 +98,6 @@ namespace LazinatorTests.Examples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             Simplifiable typedClone = (Simplifiable) clone;
             typedClone.MyIntsAre3 = MyIntsAre3;
             typedClone.Example2Char = Example2Char;
@@ -122,7 +121,6 @@ namespace LazinatorTests.Examples
             {
                 typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

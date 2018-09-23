@@ -99,12 +99,10 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             RecordLikeContainer typedClone = (RecordLikeContainer) clone;
             typedClone.MyMismatchedRecordLikeType = Clone_MismatchedRecordLikeType(MyMismatchedRecordLikeType);
             typedClone.MyRecordLikeClass = Clone_RecordLikeClass(MyRecordLikeClass);
             typedClone.MyRecordLikeType = Clone_RecordLikeType(MyRecordLikeType);
-            
         }
         
         public virtual bool HasChanged { get; set; }

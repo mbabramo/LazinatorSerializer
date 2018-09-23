@@ -94,14 +94,11 @@ namespace Lazinator.Wrappers
         
         void AssignCloneProperties(ref WNullableStruct<T> clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            WNullableStruct<T> typedClone = (WNullableStruct<T>) clone;
-            typedClone.HasValue = HasValue;
+            clone.HasValue = HasValue;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.NonNullValue = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) ? default(T) : (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                clone.NonNullValue = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) ? default(T) : (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public bool HasChanged { get; set; }

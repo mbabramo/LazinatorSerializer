@@ -95,10 +95,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DotNetHashSet_Lazinator typedClone = (DotNetHashSet_Lazinator) clone;
             typedClone.MyHashSetSerialized = Clone_HashSet_GExampleChild_g(MyHashSetSerialized);
-            
         }
         
         public virtual bool HasChanged { get; set; }

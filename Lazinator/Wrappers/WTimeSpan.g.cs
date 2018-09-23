@@ -90,10 +90,7 @@ namespace Lazinator.Wrappers
         
         void AssignCloneProperties(ref WTimeSpan clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            WTimeSpan typedClone = (WTimeSpan) clone;
-            typedClone.WrappedValue = WrappedValue;
-            
+            clone.WrappedValue = WrappedValue;
         }
         
         public bool HasChanged { get; set; }

@@ -96,13 +96,11 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             ConcreteGenericContainer typedClone = (ConcreteGenericContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.Item = (Item == null) ? default(IAbstractGeneric1<int>) : (IAbstractGeneric1<int>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public override bool HasChanged { get; set; }

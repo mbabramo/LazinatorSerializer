@@ -64,10 +64,8 @@ namespace LazinatorTests.Examples.Collections
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
-            
             DerivedArray_Values typedClone = (DerivedArray_Values) clone;
             typedClone.MyArrayInt_DerivedLevel = Clone_int_B_b(MyArrayInt_DerivedLevel);
-            
         }
         
         /* Properties */

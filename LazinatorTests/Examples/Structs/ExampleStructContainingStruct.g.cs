@@ -98,13 +98,10 @@ namespace LazinatorTests.Examples
         
         void AssignCloneProperties(ref ExampleStructContainingStruct clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            ExampleStructContainingStruct typedClone = (ExampleStructContainingStruct) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyExampleStruct = (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) ? default(ExampleStruct) : (ExampleStruct) MyExampleStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                clone.MyExampleStruct = (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) ? default(ExampleStruct) : (ExampleStruct) MyExampleStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public bool HasChanged { get; set; }

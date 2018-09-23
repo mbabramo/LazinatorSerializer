@@ -94,10 +94,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DotNetQueue_Values typedClone = (DotNetQueue_Values) clone;
             typedClone.MyQueueInt = Clone_Queue_Gint_g(MyQueueInt);
-            
         }
         
         public virtual bool HasChanged { get; set; }

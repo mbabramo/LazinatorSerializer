@@ -98,7 +98,6 @@ namespace Lazinator.Spans
         
         void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;
             typedClone._version = _version;
             typedClone.m_length = m_length;
@@ -106,7 +105,6 @@ namespace Lazinator.Spans
             {
                 typedClone.ByteSpan = (ByteSpan == null) ? default(LazinatorByteSpan) : (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public bool HasChanged { get; set; }

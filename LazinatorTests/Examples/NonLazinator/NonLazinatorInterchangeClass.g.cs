@@ -98,12 +98,9 @@ namespace LazinatorTests.Examples
         
         void AssignCloneProperties(ref NonLazinatorInterchangeClass clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            NonLazinatorInterchangeClass typedClone = (NonLazinatorInterchangeClass) clone;
-            typedClone.IsNull = IsNull;
-            typedClone.MyInt = MyInt;
-            typedClone.MyString = MyString;
-            
+            clone.IsNull = IsNull;
+            clone.MyInt = MyInt;
+            clone.MyString = MyString;
         }
         
         public bool HasChanged { get; set; }

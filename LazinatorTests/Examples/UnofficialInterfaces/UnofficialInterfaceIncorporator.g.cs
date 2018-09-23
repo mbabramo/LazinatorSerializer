@@ -99,7 +99,6 @@ namespace LazinatorTests.Examples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             UnofficialInterfaceIncorporator typedClone = (UnofficialInterfaceIncorporator) clone;
             typedClone.MyOfficialLong = MyOfficialLong;
             typedClone.MyUnofficialInt = MyUnofficialInt;
@@ -111,7 +110,6 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyUnofficialObject = (MyUnofficialObject == null) ? default(Concrete3) : (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

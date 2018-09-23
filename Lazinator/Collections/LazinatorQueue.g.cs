@@ -64,9 +64,7 @@ namespace Lazinator.Collections
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
-            
             LazinatorQueue<T> typedClone = (LazinatorQueue<T>) clone;
-            
         }
         
         /* Properties */

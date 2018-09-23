@@ -98,10 +98,8 @@ namespace LazinatorTests.Examples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             ExampleNonexclusiveInterfaceImplementer typedClone = (ExampleNonexclusiveInterfaceImplementer) clone;
             typedClone.MyInt = MyInt;
-            
         }
         
         public virtual bool HasChanged { get; set; }

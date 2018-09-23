@@ -98,9 +98,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             Base typedClone = (Base) clone;
-            
         }
         
         public virtual bool HasChanged { get; set; }

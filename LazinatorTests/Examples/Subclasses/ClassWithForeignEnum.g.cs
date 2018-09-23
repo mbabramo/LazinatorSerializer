@@ -98,10 +98,8 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             ClassWithForeignEnum typedClone = (ClassWithForeignEnum) clone;
             typedClone.MyEnum = MyEnum;
-            
         }
         
         public virtual bool HasChanged { get; set; }

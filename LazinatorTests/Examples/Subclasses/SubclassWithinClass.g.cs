@@ -100,10 +100,8 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
             {
-                
                 SubclassWithinClass typedClone = (SubclassWithinClass) clone;
                 typedClone.StringWithinSubclass = StringWithinSubclass;
-                
             }
             
             public virtual bool HasChanged { get; set; }

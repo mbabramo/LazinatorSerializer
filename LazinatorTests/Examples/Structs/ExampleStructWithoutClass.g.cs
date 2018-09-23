@@ -98,10 +98,7 @@ namespace LazinatorTests.Examples.Structs
         
         void AssignCloneProperties(ref ExampleStructWithoutClass clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            ExampleStructWithoutClass typedClone = (ExampleStructWithoutClass) clone;
-            typedClone.MyInt = MyInt;
-            
+            clone.MyInt = MyInt;
         }
         
         public bool HasChanged { get; set; }

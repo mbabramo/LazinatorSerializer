@@ -99,7 +99,6 @@ namespace LazinatorTests.Examples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             ExampleStructContainer typedClone = (ExampleStructContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -111,7 +110,6 @@ namespace LazinatorTests.Examples
             }
             typedClone.MyListExampleStruct = Clone_List_GExampleStruct_g(MyListExampleStruct);
             typedClone.MyListNullableExampleStruct = Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct);
-            
         }
         
         public virtual bool HasChanged { get; set; }

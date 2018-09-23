@@ -96,10 +96,8 @@ namespace Lazinator.Collections
         
         void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             LazinatorFastReadList<T> typedClone = (LazinatorFastReadList<T>) clone;
             typedClone.ReadOnlyBytes = Clone_ReadOnlySpan_Gbyte_g(ReadOnlyBytes);
-            
         }
         
         public bool HasChanged { get; set; }

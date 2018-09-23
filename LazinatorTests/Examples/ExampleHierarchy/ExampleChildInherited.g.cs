@@ -64,10 +64,8 @@ namespace LazinatorTests.Examples
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
-            
             ExampleChildInherited typedClone = (ExampleChildInherited) clone;
             typedClone.MyInt = MyInt;
-            
         }
         
         /* Properties */

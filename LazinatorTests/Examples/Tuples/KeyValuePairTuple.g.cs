@@ -95,10 +95,8 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             KeyValuePairTuple typedClone = (KeyValuePairTuple) clone;
             typedClone.MyKeyValuePairSerialized = Clone_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized);
-            
         }
         
         public virtual bool HasChanged { get; set; }

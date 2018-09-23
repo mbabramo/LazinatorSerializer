@@ -94,13 +94,11 @@ namespace Lazinator.Collections.Avl
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             AvlTree<TKey, TValue> typedClone = (AvlTree<TKey, TValue>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.Root = (Root == null) ? default(AvlNode<TKey, TValue>) : (AvlNode<TKey, TValue>) Root.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

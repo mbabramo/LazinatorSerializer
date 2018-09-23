@@ -99,7 +99,6 @@ namespace LazinatorTests.Examples
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             Example typedClone = (Example) clone;
             typedClone.MyNullableDouble = MyNullableDouble;
             typedClone.MyBool = MyBool;
@@ -148,7 +147,6 @@ namespace LazinatorTests.Examples
             {
                 typedClone.ExcludableChild = (ExcludableChild == null) ? default(ExampleChild) : (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

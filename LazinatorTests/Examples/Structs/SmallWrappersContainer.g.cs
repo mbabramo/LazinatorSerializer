@@ -100,7 +100,6 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             SmallWrappersContainer typedClone = (SmallWrappersContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -138,7 +137,6 @@ namespace LazinatorTests.Examples.Structs
             {
                 typedClone.WrappedSByte = (System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))) ? default(WSByte) : (WSByte) WrappedSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

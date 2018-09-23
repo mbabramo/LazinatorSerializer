@@ -94,10 +94,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DotNetStack_Values typedClone = (DotNetStack_Values) clone;
             typedClone.MyStackInt = Clone_Stack_Gint_g(MyStackInt);
-            
         }
         
         public virtual bool HasChanged { get; set; }

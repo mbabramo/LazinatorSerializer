@@ -98,7 +98,6 @@ namespace Lazinator.Collections.Avl
         
         void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             AvlNode<TKey, TValue> typedClone = (AvlNode<TKey, TValue>) clone;
             typedClone.Balance = Balance;
             typedClone.Count = Count;
@@ -118,7 +117,6 @@ namespace Lazinator.Collections.Avl
             {
                 typedClone.Value = (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) ? default(TValue) : (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public bool HasChanged { get; set; }

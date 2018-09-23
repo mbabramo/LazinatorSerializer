@@ -65,10 +65,8 @@ namespace LazinatorTests.Examples
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
-            
             DerivedLazinatorList<T> typedClone = (DerivedLazinatorList<T>) clone;
             typedClone.MyListName = MyListName;
-            
         }
         
         /* Properties */

@@ -96,14 +96,12 @@ namespace Lazinator.Collections.Avl
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             AvlMultiset<T> typedClone = (AvlMultiset<T>) clone;
             typedClone.NumItemsAdded = NumItemsAdded;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.UnderlyingSet = (UnderlyingSet == null) ? default(AvlSet<LazinatorTuple<T, WInt>>) : (AvlSet<LazinatorTuple<T, WInt>>) UnderlyingSet.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

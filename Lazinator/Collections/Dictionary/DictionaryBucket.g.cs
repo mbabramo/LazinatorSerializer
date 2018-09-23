@@ -99,7 +99,6 @@ namespace Lazinator.Collections.Dictionary
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DictionaryBucket<TKey, TValue> typedClone = (DictionaryBucket<TKey, TValue>) clone;
             typedClone.Initialized = Initialized;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
@@ -110,7 +109,6 @@ namespace Lazinator.Collections.Dictionary
             {
                 typedClone.Values = (Values == null) ? default(LazinatorList<TValue>) : (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

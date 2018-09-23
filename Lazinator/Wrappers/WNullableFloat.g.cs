@@ -92,10 +92,7 @@ namespace Lazinator.Wrappers
         
         void AssignCloneProperties(ref WNullableFloat clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            WNullableFloat typedClone = (WNullableFloat) clone;
-            typedClone.WrappedValue = WrappedValue;
-            
+            clone.WrappedValue = WrappedValue;
         }
         
         public bool HasChanged { get; set; }

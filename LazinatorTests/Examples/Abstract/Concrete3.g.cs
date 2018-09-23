@@ -93,7 +93,6 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             Concrete3 typedClone = (Concrete3) clone;
             typedClone.String1 = String1;
             typedClone.String2 = String2;
@@ -109,7 +108,6 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.IntList1 = Clone_List_Gint_g(IntList1);
             typedClone.IntList2 = Clone_List_Gint_g(IntList2);
             typedClone.IntList3 = Clone_List_Gint_g(IntList3);
-            
         }
         
         public override bool HasChanged { get; set; }

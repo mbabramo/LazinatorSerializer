@@ -95,11 +95,9 @@ namespace Lazinator.Spans
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             LazinatorByteSpan typedClone = (LazinatorByteSpan) clone;
             typedClone.ReadOnly = Clone_ReadOnlySpan_Gbyte_g(ReadOnly);
             typedClone.ReadOrWrite = Clone_Memory_Gbyte_g(ReadOrWrite);
-            
         }
         
         public virtual bool HasChanged { get; set; }

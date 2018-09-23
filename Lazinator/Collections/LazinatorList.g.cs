@@ -94,14 +94,12 @@ namespace Lazinator.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             LazinatorList<T> typedClone = (LazinatorList<T>) clone;
             typedClone.MainListSerialized = Clone_Memory_Gbyte_g(MainListSerialized);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.Offsets = (Offsets == null) ? default(LazinatorOffsetList) : (LazinatorOffsetList) Offsets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

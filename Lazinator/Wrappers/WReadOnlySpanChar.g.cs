@@ -92,10 +92,7 @@ namespace Lazinator.Wrappers
         
         void AssignCloneProperties(ref WReadOnlySpanChar clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            WReadOnlySpanChar typedClone = (WReadOnlySpanChar) clone;
-            typedClone.Value = Clone_ReadOnlySpan_Gchar_g(Value);
-            
+            clone.Value = Clone_ReadOnlySpan_Gchar_g(Value);
         }
         
         public bool HasChanged { get; set; }

@@ -95,13 +95,11 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             WrapperContainer typedClone = (WrapperContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.WrappedInt = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

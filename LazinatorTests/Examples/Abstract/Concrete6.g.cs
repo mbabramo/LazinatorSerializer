@@ -64,10 +64,8 @@ namespace LazinatorTests.Examples.Abstract
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
-            
             Concrete6 typedClone = (Concrete6) clone;
             typedClone.IntList6 = Clone_List_Gint_g(IntList6);
-            
         }
         
         /* Properties */

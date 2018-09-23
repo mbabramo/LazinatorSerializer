@@ -99,12 +99,10 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DotNetList_Wrapper typedClone = (DotNetList_Wrapper) clone;
             typedClone.MyListInt = Clone_List_GWInt_g(MyListInt);
             typedClone.MyListNullableByte = Clone_List_GWNullableByte_g(MyListNullableByte);
             typedClone.MyListNullableInt = Clone_List_GWNullableInt_g(MyListNullableInt);
-            
         }
         
         public virtual bool HasChanged { get; set; }

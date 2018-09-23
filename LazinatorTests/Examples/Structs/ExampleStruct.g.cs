@@ -103,22 +103,19 @@ namespace LazinatorTests.Examples
         
         void AssignCloneProperties(ref ExampleStruct clone, IncludeChildrenMode includeChildrenMode)
         {
-            
-            ExampleStruct typedClone = (ExampleStruct) clone;
-            typedClone.MyBool = MyBool;
-            typedClone.MyChar = MyChar;
+            clone.MyBool = MyBool;
+            clone.MyChar = MyChar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                clone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                clone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyLazinatorList = Clone_List_GExample_g(MyLazinatorList);
-            typedClone.MyListValues = Clone_List_Gint_g(MyListValues);
-            typedClone.MyTuple = Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple);
-            
+            clone.MyLazinatorList = Clone_List_GExample_g(MyLazinatorList);
+            clone.MyListValues = Clone_List_Gint_g(MyListValues);
+            clone.MyTuple = Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple);
         }
         
         public bool HasChanged { get; set; }

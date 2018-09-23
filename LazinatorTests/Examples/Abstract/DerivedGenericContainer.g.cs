@@ -98,13 +98,11 @@ namespace LazinatorTests.Examples.Abstract
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DerivedGenericContainer<T> typedClone = (DerivedGenericContainer<T>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.Item = (Item == null) ? default(AbstractGeneric1<T>) : (AbstractGeneric1<T>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

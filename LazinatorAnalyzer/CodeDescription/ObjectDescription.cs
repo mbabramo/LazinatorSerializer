@@ -584,10 +584,8 @@ namespace Lazinator.CodeDescription
                         {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties({((ObjectType == LazinatorObjectType.Struct) ? $"ref {NameIncludingGenerics}" : "ILazinator")} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {IIF(IsDerivedFromNonAbstractLazinator, $@"base.AssignCloneProperties(clone, includeChildrenMode);
-                    ")}
-                            {IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
-                            ")}{AppendCloneProperties()}
-                        }}";
+                    ")}{IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
+                            ")}{AppendCloneProperties()}}}";
 
         }
 

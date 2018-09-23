@@ -101,7 +101,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             OpenGenericStayingOpenContainer typedClone = (OpenGenericStayingOpenContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -123,7 +122,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 typedClone.ClosedGenericNonexclusiveInterface = (ClosedGenericNonexclusiveInterface == null) ? default(OpenGeneric<IExampleNonexclusiveInterface>) : (OpenGeneric<IExampleNonexclusiveInterface>) ClosedGenericNonexclusiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

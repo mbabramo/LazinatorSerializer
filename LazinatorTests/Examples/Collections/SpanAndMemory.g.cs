@@ -98,7 +98,6 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             SpanAndMemory typedClone = (SpanAndMemory) clone;
             typedClone.MyMemoryByte = Clone_Memory_Gbyte_g(MyMemoryByte);
             typedClone.MyMemoryInt = Clone_Memory_Gint_g(MyMemoryInt);
@@ -112,7 +111,6 @@ namespace LazinatorTests.Examples.Collections
             typedClone.MyReadOnlySpanChar = Clone_ReadOnlySpan_Gchar_g(MyReadOnlySpanChar);
             typedClone.MyReadOnlySpanDateTime = Clone_ReadOnlySpan_GDateTime_g(MyReadOnlySpanDateTime);
             typedClone.MyReadOnlySpanLong = Clone_ReadOnlySpan_Glong_g(MyReadOnlySpanLong);
-            
         }
         
         public virtual bool HasChanged { get; set; }

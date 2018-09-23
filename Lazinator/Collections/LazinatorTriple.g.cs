@@ -94,7 +94,6 @@ namespace Lazinator.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -108,7 +107,6 @@ namespace Lazinator.Collections
             {
                 typedClone.Item3 = (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public virtual bool HasChanged { get; set; }

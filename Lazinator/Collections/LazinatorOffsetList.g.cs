@@ -102,7 +102,6 @@ namespace Lazinator.Collections
         
         void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             LazinatorOffsetList typedClone = (LazinatorOffsetList) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -112,7 +111,6 @@ namespace Lazinator.Collections
             {
                 typedClone.TwoByteItems = (TwoByteItems == null) ? default(LazinatorFastReadList<short>) : (LazinatorFastReadList<short>) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public bool HasChanged { get; set; }

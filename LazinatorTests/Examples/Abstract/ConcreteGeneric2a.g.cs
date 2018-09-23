@@ -97,7 +97,6 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             ConcreteGeneric2a typedClone = (ConcreteGeneric2a) clone;
             typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;
             typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;
@@ -108,7 +107,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 typedClone.LazinatorExample = (LazinatorExample == null) ? default(Example) : (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
         }
         
         public override bool HasChanged { get; set; }

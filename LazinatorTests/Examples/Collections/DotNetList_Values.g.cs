@@ -94,13 +94,11 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DotNetList_Values typedClone = (DotNetList_Values) clone;
             typedClone.MyLinkedListInt = Clone_LinkedList_Gint_g(MyLinkedListInt);
             typedClone.MyListInt = Clone_List_Gint_g(MyListInt);
             typedClone.MyListInt2 = Clone_List_Gint_g(MyListInt2);
             typedClone.MySortedSetInt = Clone_SortedSet_Gint_g(MySortedSetInt);
-            
         }
         
         public virtual bool HasChanged { get; set; }

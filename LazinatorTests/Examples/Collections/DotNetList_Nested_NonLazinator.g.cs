@@ -95,10 +95,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            
             DotNetList_Nested_NonLazinator typedClone = (DotNetList_Nested_NonLazinator) clone;
             typedClone.MyListNestedNonLazinatorType = Clone_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType);
-            
         }
         
         public virtual bool HasChanged { get; set; }
