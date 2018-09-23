@@ -59,7 +59,7 @@ namespace Lazinator.Core
                 {
                     if (property.propertyValue is IEnumerable enumerable && !(property.propertyValue is string))
                     {
-                        var enumerated = enumerable.OfType<object>();
+                        var enumerated = enumerable.OfType<object>().Select(x => x is ILazinator l ? new HierarchyTree(l).ToString() : x);
                         sb.AppendLine(String.Join(", ", enumerated));
                     }
                     else

@@ -18,9 +18,9 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(ILazinator lazinator)
         {
+            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren); // DEBUG -- fix order
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
 
@@ -60,6 +60,48 @@ namespace LazinatorTests.Tests
                 {
                     MyListInt = new List<int>() { 3, 4, 5 }
                 };
+            VerifyCloningEquivalence(d);
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_DotNetHashSet()
+        {
+            DotNetHashSet_Lazinator d = new DotNetHashSet_Lazinator()
+            {
+                MyHashSetSerialized = new HashSet<ExampleChild>()
+                    {
+                        GetExampleChild(1),
+                        GetExampleChild(3), 
+                        null // null item
+                    }
+            };
+            VerifyCloningEquivalence(d);
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_DotNetList_Lazinator()
+        {
+            DotNetList_Lazinator d = new DotNetList_Lazinator()
+            {
+                MyListSerialized = new List<ExampleChild>()
+                    {
+                        GetExampleChild(1),
+                        GetExampleChild(3), // inherited item
+                        null // null item
+                    },
+
+            };
+            VerifyCloningEquivalence(d);
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_DotNetList_Wrapper()
+        {
+            DotNetList_Wrapper d = new DotNetList_Wrapper()
+            {
+                MyListNullableByte = new List<WNullableByte>() { 3, 4, 249, null },
+                MyListNullableInt = new List<WNullableInt>() { 3, 16000, 249, null, 1000000000 }
+            };
             VerifyCloningEquivalence(d);
         }
     }

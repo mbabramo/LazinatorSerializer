@@ -503,8 +503,8 @@ namespace Lazinator.CodeDescription
                             {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (_LazinatorMemoryStorage == null)
                             {{
                                 throw new NotSupportedException(""Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead.""); 
-                            }}")}
-                            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                            }}
+                            ")}if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
                                 return;
                             }}
