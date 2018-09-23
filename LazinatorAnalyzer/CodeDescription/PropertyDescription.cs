@@ -1318,15 +1318,15 @@ namespace Lazinator.CodeDescription
                     ";
         }
 
-        public void AppendCopyPropertyToClone(CodeStringBuilder sb)
+        public void AppendCopyPropertyToClone(CodeStringBuilder sb, string nameOfCloneVariable)
         {
             string copyInstruction = "";
             if (IsLazinator)
-                copyInstruction = $"typedClone.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
             else if (IsPrimitive || PropertyType == LazinatorPropertyType.NonLazinator)
-                copyInstruction = $"typedClone.{PropertyName} = {PropertyName};";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if (PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
-                copyInstruction = $"typedClone.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
             sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
         }
 

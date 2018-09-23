@@ -585,8 +585,8 @@ namespace Lazinator.CodeDescription
                         {{
                             {IIF(IsDerivedFromNonAbstractLazinator, $@"base.AssignCloneProperties(clone, includeChildrenMode);
                     ")}
-                            {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
-                            {AppendCloneProperties()}
+                            {IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
+                            ")}{AppendCloneProperties()}
                         }}";
 
         }
@@ -595,9 +595,10 @@ namespace Lazinator.CodeDescription
         private string AppendCloneProperties()
         {
             CodeStringBuilder sb = new CodeStringBuilder();
+            string nameOfCloneVariable = (ObjectType == LazinatorObjectType.Struct) ? "clone" : "typedClone";
             foreach (var property in PropertiesToDefineThisLevel)
             {
-                property.AppendCopyPropertyToClone(sb);
+                property.AppendCopyPropertyToClone(sb, nameOfCloneVariable);
             }
             return sb.ToString();
         }
