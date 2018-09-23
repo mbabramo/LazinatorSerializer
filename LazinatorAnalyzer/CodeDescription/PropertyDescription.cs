@@ -1368,12 +1368,13 @@ namespace Lazinator.CodeDescription
             bool isMemory = AppropriatelyQualifiedTypeName.StartsWith("Memory") || AppropriatelyQualifiedTypeName.StartsWith("ReadOnlyMemory");
             string memoryOrSpanWord = isMemory ? "Memory" : "Span";
             string innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
+            string innerFullTypeSizeEquivalent = (innerFullType == "DateTime" || innerFullType == "TimeSpan") ? "long" : innerFullType;
             string source = (innerFullType == "byte") ? "itemToClone" : $"MemoryMarshal.Cast<{innerFullType}, byte>(itemToClone)";
             string toReturn = (innerFullType == "byte") ? "clone" : $"MemoryMarshal.Cast<byte, {innerFullType}>(clone)";
 
             sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
             {{
-                var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullType})]);
+                var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullTypeSizeEquivalent})]);
                 {source}.CopyTo(clone);
                 return {toReturn};
             }}");

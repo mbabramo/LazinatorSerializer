@@ -1148,7 +1148,7 @@ namespace LazinatorTests.Examples.Collections
         }
         private static ReadOnlyMemory<byte> Clone_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone)
         {
-            var clone = new Memory<byte>(new byte[itemToClone.Length]);
+            var clone = new Memory<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
             return clone;
         }
@@ -1261,7 +1261,7 @@ namespace LazinatorTests.Examples.Collections
         }
         private static ReadOnlySpan<byte> Clone_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone)
         {
-            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
             return clone;
         }
@@ -1291,7 +1291,7 @@ namespace LazinatorTests.Examples.Collections
         }
         private static ReadOnlySpan<DateTime> Clone_ReadOnlySpan_GDateTime_g(ReadOnlySpan<DateTime> itemToClone)
         {
-            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(long)]);
             MemoryMarshal.Cast<DateTime, byte>(itemToClone).CopyTo(clone);
             return MemoryMarshal.Cast<byte, DateTime>(clone);
         }
@@ -1306,7 +1306,7 @@ namespace LazinatorTests.Examples.Collections
         }
         private static ReadOnlySpan<long> Clone_ReadOnlySpan_Glong_g(ReadOnlySpan<long> itemToClone)
         {
-            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(long)]);
             MemoryMarshal.Cast<long, byte>(itemToClone).CopyTo(clone);
             return MemoryMarshal.Cast<byte, long>(clone);
         }

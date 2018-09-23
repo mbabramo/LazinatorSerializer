@@ -500,7 +500,7 @@ namespace LazinatorTests.Examples
         }
         private static ReadOnlySpan<byte> Clone_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone)
         {
-            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
             return clone;
         }
