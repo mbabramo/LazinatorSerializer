@@ -1257,7 +1257,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine(
                     $@"WriteNonLazinatorObject{omitLengthSuffix}(
-                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
+                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")} || (includeChildrenMode != OriginalIncludeChildrenMode),
                         isAccessed: _{PropertyName}_Accessed, writer: ref writer,
                         getChildSliceForFieldFn: () => {ChildSliceString},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
@@ -1278,7 +1278,7 @@ namespace Lazinator.CodeDescription
                         var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
                         var copy_{PropertyName} = _{PropertyName};
                         WriteNonLazinatorObject{omitLengthSuffix}(
-                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")},
+                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")} || (includeChildrenMode != OriginalIncludeChildrenMode),
                         isAccessed: _{PropertyName}_Accessed, writer: ref writer,
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceEndString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
