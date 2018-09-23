@@ -352,6 +352,7 @@ namespace LazinatorTests.Examples.Collections
                     _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
+                OriginalIncludeChildrenMode = includeChildrenMode;
             }
         }
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

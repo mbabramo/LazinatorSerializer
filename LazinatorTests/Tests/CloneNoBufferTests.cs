@@ -30,7 +30,20 @@ namespace LazinatorTests.Tests
             var clonedNoBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             var clonedWithBufferString = new HierarchyTree(clonedWithBuffer).ToString();
             var clonedNoBufferString = new HierarchyTree(clonedNoBuffer).ToString();
-            LazinatorUtilities.ConfirmHierarchiesEqual(clonedWithBuffer, clonedNoBuffer);
+            try
+            {
+                LazinatorUtilities.ConfirmHierarchiesEqual(clonedWithBuffer, clonedNoBuffer);
+            }
+            catch (Exception ex)
+            {
+                int i = 0;
+                for (; i < Math.Min(clonedWithBuffer.LazinatorMemoryStorage.Span.Length, clonedNoBuffer.LazinatorMemoryStorage.Span.Length); i++)
+                    if (clonedWithBuffer.LazinatorMemoryStorage.Span[i] != clonedNoBuffer.LazinatorMemoryStorage.Span[i])
+                    {
+                        break;
+                    }
+                throw new Exception("Verify cloning failed at position " + i + ". See inner exception.", ex);
+            }
         }
 
         [Fact]
