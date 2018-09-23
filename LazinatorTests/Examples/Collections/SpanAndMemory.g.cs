@@ -1276,7 +1276,7 @@ namespace LazinatorTests.Examples.Collections
         }
         private static ReadOnlySpan<char> Clone_ReadOnlySpan_Gchar_g(ReadOnlySpan<char> itemToClone)
         {
-            var clone = new Span<byte>(new byte[itemToClone.Length]);
+            var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(char)]);
             MemoryMarshal.Cast<char, byte>(itemToClone).CopyTo(clone);
             return MemoryMarshal.Cast<byte, char>(clone);
         }

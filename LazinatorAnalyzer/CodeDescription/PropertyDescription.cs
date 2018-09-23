@@ -1373,7 +1373,7 @@ namespace Lazinator.CodeDescription
 
             sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
             {{
-                var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length]);
+                var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullType})]);
                 {source}.CopyTo(clone);
                 return {toReturn};
             }}");

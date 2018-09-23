@@ -43,14 +43,24 @@ namespace LazinatorTests.Tests
         public void CloneWithoutBuffer_SpanAndMemory()
         {
             SpanAndMemory s = LazinatorSpanTests.GetSpanAndMemory(false);
-            VerifyCloningEquivalence(GetTypicalExample());
+            VerifyCloningEquivalence(s);
         }
 
         [Fact]
         public void CloneWithoutBuffer_SpanAndMemory_Empty()
         {
             SpanAndMemory s = LazinatorSpanTests.GetSpanAndMemory(true);
-            VerifyCloningEquivalence(GetTypicalExample());
+            VerifyCloningEquivalence(s);
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_DotNetListValues()
+        {
+            DotNetList_Values d = new DotNetList_Values()
+                {
+                    MyListInt = new List<int>() { 3, 4, 5 }
+                };
+            VerifyCloningEquivalence(d);
         }
     }
 }
