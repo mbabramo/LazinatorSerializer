@@ -186,7 +186,8 @@ namespace Lazinator.Wrappers
             {
                 return;
             }
-            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
         }
         
         public int GetByteLength()

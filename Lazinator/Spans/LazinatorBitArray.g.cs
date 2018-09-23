@@ -184,12 +184,12 @@ namespace Lazinator.Spans
         
         public void EnsureLazinatorMemoryUpToDate()
         {
-            
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
-            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
         }
         
         public int GetByteLength()
