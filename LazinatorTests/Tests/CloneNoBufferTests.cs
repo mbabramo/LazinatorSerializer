@@ -18,8 +18,8 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(ILazinator lazinator)
         {
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
+            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
@@ -27,7 +27,9 @@ namespace LazinatorTests.Tests
         private void VerifyCloningEquivalence(ILazinator lazinator, IncludeChildrenMode includeChildrenMode)
         {
             var clonedWithBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.LinkedBuffer);
+            clonedWithBuffer.EnsureLazinatorMemoryUpToDate(); // DEBUG
             var clonedNoBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            clonedNoBuffer.EnsureLazinatorMemoryUpToDate(); // DEBUG
             var clonedWithBufferString = new HierarchyTree(clonedWithBuffer).ToString();
             var clonedNoBufferString = new HierarchyTree(clonedNoBuffer).ToString();
             LazinatorUtilities.ConfirmHierarchiesEqual(clonedWithBuffer, clonedNoBuffer);
