@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListNonLazinatorType;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNonLazinatorType, isBelievedDirty: MyListNonLazinatorType_Dirty,
+            nonLazinatorObject: _MyListNonLazinatorType, isBelievedDirty: MyListNonLazinatorType_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNonLazinatorType_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
@@ -443,7 +443,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListNonLazinatorType2;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNonLazinatorType2, isBelievedDirty: _MyListNonLazinatorType2_Accessed,
+            nonLazinatorObject: _MyListNonLazinatorType2, isBelievedDirty: _MyListNonLazinatorType2_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNonLazinatorType2_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, false, false, null),
             verifyCleanness: false,

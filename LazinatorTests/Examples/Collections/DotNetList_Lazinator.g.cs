@@ -386,7 +386,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListSerialized;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListSerialized, isBelievedDirty: MyListSerialized_Dirty,
+            nonLazinatorObject: _MyListSerialized, isBelievedDirty: MyListSerialized_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,

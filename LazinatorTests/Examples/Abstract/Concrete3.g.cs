@@ -666,7 +666,7 @@ namespace LazinatorTests.Examples.Abstract
                 var deserialized = IntList1;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _IntList1, isBelievedDirty: _IntList1_Accessed,
+            nonLazinatorObject: _IntList1, isBelievedDirty: _IntList1_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntList1_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList1_ByteIndex, _IntList1_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -686,7 +686,7 @@ namespace LazinatorTests.Examples.Abstract
                 var deserialized = IntList2;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _IntList2, isBelievedDirty: _IntList2_Accessed,
+            nonLazinatorObject: _IntList2, isBelievedDirty: _IntList2_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntList2_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList2_ByteIndex, _IntList2_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -706,7 +706,7 @@ namespace LazinatorTests.Examples.Abstract
                 var deserialized = IntList3;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _IntList3, isBelievedDirty: _IntList3_Accessed,
+            nonLazinatorObject: _IntList3, isBelievedDirty: _IntList3_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntList3_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList3_ByteIndex, _IntList3_ByteLength, false, false, null),
             verifyCleanness: false,

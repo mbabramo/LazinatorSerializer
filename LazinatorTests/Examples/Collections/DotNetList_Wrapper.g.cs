@@ -464,7 +464,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
+            nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
@@ -484,7 +484,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListNullableByte;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNullableByte, isBelievedDirty: _MyListNullableByte_Accessed,
+            nonLazinatorObject: _MyListNullableByte, isBelievedDirty: _MyListNullableByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNullableByte_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -504,7 +504,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListNullableInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNullableInt, isBelievedDirty: _MyListNullableInt_Accessed,
+            nonLazinatorObject: _MyListNullableInt, isBelievedDirty: _MyListNullableInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNullableInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null),
             verifyCleanness: false,

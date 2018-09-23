@@ -479,7 +479,7 @@ namespace LazinatorTests.Examples
             var byteLengthCopy_NonLazinatorClass = _NonLazinatorClass_ByteLength;
             var copy_NonLazinatorClass = _NonLazinatorClass;
             WriteNonLazinatorObject(
-            nonLazinatorObject: _NonLazinatorClass, isBelievedDirty: _NonLazinatorClass_Accessed,
+            nonLazinatorObject: _NonLazinatorClass, isBelievedDirty: _NonLazinatorClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _NonLazinatorClass_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorClass, byteIndexCopy_NonLazinatorClass, byteLengthCopy_NonLazinatorClass, false, false, null),
             verifyCleanness: false,
@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples
             var byteLengthCopy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass_ByteLength;
             var copy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass;
             WriteNonLazinatorObject(
-            nonLazinatorObject: _NonLazinatorInterchangeableClass, isBelievedDirty: _NonLazinatorInterchangeableClass_Accessed,
+            nonLazinatorObject: _NonLazinatorInterchangeableClass, isBelievedDirty: _NonLazinatorInterchangeableClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _NonLazinatorInterchangeableClass_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorInterchangeableClass, byteIndexCopy_NonLazinatorInterchangeableClass, byteLengthCopy_NonLazinatorInterchangeableClass, false, false, null),
             verifyCleanness: false,
@@ -525,7 +525,7 @@ namespace LazinatorTests.Examples
             var byteLengthCopy_NonLazinatorStruct = _NonLazinatorStruct_ByteLength;
             var copy_NonLazinatorStruct = _NonLazinatorStruct;
             WriteNonLazinatorObject(
-            nonLazinatorObject: _NonLazinatorStruct, isBelievedDirty: _NonLazinatorStruct_Accessed,
+            nonLazinatorObject: _NonLazinatorStruct, isBelievedDirty: _NonLazinatorStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _NonLazinatorStruct_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorStruct, byteIndexCopy_NonLazinatorStruct, byteLengthCopy_NonLazinatorStruct, false, false, null),
             verifyCleanness: false,

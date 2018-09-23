@@ -459,7 +459,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyArrayInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty,
+            nonLazinatorObject: _MyArrayInt, isBelievedDirty: MyArrayInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyArrayInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
@@ -479,7 +479,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyCrazyJaggedArray;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed,
+            nonLazinatorObject: _MyCrazyJaggedArray, isBelievedDirty: _MyCrazyJaggedArray_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyCrazyJaggedArray_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -499,7 +499,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyThreeDimArrayInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed,
+            nonLazinatorObject: _MyThreeDimArrayInt, isBelievedDirty: _MyThreeDimArrayInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyThreeDimArrayInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null),
             verifyCleanness: false,

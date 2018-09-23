@@ -473,7 +473,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = EnumTuple;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _EnumTuple, isBelievedDirty: _EnumTuple_Accessed,
+            nonLazinatorObject: _EnumTuple, isBelievedDirty: _EnumTuple_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _EnumTuple_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _EnumTuple_ByteIndex, _EnumTuple_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -490,7 +490,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyNamedTuple;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNamedTuple, isBelievedDirty: _MyNamedTuple_Accessed,
+            nonLazinatorObject: _MyNamedTuple, isBelievedDirty: _MyNamedTuple_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNamedTuple_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNamedTuple_ByteIndex, _MyNamedTuple_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -507,7 +507,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyNullableTuple;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNullableTuple, isBelievedDirty: _MyNullableTuple_Accessed,
+            nonLazinatorObject: _MyNullableTuple, isBelievedDirty: _MyNullableTuple_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNullableTuple_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNullableTuple_ByteIndex, _MyNullableTuple_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -524,7 +524,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyValueTupleSerialized;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyValueTupleSerialized, isBelievedDirty: _MyValueTupleSerialized_Accessed,
+            nonLazinatorObject: _MyValueTupleSerialized, isBelievedDirty: _MyValueTupleSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyValueTupleSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyValueTupleSerialized_ByteIndex, _MyValueTupleSerialized_ByteLength, false, false, null),
             verifyCleanness: false,

@@ -459,7 +459,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 var deserialized = ExampleListByInterface;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed,
+            nonLazinatorObject: _ExampleListByInterface, isBelievedDirty: _ExampleListByInterface_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ExampleListByInterface_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null),
             verifyCleanness: false,

@@ -704,7 +704,7 @@ namespace LazinatorTests.Examples
             var byteLengthCopy_MyLazinatorList = _MyLazinatorList_ByteLength;
             var copy_MyLazinatorList = _MyLazinatorList;
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyLazinatorList, isBelievedDirty: MyLazinatorList_Dirty,
+            nonLazinatorObject: _MyLazinatorList, isBelievedDirty: MyLazinatorList_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyLazinatorList_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList, false, false, null),
             verifyCleanness: verifyCleanness,
@@ -727,7 +727,7 @@ namespace LazinatorTests.Examples
             var byteLengthCopy_MyListValues = _MyListValues_ByteLength;
             var copy_MyListValues = _MyListValues;
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListValues, isBelievedDirty: _MyListValues_Accessed,
+            nonLazinatorObject: _MyListValues, isBelievedDirty: _MyListValues_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListValues_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues, false, false, null),
             verifyCleanness: false,
@@ -750,7 +750,7 @@ namespace LazinatorTests.Examples
             var byteLengthCopy_MyTuple = _MyTuple_ByteLength;
             var copy_MyTuple = _MyTuple;
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyTuple, isBelievedDirty: _MyTuple_Accessed,
+            nonLazinatorObject: _MyTuple, isBelievedDirty: _MyTuple_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyTuple_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple, false, false, null),
             verifyCleanness: false,

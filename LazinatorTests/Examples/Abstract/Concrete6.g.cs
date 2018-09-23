@@ -203,7 +203,7 @@ namespace LazinatorTests.Examples.Abstract
                 var deserialized = IntList6;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed,
+            nonLazinatorObject: _IntList6, isBelievedDirty: _IntList6_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntList6_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null),
             verifyCleanness: false,

@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Subclasses
                 var deserialized = MyEnumList;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed,
+            nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyEnumList_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null),
             verifyCleanness: false,

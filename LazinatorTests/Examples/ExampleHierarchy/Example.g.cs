@@ -1252,7 +1252,7 @@ namespace LazinatorTests.Examples
                 var deserialized = MyNonLazinatorChild;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty,
+            nonLazinatorObject: _MyNonLazinatorChild, isBelievedDirty: MyNonLazinatorChild_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNonLazinatorChild_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,

@@ -443,7 +443,7 @@ namespace Lazinator.Collections
                 var deserialized = MainListSerialized;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MainListSerialized, isBelievedDirty: MainListSerialized_Dirty,
+            nonLazinatorObject: _MainListSerialized, isBelievedDirty: MainListSerialized_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MainListSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,

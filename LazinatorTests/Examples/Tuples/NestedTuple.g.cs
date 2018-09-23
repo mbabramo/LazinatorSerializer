@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyNestedTuple;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNestedTuple, isBelievedDirty: _MyNestedTuple_Accessed,
+            nonLazinatorObject: _MyNestedTuple, isBelievedDirty: _MyNestedTuple_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNestedTuple_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null),
             verifyCleanness: false,

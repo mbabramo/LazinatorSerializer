@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyArrayInt_DerivedLevel;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyArrayInt_DerivedLevel, isBelievedDirty: MyArrayInt_DerivedLevel_Dirty,
+            nonLazinatorObject: _MyArrayInt_DerivedLevel, isBelievedDirty: MyArrayInt_DerivedLevel_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyArrayInt_DerivedLevel_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,

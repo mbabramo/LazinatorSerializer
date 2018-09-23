@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyKeyValuePairSerialized;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyKeyValuePairSerialized, isBelievedDirty: _MyKeyValuePairSerialized_Accessed,
+            nonLazinatorObject: _MyKeyValuePairSerialized, isBelievedDirty: _MyKeyValuePairSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyKeyValuePairSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null),
             verifyCleanness: false,

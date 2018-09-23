@@ -353,7 +353,7 @@ namespace Lazinator.Collections
                 var deserialized = ReadOnlyBytes;
             }
             WriteNonLazinatorObject_WithoutLengthPrefix(
-            nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed,
+            nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ReadOnlyBytes_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, true, false, null),
             verifyCleanness: false,

@@ -368,7 +368,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyHashSetSerialized;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyHashSetSerialized, isBelievedDirty: _MyHashSetSerialized_Accessed,
+            nonLazinatorObject: _MyHashSetSerialized, isBelievedDirty: _MyHashSetSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyHashSetSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null),
             verifyCleanness: false,

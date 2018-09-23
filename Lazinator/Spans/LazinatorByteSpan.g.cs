@@ -395,7 +395,7 @@ namespace Lazinator.Spans
                 var deserialized = ReadOnly;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _ReadOnly, isBelievedDirty: _ReadOnly_Accessed,
+            nonLazinatorObject: _ReadOnly, isBelievedDirty: _ReadOnly_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ReadOnly_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -412,7 +412,7 @@ namespace Lazinator.Spans
                 var deserialized = ReadOrWrite;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed,
+            nonLazinatorObject: _ReadOrWrite, isBelievedDirty: _ReadOrWrite_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ReadOrWrite_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null),
             verifyCleanness: false,

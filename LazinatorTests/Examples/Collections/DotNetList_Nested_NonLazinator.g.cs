@@ -368,7 +368,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListNestedNonLazinatorType;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNestedNonLazinatorType, isBelievedDirty: _MyListNestedNonLazinatorType_Accessed,
+            nonLazinatorObject: _MyListNestedNonLazinatorType, isBelievedDirty: _MyListNestedNonLazinatorType_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNestedNonLazinatorType_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null),
             verifyCleanness: false,

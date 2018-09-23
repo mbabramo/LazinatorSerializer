@@ -733,7 +733,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyMemoryByte;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyMemoryByte, isBelievedDirty: _MyMemoryByte_Accessed,
+            nonLazinatorObject: _MyMemoryByte, isBelievedDirty: _MyMemoryByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyMemoryByte_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyMemoryByte_ByteIndex, _MyMemoryByte_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -753,7 +753,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyMemoryInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyMemoryInt, isBelievedDirty: _MyMemoryInt_Accessed,
+            nonLazinatorObject: _MyMemoryInt, isBelievedDirty: _MyMemoryInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyMemoryInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyMemoryInt_ByteIndex, _MyMemoryInt_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -773,7 +773,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyNullableMemoryByte;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNullableMemoryByte, isBelievedDirty: _MyNullableMemoryByte_Accessed,
+            nonLazinatorObject: _MyNullableMemoryByte, isBelievedDirty: _MyNullableMemoryByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNullableMemoryByte_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryByte_ByteIndex, _MyNullableMemoryByte_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -793,7 +793,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyNullableMemoryInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNullableMemoryInt, isBelievedDirty: _MyNullableMemoryInt_Accessed,
+            nonLazinatorObject: _MyNullableMemoryInt, isBelievedDirty: _MyNullableMemoryInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNullableMemoryInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryInt_ByteIndex, _MyNullableMemoryInt_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -813,7 +813,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyNullableReadOnlyMemoryInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyNullableReadOnlyMemoryInt, isBelievedDirty: _MyNullableReadOnlyMemoryInt_Accessed,
+            nonLazinatorObject: _MyNullableReadOnlyMemoryInt, isBelievedDirty: _MyNullableReadOnlyMemoryInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyNullableReadOnlyMemoryInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNullableReadOnlyMemoryInt_ByteIndex, _MyNullableReadOnlyMemoryInt_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -833,7 +833,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlyMemoryByte;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlyMemoryByte, isBelievedDirty: _MyReadOnlyMemoryByte_Accessed,
+            nonLazinatorObject: _MyReadOnlyMemoryByte, isBelievedDirty: _MyReadOnlyMemoryByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlyMemoryByte_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -853,7 +853,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlyMemoryChar;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlyMemoryChar, isBelievedDirty: _MyReadOnlyMemoryChar_Accessed,
+            nonLazinatorObject: _MyReadOnlyMemoryChar, isBelievedDirty: _MyReadOnlyMemoryChar_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlyMemoryChar_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -873,7 +873,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlyMemoryInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlyMemoryInt, isBelievedDirty: _MyReadOnlyMemoryInt_Accessed,
+            nonLazinatorObject: _MyReadOnlyMemoryInt, isBelievedDirty: _MyReadOnlyMemoryInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlyMemoryInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryInt_ByteIndex, _MyReadOnlyMemoryInt_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -893,7 +893,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlySpanByte;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlySpanByte, isBelievedDirty: _MyReadOnlySpanByte_Accessed,
+            nonLazinatorObject: _MyReadOnlySpanByte, isBelievedDirty: _MyReadOnlySpanByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanByte_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -913,7 +913,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlySpanChar;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlySpanChar, isBelievedDirty: _MyReadOnlySpanChar_Accessed,
+            nonLazinatorObject: _MyReadOnlySpanChar, isBelievedDirty: _MyReadOnlySpanChar_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanChar_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -933,7 +933,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlySpanDateTime;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlySpanDateTime, isBelievedDirty: _MyReadOnlySpanDateTime_Accessed,
+            nonLazinatorObject: _MyReadOnlySpanDateTime, isBelievedDirty: _MyReadOnlySpanDateTime_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanDateTime_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanDateTime_ByteIndex, _MyReadOnlySpanDateTime_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -953,7 +953,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyReadOnlySpanLong;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyReadOnlySpanLong, isBelievedDirty: _MyReadOnlySpanLong_Accessed,
+            nonLazinatorObject: _MyReadOnlySpanLong, isBelievedDirty: _MyReadOnlySpanLong_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanLong_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, false, false, null),
             verifyCleanness: false,

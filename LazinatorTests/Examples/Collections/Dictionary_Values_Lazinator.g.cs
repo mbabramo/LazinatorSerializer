@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyDictionary;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyDictionary, isBelievedDirty: _MyDictionary_Accessed,
+            nonLazinatorObject: _MyDictionary, isBelievedDirty: _MyDictionary_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyDictionary_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -462,7 +462,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MySortedDictionary;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed,
+            nonLazinatorObject: _MySortedDictionary, isBelievedDirty: _MySortedDictionary_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MySortedDictionary_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -482,7 +482,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MySortedList;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed,
+            nonLazinatorObject: _MySortedList, isBelievedDirty: _MySortedList_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MySortedList_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null),
             verifyCleanness: false,

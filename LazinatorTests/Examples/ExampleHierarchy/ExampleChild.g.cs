@@ -470,7 +470,7 @@ namespace LazinatorTests.Examples
                 var deserialized = ByteSpan;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _ByteSpan, isBelievedDirty: _ByteSpan_Accessed,
+            nonLazinatorObject: _ByteSpan, isBelievedDirty: _ByteSpan_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ByteSpan_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null),
             verifyCleanness: false,

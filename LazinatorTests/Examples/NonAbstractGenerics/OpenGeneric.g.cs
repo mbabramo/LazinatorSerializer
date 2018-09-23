@@ -466,7 +466,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 var deserialized = MyListT;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListT, isBelievedDirty: _MyListT_Accessed,
+            nonLazinatorObject: _MyListT, isBelievedDirty: _MyListT_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListT_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null),
             verifyCleanness: false,

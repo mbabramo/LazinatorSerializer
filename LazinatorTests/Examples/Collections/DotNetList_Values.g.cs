@@ -532,7 +532,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyLinkedListInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyLinkedListInt, isBelievedDirty: MyLinkedListInt_Dirty,
+            nonLazinatorObject: _MyLinkedListInt, isBelievedDirty: MyLinkedListInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyLinkedListInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty,
+            nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
@@ -572,7 +572,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyListInt2;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListInt2, isBelievedDirty: _MyListInt2_Accessed,
+            nonLazinatorObject: _MyListInt2, isBelievedDirty: _MyListInt2_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListInt2_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -592,7 +592,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MySortedSetInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty,
+            nonLazinatorObject: _MySortedSetInt, isBelievedDirty: MySortedSetInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MySortedSetInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,

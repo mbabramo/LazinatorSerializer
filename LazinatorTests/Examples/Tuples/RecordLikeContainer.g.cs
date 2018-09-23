@@ -438,7 +438,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyMismatchedRecordLikeType;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyMismatchedRecordLikeType, isBelievedDirty: _MyMismatchedRecordLikeType_Accessed,
+            nonLazinatorObject: _MyMismatchedRecordLikeType, isBelievedDirty: _MyMismatchedRecordLikeType_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyMismatchedRecordLikeType_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -455,7 +455,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyRecordLikeClass;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed,
+            nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyRecordLikeClass_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -472,7 +472,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyRecordLikeType;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed,
+            nonLazinatorObject: _MyRecordLikeType, isBelievedDirty: _MyRecordLikeType_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyRecordLikeType_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength, false, false, null),
             verifyCleanness: false,

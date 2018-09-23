@@ -385,7 +385,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyStackInt;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyStackInt, isBelievedDirty: MyStackInt_Dirty,
+            nonLazinatorObject: _MyStackInt, isBelievedDirty: MyStackInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyStackInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,

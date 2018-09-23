@@ -631,7 +631,7 @@ namespace LazinatorTests.Examples
                 var deserialized = MyListExampleStruct;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListExampleStruct, isBelievedDirty: _MyListExampleStruct_Accessed,
+            nonLazinatorObject: _MyListExampleStruct, isBelievedDirty: _MyListExampleStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListExampleStruct_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, false, false, null),
             verifyCleanness: false,
@@ -651,7 +651,7 @@ namespace LazinatorTests.Examples
                 var deserialized = MyListNullableExampleStruct;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNullableExampleStruct, isBelievedDirty: _MyListNullableExampleStruct_Accessed,
+            nonLazinatorObject: _MyListNullableExampleStruct, isBelievedDirty: _MyListNullableExampleStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNullableExampleStruct_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, false, false, null),
             verifyCleanness: false,

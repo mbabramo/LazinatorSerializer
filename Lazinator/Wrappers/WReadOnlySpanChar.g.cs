@@ -379,7 +379,7 @@ namespace Lazinator.Wrappers
             var byteLengthCopy_Value = _Value_ByteLength;
             var copy_Value = _Value;
             WriteNonLazinatorObject_WithoutLengthPrefix(
-            nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed,
+            nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _Value_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value, true, false, null),
             verifyCleanness: false,

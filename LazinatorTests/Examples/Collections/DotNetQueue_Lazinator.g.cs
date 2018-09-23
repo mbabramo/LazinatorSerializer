@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.Collections
                 var deserialized = MyQueueSerialized;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyQueueSerialized, isBelievedDirty: _MyQueueSerialized_Accessed,
+            nonLazinatorObject: _MyQueueSerialized, isBelievedDirty: _MyQueueSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyQueueSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null),
             verifyCleanness: false,
