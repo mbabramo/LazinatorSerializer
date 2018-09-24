@@ -20,8 +20,8 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(ILazinator lazinator)
         {
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren); // DEBUG -- fix order
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
+            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren); // DEBUG -- fix order
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
@@ -39,6 +39,8 @@ namespace LazinatorTests.Tests
             catch (Exception ex)
             {
                 int i = 0;
+                if (clonedNoBuffer.IsStruct)
+                    clonedNoBuffer = clonedNoBuffer.CloneLazinator();
                 for (; i < Math.Min(clonedWithBuffer.LazinatorMemoryStorage.Span.Length, clonedNoBuffer.LazinatorMemoryStorage.Span.Length); i++)
                     if (clonedWithBuffer.LazinatorMemoryStorage.Span[i] != clonedNoBuffer.LazinatorMemoryStorage.Span[i])
                     {
@@ -325,16 +327,6 @@ namespace LazinatorTests.Tests
             {
                 NonLazinatorClass = new NonLazinatorClass() { MyInt = 5, MyString = "hi" },
                 NonLazinatorStruct = new NonLazinatorStruct() { MyInt = 6, MyString = null }
-            };
-            VerifyCloningEquivalence(c);
-        }
-
-        [Fact]
-        public void CloneWithoutBuffer_ExampleStructContainer()
-        {
-            ExampleStructContainer c = new ExampleStructContainer()
-            {
-                MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };
             VerifyCloningEquivalence(c);
         }

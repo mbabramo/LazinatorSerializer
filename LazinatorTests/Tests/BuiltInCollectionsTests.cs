@@ -643,6 +643,7 @@ namespace LazinatorTests.Tests
             c.DescendantIsDirty.Should().BeFalse();
             c[0].IsDirty.Should().BeFalse();
             c[0].MyExampleStruct.IsDirty.Should().BeFalse();
+            c[0].MyExampleStruct.MyChar.Should().Be('Q');
         }
 
         [Fact]
