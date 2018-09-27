@@ -545,7 +545,11 @@ namespace LazinatorTests.Examples
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(LazinatorMemory storage)
         {
-            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass()
+            if (storage.Length == 0)
+            {
+                return default(NonLazinatorInterchangeableClass);
+            }
+            NonLazinatorInterchangeObject interchange = new NonLazinatorInterchangeObject()
             {
                 LazinatorMemoryStorage = storage
             };
@@ -556,7 +560,11 @@ namespace LazinatorTests.Examples
         NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
         bool verifyCleanness, bool updateStoredBuffer)
         {
-            NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            NonLazinatorInterchangeObject interchange = new NonLazinatorInterchangeObject(itemToConvert);
             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         

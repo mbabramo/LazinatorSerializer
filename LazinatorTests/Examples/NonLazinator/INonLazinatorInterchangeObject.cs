@@ -3,7 +3,7 @@
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.NonLazinatorInterchangeableClass_LazinatorInterchange)]
-    public interface INonLazinatorInterchangeableClass_LazinatorInterchange
+    public interface INonLazinatorInterchangeObject
     {
         bool IsNull { get; set; }
         string MyString { get; set; }

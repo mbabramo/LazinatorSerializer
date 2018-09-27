@@ -110,11 +110,11 @@ public class MyOtherClass
             string configString = @"
                 {
                   ""InterchangeConverters"": {
-                    ""LazinatorTests.Examples.NonLazinatorInterchangeableClass"": ""LazinatorTests.Examples.NonLazinatorInterchangeClass""
+                    ""LazinatorTests.Examples.NonLazinatorInterchangeableClass"": ""LazinatorTests.Examples.NonLazinatorInterchangeObject""
                   }
                 }";
             LazinatorConfig config = new LazinatorConfig(null, configString);
-            config.InterchangeConverters["LazinatorTests.Examples.NonLazinatorInterchangeableClass"].Should().Be("LazinatorTests.Examples.NonLazinatorInterchangeClass");
+            config.InterchangeConverters["LazinatorTests.Examples.NonLazinatorInterchangeableClass"].Should().Be("LazinatorTests.Examples.NonLazinatorInterchangeObject");
         }
 
         [Fact]
@@ -239,7 +239,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(OpenGenericStayingOpenContainer), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(ClosedGenericWithoutBase), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(NonLazinatorContainer), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
-            await CompleteGenerateCode(typeof(NonLazinatorInterchangeClass), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
+            await CompleteGenerateCode(typeof(NonLazinatorInterchangeObject), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
             await CompleteGenerateCode(typeof(FromNonLazinatorBase), "LazinatorTests", "/Examples/", "NonLazinator/", ws);
             await CompleteGenerateCode(typeof(UnofficialInterfaceIncorporator), "LazinatorTests", "/Examples/", "UnofficialInterfaces/", ws);
             await CompleteGenerateCode(typeof(Dictionary_Values_Lazinator), "LazinatorTests", "/Examples/", "Collections/", ws);
