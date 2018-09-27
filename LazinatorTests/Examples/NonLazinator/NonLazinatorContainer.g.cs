@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples
         void AssignCloneProperties(ref NonLazinatorContainer clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.NonLazinatorClass = NonLazinatorClass;
-            clone.NonLazinatorInterchangeableClass = NonLazinatorInterchangeableClass;
+            clone.NonLazinatorInterchangeableClass = Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass);
             clone.NonLazinatorStruct = NonLazinatorStruct;
         }
         
@@ -566,6 +566,17 @@ namespace LazinatorTests.Examples
             }
             NonLazinatorInterchangeObject interchange = new NonLazinatorInterchangeObject(itemToConvert);
             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+        }
+        
+        
+        private static NonLazinatorInterchangeableClass Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass itemToClone)
+        {
+            if (itemToClone == null)
+            {
+                return default(NonLazinatorInterchangeableClass);
+            }
+            NonLazinatorInterchangeObject interchange = new NonLazinatorInterchangeObject(itemToClone);
+            return interchange.Interchange_NonLazinatorInterchangeableClass();
         }
         
     }

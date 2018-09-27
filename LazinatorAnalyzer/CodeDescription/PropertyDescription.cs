@@ -1323,9 +1323,9 @@ namespace Lazinator.CodeDescription
             string copyInstruction = "";
             if (IsLazinator)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
-            else if (IsPrimitive || PropertyType == LazinatorPropertyType.NonLazinator)
+            else if (IsPrimitive || ((PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType)))
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
-            else if (PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
+            else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
             sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
         }
@@ -2210,6 +2210,17 @@ namespace Lazinator.CodeDescription
                             }}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
                             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        }}
+
+
+                        private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
+                        {{
+                            if (itemToClone == null)
+                            {{
+                                return default({AppropriatelyQualifiedTypeName});
+                            }}
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
+                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
                         }}
                         ");
         }
