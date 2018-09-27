@@ -2,8 +2,8 @@
 
 namespace LazinatorTests.Examples
 {
-    [Lazinator((int)ExampleUniqueIDs.NonLazinatorInterchangeableClass_LazinatorInterchange)]
-    public interface INonLazinatorInterchangeObject
+    [Lazinator((int)ExampleUniqueIDs.NonLazinatorInterchangeableStruct_LazinatorInterchange)]
+    public interface INonLazinatorInterchangeStruct
     {
         string MyString { get; set; }
         int MyInt { get; set; }

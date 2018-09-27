@@ -81,6 +81,7 @@
         ConcreteFromBase,
         ExampleStructContainingStructContainer,
         ContainerForExampleWithDefault,
-        ClosedGenericWithGeneric
+        ClosedGenericWithGeneric,
+        NonLazinatorInterchangeableStruct_LazinatorInterchange
     }
 }

@@ -2,11 +2,11 @@
 
 namespace LazinatorTests.Examples
 {
-    public partial struct NonLazinatorInterchangeObject : INonLazinatorInterchangeObject
+    public partial struct NonLazinatorInterchangeClass : INonLazinatorInterchangeClass
     {
         static readonly FieldInfo _privateFieldInfoForMyInt = typeof(NonLazinatorInterchangeableClass).GetField("MyInt", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public NonLazinatorInterchangeObject(
+        public NonLazinatorInterchangeClass(
             NonLazinatorInterchangeableClass nonLazinatorInterchangeableClass) : this()
         {
             if (nonLazinatorInterchangeableClass == null)

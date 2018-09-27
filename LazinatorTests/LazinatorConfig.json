@@ -5,7 +5,8 @@
     "NonLazinatorStruct": "NonLazinatorDirectConverter"
   },
   "InterchangeConverters": {
-    "NonLazinatorInterchangeableClass": "NonLazinatorInterchangeObject"
+    "NonLazinatorInterchangeableClass": "NonLazinatorInterchangeClass",
+    "NonLazinatorInterchangeableStruct": "NonLazinatorInterchangeStruct"
   },
   "IgnoreRecordLikeTypes": [
     "NonLazinatorStruct"

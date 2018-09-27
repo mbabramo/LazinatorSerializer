@@ -20,5 +20,10 @@ namespace LazinatorTests.Examples
             get;
             set;
         }
+        NonLazinatorInterchangeableStruct NonLazinatorInterchangeableStruct
+        {
+            get;
+            set;
+        }
     }
 }

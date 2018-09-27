@@ -2,6 +2,5 @@
 {
     public partial struct NonLazinatorContainer : INonLazinatorContainer
     {
-        
     }
 }

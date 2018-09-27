@@ -5,7 +5,7 @@
     "NonLazinatorStruct": "NonLazinatorDirectConverter"
   },
   "InterchangeConverters": {
-    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "NonLazinatorInterchangeObject"
+    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "NonLazinatorInterchangeClass"
   },
   "IgnoreRecordLikeTypes": [
     "NonLazinatorStruct"
