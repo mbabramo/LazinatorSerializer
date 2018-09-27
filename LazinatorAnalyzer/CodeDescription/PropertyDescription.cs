@@ -1323,10 +1323,12 @@ namespace Lazinator.CodeDescription
             string copyInstruction = "";
             if (IsLazinator)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
-            else if (IsPrimitive || ((PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType)))
+            else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
+            else if (PropertyType == LazinatorPropertyType.NonLazinator)
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
             sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
         }
 
