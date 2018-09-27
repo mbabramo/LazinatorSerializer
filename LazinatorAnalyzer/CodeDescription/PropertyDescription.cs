@@ -381,7 +381,7 @@ namespace Lazinator.CodeDescription
         public string GetNullCheck(string propertyName)
         {
             string nullCheck;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter || PropertyType == LazinatorPropertyType.NonLazinator)
                 nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
             else
                 nullCheck = $"{propertyName} == null";
@@ -2206,7 +2206,7 @@ namespace Lazinator.CodeDescription
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
-                            if ({GetNullCheck("itemToConvert")}) // DEBUG {PropertyName} {PropertyType}
+                            if ({GetNullCheck("itemToConvert")})
                             {{
                                 return;
                             }}
