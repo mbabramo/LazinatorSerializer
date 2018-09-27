@@ -2206,7 +2206,7 @@ namespace Lazinator.CodeDescription
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
-                            if ({GetNullCheck("itemToConvert")})
+                            if ({GetNullCheck("itemToConvert")}) // DEBUG {PropertyName} {PropertyType}
                             {{
                                 return;
                             }}
