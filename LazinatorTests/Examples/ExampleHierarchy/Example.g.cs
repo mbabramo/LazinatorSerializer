@@ -138,7 +138,7 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyInterfaceImplementer = (MyInterfaceImplementer == null) ? default(IExampleNonexclusiveInterface) : (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyNonLazinatorChild = MyNonLazinatorChild;
+            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.Clone_NonLazinatorClass(MyNonLazinatorChild);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.WrappedInt = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
