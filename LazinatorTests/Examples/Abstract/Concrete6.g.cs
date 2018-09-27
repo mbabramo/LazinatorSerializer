@@ -160,6 +160,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete6 ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -194,6 +195,8 @@ namespace LazinatorTests.Examples.Abstract
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, IntList6 (accessed? {_IntList6_Accessed})");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList6_Accessed)
             {
@@ -211,10 +214,12 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList6_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Concrete6_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of Concrete6) ");
         }
         
         /* Conversion of supported collections and tuples */

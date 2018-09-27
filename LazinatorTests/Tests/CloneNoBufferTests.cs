@@ -22,7 +22,7 @@ namespace LazinatorTests.Tests
         {
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren); // DEBUG -- fix order
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
 
