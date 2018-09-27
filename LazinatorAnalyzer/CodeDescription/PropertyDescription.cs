@@ -2217,7 +2217,7 @@ namespace Lazinator.CodeDescription
 
                         private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
                         {{
-                            if (itemToClone == null)
+                            if ({GetNullCheck("itemToClone")})
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
