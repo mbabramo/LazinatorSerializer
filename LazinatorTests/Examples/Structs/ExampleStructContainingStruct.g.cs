@@ -222,7 +222,6 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                // DEBUG // why is this path running for the first struct after being cloned, when the span has only five characters? It seems that _LazinatorMemoryStorage is set but is incomplete. Maybe we always need to serialize for a hash code for a struct, but I'm not sure
                 EnsureLazinatorMemoryUpToDate();
                 return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
             }
