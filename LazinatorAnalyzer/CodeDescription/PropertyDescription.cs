@@ -2189,6 +2189,10 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
+                            if (storage.Length == 0)
+                            {{
+                                return default({AppropriatelyQualifiedTypeName});
+                            }}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}()
                             {{
                                 LazinatorMemoryStorage = storage
@@ -2200,6 +2204,10 @@ namespace Lazinator.CodeDescription
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
+                            if ({GetNullCheck("itemToConvert")})
+                            {{
+                                return;
+                            }}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
                             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
