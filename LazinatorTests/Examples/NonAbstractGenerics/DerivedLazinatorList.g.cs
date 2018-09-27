@@ -140,7 +140,6 @@ namespace LazinatorTests.Examples
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.DerivedLazinatorList<T> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -174,11 +173,7 @@ namespace LazinatorTests.Examples
         {
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyListName value {_MyListName}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyListName);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position} (end of DerivedLazinatorList<T>) ");
         }
         
     }

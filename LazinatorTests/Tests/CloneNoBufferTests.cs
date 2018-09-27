@@ -20,9 +20,9 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(ILazinator lazinator)
         {
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren); // DEBUG -- fix order
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
+            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren);
             VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
 
