@@ -83,6 +83,7 @@ namespace Lazinator.CodeDescription
         /* Inner properties */
         private List<PropertyDescription> InnerProperties { get; set; }
         private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
+        private bool ContainsLazinatorInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.ContainsLazinatorInnerProperty);
         internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable, ".Value");
 
         /* Conversion */
@@ -947,7 +948,7 @@ namespace Lazinator.CodeDescription
                         {recreation}
                     }}
                     _{PropertyName}_Accessed = true;
-                }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && !RoslynHelpers.IsReadOnlyStruct(Symbol), $@"
+                }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} 
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
