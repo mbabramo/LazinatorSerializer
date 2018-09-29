@@ -398,7 +398,6 @@ namespace LazinatorTests.Tests
             d[23] = GetExample(1);
             d[0] = GetExample(2);
             VerifyCloningEquivalence(d);
-            // DEBUG: problem is that the constructor doesn't run when we clone with a buffer, it does run when we clone without a buffer. So, if constructor creates a child property, then it exists when we clone with a buffer, but not when we clone without a buffer.
         }
     }
 }
