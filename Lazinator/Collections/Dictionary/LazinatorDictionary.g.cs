@@ -78,6 +78,7 @@ namespace Lazinator.Collections.Dictionary
             
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
+                clone.FreeInMemoryObjects();
                 AssignCloneProperties(clone, includeChildrenMode);
             }
             else
