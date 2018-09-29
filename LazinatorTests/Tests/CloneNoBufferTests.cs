@@ -13,6 +13,7 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Subclasses;
+using Lazinator.Collections.Dictionary;
 
 namespace LazinatorTests.Tests
 {
@@ -383,6 +384,14 @@ namespace LazinatorTests.Tests
             VerifyCloningEquivalence(l);
         }
 
+        [Fact]
+        public void CloneWithoutBuffer_LazinatorDictionary()
+        {
+            LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
+            d[23] = GetExample(1);
+            d[0] = GetExample(2);
+            VerifyCloningEquivalence(d);
+        }
         [Fact]
         public void CloneWithoutBuffer_LazinatorList_WInt()
         {
