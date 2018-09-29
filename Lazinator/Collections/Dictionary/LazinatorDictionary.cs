@@ -14,6 +14,12 @@ namespace Lazinator.Collections.Dictionary
 
         public bool IsReadOnly => false;
 
+        private void EnsureBucketsExist()
+        {
+            if (NumBuckets == 0)
+                Clear();
+        }
+
         private DictionaryBucket<TKey, TValue> GetBucketAtIndex(int index, LazinatorList<DictionaryBucket<TKey, TValue>> buckets = null)
         {
             if (buckets == null)
@@ -29,6 +35,7 @@ namespace Lazinator.Collections.Dictionary
 
         private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
         {
+            EnsureBucketsExist();
             hash = key.GetBinaryHashCode32();
             int bucketIndex = (int)(hash % NumBuckets);
             bucket = GetBucketAtIndex(bucketIndex);
@@ -37,6 +44,7 @@ namespace Lazinator.Collections.Dictionary
         private void GetHashAndBucket(TKey key, LazinatorList<DictionaryBucket<TKey, TValue>> buckets, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
         {
             // This method is for use when using a replacement set of buckets.
+            EnsureBucketsExist();
             hash = key.GetBinaryHashCode32();
             int bucketIndex = (int)(hash % buckets.Count);
             bucket = GetBucketAtIndex(bucketIndex, buckets);

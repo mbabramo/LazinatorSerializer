@@ -110,6 +110,14 @@ namespace LazinatorTests.Tests
             d.Count().Should().Be(0);
         }
 
+        [Fact]
+        public void EmptyDictionary()
+        {
+            LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
+            bool result = d.TryGetValue(10, out WString value);
+            result.Should().BeFalse();
+        }
+
         private static void RemoveAllItemsFromDictionary(LazinatorDictionary<WLong, WString> d)
         {
             int numItems = d.Count;
