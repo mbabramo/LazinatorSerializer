@@ -233,7 +233,6 @@ namespace Lazinator.Collections
         LazinatorFastReadList<int> _FourByteItems;
         public LazinatorFastReadList<int> FourByteItems
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_FourByteItems_Accessed)
@@ -259,7 +258,6 @@ namespace Lazinator.Collections
                 } 
                 return _FourByteItems;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (_FourByteItems != null)
@@ -281,7 +279,6 @@ namespace Lazinator.Collections
         LazinatorFastReadList<short> _TwoByteItems;
         public LazinatorFastReadList<short> TwoByteItems
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_TwoByteItems_Accessed)
@@ -307,7 +304,6 @@ namespace Lazinator.Collections
                 } 
                 return _TwoByteItems;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (_TwoByteItems != null)
@@ -438,6 +434,7 @@ namespace Lazinator.Collections
         
         public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.LazinatorOffsetList ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -470,6 +467,9 @@ namespace Lazinator.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.LazinatorOffsetList starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -479,6 +479,8 @@ namespace Lazinator.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, FourByteItems (accessed? {_FourByteItems_Accessed}) (backing var null? {_FourByteItems == null}) ");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -492,6 +494,9 @@ namespace Lazinator.Collections
             {
                 _FourByteItems_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, TwoByteItems (accessed? {_TwoByteItems_Accessed}) (backing var null? {_TwoByteItems == null}) ");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -505,10 +510,12 @@ namespace Lazinator.Collections
             {
                 _TwoByteItems_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _LazinatorOffsetList_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorOffsetList) ");
         }
         
     }
