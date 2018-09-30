@@ -12,7 +12,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects" })]
+    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties" })]
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T>, ILazinatorList where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;
@@ -308,6 +308,7 @@ namespace Lazinator.Collections
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
                     int startingPosition = w.Position;
+                    CreateUnderlyingListIfNecessary();
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
                         var itemIndex = i; // avoid closure problem
