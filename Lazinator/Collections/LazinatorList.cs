@@ -308,7 +308,8 @@ namespace Lazinator.Collections
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
                     int startingPosition = w.Position;
-                    CreateUnderlyingListIfNecessary();
+                    if (UnderlyingList == null && CountWhenDeserialized > 0)
+                        CreateUnderlyingListIfNecessary();
                     for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
                     {
                         var itemIndex = i; // avoid closure problem
@@ -359,14 +360,16 @@ namespace Lazinator.Collections
 
         protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
-            clone.FreeInMemoryObjects();
-            LazinatorList<T> typedClone = (LazinatorList<T>)clone;
-            foreach (T member in this)
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
-                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(member, default(T)))
-                    typedClone.Add(default(T));
-                else
-                    typedClone.Add(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
+                LazinatorList<T> typedClone = (LazinatorList<T>)clone;
+                foreach (T member in this)
+                {
+                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(member, default(T)))
+                        typedClone.Add(default(T));
+                    else
+                        typedClone.Add(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
+                }
             }
         }
 
