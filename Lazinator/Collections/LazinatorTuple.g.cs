@@ -75,7 +75,7 @@ namespace Lazinator.Collections
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
             }
             
-            if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer /* DEBUG NoBuffer */)
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
                 AssignCloneProperties(clone, includeChildrenMode);
             }
@@ -98,11 +98,11 @@ namespace Lazinator.Collections
             LazinatorTuple<T, U> typedClone = (LazinatorTuple<T, U>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item1 = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.LinkedBuffer /* DEBUG NoBuffer */);
+                typedClone.Item1 = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item2 = (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.LinkedBuffer /* DEBUG NoBuffer */);
+                typedClone.Item2 = (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
         }
         

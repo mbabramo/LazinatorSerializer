@@ -61,12 +61,6 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
-        {
-            base.AssignCloneProperties(clone, includeChildrenMode);
-            LazinatorStack<T> typedClone = (LazinatorStack<T>) clone;
-        }
-        
         /* Properties */
         
         
