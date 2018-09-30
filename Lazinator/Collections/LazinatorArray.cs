@@ -44,14 +44,12 @@ namespace Lazinator.Collections
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
                 LazinatorArray<T> typedClone = (LazinatorArray<T>)clone;
-                int i = 0;
                 foreach (T member in this)
                 {
                     if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(member, default(T)))
-                        typedClone[i] = default(T);
+                        typedClone.CompleteAdd(default(T));
                     else
-                        typedClone[i] = member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                    i++;
+                        typedClone.CompleteAdd(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
                 }
             }
         }

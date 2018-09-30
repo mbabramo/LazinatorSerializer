@@ -484,13 +484,9 @@ namespace Lazinator.Core
                             throw;
                         }
                     }
-
                 }
-                else
-                {
-                    string errorMessage = comparison;
-                    throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
-                }
+                string errorMessage = comparison;
+                throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
             }
         }
 

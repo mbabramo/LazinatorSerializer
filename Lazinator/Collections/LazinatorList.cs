@@ -188,6 +188,12 @@ namespace Lazinator.Collections
 
         public virtual void Add(T item)
         {
+            CompleteAdd(item);
+        }
+
+        // extracted so that we can call this from lazinatorarray, even though add is overriden
+        protected void CompleteAdd(T item)
+        {
             // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize,
             // because it doesn't change anything up to this point
             if (item != null)

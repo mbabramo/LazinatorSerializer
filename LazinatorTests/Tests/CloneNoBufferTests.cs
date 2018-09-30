@@ -392,6 +392,16 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void CloneWithoutBuffer_LazinatorArray_Example()
+        {
+            LazinatorArray<Example> l = new LazinatorArray<Example>(3);
+            l[0] = GetExample(1);
+            l[1] = GetExample(1);
+            l[2] = null;
+            VerifyCloningEquivalence(l);
+        }
+
+        [Fact]
         public void CloneWithoutBuffer_LazinatorDictionary()
         {
             LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
