@@ -177,6 +177,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.Derived_DotNetList_Nested_NonLazinator ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -211,7 +212,12 @@ namespace LazinatorTests.Examples.Collections
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, MyLevel2Int value {_MyLevel2Int}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyLevel2Int);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyLevel2ListNestedNonLazinatorType (accessed? {_MyLevel2ListNestedNonLazinatorType_Accessed})");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyLevel2ListNestedNonLazinatorType_Accessed)
             {
@@ -229,10 +235,12 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyLevel2ListNestedNonLazinatorType_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Derived_DotNetList_Nested_NonLazinator_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of Derived_DotNetList_Nested_NonLazinator) ");
         }
         
         /* Conversion of supported collections and tuples */

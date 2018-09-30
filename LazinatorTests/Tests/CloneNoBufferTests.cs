@@ -19,12 +19,12 @@ namespace LazinatorTests.Tests
 {
     public class CloneNoBufferTests : SerializationDeserializationTestBase
     {
-        private void VerifyCloningEquivalence(ILazinator lazinator)
+        private void VerifyCloningEquivalence(Func<ILazinator> lazinator)
         {
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeAllChildren);
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeAllChildren);
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.ExcludeOnlyExcludableChildren);
-            VerifyCloningEquivalence(lazinator, IncludeChildrenMode.IncludeOnlyIncludableChildren);
+            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeOnlyExcludableChildren); // DEBUG
+            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeAllChildren);
+            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
 
         private void VerifyCloningEquivalence(ILazinator lazinator, IncludeChildrenMode includeChildrenMode)
@@ -54,52 +54,48 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_Example()
         {
-            VerifyCloningEquivalence(GetTypicalExample());
+            VerifyCloningEquivalence(() => GetTypicalExample());
         }
 
         [Fact]
         public void CloneWithoutBuffer_SpanAndMemory()
         {
-            SpanAndMemory s = LazinatorSpanTests.GetSpanAndMemory(false);
-            VerifyCloningEquivalence(s);
+            VerifyCloningEquivalence(() => LazinatorSpanTests.GetSpanAndMemory(false));
         }
 
         [Fact]
         public void CloneWithoutBuffer_SpanAndMemory_Empty()
         {
-            SpanAndMemory s = LazinatorSpanTests.GetSpanAndMemory(true);
-            VerifyCloningEquivalence(s);
+            VerifyCloningEquivalence(() => LazinatorSpanTests.GetSpanAndMemory(true));
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetListValues()
         {
-            DotNetList_Values d = new DotNetList_Values()
-                {
-                    MyListInt = new List<int>() { 3, 4, 5 }
-                };
-            VerifyCloningEquivalence(d);
+            VerifyCloningEquivalence(() => new DotNetList_Values()
+            {
+                MyListInt = new List<int>() { 3, 4, 5 }
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetHashSet()
         {
-            DotNetHashSet_Lazinator d = new DotNetHashSet_Lazinator()
+            VerifyCloningEquivalence(() => new DotNetHashSet_Lazinator()
             {
                 MyHashSetSerialized = new HashSet<ExampleChild>()
                     {
                         GetExampleChild(1),
-                        GetExampleChild(3), 
+                        GetExampleChild(3),
                         null // null item
                     }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetList_Lazinator()
         {
-            DotNetList_Lazinator d = new DotNetList_Lazinator()
+            VerifyCloningEquivalence(() => new DotNetList_Lazinator()
             {
                 MyListSerialized = new List<ExampleChild>()
                     {
@@ -108,25 +104,23 @@ namespace LazinatorTests.Tests
                         null // null item
                     },
 
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetList_Wrapper()
         {
-            DotNetList_Wrapper d = new DotNetList_Wrapper()
+            VerifyCloningEquivalence(() => new DotNetList_Wrapper()
             {
                 MyListNullableByte = new List<WNullableByte>() { 3, 4, 249, null },
                 MyListNullableInt = new List<WNullableInt>() { 3, 16000, 249, null, 1000000000 }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetList_Nested_NonLazinator()
         {
-            DotNetList_Nested_NonLazinator d = new DotNetList_Nested_NonLazinator()
+            VerifyCloningEquivalence(() => new DotNetList_Nested_NonLazinator()
             {
                 MyListNestedNonLazinatorType = new List<List<NonLazinatorClass>>()
                     {
@@ -146,74 +140,68 @@ namespace LazinatorTests.Tests
                         },
                         null // null item
                     }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetQueue_Lazinator()
         {
-            DotNetQueue_Lazinator d = new DotNetQueue_Lazinator()
+            VerifyCloningEquivalence(() => new DotNetQueue_Lazinator()
             {
                 MyQueueSerialized = new Queue<ExampleChild>(new[] { new ExampleChild() { MyLong = 3 }, new ExampleChild() { MyLong = 4 }, new ExampleChild() { MyLong = 5 } })
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DotNetStack_Values()
         {
-            DotNetStack_Values d = new DotNetStack_Values()
+            VerifyCloningEquivalence(() => new DotNetStack_Values()
             {
                 MyStackInt = new Stack<int>(new[] { 3, 4, 5 })
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_OpenGenericStayingOpenContainer()
         {
-            OpenGenericStayingOpenContainer d = new OpenGenericStayingOpenContainer()
+            VerifyCloningEquivalence(() => new OpenGenericStayingOpenContainer()
             {
-                ClosedGenericFloat = new OpenGeneric<WFloat>()
+                ClosedGenericFloat =  new OpenGeneric<WFloat>()
                 {
                     MyT = new WFloat(3.4F)
                 }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
 
         [Fact]
         public void CloneWithoutBuffer_ClosedGenericInterface()
         {
-            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            VerifyCloningEquivalence(() => new OpenGenericStayingOpenContainer()
             {
                 ClosedGenericInterface = new OpenGeneric<IExampleChild>()
                 {
                     MyT = new ExampleChild() { MyShort = 45 }
                 }
-            };
-            VerifyCloningEquivalence(x);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ClosedGenericNonexclusiveInterface()
         {
-            OpenGenericStayingOpenContainer d = new OpenGenericStayingOpenContainer()
+            VerifyCloningEquivalence(() => new OpenGenericStayingOpenContainer()
             {
                 ClosedGenericNonexclusiveInterface = new OpenGeneric<IExampleNonexclusiveInterface>()
                 {
                     MyT = new ExampleNonexclusiveInterfaceImplementer() { MyInt = 45 }
                 }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ClosedGenericBase()
         {
-            OpenGenericStayingOpenContainer d = new OpenGenericStayingOpenContainer()
+            VerifyCloningEquivalence(() => new OpenGenericStayingOpenContainer()
             {
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
@@ -223,14 +211,13 @@ namespace LazinatorTests.Tests
                 {
                     MyT = new Base()
                 }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ClosedGenericBase_GenericFromBase()
         {
-            OpenGenericStayingOpenContainer x = new OpenGenericStayingOpenContainer()
+            VerifyCloningEquivalence(() => new OpenGenericStayingOpenContainer()
             {
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
@@ -240,49 +227,45 @@ namespace LazinatorTests.Tests
                 {
                     MyT = new GenericFromBase<WInt>()
                 }
-            };
-            VerifyCloningEquivalence(x);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ConcreteGeneric2a()
         {
-            ConcreteGeneric2a d = new ConcreteGeneric2a()
+            VerifyCloningEquivalence(() => new ConcreteGeneric2a()
             {
                 AnotherProperty = "hi",
                 MyT = 5, // now is an int
                 LazinatorExample = GetExample(2),
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_DerivedGenericContainer()
         {
-            DerivedGenericContainer<WInt> d = new DerivedGenericContainer<WInt>()
+            VerifyCloningEquivalence(() => new DerivedGenericContainer<WInt>()
             {
                 Item = new DerivedGeneric2c<WInt>()
                 {
                     MyT = 5 // now is a wrapped int -- note that Item is defined as being IAbstract<T>
                 },
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_GenericFromBase()
         {
-            GenericFromBase<WInt> d = new GenericFromBase<WInt>()
+            VerifyCloningEquivalence(() => new GenericFromBase<WInt>()
             {
                 MyT = 5
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ClassWithSubclass()
         {
-            ClassWithSubclass d = new ClassWithSubclass()
+            VerifyCloningEquivalence(() => new ClassWithSubclass()
             {
                 IntWithinSuperclass = 5,
                 SubclassInstance1 = new ClassWithSubclass.SubclassWithinClass()
@@ -293,121 +276,129 @@ namespace LazinatorTests.Tests
                 {
                     StringWithinSubclass = "within2"
                 }
-            };
-            VerifyCloningEquivalence(d);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ConcreteClassesInheritingFromAbstract()
         {
-            Concrete5 c = new Concrete5()
+            VerifyCloningEquivalence(() => new Concrete5()
             {
                 String1 = "1",
                 String2 = "2",
                 String3 = "3",
                 String4 = "4",
                 String5 = "5"
-            };
-            VerifyCloningEquivalence(c);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ContainerWithAbstract1()
         {
-            ContainerWithAbstract1 c = new ContainerWithAbstract1()
+            VerifyCloningEquivalence(() => new ContainerWithAbstract1()
             {
                 AbstractProperty = new Concrete3() { String1 = "1", String2 = "2", String3 = "3" }
-            };
-            VerifyCloningEquivalence(c);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_NonLazinatorContainer()
         {
-            NonLazinatorContainer c = new NonLazinatorContainer()
+            VerifyCloningEquivalence(() => new NonLazinatorContainer()
             {
                 NonLazinatorClass = new NonLazinatorClass() { MyInt = 5, MyString = "hi" },
                 NonLazinatorStruct = new NonLazinatorStruct() { MyInt = 6, MyString = null }
-            };
-            VerifyCloningEquivalence(c);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ContainerForExampleStructWithoutClass()
         {
-            ContainerForExampleStructWithoutClass c = new ContainerForExampleStructWithoutClass()
+            VerifyCloningEquivalence(() => new ContainerForExampleStructWithoutClass()
             {
                 ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 }
-            };
-            VerifyCloningEquivalence(c);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ExampleStructContainingStruct()
         {
-            ExampleStructContainingStruct c = new ExampleStructContainingStruct()
+            VerifyCloningEquivalence(() => new ExampleStructContainingStruct()
             {
                 MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
-            };
-            VerifyCloningEquivalence(c);
+            });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ExampleStruct()
         {
-            ExampleStruct s = new ExampleStruct();
-            s.MyBool = true;
-            s.MyChar = 'x';
-            s.MyChild1 = new ExampleChildInherited()
+            ExampleStruct GetExampleStruct()
             {
-                MyInt = 34,
-                MyLong = 341341
-            };
-            s.MyListValues = new List<int>() { 3, 4 };
-            s.MyTuple = (new NonLazinatorClass() { MyInt = 5 }, 4);
-            s.MyLazinatorList = new List<Example>() { new Example() };
-            VerifyCloningEquivalence(s);
+                ExampleStruct s = new ExampleStruct();
+                s.MyBool = true;
+                s.MyChar = 'x';
+                s.MyChild1 = new ExampleChildInherited()
+                {
+                    MyInt = 34,
+                    MyLong = 341341
+                };
+                s.MyListValues = new List<int>() { 3, 4 };
+                s.MyTuple = (new NonLazinatorClass() { MyInt = 5 }, 4);
+                s.MyLazinatorList = new List<Example>() { new Example() };
+                return s;
+            }
+            VerifyCloningEquivalence(() => GetExampleStruct());
         }
 
         [Fact]
         public void CloneWithoutBuffer_WReadOnlySpanChar()
         {
-            WReadOnlySpanChar wReadOnlySpanChar = new WReadOnlySpanChar();
-            wReadOnlySpanChar.Value = new Span<char>("mystring".ToArray());
-            VerifyCloningEquivalence(wReadOnlySpanChar);
+            WReadOnlySpanChar GetWReadOnlySpanChar()
+            {
+                WReadOnlySpanChar wReadOnlySpanChar = new WReadOnlySpanChar();
+                wReadOnlySpanChar.Value = new Span<char>("mystring".ToArray());
+                return wReadOnlySpanChar;
+            }
+            VerifyCloningEquivalence(() => GetWReadOnlySpanChar());
         }
 
         [Fact]
         public void CloneWithoutBuffer_LazinatorList_Example()
         {
-            LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
-            VerifyCloningEquivalence(l);
+            VerifyCloningEquivalence(() => new LazinatorList<Example>() { GetExample(1), GetExample(1) });
         }
 
         [Fact]
         public void CloneWithoutBuffer_LazinatorList_WInt()
         {
-            LazinatorList<WInt> l = new LazinatorList<WInt>() { 3 };
-            VerifyCloningEquivalence(l);
+            VerifyCloningEquivalence(() => new LazinatorList<WInt>() { 3 });
         }
 
         [Fact]
         public void CloneWithoutBuffer_LazinatorArray_Example()
         {
-            LazinatorArray<Example> l = new LazinatorArray<Example>(3);
-            l[0] = GetExample(1);
-            l[1] = GetExample(1);
-            l[2] = null;
-            VerifyCloningEquivalence(l);
+            LazinatorArray<Example> GetArray()
+            {
+                LazinatorArray<Example> l = new LazinatorArray<Example>(3);
+                l[0] = GetExample(1);
+                l[1] = GetExample(1);
+                l[2] = null;
+                return l;
+            }
+            VerifyCloningEquivalence(() => GetArray());
         }
 
         [Fact]
         public void CloneWithoutBuffer_LazinatorDictionary()
         {
-            LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
-            d[23] = GetExample(1);
-            d[0] = GetExample(2);
-            VerifyCloningEquivalence(d);
+            LazinatorDictionary<WInt, Example> GetDictionary()
+            {
+                LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
+                d[23] = GetExample(1);
+                d[0] = GetExample(2);
+                return d;
+            }
+            VerifyCloningEquivalence(() => GetDictionary());
         }
     }
 }
