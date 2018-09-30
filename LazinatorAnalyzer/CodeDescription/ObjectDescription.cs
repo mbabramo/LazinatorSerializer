@@ -324,6 +324,12 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
+                        public abstract IncludeChildrenMode OriginalIncludeChildrenMode
+                        {{
+                            get;
+                            private set;
+                        }}
+
                         {ProtectedIfApplicable}abstract ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
 			                get;
@@ -380,7 +386,7 @@ namespace Lazinator.CodeDescription
 
                         {constructor}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
-                        {ProtectedIfApplicable}IncludeChildrenMode OriginalIncludeChildrenMode;
+                        public IncludeChildrenMode OriginalIncludeChildrenMode {{ get; private set; }}
 
                         public {DerivationKeyword}int Deserialize()
                         {{
