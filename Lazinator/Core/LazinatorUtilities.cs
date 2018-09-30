@@ -163,6 +163,7 @@ namespace Lazinator.Core
                     childStorage = child.LazinatorMemoryStorage;
                     if (childStorage.Memory.Length != 0)
                         childCouldHaveChanged = false;
+                    Debug; // should set above to false only if OriginalIncludeChildrenMode == includeChildrenMode. We could add a parameter here childDefinitelyDirty, which we set to true if OriginalIncludeChildrenMode != includeChildrenMode. Another possibility is to change the header order, but that seems like a pain.
                 }
             }
             if (!childCouldHaveChanged)
