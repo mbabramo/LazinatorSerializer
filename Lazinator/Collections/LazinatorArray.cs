@@ -38,6 +38,24 @@ namespace Lazinator.Collections
 
         public int Length => Count;
 
+
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
+            {
+                LazinatorArray<T> typedClone = (LazinatorArray<T>)clone;
+                int i = 0;
+                foreach (T member in this)
+                {
+                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(member, default(T)))
+                        typedClone[i] = default(T);
+                    else
+                        typedClone[i] = member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    i++;
+                }
+            }
+        }
+
         public override void Add(T item) => throw new NotSupportedInLazinatorArrayException();
 
         public override void Clear() => throw new NotSupportedInLazinatorArrayException();
