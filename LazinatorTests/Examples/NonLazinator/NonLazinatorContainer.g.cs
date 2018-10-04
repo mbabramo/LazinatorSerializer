@@ -459,7 +459,6 @@ namespace LazinatorTests.Examples
         
         public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.NonLazinatorContainer ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -492,9 +491,6 @@ namespace LazinatorTests.Examples
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.NonLazinatorContainer starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -504,8 +500,6 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorClass (accessed? {_NonLazinatorClass_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorClass_Accessed)
             {
@@ -526,9 +520,6 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorClass_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableClass (accessed? {_NonLazinatorInterchangeableClass_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorInterchangeableClass_Accessed)
             {
@@ -549,9 +540,6 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorInterchangeableClass_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableStruct (accessed? {_NonLazinatorInterchangeableStruct_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorInterchangeableStruct_Accessed)
             {
@@ -572,9 +560,6 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorInterchangeableStruct_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorStruct (accessed? {_NonLazinatorStruct_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorStruct_Accessed)
             {
@@ -595,12 +580,10 @@ namespace LazinatorTests.Examples
             {
                 _NonLazinatorStruct_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _NonLazinatorContainer_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of NonLazinatorContainer) ");
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(LazinatorMemory storage)

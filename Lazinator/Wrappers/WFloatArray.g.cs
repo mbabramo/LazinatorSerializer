@@ -242,6 +242,7 @@ namespace Lazinator.Wrappers
         float[] _WrappedValue;
         public float[] WrappedValue
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_WrappedValue_Accessed)
@@ -260,6 +261,7 @@ namespace Lazinator.Wrappers
                 IsDirty = true; 
                 return _WrappedValue;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -337,7 +339,6 @@ namespace Lazinator.Wrappers
         
         public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Wrappers.WFloatArray ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -370,9 +371,6 @@ namespace Lazinator.Wrappers
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.WFloatArray starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -381,8 +379,6 @@ namespace Lazinator.Wrappers
             CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, WrappedValue (accessed? {_WrappedValue_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_WrappedValue_Accessed)
             {
@@ -403,12 +399,10 @@ namespace Lazinator.Wrappers
             {
                 _WrappedValue_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _WFloatArray_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of WFloatArray) ");
         }
         
         /* Conversion of supported collections and tuples */

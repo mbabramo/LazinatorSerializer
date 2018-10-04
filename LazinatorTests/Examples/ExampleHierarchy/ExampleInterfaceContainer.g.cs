@@ -385,7 +385,6 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Hierarchy.ExampleInterfaceContainer ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -418,9 +417,6 @@ namespace LazinatorTests.Examples.Hierarchy
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Hierarchy.ExampleInterfaceContainer starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -436,8 +432,6 @@ namespace LazinatorTests.Examples.Hierarchy
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, ExampleByInterface (accessed? {_ExampleByInterface_Accessed}) (backing var null? {_ExampleByInterface == null}) ");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
@@ -451,9 +445,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 _ExampleByInterface_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, ExampleListByInterface (accessed? {_ExampleListByInterface_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ExampleListByInterface_Accessed)
             {
@@ -471,12 +462,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 _ExampleListByInterface_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _ExampleInterfaceContainer_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleInterfaceContainer) ");
         }
         
         /* Conversion of supported collections and tuples */

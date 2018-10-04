@@ -228,10 +228,12 @@ namespace Lazinator.Wrappers
         TimeSpan? _WrappedValue;
         public TimeSpan? WrappedValue
         {
+            [DebuggerStepThrough]
             get
             {
                 return _WrappedValue;
             }
+            [DebuggerStepThrough]
             private set
             {
                 IsDirty = true;
@@ -303,7 +305,6 @@ namespace Lazinator.Wrappers
         
         public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Wrappers.WNullableTimeSpan ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -334,9 +335,6 @@ namespace Lazinator.Wrappers
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.WNullableTimeSpan starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} False, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} False");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -344,11 +342,7 @@ namespace Lazinator.Wrappers
             
             
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, WrappedValue value {_WrappedValue}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedNullableTimeSpan(ref writer, _WrappedValue);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position} (end of WNullableTimeSpan) ");
         }
         
     }

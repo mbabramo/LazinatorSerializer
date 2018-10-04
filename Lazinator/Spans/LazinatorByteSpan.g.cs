@@ -221,6 +221,7 @@ namespace Lazinator.Spans
         private ReadOnlyMemory<byte> _ReadOnly;
         internal ReadOnlySpan<byte> ReadOnly
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_ReadOnly_Accessed)
@@ -231,6 +232,7 @@ namespace Lazinator.Spans
                 }
                 return _ReadOnly.Span;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -242,6 +244,7 @@ namespace Lazinator.Spans
         protected Memory<byte> _ReadOrWrite;
         internal Memory<byte> ReadOrWrite
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_ReadOrWrite_Accessed)
@@ -260,6 +263,7 @@ namespace Lazinator.Spans
                 IsDirty = true; 
                 return _ReadOrWrite;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -338,7 +342,6 @@ namespace Lazinator.Spans
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Spans.LazinatorByteSpan ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -372,9 +375,6 @@ namespace Lazinator.Spans
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for Lazinator.Spans.LazinatorByteSpan starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -390,8 +390,6 @@ namespace Lazinator.Spans
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, ReadOnly (accessed? {_ReadOnly_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ReadOnly_Accessed)
             {
@@ -409,9 +407,6 @@ namespace Lazinator.Spans
             {
                 _ReadOnly_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, ReadOrWrite (accessed? {_ReadOrWrite_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ReadOrWrite_Accessed)
             {
@@ -429,12 +424,10 @@ namespace Lazinator.Spans
             {
                 _ReadOrWrite_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _LazinatorByteSpan_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorByteSpan) ");
         }
         
         /* Conversion of supported collections and tuples */

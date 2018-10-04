@@ -421,7 +421,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Tuples.StructTuple ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -454,9 +453,6 @@ namespace LazinatorTests.Examples.Tuples
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.StructTuple starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -472,8 +468,6 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, EnumTuple (accessed? {_EnumTuple_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_EnumTuple_Accessed)
             {
@@ -491,9 +485,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _EnumTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyNamedTuple (accessed? {_MyNamedTuple_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNamedTuple_Accessed)
             {
@@ -511,9 +502,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyNamedTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyNullableTuple (accessed? {_MyNullableTuple_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNullableTuple_Accessed)
             {
@@ -531,9 +519,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyNullableTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyValueTupleSerialized (accessed? {_MyValueTupleSerialized_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyValueTupleSerialized_Accessed)
             {
@@ -551,12 +536,10 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyValueTupleSerialized_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _StructTuple_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of StructTuple) ");
         }
         
         /* Conversion of supported collections and tuples */
