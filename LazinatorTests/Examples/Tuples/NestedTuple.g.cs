@@ -442,6 +442,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> itemToConvert)
         {
+            if (itemToConvert == null)
+            {
+                return default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
+            }
             return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) (itemToConvert?.Item1),((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) Clone__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
@@ -599,6 +603,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int a, string b)? Clone__Pint_C32a_c_C32string_C32b_p_C63((int a, string b)? itemToConvert)
         {
+            if (itemToConvert == null)
+            {
+                return default((int a, string b)?);
+            }
             return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2 ?? default));
         }
         
@@ -635,6 +643,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<short, long> Clone_Tuple_Gshort_c_C32long_g(Tuple<short, long> itemToConvert)
         {
+            if (itemToConvert == null)
+            {
+                return default(Tuple<short, long>);
+            }
             return new Tuple<short, long>((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
         }
         

@@ -641,6 +641,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int, double)? Clone__Pint_c_C32double_p_C63((int, double)? itemToConvert)
         {
+            if (itemToConvert == null)
+            {
+                return default((int, double)?);
+            }
             return ((int) (itemToConvert?.Item1 ?? default),(double) (itemToConvert?.Item2 ?? default));
         }
         
