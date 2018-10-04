@@ -198,7 +198,7 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList6 (accessed? {_IntList6_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList6_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList6_Accessed)
             {
                 var deserialized = IntList6;
             }

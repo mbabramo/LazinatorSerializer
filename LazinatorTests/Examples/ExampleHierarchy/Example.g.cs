@@ -1170,7 +1170,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IncludableChild_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IncludableChild_Accessed)
                 {
                     var deserialized = IncludableChild;
                 }
@@ -1186,7 +1186,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyChild1_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyChild1_Accessed)
                 {
                     var deserialized = MyChild1;
                 }
@@ -1202,7 +1202,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyChild2_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyChild2_Accessed)
                 {
                     var deserialized = MyChild2;
                 }
@@ -1218,7 +1218,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyChild2Previous_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyChild2Previous_Accessed)
                 {
                     var deserialized = MyChild2Previous;
                 }
@@ -1234,7 +1234,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyInterfaceImplementer_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyInterfaceImplementer_Accessed)
                 {
                     var deserialized = MyInterfaceImplementer;
                 }
@@ -1248,7 +1248,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorChild (accessed? {_MyNonLazinatorChild_Accessed}) (dirty? {_MyNonLazinatorChild_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNonLazinatorChild_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNonLazinatorChild_Accessed)
             {
                 var deserialized = MyNonLazinatorChild;
             }
@@ -1270,7 +1270,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_WrappedInt_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_WrappedInt_Accessed)
                 {
                     var deserialized = WrappedInt;
                 }
@@ -1286,7 +1286,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ExcludableChild_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ExcludableChild_Accessed)
                 {
                     var deserialized = ExcludableChild;
                 }

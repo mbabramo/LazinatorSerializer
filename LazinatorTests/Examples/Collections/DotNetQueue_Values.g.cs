@@ -381,7 +381,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyQueueInt (accessed? {_MyQueueInt_Accessed}) (dirty? {_MyQueueInt_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyQueueInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyQueueInt_Accessed)
             {
                 var deserialized = MyQueueInt;
             }

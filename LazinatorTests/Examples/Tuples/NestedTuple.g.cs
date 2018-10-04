@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyNestedTuple (accessed? {_MyNestedTuple_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNestedTuple_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNestedTuple_Accessed)
             {
                 var deserialized = MyNestedTuple;
             }

@@ -528,7 +528,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyLinkedListInt (accessed? {_MyLinkedListInt_Accessed}) (dirty? {_MyLinkedListInt_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyLinkedListInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyLinkedListInt_Accessed)
             {
                 var deserialized = MyLinkedListInt;
             }
@@ -548,7 +548,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyListInt (accessed? {_MyListInt_Accessed}) (dirty? {_MyListInt_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyListInt_Accessed)
             {
                 var deserialized = MyListInt;
             }
@@ -568,7 +568,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyListInt2 (accessed? {_MyListInt2_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListInt2_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyListInt2_Accessed)
             {
                 var deserialized = MyListInt2;
             }
@@ -588,7 +588,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MySortedSetInt (accessed? {_MySortedSetInt_Accessed}) (dirty? {_MySortedSetInt_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MySortedSetInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MySortedSetInt_Accessed)
             {
                 var deserialized = MySortedSetInt;
             }

@@ -597,7 +597,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntWrapper_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntWrapper_Accessed)
                 {
                     var deserialized = IntWrapper;
                 }
@@ -613,7 +613,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyExampleStruct_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyExampleStruct_Accessed)
                 {
                     var deserialized = MyExampleStruct;
                 }
@@ -627,7 +627,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyListExampleStruct (accessed? {_MyListExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListExampleStruct_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyListExampleStruct_Accessed)
             {
                 var deserialized = MyListExampleStruct;
             }
@@ -647,7 +647,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNullableExampleStruct (accessed? {_MyListNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListNullableExampleStruct_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyListNullableExampleStruct_Accessed)
             {
                 var deserialized = MyListNullableExampleStruct;
             }

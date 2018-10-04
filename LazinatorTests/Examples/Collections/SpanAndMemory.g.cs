@@ -729,7 +729,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyMemoryByte (accessed? {_MyMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyMemoryByte_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyMemoryByte_Accessed)
             {
                 var deserialized = MyMemoryByte;
             }
@@ -749,7 +749,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyMemoryInt (accessed? {_MyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyMemoryInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyMemoryInt_Accessed)
             {
                 var deserialized = MyMemoryInt;
             }
@@ -769,7 +769,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableMemoryByte (accessed? {_MyNullableMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableMemoryByte_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNullableMemoryByte_Accessed)
             {
                 var deserialized = MyNullableMemoryByte;
             }
@@ -789,7 +789,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableMemoryInt (accessed? {_MyNullableMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableMemoryInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNullableMemoryInt_Accessed)
             {
                 var deserialized = MyNullableMemoryInt;
             }
@@ -809,7 +809,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableReadOnlyMemoryInt (accessed? {_MyNullableReadOnlyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableReadOnlyMemoryInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNullableReadOnlyMemoryInt_Accessed)
             {
                 var deserialized = MyNullableReadOnlyMemoryInt;
             }
@@ -829,7 +829,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlyMemoryByte (accessed? {_MyReadOnlyMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlyMemoryByte_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlyMemoryByte_Accessed)
             {
                 var deserialized = MyReadOnlyMemoryByte;
             }
@@ -849,7 +849,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlyMemoryChar (accessed? {_MyReadOnlyMemoryChar_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlyMemoryChar_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlyMemoryChar_Accessed)
             {
                 var deserialized = MyReadOnlyMemoryChar;
             }
@@ -869,7 +869,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlyMemoryInt (accessed? {_MyReadOnlyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlyMemoryInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlyMemoryInt_Accessed)
             {
                 var deserialized = MyReadOnlyMemoryInt;
             }
@@ -889,7 +889,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanByte (accessed? {_MyReadOnlySpanByte_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanByte_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlySpanByte_Accessed)
             {
                 var deserialized = MyReadOnlySpanByte;
             }
@@ -909,7 +909,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanChar (accessed? {_MyReadOnlySpanChar_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanChar_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlySpanChar_Accessed)
             {
                 var deserialized = MyReadOnlySpanChar;
             }
@@ -929,7 +929,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanDateTime (accessed? {_MyReadOnlySpanDateTime_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanDateTime_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlySpanDateTime_Accessed)
             {
                 var deserialized = MyReadOnlySpanDateTime;
             }
@@ -949,7 +949,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanLong (accessed? {_MyReadOnlySpanLong_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyReadOnlySpanLong_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyReadOnlySpanLong_Accessed)
             {
                 var deserialized = MyReadOnlySpanLong;
             }

@@ -428,7 +428,7 @@ namespace Lazinator.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MainListSerialized (accessed? {_MainListSerialized_Accessed}) (dirty? {_MainListSerialized_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MainListSerialized_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MainListSerialized_Accessed)
             {
                 var deserialized = MainListSerialized;
             }
@@ -450,7 +450,7 @@ namespace Lazinator.Collections
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Offsets_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_Offsets_Accessed)
                 {
                     var deserialized = Offsets;
                 }

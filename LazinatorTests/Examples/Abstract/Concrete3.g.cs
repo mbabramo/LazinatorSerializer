@@ -632,7 +632,7 @@ namespace LazinatorTests.Examples.Abstract
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Example2_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_Example2_Accessed)
                 {
                     var deserialized = Example2;
                 }
@@ -648,7 +648,7 @@ namespace LazinatorTests.Examples.Abstract
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Example3_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_Example3_Accessed)
                 {
                     var deserialized = Example3;
                 }
@@ -662,7 +662,7 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList1 (accessed? {_IntList1_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList1_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList1_Accessed)
             {
                 var deserialized = IntList1;
             }
@@ -682,7 +682,7 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList2 (accessed? {_IntList2_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList2_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList2_Accessed)
             {
                 var deserialized = IntList2;
             }
@@ -702,7 +702,7 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList3 (accessed? {_IntList3_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_IntList3_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList3_Accessed)
             {
                 var deserialized = IntList3;
             }

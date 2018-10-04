@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Hierarchy
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ExampleByInterface_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ExampleByInterface_Accessed)
                 {
                     var deserialized = ExampleByInterface;
                 }
@@ -455,7 +455,7 @@ namespace LazinatorTests.Examples.Hierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleListByInterface (accessed? {_ExampleListByInterface_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ExampleListByInterface_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ExampleListByInterface_Accessed)
             {
                 var deserialized = ExampleListByInterface;
             }

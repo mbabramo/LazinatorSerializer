@@ -512,7 +512,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyListTuple (accessed? {_MyListTuple_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyListTuple_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyListTuple_Accessed)
             {
                 var deserialized = MyListTuple;
             }
@@ -532,7 +532,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized (accessed? {_MyTupleSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyTupleSerialized_Accessed)
             {
                 var deserialized = MyTupleSerialized;
             }
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized2 (accessed? {_MyTupleSerialized2_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized2_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyTupleSerialized2_Accessed)
             {
                 var deserialized = MyTupleSerialized2;
             }
@@ -572,7 +572,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized3 (accessed? {_MyTupleSerialized3_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized3_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyTupleSerialized3_Accessed)
             {
                 var deserialized = MyTupleSerialized3;
             }
@@ -592,7 +592,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized4 (accessed? {_MyTupleSerialized4_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyTupleSerialized4_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyTupleSerialized4_Accessed)
             {
                 var deserialized = MyTupleSerialized4;
             }

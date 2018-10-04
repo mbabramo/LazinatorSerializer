@@ -690,7 +690,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ClosedGenericBase_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ClosedGenericBase_Accessed)
                 {
                     var deserialized = ClosedGenericBase;
                 }
@@ -706,7 +706,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ClosedGenericFloat_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ClosedGenericFloat_Accessed)
                 {
                     var deserialized = ClosedGenericFloat;
                 }
@@ -722,7 +722,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ClosedGenericFromBaseWithBase_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ClosedGenericFromBaseWithBase_Accessed)
                 {
                     var deserialized = ClosedGenericFromBaseWithBase;
                 }
@@ -738,7 +738,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ClosedGenericInterface_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ClosedGenericInterface_Accessed)
                 {
                     var deserialized = ClosedGenericInterface;
                 }
@@ -754,7 +754,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ClosedGenericNonexclusiveInterface_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ClosedGenericNonexclusiveInterface_Accessed)
                 {
                     var deserialized = ClosedGenericNonexclusiveInterface;
                 }

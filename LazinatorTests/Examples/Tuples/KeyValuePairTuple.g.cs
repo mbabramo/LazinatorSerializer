@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyKeyValuePairSerialized (accessed? {_MyKeyValuePairSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyKeyValuePairSerialized_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyKeyValuePairSerialized_Accessed)
             {
                 var deserialized = MyKeyValuePairSerialized;
             }

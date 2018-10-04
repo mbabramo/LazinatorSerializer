@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyLevel2ListNestedNonLazinatorType (accessed? {_MyLevel2ListNestedNonLazinatorType_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyLevel2ListNestedNonLazinatorType_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyLevel2ListNestedNonLazinatorType_Accessed)
             {
                 var deserialized = MyLevel2ListNestedNonLazinatorType;
             }

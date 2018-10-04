@@ -454,7 +454,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyExampleStruct_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyExampleStruct_Accessed)
                 {
                     var deserialized = MyExampleStruct;
                 }

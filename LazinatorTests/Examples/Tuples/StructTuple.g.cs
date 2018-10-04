@@ -475,7 +475,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, EnumTuple (accessed? {_EnumTuple_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_EnumTuple_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_EnumTuple_Accessed)
             {
                 var deserialized = EnumTuple;
             }
@@ -495,7 +495,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyNamedTuple (accessed? {_MyNamedTuple_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNamedTuple_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNamedTuple_Accessed)
             {
                 var deserialized = MyNamedTuple;
             }
@@ -515,7 +515,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableTuple (accessed? {_MyNullableTuple_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyNullableTuple_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNullableTuple_Accessed)
             {
                 var deserialized = MyNullableTuple;
             }
@@ -535,7 +535,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyValueTupleSerialized (accessed? {_MyValueTupleSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyValueTupleSerialized_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyValueTupleSerialized_Accessed)
             {
                 var deserialized = MyValueTupleSerialized;
             }

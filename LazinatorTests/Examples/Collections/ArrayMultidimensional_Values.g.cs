@@ -455,7 +455,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt (accessed? {_MyArrayInt_Accessed}) (dirty? {_MyArrayInt_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyArrayInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyArrayInt_Accessed)
             {
                 var deserialized = MyArrayInt;
             }
@@ -475,7 +475,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyCrazyJaggedArray (accessed? {_MyCrazyJaggedArray_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyCrazyJaggedArray_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyCrazyJaggedArray_Accessed)
             {
                 var deserialized = MyCrazyJaggedArray;
             }
@@ -495,7 +495,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyThreeDimArrayInt (accessed? {_MyThreeDimArrayInt_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyThreeDimArrayInt_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyThreeDimArrayInt_Accessed)
             {
                 var deserialized = MyThreeDimArrayInt;
             }

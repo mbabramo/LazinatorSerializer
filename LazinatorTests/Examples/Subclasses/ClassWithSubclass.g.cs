@@ -494,7 +494,7 @@ namespace LazinatorTests.Examples.Subclasses
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_SubclassInstance1_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_SubclassInstance1_Accessed)
                 {
                     var deserialized = SubclassInstance1;
                 }
@@ -510,7 +510,7 @@ namespace LazinatorTests.Examples.Subclasses
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_SubclassInstance2_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_SubclassInstance2_Accessed)
                 {
                     var deserialized = SubclassInstance2;
                 }

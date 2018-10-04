@@ -477,7 +477,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyMismatchedRecordLikeType (accessed? {_MyMismatchedRecordLikeType_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyMismatchedRecordLikeType_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyMismatchedRecordLikeType_Accessed)
             {
                 var deserialized = MyMismatchedRecordLikeType;
             }
@@ -497,7 +497,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeClass (accessed? {_MyRecordLikeClass_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyRecordLikeClass_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyRecordLikeClass_Accessed)
             {
                 var deserialized = MyRecordLikeClass;
             }
@@ -517,7 +517,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeType (accessed? {_MyRecordLikeType_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyRecordLikeType_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyRecordLikeType_Accessed)
             {
                 var deserialized = MyRecordLikeType;
             }
@@ -537,7 +537,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeTypeWithLazinator (accessed? {_MyRecordLikeTypeWithLazinator_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyRecordLikeTypeWithLazinator_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyRecordLikeTypeWithLazinator_Accessed)
             {
                 var deserialized = MyRecordLikeTypeWithLazinator;
             }

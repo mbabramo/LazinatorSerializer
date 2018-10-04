@@ -466,7 +466,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, ByteSpan (accessed? {_ByteSpan_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ByteSpan_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ByteSpan_Accessed)
             {
                 var deserialized = ByteSpan;
             }
@@ -488,7 +488,7 @@ namespace LazinatorTests.Examples
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyWrapperContainer_Accessed)
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyWrapperContainer_Accessed)
                 {
                     var deserialized = MyWrapperContainer;
                 }

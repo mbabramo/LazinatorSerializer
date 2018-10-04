@@ -387,7 +387,7 @@ namespace LazinatorTests.Examples.Subclasses
             TabbedText.WriteLine($"Byte {writer.Position}, MyEnumList (accessed? {_MyEnumList_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyEnumList_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyEnumList_Accessed)
             {
                 var deserialized = MyEnumList;
             }

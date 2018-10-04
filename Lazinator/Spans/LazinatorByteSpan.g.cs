@@ -393,7 +393,7 @@ namespace Lazinator.Spans
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOnly (accessed? {_ReadOnly_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ReadOnly_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ReadOnly_Accessed)
             {
                 var deserialized = ReadOnly;
             }
@@ -413,7 +413,7 @@ namespace Lazinator.Spans
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOrWrite (accessed? {_ReadOrWrite_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ReadOrWrite_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ReadOrWrite_Accessed)
             {
                 var deserialized = ReadOrWrite;
             }

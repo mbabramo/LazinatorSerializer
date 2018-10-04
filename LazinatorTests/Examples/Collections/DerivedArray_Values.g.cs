@@ -216,7 +216,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MyArrayInt_DerivedLevel_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyArrayInt_DerivedLevel_Accessed)
             {
                 var deserialized = MyArrayInt_DerivedLevel;
             }

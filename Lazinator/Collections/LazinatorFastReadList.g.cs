@@ -353,7 +353,7 @@ namespace Lazinator.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_ReadOnlyBytes_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ReadOnlyBytes_Accessed)
             {
                 var deserialized = ReadOnlyBytes;
             }

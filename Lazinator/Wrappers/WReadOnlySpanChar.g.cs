@@ -375,7 +375,7 @@ namespace Lazinator.Wrappers
             TabbedText.WriteLine($"Byte {writer.Position}, Value (accessed? {_Value_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_Value_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_Value_Accessed)
             {
                 var deserialized = Value;
             }

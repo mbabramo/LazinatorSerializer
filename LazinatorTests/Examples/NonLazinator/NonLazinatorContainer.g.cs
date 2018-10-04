@@ -507,7 +507,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorClass (accessed? {_NonLazinatorClass_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorClass_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorClass_Accessed)
             {
                 var deserialized = NonLazinatorClass;
             }
@@ -530,7 +530,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableClass (accessed? {_NonLazinatorInterchangeableClass_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorInterchangeableClass_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorInterchangeableClass_Accessed)
             {
                 var deserialized = NonLazinatorInterchangeableClass;
             }
@@ -553,7 +553,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableStruct (accessed? {_NonLazinatorInterchangeableStruct_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorInterchangeableStruct_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorInterchangeableStruct_Accessed)
             {
                 var deserialized = NonLazinatorInterchangeableStruct;
             }
@@ -576,7 +576,7 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorStruct (accessed? {_NonLazinatorStruct_Accessed})");
             TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_NonLazinatorStruct_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_NonLazinatorStruct_Accessed)
             {
                 var deserialized = NonLazinatorStruct;
             }
