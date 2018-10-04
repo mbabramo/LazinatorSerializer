@@ -146,7 +146,7 @@ namespace Lazinator.Core
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
             ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
-            bool childCouldHaveChanged = childHasBeenAccessed;
+            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && includeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
             if (!childHasBeenAccessed && child != null)
             {
@@ -157,11 +157,11 @@ namespace Lazinator.Core
             else
             {
                 // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
-                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren) 
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode) 
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to EnsureLazinatorMemoryUpToDate.
                     childStorage = child.LazinatorMemoryStorage;
-                    if (childStorage.Memory.Length != 0 && child.OriginalIncludeChildrenMode == includeChildrenMode)
+                    if (childStorage.Memory.Length != 0)
                         childCouldHaveChanged = false;
                     // DEBUG: should set above to false only if OriginalIncludeChildrenMode == includeChildrenMode. We could add a parameter here childDefinitelyDirty, which we set to true if OriginalIncludeChildrenMode != includeChildrenMode. Another possibility is to change the header order, but that seems like a pain.
                 }
