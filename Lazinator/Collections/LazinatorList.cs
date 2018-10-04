@@ -307,7 +307,7 @@ namespace Lazinator.Collections
 
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            if (IsDirty || DescendantIsDirty)
+            if (IsDirty || DescendantIsDirty|| includeChildrenMode != OriginalIncludeChildrenMode)
             {
                 var offsetList = new LazinatorOffsetList();
                 int originalStartingPosition = writer.Position;
