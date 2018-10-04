@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
-        protected IncludeChildrenMode OriginalIncludeChildrenMode;
+        public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public virtual int Deserialize()
         {

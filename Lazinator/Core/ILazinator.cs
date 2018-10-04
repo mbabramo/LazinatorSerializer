@@ -112,6 +112,10 @@ namespace Lazinator.Core
         /// </summary>
         LazinatorMemory LazinatorMemoryStorage { get; set; }
         /// <summary>
+        /// An indication of whether children were included when the object was serialized into LazinatorMemoryStorage.
+        /// </summary>
+        IncludeChildrenMode OriginalIncludeChildrenMode { get; }
+        /// <summary>
         /// Returns true if the Lazinator object is a struct. This is used internally by Lazinator.
         /// </summary>
         bool IsStruct { get; }

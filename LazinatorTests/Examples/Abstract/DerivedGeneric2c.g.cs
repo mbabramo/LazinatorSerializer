@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
-        protected IncludeChildrenMode OriginalIncludeChildrenMode;
+        public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public override int Deserialize()
         {

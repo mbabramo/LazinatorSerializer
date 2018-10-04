@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Structs
         
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
-        IncludeChildrenMode OriginalIncludeChildrenMode;
+        public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public int Deserialize()
         {

@@ -161,7 +161,7 @@ namespace Lazinator.Core
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to EnsureLazinatorMemoryUpToDate.
                     childStorage = child.LazinatorMemoryStorage;
-                    if (childStorage.Memory.Length != 0)
+                    if (childStorage.Memory.Length != 0 && child.OriginalIncludeChildrenMode == includeChildrenMode)
                         childCouldHaveChanged = false;
                     // DEBUG: should set above to false only if OriginalIncludeChildrenMode == includeChildrenMode. We could add a parameter here childDefinitelyDirty, which we set to true if OriginalIncludeChildrenMode != includeChildrenMode. Another possibility is to change the header order, but that seems like a pain.
                 }

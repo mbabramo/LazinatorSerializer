@@ -78,6 +78,12 @@ namespace Lazinator.Wrappers
             set;
         }
         
+        public abstract IncludeChildrenMode OriginalIncludeChildrenMode
+        {
+            get;
+            set;
+        }
+        
         protected abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;

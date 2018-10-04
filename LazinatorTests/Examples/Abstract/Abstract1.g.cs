@@ -79,6 +79,12 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
+        public abstract IncludeChildrenMode OriginalIncludeChildrenMode
+        {
+            get;
+            set;
+        }
+        
         protected abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;

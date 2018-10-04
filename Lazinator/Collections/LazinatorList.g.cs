@@ -33,7 +33,7 @@ namespace Lazinator.Collections
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
-        protected IncludeChildrenMode OriginalIncludeChildrenMode;
+        public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public virtual int Deserialize()
         {
@@ -212,7 +212,6 @@ namespace Lazinator.Collections
         protected Memory<byte> _MainListSerialized;
         public Memory<byte> MainListSerialized
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MainListSerialized_Accessed)
@@ -231,7 +230,6 @@ namespace Lazinator.Collections
                 } 
                 return _MainListSerialized;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -246,9 +244,7 @@ namespace Lazinator.Collections
         private bool _MainListSerialized_Dirty;
         public bool MainListSerialized_Dirty
         {
-            [DebuggerStepThrough]
             get => _MainListSerialized_Dirty;
-            [DebuggerStepThrough]
             set
             {
                 if (_MainListSerialized_Dirty != value)
@@ -264,7 +260,6 @@ namespace Lazinator.Collections
         protected LazinatorOffsetList _Offsets;
         public LazinatorOffsetList Offsets
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Offsets_Accessed)
@@ -283,7 +278,6 @@ namespace Lazinator.Collections
                 } 
                 return _Offsets;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (_Offsets != null)
@@ -379,6 +373,7 @@ namespace Lazinator.Collections
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.LazinatorList<T> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -412,6 +407,9 @@ namespace Lazinator.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.LazinatorList<T> starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -427,6 +425,8 @@ namespace Lazinator.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, MainListSerialized (accessed? {_MainListSerialized_Accessed}) (dirty? {_MainListSerialized_Dirty})");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren && !_MainListSerialized_Accessed)
             {
@@ -444,6 +444,9 @@ namespace Lazinator.Collections
             {
                 _MainListSerialized_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, Offsets (accessed? {_Offsets_Accessed}) (backing var null? {_Offsets == null}) ");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -457,10 +460,12 @@ namespace Lazinator.Collections
             {
                 _Offsets_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _LazinatorList_T_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorList<T>) ");
         }
         
         /* Conversion of supported collections and tuples */
