@@ -14,6 +14,7 @@ using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Subclasses;
 using Lazinator.Collections.Dictionary;
+using LazinatorTests.Examples.Tuples;
 
 namespace LazinatorTests.Tests
 {
@@ -399,6 +400,59 @@ namespace LazinatorTests.Tests
                 return d;
             }
             VerifyCloningEquivalence(() => GetDictionary());
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_StructTuple()
+        {
+            StructTuple GetObject()
+            {
+                return new StructTuple()
+                {
+                    MyNullableTuple = (3, 4)
+                };
+            }
+            VerifyCloningEquivalence(() => GetObject());
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_StructTuple_Null()
+        {
+            StructTuple GetObject()
+            {
+                return new StructTuple()
+                {
+                    MyNullableTuple = null
+                };
+            }
+            VerifyCloningEquivalence(() => GetObject());
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_RegularTuple()
+        {
+            RegularTuple GetObject()
+            {
+                return new RegularTuple()
+                {
+                    MyTupleSerialized = new Tuple<uint, ExampleChild, NonLazinatorClass>(3, GetExampleChild(1),
+                        GetNonLazinatorType(2))
+                };
+            }
+            VerifyCloningEquivalence(() => GetObject());
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_RegularTuple_Null()
+        {
+            RegularTuple GetObject()
+            {
+                return new RegularTuple()
+                {
+                    MyTupleSerialized = null
+                };
+            }
+            VerifyCloningEquivalence(() => GetObject());
         }
     }
 }
