@@ -2171,7 +2171,11 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert)
                     {{
-                        return {creationText};
+                        {IIF(Nullable, $@"if ({GetNullCheck("itemToConvert")})
+                        {{
+                            return default({AppropriatelyQualifiedTypeName});
+                        }}
+                        ")}return {creationText};
                     }}
             ");
         }
