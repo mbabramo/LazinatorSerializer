@@ -338,7 +338,7 @@ namespace Lazinator.Wrappers
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {
-                    _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
+                    _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }

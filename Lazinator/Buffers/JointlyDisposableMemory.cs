@@ -68,10 +68,13 @@ namespace Lazinator.Buffers
                 OriginalSource.DoNotDisposeWithThis(buffer, disposeBufferIfNotOriginalSource);
             else
             {
-                if (DisposeTogether != null)
-                    DisposeTogether.Remove(buffer);
-                if (disposeBufferIfNotOriginalSource)
-                    buffer.Dispose();
+                if (buffer != this)
+                {
+                    if (DisposeTogether != null)
+                        DisposeTogether.Remove(buffer);
+                    if (disposeBufferIfNotOriginalSource)
+                        buffer.Dispose();
+                }
             }
         }
 
