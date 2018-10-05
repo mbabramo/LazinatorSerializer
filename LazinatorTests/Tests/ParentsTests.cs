@@ -348,8 +348,8 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
-            var e2 = e.CloneLazinatorTyped(); // buffers are linked
-            e2.LazinatorMemoryStorage.DisposeIndependently(); // now they're separate
+            var e2 = e.CloneLazinatorTyped();
+            e2.LazinatorMemoryStorage.DisposeIndependently();
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
             {
