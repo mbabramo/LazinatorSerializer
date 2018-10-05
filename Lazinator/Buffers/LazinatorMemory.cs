@@ -59,6 +59,12 @@ namespace Lazinator.Buffers
             OwnedMemory.Dispose();
         }
 
+        public override void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
+        {
+            DoNotDisposeWithThis(OwnedMemory, true);
+            DisposeWithThis(newBuffer);
+        }
+
         #endregion
 
         #region Conversions and slicing
