@@ -959,7 +959,7 @@ namespace Lazinator.CodeDescription
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {{
-                     _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
+                     _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer.OwnedMemory);
                 }}
                 _LazinatorMemoryStorage = newBuffer;");
             sb.Append($@"}}
