@@ -49,17 +49,30 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
+        /// Specifies that an old buffer is being replaced with a new buffer. Thus, the old buffer should be disposed now if it is not the original source. The new buffer should be disposed together with the original source.
+        /// </summary>
+        /// <param name="oldBuffer"></param>
+        /// <param name="newBuffer"></param>
+        public void ReplaceBuffer(IMemoryOwner<byte> oldBuffer, IMemoryOwner<byte> newBuffer)
+        {
+            DoNotDisposeWithThis(oldBuffer, true);
+            DisposeWithThis(newBuffer);
+        }
+
+        /// <summary>
         /// Specifies that when this is disposed, the buffer should not be disposed with it. 
         /// </summary>
         /// <param name="buffer"></param>
-        public void DoNotDisposeWithThis(IMemoryOwner<byte> buffer)
+        public void DoNotDisposeWithThis(IMemoryOwner<byte> buffer, bool disposeBufferIfNotOriginalSource)
         {
             if (OriginalSource != null)
-                OriginalSource.DisposeWithThis(buffer);
+                OriginalSource.DoNotDisposeWithThis(buffer, disposeBufferIfNotOriginalSource);
             else
             {
                 if (DisposeTogether != null)
                     DisposeTogether.Remove(buffer);
+                if (disposeBufferIfNotOriginalSource)
+                    buffer.Dispose();
             }
         }
 
@@ -77,7 +90,7 @@ namespace Lazinator.Buffers
                     buffer = lazinatorMemory.OwnedMemory ?? this;
                 else
                     buffer = this;
-                OriginalSource.DoNotDisposeWithThis(buffer);
+                OriginalSource.DoNotDisposeWithThis(buffer, false);
             }
         }
 
