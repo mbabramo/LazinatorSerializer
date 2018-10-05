@@ -51,11 +51,10 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Specifies that an old buffer is being replaced with a new buffer. Thus, the old buffer should be disposed now if it is not the original source. The new buffer should be disposed together with the original source.
         /// </summary>
-        /// <param name="oldBuffer"></param>
         /// <param name="newBuffer"></param>
-        public void ReplaceBuffer(IMemoryOwner<byte> oldBuffer, IMemoryOwner<byte> newBuffer)
+        public void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
         {
-            DoNotDisposeWithThis(oldBuffer, true);
+            DoNotDisposeWithThis(this, true);
             DisposeWithThis(newBuffer);
         }
 
