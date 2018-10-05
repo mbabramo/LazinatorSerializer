@@ -23,7 +23,7 @@ namespace Lazinator.Buffers
             }
         }
 
-        private HashSet<IMemoryOwner<byte>> DisposeTogether = null;
+        private Dictionary<IMemoryOwner<byte>, short> DisposeTogether = null;
 
         public abstract Memory<byte> Memory { get; }
 
@@ -43,8 +43,11 @@ namespace Lazinator.Buffers
             else
             {
                 if (DisposeTogether == null)
-                    DisposeTogether = new HashSet<IMemoryOwner<byte>>();
-                DisposeTogether.Add(additionalBuffer);
+                    DisposeTogether = new Dictionary<IMemoryOwner<byte>, short>();
+                if (DisposeTogether.ContainsKey(additionalBuffer))
+                    DisposeTogether[additionalBuffer]++;
+                else
+                    DisposeTogether[additionalBuffer] = 1;
             }
         }
 
@@ -59,7 +62,14 @@ namespace Lazinator.Buffers
             else
             {
                 if (DisposeTogether != null)
-                    DisposeTogether.Remove(buffer);
+                {
+                    if (DisposeTogether.ContainsKey(buffer))
+                    {
+                        DisposeTogether.Remove(buffer);
+                    }
+                    else
+                        throw new Exception("DEBUG");
+                }
             }
         }
 
@@ -100,8 +110,9 @@ namespace Lazinator.Buffers
                     OriginalSource.Dispose();
                 }
                 if (DisposeTogether != null)
-                    foreach (JointlyDisposableMemory m in DisposeTogether)
-                        m.Dispose();
+                    foreach (var disposedWith in DisposeTogether)
+                        if (disposedWith.Value == 0)
+                            disposedWith.Key.Dispose();
             }
         }
 
