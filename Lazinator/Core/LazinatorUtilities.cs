@@ -726,6 +726,28 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Used internally to replace the buffer associated with a Lazinator object, disposing the previous buffer if it is no longer needed.
+        /// </summary>
+        /// <param name="lazinator">The Lazinator object</param>
+        /// <param name="newBuffer">The new buffer</param>
+        public static void ReplaceBuffer(ILazinator lazinator, LazinatorMemory newBuffer)
+        {
+            if (lazinator.LazinatorMemoryStorage != null)
+            {
+                var ownedMemory = lazinator.LazinatorMemoryStorage.OwnedMemory;
+                if (lazinator.LazinatorParents.Any(x => x.LazinatorMemoryStorage.OwnedMemory == ownedMemory))
+                {
+                    lazinator.LazinatorMemoryStorage.DisposeWithThis(newBuffer);
+                }
+                else
+                {
+                    lazinator.LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
+                }
+            }
+            lazinator.LazinatorMemoryStorage = newBuffer;
+        }
+
+        /// <summary>
         /// Get a MemoryStream from ReadOnlyMemory, if possibly without copying the source memory.
         /// </summary>
         /// <param name="memory">The source memory</param>
