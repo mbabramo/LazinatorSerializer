@@ -54,7 +54,7 @@ namespace Lazinator.Buffers
         /// <param name="newBuffer"></param>
         public virtual void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
         {
-            // the disposal of the old buffer must be handled in the override method. 
+            DoNotDisposeWithThis(this, true);
             DisposeWithThis(newBuffer);
         }
 
