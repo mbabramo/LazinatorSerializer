@@ -29,6 +29,15 @@ namespace Lazinator.Core
 
         public bool Any() => LastAdded != null || (OtherParents != null && OtherParents.Any());
 
+        public bool Any(Func<ILazinator, bool> predicate)
+        {
+            if (LastAdded != null && predicate(LastAdded))
+                return true;
+            if (OtherParents != null && OtherParents.Any(x => predicate(x.parent)))
+                return true;
+            return false;
+        }
+
         /// <summary>
         /// The number of parents stored. A parent is counted only once even if stored more often.
         /// </summary>

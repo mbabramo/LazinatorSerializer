@@ -379,7 +379,7 @@ namespace LazinatorTests.Tests
         public void CanRepeatedlyEnsureMemoryUpToDate()
         {
             Example e = GetTypicalExample();
-            int repetitions = int.MaxValue; // DEBUG
+            int repetitions = 10000;
             for (int i = 0; i < repetitions; i++)
             {
                 JointlyDisposableMemory.Round = i;
@@ -387,6 +387,8 @@ namespace LazinatorTests.Tests
                 e.EnsureLazinatorMemoryUpToDate();
             }
         }
+
+        debug; // check with MyChild up to date ALSO must change Examplechild
 
     }
 }
