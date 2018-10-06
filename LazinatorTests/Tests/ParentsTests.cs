@@ -388,7 +388,5 @@ namespace LazinatorTests.Tests
             }
         }
 
-        debug; // check with MyChild up to date ALSO must change Examplechild
-
     }
 }
