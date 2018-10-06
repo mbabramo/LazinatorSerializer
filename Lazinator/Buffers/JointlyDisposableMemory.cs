@@ -73,7 +73,11 @@ namespace Lazinator.Buffers
                     if (DisposeTogether != null)
                         DisposeTogether.Remove(buffer);
                     if (disposeBufferIfNotOriginalSource)
+                    {
+                        if (buffer is JointlyDisposableMemory j)
+                            j.OriginalSource = null; // don't dispose original source -- just dispose the buffer itself
                         buffer.Dispose();
+                    }
                 }
             }
         }
