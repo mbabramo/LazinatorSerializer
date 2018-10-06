@@ -23,6 +23,7 @@ namespace Lazinator.Buffers
             StartPosition = startPosition;
             Length = bytesFilled;
             OriginalSource = originalSource;
+            N = Round.ToString() + "L";
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
@@ -64,7 +65,11 @@ namespace Lazinator.Buffers
             DoNotDisposeWithThis(OwnedMemory, true);
             DisposeWithThis(newBuffer);
             if (newBuffer is JointlyDisposableMemory j)
-                j.OriginalSource = this;
+            {
+                j.OriginalSource = this.OriginalSource ?? this;
+                if (newBuffer is LazinatorMemory m && m.OwnedMemory is JointlyDisposableMemory m2)
+                    m2.OriginalSource = this.OriginalSource ?? this;
+            }
         }
 
         #endregion

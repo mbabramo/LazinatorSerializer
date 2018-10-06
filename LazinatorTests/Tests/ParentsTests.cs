@@ -10,6 +10,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
+using Lazinator.Buffers;
 
 namespace LazinatorTests.Tests
 {
@@ -372,6 +373,19 @@ namespace LazinatorTests.Tests
                 m.Span[0] = 1;
             };
             a.Should().Throw<ObjectDisposedException>();
+        }
+
+        [Fact]
+        public void CanRepeatedlyEnsureMemoryUpToDate()
+        {
+            Example e = GetTypicalExample();
+            int repetitions = int.MaxValue; // DEBUG
+            for (int i = 0; i < repetitions; i++)
+            {
+                JointlyDisposableMemory.Round = i;
+                e.MyChild1.MyLong = i;
+                e.EnsureLazinatorMemoryUpToDate();
+            }
         }
 
     }
