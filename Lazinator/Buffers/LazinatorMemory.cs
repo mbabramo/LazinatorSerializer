@@ -63,6 +63,8 @@ namespace Lazinator.Buffers
         {
             DoNotDisposeWithThis(OwnedMemory, true);
             DisposeWithThis(newBuffer);
+            if (newBuffer is JointlyDisposableMemory j)
+                j.OriginalSource = this;
         }
 
         #endregion
