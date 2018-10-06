@@ -725,6 +725,7 @@ namespace Lazinator.Core
             return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
 
+        // DEBUG -- delete
         /// <summary>
         /// Used internally to replace the buffer associated with a Lazinator object, disposing the previous buffer if it is no longer needed.
         /// </summary>
@@ -735,7 +736,7 @@ namespace Lazinator.Core
             if (lazinator.LazinatorMemoryStorage != null)
             {
                 var ownedMemory = lazinator.LazinatorMemoryStorage.OwnedMemory;
-                if (lazinator.LazinatorParents.Any(x => x.LazinatorMemoryStorage.OwnedMemory == ownedMemory))
+                if (lazinator.LazinatorParents.ParentsShareBuffer(ownedMemory))
                 {
                     lazinator.LazinatorMemoryStorage.DisposeWithThis(newBuffer);
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,11 @@ namespace Lazinator.Core
             if (OtherParents != null && OtherParents.Any(x => predicate(x.parent)))
                 return true;
             return false;
+        }
+
+        public bool ParentsShareBuffer(IMemoryOwner<byte> ownedMemory)
+        {
+            return Any(x => x.LazinatorMemoryStorage.OwnedMemory == ownedMemory);
         }
 
         /// <summary>
