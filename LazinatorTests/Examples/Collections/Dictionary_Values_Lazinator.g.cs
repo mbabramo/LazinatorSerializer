@@ -410,20 +410,7 @@ namespace LazinatorTests.Examples.Collections
             }
             
             var newBuffer = writer.Slice(startPosition);
-            if (_LazinatorMemoryStorage != null)
-            {
-                var ownedMemory = _LazinatorMemoryStorage.OwnedMemory;
-                if (LazinatorParents.ParentSharesBuffer(ownedMemory))
-                {
-                    _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
-                }
-                else
-                {
-                    _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
-                }
-                _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
-            }
-            _LazinatorMemoryStorage = newBuffer;
+            ReplaceBuffer(ref _LazinatorMemoryStorage, newBuffer, LazinatorParents);
         }
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
