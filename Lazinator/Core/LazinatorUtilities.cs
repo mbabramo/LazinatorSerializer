@@ -172,8 +172,8 @@ namespace Lazinator.Core
                 if (updateStoredBuffer)
                 {
                     var newBuffer = writer.Slice(startPosition);
-                    // DEBUG
-                    //ReplaceBuffer(ref child.LazinatorMemoryStorage, newBuffer, LazinatorParents);
+                    if (child != null)
+                        child.LazinatorMemoryStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents);
                 }
             }
             else
@@ -738,7 +738,7 @@ namespace Lazinator.Core
         /// <param name="existingBuffer">The existing buffer</param>
         /// <param name="newBuffer">The new buffer</param>
         /// <param name="parents"></param>
-        public static LazinatorMemory ReplaceBuffer(ref LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents)
+        public static LazinatorMemory ReplaceBuffer(LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents)
         {
             if (existingBuffer != null)
             {

@@ -355,7 +355,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
             
             var newBuffer = writer.Slice(startPosition);
-            ReplaceBuffer(ref _LazinatorMemoryStorage, newBuffer, LazinatorParents);
+            _LazinatorMemoryStorage = ReplaceBuffer(_LazinatorMemoryStorage, newBuffer, LazinatorParents);
         }
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
