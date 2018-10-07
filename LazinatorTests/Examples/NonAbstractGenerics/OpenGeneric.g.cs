@@ -430,7 +430,15 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 var newBuffer = writer.Slice(startPosition);
                 if (_LazinatorMemoryStorage != null)
                 {
-                    _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
+                    var ownedMemory = _LazinatorMemoryStorage.OwnedMemory;
+                    if (LazinatorParents.ParentsShareBuffer(ownedMemory))
+                    {
+                        _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
+                    }
+                    else
+                    {
+                        _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
+                    }
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }

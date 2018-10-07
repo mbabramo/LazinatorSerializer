@@ -61,6 +61,17 @@ namespace Lazinator.Buffers
             DisposeWithThis(newBuffer);
         }
 
+        
+        public void CopyOriginalSourceToNewBuffer(IMemoryOwner<byte> newBuffer)
+        {
+            if (newBuffer is JointlyDisposableMemory j)
+            {
+                j.OriginalSource = this.OriginalSource ?? this;
+                if (newBuffer is LazinatorMemory m && m.OwnedMemory is JointlyDisposableMemory m2)
+                    m2.OriginalSource = this.OriginalSource ?? this;
+            }
+        }
+
         /// <summary>
         /// Specifies that when this is disposed, the buffer should not be disposed with it. 
         /// </summary>
