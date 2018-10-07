@@ -167,7 +167,14 @@ namespace Lazinator.Core
             }
             if (!childCouldHaveChanged)
             {
+                int startPosition = writer.Position;
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
+                if (updateStoredBuffer)
+                {
+                    var newBuffer = writer.Slice(startPosition);
+                    // DEBUG
+                    //ReplaceBuffer(ref child.LazinatorMemoryStorage, newBuffer, LazinatorParents);
+                }
             }
             else
             {
@@ -725,7 +732,13 @@ namespace Lazinator.Core
             return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
 
-        public static void ReplaceBuffer(ref LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents)
+        /// <summary>
+        /// Replaces an existing buffer with a new buffer, disposing of the buffer if it is not shared by the object's parents.
+        /// </summary>
+        /// <param name="existingBuffer">The existing buffer</param>
+        /// <param name="newBuffer">The new buffer</param>
+        /// <param name="parents"></param>
+        public static LazinatorMemory ReplaceBuffer(ref LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents)
         {
             if (existingBuffer != null)
             {
@@ -740,7 +753,7 @@ namespace Lazinator.Core
                 }
                 existingBuffer.CopyOriginalSourceToNewBuffer(newBuffer);
             }
-            existingBuffer = newBuffer;
+            return newBuffer;
         }
 
         /// <summary>
