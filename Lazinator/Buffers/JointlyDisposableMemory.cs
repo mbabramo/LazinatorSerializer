@@ -130,7 +130,7 @@ namespace Lazinator.Buffers
                     OriginalSource.Dispose();
                 }
                 if (DisposeTogether != null)
-                    foreach (JointlyDisposableMemory m in DisposeTogether)
+                    foreach (IMemoryOwner<byte> m in DisposeTogether)
                         m.Dispose();
             }
         }
