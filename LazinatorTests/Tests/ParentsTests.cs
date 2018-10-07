@@ -318,7 +318,6 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             e.MyChild1.MyLong = -342356;
             e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
-            JointlyDisposableMemory.Round = 1; // DEBUG
             e.MyChild1.EnsureLazinatorMemoryUpToDate();
             e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
             e.MyChild1.LazinatorMemoryStorage.Dispose();
@@ -395,7 +394,6 @@ namespace LazinatorTests.Tests
                     c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.SharedBuffer);
                     c4 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
                 }
-                JointlyDisposableMemory.Round = i;
                 e.MyChild1.MyLong = i;
                 if (makeChildUpToDate)
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();

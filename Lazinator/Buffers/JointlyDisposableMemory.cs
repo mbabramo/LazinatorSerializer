@@ -8,9 +8,6 @@ namespace Lazinator.Buffers
 {
     public abstract class JointlyDisposableMemory : IMemoryOwner<byte>
     {
-        public string N; // DEBUG
-        public static int Round = 0; // DEBUG
-
         private JointlyDisposableMemory _OriginalSource;
         public JointlyDisposableMemory OriginalSource
         {

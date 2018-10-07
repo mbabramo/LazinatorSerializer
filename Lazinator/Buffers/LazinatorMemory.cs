@@ -23,7 +23,6 @@ namespace Lazinator.Buffers
             StartPosition = startPosition;
             Length = bytesFilled;
             OriginalSource = originalSource;
-            N = Round.ToString() + "L";
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
