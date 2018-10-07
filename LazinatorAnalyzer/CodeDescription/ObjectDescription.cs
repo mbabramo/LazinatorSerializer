@@ -970,20 +970,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
-                if (_LazinatorMemoryStorage != null)
-                {{
-                    var ownedMemory = _LazinatorMemoryStorage.OwnedMemory;
-                    if (LazinatorParents.ParentSharesBuffer(ownedMemory))
-                    {{
-                        _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
-                    }}
-                    else
-                    {{
-                        _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
-                    }}
-                    _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
-                }}
-                _LazinatorMemoryStorage = newBuffer;");
+                ReplaceBuffer(ref _LazinatorMemoryStorage, newBuffer, LazinatorParents);");
             sb.Append($@"}}
 ");
         }

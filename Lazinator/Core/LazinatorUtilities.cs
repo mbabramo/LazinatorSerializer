@@ -725,6 +725,24 @@ namespace Lazinator.Core
             return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
 
+        public static void ReplaceBuffer(ref LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents)
+        {
+            if (existingBuffer != null)
+            {
+                var ownedMemory = existingBuffer.OwnedMemory;
+                if (parents.ParentSharesBuffer(ownedMemory))
+                {
+                    existingBuffer.DisposeWithThis(newBuffer);
+                }
+                else
+                {
+                    existingBuffer.ReplaceWithNewBuffer(newBuffer);
+                }
+                existingBuffer.CopyOriginalSourceToNewBuffer(newBuffer);
+            }
+            existingBuffer = newBuffer;
+        }
+
         /// <summary>
         /// Get a MemoryStream from ReadOnlyMemory, if possibly without copying the source memory.
         /// </summary>
