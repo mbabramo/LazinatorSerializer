@@ -958,7 +958,8 @@ namespace Lazinator.CodeDescription
 ");
             sb.Append($@"}}
 ");
-            AppendUpdateStoredBufferMethod(sb);
+            if (!IsDerivedFromNonAbstractLazinator)
+                AppendUpdateStoredBufferMethod(sb);
         }
 
         private void AppendUpdateStoredBufferMethod(CodeStringBuilder sb)
