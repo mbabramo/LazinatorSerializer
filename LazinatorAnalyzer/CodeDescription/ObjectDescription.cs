@@ -951,9 +951,22 @@ namespace Lazinator.CodeDescription
                             ")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
             
-            string postEncodingDirtinessReset = GetDescendantDirtinessChecks(true, false);
             sb.AppendLine($@"if (updateStoredBuffer)
-                        {{");
+                        {{
+                            UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode);");
+            sb.Append($@"}}
+");
+            sb.Append($@"}}
+");
+            AppendUpdateStoredBufferMethod(sb);
+        }
+
+        private void AppendUpdateStoredBufferMethod(CodeStringBuilder sb)
+        {
+            sb.AppendLine($@"
+            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode)
+            {{");
+            string postEncodingDirtinessReset = GetDescendantDirtinessChecks(true, false);
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
@@ -971,8 +984,6 @@ namespace Lazinator.CodeDescription
                     _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
                 }}
                 _LazinatorMemoryStorage = newBuffer;");
-            sb.Append($@"}}
-");
             sb.Append($@"}}
 ");
         }
@@ -1003,7 +1014,8 @@ namespace Lazinator.CodeDescription
             else
             {
                 sb.AppendLine(
-                        $@"{ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+                        $@"
+                        {ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
                         {{{positionInitialization}
                             // header information");
 
