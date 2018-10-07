@@ -1094,42 +1094,48 @@ namespace LazinatorTests.Examples.Structs
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                
-                _IsDirty = false;
-                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode);
+            }
+        }
+        
+        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode)
+        {
+            
+            _IsDirty = false;
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                _DescendantIsDirty = false;
+                _WrappedBool_Accessed = false;
+                _WrappedByte_Accessed = false;
+                _WrappedChar_Accessed = false;
+                _WrappedNullableBool_Accessed = false;
+                _WrappedNullableByte_Accessed = false;
+                _WrappedNullableChar_Accessed = false;
+                _WrappedNullableSByte_Accessed = false;
+                _WrappedSByte_Accessed = false;
+            }
+            else
+            {
+                throw new Exception("Cannot update stored buffer when serializing only some children.");
+            }
+            
+            var newBuffer = writer.Slice(startPosition);
+            if (_LazinatorMemoryStorage != null)
+            {
+                var ownedMemory = _LazinatorMemoryStorage.OwnedMemory;
+                if (LazinatorParents.ParentSharesBuffer(ownedMemory))
                 {
-                    _DescendantIsDirty = false;
-                    _WrappedBool_Accessed = false;
-                    _WrappedByte_Accessed = false;
-                    _WrappedChar_Accessed = false;
-                    _WrappedNullableBool_Accessed = false;
-                    _WrappedNullableByte_Accessed = false;
-                    _WrappedNullableChar_Accessed = false;
-                    _WrappedNullableSByte_Accessed = false;
-                    _WrappedSByte_Accessed = false;
+                    _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
                 }
                 else
                 {
-                    throw new Exception("Cannot update stored buffer when serializing only some children.");
+                    _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
                 }
-                
-                var newBuffer = writer.Slice(startPosition);
-                if (_LazinatorMemoryStorage != null)
-                {
-                    var ownedMemory = _LazinatorMemoryStorage.OwnedMemory;
-                    if (LazinatorParents.ParentSharesBuffer(ownedMemory))
-                    {
-                        _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
-                    }
-                    else
-                    {
-                        _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
-                    }
-                    _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
-                }
-                _LazinatorMemoryStorage = newBuffer;
+                _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
             }
+            _LazinatorMemoryStorage = newBuffer;
         }
+        
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.Position;
