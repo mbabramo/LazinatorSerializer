@@ -446,7 +446,7 @@ namespace LazinatorTests.Examples.Tuples
                 if (_LazinatorMemoryStorage != null)
                 {
                     var ownedMemory = _LazinatorMemoryStorage.OwnedMemory;
-                    if (LazinatorParents.ParentsShareBuffer(ownedMemory))
+                    if (LazinatorParents.ParentSharesBuffer(ownedMemory))
                     {
                         _LazinatorMemoryStorage.DisposeWithThis(newBuffer);
                     }

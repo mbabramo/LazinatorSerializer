@@ -736,7 +736,7 @@ namespace Lazinator.Core
             if (lazinator.LazinatorMemoryStorage != null)
             {
                 var ownedMemory = lazinator.LazinatorMemoryStorage.OwnedMemory;
-                if (lazinator.LazinatorParents.ParentsShareBuffer(ownedMemory))
+                if (lazinator.LazinatorParents.ParentSharesBuffer(ownedMemory))
                 {
                     lazinator.LazinatorMemoryStorage.DisposeWithThis(newBuffer);
                 }

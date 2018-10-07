@@ -39,9 +39,14 @@ namespace Lazinator.Core
             return false;
         }
 
-        public bool ParentsShareBuffer(IMemoryOwner<byte> ownedMemory)
+        /// <summary>
+        /// Indicates whether the Lazinator object's buffer is shared by its parent.
+        /// </summary>
+        /// <param name="ownedMemory">The memory buffer of the Lazinator object to which this parents collection belongs.</param>
+        /// <returns></returns>
+        public bool ParentSharesBuffer(IMemoryOwner<byte> ownedMemory)
         {
-            return Any(x => x.LazinatorMemoryStorage.OwnedMemory == ownedMemory);
+            return Any(x => x.LazinatorMemoryStorage?.OwnedMemory == ownedMemory);
         }
 
         /// <summary>
