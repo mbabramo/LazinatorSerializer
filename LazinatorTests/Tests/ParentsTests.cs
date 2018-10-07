@@ -375,12 +375,43 @@ namespace LazinatorTests.Tests
             a.Should().Throw<ObjectDisposedException>();
         }
 
+        public enum RepetitionsToMutate
+        {
+            All,
+            None,
+            Even,
+            Odd
+        }
+
+        private bool MutateThisRepetition(int i, RepetitionsToMutate o)
+        {
+            switch (o)
+            {
+                case RepetitionsToMutate.All:
+                    return true;
+                case RepetitionsToMutate.None:
+                    return false;
+                case RepetitionsToMutate.Even:
+                    return i % 2 == 0;
+                case RepetitionsToMutate.Odd:
+                    return i % 2 == 1;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public static IEnumerable<object[]> CanRepeatedlyData()
+        {
+            foreach (bool makeChildUpToDate in new bool[] { true, false })
+                foreach (bool makeParentUpToDate in new bool[] { true, false })
+                    foreach (RepetitionsToMutate mutateParent in new RepetitionsToMutate[] { RepetitionsToMutate.All, RepetitionsToMutate.None, RepetitionsToMutate.Even, RepetitionsToMutate.Odd })
+                        foreach (RepetitionsToMutate mutateChild in new RepetitionsToMutate[] { RepetitionsToMutate.All, RepetitionsToMutate.None, RepetitionsToMutate.Even, RepetitionsToMutate.Odd })
+                            yield return new object[] { makeChildUpToDate, makeParentUpToDate, mutateParent, mutateChild };
+        }
+
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        [InlineData(false, false)]
-        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate)
+        [MemberData(nameof(CanRepeatedlyData))]
+        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate, RepetitionsToMutate mutateParent, RepetitionsToMutate mutateChild)
         {
             Example e = GetTypicalExample();
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
@@ -394,7 +425,10 @@ namespace LazinatorTests.Tests
                     c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.SharedBuffer);
                     c4 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
                 }
-                e.MyChild1.MyLong = i;
+                if (MutateThisRepetition(i, mutateParent))
+                    e.MyBool = !e.MyBool;
+                if (MutateThisRepetition(i, mutateChild))
+                    e.MyChild1.MyLong++;
                 if (makeChildUpToDate)
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();
                 if (makeParentUpToDate)

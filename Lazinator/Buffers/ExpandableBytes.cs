@@ -12,6 +12,8 @@ namespace Lazinator.Buffers
     public class ExpandableBytes : JointlyDisposableMemory
     {
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
+        public static ulong NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
+        public ulong AllocationID;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
 
@@ -24,6 +26,10 @@ namespace Lazinator.Buffers
         public ExpandableBytes(int minBufferSize, JointlyDisposableMemory originalSource)
         {
             CurrentBuffer = LazinatorUtilities.GetRentedMemory(Math.Max(minBufferSize, MinMinBufferSize));
+            unchecked
+            {
+                AllocationID = NextAllocationID++;
+            }
 
             OriginalSource = originalSource;
             if (OriginalSource != null)
