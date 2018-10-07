@@ -376,31 +376,38 @@ namespace LazinatorTests.Tests
             a.Should().Throw<ObjectDisposedException>();
         }
 
-        [Fact]
-        public void CanRepeatedlyEnsureMemoryUpToDate()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate)
         {
             Example e = GetTypicalExample();
-            int repetitions = 10000;
+            Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
+            int repetitions = 100;
             for (int i = 0; i < repetitions; i++)
             {
+                if (i == 5)
+                {
+                    c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
+                    c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
+                    c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.SharedBuffer);
+                    c4 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                }
                 JointlyDisposableMemory.Round = i;
                 e.MyChild1.MyLong = i;
-                e.EnsureLazinatorMemoryUpToDate();
+                if (makeChildUpToDate)
+                    e.MyChild1.EnsureLazinatorMemoryUpToDate();
+                if (makeParentUpToDate)
+                    e.EnsureLazinatorMemoryUpToDate();
             }
-        }
-
-        [Fact]
-        public void CanRepeatedlyEnsureMemoryUpToDate_Child()
-        {
-            Example e = GetTypicalExample();
-            int repetitions = 10000;
-            for (int i = 0; i < repetitions; i++)
+            foreach (Example c in new Example[] { c1, c2, c3, c4})
             {
-                JointlyDisposableMemory.Round = i;
-                e.MyChild1.MyLong = i;
-                e.MyChild1.EnsureLazinatorMemoryUpToDate();
+                c.MyChild2.MyLong = -3; // make sure early clone still works
             }
         }
+        
 
     }
 }
