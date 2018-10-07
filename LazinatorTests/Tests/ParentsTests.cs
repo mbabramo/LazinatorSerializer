@@ -389,5 +389,18 @@ namespace LazinatorTests.Tests
             }
         }
 
+        [Fact]
+        public void CanRepeatedlyEnsureMemoryUpToDate_Child()
+        {
+            Example e = GetTypicalExample();
+            int repetitions = 10000;
+            for (int i = 0; i < repetitions; i++)
+            {
+                JointlyDisposableMemory.Round = i;
+                e.MyChild1.MyLong = i;
+                e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            }
+        }
+
     }
 }
