@@ -968,6 +968,7 @@ namespace Lazinator.CodeDescription
                     {{
                         _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
                     }}
+                    _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
                 }}
                 _LazinatorMemoryStorage = newBuffer;");
             sb.Append($@"}}
