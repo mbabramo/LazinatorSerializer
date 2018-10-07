@@ -168,6 +168,7 @@ namespace LazinatorTests.Examples
                     {
                         _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
                     }
+                    _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }

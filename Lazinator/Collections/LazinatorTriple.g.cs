@@ -574,6 +574,7 @@ namespace Lazinator.Collections
                     {
                         _LazinatorMemoryStorage.ReplaceWithNewBuffer(newBuffer);
                     }
+                    _LazinatorMemoryStorage.CopyOriginalSourceToNewBuffer(newBuffer);
                 }
                 _LazinatorMemoryStorage = newBuffer;
             }
