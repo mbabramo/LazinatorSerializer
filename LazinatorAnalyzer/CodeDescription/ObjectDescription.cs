@@ -487,6 +487,11 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
                             LazinatorMemoryStorage = serializedBytes;
+                            int length = Deserialize();
+                            if (length != _LazinatorMemoryStorage.Length)
+                            {{
+                                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                            }}
                         }}
 
                         {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage;
@@ -496,11 +501,6 @@ namespace Lazinator.CodeDescription
                             set
                             {{
                                 _LazinatorMemoryStorage = value;
-                                int length = Deserialize();
-                                if (length != _LazinatorMemoryStorage.Length)
-                                {{
-                                    _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
-                                }}
                             }}
                         }}
                         {ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
