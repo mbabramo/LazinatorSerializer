@@ -415,14 +415,12 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
-            int repetitions = 6; // DEBUG
+            int repetitions = 100; 
             for (int i = 0; i < repetitions; i++)
             {
                 if (i == 5)
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
-                    var DEBUG = e.MyChild2.MyLong;
-                    var DEBUG2 = c1.MyChild2.MyLong;
                     c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
                     c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.SharedBuffer);
                     c4 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
@@ -435,7 +433,6 @@ namespace LazinatorTests.Tests
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();
                 if (makeParentUpToDate)
                     e.EnsureLazinatorMemoryUpToDate();
-                debug; // on i == 2, e.LazinatorMemoryStorage.Span[69] is no longer set to correct value
             }
             foreach (Example c in new Example[] { c1, c2, c3, c4})
             {

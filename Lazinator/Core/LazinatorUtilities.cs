@@ -167,11 +167,15 @@ namespace Lazinator.Core
             }
             if (!childCouldHaveChanged)
             {
-                int startPosition = writer.Position;
+                LazinatorMemory newBuffer = null;
+                if (updateStoredBuffer)
+                {
+                    int startPosition = writer.Position;
+                    newBuffer = writer.Slice(startPosition);
+                }
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
                 if (updateStoredBuffer)
                 {
-                    var newBuffer = writer.Slice(startPosition);
                     if (child != null)
                         child.LazinatorMemoryStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents);
                 }
