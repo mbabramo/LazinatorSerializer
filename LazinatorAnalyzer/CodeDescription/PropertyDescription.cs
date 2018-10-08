@@ -981,11 +981,10 @@ namespace Lazinator.CodeDescription
                                         else
                                         {{
                                             LazinatorMemory childData = {ChildSliceString};
-                                            return new {AppropriatelyQualifiedTypeName}()
-                                            {{
-                                                LazinatorMemoryStorage = childData,
-                                                IsDirty = false
-                                            }};
+                                            var toReturn = new {AppropriatelyQualifiedTypeName}();
+                                            toReturn.DeserializeLazinator(childData);
+                                            toReturn.IsDirty = false;
+                                            return toReturn;
                                         }}
                                     }}
                                     var cleanCopy = _{PropertyName};
@@ -1013,10 +1012,13 @@ namespace Lazinator.CodeDescription
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
                             LazinatorParents = new LazinatorParentsCollection(this),";
-            string creation = $@"{nullItemCheck}_{PropertyName} = new {AppropriatelyQualifiedTypeName}()
-                    {{{lazinatorParentClassSet}
-                        LazinatorMemoryStorage = childData,
-                    }};";
+            string creation = $@"{nullItemCheck}
+                    {{
+                        _{PropertyName} = new {AppropriatelyQualifiedTypeName}()
+                        {{{lazinatorParentClassSet}
+                        }};
+                        _{PropertyName}.DeserializeLazinator(childData);
+                    }}";
             return creation;
         }
 
@@ -1863,10 +1865,8 @@ namespace Lazinator.CodeDescription
                         $@"
                         {lengthCollectionMemberString}
                         LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = new {AppropriatelyQualifiedTypeName}()
-                        {{
-                            LazinatorMemoryStorage = childData,
-                        }};
+                        var item = new {AppropriatelyQualifiedTypeName}();
+                        item.DeserializeLazinator(childData);
                         {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
             }
@@ -2079,10 +2079,8 @@ namespace Lazinator.CodeDescription
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = new {AppropriatelyQualifiedTypeName}()
-                            {{
-                                LazinatorMemoryStorage = childData,
-                            }};
+                            {itemName} = new {AppropriatelyQualifiedTypeName}();
+                            {itemName}.DeserializeLazinator(childData);;
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
                 else return ($@"
