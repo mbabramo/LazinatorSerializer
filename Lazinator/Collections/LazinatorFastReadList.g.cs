@@ -215,7 +215,6 @@ namespace Lazinator.Collections
         private ReadOnlyMemory<byte> _ReadOnlyBytes;
         public ReadOnlySpan<byte> ReadOnlyBytes
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_ReadOnlyBytes_Accessed)
@@ -226,7 +225,6 @@ namespace Lazinator.Collections
                 }
                 return _ReadOnlyBytes.Span;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -303,6 +301,7 @@ namespace Lazinator.Collections
         
         public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.LazinatorFastReadList<T> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -338,6 +337,9 @@ namespace Lazinator.Collections
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.LazinatorFastReadList<T> starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -346,6 +348,8 @@ namespace Lazinator.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_ReadOnlyBytes_Accessed)
             {
@@ -363,10 +367,12 @@ namespace Lazinator.Collections
             {
                 _ReadOnlyBytes_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _LazinatorFastReadList_T_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorFastReadList<T>) ");
         }
         
         /* Conversion of supported collections and tuples */
