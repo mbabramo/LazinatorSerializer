@@ -65,7 +65,6 @@ namespace LazinatorTests.Tests
             l.EnsureLazinatorMemoryUpToDate();
             l.LazinatorMemoryStorage.DisposeIndependently();
             l.FreeInMemoryObjects();
-            typical1.LazinatorMemoryStorage.Dispose(); // should not prevent reading list
             typical2.MyChild1.MyLong = 46523496; // should not affect the list now
             l[0].MyChild1.MyLong.Should().Be(origValue);
             l[1].MyChild1.MyLong.Should().Be(origValue);
