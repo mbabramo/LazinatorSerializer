@@ -415,7 +415,7 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
-            int repetitions = 100;
+            int repetitions = 6; // DEBUG
             for (int i = 0; i < repetitions; i++)
             {
                 if (i == 5)
