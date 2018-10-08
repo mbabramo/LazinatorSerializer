@@ -251,9 +251,9 @@ namespace LazinatorTests.Examples
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
                         _IntWrapper = new WInt()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _IntWrapper.DeserializeLazinator(childData);
                     }
                     _IntWrapper_Accessed = true;
                 } 
@@ -283,11 +283,10 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
-                        return new WInt()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WInt();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _IntWrapper;
@@ -313,9 +312,9 @@ namespace LazinatorTests.Examples
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
                         _MyExampleStruct = new ExampleStruct()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _MyExampleStruct.DeserializeLazinator(childData);
                     }
                     _MyExampleStruct_Accessed = true;
                 } 
@@ -345,11 +344,10 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                        return new ExampleStruct()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new ExampleStruct();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _MyExampleStruct;
@@ -674,10 +672,8 @@ namespace LazinatorTests.Examples
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new ExampleStruct()
-                {
-                    LazinatorMemoryStorage = childData,
-                };
+                var item = new ExampleStruct();
+                item.DeserializeLazinator(childData);
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -734,10 +730,8 @@ namespace LazinatorTests.Examples
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new WNullableStruct<ExampleStruct>()
-                {
-                    LazinatorMemoryStorage = childData,
-                };
+                var item = new WNullableStruct<ExampleStruct>();
+                item.DeserializeLazinator(childData);
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }

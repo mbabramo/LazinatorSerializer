@@ -239,9 +239,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
                         _Subcontainer = new ExampleStructContainingStruct()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _Subcontainer.DeserializeLazinator(childData);
                     }
                     _Subcontainer_Accessed = true;
                 } 
@@ -271,11 +271,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
-                        return new ExampleStructContainingStruct()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new ExampleStructContainingStruct();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _Subcontainer;

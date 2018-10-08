@@ -342,11 +342,14 @@ namespace Lazinator.Collections.Avl
                         {
                             _Left = default;
                         }
-                        else _Left = new AvlNode<TKey, TValue>()
+                        else 
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
-                        };
+                            _Left = new AvlNode<TKey, TValue>()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _Left.DeserializeLazinator(childData);
+                        }
                     }
                     _Left_Accessed = true;
                 } 
@@ -390,11 +393,14 @@ namespace Lazinator.Collections.Avl
                         {
                             _Right = default;
                         }
-                        else _Right = new AvlNode<TKey, TValue>()
+                        else 
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
-                        };
+                            _Right = new AvlNode<TKey, TValue>()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _Right.DeserializeLazinator(childData);
+                        }
                     }
                     _Right_Accessed = true;
                 } 

@@ -1011,13 +1011,14 @@ namespace Lazinator.CodeDescription
                         }}
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
-                            LazinatorParents = new LazinatorParentsCollection(this),";
-            string creation = $@"{nullItemCheck}
+                            {{
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            }}";
+            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeName}(){lazinatorParentClassSet};
+                        _{PropertyName}.DeserializeLazinator(childData);";
+            string creation = nullItemCheck == "" ? doCreation : $@"{nullItemCheck}
                     {{
-                        _{PropertyName} = new {AppropriatelyQualifiedTypeName}()
-                        {{{lazinatorParentClassSet}
-                        }};
-                        _{PropertyName}.DeserializeLazinator(childData);
+                        {doCreation}
                     }}";
             return creation;
         }

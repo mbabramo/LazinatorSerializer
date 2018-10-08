@@ -327,9 +327,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1);
                         _WrappedBool = new WBool()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedBool.DeserializeLazinator(childData);
                     }
                     _WrappedBool_Accessed = true;
                 } 
@@ -359,11 +359,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1);
-                        return new WBool()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WBool();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedBool;
@@ -389,9 +388,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1);
                         _WrappedByte = new WByte()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedByte.DeserializeLazinator(childData);
                     }
                     _WrappedByte_Accessed = true;
                 } 
@@ -421,11 +420,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1);
-                        return new WByte()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WByte();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedByte;
@@ -451,9 +449,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2);
                         _WrappedChar = new WChar()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedChar.DeserializeLazinator(childData);
                     }
                     _WrappedChar_Accessed = true;
                 } 
@@ -483,11 +481,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2);
-                        return new WChar()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WChar();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedChar;
@@ -513,9 +510,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1);
                         _WrappedNullableBool = new WNullableBool()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedNullableBool.DeserializeLazinator(childData);
                     }
                     _WrappedNullableBool_Accessed = true;
                 } 
@@ -545,11 +542,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1);
-                        return new WNullableBool()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WNullableBool();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedNullableBool;
@@ -575,9 +571,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null);
                         _WrappedNullableByte = new WNullableByte()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedNullableByte.DeserializeLazinator(childData);
                     }
                     _WrappedNullableByte_Accessed = true;
                 } 
@@ -607,11 +603,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null);
-                        return new WNullableByte()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WNullableByte();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedNullableByte;
@@ -637,9 +632,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null);
                         _WrappedNullableChar = new WNullableChar()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedNullableChar.DeserializeLazinator(childData);
                     }
                     _WrappedNullableChar_Accessed = true;
                 } 
@@ -669,11 +664,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null);
-                        return new WNullableChar()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WNullableChar();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedNullableChar;
@@ -699,9 +693,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null);
                         _WrappedNullableSByte = new WNullableSByte()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedNullableSByte.DeserializeLazinator(childData);
                     }
                     _WrappedNullableSByte_Accessed = true;
                 } 
@@ -731,11 +725,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null);
-                        return new WNullableSByte()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WNullableSByte();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedNullableSByte;
@@ -761,9 +754,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1);
                         _WrappedSByte = new WSByte()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedSByte.DeserializeLazinator(childData);
                     }
                     _WrappedSByte_Accessed = true;
                 } 
@@ -793,11 +786,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1);
-                        return new WSByte()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WSByte();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedSByte;

@@ -250,11 +250,14 @@ namespace Lazinator.Collections
                         {
                             _FourByteItems = default;
                         }
-                        else _FourByteItems = new LazinatorFastReadList<int>()
+                        else 
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
-                        };
+                            _FourByteItems = new LazinatorFastReadList<int>()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _FourByteItems.DeserializeLazinator(childData);
+                        }
                     }
                     _FourByteItems_Accessed = true;
                 } 
@@ -298,11 +301,14 @@ namespace Lazinator.Collections
                         {
                             _TwoByteItems = default;
                         }
-                        else _TwoByteItems = new LazinatorFastReadList<short>()
+                        else 
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
-                        };
+                            _TwoByteItems = new LazinatorFastReadList<short>()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _TwoByteItems.DeserializeLazinator(childData);
+                        }
                     }
                     _TwoByteItems_Accessed = true;
                 } 

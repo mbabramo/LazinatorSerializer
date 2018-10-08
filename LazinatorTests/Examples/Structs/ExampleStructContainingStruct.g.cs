@@ -262,10 +262,8 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                        _MyExampleStruct = new ExampleStruct()
-                        {
-                            LazinatorMemoryStorage = childData,
-                        };
+                        _MyExampleStruct = new ExampleStruct();
+                        _MyExampleStruct.DeserializeLazinator(childData);
                     }
                     _MyExampleStruct_Accessed = true;
                 } 
@@ -294,11 +292,10 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                        return new ExampleStruct()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new ExampleStruct();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _MyExampleStruct;

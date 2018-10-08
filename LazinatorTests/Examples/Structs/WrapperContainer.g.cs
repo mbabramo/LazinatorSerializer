@@ -235,9 +235,9 @@ namespace LazinatorTests.Examples.Structs
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
                         _WrappedInt = new WInt()
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
+                            LazinatorParents = new LazinatorParentsCollection(this)
                         };
+                        _WrappedInt.DeserializeLazinator(childData);
                     }
                     _WrappedInt_Accessed = true;
                 } 
@@ -267,11 +267,10 @@ namespace LazinatorTests.Examples.Structs
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
-                        return new WInt()
-                        {
-                            LazinatorMemoryStorage = childData,
-                            IsDirty = false
-                        };
+                        var toReturn = new WInt();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
                     }
                 }
                 var cleanCopy = _WrappedInt;

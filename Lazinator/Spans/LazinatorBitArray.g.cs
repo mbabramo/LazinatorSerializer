@@ -272,11 +272,14 @@ namespace Lazinator.Spans
                         {
                             _ByteSpan = default;
                         }
-                        else _ByteSpan = new LazinatorByteSpan()
+                        else 
                         {
-                            LazinatorParents = new LazinatorParentsCollection(this),
-                            LazinatorMemoryStorage = childData,
-                        };
+                            _ByteSpan = new LazinatorByteSpan()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _ByteSpan.DeserializeLazinator(childData);
+                        }
                     }
                     _ByteSpan_Accessed = true;
                 } 
