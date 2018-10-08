@@ -363,7 +363,7 @@ namespace Lazinator.CodeDescription
 
                     string hashCore32 = ObjectType == LazinatorObjectType.Struct
                         ?
-                        $@"if (_LazinatorMemoryStorage == null)
+                        $@"if (LazinatorMemoryStorage == null)
                         {{
                             var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
                             return FarmhashByteSpans.Hash32(result.Span);
@@ -488,26 +488,22 @@ namespace Lazinator.CodeDescription
                         {{
                             LazinatorMemoryStorage = serializedBytes;
                             int length = Deserialize();
-                            if (length != _LazinatorMemoryStorage.Length)
+                            if (length != LazinatorMemoryStorage.Length)
                             {{
-                                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
                             }}
                         }}
 
-                        {ProtectedIfApplicable}LazinatorMemory _LazinatorMemoryStorage;
                         public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
                         {{
-                            get => _LazinatorMemoryStorage;
-                            set
-                            {{
-                                _LazinatorMemoryStorage = value;
-                            }}
+                            get;
+                            set;
                         }}
                         {ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
                         {{
-                            {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (_LazinatorMemoryStorage == null)
+                            {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (LazinatorMemoryStorage == null)
                             {{
                                 throw new NotSupportedException(""Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead.""); 
                             }}
@@ -971,7 +967,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
-                _LazinatorMemoryStorage = ReplaceBuffer(_LazinatorMemoryStorage, newBuffer, LazinatorParents);");
+                LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents);");
             sb.Append($@"}}
 ");
         }
