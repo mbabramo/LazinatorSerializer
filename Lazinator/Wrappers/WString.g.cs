@@ -154,26 +154,22 @@ namespace Lazinator.Wrappers
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();
-            if (length != _LazinatorMemoryStorage.Length)
+            if (length != LazinatorMemoryStorage.Length)
             {
-                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
         }
         
-        LazinatorMemory _LazinatorMemoryStorage;
         public LazinatorMemory LazinatorMemoryStorage
         {
-            get => _LazinatorMemoryStorage;
-            set
-            {
-                _LazinatorMemoryStorage = value;
-            }
+            get;
+            set;
         }
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public void EnsureLazinatorMemoryUpToDate()
         {
-            if (_LazinatorMemoryStorage == null)
+            if (LazinatorMemoryStorage == null)
             {
                 throw new NotSupportedException("Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead."); 
             }
@@ -193,7 +189,7 @@ namespace Lazinator.Wrappers
         
         public uint GetBinaryHashCode32()
         {
-            if (_LazinatorMemoryStorage == null)
+            if (LazinatorMemoryStorage == null)
             {
                 var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
                 return FarmhashByteSpans.Hash32(result.Span);
@@ -207,7 +203,7 @@ namespace Lazinator.Wrappers
         
         public ulong GetBinaryHashCode64()
         {
-            if (_LazinatorMemoryStorage == null)
+            if (LazinatorMemoryStorage == null)
             {
                 var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
                 return FarmhashByteSpans.Hash64(result.Span);
@@ -221,7 +217,7 @@ namespace Lazinator.Wrappers
         
         public Guid GetBinaryHashCode128()
         {
-            if (_LazinatorMemoryStorage == null)
+            if (LazinatorMemoryStorage == null)
             {
                 var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
                 return FarmhashByteSpans.Hash128(result.Span);
@@ -342,7 +338,7 @@ namespace Lazinator.Wrappers
             }
             
             var newBuffer = writer.Slice(startPosition);
-            _LazinatorMemoryStorage = ReplaceBuffer(_LazinatorMemoryStorage, newBuffer, LazinatorParents);
+            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents);
         }
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

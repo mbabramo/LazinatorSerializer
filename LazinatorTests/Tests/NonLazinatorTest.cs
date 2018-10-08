@@ -34,7 +34,7 @@ namespace LazinatorTests.Tests
                 NonLazinatorStruct = new NonLazinatorStruct(),
                 NonLazinatorInterchangeableClass = new NonLazinatorInterchangeableClass("hi", 5)
             };
-            var c2 = CloneWithOptionalVerification(c, true, false);
+            var c2 = c.CloneLazinatorTyped();
             c2.NonLazinatorStruct.MyInt.Should().Be(0);
             c2.NonLazinatorStruct.MyString.Should().Be(null);
             // read a private field and a public field

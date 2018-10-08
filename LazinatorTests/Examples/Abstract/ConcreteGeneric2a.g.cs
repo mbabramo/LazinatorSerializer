@@ -168,20 +168,16 @@ namespace LazinatorTests.Examples.Abstract
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();
-            if (length != _LazinatorMemoryStorage.Length)
+            if (length != LazinatorMemoryStorage.Length)
             {
-                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
         }
         
-        protected LazinatorMemory _LazinatorMemoryStorage;
         public override LazinatorMemory LazinatorMemoryStorage
         {
-            get => _LazinatorMemoryStorage;
-            set
-            {
-                _LazinatorMemoryStorage = value;
-            }
+            get;
+            set;
         }
         protected override ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
@@ -452,7 +448,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             
             var newBuffer = writer.Slice(startPosition);
-            _LazinatorMemoryStorage = ReplaceBuffer(_LazinatorMemoryStorage, newBuffer, LazinatorParents);
+            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents);
         }
         
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

@@ -2199,10 +2199,8 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}()
-                            {{
-                                LazinatorMemoryStorage = storage
-                            }};
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}();
+                            interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
                         }}
 

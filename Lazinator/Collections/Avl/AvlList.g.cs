@@ -161,20 +161,16 @@ namespace Lazinator.Collections.Avl
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();
-            if (length != _LazinatorMemoryStorage.Length)
+            if (length != LazinatorMemoryStorage.Length)
             {
-                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
         }
         
-        protected LazinatorMemory _LazinatorMemoryStorage;
         public virtual LazinatorMemory LazinatorMemoryStorage
         {
-            get => _LazinatorMemoryStorage;
-            set
-            {
-                _LazinatorMemoryStorage = value;
-            }
+            get;
+            set;
         }
         protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
@@ -382,7 +378,7 @@ namespace Lazinator.Collections.Avl
             }
             
             var newBuffer = writer.Slice(startPosition);
-            _LazinatorMemoryStorage = ReplaceBuffer(_LazinatorMemoryStorage, newBuffer, LazinatorParents);
+            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents);
         }
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
