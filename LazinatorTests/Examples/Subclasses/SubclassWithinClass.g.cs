@@ -162,6 +162,11 @@ namespace LazinatorTests.Examples.Subclasses
             public virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
             {
                 LazinatorMemoryStorage = serializedBytes;
+                int length = Deserialize();
+                if (length != _LazinatorMemoryStorage.Length)
+                {
+                    _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+                }
             }
             
             protected LazinatorMemory _LazinatorMemoryStorage;
@@ -171,11 +176,6 @@ namespace LazinatorTests.Examples.Subclasses
                 set
                 {
                     _LazinatorMemoryStorage = value;
-                    int length = Deserialize();
-                    if (length != _LazinatorMemoryStorage.Length)
-                    {
-                        _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
-                    }
                 }
             }
             protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;

@@ -179,7 +179,7 @@ namespace Lazinator.Core
         private void InitializeDeserialized(ILazinator lazinatorType, LazinatorMemory serializedBytes, ILazinator parent)
         {
             lazinatorType.LazinatorParents = new LazinatorParentsCollection(parent);
-            lazinatorType.LazinatorMemoryStorage = serializedBytes;
+            lazinatorType.DeserializeLazinator(serializedBytes);
             lazinatorType.HasChanged = false;
             lazinatorType.DescendantHasChanged = false;
         }

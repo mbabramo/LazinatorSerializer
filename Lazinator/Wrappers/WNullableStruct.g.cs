@@ -159,6 +159,11 @@ namespace Lazinator.Wrappers
         public void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
+            int length = Deserialize();
+            if (length != _LazinatorMemoryStorage.Length)
+            {
+                _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
+            }
         }
         
         LazinatorMemory _LazinatorMemoryStorage;
@@ -168,11 +173,6 @@ namespace Lazinator.Wrappers
             set
             {
                 _LazinatorMemoryStorage = value;
-                int length = Deserialize();
-                if (length != _LazinatorMemoryStorage.Length)
-                {
-                    _LazinatorMemoryStorage = _LazinatorMemoryStorage.Slice(0, length);
-                }
             }
         }
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
