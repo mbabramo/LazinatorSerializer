@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Values typedClone = (DotNetQueue_Values) clone;
-            typedClone.MyQueueInt = Clone_Queue_Gint_g(MyQueueInt);
+            typedClone.MyQueueInt = Clone_Queue_Gint_g(MyQueueInt, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Queue<int> Clone_Queue_Gint_g(Queue<int> itemToClone)
+        private static Queue<int> Clone_Queue_Gint_g(Queue<int> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {

@@ -101,10 +101,10 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             RecordLikeContainer typedClone = (RecordLikeContainer) clone;
-            typedClone.MyMismatchedRecordLikeType = Clone_MismatchedRecordLikeType(MyMismatchedRecordLikeType);
-            typedClone.MyRecordLikeClass = Clone_RecordLikeClass(MyRecordLikeClass);
-            typedClone.MyRecordLikeType = Clone_RecordLikeType(MyRecordLikeType);
-            typedClone.MyRecordLikeTypeWithLazinator = Clone_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator);
+            typedClone.MyMismatchedRecordLikeType = Clone_MismatchedRecordLikeType(MyMismatchedRecordLikeType, includeChildrenMode);
+            typedClone.MyRecordLikeClass = Clone_RecordLikeClass(MyRecordLikeClass, includeChildrenMode);
+            typedClone.MyRecordLikeType = Clone_RecordLikeType(MyRecordLikeType, includeChildrenMode);
+            typedClone.MyRecordLikeTypeWithLazinator = Clone_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -588,7 +588,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
         }
         
-        private static MismatchedRecordLikeType Clone_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert)
+        private static MismatchedRecordLikeType Clone_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
             return new MismatchedRecordLikeType((int) (itemToConvert.Age),(string) (itemToConvert.Name));
         }
@@ -635,9 +635,9 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static RecordLikeClass Clone_RecordLikeClass(RecordLikeClass itemToConvert)
+        private static RecordLikeClass Clone_RecordLikeClass(RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
-            return new RecordLikeClass((int) (itemToConvert.Age),(Example) (itemToConvert.Example)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new RecordLikeClass((int) (itemToConvert.Age),(Example) (itemToConvert.Example)?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         private static RecordLikeType ConvertFromBytes_RecordLikeType(LazinatorMemory storage)
@@ -667,7 +667,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
         }
         
-        private static RecordLikeType Clone_RecordLikeType(RecordLikeType itemToConvert)
+        private static RecordLikeType Clone_RecordLikeType(RecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
             return new RecordLikeType((int) (itemToConvert.Age),(string) (itemToConvert.Name));
         }
@@ -718,9 +718,9 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static RecordLikeTypeWithLazinator Clone_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert)
+        private static RecordLikeTypeWithLazinator Clone_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
-            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age),(string) (itemToConvert.Name),(Example) (itemToConvert.Example)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age),(string) (itemToConvert.Name),(Example) (itemToConvert.Example)?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
     }

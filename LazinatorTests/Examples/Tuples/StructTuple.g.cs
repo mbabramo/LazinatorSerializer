@@ -97,10 +97,10 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             StructTuple typedClone = (StructTuple) clone;
-            typedClone.EnumTuple = Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(EnumTuple);
-            typedClone.MyNamedTuple = Clone__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(MyNamedTuple);
-            typedClone.MyNullableTuple = Clone__Pint_c_C32double_p_C63(MyNullableTuple);
-            typedClone.MyValueTupleSerialized = Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(MyValueTupleSerialized);
+            typedClone.EnumTuple = Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(EnumTuple, includeChildrenMode);
+            typedClone.MyNamedTuple = Clone__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(MyNamedTuple, includeChildrenMode);
+            typedClone.MyNullableTuple = Clone__Pint_c_C32double_p_C63(MyNullableTuple, includeChildrenMode);
+            typedClone.MyValueTupleSerialized = Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(MyValueTupleSerialized, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -586,7 +586,7 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) itemToConvert.Item2);
         }
         
-        private static (TestEnum firstEnum, TestEnum anotherEnum) Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p((TestEnum firstEnum, TestEnum anotherEnum) itemToConvert)
+        private static (TestEnum firstEnum, TestEnum anotherEnum) Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p((TestEnum firstEnum, TestEnum anotherEnum) itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
             return ((TestEnum) (itemToConvert.Item1),(TestEnum) (itemToConvert.Item2));
         }
@@ -618,7 +618,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.Item2);
         }
         
-        private static (int MyFirstItem, double MySecondItem) Clone__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p((int MyFirstItem, double MySecondItem) itemToConvert)
+        private static (int MyFirstItem, double MySecondItem) Clone__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p((int MyFirstItem, double MySecondItem) itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
             return ((int) (itemToConvert.Item1),(double) (itemToConvert.Item2));
         }
@@ -654,7 +654,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.Value.Item2);
         }
         
-        private static (int, double)? Clone__Pint_c_C32double_p_C63((int, double)? itemToConvert)
+        private static (int, double)? Clone__Pint_c_C32double_p_C63((int, double)? itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToConvert == null)
             {
@@ -724,9 +724,9 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static (uint, ExampleChild, NonLazinatorClass) Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p((uint, ExampleChild, NonLazinatorClass) itemToConvert)
+        private static (uint, ExampleChild, NonLazinatorClass) Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p((uint, ExampleChild, NonLazinatorClass) itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
-            return ((uint) (itemToConvert.Item1),(ExampleChild) (itemToConvert.Item2)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert.Item3));
+            return ((uint) (itemToConvert.Item1),(ExampleChild) (itemToConvert.Item2)?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert.Item3));
         }
         
     }

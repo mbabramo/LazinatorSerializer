@@ -96,10 +96,10 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Values typedClone = (DotNetList_Values) clone;
-            typedClone.MyLinkedListInt = Clone_LinkedList_Gint_g(MyLinkedListInt);
-            typedClone.MyListInt = Clone_List_Gint_g(MyListInt);
-            typedClone.MyListInt2 = Clone_List_Gint_g(MyListInt2);
-            typedClone.MySortedSetInt = Clone_SortedSet_Gint_g(MySortedSetInt);
+            typedClone.MyLinkedListInt = Clone_LinkedList_Gint_g(MyLinkedListInt, includeChildrenMode);
+            typedClone.MyListInt = Clone_List_Gint_g(MyListInt, includeChildrenMode);
+            typedClone.MyListInt2 = Clone_List_Gint_g(MyListInt2, includeChildrenMode);
+            typedClone.MySortedSetInt = Clone_SortedSet_Gint_g(MySortedSetInt, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -647,7 +647,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static LinkedList<int> Clone_LinkedList_Gint_g(LinkedList<int> itemToClone)
+        private static LinkedList<int> Clone_LinkedList_Gint_g(LinkedList<int> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -700,7 +700,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<int> Clone_List_Gint_g(List<int> itemToClone)
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -754,7 +754,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedSet<int> Clone_SortedSet_Gint_g(SortedSet<int> itemToClone)
+        private static SortedSet<int> Clone_SortedSet_Gint_g(SortedSet<int> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {

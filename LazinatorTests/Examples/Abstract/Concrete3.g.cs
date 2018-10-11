@@ -106,9 +106,9 @@ namespace LazinatorTests.Examples.Abstract
             {
                 typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.IntList1 = Clone_List_Gint_g(IntList1);
-            typedClone.IntList2 = Clone_List_Gint_g(IntList2);
-            typedClone.IntList3 = Clone_List_Gint_g(IntList3);
+            typedClone.IntList1 = Clone_List_Gint_g(IntList1, includeChildrenMode);
+            typedClone.IntList2 = Clone_List_Gint_g(IntList2, includeChildrenMode);
+            typedClone.IntList3 = Clone_List_Gint_g(IntList3, includeChildrenMode);
         }
         
         public override bool HasChanged { get; set; }
@@ -761,7 +761,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private static List<int> Clone_List_Gint_g(List<int> itemToClone)
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {

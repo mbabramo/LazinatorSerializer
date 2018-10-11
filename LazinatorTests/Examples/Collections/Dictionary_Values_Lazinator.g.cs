@@ -97,9 +97,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Dictionary_Values_Lazinator typedClone = (Dictionary_Values_Lazinator) clone;
-            typedClone.MyDictionary = Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary);
-            typedClone.MySortedDictionary = Clone_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary);
-            typedClone.MySortedList = Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList);
+            typedClone.MyDictionary = Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, includeChildrenMode);
+            typedClone.MySortedDictionary = Clone_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, includeChildrenMode);
+            typedClone.MySortedList = Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -540,7 +540,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Dictionary<int, ExampleChild> Clone_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone)
+        private static Dictionary<int, ExampleChild> Clone_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -551,7 +551,7 @@ namespace LazinatorTests.Examples.Collections
             Dictionary<int, ExampleChild> collection = new Dictionary<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item, includeChildrenMode);
                 collection.Add(item.Key, item.Value);
             }
             return collection;
@@ -599,9 +599,9 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
-        private static KeyValuePair<int, ExampleChild> Clone_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert)
+        private static KeyValuePair<int, ExampleChild> Clone_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode)
         {
-            return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) (itemToConvert.Value)?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer));
+            return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) (itemToConvert.Value)?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
@@ -642,7 +642,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedDictionary<int, ExampleChild> Clone_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone)
+        private static SortedDictionary<int, ExampleChild> Clone_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -653,7 +653,7 @@ namespace LazinatorTests.Examples.Collections
             SortedDictionary<int, ExampleChild> collection = new SortedDictionary<int, ExampleChild>();
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item, includeChildrenMode);
                 collection.Add(item.Key, item.Value);
             }
             return collection;
@@ -697,7 +697,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedList<int, ExampleChild> Clone_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone)
+        private static SortedList<int, ExampleChild> Clone_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -708,7 +708,7 @@ namespace LazinatorTests.Examples.Collections
             SortedList<int, ExampleChild> collection = new SortedList<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) Clone_KeyValuePair_Gint_c_C32ExampleChild_g(item, includeChildrenMode);
                 collection.Add(item.Key, item.Value);
             }
             return collection;

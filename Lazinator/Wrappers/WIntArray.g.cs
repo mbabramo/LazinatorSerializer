@@ -93,7 +93,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WIntArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = Clone_int_B_b(WrappedValue);
+            clone.WrappedValue = Clone_int_B_b(WrappedValue, includeChildrenMode);
         }
         
         public bool HasChanged { get; set; }
@@ -446,7 +446,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private static int[] Clone_int_B_b(int[] itemToClone)
+        private static int[] Clone_int_B_b(int[] itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {

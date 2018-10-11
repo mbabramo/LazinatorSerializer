@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetHashSet_Lazinator typedClone = (DotNetHashSet_Lazinator) clone;
-            typedClone.MyHashSetSerialized = Clone_HashSet_GExampleChild_g(MyHashSetSerialized);
+            typedClone.MyHashSetSerialized = Clone_HashSet_GExampleChild_g(MyHashSetSerialized, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static HashSet<ExampleChild> Clone_HashSet_GExampleChild_g(HashSet<ExampleChild> itemToClone)
+        private static HashSet<ExampleChild> Clone_HashSet_GExampleChild_g(HashSet<ExampleChild> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -459,7 +459,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (ExampleChild) item?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    var itemCopied = (ExampleChild) item?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                     collection.Add(itemCopied);
                 }
             }

@@ -100,7 +100,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             clone.FreeInMemoryObjects();
             OpenGeneric<T> typedClone = (OpenGeneric<T>) clone;
-            typedClone.MyListT = Clone_List_GT_g(MyListT);
+            typedClone.MyListT = Clone_List_GT_g(MyListT, includeChildrenMode);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.MyT = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
@@ -557,7 +557,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        private static List<T> Clone_List_GT_g(List<T> itemToClone)
+        private static List<T> Clone_List_GT_g(List<T> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -575,7 +575,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 else
                 {
-                    var itemCopied = (T) itemToClone[itemIndex]?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    var itemCopied = (T) itemToClone[itemIndex]?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                     collection.Add(itemCopied);
                 }
             }

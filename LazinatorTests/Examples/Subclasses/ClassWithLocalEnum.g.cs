@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples.Subclasses
             clone.FreeInMemoryObjects();
             ClassWithLocalEnum typedClone = (ClassWithLocalEnum) clone;
             typedClone.MyEnum = MyEnum;
-            typedClone.MyEnumList = Clone_List_GEnumWithinClass_g(MyEnumList);
+            typedClone.MyEnumList = Clone_List_GEnumWithinClass_g(MyEnumList, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -446,7 +446,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        private static List<EnumWithinClass> Clone_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone)
+        private static List<EnumWithinClass> Clone_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {

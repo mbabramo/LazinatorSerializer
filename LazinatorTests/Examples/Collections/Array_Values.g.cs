@@ -96,9 +96,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Array_Values typedClone = (Array_Values) clone;
-            typedClone.MyArrayInt = Clone_int_B_b(MyArrayInt);
-            typedClone.MyArrayNullableInt = Clone_int_C63_B_b(MyArrayNullableInt);
-            typedClone.MyJaggedArrayInt = Clone_int_B_b_B_b(MyJaggedArrayInt);
+            typedClone.MyArrayInt = Clone_int_B_b(MyArrayInt, includeChildrenMode);
+            typedClone.MyArrayNullableInt = Clone_int_C63_B_b(MyArrayNullableInt, includeChildrenMode);
+            typedClone.MyJaggedArrayInt = Clone_int_B_b_B_b(MyJaggedArrayInt, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -554,7 +554,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[] Clone_int_B_b(int[] itemToClone)
+        private static int[] Clone_int_B_b(int[] itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -607,7 +607,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int?[] Clone_int_C63_B_b(int?[] itemToClone)
+        private static int?[] Clone_int_C63_B_b(int?[] itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -687,7 +687,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][] Clone_int_B_b_B_b(int[][] itemToClone)
+        private static int[][] Clone_int_B_b_B_b(int[][] itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -705,7 +705,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (int[]) Clone_int_B_b(itemToClone[itemIndex]);
+                    var itemCopied = (int[]) Clone_int_B_b(itemToClone[itemIndex], includeChildrenMode);
                     collection[itemIndex] = itemCopied;
                 }
             }

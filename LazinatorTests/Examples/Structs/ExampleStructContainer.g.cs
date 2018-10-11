@@ -109,8 +109,8 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyExampleStruct = (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) ? default(ExampleStruct) : (ExampleStruct) MyExampleStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyListExampleStruct = Clone_List_GExampleStruct_g(MyListExampleStruct);
-            typedClone.MyListNullableExampleStruct = Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct);
+            typedClone.MyListExampleStruct = Clone_List_GExampleStruct_g(MyListExampleStruct, includeChildrenMode);
+            typedClone.MyListNullableExampleStruct = Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct, includeChildrenMode);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -709,7 +709,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<ExampleStruct> Clone_List_GExampleStruct_g(List<ExampleStruct> itemToClone)
+        private static List<ExampleStruct> Clone_List_GExampleStruct_g(List<ExampleStruct> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -721,7 +721,7 @@ namespace LazinatorTests.Examples
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (ExampleStruct) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                var itemCopied = (ExampleStruct) itemToClone[itemIndex].CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 collection.Add(itemCopied);
             }
             return collection;
@@ -767,7 +767,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<WNullableStruct<ExampleStruct>> Clone_List_GWNullableStruct_GExampleStruct_g_g(List<WNullableStruct<ExampleStruct>> itemToClone)
+        private static List<WNullableStruct<ExampleStruct>> Clone_List_GWNullableStruct_GExampleStruct_g_g(List<WNullableStruct<ExampleStruct>> itemToClone, IncludeChildrenMode includeChildrenMode)
         {
             if (itemToClone == null)
             {
@@ -779,7 +779,7 @@ namespace LazinatorTests.Examples
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (WNullableStruct<ExampleStruct>) itemToClone[itemIndex].CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                var itemCopied = (WNullableStruct<ExampleStruct>) itemToClone[itemIndex].CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 collection.Add(itemCopied);
             }
             return collection;
