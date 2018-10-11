@@ -115,9 +115,9 @@ namespace LazinatorTests.Tests
             if (index == 0)
                 return null;
             else if (index == 1)
-                return new ExampleChild() {MyLong = 123123, MyShort = 543};
+                return new ExampleChild() { MyLong = 123123, MyShort = 543, MyExampleGrandchild = new ExampleGrandchild() { AString = "hello", MyInt = 123 } };
             else if (index == 2)
-                return new ExampleChild() {MyLong = 999888, MyShort = -23};
+                return new ExampleChild() {MyLong = 999888, MyShort = -23, MyExampleGrandchild = new ExampleGrandchild() { AString = "x", MyInt = 3456345 } };
             else if (index == 3)
                 return new ExampleChildInherited() {MyLong = 234123, MyInt = 5432, MyShort = 2341}; // the subtype
             throw new NotImplementedException();

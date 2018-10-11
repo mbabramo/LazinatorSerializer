@@ -108,7 +108,7 @@ namespace LazinatorTests.Tests
             v2.MyList.Add(GetExampleChild(1));
 
             var results = v2.GetDirtyNodes(true);
-            results.Count().Should().Be(4);
+            results.Count().Should().Be(7);
 
             var v5 = v2.CloneLazinatorTyped();
             v5.MyList[1].MyLong = -98765;
@@ -173,11 +173,17 @@ $@"LazinatorTests.Examples.Example
         MyLong: 123123
         MyShort: 543
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
+            AString: hello
+            MyInt: 123
         MyWrapperContainer: NULL
     MyChild2: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
+            AString: hello
+            MyInt: 123
         MyWrapperContainer: NULL
     MyChild2Previous: NULL
     MyInterfaceImplementer: NULL
@@ -215,6 +221,9 @@ $@"LazinatorTests.Examples.Example
         MyLong: 123123
         MyShort: 543
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
+            AString: hello
+            MyInt: 123
         MyWrapperContainer: LazinatorTests.Examples.Structs.WrapperContainer
             WrappedInt: 17
                 WrappedValue: 17
@@ -222,6 +231,9 @@ $@"LazinatorTests.Examples.Example
         MyLong: 999888
         MyShort: -23
         ByteSpan: System.ReadOnlySpan<Byte>[0]
+        MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
+            AString: x
+            MyInt: 3456345
         MyWrapperContainer: NULL
     MyChild2Previous: NULL
     MyInterfaceImplementer: NULL

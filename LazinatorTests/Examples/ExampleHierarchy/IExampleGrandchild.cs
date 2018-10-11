@@ -8,7 +8,7 @@ namespace LazinatorTests.Examples
     [Lazinator((int)ExampleUniqueIDs.ExampleGrandchild)]
     public interface IExampleGrandchild : ILazinator
     {
-        string MyString { get; set; }
+        string AString { get; set; }
         int MyInt { get; set; }
     }
 }

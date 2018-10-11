@@ -71,7 +71,7 @@ namespace LazinatorTests.Tests
             var propertiesThisLevel = properties.Where(x => x.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
             var propertiesLowerLevels = properties.Where(x => x.LevelInfo != PropertyWithDefinitionInfo.Level.IsDefinedThisLevel).Select(x => x.Property).ToList();
             propertiesThisLevel.Count().Should().Be(1);
-            propertiesLowerLevels.Count().Should().Be(4);
+            propertiesLowerLevels.Count().Should().Be(5);
             propertiesThisLevel[0].Name.Should().Be("MyInt");
             propertiesThisLevel[0].GetMethod.Name.Should().Be("get_MyInt");
             propertiesThisLevel[0].SetMethod.Name.Should().Be("set_MyInt");
@@ -80,18 +80,22 @@ namespace LazinatorTests.Tests
             propertiesLowerLevels[0].GetMethod.Name.Should().Be("get_ByteSpan");
             propertiesLowerLevels[0].SetMethod.Name.Should().Be("set_ByteSpan");
             propertiesLowerLevels[0].Type.Name.Should().Be("ReadOnlySpan");
-            propertiesLowerLevels[1].Name.Should().Be("MyLong");
-            propertiesLowerLevels[1].GetMethod.Name.Should().Be("get_MyLong");
-            propertiesLowerLevels[1].SetMethod.Name.Should().Be("set_MyLong");
-            propertiesLowerLevels[1].Type.Name.Should().Be("Int64");
-            propertiesLowerLevels[2].Name.Should().Be("MyShort");
-            propertiesLowerLevels[2].GetMethod.Name.Should().Be("get_MyShort");
-            propertiesLowerLevels[2].SetMethod.Name.Should().Be("set_MyShort");
-            propertiesLowerLevels[2].Type.Name.Should().Be("Int16");
-            propertiesLowerLevels[3].Name.Should().Be("MyWrapperContainer");
-            propertiesLowerLevels[3].GetMethod.Name.Should().Be("get_MyWrapperContainer");
-            propertiesLowerLevels[3].SetMethod.Name.Should().Be("set_MyWrapperContainer");
-            propertiesLowerLevels[3].Type.Name.Should().Be("WrapperContainer");
+            propertiesLowerLevels[1].Name.Should().Be("MyExampleGrandchild");
+            propertiesLowerLevels[1].GetMethod.Name.Should().Be("get_MyExampleGrandchild");
+            propertiesLowerLevels[1].SetMethod.Name.Should().Be("set_MyExampleGrandchild");
+            propertiesLowerLevels[1].Type.Name.Should().Be("ExampleGrandchild");
+            propertiesLowerLevels[2].Name.Should().Be("MyLong");
+            propertiesLowerLevels[2].GetMethod.Name.Should().Be("get_MyLong");
+            propertiesLowerLevels[2].SetMethod.Name.Should().Be("set_MyLong");
+            propertiesLowerLevels[2].Type.Name.Should().Be("Int64");
+            propertiesLowerLevels[3].Name.Should().Be("MyShort");
+            propertiesLowerLevels[3].GetMethod.Name.Should().Be("get_MyShort");
+            propertiesLowerLevels[3].SetMethod.Name.Should().Be("set_MyShort");
+            propertiesLowerLevels[3].Type.Name.Should().Be("Int16");
+            propertiesLowerLevels[4].Name.Should().Be("MyWrapperContainer");
+            propertiesLowerLevels[4].GetMethod.Name.Should().Be("get_MyWrapperContainer");
+            propertiesLowerLevels[4].SetMethod.Name.Should().Be("set_MyWrapperContainer");
+            propertiesLowerLevels[4].Type.Name.Should().Be("WrapperContainer");
         }
 
         [Fact]
@@ -108,14 +112,18 @@ namespace LazinatorTests.Tests
             propertiesThisLevel[0].GetMethod.Name.Should().Be("get_ByteSpan");
             propertiesThisLevel[0].SetMethod.Name.Should().Be("set_ByteSpan");
             propertiesThisLevel[0].Type.Name.Should().Be("ReadOnlySpan");
-            propertiesThisLevel[1].Name.Should().Be("MyLong");
-            propertiesThisLevel[1].GetMethod.Name.Should().Be("get_MyLong");
-            propertiesThisLevel[1].SetMethod.Name.Should().Be("set_MyLong");
-            propertiesThisLevel[1].Type.Name.Should().Be("Int64");
-            propertiesThisLevel[2].Name.Should().Be("MyShort");
-            propertiesThisLevel[2].GetMethod.Name.Should().Be("get_MyShort");
-            propertiesThisLevel[2].SetMethod.Name.Should().Be("set_MyShort");
-            propertiesThisLevel[2].Type.Name.Should().Be("Int16");
+            propertiesThisLevel[1].Name.Should().Be("MyExampleGrandchild");
+            propertiesThisLevel[1].GetMethod.Name.Should().Be("get_MyExampleGrandchild");
+            propertiesThisLevel[1].SetMethod.Name.Should().Be("set_MyExampleGrandchild");
+            propertiesThisLevel[1].Type.Name.Should().Be("ExampleGrandchild");
+            propertiesThisLevel[2].Name.Should().Be("MyLong");
+            propertiesThisLevel[2].GetMethod.Name.Should().Be("get_MyLong");
+            propertiesThisLevel[2].SetMethod.Name.Should().Be("set_MyLong");
+            propertiesThisLevel[2].Type.Name.Should().Be("Int64");
+            propertiesThisLevel[3].Name.Should().Be("MyShort");
+            propertiesThisLevel[3].GetMethod.Name.Should().Be("get_MyShort");
+            propertiesThisLevel[3].SetMethod.Name.Should().Be("set_MyShort");
+            propertiesThisLevel[3].Type.Name.Should().Be("Int16");
             propertiesLowerLevels.Count().Should().Be(0);
         }
 
