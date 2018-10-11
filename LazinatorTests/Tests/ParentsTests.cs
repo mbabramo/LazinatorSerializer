@@ -415,9 +415,17 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
-            int repetitions = 100; 
+            int repetitions = 100;
+            Random r = new Random();
+            long randLong = 0;
+            short randShort = 0;
             for (int i = 0; i < repetitions; i++)
             {
+                if (i == 0)
+                {
+                    e.MyChild1.MyLong = 0;
+                    e.MyChild1.MyShort = 0;
+                }
                 if (i == 5)
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
@@ -428,7 +436,20 @@ namespace LazinatorTests.Tests
                 if (MutateThisRepetition(i, mutateParent))
                     e.MyBool = !e.MyBool;
                 if (MutateThisRepetition(i, mutateChild))
-                    e.MyChild1.MyLong++;
+                {
+                    if (i > 2)
+                    {
+                        e.MyChild1.MyLong.Should().Be(randLong);
+                        e.MyChild1.MyShort.Should().Be(randShort);
+                    }
+                    unchecked
+                    {
+                        randLong = r.Next(0, 2) == 0 ? r.Next(1, 100) : r.Next();
+                        randShort = (short) (r.Next(0, 2) == 0 ? r.Next(1, 100) : r.Next());
+                    }
+                    e.MyChild1.MyLong = randLong;
+                    e.MyChild1.MyShort = randShort; 
+                }
                 if (makeChildUpToDate)
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();
                 if (makeParentUpToDate)

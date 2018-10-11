@@ -10,6 +10,7 @@ namespace LazinatorTests.Examples
     {
         long MyLong { get; set; }
         short MyShort { get; set; }
+        ExampleGrandchild MyExampleGrandchild { get; set; }
         WrapperContainer MyWrapperContainer { get; set; }
         ReadOnlySpan<byte> ByteSpan { get; set; }
     }

@@ -82,6 +82,7 @@
         ExampleStructContainingStructContainer,
         ContainerForExampleWithDefault,
         ClosedGenericWithGeneric,
-        NonLazinatorInterchangeableStruct_LazinatorInterchange
+        NonLazinatorInterchangeableStruct_LazinatorInterchange,
+        ExampleGrandchild
     }
 }
