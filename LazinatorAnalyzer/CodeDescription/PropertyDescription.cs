@@ -1330,9 +1330,9 @@ namespace Lazinator.CodeDescription
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, includeChildrenMode);";
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName});";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, includeChildrenMode);";
             sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
         }
 
@@ -1378,7 +1378,7 @@ namespace Lazinator.CodeDescription
             string source = (innerFullType == "byte") ? "itemToClone" : $"MemoryMarshal.Cast<{innerFullType}, byte>(itemToClone)";
             string toReturn = (innerFullType == "byte") ? "clone" : $"MemoryMarshal.Cast<byte, {innerFullType}>(clone)";
 
-            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
+            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, IncludeChildrenMode includeChildrenMode)
             {{
                 var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullTypeSizeEquivalent})]);
                 {source}.CopyTo(clone);
@@ -1514,7 +1514,7 @@ namespace Lazinator.CodeDescription
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
+                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, IncludeChildrenMode includeChildrenMode)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if ({GetNullCheck("itemToClone")})
                         {{
@@ -1656,12 +1656,12 @@ namespace Lazinator.CodeDescription
             if (IsLazinator)
             {
                 if (IsLazinatorStruct)
-                    cloneString = $"{itemString}.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer)";
+                    cloneString = $"{itemString}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
                 else
-                    cloneString = $"{itemString}?.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer)";
+                    cloneString = $"{itemString}?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
             }
             else if (SupportedCollectionType != null || SupportedTupleType != null)
-                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString})";
+                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString}, includeChildrenMode)";
             else if (IsPrimitive || IsNonLazinatorType)
                 cloneString = itemString;
             else
@@ -2168,7 +2168,7 @@ namespace Lazinator.CodeDescription
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}({innerClones})";
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert)
+                    private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode)
                     {{
                         {IIF(Nullable, $@"if ({GetNullCheck("itemToConvert")})
                         {{
@@ -2217,7 +2217,7 @@ namespace Lazinator.CodeDescription
                         }}
 
 
-                        private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone)
+                        private static {AppropriatelyQualifiedTypeName} Clone_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, IncludeChildrenMode includeChildrenMode)
                         {{
                             if ({GetNullCheck("itemToClone")})
                             {{
