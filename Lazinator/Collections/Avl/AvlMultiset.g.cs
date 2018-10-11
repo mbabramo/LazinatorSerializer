@@ -219,12 +219,10 @@ namespace Lazinator.Collections.Avl
         protected int _NumItemsAdded;
         public int NumItemsAdded
         {
-            [DebuggerStepThrough]
             get
             {
                 return _NumItemsAdded;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -234,7 +232,6 @@ namespace Lazinator.Collections.Avl
         protected AvlSet<LazinatorTuple<T, WInt>> _UnderlyingSet;
         public virtual AvlSet<LazinatorTuple<T, WInt>> UnderlyingSet
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_UnderlyingSet_Accessed)
@@ -253,7 +250,6 @@ namespace Lazinator.Collections.Avl
                 } 
                 return _UnderlyingSet;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (_UnderlyingSet != null)
@@ -371,6 +367,7 @@ namespace Lazinator.Collections.Avl
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Avl.AvlMultiset<T> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -405,6 +402,9 @@ namespace Lazinator.Collections.Avl
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Avl.AvlMultiset<T> starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -420,7 +420,12 @@ namespace Lazinator.Collections.Avl
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, NumItemsAdded value {_NumItemsAdded}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _NumItemsAdded);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, UnderlyingSet (accessed? {_UnderlyingSet_Accessed}) (backing var null? {_UnderlyingSet == null}) ");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -434,10 +439,12 @@ namespace Lazinator.Collections.Avl
             {
                 _UnderlyingSet_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _AvlMultiset_T_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of AvlMultiset<T>) ");
         }
         
     }

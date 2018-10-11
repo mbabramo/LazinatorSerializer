@@ -294,10 +294,11 @@ public class MyOtherClass
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, name, ".g.cs", out string codeBehindPath, out string codeBehind);
             LazinatorConfig config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
 
-            //uncomment to include tracing code
-            //if (config == null)
-            //    config = new LazinatorConfig();
-            //config.IncludeTracingCode = true;
+            // uncomment to include tracing code
+            // DEBUG
+            if (config == null)
+                config = new LazinatorConfig();
+            config.IncludeTracingCode = true;
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
