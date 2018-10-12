@@ -326,7 +326,6 @@ namespace Lazinator.Collections
                     {
                         var itemIndex = i; // avoid closure problem
                         var underlyingItem = UnderlyingList[itemIndex];
-                        var DEBUG = GetListMemberSlice(itemIndex);
                         WriteChild(ref w, underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that updated is not here. Cloning is the only safe way to get a clean hierarchy, because setting .IsDirty = true will not clear .IsDirty from nested structs.
@@ -337,7 +336,15 @@ namespace Lazinator.Collections
                         offsetList.AddOffset(offset);
                     }
                 });
-                MainListSerialized = writer.LazinatorMemory.Memory.Slice(originalStartingPosition);
+                var updatedMainListSerialized = writer.LazinatorMemory.Memory.Slice(originalStartingPosition);
+                if (updateStoredBuffer)
+                    MainListSerialized = updatedMainListSerialized;
+                else
+                { // since we're not updating the stored buffer, we want to avoid linking with this new buffer, so we make a copy of the relevant portion of the buffer
+                    byte[] b = new byte[updatedMainListSerialized.Span.Length];
+                    updatedMainListSerialized.Span.CopyTo(b);
+                    MainListSerialized = new Memory<byte>(b);
+                }
                 _Offsets_Accessed = true;
                 _Offsets = offsetList;
                 _Offsets.IsDirty = true;
