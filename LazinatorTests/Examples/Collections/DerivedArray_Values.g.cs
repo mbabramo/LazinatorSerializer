@@ -178,6 +178,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Collections.DerivedArray_Values ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -196,6 +197,8 @@ namespace LazinatorTests.Examples.Collections
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
+            TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
+            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyArrayInt_DerivedLevel_Accessed)
             {
@@ -213,10 +216,12 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt_DerivedLevel_ByteIndex = startOfObjectPosition - startPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _DerivedArray_Values_EndByteIndex = writer.Position - startPosition;
             }
+            TabbedText.WriteLine($"Byte {writer.Position} (end of DerivedArray_Values) ");
         }
         
         /* Conversion of supported collections and tuples */

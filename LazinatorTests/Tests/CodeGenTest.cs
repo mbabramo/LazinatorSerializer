@@ -295,9 +295,10 @@ public class MyOtherClass
             LazinatorConfig config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
 
             // uncomment to include tracing code
-            //if (config == null)
-            //    config = new LazinatorConfig();
-            //config.IncludeTracingCode = true;
+            // DEBUG
+            if (config == null)
+                config = new LazinatorConfig();
+            config.IncludeTracingCode = true;
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);

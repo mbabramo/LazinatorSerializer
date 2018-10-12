@@ -71,8 +71,11 @@ namespace Lazinator.Collections
             }
         }
 
+        static int DEBUG = 0;
+
         private T GetSerializedContents(int index)
         {
+            DEBUG++;
             var byteSpan = GetListMemberSlice(index);
             if (byteSpan.Length == 0)
                 return default;
@@ -119,8 +122,12 @@ namespace Lazinator.Collections
             else
                 offset = Offsets[index - 1];
             int nextOffset = Offsets[index];
-            var byteSpan = MainListSerialized.Slice(offset, nextOffset - offset);
-            return byteSpan;
+
+            // Now, produce the slice. We don't use MainListSerialized directly, because that will slice directly into Memory<byte>. We need to slice into LazinatorMemory,
+            // to ensure that buffers can be tracked. Otherwise, reserializing a list memory will result in disposing the old memory buffer, but that memory buffer will still be in use.
+            LazinatorMemory mainListSerializedMemory = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
+            var childMemory = mainListSerializedMemory.Slice(offset, nextOffset - offset);
+            return childMemory;
         }
 
         public T this[int index]
@@ -320,6 +327,7 @@ namespace Lazinator.Collections
                     {
                         var itemIndex = i; // avoid closure problem
                         var underlyingItem = UnderlyingList[itemIndex];
+                        var DEBUG = GetListMemberSlice(itemIndex);
                         WriteChild(ref w, underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that updated is not here. Cloning is the only safe way to get a clean hierarchy, because setting .IsDirty = true will not clear .IsDirty from nested structs.
