@@ -123,10 +123,9 @@ namespace Lazinator.Collections
                 offset = Offsets[index - 1];
             int nextOffset = Offsets[index];
 
-            // Now, produce the slice. We don't use MainListSerialized directly, because that will slice directly into Memory<byte>. We need to slice into LazinatorMemory,
-            // to ensure that buffers can be tracked. Otherwise, reserializing a list memory will result in disposing the old memory buffer, but that memory buffer will still be in use.
-            LazinatorMemory mainListSerializedMemory = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
-            var childMemory = mainListSerializedMemory.Slice(offset, nextOffset - offset);
+            // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
+            // write properties. But we include the OriginalSource to prevent objects from being disposed.
+            var childMemory = new LazinatorMemory(new SimpleMemoryOwner<byte>(MainListSerialized), offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
             return childMemory;
         }
 
