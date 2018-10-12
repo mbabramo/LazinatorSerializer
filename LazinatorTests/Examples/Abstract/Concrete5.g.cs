@@ -227,7 +227,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete5 ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -246,16 +245,8 @@ namespace LazinatorTests.Examples.Abstract
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, String4 value {_String4}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String4);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, String5 value {_String5}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String5);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, IntList4 (accessed? {_IntList4_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList4_Accessed)
             {
@@ -273,9 +264,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList4_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, IntList5 (accessed? {_IntList5_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList5_Accessed)
             {
@@ -293,12 +281,10 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList5_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Concrete5_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Concrete5) ");
         }
         
         /* Conversion of supported collections and tuples */

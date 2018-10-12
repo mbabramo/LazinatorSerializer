@@ -113,7 +113,6 @@ namespace Lazinator.Collections
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.LazinatorArray<T> ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -131,7 +130,6 @@ namespace Lazinator.Collections
         {
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorArray<T>) ");
         }
         
     }

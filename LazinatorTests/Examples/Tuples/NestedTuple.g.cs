@@ -306,7 +306,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Tuples.NestedTuple ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -341,9 +340,6 @@ namespace LazinatorTests.Examples.Tuples
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
             // header information
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.NestedTuple starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (LazinatorGenericID.IsEmpty)
@@ -359,8 +355,6 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            TabbedText.WriteLine($"Byte {writer.Position}, MyNestedTuple (accessed? {_MyNestedTuple_Accessed})");
-            TabbedText.Tabs++;
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyNestedTuple_Accessed)
             {
@@ -378,12 +372,10 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyNestedTuple_ByteIndex = startOfObjectPosition - startPosition;
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _NestedTuple_EndByteIndex = writer.Position - startPosition;
             }
-            TabbedText.WriteLine($"Byte {writer.Position} (end of NestedTuple) ");
         }
         
         /* Conversion of supported collections and tuples */
