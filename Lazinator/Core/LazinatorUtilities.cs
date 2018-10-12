@@ -749,7 +749,7 @@ namespace Lazinator.Core
             {
                 var ownedMemory = existingBuffer.OwnedMemory;
                 if (parents.ParentSharesBuffer(ownedMemory) || (!isTopOfHierarchy && !parents.Any()))
-                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, so we must assume that this is a Lazinator embedded in a non-Lazinator in a Lazinator hierarchy to be on the safe side
+                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, so we must assume that this is a Lazinator embedded in a non-Lazinator in a Lazinator hierarchy to be on the safe side.
                     existingBuffer.DisposeWithThis(newBuffer);
                 }
                 else

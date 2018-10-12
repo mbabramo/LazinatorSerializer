@@ -11,6 +11,7 @@ using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using Lazinator.Buffers;
+using Lazinator.Collections.Dictionary;
 
 namespace LazinatorTests.Tests
 {
@@ -462,5 +463,109 @@ namespace LazinatorTests.Tests
         }
         
 
+        const int dictsize = 25;
+
+        [Fact]
+        public void CanCloneListOfLazinatorsAndThenEnsureUpToDate()
+        {
+            var l = new LazinatorList<Example>() { GetTypicalExample(), GetTypicalExample() };
+            var l2 = l.CloneLazinatorTyped();
+            var l3 = l.CloneLazinatorTyped();
+            l.EnsureLazinatorMemoryUpToDate();
+        }
+
+        [Fact]
+        public void CanCloneListOfStructsAndThenEnsureUpToDate()
+        {
+            var l = new LazinatorList<WInt>() { 1 };
+            var l2 = l.CloneLazinatorTyped();
+            var l3 = l.CloneLazinatorTyped();
+            l.EnsureLazinatorMemoryUpToDate();
+        }
+
+        [Fact]
+        public void CanCloneDictionaryAndThenEnsureUpToDate()
+        {
+            // Note: This is a sequence that proved problematic in the next test
+            var d = GetDictionary();
+            var d2 = d.CloneLazinatorTyped();
+            var d3 = d.CloneLazinatorTyped();
+            d.EnsureLazinatorMemoryUpToDate();
+        }
+
+        [Fact]
+        public void CanEnsureUpToDateInLazinatorDictionary()
+        {
+            // Note: The purpose of this test is to make sure that data structures containing LazinatorLists can have buffers updated without causing object disposed exceptions, if a child is updated when its parent still exists.
+            Random r = new Random(0);
+            for (int i = 0; i < 1000; i++)
+            {
+                List<LazinatorDictionary<WInt, Example>> dictionaries = new List<LazinatorDictionary<WInt, Example>>();
+                dictionaries.Add(GetDictionary());
+                // operations: (1) clone a dictionary and add to the list; (2) mutate an element of a dictionary or ensure that an element is up to date; (3) ensure that dictionary is up to date
+                int numOperationsPerAttempt = 3; // DEBUG -- set to higher number
+                if (i == 131)
+                {
+                    var DEBUG = 0;
+                }
+                for (int j = 0; j < numOperationsPerAttempt; j++)
+                {
+                    int dict_index = r.Next(dictionaries.Count());
+                    var d = dictionaries[dict_index];
+                    int op = r.Next(3) + 1;
+                    switch (op)
+                    {
+                        case 1:
+                            dictionaries.Add(d.CloneLazinatorTyped());
+                            break;
+                        case 2:
+                            int itemIndex = r.Next(dictsize);
+                            Example e = d[itemIndex];
+                            bool applyToChild = r.Next(2) == 0;
+                            bool child1 = r.Next(2) == 0;
+                            bool mutate = r.Next(2) == 0;
+                            if (mutate)
+                            {
+                                if (applyToChild)
+                                {
+                                    if (child1)
+                                        e.MyChild1.MyLong = r.Next();
+                                    else
+                                        e.MyChild2.MyLong = r.Next();
+                                }
+                                else
+                                    e.MyChar = (char)(byte)r.Next(255);
+                            }
+                            else
+                            {
+                                if (applyToChild)
+                                {
+                                    if (child1)
+                                        e.MyChild1.EnsureLazinatorMemoryUpToDate();
+                                    else
+                                        e.MyChild2.EnsureLazinatorMemoryUpToDate();
+                                }
+                                else
+                                    e.EnsureLazinatorMemoryUpToDate();
+                            }
+                            break;
+                        case 3:
+                            d.EnsureLazinatorMemoryUpToDate();
+                            break;
+                    }
+                }
+            }
+
+        }
+
+        private LazinatorDictionary<WInt, Example> GetDictionary()
+        {
+            LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
+            for (int i = 0; i < dictsize; i++)
+            {
+                d[i] = GetTypicalExample();
+            }
+            return d;
+        }
     }
 }
