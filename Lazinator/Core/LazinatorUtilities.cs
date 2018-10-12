@@ -176,7 +176,7 @@ namespace Lazinator.Core
                         if (!skipLength)
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
                         LazinatorMemory newBuffer = writer.Slice(startPosition);
-                        var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents);
+                        var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents, false);
                         child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer.
                     }
                 }
@@ -743,13 +743,13 @@ namespace Lazinator.Core
         /// <param name="existingBuffer">The existing buffer</param>
         /// <param name="newBuffer">The new buffer</param>
         /// <param name="parents"></param>
-        public static LazinatorMemory ReplaceBuffer(LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents, bool isTopOfHierarchy = true)
+        public static LazinatorMemory ReplaceBuffer(LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents, bool isTopOfHierarchy, bool isStruct)
         {
             if (existingBuffer != null)
             {
                 var ownedMemory = existingBuffer.OwnedMemory;
-                if (parents.ParentSharesBuffer(ownedMemory) || (!isTopOfHierarchy && !parents.Any()))
-                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, so we must assume that this is a Lazinator embedded in a non-Lazinator in a Lazinator hierarchy to be on the safe side.
+                if (parents.ParentSharesBuffer(ownedMemory) || (!isTopOfHierarchy && !parents.Any()) || isStruct)
+                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, so we must assume that this is a Lazinator embedded in a non-Lazinator in a Lazinator hierarchy to be on the safe side. 
                     existingBuffer.DisposeWithThis(newBuffer);
                 }
                 else
