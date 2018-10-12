@@ -463,21 +463,23 @@ namespace LazinatorTests.Tests
         }
         
 
-        const int dictsize = 25;
+        const int dictsize = 5;
+
 
         [Fact]
-        public void CanCloneListOfLazinatorsAndThenEnsureUpToDate()
+        public void CanCloneListOfStructsAndThenEnsureUpToDate()
         {
-            var l = new LazinatorList<Example>() { GetTypicalExample(), GetTypicalExample() };
+            // Note: This works because of IsStruct parameter in ReplaceBuffer. Without that parameter, the last call would lead to disposal of memory still needed.
+            var l = new LazinatorList<WInt>() { 1 };
             var l2 = l.CloneLazinatorTyped();
             var l3 = l.CloneLazinatorTyped();
             l.EnsureLazinatorMemoryUpToDate();
         }
 
         [Fact]
-        public void CanCloneListOfStructsAndThenEnsureUpToDate()
+        public void CanCloneListOfLazinatorsAndThenEnsureUpToDate()
         {
-            var l = new LazinatorList<WInt>() { 1 };
+            var l = new LazinatorList<Example>() { GetTypicalExample(), GetTypicalExample() };
             var l2 = l.CloneLazinatorTyped();
             var l3 = l.CloneLazinatorTyped();
             l.EnsureLazinatorMemoryUpToDate();
@@ -498,16 +500,12 @@ namespace LazinatorTests.Tests
         {
             // Note: The purpose of this test is to make sure that data structures containing LazinatorLists can have buffers updated without causing object disposed exceptions, if a child is updated when its parent still exists.
             Random r = new Random(0);
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 List<LazinatorDictionary<WInt, Example>> dictionaries = new List<LazinatorDictionary<WInt, Example>>();
                 dictionaries.Add(GetDictionary());
                 // operations: (1) clone a dictionary and add to the list; (2) mutate an element of a dictionary or ensure that an element is up to date; (3) ensure that dictionary is up to date
-                int numOperationsPerAttempt = 3; // DEBUG -- set to higher number
-                if (i == 131)
-                {
-                    var DEBUG = 0;
-                }
+                int numOperationsPerAttempt = 5;
                 for (int j = 0; j < numOperationsPerAttempt; j++)
                 {
                     int dict_index = r.Next(dictionaries.Count());
