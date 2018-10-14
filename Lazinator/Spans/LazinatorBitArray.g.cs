@@ -114,7 +114,7 @@ namespace Lazinator.Spans
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {

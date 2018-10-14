@@ -434,7 +434,7 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
-                            get => _IsDirty || LazinatorObjectBytes.Length == 0;
+                            get => _IsDirty{IIF(!(ObjectType == LazinatorObjectType.Struct), "|| LazinatorObjectBytes.Length == 0")};
                             [DebuggerStepThrough]
                             set
                             {{
@@ -589,7 +589,8 @@ namespace Lazinator.CodeDescription
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
-                            ")}{AppendCloneProperties()}}}")}";
+                            ")}{AppendCloneProperties()}{IIF(ObjectType == LazinatorObjectType.Struct, $@"
+                            clone.IsDirty = false;")}}}")}";
 
         }
 

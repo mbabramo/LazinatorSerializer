@@ -110,7 +110,7 @@ namespace LazinatorTests.Examples.Abstract
         public override bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {

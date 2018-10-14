@@ -151,7 +151,7 @@ namespace Lazinator.Core
             if (!childHasBeenAccessed && child != null)
             {
                 childStorage = getChildSliceFn();
-                if (childStorage.Memory.Length == 0)
+                if (childStorage == null || childStorage.Memory.Length == 0)
                     childCouldHaveChanged = true; // child might be an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
             }
             else
@@ -161,7 +161,7 @@ namespace Lazinator.Core
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to EnsureLazinatorMemoryUpToDate.
                     childStorage = child.LazinatorMemoryStorage;
-                    if (childStorage.Memory.Length != 0)
+                    if (childStorage != null && childStorage.Memory.Length != 0)
                         childCouldHaveChanged = false;
                 }
             }
@@ -241,7 +241,7 @@ namespace Lazinator.Core
         {
             void action(ref BinaryBufferWriter w)
             {
-                if (child.IsDirty || child.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != child.OriginalIncludeChildrenMode)
+                if (child.LazinatorMemoryStorage == null || child.LazinatorMemoryStorage.Length == 0 || child.IsDirty || child.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != child.OriginalIncludeChildrenMode)
                     child.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
                     w.Write(child.LazinatorMemoryStorage.Span); // the child has been accessed, but is unchanged, so we can use the storage holding the child

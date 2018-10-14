@@ -103,364 +103,365 @@ namespace LazinatorTests.Examples
             {
                 clone.MyExampleStruct = (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) ? default(ExampleStruct) : (ExampleStruct) MyExampleStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-        }
-        
-        public bool HasChanged { get; set; }
-        
-        bool _IsDirty;
-        public bool IsDirty
-        {
-            [DebuggerStepThrough]
-            get => _IsDirty || LazinatorObjectBytes.Length == 0;
-            [DebuggerStepThrough]
-            set
+            
+            clone.IsDirty = false;}
+            
+            public bool HasChanged { get; set; }
+            
+            bool _IsDirty;
+            public bool IsDirty
             {
-                if (_IsDirty != value)
+                [DebuggerStepThrough]
+                get => _IsDirty;
+                [DebuggerStepThrough]
+                set
                 {
-                    _IsDirty = value;
-                    if (_IsDirty)
+                    if (_IsDirty != value)
                     {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        HasChanged = true;
+                        _IsDirty = value;
+                        if (_IsDirty)
+                        {
+                            LazinatorParents.InformParentsOfDirtiness();
+                            HasChanged = true;
+                        }
                     }
                 }
             }
-        }
-        
-        bool _DescendantHasChanged;
-        public bool DescendantHasChanged
-        {
-            [DebuggerStepThrough]
-            get => _DescendantHasChanged || (_MyExampleStruct_Accessed && (MyExampleStruct.HasChanged || MyExampleStruct.DescendantHasChanged));
-            [DebuggerStepThrough]
-            set
+            
+            bool _DescendantHasChanged;
+            public bool DescendantHasChanged
             {
-                _DescendantHasChanged = value;
-            }
-        }
-        
-        bool _DescendantIsDirty;
-        public bool DescendantIsDirty
-        {
-            [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty));
-            [DebuggerStepThrough]
-            set
-            {
-                if (_DescendantIsDirty != value)
+                [DebuggerStepThrough]
+                get => _DescendantHasChanged || (_MyExampleStruct_Accessed && (MyExampleStruct.HasChanged || MyExampleStruct.DescendantHasChanged));
+                [DebuggerStepThrough]
+                set
                 {
-                    _DescendantIsDirty = value;
-                    if (_DescendantIsDirty)
+                    _DescendantHasChanged = value;
+                }
+            }
+            
+            bool _DescendantIsDirty;
+            public bool DescendantIsDirty
+            {
+                [DebuggerStepThrough]
+                get => _DescendantIsDirty || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty));
+                [DebuggerStepThrough]
+                set
+                {
+                    if (_DescendantIsDirty != value)
                     {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        _DescendantHasChanged = true;
+                        _DescendantIsDirty = value;
+                        if (_DescendantIsDirty)
+                        {
+                            LazinatorParents.InformParentsOfDirtiness();
+                            _DescendantHasChanged = true;
+                        }
                     }
                 }
             }
-        }
-        
-        public void DeserializeLazinator(LazinatorMemory serializedBytes)
-        {
-            LazinatorMemoryStorage = serializedBytes;
-            int length = Deserialize();
-            if (length != LazinatorMemoryStorage.Length)
+            
+            public void DeserializeLazinator(LazinatorMemory serializedBytes)
             {
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
-            }
-        }
-        
-        public LazinatorMemory LazinatorMemoryStorage
-        {
-            get;
-            set;
-        }
-        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-        
-        public void EnsureLazinatorMemoryUpToDate()
-        {
-            if (LazinatorMemoryStorage == null)
-            {
-                throw new NotSupportedException("Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead."); 
-            }
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                return;
-            }
-            LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
-            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-        }
-        
-        public int GetByteLength()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return LazinatorObjectBytes.Length;
-        }
-        
-        public uint GetBinaryHashCode32()
-        {
-            if (LazinatorMemoryStorage == null)
-            {
-                var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                return FarmhashByteSpans.Hash32(result.Span);
-            }
-            else
-            {
-                EnsureLazinatorMemoryUpToDate();
-                return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
-            }
-        }
-        
-        public ulong GetBinaryHashCode64()
-        {
-            if (LazinatorMemoryStorage == null)
-            {
-                var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                return FarmhashByteSpans.Hash64(result.Span);
-            }
-            else
-            {
-                EnsureLazinatorMemoryUpToDate();
-                return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
-            }
-        }
-        
-        public Guid GetBinaryHashCode128()
-        {
-            if (LazinatorMemoryStorage == null)
-            {
-                var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                return FarmhashByteSpans.Hash128(result.Span);
-            }
-            else
-            {
-                EnsureLazinatorMemoryUpToDate();
-                return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
-            }
-        }
-        
-        /* Property definitions */
-        
-        int _MyExampleStruct_ByteIndex;
-        private int _ExampleStructContainingStruct_EndByteIndex;
-        int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
-        
-        ExampleStruct _MyExampleStruct;
-        public ExampleStruct MyExampleStruct
-        {
-            get
-            {
-                if (!_MyExampleStruct_Accessed)
+                LazinatorMemoryStorage = serializedBytes;
+                int length = Deserialize();
+                if (length != LazinatorMemoryStorage.Length)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
+                }
+            }
+            
+            public LazinatorMemory LazinatorMemoryStorage
+            {
+                get;
+                set;
+            }
+            ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+            
+            public void EnsureLazinatorMemoryUpToDate()
+            {
+                if (LazinatorMemoryStorage == null)
+                {
+                    throw new NotSupportedException("Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead."); 
+                }
+                if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    return;
+                }
+                LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, true);
+                OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
+            }
+            
+            public int GetByteLength()
+            {
+                EnsureLazinatorMemoryUpToDate();
+                return LazinatorObjectBytes.Length;
+            }
+            
+            public uint GetBinaryHashCode32()
+            {
+                if (LazinatorMemoryStorage == null)
+                {
+                    var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                    return FarmhashByteSpans.Hash32(result.Span);
+                }
+                else
+                {
+                    EnsureLazinatorMemoryUpToDate();
+                    return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
+                }
+            }
+            
+            public ulong GetBinaryHashCode64()
+            {
+                if (LazinatorMemoryStorage == null)
+                {
+                    var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                    return FarmhashByteSpans.Hash64(result.Span);
+                }
+                else
+                {
+                    EnsureLazinatorMemoryUpToDate();
+                    return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
+                }
+            }
+            
+            public Guid GetBinaryHashCode128()
+            {
+                if (LazinatorMemoryStorage == null)
+                {
+                    var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                    return FarmhashByteSpans.Hash128(result.Span);
+                }
+                else
+                {
+                    EnsureLazinatorMemoryUpToDate();
+                    return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
+                }
+            }
+            
+            /* Property definitions */
+            
+            int _MyExampleStruct_ByteIndex;
+            private int _ExampleStructContainingStruct_EndByteIndex;
+            int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
+            
+            ExampleStruct _MyExampleStruct;
+            public ExampleStruct MyExampleStruct
+            {
+                get
+                {
+                    if (!_MyExampleStruct_Accessed)
                     {
-                        _MyExampleStruct = default(ExampleStruct);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                        _MyExampleStruct = new ExampleStruct();
-                        _MyExampleStruct.DeserializeLazinator(childData);
-                    }
+                        if (LazinatorObjectBytes.Length == 0)
+                        {
+                            _MyExampleStruct = default(ExampleStruct);
+                        }
+                        else
+                        {
+                            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
+                            _MyExampleStruct = new ExampleStruct();
+                            _MyExampleStruct.DeserializeLazinator(childData);
+                        }
+                        _MyExampleStruct_Accessed = true;
+                    } 
+                    return _MyExampleStruct;
+                }
+                set
+                {
+                    
+                    IsDirty = true;
+                    DescendantIsDirty = true;
+                    _MyExampleStruct = value;
                     _MyExampleStruct_Accessed = true;
-                } 
-                return _MyExampleStruct;
+                }
             }
-            set
+            bool _MyExampleStruct_Accessed;
+            public ExampleStruct MyExampleStruct_Copy
+            {
+                get
+                {
+                    if (!_MyExampleStruct_Accessed)
+                    {
+                        if (LazinatorObjectBytes.Length == 0)
+                        {
+                            return default(ExampleStruct);
+                        }
+                        else
+                        {
+                            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
+                            var toReturn = new ExampleStruct();
+                            toReturn.DeserializeLazinator(childData);
+                            toReturn.IsDirty = false;
+                            return toReturn;
+                        }
+                    }
+                    var cleanCopy = _MyExampleStruct;
+                    cleanCopy.IsDirty = false;
+                    cleanCopy.DescendantIsDirty = false;
+                    return cleanCopy;
+                }
+            }
+            
+            public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
+            {
+                bool match = (matchCriterion == null) ? true : matchCriterion(this);
+                bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
+                if (match)
+                {
+                    yield return this;
+                }
+                if (explore)
+                {
+                    foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    {
+                        yield return item.descendant;
+                    }
+                }
+            }
+            
+            public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
+            {
+                if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStruct_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))))
+                {
+                    yield return ("MyExampleStruct", default);
+                }
+                else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
+                {
+                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleStruct);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStruct);
+                    if (isMatch)
+                    {
+                        yield return ("MyExampleStruct", MyExampleStruct);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("MyExampleStruct" + "." + toYield.propertyName, toYield.descendant);
+                        }
+                    }
+                }
+                yield break;
+            }
+            
+            
+            public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+            {
+                yield break;
+            }
+            
+            public void FreeInMemoryObjects()
+            {
+                _MyExampleStruct = default;
+                _MyExampleStruct_Accessed = false;
+                IsDirty = false;
+                DescendantIsDirty = false;
+                HasChanged = false;
+                DescendantHasChanged = false;
+            }
+            
+            /* Conversion */
+            
+            public int LazinatorUniqueID => 218;
+            
+            bool ContainsOpenGenericParameters => false;
+            public LazinatorGenericIDType LazinatorGenericID
+            {
+                get => default;
+                set { }
+            }
+            
+            private bool _LazinatorObjectVersionChanged;
+            private int _LazinatorObjectVersionOverride;
+            public int LazinatorObjectVersion
+            {
+                get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : 0;
+                set
+                {
+                    _LazinatorObjectVersionOverride = value;
+                    _LazinatorObjectVersionChanged = true;
+                }
+            }
+            
+            
+            public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+            {
+                ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+                _MyExampleStruct_ByteIndex = bytesSoFar;
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+                {
+                    bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                }
+                _ExampleStructContainingStruct_EndByteIndex = bytesSoFar;
+            }
+            
+            public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+                {
+                    updateStoredBuffer = false;
+                }
+                int startPosition = writer.Position;
+                WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+                if (updateStoredBuffer)
+                {
+                    UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode);
+                }
+            }
+            
+            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode)
             {
                 
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyExampleStruct = value;
-                _MyExampleStruct_Accessed = true;
-            }
-        }
-        bool _MyExampleStruct_Accessed;
-        public ExampleStruct MyExampleStruct_Copy
-        {
-            get
-            {
-                if (!_MyExampleStruct_Accessed)
+                _IsDirty = false;
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        return default(ExampleStruct);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                        var toReturn = new ExampleStruct();
-                        toReturn.DeserializeLazinator(childData);
-                        toReturn.IsDirty = false;
-                        return toReturn;
-                    }
+                    _DescendantIsDirty = false;
+                    _MyExampleStruct_Accessed = false;
                 }
-                var cleanCopy = _MyExampleStruct;
-                cleanCopy.IsDirty = false;
-                cleanCopy.DescendantIsDirty = false;
-                return cleanCopy;
-            }
-        }
-        
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
-        {
-            bool match = (matchCriterion == null) ? true : matchCriterion(this);
-            bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
-            if (match)
-            {
-                yield return this;
-            }
-            if (explore)
-            {
-                foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                else
                 {
-                    yield return item.descendant;
+                    throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
-            }
-        }
-        
-        public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
-        {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStruct_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))))
-            {
-                yield return ("MyExampleStruct", default);
-            }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
-            {
-                bool isMatch = matchCriterion == null || matchCriterion(MyExampleStruct);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStruct);
-                if (isMatch)
-                {
-                    yield return ("MyExampleStruct", MyExampleStruct);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("MyExampleStruct" + "." + toYield.propertyName, toYield.descendant);
-                    }
-                }
-            }
-            yield break;
-        }
-        
-        
-        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
-        {
-            yield break;
-        }
-        
-        public void FreeInMemoryObjects()
-        {
-            _MyExampleStruct = default;
-            _MyExampleStruct_Accessed = false;
-            IsDirty = false;
-            DescendantIsDirty = false;
-            HasChanged = false;
-            DescendantHasChanged = false;
-        }
-        
-        /* Conversion */
-        
-        public int LazinatorUniqueID => 218;
-        
-        bool ContainsOpenGenericParameters => false;
-        public LazinatorGenericIDType LazinatorGenericID
-        {
-            get => default;
-            set { }
-        }
-        
-        private bool _LazinatorObjectVersionChanged;
-        private int _LazinatorObjectVersionOverride;
-        public int LazinatorObjectVersion
-        {
-            get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : 0;
-            set
-            {
-                _LazinatorObjectVersionOverride = value;
-                _LazinatorObjectVersionChanged = true;
-            }
-        }
-        
-        
-        public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
-        {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            _MyExampleStruct_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            _ExampleStructContainingStruct_EndByteIndex = bytesSoFar;
-        }
-        
-        public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
-            {
-                updateStoredBuffer = false;
-            }
-            int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
-            if (updateStoredBuffer)
-            {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode);
-            }
-        }
-        
-        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode)
-        {
-            
-            _IsDirty = false;
-            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                _DescendantIsDirty = false;
-                _MyExampleStruct_Accessed = false;
-            }
-            else
-            {
-                throw new Exception("Cannot update stored buffer when serializing only some children.");
+                
+                var newBuffer = writer.Slice(startPosition);
+                LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
             }
             
-            var newBuffer = writer.Slice(startPosition);
-            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
-        }
-        
-        void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-        {
-            int startPosition = writer.Position;
-            int startOfObjectPosition = 0;
-            // header information
-            if (includeUniqueID)
+            void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                int startPosition = writer.Position;
+                int startOfObjectPosition = 0;
+                // header information
+                if (includeUniqueID)
+                {
+                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                }
+                
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+                writer.Write((byte)includeChildrenMode);
+                // write properties
+                startOfObjectPosition = writer.Position;
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
+                {
+                    if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyExampleStruct_Accessed)
+                    {
+                        var deserialized = MyExampleStruct;
+                    }
+                    var serializedBytesCopy = LazinatorMemoryStorage;
+                    var byteIndexCopy = _MyExampleStruct_ByteIndex;
+                    var byteLengthCopy = _MyExampleStruct_ByteLength;
+                    WriteChild(ref writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
+                }
+                if (updateStoredBuffer)
+                {
+                    _MyExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
+                }
+                if (updateStoredBuffer)
+                {
+                    _ExampleStructContainingStruct_EndByteIndex = writer.Position - startPosition;
+                }
             }
             
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-            writer.Write((byte)includeChildrenMode);
-            // write properties
-            startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
-            {
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyExampleStruct_Accessed)
-                {
-                    var deserialized = MyExampleStruct;
-                }
-                var serializedBytesCopy = LazinatorMemoryStorage;
-                var byteIndexCopy = _MyExampleStruct_ByteIndex;
-                var byteLengthCopy = _MyExampleStruct_ByteLength;
-                WriteChild(ref writer, _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
-            }
-            if (updateStoredBuffer)
-            {
-                _MyExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
-            }
-            if (updateStoredBuffer)
-            {
-                _ExampleStructContainingStruct_EndByteIndex = writer.Position - startPosition;
-            }
         }
-        
     }
-}

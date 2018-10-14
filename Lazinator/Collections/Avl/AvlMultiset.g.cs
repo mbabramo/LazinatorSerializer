@@ -111,7 +111,7 @@ namespace Lazinator.Collections.Avl
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty || LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
             [DebuggerStepThrough]
             set
             {
