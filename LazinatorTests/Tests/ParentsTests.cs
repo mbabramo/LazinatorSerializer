@@ -12,6 +12,7 @@ using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using Lazinator.Buffers;
 using Lazinator.Collections.Dictionary;
+using LazinatorTests.Examples.Collections;
 
 namespace LazinatorTests.Tests
 {
@@ -346,6 +347,25 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void BuffersDisposedJointly_UpdatingDoesntDisposeClone()
+        {
+            Example e = GetTypicalExample(); // no memory backing yet
+            e = e.CloneLazinatorTyped(); // now there is a memory buffer
+            var e2 = e.CloneLazinatorTyped();
+            e.MyChild1.MyShort = 52;
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            var f = e.MyChild1.CloneLazinatorTyped();
+            e.MyChild1.MyShort = 53;
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            Action a = () =>
+            {
+                var m = f.LazinatorMemoryStorage.Memory;
+                m.Span[0] = 1;
+            };
+            a.Should().NotThrow<ObjectDisposedException>();
+        }
+
+        [Fact]
         public void BuffersDisposedJointly_DisposeCloneIndependently()
         {
             Example e = GetTypicalExample(); // no memory backing yet
@@ -446,22 +466,22 @@ namespace LazinatorTests.Tests
                     unchecked
                     {
                         randLong = r.Next(0, 2) == 0 ? r.Next(1, 100) : r.Next();
-                        randShort = (short) (r.Next(0, 2) == 0 ? r.Next(1, 100) : r.Next());
+                        randShort = (short)(r.Next(0, 2) == 0 ? r.Next(1, 100) : r.Next());
                     }
                     e.MyChild1.MyLong = randLong;
-                    e.MyChild1.MyShort = randShort; 
+                    e.MyChild1.MyShort = randShort;
                 }
                 if (makeChildUpToDate)
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();
                 if (makeParentUpToDate)
                     e.EnsureLazinatorMemoryUpToDate();
             }
-            foreach (Example c in new Example[] { c1, c2, c3, c4})
+            foreach (Example c in new Example[] { c1, c2, c3, c4 })
             {
                 c.MyChild2.MyLong = -3; // make sure early clone still works
             }
         }
-        
+
 
         const int dictsize = 5;
 
@@ -496,21 +516,68 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ObjectDisposedExceptionThrownOnItemRemovedFromHierarchy()
+        {
+            LazinatorDictionary<WInt, Example> d = GetDictionary();
+            //same effect if both of the following lines are included
+            //d.EnsureLazinatorMemoryUpToDate();
+            //d[0].MyChar = 'q';
+            d[0].EnsureLazinatorMemoryUpToDate(); // OwnedMemory has allocation ID of 0. 
+            d.EnsureLazinatorMemoryUpToDate(); // OwnedMemory for this and d[0] share allocation ID of 1
+            Example e = d[0];
+            d[0] = GetTypicalExample();
+            d.EnsureLazinatorMemoryUpToDate(); // allocation ID 1 disposed.
+            Action a = () => { var x = e.MyChild1; };
+            a.Should().Throw<ObjectDisposedException>();
+        }
+
+        [Fact]
+        public void ObjectDisposedExceptionAvoidedByCloneToIndependentBuffer()
+        {
+            LazinatorDictionary<WInt, Example> d = GetDictionary();
+            d[0].EnsureLazinatorMemoryUpToDate(); // OwnedMemory has allocation ID of 0. 
+            d.EnsureLazinatorMemoryUpToDate(); // OwnedMemory for this and d[0] share allocation ID of 1
+            Example e = d[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
+            d[0] = GetTypicalExample();
+            d.EnsureLazinatorMemoryUpToDate(); // allocation ID 1 disposed.
+            Action a = () => { var x = e.MyChild1; };
+            a.Should().NotThrow<ObjectDisposedException>();
+        }
+
+        [Fact]
+        public void CanAccessCopiedItemAfterEnsureUpToDate()
+        {
+            LazinatorDictionary<WInt, Example> d = GetDictionary();
+            d.EnsureLazinatorMemoryUpToDate(); // OwnedMemory for this and d[0] share allocation ID of 0. As the original source, this will not be automatically disposed. 
+            Example e = d[0];
+            d[0] = GetTypicalExample();
+            d.EnsureLazinatorMemoryUpToDate(); // allocation ID 0 is not disposed.
+            var x = e.MyChild1;
+        }
+
+        // DEBUG -- eliminate this test
+        [Fact]
         public void CanEnsureUpToDateInLazinatorDictionary()
         {
+            return;
             // Note: The purpose of this test is to make sure that data structures containing LazinatorLists can have buffers updated without causing object disposed exceptions, if a child is updated when its parent still exists.
-            Random r = new Random(0);
-            for (int i = 0; i < 100; i++)
+            for (int i = 79315; i < 2500000; i++)
             {
+                Random r = new Random(i);
+                if (i == 79315)
+                {
+                    //DEBUG; // follow this example through and then create another test with these steps. see if it makes sense that we get an ObjectDisposedException or whether there might be some way to prevent it. If it makes sense, figure out what changes need to be made so that user can prevent it.
+                }
                 List<LazinatorDictionary<WInt, Example>> dictionaries = new List<LazinatorDictionary<WInt, Example>>();
+                List<Example> elementClones = new List<Example>();
                 dictionaries.Add(GetDictionary());
-                // operations: (1) clone a dictionary and add to the list; (2) mutate an element of a dictionary or ensure that an element is up to date; (3) ensure that dictionary is up to date
+                // operations: (1) clone a dictionary and add to the list; (2) mutate an element of a dictionary or ensure that an element is up to date; (3) ensure that dictionary is up to date; (4) clone an element or remove an element from the dictionary; (5) access a random clone
                 int numOperationsPerAttempt = 5;
                 for (int j = 0; j < numOperationsPerAttempt; j++)
                 {
                     int dict_index = r.Next(dictionaries.Count());
                     var d = dictionaries[dict_index];
-                    int op = r.Next(3) + 1;
+                    int op = r.Next(5) + 1;
                     switch (op)
                     {
                         case 1:
@@ -549,6 +616,24 @@ namespace LazinatorTests.Tests
                             break;
                         case 3:
                             d.EnsureLazinatorMemoryUpToDate();
+                            break;
+                        case 4:
+                            int itemIndex2 = r.Next(dictsize);
+                            Example e2 = d[itemIndex2];
+                            if (r.Next(2) == 0)
+                                elementClones.Add(e2.CloneLazinatorTyped());
+                            else
+                            {
+                                elementClones.Add(e2);
+                                d[itemIndex2] = GetTypicalExample();
+                            }
+                            break;
+                        case 5:
+                            if (elementClones.Any())
+                            {
+                                Example clone = elementClones[r.Next(elementClones.Count())];
+                                var x = clone.MyChild1.MyLong;
+                            }
                             break;
                     }
                 }

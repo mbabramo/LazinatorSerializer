@@ -79,14 +79,15 @@ namespace Lazinator.Buffers
                 OriginalSource.DoNotDisposeWithThis(buffer, disposeBufferIfNotOriginalSource);
             else
             {
-                if (buffer != this)
+                bool bufferIsThis = buffer == this;
+                if (!bufferIsThis)
                 {
                     if (DisposeTogether != null)
                         DisposeTogether.Remove(buffer);
                     if (disposeBufferIfNotOriginalSource)
                     {
-                        if (buffer is JointlyDisposableMemory j)
-                            j.OriginalSource = null; // don't dispose original source -- just dispose the buffer itself
+                        if (buffer is JointlyDisposableMemory j2)
+                            j2.OriginalSource = null; // don't dispose original source -- just dispose the buffer itself
                         buffer.Dispose();
                     }
                 }
