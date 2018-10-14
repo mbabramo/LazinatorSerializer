@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         
         public bool HasChanged { get; set; }
         
-        bool _IsDirty;
+        public bool _IsDirty;
         public bool IsDirty
         {
             [DebuggerStepThrough]
