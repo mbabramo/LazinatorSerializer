@@ -764,27 +764,17 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Get a MemoryStream from ReadOnlyMemory, if possibly without copying the source memory.
+        /// Get a MemoryStream from ReadOnlyMemory
         /// </summary>
         /// <param name="memory">The source memory</param>
         /// <returns>The resulting memory stream</returns>
         public static MemoryStream GetMemoryStream(this ReadOnlyMemory<byte> memory)
         {
-            bool arrayLoaded = MemoryMarshal.TryGetArray(memory, out ArraySegment<byte> segment);
-            if (arrayLoaded)
-            {
-                MemoryStream stream = new MemoryStream(segment.Array);
-                return stream;
-            }
-            else
-            {
-                // MemoryMarshal can't get an array. Thus, write the memory stream manually.
-                MemoryStream stream = new MemoryStream();
-                stream.Write(memory.Span);
-                stream.Flush();
-                stream.Position = 0;
-                return stream;
-            }
+            MemoryStream stream = new MemoryStream();
+            stream.Write(memory.Span);
+            stream.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         /// <summary>
