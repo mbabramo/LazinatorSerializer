@@ -571,12 +571,9 @@ namespace LazinatorTests.Tests
 
             // attaching item with dirty descendant
             v5.MyList[0].MyWrapperContainer = new WrapperContainer() { WrappedInt = 4 };
-            // v5.EnsureLazinatorMemoryUpToDate(); // DEBUG -- shouldn't be needed
             v6 = v5.CloneLazinatorTyped();
             v7 = v5.CloneLazinatorTyped();
             LazinatorUtilities.ConfirmMatch(v6.LazinatorMemoryStorage.Memory, v7.LazinatorMemoryStorage.Memory);
-            var DEBUG = v6.MyList[1];
-            var DEBUG2 = v7.MyList[1];
             v6item = v6.MyList[0];
             v6item.MyWrapperContainer.WrappedInt = 5;
             v6item.IsDirty.Should().BeFalse();

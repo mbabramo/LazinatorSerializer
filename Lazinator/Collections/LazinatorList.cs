@@ -71,11 +71,8 @@ namespace Lazinator.Collections
             }
         }
 
-        static int DEBUG = 0;
-
         private T GetSerializedContents(int index)
         {
-            DEBUG++;
             var byteSpan = GetListMemberSlice(index);
             if (byteSpan.Length == 0)
                 return default;
@@ -329,8 +326,7 @@ namespace Lazinator.Collections
                         WriteChild(ref w, underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that updated is not here. Cloning is the only safe way to get a clean hierarchy, because setting .IsDirty = true will not clear .IsDirty from nested structs.
-                            // DEBUG -- try to do this with no buffer so that we're not adding a lot of buffers here
-                            underlyingItem = underlyingItem.CloneLazinatorTyped();
+                            underlyingItem = underlyingItem.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
                             UnderlyingList[itemIndex] = underlyingItem;
                         }
                         var offset = (int)(w.Position - startingPosition);
