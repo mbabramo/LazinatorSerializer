@@ -70,7 +70,7 @@ namespace Lazinator.Collections.Dictionary
         {
             if (!Initialized)
                 return -1;
-            if (_lastSearchRemembered && (_lastKeySearched.LazinatorMemoryStorage == null || _lastKeySearched.LazinatorMemoryStorage.Disposed == false) && _lastKeySearched.Equals(key))
+            if (_lastSearchRemembered && (_lastKeySearched.LazinatorMemoryStorage == null || _lastKeySearched.LazinatorMemoryStorage.IndirectlyDisposed() == false) && _lastKeySearched.Equals(key))
                 return _lastResult;
             _lastKeySearched = key;
             _lastSearchRemembered = true;
