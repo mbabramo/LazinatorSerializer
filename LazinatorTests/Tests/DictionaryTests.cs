@@ -182,7 +182,7 @@ namespace LazinatorTests.Tests
             a2.LazinatorMemoryStorage.Dispose();
 
             LazinatorTuple<WLong, WInt> a3 = new LazinatorTuple<WLong, WInt>(1, 2);
-            s = d[a3]; // this will lead to a caught ObjectDisposedException and should now still work
+            s = d[a3];
             s.Should().Be("something");
 
         }

@@ -53,6 +53,11 @@ namespace Lazinator.Buffers
             OriginalSource = existingMemoryToCopy.OriginalSource;
         }
 
+        public bool IsDisposed()
+        {
+            return Disposed || (OwnedMemory != null && OwnedMemory is JointlyDisposableMemory j && j.Disposed);
+        }
+
         public override void Dispose()
         {
             base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer

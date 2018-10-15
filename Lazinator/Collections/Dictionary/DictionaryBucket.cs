@@ -70,16 +70,8 @@ namespace Lazinator.Collections.Dictionary
         {
             if (!Initialized)
                 return -1;
-            try
-            {
-                if (_lastSearchRemembered && _lastKeySearched.Equals(key))
-                    return _lastResult;
-            }
-            catch (ObjectDisposedException e)
-            {
-                _lastSearchRemembered = false;
-                _lastKeySearched = default;
-            }
+            if (_lastSearchRemembered && (_lastKeySearched.LazinatorMemoryStorage == null || _lastKeySearched.LazinatorMemoryStorage.Disposed == false) && _lastKeySearched.Equals(key))
+                return _lastResult;
             _lastKeySearched = key;
             _lastSearchRemembered = true;
             uint searchHash = binaryHashOfKey ?? key.GetBinaryHashCode32();

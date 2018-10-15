@@ -23,6 +23,8 @@ namespace Lazinator.Buffers
             }
         }
 
+        public bool Disposed { get; protected internal set; }
+
         private HashSet<IMemoryOwner<byte>> DisposeTogether = null;
 
         public abstract Memory<byte> Memory { get; }
@@ -113,19 +115,14 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Indicate whether disposing has been initiating to avoid infinite loops.
-        /// </summary>
-        bool _disposingInitiated = false;
-
-        /// <summary>
         /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed
         /// without calling this, but it will be less efficient.
         /// </summary>
         public virtual void Dispose()
         {
-            if (!_disposingInitiated)
+            if (!Disposed)
             {
-                _disposingInitiated = true;
+                Disposed = true;
                 if (OriginalSource != null)
                 {
                     OriginalSource.Dispose();
