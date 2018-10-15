@@ -122,7 +122,10 @@ namespace Lazinator.Collections
 
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
             // write properties. But we include the OriginalSource to prevent objects from being disposed.
-            var childMemory = new LazinatorMemory(new SimpleMemoryOwner<byte>(MainListSerialized), offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
+            // DEBUG
+            byte[] DEBUG = new byte[MainListSerialized.Length];
+            MainListSerialized.CopyTo(DEBUG);
+            var childMemory = new LazinatorMemory(new SimpleMemoryOwner<byte>(DEBUG /* MainListSerialized DEBUG */), offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
             return childMemory;
         }
 
