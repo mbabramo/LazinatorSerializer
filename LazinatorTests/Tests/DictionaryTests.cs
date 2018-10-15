@@ -165,7 +165,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void DictionarySearchWorksEvenIfLastKeyDeleted()
+        public void DictionarySearchWorksEvenIfLastKeyDisposed()
         {
             // The concern here is that the dictionary remembers the last key searched as a shortcut. What happens if that is disposed? With a struct or class that contains only primitive properties, that is not a problem, because equality can be determined solely by looking at primitive properties. But it can be an issue with a Lazinator object that has child objects that need to be examined.
 
@@ -182,7 +182,7 @@ namespace LazinatorTests.Tests
             a2.LazinatorMemoryStorage.Dispose();
 
             LazinatorTuple<WLong, WInt> a3 = new LazinatorTuple<WLong, WInt>(1, 2);
-            s = d[a3];
+            s = d[a3]; // this will lead to a caught ObjectDisposedException and should now still work
             s.Should().Be("something");
 
         }
