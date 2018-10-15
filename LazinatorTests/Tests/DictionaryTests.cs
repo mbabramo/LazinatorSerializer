@@ -6,6 +6,8 @@ using FluentAssertions;
 using Lazinator.Collections.Dictionary;
 using Lazinator.Wrappers;
 using Lazinator.Core;
+using LazinatorTests.Examples;
+using Lazinator.Collections;
 
 namespace LazinatorTests.Tests
 {
@@ -160,6 +162,29 @@ namespace LazinatorTests.Tests
             var key = d.Keys.First();
             d.ContainsKey(key).Should().BeTrue();
             d[key].WrappedValue.Should().Be(key.ToString());
+        }
+
+        [Fact]
+        public void DictionarySearchWorksEvenIfLastKeyDeleted()
+        {
+            // The concern here is that the dictionary remembers the last key searched as a shortcut. What happens if that is disposed? With a struct or class that contains only primitive properties, that is not a problem, because equality can be determined solely by looking at primitive properties. But it can be an issue with a Lazinator object that has child objects that need to be examined.
+
+            LazinatorDictionary<LazinatorTuple<WLong, WInt>, WString> d = new LazinatorDictionary<LazinatorTuple<WLong, WInt>, WString>();
+            LazinatorTuple<WLong, WInt> a = new LazinatorTuple<WLong, WInt>(1, 2);
+            LazinatorTuple<WLong, WInt> b = new LazinatorTuple<WLong, WInt>(3, 4);
+            d[a] = "something";
+            d[b] = "else";
+            LazinatorTuple<WLong, WInt> a2 = new LazinatorTuple<WLong, WInt>(1, 2);
+            a2.EnsureLazinatorMemoryUpToDate();
+            string s = d[a2];
+            s.Should().Be("something");
+            a2.FreeInMemoryObjects();
+            a2.LazinatorMemoryStorage.Dispose();
+
+            LazinatorTuple<WLong, WInt> a3 = new LazinatorTuple<WLong, WInt>(1, 2);
+            s = d[a3];
+            s.Should().Be("something");
+
         }
 
 

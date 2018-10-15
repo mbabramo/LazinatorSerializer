@@ -21,5 +21,26 @@ namespace Lazinator.Collections
         {
             return ((Item1, Item2)).CompareTo((other.Item1, other.Item2));
         }
+
+        public override bool Equals(object obj)
+        {
+            LazinatorTuple<T, U> other = obj as LazinatorTuple<T, U>;
+            if (other == null)
+                return false;
+            return EqualityComparer<T>.Default.Equals(Item1, other.Item1) && EqualityComparer<U>.Default.Equals(Item2, other.Item2);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 233;
+                if (!EqualityComparer<T>.Default.Equals(Item1, default(T)))
+                    hash = hash * 23 + Item1.GetHashCode();
+                if (!EqualityComparer<U>.Default.Equals(Item2, default(U)))
+                    hash = hash * 29 + Item2.GetHashCode();
+                return hash;
+            }
+        }
     }
 }
