@@ -472,7 +472,10 @@ namespace Lazinator.Collections
         
         public virtual void FreeInMemoryObjects()
         {
-            
+            _Item1 = default;
+            _Item2 = default;
+            _Item3 = default;
+            _Item1_Accessed = _Item2_Accessed = _Item3_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;

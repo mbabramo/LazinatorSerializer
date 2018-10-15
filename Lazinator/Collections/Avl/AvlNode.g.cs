@@ -586,9 +586,11 @@ namespace Lazinator.Collections.Avl
         
         public void FreeInMemoryObjects()
         {
+            _Key = default;
             _Left = default;
             _Right = default;
-            _Left_Accessed = _Right_Accessed = false;
+            _Value = default;
+            _Key_Accessed = _Left_Accessed = _Right_Accessed = _Value_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;

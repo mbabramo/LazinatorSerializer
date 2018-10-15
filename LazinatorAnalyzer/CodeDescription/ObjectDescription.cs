@@ -673,7 +673,7 @@ namespace Lazinator.CodeDescription
         private void AppendResetProperties(CodeStringBuilder sb)
         {
             string resetAccessed = "", resetStorage = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNotPrimitiveOrOpenGeneric))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive))
             {
                 resetStorage += $@"_{property.PropertyName} = default;
                         ";

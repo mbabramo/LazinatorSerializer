@@ -342,7 +342,8 @@ namespace Lazinator.Wrappers
             
             public void FreeInMemoryObjects()
             {
-                
+                _NonNullValue = default;
+                _NonNullValue_Accessed = false;
                 IsDirty = false;
                 DescendantIsDirty = false;
                 HasChanged = false;

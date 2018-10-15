@@ -169,7 +169,8 @@ namespace LazinatorTests.Examples.Abstract
         public override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();
-            
+            _MyT = default;
+            _MyT_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;

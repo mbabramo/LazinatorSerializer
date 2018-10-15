@@ -353,7 +353,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public virtual void FreeInMemoryObjects()
         {
             _MyListT = default;
-            _MyListT_Accessed = false;
+            _MyT = default;
+            _MyListT_Accessed = _MyT_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;
