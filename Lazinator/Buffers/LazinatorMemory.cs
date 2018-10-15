@@ -53,7 +53,7 @@ namespace Lazinator.Buffers
             OriginalSource = existingMemoryToCopy.OriginalSource;
         }
 
-        public bool IsDisposed()
+        public bool IndirectlyDisposed()
         {
             return Disposed || (OwnedMemory != null && OwnedMemory is JointlyDisposableMemory j && j.Disposed);
         }

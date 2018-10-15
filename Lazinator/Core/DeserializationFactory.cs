@@ -101,6 +101,8 @@ namespace Lazinator.Core
             var span = (ReadOnlySpan<byte>)storage.Memory.Span;
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             T itemToReturn;
+            if (!UniqueIDToTypeMap.ContainsKey(uniqueID))
+                throw new LazinatorDeserializationException($"Could not deserialize, because unique ID {uniqueID} was found in the memory to be deserialized, but this unique ID is not known. This could arise by creating a Lazinator object and then deserializing it in an assembly where that object type is not present. "); // If there is a Lazinator internal error causing the unique ID to be read in the wrong place, that could also cause the error.
             var typeInfo = UniqueIDToTypeMap[uniqueID];
             if (typeInfo.numberGenericParameters > 0)
             {
