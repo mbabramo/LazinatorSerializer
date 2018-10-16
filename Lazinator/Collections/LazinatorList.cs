@@ -66,15 +66,15 @@ namespace Lazinator.Collections
                 for (int i = 0; i < count; i++)
                 {
                     if (!ItemsAccessedBeforeFullyDeserialized[i])
-                        UnderlyingList[i] = GetSerializedContents(i);
+                        UnderlyingList[i] = GetSerializedContents(i, true);
                 }
                 FullyDeserialized = true;
             }
         }
 
-        private T GetSerializedContents(int index)
+        private T GetSerializedContents(int index, bool trackSliceMemory)
         {
-            var byteSpan = GetListMemberSlice(index, true);
+            var byteSpan = GetListMemberSlice(index, trackSliceMemory);
             if (byteSpan.Length == 0)
                 return default;
             T n2;
@@ -124,12 +124,12 @@ namespace Lazinator.Collections
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
             // write properties. But we include the OriginalSource to prevent objects from being disposed.
             IMemoryOwner<byte> slice = null;
-            byte[] DEBUG = MainListSerialized.ToArray();
             if (trackSliceMemory)
             {
+                //byte[] DEBUG = MainListSerialized.ToArray();
                 //slice = new SimpleMemoryOwner<byte>(DEBUG);
                 SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
-                slice = trackSliceMemory ? (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+                slice = (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage);
             }
             else
             {
@@ -152,7 +152,7 @@ namespace Lazinator.Collections
                 {
                     if (ItemsAccessedBeforeFullyDeserialized[index])
                         return default;
-                    current = GetSerializedContents(index);
+                    current = GetSerializedContents(index, true);
                     UnderlyingList[index] = current;
                     ItemsAccessedBeforeFullyDeserialized[index] = true;
                 }

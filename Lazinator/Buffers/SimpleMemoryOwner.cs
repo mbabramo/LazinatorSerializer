@@ -11,15 +11,19 @@ namespace Lazinator.Buffers
     /// <typeparam name="T"></typeparam>
     public struct SimpleMemoryOwner<T> : IMemoryOwner<T>
     {
-        public Memory<T> Memory { get; set; }
+        private Memory<T> _Memory;
+        public Memory<T> Memory { get => Disposed ? throw new ObjectDisposedException("SimpleMemoryOwner") : _Memory; set => _Memory = value; }
+        public bool Disposed { get; set; }
 
         public SimpleMemoryOwner(Memory<T> memory)
         {
-            Memory = memory;
+            _Memory = memory;
+            Disposed = false;
         }
 
         public void Dispose()
         {
+            Disposed = true;
         }
     }
 }
