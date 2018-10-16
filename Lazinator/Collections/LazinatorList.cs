@@ -131,14 +131,15 @@ namespace Lazinator.Collections
                 source.CopyTo(arrayCopy);
                 slice = new SimpleMemoryOwner<byte>(arrayCopy);
                 return new LazinatorMemory(slice, 0, source.Length, LazinatorMemoryStorage?.OriginalSource);
-                //TODO: It might seem that the following would work, and an ObjectDisposedException would be generated if there is an attempt to use the list member slice after the underlying list has been disposed, since LazinatorMemoryStorage would be disposed. But it seems that the memory being used is being returned to the array pool and reused, causing difficult-to-track bugs that I haven't been able to replicate with a test.
+                //TODO: It might seem that the following would work, saving us the trouble of copying the slice, and an ObjectDisposedException would be generated if there is an attempt to use the list member slice after the underlying list has been disposed, since LazinatorMemoryStorage would be disposed. But it seems that the memory being used is being returned to the array pool and reused, causing difficult-to-track bugs that I haven't been able to replicate with a test.
                 //SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
                 //slice = (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage);
+                //... (childMemory)
+                //An alternative approach might be go change GetSerializedContents, so that it strips the deserialized objects of its buffer. At this point, the one efficient way to do that would be to clone it using NoBuffer. 
             }
             else
             {
-                SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
-                slice = copySlice ? (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+                slice = new SimpleMemoryOwner<byte>(MainListSerialized);
                 var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
                 return childMemory;
             }
