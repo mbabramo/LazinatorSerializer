@@ -24,7 +24,8 @@ namespace Lazinator.CodeDescription
             { "TimeSpan", $"ToDecompressedTimeSpan" },
             { "DateTime", $"ToDecompressedDateTime" },
             { "Guid", $"ToGuid" },
-            { "string", $"ToString_VarIntLengthUtf8" }, // ToString_BrotliCompressedWithLength
+            { "string", $"ToString_VarIntLengthUtf8" },
+            { "string_brotli", $"ToString_BrotliCompressedWithLength" },
             { "bool?", $"ToDecompressedNullableBool" },
             { "byte?", $"ToDecompressedNullableByte" },
             { "sbyte?", $"ToDecompressedNullableSByte" },
@@ -62,7 +63,8 @@ namespace Lazinator.CodeDescription
             { "TimeSpan", $"CompressedIntegralTypes.WriteCompressedTimeSpan" },
             { "DateTime", $"CompressedIntegralTypes.WriteCompressedDateTime" },
             { "Guid", $"WriteUncompressedPrimitives.WriteGuid" },
-            { "string", $"EncodeCharAndString.WriteStringUtf8WithVarIntPrefix" }, // EncodeCharAndString.WriteBrotliCompressedWithIntPrefix
+            { "string", $"EncodeCharAndString.WriteStringUtf8WithVarIntPrefix" },
+            { "string_brotli", $"EncodeCharAndString.WriteBrotliCompressedWithIntPrefix" },
             { "bool?", $"CompressedIntegralTypes.WriteCompressedNullableBool" },
             { "byte?", $"CompressedIntegralTypes.WriteCompressedNullableByte" },
             { "sbyte?", $"CompressedIntegralTypes.WriteCompressedNullableSByte" },
