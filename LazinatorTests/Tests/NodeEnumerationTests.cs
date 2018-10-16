@@ -163,7 +163,8 @@ $@"LazinatorTests.Examples.Example
     MyNullableDecimal: NULL
     MyNullableTimeSpan: 4.00:00:00
     MyOldString: NULL
-    MyString: 
+    MyString: NULL
+    MyStringBrotli: 
     MyTestEnum: MyTestValue3
     MyTestEnumByteNullable: MyTestValue
     MyUint: 1235
@@ -211,7 +212,8 @@ $@"LazinatorTests.Examples.Example
     MyNullableDecimal: -2341.5212352
     MyNullableTimeSpan: 03:00:00
     MyOldString: NULL
-    MyString: hello, world
+    MyString: this is a very long way of saying hello, world
+    MyStringBrotli: this is a very long way of saying hello, world
     MyTestEnum: MyTestValue2
     MyTestEnumByteNullable: NULL
     MyUint: 2342343242

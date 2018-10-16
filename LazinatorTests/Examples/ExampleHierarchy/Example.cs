@@ -22,8 +22,6 @@ namespace LazinatorTests.Examples
         public bool _OnDirtyCalled = false;
         public bool _OnDescendantIsDirtyCalled = false;
 
-        public string MyStringBrotli { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
         public void OnDirty()
         {
             _OnDirtyCalled = true;
