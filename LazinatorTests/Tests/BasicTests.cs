@@ -238,6 +238,24 @@ namespace LazinatorTests.Tests
             ExampleEqual(original, result3).Should().BeTrue();
         }
 
+        [Fact]
+        public void RefPropertiesWork()
+        {
+            void ChangeStuff(ref char c, ref string s)
+            {
+                c = 'k';
+                s = "changed string";
+            }
+
+            Example e = GetTypicalExample();
+            e = e.CloneLazinatorTyped();
+            e.IsDirty.Should().BeFalse();
+            ChangeStuff(ref e.MyChar_Ref, ref e.MyString_Ref);
+            e.IsDirty.Should().BeTrue();
+            e.MyChar.Should().Be('k');
+            e.MyString.Should().Be("changed string");
+        }
+
 
     }
 }

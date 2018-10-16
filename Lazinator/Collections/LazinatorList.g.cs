@@ -320,7 +320,6 @@ namespace Lazinator.Collections
         
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
-            yield return ("MainListSerialized", (object)MainListSerialized);
             yield break;
         }
         

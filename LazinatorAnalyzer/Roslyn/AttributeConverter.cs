@@ -114,6 +114,10 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneDoNotAutogenerateAttribute();
                 case "IncludableChildAttribute":
                     return new CloneIncludableChildAttribute();
+                case "IncludeRefPropertyAttribute":
+                    return new CloneIncludeRefPropertyAttribute();
+                case "DoNotEnumerateAttribute":
+                    return new CloneDoNotEnumerateAttribute();
                 case "NonexclusiveLazinatorAttribute":
                     return new CloneNonexclusiveLazinatorAttribute();
                 case "NonbinaryHashAttribute":

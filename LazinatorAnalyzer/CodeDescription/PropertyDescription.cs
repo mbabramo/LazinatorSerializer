@@ -770,7 +770,7 @@ namespace Lazinator.CodeDescription
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct, " = false")};
-                {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}_Ref
+                {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{abstractDerivationKeyword}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get;
                 }}
@@ -802,7 +802,7 @@ namespace Lazinator.CodeDescription
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
             string propertyString = $@"        {ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
-        {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}_Ref
+        {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get
                     {{
