@@ -204,9 +204,8 @@ namespace LazinatorTests.Tests
             var clone = original.CloneLazinatorTyped();
             LazinatorUtilities.ConfirmHierarchiesEqual(original, clone);
         }
-
-        [Fact]
-        public void ConfirmSerialization()
+        
+        public static IEnumerable<object[]> ConfirmHierarchySerializationData()
         {
             for (int i = 0; i <= 2; i++)
                 for (int i2 = 0; i2 <= 3; i2++)
@@ -214,11 +213,13 @@ namespace LazinatorTests.Tests
                         for (int i4 = 0; i4 <= 3; i4++)
                             for (int i5 = 0; i5 <= 2; i5++)
                             {
-                                ConfirmHierarchySerialization(i, i2, i3, i4, i5);
+                                yield return new object[] { i, i2, i3, i4, i5 };
                             }
         }
 
-        private void ConfirmHierarchySerialization(int indexUpTo2, int indexUpTo3a, int indexUpTo3b,
+        [Theory]
+        [MemberData(nameof(ConfirmHierarchySerializationData))]
+        public  void ConfirmHierarchySerialization(int indexUpTo2, int indexUpTo3a, int indexUpTo3b,
             int indexUpTo3c, int indexUpTo2b)
         {
             var original = GetHierarchy(indexUpTo2, indexUpTo3a, indexUpTo3b, indexUpTo3c, indexUpTo2b);
