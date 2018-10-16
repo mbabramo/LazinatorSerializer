@@ -99,7 +99,6 @@ namespace Lazinator.Collections
 
         private LazinatorMemory GetListMemberSlice(int index, bool trackSliceMemory)
         {
-            trackSliceMemory = true; // DEBUG
             if (FullyDeserialized)
             { // we can't rely on original offsets, because an insertion/removal may have occurred
                 T underlyingItem = UnderlyingList[index];
@@ -124,9 +123,17 @@ namespace Lazinator.Collections
 
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
             // write properties. But we include the OriginalSource to prevent objects from being disposed.
+            IMemoryOwner<byte> slice = null;
             byte[] DEBUG = MainListSerialized.ToArray();
-            SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(DEBUG /* MainListSerialized */);
-            IMemoryOwner<byte> slice = trackSliceMemory ? (IMemoryOwner<byte>) new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+            if (trackSliceMemory)
+            {
+                slice = new SimpleMemoryOwner<byte>(DEBUG);
+            }
+            else
+            {
+                SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(DEBUG /* MainListSerialized */);
+                slice = trackSliceMemory ? (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+            }
             var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
             return childMemory;
         }
