@@ -13,7 +13,7 @@ namespace Lazinator.Buffers
     {
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
         public static ulong NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
-        public static bool UseMemoryPooling = true; // DEBUG
+        public static bool UseMemoryPooling = true;
         public ulong AllocationID;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
@@ -43,9 +43,12 @@ namespace Lazinator.Buffers
                 OriginalSource.DisposeWithThis(this);
         }
 
-        public ExpandableBytes(IMemoryOwner<byte> initialBuffer)
+        public ExpandableBytes(IMemoryOwner<byte> initialBuffer, JointlyDisposableMemory originalSource)
         {
             CurrentBuffer = initialBuffer;
+            OriginalSource = originalSource;
+            if (OriginalSource != null)
+                OriginalSource.DisposeWithThis(this);
         }
 
         public void EnsureMinBufferSize(int desiredBufferSize = 0)

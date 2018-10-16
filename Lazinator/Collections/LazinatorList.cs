@@ -9,6 +9,7 @@ using Lazinator.Core;
 using static Lazinator.Core.LazinatorUtilities;
 using System.Linq;
 using Lazinator.Attributes;
+using System.Buffers;
 
 namespace Lazinator.Collections
 {
@@ -73,7 +74,7 @@ namespace Lazinator.Collections
 
         private T GetSerializedContents(int index)
         {
-            var byteSpan = GetListMemberSlice(index);
+            var byteSpan = GetListMemberSlice(index, true);
             if (byteSpan.Length == 0)
                 return default;
             T n2;
@@ -92,12 +93,13 @@ namespace Lazinator.Collections
             if (FullyDeserialized || (UnderlyingList != null && ItemsAccessedBeforeFullyDeserialized[index]))
                 return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();
             
-            var byteSpan = GetListMemberSlice(index);
+            var byteSpan = GetListMemberSlice(index, false);
             return FarmhashByteSpans.Hash32(byteSpan.Span);
         }
 
-        private LazinatorMemory GetListMemberSlice(int index)
+        private LazinatorMemory GetListMemberSlice(int index, bool trackSliceMemory)
         {
+            trackSliceMemory = true; // DEBUG
             if (FullyDeserialized)
             { // we can't rely on original offsets, because an insertion/removal may have occurred
                 T underlyingItem = UnderlyingList[index];
@@ -122,10 +124,10 @@ namespace Lazinator.Collections
 
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
             // write properties. But we include the OriginalSource to prevent objects from being disposed.
-            // DEBUG
-            byte[] DEBUG = new byte[MainListSerialized.Length];
-            MainListSerialized.CopyTo(DEBUG);
-            var childMemory = new LazinatorMemory(new SimpleMemoryOwner<byte>(DEBUG /* MainListSerialized DEBUG */), offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
+            byte[] DEBUG = MainListSerialized.ToArray();
+            SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(DEBUG /* MainListSerialized */);
+            IMemoryOwner<byte> slice = trackSliceMemory ? (IMemoryOwner<byte>) new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+            var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
             return childMemory;
         }
 
@@ -326,7 +328,7 @@ namespace Lazinator.Collections
                     {
                         var itemIndex = i; // avoid closure problem
                         var underlyingItem = UnderlyingList[itemIndex];
-                        WriteChild(ref w, underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        WriteChild(ref w, underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex, false), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                             underlyingItem = underlyingItem.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
