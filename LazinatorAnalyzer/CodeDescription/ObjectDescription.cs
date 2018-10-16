@@ -809,7 +809,7 @@ namespace Lazinator.CodeDescription
 
                 foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsLazinator))
                 {
-                    if (property.PropertyName != "MainListSerialized") // skip MainListSerialized from LazinatorList, instead focusing on individual items (TODO: use DoNotEnumerate attribute instead)
+                    if (!property.DoNotEnumerate)
                     {
                         if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                         {

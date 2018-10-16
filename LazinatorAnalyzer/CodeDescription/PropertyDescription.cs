@@ -104,6 +104,7 @@ namespace Lazinator.CodeDescription
         private string CustomNonlazinatorWrite { get; set; }
         private int? IntroducedWithVersion { get; set; }
         private int? EliminatedWithVersion { get; set; }
+        internal bool DoNotEnumerate { get; set; }
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
@@ -219,6 +220,8 @@ namespace Lazinator.CodeDescription
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
             ExcludableWhenIncludingMostChildren = excludable != null;
+            CloneDoNotEnumerateAttribute doNotEnumerate = UserAttributes.OfType<CloneDoNotEnumerateAttribute>().FirstOrDefault();
+            DoNotEnumerate = doNotEnumerate != null;
             CloneAllowLazinatorInNonLazinatorAttribute allowLazinatorInNonLazinator = UserAttributes.OfType<CloneAllowLazinatorInNonLazinatorAttribute>().FirstOrDefault();
             AllowLazinatorInNonLazinator = allowLazinatorInNonLazinator != null;
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();

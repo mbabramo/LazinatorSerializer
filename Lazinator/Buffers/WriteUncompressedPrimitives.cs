@@ -68,9 +68,8 @@ namespace Lazinator.Buffers
         }
         public static byte WriteGuid(ref BinaryBufferWriter writer, Guid value)
         {
-            var bytes = value.ToByteArray();
-            writer.Write(bytes); // TODO: when not using BinaryBufferWriter, we should be able to write directly to a destination span, using available extension methods
-            return (byte)bytes.Length;
+            writer.Write(value); // TODO: when not using BinaryBufferWriter, we should be able to write directly to a destination span, using available extension methods
+            return (byte)16;
         }
         public static byte WriteNullableBool(ref BinaryBufferWriter writer, bool? value)
         {
@@ -205,9 +204,8 @@ namespace Lazinator.Buffers
                 return 1;
             }
             writer.Write((byte)1);
-            var bytes = value.Value.ToByteArray();
-            writer.Write(bytes); // TODO: when not using BinaryBufferWriter, we should be able to write directly to a destination span, using available extension methods
-            return (byte)(bytes.Length + 1);
+            writer.Write((Guid) value);
+            return (byte)17;
         }
     }
 }

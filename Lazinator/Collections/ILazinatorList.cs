@@ -18,6 +18,7 @@ namespace Lazinator.Collections
     interface ILazinatorList<T> where T : ILazinator
     {
         [CustomNonlazinatorWrite("WriteMainList")]
+        [DoNotEnumerate]
         Memory<byte> MainListSerialized { get; set; }
         bool MainListSerialized_Dirty { get; set; }
         LazinatorOffsetList Offsets { get; set; }

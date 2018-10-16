@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
             }
         }
-        
+
         public virtual LazinatorMemory LazinatorMemoryStorage
         {
             get;

@@ -292,8 +292,7 @@ namespace LazinatorAnalyzer.Analyzer
                             }
                         },
                         cancellationToken);
-
-                    // TODO: Wrap call to ComputeFixesAsync() below in IExtensionManager.PerformFunctionAsync() so that a buggy extension that throws can't bring down the host?
+                    
                     var task = fixAllContext.CodeFixProvider.RegisterCodeFixesAsync(context) ?? Task.CompletedTask;
                     await task.ConfigureAwait(false);
 
@@ -398,8 +397,7 @@ namespace LazinatorAnalyzer.Analyzer
         public async Task<bool> IncludeCodeActionInRevisionsAsync(Solution oldSolution, CodeAction codeAction, RevisionsTracker revisionsTracker, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
-            // TODO: Parallelize GetChangedSolutionInternalAsync for codeActions
+            
             ImmutableArray<CodeActionOperation> operations = await codeAction.GetPreviewOperationsAsync(cancellationToken).ConfigureAwait(false);
             ApplyChangesOperation singleApplyChangesOperation = null;
             foreach (var operation in operations)

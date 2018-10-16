@@ -607,8 +607,6 @@ namespace Lazinator.Core
             return l;
         }
 
-        // TODO: We could build MarkClean and MarkUnchanged into each Lazinator object. This could then work for structs too. 
-
         /// <summary>
         /// Marks all classes in a hierarchy as clean, so that IsDirty and HasChanged will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
         /// </summary>

@@ -7,7 +7,7 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorArray<T> : LazinatorList<T>, ILazinatorArray<T> where T : ILazinator
     {
-        // TODO: Consider an implementation in which LazinatorList is an underlying type, instead of throwing exceptions.
+        // TODO: Consider an implementation in which LazinatorList is an underlying type, instead of throwing exceptions when a List method is used.
         // Or implement LazinatorArray independently, using some LazinatorList functionality in a base class.
 
         public LazinatorArray()
