@@ -72,9 +72,9 @@ namespace Lazinator.Collections
             }
         }
 
-        private T GetSerializedContents(int index, bool trackSliceMemory)
+        private T GetSerializedContents(int index, bool copySlice)
         {
-            var byteSpan = GetListMemberSlice(index, trackSliceMemory);
+            var byteSpan = GetListMemberSlice(index, copySlice);
             if (byteSpan.Length == 0)
                 return default;
             T n2;
@@ -97,7 +97,7 @@ namespace Lazinator.Collections
             return FarmhashByteSpans.Hash32(byteSpan.Span);
         }
 
-        private LazinatorMemory GetListMemberSlice(int index, bool trackSliceMemory)
+        private LazinatorMemory GetListMemberSlice(int index, bool copySlice)
         {
             if (FullyDeserialized)
             { // we can't rely on original offsets, because an insertion/removal may have occurred
@@ -124,20 +124,24 @@ namespace Lazinator.Collections
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
             // write properties. But we include the OriginalSource to prevent objects from being disposed.
             IMemoryOwner<byte> slice = null;
-            if (trackSliceMemory)
+            if (copySlice)
             {
-                //byte[] DEBUG = MainListSerialized.ToArray();
-                //slice = new SimpleMemoryOwner<byte>(DEBUG);
-                SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
-                slice = (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage);
+                byte[] arrayCopy = new byte[nextOffset - offset];
+                Span<byte> source = MainListSerialized.Slice(offset, nextOffset - offset).Span;
+                source.CopyTo(arrayCopy);
+                slice = new SimpleMemoryOwner<byte>(arrayCopy);
+                return new LazinatorMemory(slice, 0, source.Length, LazinatorMemoryStorage?.OriginalSource);
+                //TODO: It might seem that the following would work, and an ObjectDisposedException would be generated if there is an attempt to use the list member slice after the underlying list has been disposed, since LazinatorMemoryStorage would be disposed. But it seems that the memory being used is being returned to the array pool and reused, causing difficult-to-track bugs that I haven't been able to replicate with a test.
+                //SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
+                //slice = (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage);
             }
             else
             {
                 SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
-                slice = trackSliceMemory ? (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+                slice = copySlice ? (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
+                var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
+                return childMemory;
             }
-            var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
-            return childMemory;
         }
 
         public T this[int index]
