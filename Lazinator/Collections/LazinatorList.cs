@@ -127,7 +127,9 @@ namespace Lazinator.Collections
             byte[] DEBUG = MainListSerialized.ToArray();
             if (trackSliceMemory)
             {
-                slice = new SimpleMemoryOwner<byte>(DEBUG);
+                //slice = new SimpleMemoryOwner<byte>(DEBUG);
+                SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
+                slice = trackSliceMemory ? (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage) : untrackedSlice;
             }
             else
             {
