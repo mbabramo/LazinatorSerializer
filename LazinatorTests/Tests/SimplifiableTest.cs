@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
-using ExampleNonexclusiveInterfaceImplementer = LazinatorTests.Examples.ExampleNonexclusiveInterfaceImplementer;
-using Lazinator.Wrappers;
-using LazinatorTests.Examples.Abstract;
-using LazinatorTests.Examples.NonAbstractGenerics;
 using Lazinator.Collections;
 
 namespace LazinatorTests.Tests

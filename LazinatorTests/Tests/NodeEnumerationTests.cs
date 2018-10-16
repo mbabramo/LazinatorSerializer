@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Lazinator.Collections;
 using LazinatorTests.Examples;
 using LazinatorTests.Examples.Collections;
 using Lazinator.Core;
-using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using Lazinator.Support;
 using System.Dynamic;
 
 namespace LazinatorTests.Tests

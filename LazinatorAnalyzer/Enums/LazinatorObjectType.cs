@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LazinatorCodeGen.Support;
+﻿using LazinatorCodeGen.Support;
 
 namespace Lazinator.CodeDescription
 {

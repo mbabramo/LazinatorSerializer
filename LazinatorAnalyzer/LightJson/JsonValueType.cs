@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace LightJson
+﻿namespace LightJson
 {
-	/// <summary>
-	/// Enumerates the types of Json values.
-	/// </summary>
-	public enum JsonValueType : byte
+    /// <summary>
+    /// Enumerates the types of Json values.
+    /// </summary>
+    public enum JsonValueType : byte
 	{
 		/// <summary>
 		/// A null value.

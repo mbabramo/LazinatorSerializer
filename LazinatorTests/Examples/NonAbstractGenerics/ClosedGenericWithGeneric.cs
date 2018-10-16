@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LazinatorTests.Examples.NonAbstractGenerics
+﻿namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     public partial class ClosedGenericWithGeneric : OpenGeneric<OpenGeneric<ExampleChild>>, IClosedGenericWithGeneric
     {

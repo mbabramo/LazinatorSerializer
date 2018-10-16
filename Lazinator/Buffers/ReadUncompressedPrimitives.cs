@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Text;
-using static System.Buffers.Binary.BinaryPrimitives;
-using System.Buffers.Text;
-using Lazinator.Exceptions;
 
 namespace Lazinator.Buffers
 {

@@ -5,10 +5,8 @@ using System.Text;
 using System.Linq;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Threading.Tasks;
 using Lazinator.CodeDescription;
 using LazinatorAnalyzer.AttributeClones;
-using LazinatorAnalyzer.Roslyn;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorCodeGen.Roslyn

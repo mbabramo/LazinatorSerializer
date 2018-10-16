@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Immutable;
 using Lazinator.CodeDescription;
@@ -11,7 +10,6 @@ using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
 using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorCodeGen.Roslyn
 {

@@ -1,6 +1,5 @@
 ﻿using Lazinator.Exceptions;
 using System;
-using System.IO;
 
 namespace Lazinator.Buffers
 {

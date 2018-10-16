@@ -1,14 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using LightJson.Serialization;
 
 namespace LightJson
 {
-	/// <summary>
-	/// Represents a key-value pair collection of JsonValue objects.
-	/// </summary>
-	[DebuggerDisplay("Count = {Count}")]
+    /// <summary>
+    /// Represents a key-value pair collection of JsonValue objects.
+    /// </summary>
+    [DebuggerDisplay("Count = {Count}")]
 	[DebuggerTypeProxy(typeof(JsonObjectDebugView))]
 	public sealed class JsonObject : IEnumerable<KeyValuePair<string, JsonValue>>, IEnumerable<JsonValue>
 	{

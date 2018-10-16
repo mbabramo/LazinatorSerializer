@@ -6,7 +6,6 @@ using FluentAssertions;
 using Lazinator.Collections.Dictionary;
 using Lazinator.Wrappers;
 using Lazinator.Core;
-using LazinatorTests.Examples;
 using Lazinator.Collections;
 
 namespace LazinatorTests.Tests

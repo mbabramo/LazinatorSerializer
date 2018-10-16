@@ -1,6 +1,4 @@
-﻿using LazinatorTests.Examples.Abstract;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     public partial class UnofficialInterfaceIncorporator : IUnofficialInterfaceIncorporator
     {

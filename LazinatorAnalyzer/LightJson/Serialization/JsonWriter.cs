@@ -1,17 +1,16 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
 
 namespace LightJson.Serialization
 {
-	using ErrorType = JsonSerializationException.ErrorType;
+    using ErrorType = JsonSerializationException.ErrorType;
 
-	/// <summary>
-	/// Represents a TextWriter adapter that can write string representations of JsonValues.
-	/// </summary>
-	public sealed class JsonWriter
+    /// <summary>
+    /// Represents a TextWriter adapter that can write string representations of JsonValues.
+    /// </summary>
+    public sealed class JsonWriter
 	{
 		private int indent;
 		private bool isNewLine;

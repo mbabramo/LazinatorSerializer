@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Lazinator.Buffers;
-using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 using static Lazinator.Core.LazinatorUtilities;

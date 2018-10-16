@@ -1,15 +1,14 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace LightJson.Serialization
 {
-	using ErrorType = JsonParseException.ErrorType;
+    using ErrorType = JsonParseException.ErrorType;
 
-	/// <summary>
-	/// Represents a text scanner that reads one character at a time.
-	/// </summary>
-	public sealed class TextScanner
+    /// <summary>
+    /// Represents a text scanner that reads one character at a time.
+    /// </summary>
+    public sealed class TextScanner
 	{
 		private TextReader reader;
 		private TextPosition position;

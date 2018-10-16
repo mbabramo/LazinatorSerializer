@@ -1,5 +1,4 @@
-﻿using System;
-using Lazinator.Attributes;
+﻿using Lazinator.Attributes;
 using Lazinator.Collections;
 
 namespace Lazinator.Spans

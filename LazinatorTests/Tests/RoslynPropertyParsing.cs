@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using LazinatorCodeGen.Roslyn;
 using System.Collections.Immutable;
-using LazinatorAnalyzer.Roslyn;
 using LazinatorTests.Support;
 
 namespace LazinatorTests.Tests

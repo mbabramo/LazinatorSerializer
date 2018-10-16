@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Lazinator.Wrappers
+﻿namespace Lazinator.Wrappers
 {
     public abstract partial class WAbstract<T> : IWAbstract<T>
     {

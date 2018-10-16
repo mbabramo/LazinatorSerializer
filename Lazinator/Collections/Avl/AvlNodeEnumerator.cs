@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-	public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator, new() where TValue : ILazinator, new()
+    public sealed class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator, new() where TValue : ILazinator, new()
     {
 		private AvlNode<TKey, TValue> _root;
 		private NextAction _nextAction;

@@ -7,12 +7,8 @@ using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
-using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
-using LazinatorTests.Examples.NonAbstractGenerics;
-using Lazinator.Buffers;
 using Lazinator.Collections.Dictionary;
-using LazinatorTests.Examples.Collections;
 
 namespace LazinatorTests.Tests
 {

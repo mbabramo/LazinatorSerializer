@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lazinator.Wrappers
+﻿namespace Lazinator.Wrappers
 {
     public partial struct WLongArray : IWLongArray
     {

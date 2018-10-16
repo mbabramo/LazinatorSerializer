@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Lazinator.CodeDescription
+﻿namespace Lazinator.CodeDescription
 {
     public enum LazinatorPropertyType : byte
     {

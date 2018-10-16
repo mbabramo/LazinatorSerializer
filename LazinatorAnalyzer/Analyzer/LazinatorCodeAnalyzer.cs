@@ -1,20 +1,8 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using LazinatorAnalyzer.Settings;
-using LazinatorAnalyzer.AttributeClones;
-using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.FindSymbols;
-using Location = Microsoft.CodeAnalysis.Location;
 
 namespace LazinatorAnalyzer.Analyzer
 {

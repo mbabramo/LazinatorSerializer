@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Buffers.Text;
 using static System.Buffers.Binary.BinaryPrimitives;
 using System.Runtime.InteropServices;
-using System.Buffers;
-using Lazinator.Support;
-using Lazinator.Core;
-using System.Runtime.CompilerServices;
 
 namespace Lazinator.Buffers
 {

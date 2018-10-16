@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     public readonly struct RecordLikeTypeWithLazinator
     {
