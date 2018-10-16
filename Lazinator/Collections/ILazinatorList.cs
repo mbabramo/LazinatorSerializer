@@ -15,7 +15,7 @@ namespace Lazinator.Collections
     }
 
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorList)]
-    interface ILazinatorList<T> where T : ILazinator
+    public interface ILazinatorList<T> where T : ILazinator
     {
         [CustomNonlazinatorWrite("WriteMainList")]
         [DoNotEnumerate]
