@@ -105,6 +105,7 @@ namespace Lazinator.CodeDescription
         private int? IntroducedWithVersion { get; set; }
         private int? EliminatedWithVersion { get; set; }
         internal bool DoNotEnumerate { get; set; }
+        private bool IncludeRefProperty { get; set; }
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
@@ -222,6 +223,10 @@ namespace Lazinator.CodeDescription
             ExcludableWhenIncludingMostChildren = excludable != null;
             CloneDoNotEnumerateAttribute doNotEnumerate = UserAttributes.OfType<CloneDoNotEnumerateAttribute>().FirstOrDefault();
             DoNotEnumerate = doNotEnumerate != null;
+            CloneIncludeRefPropertyAttribute includeRefProperty = UserAttributes.OfType<CloneIncludeRefPropertyAttribute>().FirstOrDefault();
+            IncludeRefProperty = includeRefProperty != null;
+            if (IncludeRefProperty && !IsPrimitive)
+                throw new LazinatorCodeGenException($"The IncludeRefPropertyAttribute was applied to {PropertySymbol}, but can be used only with a non-primitive property.");
             CloneAllowLazinatorInNonLazinatorAttribute allowLazinatorInNonLazinator = UserAttributes.OfType<CloneAllowLazinatorInNonLazinatorAttribute>().FirstOrDefault();
             AllowLazinatorInNonLazinator = allowLazinatorInNonLazinator != null;
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
@@ -765,11 +770,15 @@ namespace Lazinator.CodeDescription
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct, " = false")};
-        {GetAttributesToInsert()}{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{
-            get;
-            set;
-        }}
+                {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}_Ref
+                {{
+                    get;
+                }}
+                ")}{GetAttributesToInsert()}{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}
+                {{
+                    get;
+                    set;
+                }}
 ";
             sb.Append(propertyString);
         }
@@ -793,7 +802,15 @@ namespace Lazinator.CodeDescription
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
             string propertyString = $@"        {ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
-        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+        {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}_Ref
+                {{
+                    get
+                    {{
+                        IsDirty = true;
+                        return ref _{PropertyName};
+                    }}
+                }}
+                ")}{GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{

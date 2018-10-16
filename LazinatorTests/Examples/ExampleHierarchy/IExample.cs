@@ -9,6 +9,7 @@ namespace LazinatorTests.Examples
     public interface IExample : ILazinator // note that this ILazinator reference is unnecessary
     {
         bool MyBool { get; set; }
+        [IncludeRefProperty]
         char MyChar { get; set; }
         ExampleChild MyChild1 { get; set; }
         ExampleChild MyChild2 { get; set; }
@@ -23,6 +24,7 @@ namespace LazinatorTests.Examples
         [DerivationKeyword("virtual")] double? MyNullableDouble { get; set; }
         TimeSpan? MyNullableTimeSpan { get; set; }
         [EliminatedWithVersion(3)] string MyOldString { get; set; }
+        [IncludeRefProperty]
         string MyString { get; set; }
         uint MyUint { get; set; }
         TestEnum MyTestEnum { get; set; }
