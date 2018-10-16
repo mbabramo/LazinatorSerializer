@@ -14,7 +14,7 @@ using LazinatorTests.Examples.Structs;
 namespace LazinatorTests.Tests
 {
     public class BuiltInCollectionsTests : SerializationDeserializationTestBase
-    {
+    { 
         [Fact]
         public void LazinatorTuple()
         {
