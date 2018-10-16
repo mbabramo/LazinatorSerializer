@@ -2,7 +2,7 @@
 
 namespace LazinatorTests.Examples
 {
-    [Implements(new string[] { "LazinatorObjectVersionUpgrade", "OnDirty", "OnDescendantIsDirty" })]
+    [Implements(new string[] { "LazinatorObjectVersionUpgrade", "OnDirty", "OnDescendantIsDirty", "OnCompleteClone" })]
     public partial class Example : IExample
     {
         public Example()
@@ -21,6 +21,11 @@ namespace LazinatorTests.Examples
 
         public bool _OnDirtyCalled = false;
         public bool _OnDescendantIsDirtyCalled = false;
+
+        public void OnCompleteClone(Example other)
+        {
+            // could do something here
+        }
 
         public void OnDirty()
         {

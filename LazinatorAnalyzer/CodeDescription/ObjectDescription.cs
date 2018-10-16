@@ -60,6 +60,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsOnDirty => ImplementedMethods.Contains("OnDirty");
         public bool ImplementsOnDescendantIsDirty => ImplementedMethods.Contains("OnDescendantIsDirty");
         public bool ImplementsOnFreeInMemoryObjects => ImplementedMethods.Contains("OnFreeInMemoryObjects");
+        public bool ImplementsOnClone => ImplementedMethods.Contains("OnCompleteClone");
         public bool ImplementsConvertFromBytesAfterHeader => ImplementedMethods.Contains("ConvertFromBytesAfterHeader");
         public bool ImplementsWritePropertiesIntoBuffer => ImplementedMethods.Contains("WritePropertiesIntoBuffer");
         public bool ImplementsEnumerateLazinatorDescendants => ImplementedMethods.Contains("EnumerateLazinatorDescendants");
@@ -579,7 +580,8 @@ namespace Lazinator.CodeDescription
                                     clone.LazinatorMemoryStorage.DisposeIndependently();
                                 }}
                             }}
-                            clone.LazinatorParents = default;
+                            clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"
+            clone.OnCompleteClone(this);")}
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
 
