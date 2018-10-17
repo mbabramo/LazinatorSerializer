@@ -740,7 +740,7 @@ namespace Lazinator.Core
         /// <param name="parents"></param>
         public static LazinatorMemory ReplaceBuffer(LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents, bool isTopOfHierarchy, bool isStruct)
         {
-            if (existingBuffer != null)
+            if (existingBuffer != null && existingBuffer.OwnedMemory != newBuffer.OwnedMemory)
             {
                 var ownedMemory = existingBuffer.OwnedMemory;
                 if (parents.ParentSharesBuffer(ownedMemory) || (!isTopOfHierarchy && !parents.Any()) || isStruct)
