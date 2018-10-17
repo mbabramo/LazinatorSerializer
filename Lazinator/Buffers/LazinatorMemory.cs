@@ -59,7 +59,8 @@ namespace Lazinator.Buffers
         public override void Dispose()
         {
             base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
-            OwnedMemory.Dispose();
+            if (!(OwnedMemory is SimpleMemoryOwner<byte>))
+                OwnedMemory.Dispose();
         }
 
         public override void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
@@ -79,7 +80,7 @@ namespace Lazinator.Buffers
 
         public static implicit operator LazinatorMemory(byte[] array)
         {
-            return new LazinatorMemory(new Memory<byte>(array));
+            return new LazinatorMemory(array);
         }
 
         public LazinatorMemory Slice(int position) => Slice(position, Length - position);

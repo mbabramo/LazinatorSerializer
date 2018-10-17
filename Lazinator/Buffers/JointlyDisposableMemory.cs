@@ -88,7 +88,8 @@ namespace Lazinator.Buffers
                     {
                         if (buffer is JointlyDisposableMemory j2)
                             j2.OriginalSource = null; // don't dispose original source -- just dispose the buffer itself
-                        buffer.Dispose();
+                        if (!(buffer is SimpleMemoryOwner<byte>))
+                            buffer.Dispose();
                     }
                 }
             }
@@ -127,7 +128,8 @@ namespace Lazinator.Buffers
                 }
                 if (DisposeTogether != null)
                     foreach (IMemoryOwner<byte> m in DisposeTogether)
-                        m.Dispose();
+                        if (!(m is SimpleMemoryOwner<byte>))
+                            m.Dispose();
             }
         }
 

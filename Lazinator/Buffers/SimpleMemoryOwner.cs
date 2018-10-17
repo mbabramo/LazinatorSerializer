@@ -22,6 +22,7 @@ namespace Lazinator.Buffers
         public void Dispose()
         {
             Disposed = true;
+            // Note: This doesn't actually dispose of the underlying memory, since Memory<T> does not define Dispose. In general, you should not manually call Dispose() on SimpleMemoryOwner. The memory will be automatically garbage collected.
         }
     }
 }

@@ -71,7 +71,8 @@ namespace Lazinator.Buffers
             if (!UseMemoryPooling)
                 return; // no need to dispose -- garbage collection will handle it
             base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
-            CurrentBuffer.Dispose();
+            if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
+                CurrentBuffer.Dispose();
         }
     }
 }
