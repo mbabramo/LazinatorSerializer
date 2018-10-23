@@ -110,6 +110,7 @@ namespace Lazinator.Buffers
                 else
                     buffer = this;
                 OriginalSource.DoNotDisposeWithThis(buffer, false);
+                OriginalSource = null;
             }
         }
 
