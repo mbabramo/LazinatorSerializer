@@ -427,7 +427,7 @@ namespace Lazinator.Core
         /// Enumerates all nodes in the hierarchy.
         /// </summary>
         /// <returns>The dirty nodes</returns>
-        public static IEnumerable<ILazinator> GetAllNodes(this ILazinator startNode)
+        public static IEnumerable<ILazinator> EnumerateAllNodes(this ILazinator startNode)
         {
             return startNode.EnumerateLazinatorNodes(x => true, false, x => true, false, false);
         }
@@ -440,6 +440,16 @@ namespace Lazinator.Core
         public static IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorChildren(this ILazinator node, bool deserializedOnly = false)
         {
             return node.EnumerateLazinatorDescendants(x => true, true, x => false, deserializedOnly, true);
+        }
+
+        /// <summary>
+        /// Enumerates the descendants of a node that have already been deserialized.
+        /// </summary>
+        /// <param name="node">The node</param>
+        /// <returns>The node and any deserialized descendants</returns>
+        public static IEnumerable<(string propertyName, ILazinator descendant)> EnumerateDeserializedDescendants(this ILazinator node)
+        {
+            return node.EnumerateLazinatorDescendants(x => true, true, x => true, true, false);
         }
 
         /// <summary>

@@ -9,6 +9,9 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Collections.Dictionary;
+using Lazinator.Buffers;
+using LazinatorTests.Examples.NonAbstractGenerics;
+using LazinatorTests.Examples.Abstract;
 
 namespace LazinatorTests.Tests
 {
@@ -549,6 +552,62 @@ namespace LazinatorTests.Tests
             d[0] = GetTypicalExample();
             d.EnsureLazinatorMemoryUpToDate(); // allocation ID 0 is not disposed.
             var x = e.MyChild1;
+        }
+
+        [Fact]
+        public void BuffersUpdateInTandem()
+        {
+            Example e = GetTypicalExample().CloneLazinatorTyped();
+            e.MyChild1.MyLong = 3;
+            var y = e.MyChild1.MyExampleGrandchild;
+            e.MyChild2.MyExampleGrandchild.MyInt = 6;
+            ConfirmBuffersUpdateInTandem(e);
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+        [Fact]
+        public void BuffersUpdateInTandem_Struct()
+        {
+            ContainerForExampleStructWithoutClass e = new ContainerForExampleStructWithoutClass() { ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 19 } };
+            e = e.CloneLazinatorTyped();
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyInt = 29; // make it dirty but leave child struct clean
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+        [Fact]
+        public void BuffersUpdateInTandem_OpenGeneric_Struct()
+        {
+            OpenGenericStayingOpenContainer e = new OpenGenericStayingOpenContainer();
+            e.ClosedGenericFloat = new OpenGeneric<WFloat>() { MyT = 3.45F };
+            e.ClosedGenericInterface = new OpenGeneric<IExampleChild>() { MyT = GetExampleChild(1) };
+            e = e.CloneLazinatorTyped();
+            ConfirmBuffersUpdateInTandem(e);
+            e.ClosedGenericInterface.MyT.MyLong = 29; // make it dirty but leave child struct clean
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+        [Fact]
+        public void BuffersUpdateInTandem_GenericFromBase_Struct()
+        {
+            GenericFromBase<WFloat> e = new GenericFromBase<WFloat>();
+            e.MyT = new WFloat(8.65F);
+            e = e.CloneLazinatorTyped();
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyInt = 29; // make it dirty but leave child struct clean
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+        private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
+        {
+            itemToUpdate.EnsureLazinatorMemoryUpToDate();
+            var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.OwnedMemory).AllocationID;
+            IEnumerable<ILazinator> descendants = itemToUpdate.EnumerateAllNodes().ToList();
+            foreach (ILazinator lazinator in descendants)
+            {
+                ExpandableBytes b = lazinator.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+                b.AllocationID.Should().Be(allocationID);
+            }
         }
 
         private LazinatorDictionary<WInt, Example> GetDictionary()

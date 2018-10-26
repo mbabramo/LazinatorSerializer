@@ -7,5 +7,6 @@ namespace LazinatorTests.Examples.Abstract
     public interface IGenericFromBase<T> where T : ILazinator, new()
     {
         T MyT { get; set; }
+        int MyInt { get; set; }
     }
 }

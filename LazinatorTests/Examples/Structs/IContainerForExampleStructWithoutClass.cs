@@ -6,5 +6,6 @@ namespace LazinatorTests.Examples.Structs
     public interface IContainerForExampleStructWithoutClass
     {
         ExampleStructWithoutClass ExampleStructWithoutClass { get; set; }
+        int MyInt { get; set; }
     }
 }

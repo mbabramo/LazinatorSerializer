@@ -139,7 +139,7 @@ namespace LazinatorTests.Tests
         {
             LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
             var c = l.CloneLazinatorTyped();
-            var results2 = c.GetAllNodes().ToList();
+            var results2 = c.EnumerateAllNodes().ToList();
             results2[0].Should().Be(c);
             results2[1].LazinatorParents.LastAdded.Should().Be(c);
         }
