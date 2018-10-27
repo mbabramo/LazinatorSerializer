@@ -427,7 +427,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     var deserialized = Buckets;
                 }
-                WriteChild(ref writer, _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

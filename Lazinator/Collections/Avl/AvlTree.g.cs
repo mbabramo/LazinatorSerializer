@@ -407,7 +407,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = Root;
                 }
-                WriteChild(ref writer, _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _Root, includeChildrenMode, _Root_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

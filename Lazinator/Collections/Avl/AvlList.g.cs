@@ -408,7 +408,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = UnderlyingTree;
                 }
-                WriteChild(ref writer, _UnderlyingTree, includeChildrenMode, _UnderlyingTree_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _UnderlyingTree, includeChildrenMode, _UnderlyingTree_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

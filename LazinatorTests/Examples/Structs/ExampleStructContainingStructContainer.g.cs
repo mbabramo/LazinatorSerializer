@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = Subcontainer;
                 }
-                WriteChild(ref writer, _Subcontainer, includeChildrenMode, _Subcontainer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _Subcontainer, includeChildrenMode, _Subcontainer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

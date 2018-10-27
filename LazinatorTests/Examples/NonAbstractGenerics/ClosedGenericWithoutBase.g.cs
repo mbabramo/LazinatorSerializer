@@ -416,7 +416,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = ItemU;
                 }
-                WriteChild(ref writer, _ItemU, includeChildrenMode, _ItemU_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _ItemU, includeChildrenMode, _ItemU_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

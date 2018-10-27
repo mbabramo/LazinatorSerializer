@@ -1138,7 +1138,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = ListWrappedBytes;
                 }
-                WriteChild(ref writer, _ListWrappedBytes, includeChildrenMode, _ListWrappedBytes_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ListWrappedBytes_ByteIndex, _ListWrappedBytes_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _ListWrappedBytes, includeChildrenMode, _ListWrappedBytes_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ListWrappedBytes_ByteIndex, _ListWrappedBytes_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -1151,7 +1151,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedBool;
                 }
-                WriteChild(ref writer, _WrappedBool, includeChildrenMode, _WrappedBool_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
+                WriteChild(ref writer, ref _WrappedBool, includeChildrenMode, _WrappedBool_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
             }
             if (updateStoredBuffer)
             {
@@ -1164,7 +1164,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedByte;
                 }
-                WriteChild(ref writer, _WrappedByte, includeChildrenMode, _WrappedByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
+                WriteChild(ref writer, ref _WrappedByte, includeChildrenMode, _WrappedByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
             }
             if (updateStoredBuffer)
             {
@@ -1177,7 +1177,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedChar;
                 }
-                WriteChild(ref writer, _WrappedChar, includeChildrenMode, _WrappedChar_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2), verifyCleanness, updateStoredBuffer, true, true, this);
+                WriteChild(ref writer, ref _WrappedChar, includeChildrenMode, _WrappedChar_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2), verifyCleanness, updateStoredBuffer, true, true, this);
             }
             if (updateStoredBuffer)
             {
@@ -1190,7 +1190,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedNullableBool;
                 }
-                WriteChild(ref writer, _WrappedNullableBool, includeChildrenMode, _WrappedNullableBool_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
+                WriteChild(ref writer, ref _WrappedNullableBool, includeChildrenMode, _WrappedNullableBool_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
             }
             if (updateStoredBuffer)
             {
@@ -1203,7 +1203,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedNullableByte;
                 }
-                WriteChild(ref writer, _WrappedNullableByte, includeChildrenMode, _WrappedNullableByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
+                WriteChild(ref writer, ref _WrappedNullableByte, includeChildrenMode, _WrappedNullableByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -1216,7 +1216,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedNullableChar;
                 }
-                WriteChild(ref writer, _WrappedNullableChar, includeChildrenMode, _WrappedNullableChar_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
+                WriteChild(ref writer, ref _WrappedNullableChar, includeChildrenMode, _WrappedNullableChar_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -1229,7 +1229,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedNullableSByte;
                 }
-                WriteChild(ref writer, _WrappedNullableSByte, includeChildrenMode, _WrappedNullableSByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
+                WriteChild(ref writer, ref _WrappedNullableSByte, includeChildrenMode, _WrappedNullableSByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
             if (updateStoredBuffer)
             {
@@ -1242,7 +1242,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedSByte;
                 }
-                WriteChild(ref writer, _WrappedSByte, includeChildrenMode, _WrappedSByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
+                WriteChild(ref writer, ref _WrappedSByte, includeChildrenMode, _WrappedSByte_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1), verifyCleanness, updateStoredBuffer, true, true, this);
             }
             if (updateStoredBuffer)
             {

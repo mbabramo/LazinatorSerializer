@@ -399,7 +399,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     var deserialized = MyBase;
                 }
-                WriteChild(ref writer, _MyBase, includeChildrenMode, _MyBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _MyBase, includeChildrenMode, _MyBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {

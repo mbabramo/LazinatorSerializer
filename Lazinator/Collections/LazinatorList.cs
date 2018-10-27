@@ -339,7 +339,7 @@ namespace Lazinator.Collections
                     {
                         var itemIndex = i; // avoid closure problem
                         var underlyingItem = UnderlyingList[itemIndex];
-                        WriteChild(ref w, underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex, false), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        WriteChild(ref w, ref underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex, false), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                             underlyingItem = underlyingItem.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);

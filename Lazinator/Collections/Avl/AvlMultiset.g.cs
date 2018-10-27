@@ -428,7 +428,7 @@ namespace Lazinator.Collections.Avl
                 {
                     var deserialized = UnderlyingSet;
                 }
-                WriteChild(ref writer, _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _UnderlyingSet, includeChildrenMode, _UnderlyingSet_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
