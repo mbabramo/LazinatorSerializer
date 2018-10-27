@@ -141,14 +141,9 @@ namespace Lazinator.Core
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
             ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
-            if (child == null)
-            {
-                WriteNullChild(ref writer, restrictLengthTo250Bytes, skipLength);
-                return;
-            }
-            bool childCouldHaveChanged = childHasBeenAccessed || (includeChildrenMode != child.OriginalIncludeChildrenMode);
+            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && includeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
-            if (!childHasBeenAccessed)
+            if (!childHasBeenAccessed && child != null)
             {
                 childStorage = getChildSliceFn();
                 if (childStorage == null || childStorage.Memory.Length == 0)
@@ -157,7 +152,7 @@ namespace Lazinator.Core
             else
             {
                 // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
-                if (childCouldHaveChanged && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode) 
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode) 
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to EnsureLazinatorMemoryUpToDate.
                     childStorage = child.LazinatorMemoryStorage;
@@ -171,16 +166,26 @@ namespace Lazinator.Core
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
                 if (updateStoredBuffer)
                 {
-                    if (!skipLength)
-                        startPosition += restrictLengthTo250Bytes ? 1 : 4;
-                    LazinatorMemory newBuffer = writer.Slice(startPosition);
-                    var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents, false, child.IsStruct);
-                    child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer.
+                    if (child != null)
+                    {
+                        if (!skipLength)
+                            startPosition += restrictLengthTo250Bytes ? 1 : 4;
+                        LazinatorMemory newBuffer = writer.Slice(startPosition);
+                        var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents, false, child.IsStruct);
+                        child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer.
+                    }
                 }
             }
             else
             {
-                WriteChildToBinary(ref writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
+                if (child == null)
+                {
+                    WriteNullChild(ref writer, restrictLengthTo250Bytes, skipLength);
+                }
+                else
+                {
+                    WriteChildToBinary(ref writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
+                }
             }
             AddParentToChildless(child, parent);
         }
