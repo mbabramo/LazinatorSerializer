@@ -424,7 +424,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     _MyT_Accessed = false;
                 }
-                Debug; // so, if it's a class, we don't want to reset it, because we want references to still work -- hence the code above. So, if we move this to FreeInMemoryObjects with a parameter (bool structsOnly), then we would have code like this but also handle the not structs only situation, in which case we would just set it to default. That is, in FreeInMemoryObjects, for each generic, if not structs only, set to default; otherwise, include the code above. Then, above, we call FreeInMemoryObjects for structs only. 
             }
             else
             {
