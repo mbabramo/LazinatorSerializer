@@ -304,7 +304,10 @@ namespace LazinatorTests.Examples.NonLazinator
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                }
+                
             }
             else
             {

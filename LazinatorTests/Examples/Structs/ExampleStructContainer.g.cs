@@ -551,7 +551,18 @@ namespace LazinatorTests.Examples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt)))
+                    {
+                        IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct)))
+                    {
+                        MyExampleStruct.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
                 _IntWrapper_Accessed = false;
                 _MyExampleStruct_Accessed = false;
             }

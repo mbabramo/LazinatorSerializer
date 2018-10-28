@@ -399,7 +399,14 @@ namespace LazinatorTests.Examples.Hierarchy
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
+                    {
+                        ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {

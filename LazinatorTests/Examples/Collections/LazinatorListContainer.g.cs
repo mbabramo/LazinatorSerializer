@@ -391,7 +391,14 @@ namespace LazinatorTests.Examples.Collections
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_MyList_Accessed && _MyList != null)
+                    {
+                        MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {

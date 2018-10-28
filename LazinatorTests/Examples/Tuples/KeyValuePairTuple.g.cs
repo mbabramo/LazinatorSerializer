@@ -324,7 +324,10 @@ namespace LazinatorTests.Examples.Tuples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                }
+                
             }
             else
             {

@@ -464,7 +464,18 @@ namespace Lazinator.Collections
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                    {
+                        Item1.UpdateStoredBuffer(ref writer, startPosition + _Item1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                    {
+                        Item2.UpdateStoredBuffer(ref writer, startPosition + _Item2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
                 if (_Item1_Accessed && _Item1 != null && _Item1.IsStruct && (_Item1.IsDirty || _Item1.DescendantIsDirty))
                 {
                     _Item1_Accessed = false;

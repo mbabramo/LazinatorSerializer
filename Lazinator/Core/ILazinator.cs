@@ -105,6 +105,14 @@ namespace Lazinator.Core
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
         void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
+        /// This is used internally to update a stored buffer.
+        /// </summary>
+        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
+        /// <param name="startPosition">The start position within the writer</param>
+        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
+        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
+        void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's LazinatorObjectBytes.
         /// </summary>
         LazinatorMemory LazinatorMemoryStorage { get; set; }

@@ -389,7 +389,14 @@ namespace Lazinator.Collections.Avl
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_UnderlyingSet_Accessed && _UnderlyingSet != null)
+                    {
+                        UnderlyingSet.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingSet_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {

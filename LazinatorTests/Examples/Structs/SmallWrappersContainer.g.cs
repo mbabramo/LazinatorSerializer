@@ -1092,7 +1092,46 @@ namespace LazinatorTests.Examples.Structs
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null)
+                    {
+                        ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool)))
+                    {
+                        WrappedBool.UpdateStoredBuffer(ref writer, startPosition + _WrappedBool_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte)))
+                    {
+                        WrappedByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedByte_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar)))
+                    {
+                        WrappedChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedChar_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool)))
+                    {
+                        WrappedNullableBool.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableBool_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte)))
+                    {
+                        WrappedNullableByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableByte_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar)))
+                    {
+                        WrappedNullableChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableChar_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte)))
+                    {
+                        WrappedNullableSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableSByte_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte)))
+                    {
+                        WrappedSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedSByte_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
                 _WrappedBool_Accessed = false;
                 _WrappedByte_Accessed = false;
                 _WrappedChar_Accessed = false;

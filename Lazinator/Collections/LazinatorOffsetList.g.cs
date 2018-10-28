@@ -459,7 +459,18 @@ namespace Lazinator.Collections
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_FourByteItems_Accessed && _FourByteItems != null)
+                    {
+                        FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_TwoByteItems_Accessed && _TwoByteItems != null)
+                    {
+                        TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {

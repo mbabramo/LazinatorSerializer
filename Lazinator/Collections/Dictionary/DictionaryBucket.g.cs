@@ -465,7 +465,18 @@ namespace Lazinator.Collections.Dictionary
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_Keys_Accessed && _Keys != null)
+                    {
+                        Keys.UpdateStoredBuffer(ref writer, startPosition + _Keys_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_Values_Accessed && _Values != null)
+                    {
+                        Values.UpdateStoredBuffer(ref writer, startPosition + _Values_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {

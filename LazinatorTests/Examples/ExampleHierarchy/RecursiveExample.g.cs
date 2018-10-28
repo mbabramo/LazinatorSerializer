@@ -432,7 +432,18 @@ namespace LazinatorTests.Examples.Hierarchy
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_RecursiveClass_Accessed && _RecursiveClass != null)
+                    {
+                        RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_RecursiveInterface_Accessed && _RecursiveInterface != null)
+                    {
+                        RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {

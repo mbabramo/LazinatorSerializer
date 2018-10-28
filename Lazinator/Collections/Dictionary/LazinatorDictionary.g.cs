@@ -388,7 +388,14 @@ namespace Lazinator.Collections.Dictionary
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;
+                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                {
+                    if (_Buckets_Accessed && _Buckets != null)
+                    {
+                        Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
             }
             else
             {
