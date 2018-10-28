@@ -980,7 +980,7 @@ namespace Lazinator.CodeDescription
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
                             _DescendantIsDirty = false;";
-            beforeBufferIsUpdated = GetStructAndOpenGenericReset(beforeBufferIsUpdated);
+            beforeBufferIsUpdated += GetStructAndOpenGenericReset();
 
             beforeBufferIsUpdated += $@"
                     }}
@@ -992,11 +992,12 @@ namespace Lazinator.CodeDescription
             return beforeBufferIsUpdated;
         }
 
-        private string GetStructAndOpenGenericReset(string postEncodingDirtinessReset)
+        private string GetStructAndOpenGenericReset()
         {
+            string reset = "";
             foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
             {
-                postEncodingDirtinessReset +=
+                reset +=
                     $@"
                     _{property.PropertyName}_Accessed = false;"; // force deserialization to make the struct clean
             }
@@ -1004,14 +1005,14 @@ namespace Lazinator.CodeDescription
                 .Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))
             {
                 if (!property.GenericConstrainedToStruct)
-                    postEncodingDirtinessReset +=
+                    reset +=
                         $@"
                         if (_{property.PropertyName}_Accessed && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                         {{
                             _{property.PropertyName}_Accessed = false;
                         }}";
                 else
-                    postEncodingDirtinessReset +=
+                    reset +=
                         $@"
                         if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
                         {{
@@ -1019,7 +1020,7 @@ namespace Lazinator.CodeDescription
                         }}";
             }
 
-            return postEncodingDirtinessReset;
+            return reset;
         }
 
         string skipWritePropertiesIntoBufferString = "// WritePropertiesIntoBuffer defined in main class; thus skipped here";
