@@ -980,7 +980,7 @@ namespace Lazinator.CodeDescription
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
                             _DescendantIsDirty = false;");
-            // AppendUpdateStoredBufferForDeserializedChildren(sb); // not yet implemented
+            AppendUpdateStoredBufferForDeserializedChildren(sb);
             sb.Append(GetStructAndOpenGenericReset()); // DEBUG -- not needed?
 
             sb.AppendLine($@"
@@ -1026,7 +1026,7 @@ namespace Lazinator.CodeDescription
         {
             sb.AppendLine($@"if (updateDeserializedChildren)
                         {{");
-            foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType)) // DEBUG -- what about non-Lazinators -- don't they need to update too?
+            foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType))
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
