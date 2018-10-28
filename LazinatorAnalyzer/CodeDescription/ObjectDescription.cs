@@ -979,7 +979,7 @@ namespace Lazinator.CodeDescription
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
                             _DescendantIsDirty = false;");
-            AppendUpdateStoredBufferForDeserializedChildren(sb);
+            // AppendUpdateStoredBufferForDeserializedChildren(sb); // not yet implemented
             sb.Append(GetStructAndOpenGenericReset()); // DEBUG -- not needed?
 
             sb.AppendLine($@"
