@@ -441,10 +441,6 @@ namespace LazinatorTests.Tests
             short randShort = 0;
             for (int i = 0; i < repetitions; i++)
             {
-                if (i > 0 && e._WrappedInt.LazinatorMemoryStorage != null && (e.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes).AllocationID != (e._WrappedInt.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes).AllocationID)
-                {
-                    var DEBUG = 0;
-                }
                 if (i == 0)
                 {
                     e.MyChild1.MyLong = 0;
