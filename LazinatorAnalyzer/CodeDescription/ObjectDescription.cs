@@ -964,13 +964,62 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
             public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
-            string postEncodingDirtinessReset = GetPostEncodingDirtinessReset();
-            sb.AppendLine(postEncodingDirtinessReset);
+            string beforeBufferIsUpdated = GetCodeBeforeBufferIsUpdated();
+            sb.AppendLine(beforeBufferIsUpdated);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
                 LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);");
             sb.Append($@"}}
 ");
+        }
+
+        private string GetCodeBeforeBufferIsUpdated()
+        {
+            string beforeBufferIsUpdated = $@"
+                        _IsDirty = false;
+                        if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                        {{
+                            _DescendantIsDirty = false;";
+            beforeBufferIsUpdated = GetStructAndOpenGenericReset(beforeBufferIsUpdated);
+
+            beforeBufferIsUpdated += $@"
+                    }}
+                    else
+                    {{
+                        throw new Exception(""Cannot update stored buffer when serializing only some children."");
+                    }}";
+
+            return beforeBufferIsUpdated;
+        }
+
+        private string GetStructAndOpenGenericReset(string postEncodingDirtinessReset)
+        {
+            foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            {
+                postEncodingDirtinessReset +=
+                    $@"
+                    _{property.PropertyName}_Accessed = false;"; // force deserialization to make the struct clean
+            }
+            foreach (var property in PropertiesIncludingInherited
+                .Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))
+            {
+                if (!property.GenericConstrainedToStruct)
+                    postEncodingDirtinessReset +=
+                        $@"
+                        if (_{property.PropertyName}_Accessed && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                        {{
+                            _{property.PropertyName}_Accessed = false;
+                        }}";
+                else
+                    postEncodingDirtinessReset +=
+                        $@"
+                        if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                        {{
+                            _{property.PropertyName}_Accessed = false;
+                        }}";
+            }
+
+            return postEncodingDirtinessReset;
         }
 
         string skipWritePropertiesIntoBufferString = "// WritePropertiesIntoBuffer defined in main class; thus skipped here";
@@ -1183,50 +1232,7 @@ namespace Lazinator.CodeDescription
 
             if (usePastTense)
                 throw new NotImplementedException();
-            return GetPostEncodingDirtinessReset();
-        }
-
-        private string GetPostEncodingDirtinessReset()
-        {
-            string postEncodingDirtinessReset = $@"
-                        _IsDirty = false;
-                        if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-                        {{
-                            _DescendantIsDirty = false;";
-
-            foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
-            {
-                postEncodingDirtinessReset +=
-                    $@"
-                    _{property.PropertyName}_Accessed = false;"; // force deserialization to make the struct clean
-            }
-            foreach (var property in PropertiesIncludingInherited
-                .Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))
-            {
-                if (!property.GenericConstrainedToStruct)
-                    postEncodingDirtinessReset +=
-                        $@"
-                        if (_{property.PropertyName}_Accessed && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
-                        {{
-                            _{property.PropertyName}_Accessed = false;
-                        }}";
-                else
-                    postEncodingDirtinessReset +=
-                        $@"
-                        if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
-                        {{
-                            _{property.PropertyName}_Accessed = false;
-                        }}";
-            }
-
-            postEncodingDirtinessReset += $@"
-                    }}
-                    else
-                    {{
-                        throw new Exception(""Cannot update stored buffer when serializing only some children."");
-                    }}";
-
-            return postEncodingDirtinessReset;
+            return GetCodeBeforeBufferIsUpdated();
         }
 
         private static void GetSupportedConversions(CodeStringBuilder sb, List<PropertyDescription> propertiesSupportedCollections, List<PropertyDescription> propertiesSupportedTuples, List<PropertyDescription> propertiesNonSerialized)
