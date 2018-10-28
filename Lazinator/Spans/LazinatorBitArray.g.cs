@@ -408,11 +408,12 @@ namespace Lazinator.Spans
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_ByteSpan_Accessed && _ByteSpan != null)
                     {
-                        ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

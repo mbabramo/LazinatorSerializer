@@ -670,23 +670,24 @@ namespace Lazinator.Collections.Avl
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
                     {
-                        Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Left_Accessed && _Left != null)
                     {
-                        Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Right_Accessed && _Right != null)
                     {
-                        Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
                     {
-                        Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

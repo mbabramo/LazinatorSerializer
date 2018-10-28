@@ -440,11 +440,12 @@ namespace LazinatorTests.Examples.Abstract
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_LazinatorExample_Accessed && _LazinatorExample != null)
                     {
-                        LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

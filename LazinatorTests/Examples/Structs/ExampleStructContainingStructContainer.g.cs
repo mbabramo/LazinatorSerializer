@@ -384,11 +384,12 @@ namespace LazinatorTests.Examples.Structs
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_Subcontainer_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(_Subcontainer, default(ExampleStructContainingStruct)))
                     {
-                        Subcontainer.UpdateStoredBuffer(ref writer, startPosition + _Subcontainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Subcontainer.UpdateStoredBuffer(ref writer, startPosition + _Subcontainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

@@ -377,11 +377,12 @@ namespace LazinatorTests.Examples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_ItemU_Accessed && _ItemU != null)
                     {
-                        ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

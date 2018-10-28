@@ -1105,35 +1105,36 @@ namespace LazinatorTests.Examples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_IncludableChild_Accessed && _IncludableChild != null)
                     {
-                        IncludableChild.UpdateStoredBuffer(ref writer, startPosition + _IncludableChild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _IncludableChild.UpdateStoredBuffer(ref writer, startPosition + _IncludableChild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyChild1_Accessed && _MyChild1 != null)
                     {
-                        MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyChild2_Accessed && _MyChild2 != null)
                     {
-                        MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyChild2Previous_Accessed && _MyChild2Previous != null)
                     {
-                        MyChild2Previous.UpdateStoredBuffer(ref writer, startPosition + _MyChild2Previous_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyChild2Previous.UpdateStoredBuffer(ref writer, startPosition + _MyChild2Previous_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null)
                     {
-                        MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)))
                     {
-                        WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_ExcludableChild_Accessed && _ExcludableChild != null)
                     {
-                        ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

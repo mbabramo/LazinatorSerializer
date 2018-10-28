@@ -448,15 +448,16 @@ namespace LazinatorTests.Examples.Subclasses
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
                     {
-                        SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
                     {
-                        SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

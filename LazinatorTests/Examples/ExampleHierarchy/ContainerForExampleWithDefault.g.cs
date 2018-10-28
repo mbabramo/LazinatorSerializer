@@ -357,11 +357,12 @@ namespace LazinatorTests.Examples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_Example_Accessed && _Example != null)
                     {
-                        Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

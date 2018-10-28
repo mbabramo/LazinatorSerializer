@@ -408,11 +408,12 @@ namespace Lazinator.Wrappers
                 _IsDirty = false;
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
-                    _DescendantIsDirty = false;if (updateDeserializedChildren)
+                    _DescendantIsDirty = false;
+                    if (updateDeserializedChildren)
                     {
                         if (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)))
                         {
-                            NonNullValue.UpdateStoredBuffer(ref writer, startPosition + _NonNullValue_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                            _NonNullValue.UpdateStoredBuffer(ref writer, startPosition + _NonNullValue_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                         }
                     }
                     

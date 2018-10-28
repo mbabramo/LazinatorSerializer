@@ -708,23 +708,24 @@ namespace LazinatorTests.Examples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null)
                     {
-                        ANonSkippableEarlierExample.UpdateStoredBuffer(ref writer, startPosition + _ANonSkippableEarlierExample_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ANonSkippableEarlierExample.UpdateStoredBuffer(ref writer, startPosition + _ANonSkippableEarlierExample_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Example_Accessed && _Example != null)
                     {
-                        Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Example2_Accessed && _Example2 != null)
                     {
-                        Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Example3_Accessed && _Example3 != null)
                     {
-                        Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

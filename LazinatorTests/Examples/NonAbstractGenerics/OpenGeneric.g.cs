@@ -419,11 +419,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)))
                     {
-                        MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

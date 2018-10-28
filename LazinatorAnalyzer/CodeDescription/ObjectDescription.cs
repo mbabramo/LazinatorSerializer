@@ -981,8 +981,7 @@ namespace Lazinator.CodeDescription
                         {{
                             _DescendantIsDirty = false;");
             AppendUpdateStoredBufferForDeserializedChildren(sb);
-            // sb.Append(GetStructAndOpenGenericReset()); // DEBUG -- not needed?
-
+            sb.Append(GetStructAndOpenGenericReset()); // needed for dirtiness to be set correctly
             sb.AppendLine($@"
                     }}
                     else

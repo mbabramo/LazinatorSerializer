@@ -617,15 +617,16 @@ namespace LazinatorTests.Examples
                 _IsDirty = false;
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
-                    _DescendantIsDirty = false;if (updateDeserializedChildren)
+                    _DescendantIsDirty = false;
+                    if (updateDeserializedChildren)
                     {
                         if (_MyChild1_Accessed && _MyChild1 != null)
                         {
-                            MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                            _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                         }
                         if (_MyChild2_Accessed && _MyChild2 != null)
                         {
-                            MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                            _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                         }
                     }
                     

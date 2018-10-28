@@ -369,11 +369,12 @@ namespace Lazinator.Collections.Avl
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_Root_Accessed && _Root != null)
                     {
-                        Root.UpdateStoredBuffer(ref writer, startPosition + _Root_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Root.UpdateStoredBuffer(ref writer, startPosition + _Root_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

@@ -380,11 +380,12 @@ namespace LazinatorTests.Examples.Structs
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)))
                     {
-                        WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

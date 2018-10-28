@@ -331,7 +331,8 @@ namespace Lazinator.Wrappers
                 _IsDirty = false;
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
-                    _DescendantIsDirty = false;if (updateDeserializedChildren)
+                    _DescendantIsDirty = false;
+                    if (updateDeserializedChildren)
                     {
                     }
                     

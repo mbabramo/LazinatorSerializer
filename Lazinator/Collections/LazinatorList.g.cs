@@ -394,11 +394,12 @@ namespace Lazinator.Collections
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_Offsets_Accessed && _Offsets != null)
                     {
-                        Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

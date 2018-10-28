@@ -489,15 +489,16 @@ namespace LazinatorTests.Examples
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
-                _DescendantIsDirty = false;if (updateDeserializedChildren)
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
                 {
                     if (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null)
                     {
-                        MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyWrapperContainer_Accessed && _MyWrapperContainer != null)
                     {
-                        MyWrapperContainer.UpdateStoredBuffer(ref writer, startPosition + _MyWrapperContainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyWrapperContainer.UpdateStoredBuffer(ref writer, startPosition + _MyWrapperContainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
