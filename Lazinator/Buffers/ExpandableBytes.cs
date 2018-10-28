@@ -12,6 +12,7 @@ namespace Lazinator.Buffers
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
         public static ulong NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
         public static bool UseMemoryPooling = true;
+        public bool DoNotAutomaticallyReturnToPool;
         public ulong AllocationID;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
@@ -68,7 +69,7 @@ namespace Lazinator.Buffers
 
         public override void Dispose()
         {
-            if (!UseMemoryPooling)
+            if (!UseMemoryPooling || DoNotAutomaticallyReturnToPool)
                 return; // no need to dispose -- garbage collection will handle it
             base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
             if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed

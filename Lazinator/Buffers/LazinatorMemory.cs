@@ -69,6 +69,14 @@ namespace Lazinator.Buffers
             DisposeWithThis(newBuffer);
         }
 
+        public void DoNotAutomaticallyReturnToPool()
+        {
+            if (OwnedMemory is ExpandableBytes e)
+            {
+                e.DoNotAutomaticallyReturnToPool = true;
+            }
+        }
+
         #endregion
 
         #region Conversions and slicing

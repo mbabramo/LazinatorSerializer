@@ -1757,6 +1757,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return default({AppropriatelyQualifiedTypeName});
                         }}
+                        storage.DoNotAutomaticallyReturnToPool();
                         ReadOnlySpan<byte> span = storage.Span;
 
                         int bytesSoFar = 0;
@@ -2022,6 +2023,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return default;
                         }}
+                        storage.DoNotAutomaticallyReturnToPool();
                         ReadOnlySpan<byte> span = storage.ReadOnlySpan;
 
                         int bytesSoFar = 0;
@@ -2224,6 +2226,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
+                            storage.DoNotAutomaticallyReturnToPool();
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}();
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
