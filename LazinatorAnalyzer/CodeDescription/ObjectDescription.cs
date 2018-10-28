@@ -981,7 +981,7 @@ namespace Lazinator.CodeDescription
                         {{
                             _DescendantIsDirty = false;");
             AppendUpdateStoredBufferForDeserializedChildren(sb);
-            sb.Append(GetStructAndOpenGenericReset()); // DEBUG -- not needed?
+            // sb.Append(GetStructAndOpenGenericReset()); // DEBUG -- not needed?
 
             sb.AppendLine($@"
                     }}
@@ -1024,13 +1024,14 @@ namespace Lazinator.CodeDescription
 
         private void AppendUpdateStoredBufferForDeserializedChildren(CodeStringBuilder sb)
         {
-            sb.AppendLine($@"if (updateDeserializedChildren)
+            sb.AppendLine($@"
+                        if (updateDeserializedChildren)
                         {{");
             foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType))
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
-                    {property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
             sb.AppendLine($@"}}");

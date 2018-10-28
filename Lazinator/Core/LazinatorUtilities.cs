@@ -170,9 +170,11 @@ namespace Lazinator.Core
                     {
                         if (!skipLength)
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
-                        LazinatorMemory newBuffer = writer.Slice(startPosition);
-                        var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents, false, child.IsStruct);
-                        child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer. DEBUG : Try replacing with UpdateStoredBuffer (instead of above), and modify UpdateStoredBuffer so that it optionally can replace children.
+                        child.UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, true);
+                        // DEBUG
+                        //LazinatorMemory newBuffer = writer.Slice(startPosition);
+                        //var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents, false, child.IsStruct);
+                        //child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer. DEBUG : Try replacing with UpdateStoredBuffer (instead of above), and modify UpdateStoredBuffer so that it optionally can replace children.
                     }
                 }
             }
