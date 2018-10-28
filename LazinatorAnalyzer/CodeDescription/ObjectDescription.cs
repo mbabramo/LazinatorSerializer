@@ -950,7 +950,7 @@ namespace Lazinator.CodeDescription
             
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
-                            UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode);");
+                            UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);");
             sb.Append($@"}}
 ");
             sb.Append($@"}}
@@ -962,7 +962,7 @@ namespace Lazinator.CodeDescription
         private void AppendUpdateStoredBufferMethod(CodeStringBuilder sb)
         {
             sb.AppendLine($@"
-            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode)
+            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
             string postEncodingDirtinessReset = GetDescendantDirtinessChecks(true, false);
             sb.AppendLine(postEncodingDirtinessReset);
