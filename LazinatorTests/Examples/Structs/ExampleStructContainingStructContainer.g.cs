@@ -387,10 +387,6 @@ namespace LazinatorTests.Examples.Structs
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Subcontainer_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(_Subcontainer, default(ExampleStructContainingStruct)))
-                    {
-                        _Subcontainer.UpdateStoredBuffer(ref writer, startPosition + _Subcontainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
-                    }
                 }
                 
                 _Subcontainer_Accessed = false;

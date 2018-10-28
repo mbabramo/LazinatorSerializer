@@ -383,10 +383,6 @@ namespace LazinatorTests.Examples.Structs
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)))
-                    {
-                        _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
-                    }
                 }
                 
                 _WrappedInt_Accessed = false;
