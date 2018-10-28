@@ -172,7 +172,7 @@ namespace Lazinator.Core
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
                         LazinatorMemory newBuffer = writer.Slice(startPosition);
                         var replacementStorage = ReplaceBuffer(child.LazinatorMemoryStorage, newBuffer, child.LazinatorParents, false, child.IsStruct);
-                        child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer.
+                        child.DeserializeLazinator(replacementStorage); // child's children may rely on replaced buffer. DEBUG : Try replacing with UpdateStoredBuffer (instead of above), and modify UpdateStoredBuffer so that it optionally can replace children.
                     }
                 }
             }
@@ -187,7 +187,7 @@ namespace Lazinator.Core
                     WriteChildToBinary(ref writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
                 }
             }
-            AddParentToChildless(child, parent);
+            AddParentToChildless(ref child, parent);
         }
 
         public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
@@ -215,7 +215,7 @@ namespace Lazinator.Core
             return childStorage;
         }
 
-        private static void AddParentToChildless<T>(T child, ILazinator parent) where T : ILazinator
+        private static void AddParentToChildless<T>(ref T child, ILazinator parent) where T : ILazinator
         {
             if (child != null && !child.LazinatorParents.Any())
                 child.LazinatorParents = child.LazinatorParents.WithAdded(parent); // set the parent so that this object can be used like a deserialized object
