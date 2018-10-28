@@ -979,7 +979,8 @@ namespace Lazinator.CodeDescription
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
                             _DescendantIsDirty = false;");
-            sb.Append(GetStructAndOpenGenericReset());
+            AppendUpdateStoredBufferForDeserializedChildren(sb);
+            sb.Append(GetStructAndOpenGenericReset()); // DEBUG -- not needed?
 
             sb.AppendLine($@"
                     }}
@@ -1018,6 +1019,20 @@ namespace Lazinator.CodeDescription
             }
 
             return reset;
+        }
+
+        private void AppendUpdateStoredBufferForDeserializedChildren(CodeStringBuilder sb)
+        {
+            sb.AppendLine($@"if (updateDeserializedChildren)
+                        {{");
+            foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType)) // DEBUG -- what about non-Lazinators -- don't they need to update too?
+            {
+                sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
+                {{
+                    {property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                }}");
+            }
+            sb.AppendLine($@"}}");
         }
 
         string skipWritePropertiesIntoBufferString = "// WritePropertiesIntoBuffer defined in main class; thus skipped here";
