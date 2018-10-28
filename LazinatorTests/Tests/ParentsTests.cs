@@ -526,7 +526,7 @@ namespace LazinatorTests.Tests
             Example e = d[0];
             d[0] = GetTypicalExample();
             d.EnsureLazinatorMemoryUpToDate(); // allocation ID 1 disposed.
-            Action a = () => { var x = e.MyChild1; };
+            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.OwnedMemory.Memory; }; // note that error occurs only when looking at underlying memory
             a.Should().Throw<ObjectDisposedException>();
         }
 
