@@ -426,12 +426,13 @@ namespace LazinatorTests.Tests
                 foreach (bool makeParentUpToDate in new bool[] { true, false })
                     foreach (RepetitionsToMutate mutateParent in new RepetitionsToMutate[] { RepetitionsToMutate.All, RepetitionsToMutate.None, RepetitionsToMutate.Even, RepetitionsToMutate.Odd })
                         foreach (RepetitionsToMutate mutateChild in new RepetitionsToMutate[] { RepetitionsToMutate.All, RepetitionsToMutate.None, RepetitionsToMutate.Even, RepetitionsToMutate.Odd })
-                            yield return new object[] { makeChildUpToDate, makeParentUpToDate, mutateParent, mutateChild };
+                            foreach (bool doNotAutomaticallyReturnToPool in new bool[] { true, false })
+                                yield return new object[] { makeChildUpToDate, makeParentUpToDate, mutateParent, mutateChild, doNotAutomaticallyReturnToPool };
         }
 
         [Theory]
         [MemberData(nameof(CanRepeatedlyData))]
-        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate, RepetitionsToMutate mutateParent, RepetitionsToMutate mutateChild)
+        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate, RepetitionsToMutate mutateParent, RepetitionsToMutate mutateChild, bool doNotAutomaticallyReturnToPool)
         {
             Example e = GetTypicalExample();
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
@@ -441,6 +442,8 @@ namespace LazinatorTests.Tests
             short randShort = 0;
             for (int i = 0; i < repetitions; i++)
             {
+                if (doNotAutomaticallyReturnToPool && e.LazinatorMemoryStorage != null)
+                    e.LazinatorMemoryStorage.DoNotAutomaticallyReturnToPool();
                 if (i == 0)
                 {
                     e.MyChild1.MyLong = 0;
@@ -471,7 +474,11 @@ namespace LazinatorTests.Tests
                     e.MyChild1.MyShort = randShort;
                 }
                 if (makeChildUpToDate)
+                {
+                    if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage != null)
+                        e.MyChild1.LazinatorMemoryStorage.DoNotAutomaticallyReturnToPool();
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();
+                }
                 if (makeParentUpToDate)
                     e.EnsureLazinatorMemoryUpToDate();
             }

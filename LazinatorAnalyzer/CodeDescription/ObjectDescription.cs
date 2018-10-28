@@ -975,8 +975,7 @@ namespace Lazinator.CodeDescription
 
         private void GetCodeBeforeBufferIsUpdated(CodeStringBuilder sb)
         {
-            sb.Append($@"
-                        _IsDirty = false;
+            sb.Append($@"_IsDirty = false;
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
                             _DescendantIsDirty = false;");

@@ -170,7 +170,10 @@ namespace Lazinator.Core
                     {
                         if (!skipLength)
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
-                        child.UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, true);
+                        if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e && !e.DoNotAutomaticallyReturnToPool && ExpandableBytes.UseMemoryPooling)
+                        {
+                            child.UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, true);
+                        }
                     }
                 }
             }
