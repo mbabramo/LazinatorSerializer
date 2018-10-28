@@ -964,8 +964,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
             public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
-            string beforeBufferIsUpdated = GetCodeBeforeBufferIsUpdated();
-            sb.AppendLine(beforeBufferIsUpdated);
+            GetCodeBeforeBufferIsUpdated(sb);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
                 LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);");
@@ -973,23 +972,21 @@ namespace Lazinator.CodeDescription
 ");
         }
 
-        private string GetCodeBeforeBufferIsUpdated()
+        private void GetCodeBeforeBufferIsUpdated(CodeStringBuilder sb)
         {
-            string beforeBufferIsUpdated = $@"
+            sb.Append($@"
                         _IsDirty = false;
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
-                            _DescendantIsDirty = false;";
-            beforeBufferIsUpdated += GetStructAndOpenGenericReset();
+                            _DescendantIsDirty = false;");
+            sb.Append(GetStructAndOpenGenericReset());
 
-            beforeBufferIsUpdated += $@"
+            sb.AppendLine($@"
                     }}
                     else
                     {{
                         throw new Exception(""Cannot update stored buffer when serializing only some children."");
-                    }}";
-
-            return beforeBufferIsUpdated;
+                    }}");
         }
 
         private string GetStructAndOpenGenericReset()
@@ -1228,12 +1225,6 @@ namespace Lazinator.CodeDescription
             }
 
             return additionalDescendantDirtinessChecks;
-
-            // After encoding in a mode in which we don't encode all children, we will need to do a check.
-
-            if (usePastTense)
-                throw new NotImplementedException();
-            return GetCodeBeforeBufferIsUpdated();
         }
 
         private static void GetSupportedConversions(CodeStringBuilder sb, List<PropertyDescription> propertiesSupportedCollections, List<PropertyDescription> propertiesSupportedTuples, List<PropertyDescription> propertiesNonSerialized)
