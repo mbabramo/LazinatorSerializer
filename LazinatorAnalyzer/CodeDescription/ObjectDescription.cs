@@ -334,6 +334,7 @@ namespace Lazinator.CodeDescription
 			                get;
                         }}
 
+                        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
                         public abstract void EnsureLazinatorMemoryUpToDate();
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
@@ -962,7 +963,7 @@ namespace Lazinator.CodeDescription
         private void AppendUpdateStoredBufferMethod(CodeStringBuilder sb)
         {
             sb.AppendLine($@"
-            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            public {DerivationKeyword}void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
             GetCodeBeforeBufferIsUpdated(sb);
             sb.AppendLine($@"
