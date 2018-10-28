@@ -168,7 +168,7 @@ namespace LazinatorTests.Examples.Abstract
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode);
+                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
             }
         }
         
