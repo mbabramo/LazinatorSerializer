@@ -160,7 +160,7 @@ namespace Lazinator.Core
                         childCouldHaveChanged = false;
                 }
             }
-            if (!childCouldHaveChanged)
+            if (!childCouldHaveChanged && !updateStoredBuffer /* DEBUG */)
             {
                 int startPosition = writer.Position;
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
@@ -237,7 +237,7 @@ namespace Lazinator.Core
             T childCopy = child;
             void action(ref BinaryBufferWriter w)
             {
-                if (childCopy.LazinatorMemoryStorage == null || childCopy.LazinatorMemoryStorage.Length == 0 || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
+                if (childCopy.LazinatorMemoryStorage == null || childCopy.LazinatorMemoryStorage.Length == 0 || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode || updateStoredBuffer)
                     childCopy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
                     w.Write(childCopy.LazinatorMemoryStorage.Span); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
