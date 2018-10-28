@@ -262,8 +262,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendGeneralDefinitions(CodeStringBuilder sb)
         {
-            string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false, false);
-            string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(false, true);
+            string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false);
+            string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructor = GetConstructor();
             string cloneMethod = GetCloneMethod();
@@ -964,7 +964,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
             public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
-            string postEncodingDirtinessReset = GetDescendantDirtinessChecks(true, false);
+            string postEncodingDirtinessReset = GetPostEncodingDirtinessReset();
             sb.AppendLine(postEncodingDirtinessReset);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition);
@@ -1149,7 +1149,7 @@ namespace Lazinator.CodeDescription
             return classContainingStructContainingClassError;
         }
 
-        private string GetDescendantDirtinessChecks(bool postEncodingResetCheck, bool usePastTense)
+        private string GetDescendantDirtinessChecks(bool usePastTense)
         {
             string additionalDescendantDirtinessChecks;
             // we need a way of determining descendant dirtiness manually. We build a set of checks, each beginning with "||" (which, for the first entry, we strip out for one scenario below).
@@ -1177,17 +1177,18 @@ namespace Lazinator.CodeDescription
                 additionalDescendantDirtinessChecks = manualDescendantDirtinessChecks;
             }
 
-            if (!postEncodingResetCheck)
-                return additionalDescendantDirtinessChecks;
+            return additionalDescendantDirtinessChecks;
 
             // After encoding in a mode in which we don't encode all children, we will need to do a check.
 
             if (usePastTense)
                 throw new NotImplementedException();
+            return GetPostEncodingDirtinessReset();
+        }
 
-            string postEncodingDirtinessReset;
-            postEncodingDirtinessReset =
-                    $@"
+        private string GetPostEncodingDirtinessReset()
+        {
+            string postEncodingDirtinessReset = $@"
                         _IsDirty = false;
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
