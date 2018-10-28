@@ -227,6 +227,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(int[]);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

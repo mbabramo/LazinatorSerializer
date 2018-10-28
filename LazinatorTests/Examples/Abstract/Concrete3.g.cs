@@ -703,6 +703,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 return default(List<int>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

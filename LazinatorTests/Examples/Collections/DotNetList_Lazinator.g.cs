@@ -400,14 +400,11 @@ namespace LazinatorTests.Examples.Collections
         
         private static List<ExampleChild> ConvertFromBytes_List_GExampleChild_g(LazinatorMemory storage)
         {
-            if (storage.OwnedMemory is ExpandableBytes e)
-            {
-                e.DoNotAutomaticallyReturnToPool = true;
-            }
             if (storage.Length == 0)
             {
                 return default(List<ExampleChild>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

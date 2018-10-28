@@ -498,6 +498,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 return default(List<T>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

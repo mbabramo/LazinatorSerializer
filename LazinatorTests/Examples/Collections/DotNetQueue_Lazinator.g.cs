@@ -390,6 +390,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Queue<ExampleChild>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

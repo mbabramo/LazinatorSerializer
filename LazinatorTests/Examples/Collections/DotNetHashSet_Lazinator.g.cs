@@ -386,6 +386,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(HashSet<ExampleChild>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

@@ -406,6 +406,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 return default(List<EnumWithinClass>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

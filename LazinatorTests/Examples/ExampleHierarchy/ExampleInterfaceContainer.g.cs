@@ -474,6 +474,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 return default(List<IExample>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

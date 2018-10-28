@@ -964,6 +964,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Memory<int>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1049,6 +1050,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Memory<int>?);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1096,6 +1098,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(ReadOnlyMemory<int>?);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1158,6 +1161,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(ReadOnlyMemory<char>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1207,6 +1211,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(ReadOnlyMemory<int>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

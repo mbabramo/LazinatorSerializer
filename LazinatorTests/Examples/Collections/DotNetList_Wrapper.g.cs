@@ -516,6 +516,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(List<WInt>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -574,6 +575,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(List<WNullableByte>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -632,6 +634,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(List<WNullableInt>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

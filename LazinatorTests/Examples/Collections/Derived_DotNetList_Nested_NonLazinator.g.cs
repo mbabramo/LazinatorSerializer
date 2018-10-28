@@ -227,6 +227,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(List<List<NonLazinatorClass>>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -307,6 +308,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(List<NonLazinatorClass>);
             }
+            storage.DoNotAutomaticallyReturnToPool();
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

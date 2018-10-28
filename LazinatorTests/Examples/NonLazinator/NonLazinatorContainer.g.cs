@@ -591,6 +591,7 @@ namespace LazinatorTests.Examples
                 {
                     return default(NonLazinatorInterchangeableClass);
                 }
+                storage.DoNotAutomaticallyReturnToPool();
                 NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass();
                 interchange.DeserializeLazinator(storage);
                 return interchange.Interchange_NonLazinatorInterchangeableClass();
@@ -625,6 +626,7 @@ namespace LazinatorTests.Examples
                 {
                     return default(NonLazinatorInterchangeableStruct);
                 }
+                storage.DoNotAutomaticallyReturnToPool();
                 NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct();
                 interchange.DeserializeLazinator(storage);
                 return interchange.Interchange_NonLazinatorInterchangeableStruct();

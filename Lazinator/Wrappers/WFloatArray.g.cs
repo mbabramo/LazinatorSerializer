@@ -412,6 +412,7 @@ namespace Lazinator.Wrappers
                 {
                     return default(float[]);
                 }
+                storage.DoNotAutomaticallyReturnToPool();
                 ReadOnlySpan<byte> span = storage.Span;
                 
                 int bytesSoFar = 0;
