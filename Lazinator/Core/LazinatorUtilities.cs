@@ -184,7 +184,7 @@ namespace Lazinator.Core
                 }
                 else
                 {
-                    WriteChildToBinary(ref writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
+                    WriteChildToBinary(ref writer, ref child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
                 }
             }
             AddParentToChildless(ref child, parent);
@@ -232,14 +232,15 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
         /// <param name="skipLength">If true, the length is omitted altogether.</param>
         /// <param name="parent">The parent of the object being written</param>
-        public static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength) where T : ILazinator
+        public static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength) where T : ILazinator
         {
+            T childCopy = child;
             void action(ref BinaryBufferWriter w)
             {
-                if (child.LazinatorMemoryStorage == null || child.LazinatorMemoryStorage.Length == 0 || child.IsDirty || child.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != child.OriginalIncludeChildrenMode)
-                    child.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                if (childCopy.LazinatorMemoryStorage == null || childCopy.LazinatorMemoryStorage.Length == 0 || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
+                    childCopy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
-                    w.Write(child.LazinatorMemoryStorage.Span); // the child has been accessed, but is unchanged, so we can use the storage holding the child
+                    w.Write(childCopy.LazinatorMemoryStorage.Span); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
             }
             if (skipLength)
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);
