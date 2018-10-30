@@ -114,7 +114,8 @@ namespace Lazinator.Collections
             int offset = GetOffset(index);
             int nextOffset = Offsets[index];
 
-            return LazinatorMemoryStorage.Slice(_MainListSerialized_ByteIndex + offset, nextOffset - offset);
+            var mainListSerializedStorage = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null); // this is equivalent to MainListSerialized (omitting the length, containing the bytes). We don't use MainListSerialized itself because it's not slicesable
+            return mainListSerializedStorage.Slice(offset, nextOffset - offset);
 
             // DEBUG
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
