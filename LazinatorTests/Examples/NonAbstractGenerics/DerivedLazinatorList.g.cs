@@ -151,6 +151,7 @@ namespace LazinatorTests.Examples
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyListName);
+            OnPropertiesWritten(updateStoredBuffer);
         }
         
     }

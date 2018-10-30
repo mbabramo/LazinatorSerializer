@@ -467,6 +467,7 @@ namespace Lazinator.Collections
             {
                 _LazinatorList_T_EndByteIndex = writer.Position - startPosition;
             }
+            OnPropertiesWritten(updateStoredBuffer);
         }
         
         /* Conversion of supported collections and tuples */

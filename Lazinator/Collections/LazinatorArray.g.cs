@@ -130,6 +130,7 @@ namespace Lazinator.Collections
         {
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
+            OnPropertiesWritten(updateStoredBuffer);
         }
         
     }
