@@ -627,9 +627,10 @@ namespace LazinatorTests.Tests
         {
             itemToUpdate.EnsureLazinatorMemoryUpToDate();
             var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.OwnedMemory).AllocationID;
-            IEnumerable<ILazinator> descendants = itemToUpdate.EnumerateAllNodes().ToList();
-            foreach (ILazinator lazinator in descendants)
+            List<ILazinator> descendants = itemToUpdate.EnumerateAllNodes().ToList();
+            for (int i = 0; i < descendants.Count; i++) 
             {
+                ILazinator lazinator = descendants[i];
                 ExpandableBytes b = lazinator.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
                 if (b != null)
                     b.AllocationID.Should().Be(allocationID);

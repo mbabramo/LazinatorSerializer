@@ -64,6 +64,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsConvertFromBytesAfterHeader => ImplementedMethods.Contains("ConvertFromBytesAfterHeader");
         public bool ImplementsOnUpdateDeserializedChildren => ImplementedMethods.Contains("OnUpdateDeserializedChildren");
         public bool ImplementsWritePropertiesIntoBuffer => ImplementedMethods.Contains("WritePropertiesIntoBuffer");
+        public bool ImplementsOnPropertiesWritten => ImplementedMethods.Contains("OnPropertiesWritten");
         public bool ImplementsEnumerateLazinatorDescendants => ImplementedMethods.Contains("EnumerateLazinatorDescendants");
         public bool ImplementsAssignCloneProperties => ImplementedMethods.Contains("AssignCloneProperties");
 
@@ -1033,8 +1034,8 @@ namespace Lazinator.CodeDescription
                     _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
-            sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"
-                                        OnUpdateDeserializedChildren(ref writer, startPosition);")}}}");
+            sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);
+                                    ")}}}");
         }
 
         string skipWritePropertiesIntoBufferString = "// WritePropertiesIntoBuffer defined in main class; thus skipped here";
@@ -1135,7 +1136,11 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}} (end of {NameIncludingGenerics}) "");");
             }
-                sb.Append($@"}}
+            if (ImplementsOnPropertiesWritten)
+            {
+                sb.AppendLine($@"OnPropertiesWritten(updateStoredBuffer);");
+            }
+            sb.Append($@"}}
 ");
         }
 
