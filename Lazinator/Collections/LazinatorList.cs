@@ -63,15 +63,15 @@ namespace Lazinator.Collections
                 for (int i = 0; i < count; i++)
                 {
                     if (!ItemsAccessedBeforeFullyDeserialized[i])
-                        UnderlyingList[i] = GetSerializedContents(i, true);
+                        UnderlyingList[i] = GetSerializedContents(i);
                 }
                 FullyDeserialized = true;
             }
         }
 
-        private T GetSerializedContents(int index, bool copySlice)
+        private T GetSerializedContents(int index)
         {
-            var byteSpan = GetListMemberSlice(index, copySlice);
+            var byteSpan = GetListMemberSlice(index);
             if (byteSpan.Length == 0)
                 return default;
             T n2;
@@ -90,11 +90,11 @@ namespace Lazinator.Collections
             if (FullyDeserialized || (UnderlyingList != null && ItemsAccessedBeforeFullyDeserialized[index]))
                 return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();
             
-            var byteSpan = GetListMemberSlice(index, false);
+            var byteSpan = GetListMemberSlice(index);
             return FarmhashByteSpans.Hash32(byteSpan.Span);
         }
 
-        private LazinatorMemory GetListMemberSlice(int index, bool copySlice)
+        private LazinatorMemory GetListMemberSlice(int index)
         {
             if (FullyDeserialized)
             { // we can't rely on original offsets, because an insertion/removal may have occurred
@@ -116,14 +116,6 @@ namespace Lazinator.Collections
 
             var mainListSerializedStorage = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null); // this is equivalent to MainListSerialized (omitting the length, containing the bytes). We don't use MainListSerialized itself because it's not slicesable
             return mainListSerializedStorage.Slice(offset, nextOffset - offset);
-
-            // DEBUG
-            // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
-            // write properties. But we include the OriginalSource to prevent objects from being disposed.
-            SimpleMemoryOwner<byte> untrackedSlice = new SimpleMemoryOwner<byte>(MainListSerialized);
-            IMemoryOwner<byte> slice = (IMemoryOwner<byte>)new ExpandableBytes(untrackedSlice, LazinatorMemoryStorage);
-            var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
-            return childMemory;
         }
 
         private int GetOffset(int index)
@@ -134,33 +126,6 @@ namespace Lazinator.Collections
             else
                 offset = Offsets[index - 1];
             return offset;
-        }
-
-
-        // DEBUG -- copySlice is unnecessary
-        // DEBUG2 -- we're not yet triggering OnUpdateDeserializedChildren
-
-        // How do we ensure that after serialization occurs, the child items get updated?
-        // If the list is clean, then the entire storage of the LazinatorList is written in one fell swoop. But UpdateStoredBuffer will be called if the list is instantiated. Then, OnUpdateDeserializedChildren will be called, and the active BinaryBufferWriter can be used.
-        // If the list is dirty or has a dirty descendant, then the writing of properties will work as follows: 
-        // If updateStoredBuffer is true, then after writing properties into buffer, we call UpdateStoredBuffer with updateDeserializedChildren = false. The expectation is that we'll update each child when writing the properties, so we do this in WriteMainList.  The WriteChild method there will do this assuming that the child is in memory, and the child will get the new buffer. 
-        // But what happens if updateStoredBuffer is false? If that is so, WriteMainList still updates MainListSerialized and Offsets. But it does so by copying the bytes of MainListSerialized so that we're not using a buffer that is supposed to be independent. At this point, if a child is accessed, then we'll have the updated source and the updated main list serialized. DEBUG: An alternative approach would be to save the original version of MainListSerialized and Offsets and immediately switch them back after we update with updateStoredBuffer = false. We don't need MainListSerialized, but don't want to have any connection to the other buffer. We do need Offsets to refer to the original LazinatorMemoryStorage. 
-
-        public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
-        {
-            if (UnderlyingList == null)
-                return;
-            for (int index = 0; index < UnderlyingList.Count; index++)
-            {
-                if (FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index])
-                {
-                    var current = ((IList<T>)UnderlyingList)[index];
-                    if (current != null)
-                    {
-                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                }
-            }
         }
 
         public T this[int index]
@@ -175,7 +140,7 @@ namespace Lazinator.Collections
                 {
                     if (ItemsAccessedBeforeFullyDeserialized[index])
                         return default;
-                    current = GetSerializedContents(index, true);
+                    current = GetSerializedContents(index);
                     UnderlyingList[index] = current;
                     ItemsAccessedBeforeFullyDeserialized[index] = true;
                 }
@@ -343,6 +308,30 @@ namespace Lazinator.Collections
             }
         }
 
+
+        // How do we ensure that after serialization occurs, the child items get updated?
+        // If the list is clean, then the entire storage of the LazinatorList is written in one fell swoop. But UpdateStoredBuffer will be called if the list is instantiated. Then, OnUpdateDeserializedChildren will be called, and the active BinaryBufferWriter can be used.
+        // If the list is dirty or has a dirty descendant, then the writing of properties will work as follows: 
+        // If updateStoredBuffer is true, then after writing properties into buffer, we call UpdateStoredBuffer with updateDeserializedChildren = false. The expectation is that we'll update each child when writing the properties, so we do this in WriteMainList.  The WriteChild method there will do this assuming that the child is in memory, and the child will get the new buffer. 
+        // But what happens if updateStoredBuffer is false? If that is so, WriteMainList still updates MainListSerialized and Offsets. But it then immediately switches them back after we update with updateStoredBuffer = false. This ensures that Offsets refers to the original LazinatorMemoryStorage. 
+
+        public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (UnderlyingList == null)
+                return;
+            for (int index = 0; index < UnderlyingList.Count; index++)
+            {
+                if (FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index])
+                {
+                    var current = ((IList<T>)UnderlyingList)[index];
+                    if (current != null)
+                    {
+                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+            }
+        }
+
         public void OnPropertiesWritten(bool updateStoredBuffer)
         {
             if (updateStoredBuffer)
@@ -380,7 +369,7 @@ namespace Lazinator.Collections
                     {
                         var itemIndex = i; // avoid closure problem
                         var underlyingItem = UnderlyingList[itemIndex];
-                        WriteChild(ref w, ref underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex, false), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
+                        WriteChild(ref w, ref underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                             underlyingItem = underlyingItem.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
