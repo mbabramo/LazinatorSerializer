@@ -365,7 +365,6 @@ namespace Lazinator.Collections.Avl
         
         public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
-            
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {

@@ -10,7 +10,7 @@ using System.Buffers;
 
 namespace Lazinator.Collections
 {
-    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties" })]
+    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren" })]
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T>, ILazinatorList where T : ILazinator
     {
         [NonSerialized] private bool FullyDeserialized;
@@ -111,11 +111,7 @@ namespace Lazinator.Collections
             // The offste of the third is Offsets[1] and the next offset is Offsets[2], the position at the end of the third item.
             if (Offsets == null || index >= Offsets.Count)
                 return LazinatorUtilities.EmptyLazinatorMemory;
-            int offset;
-            if (index == 0)
-                offset = 0;
-            else
-                offset = Offsets[index - 1];
+            int offset = GetOffset(index);
             int nextOffset = Offsets[index];
 
             // We slice from MainListSerialized, not from LazinatorMemoryStorage, because MainListSerialized but not LazinatorMemoryStorage is always updated when we 
@@ -139,6 +135,33 @@ namespace Lazinator.Collections
                 slice = new SimpleMemoryOwner<byte>(MainListSerialized);
                 var childMemory = new LazinatorMemory(slice, offset, nextOffset - offset, LazinatorMemoryStorage?.OriginalSource);
                 return childMemory;
+            }
+        }
+
+        private int GetOffset(int index)
+        {
+            int offset;
+            if (index == 0)
+                offset = 0;
+            else
+                offset = Offsets[index - 1];
+            return offset;
+        }
+
+        public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (UnderlyingList == null)
+                return;
+            for (int index = 0; index < UnderlyingList.Count; index++)
+            {
+                if (FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index])
+                {
+                    var current = ((IList<T>)UnderlyingList)[index];
+                    if (current != null)
+                    {
+                        current.UpdateStoredBuffer(ref writer, startPosition + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
             }
         }
 

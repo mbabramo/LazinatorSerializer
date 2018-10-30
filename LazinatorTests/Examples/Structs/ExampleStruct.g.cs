@@ -613,7 +613,6 @@ namespace LazinatorTests.Examples
             
             public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {
-                
                 _IsDirty = false;
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
