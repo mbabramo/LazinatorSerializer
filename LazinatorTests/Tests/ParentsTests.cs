@@ -12,6 +12,7 @@ using Lazinator.Collections.Dictionary;
 using Lazinator.Buffers;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
+using LazinatorTests.Examples.Collections;
 
 namespace LazinatorTests.Tests
 {
@@ -605,6 +606,23 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
+        [Fact]
+        public void BuffersUpdateInTandem_LazinatorList()
+        {
+            LazinatorListContainer e = new LazinatorListContainer();
+            e.MyList = new LazinatorList<ExampleChild>();
+            e.MyList.Add(GetExampleChild(1));
+            e.MyList[0].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
+            e.MyList.Add(GetExampleChild(1));
+            e.MyList[1].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
+            e = e.CloneLazinatorTyped();
+            e.MyList[1].MyExampleGrandchild.MyInt = 6;
+            e.MyList[1].EnsureLazinatorMemoryUpToDate(); // generate a new buffer in a list member
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyInt = 17; // keep list clean while making container dirty
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
             itemToUpdate.EnsureLazinatorMemoryUpToDate();
@@ -613,7 +631,8 @@ namespace LazinatorTests.Tests
             foreach (ILazinator lazinator in descendants)
             {
                 ExpandableBytes b = lazinator.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
-                b.AllocationID.Should().Be(allocationID);
+                if (b != null)
+                    b.AllocationID.Should().Be(allocationID);
             }
         }
 
