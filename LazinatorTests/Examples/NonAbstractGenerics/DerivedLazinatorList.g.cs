@@ -148,6 +148,31 @@ namespace LazinatorTests.Examples
             }
         }
         
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        {
+            _IsDirty = false;
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
+                {
+                    if (_Offsets_Accessed && _Offsets != null)
+                    {
+                        _Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    OnUpdateDeserializedChildren(ref writer, startPosition);
+                }
+                
+            }
+            else
+            {
+                throw new Exception("Cannot update stored buffer when serializing only some children.");
+            }
+            
+            var newBuffer = writer.Slice(startPosition);
+            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
+        }
+        
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);

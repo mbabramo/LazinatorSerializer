@@ -226,6 +226,38 @@ namespace LazinatorTests.Examples
             }
         }
         
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        {
+            _IsDirty = false;
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
+                {
+                    if (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null)
+                    {
+                        _MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_MyWrapperContainer_Accessed && _MyWrapperContainer != null)
+                    {
+                        _MyWrapperContainer.UpdateStoredBuffer(ref writer, startPosition + _MyWrapperContainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null)
+                    {
+                        _MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                }
+                
+            }
+            else
+            {
+                throw new Exception("Cannot update stored buffer when serializing only some children.");
+            }
+            
+            var newBuffer = writer.Slice(startPosition);
+            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
+        }
+        
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.Position;
