@@ -584,35 +584,12 @@ namespace LazinatorTests.Tests
         [Fact]
         public void UpdateBufferForDeserialized()
         {
-            Example e = GetTypicalExample().CloneLazinatorTyped();
-            e.MyChild1.MyShort = 5;
-            e = e.CloneLazinatorTyped();
-            e.MyChild1.MyShort = 6;
-            e.EnsureLazinatorMemoryUpToDate();
-            var buffer = new Memory<byte>(e.LazinatorMemoryStorage.Memory.Span.ToArray());
-            var buffer_child = new Memory<byte>(e.MyChild1.LazinatorMemoryStorage.Memory.Span.ToArray());
-            BinaryBufferWriter b = new BinaryBufferWriter();
-            b.Write(buffer.Span);
-            e.UpdateStoredBuffer(ref b, 0, IncludeChildrenMode.IncludeAllChildren, true);
-            ReadOnlySpan<byte> original = buffer.Span;
-            ReadOnlySpan<byte> revised = e.LazinatorMemoryStorage.Memory.Span;
-            original.Matches(revised).Should().BeTrue();
-            ReadOnlySpan<byte> original_child = buffer_child.Span;
-            ReadOnlySpan<byte> revised_child = e.MyChild1.LazinatorMemoryStorage.Memory.Span.Slice(0, original_child.Length);
-            e.MyChar = '5';
-            var e2 = e.CloneLazinatorTyped();
-            e2.MyChild1.MyShort.Should().Be(6);
-            original_child.Matches(revised_child).Should().BeTrue();
-        }
-
-        [Fact]
-        public void UpdateBufferForDeserialized_DEBUG()
-        {
             Example e = GetTypicalExample();
             e.MyChild1.MyShort = 5;
             e = e.CloneLazinatorTyped();
             e.MyChild1.MyShort = 6;
             UpdateStoredBufferFromExisting(e);
+            e.MyChar = '5';
             var e2 = e.CloneLazinatorTyped();
             var x = e2.MyChild1.MyShort;
             x.Should().Be(6);
