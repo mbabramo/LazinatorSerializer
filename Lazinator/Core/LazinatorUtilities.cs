@@ -471,6 +471,18 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Returns a string representing the entire hierarchy beginning with this node.
+        /// </summary>
+        /// <param name="node">The node</param>
+        /// <returns>A hierarchical string representation</returns>
+        public static string GetHierarchyString(this ILazinator node)
+        {
+            var clone = node.CloneLazinator(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers); // clone to minimize side effects from accessing properties
+            HierarchyTree tree = new HierarchyTree(clone);
+            return tree.ToString();
+        }
+
+        /// <summary>
         /// Verifies that the 64-bit hashes of each node in two hierarchies match, indicating likely equality.
         /// If the hashes do not match, then this will walk the hierarchy tree to find the first node where 
         /// a difference is manifest when children are excluded.

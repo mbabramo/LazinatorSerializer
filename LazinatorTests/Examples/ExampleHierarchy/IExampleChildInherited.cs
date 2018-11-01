@@ -6,5 +6,6 @@ namespace LazinatorTests.Examples
     public interface IExampleChildInherited : IExampleChild
     {
         int MyInt { get; set; }
+        ExampleGrandchild MyGrandchildInInherited { get; set; }
     }
 }

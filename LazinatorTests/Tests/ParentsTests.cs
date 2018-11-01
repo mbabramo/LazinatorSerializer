@@ -436,6 +436,7 @@ namespace LazinatorTests.Tests
         public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate, RepetitionsToMutate mutateParent, RepetitionsToMutate mutateChild, bool doNotAutomaticallyReturnToPool)
         {
             Example e = GetTypicalExample();
+            e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
             int repetitions = 8;
             Random r = new Random();
@@ -449,6 +450,7 @@ namespace LazinatorTests.Tests
                 {
                     e.MyChild1.MyLong = 0;
                     e.MyChild1.MyShort = 0;
+                    ((ExampleChildInherited)e.MyChild1).MyInt = 0;
                 }
                 if (i == 5)
                 {
@@ -465,6 +467,7 @@ namespace LazinatorTests.Tests
                     {
                         e.MyChild1.MyLong.Should().Be(randLong);
                         e.MyChild1.MyShort.Should().Be(randShort);
+                        ((ExampleChildInherited)e.MyChild1).MyInt.Should().Be(randShort);
                     }
                     unchecked
                     {
@@ -473,6 +476,7 @@ namespace LazinatorTests.Tests
                     }
                     e.MyChild1.MyLong = randLong;
                     e.MyChild1.MyShort = randShort;
+                    ((ExampleChildInherited)e.MyChild1).MyInt = randShort;
                 }
                 if (makeChildUpToDate)
                 {
@@ -563,12 +567,39 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void UpdateStoredBufferOnInherited()
+        {
+            Example e = GetTypicalExample();
+            e.MyChild1 = GetExampleChild(3); // inherited child
+            ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited = new ExampleGrandchild() { MyInt = 139 };
+            e = e.CloneLazinatorTyped();
+            ((ExampleChildInherited)e.MyChild1).MyInt = 137;
+            ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited.MyInt = 141;
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            e.EnsureLazinatorMemoryUpToDate();
+            ((ExampleChildInherited)e.MyChild1).MyInt.Should().Be(137);
+            ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited.MyInt.Should().Be(141);
+        }
+
+        [Fact]
         public void BuffersUpdateInTandem()
         {
             Example e = GetTypicalExample().CloneLazinatorTyped();
             e.MyChild1.MyLong = 3;
             var y = e.MyChild1.MyExampleGrandchild;
             e.MyChild2.MyExampleGrandchild.MyInt = 6;
+            ConfirmBuffersUpdateInTandem(e);
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+        [Fact]
+        public void BuffersUpdateInTandem_Inherited()
+        {
+
+            Example e = GetTypicalExample().CloneLazinatorTyped();
+            e.MyChild1 = GetExampleChild(3); // inherited child
+            ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited = new ExampleGrandchild() { MyInt = 139 };
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
             ConfirmBuffersUpdateInTandem(e);
             ConfirmBuffersUpdateInTandem(e);
         }
