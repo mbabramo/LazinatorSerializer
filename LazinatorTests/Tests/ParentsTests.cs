@@ -616,6 +616,7 @@ namespace LazinatorTests.Tests
             LazinatorListContainer c = GetLazinatorListContainer();
             c.MyList[0].MyExampleGrandchild.MyInt = 200;
             UpdateStoredBufferFromExisting(c);
+            var item = c.MyList[0].CloneLazinatorTyped();
             var c2 = c.CloneLazinatorTyped();
             c.MyList[0].MyExampleGrandchild.MyInt.Should().Be(200);
         }
