@@ -440,11 +440,11 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     if (_RecursiveClass_Accessed && _RecursiveClass != null)
                     {
-                        _RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_RecursiveInterface_Accessed && _RecursiveInterface != null)
                     {
-                        _RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

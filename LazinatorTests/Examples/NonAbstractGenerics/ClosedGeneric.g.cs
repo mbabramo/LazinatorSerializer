@@ -162,7 +162,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     if (_MyT_Accessed && _MyT != null)
                     {
-                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

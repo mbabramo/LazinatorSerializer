@@ -414,7 +414,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (_UnderlyingSet_Accessed && _UnderlyingSet != null)
                     {
-                        _UnderlyingSet.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingSet_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _UnderlyingSet.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingSet_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

@@ -1122,7 +1122,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null)
                     {
-                        _ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

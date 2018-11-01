@@ -490,11 +490,11 @@ namespace Lazinator.Collections
                 {
                     if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
                     {
-                        _Item1.UpdateStoredBuffer(ref writer, startPosition + _Item1_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Item1.UpdateStoredBuffer(ref writer, startPosition + _Item1_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
                     {
-                        _Item2.UpdateStoredBuffer(ref writer, startPosition + _Item2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Item2.UpdateStoredBuffer(ref writer, startPosition + _Item2_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

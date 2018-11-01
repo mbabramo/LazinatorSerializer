@@ -363,7 +363,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (_Item_Accessed && _Item != null)
                     {
-                        _Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

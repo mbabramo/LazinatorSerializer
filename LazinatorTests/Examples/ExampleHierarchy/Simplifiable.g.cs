@@ -732,19 +732,19 @@ namespace LazinatorTests.Examples
                 {
                     if (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null)
                     {
-                        _ANonSkippableEarlierExample.UpdateStoredBuffer(ref writer, startPosition + _ANonSkippableEarlierExample_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ANonSkippableEarlierExample.UpdateStoredBuffer(ref writer, startPosition + _ANonSkippableEarlierExample_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Example_Accessed && _Example != null)
                     {
-                        _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Example2_Accessed && _Example2 != null)
                     {
-                        _Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Example3_Accessed && _Example3 != null)
                     {
-                        _Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

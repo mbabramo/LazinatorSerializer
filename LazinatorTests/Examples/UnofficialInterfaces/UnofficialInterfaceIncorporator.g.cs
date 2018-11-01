@@ -477,11 +477,11 @@ namespace LazinatorTests.Examples
                 {
                     if (_MyOfficialObject_Accessed && _MyOfficialObject != null)
                     {
-                        _MyOfficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyOfficialObject_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyOfficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyOfficialObject_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyUnofficialObject_Accessed && _MyUnofficialObject != null)
                     {
-                        _MyUnofficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyUnofficialObject_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyUnofficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyUnofficialObject_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

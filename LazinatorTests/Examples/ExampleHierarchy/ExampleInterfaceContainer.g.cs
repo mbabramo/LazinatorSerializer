@@ -407,7 +407,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
                     {
-                        _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

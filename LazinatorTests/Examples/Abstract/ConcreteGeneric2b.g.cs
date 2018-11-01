@@ -509,11 +509,11 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (_MyT_Accessed && _MyT != null)
                     {
-                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_LazinatorExample_Accessed && _LazinatorExample != null)
                     {
-                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

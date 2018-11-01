@@ -483,11 +483,11 @@ namespace Lazinator.Collections
                 {
                     if (_FourByteItems_Accessed && _FourByteItems != null)
                     {
-                        _FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_TwoByteItems_Accessed && _TwoByteItems != null)
                     {
-                        _TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

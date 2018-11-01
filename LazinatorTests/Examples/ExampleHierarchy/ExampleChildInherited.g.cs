@@ -236,15 +236,15 @@ namespace LazinatorTests.Examples
                 {
                     if (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null)
                     {
-                        _MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyWrapperContainer_Accessed && _MyWrapperContainer != null)
                     {
-                        _MyWrapperContainer.UpdateStoredBuffer(ref writer, startPosition + _MyWrapperContainer_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyWrapperContainer.UpdateStoredBuffer(ref writer, startPosition + _MyWrapperContainer_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null)
                     {
-                        _MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

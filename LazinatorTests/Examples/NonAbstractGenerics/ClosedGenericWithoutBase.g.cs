@@ -385,7 +385,7 @@ namespace LazinatorTests.Examples
                 {
                     if (_ItemU_Accessed && _ItemU != null)
                     {
-                        _ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

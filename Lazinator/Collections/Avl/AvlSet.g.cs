@@ -413,7 +413,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (_UnderlyingTree_Accessed && _UnderlyingTree != null)
                     {
-                        _UnderlyingTree.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingTree_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _UnderlyingTree.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingTree_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

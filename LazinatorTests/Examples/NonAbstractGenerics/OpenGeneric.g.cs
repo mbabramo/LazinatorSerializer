@@ -427,7 +427,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)))
                     {
-                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

@@ -413,7 +413,7 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (_Buckets_Accessed && _Buckets != null)
                     {
-                        _Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

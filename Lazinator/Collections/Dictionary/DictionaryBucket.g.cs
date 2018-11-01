@@ -493,11 +493,11 @@ namespace Lazinator.Collections.Dictionary
                 {
                     if (_Keys_Accessed && _Keys != null)
                     {
-                        _Keys.UpdateStoredBuffer(ref writer, startPosition + _Keys_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Keys.UpdateStoredBuffer(ref writer, startPosition + _Keys_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Values_Accessed && _Values != null)
                     {
-                        _Values.UpdateStoredBuffer(ref writer, startPosition + _Values_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Values.UpdateStoredBuffer(ref writer, startPosition + _Values_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

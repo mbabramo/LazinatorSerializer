@@ -392,7 +392,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (_Root_Accessed && _Root != null)
                     {
-                        _Root.UpdateStoredBuffer(ref writer, startPosition + _Root_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Root.UpdateStoredBuffer(ref writer, startPosition + _Root_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

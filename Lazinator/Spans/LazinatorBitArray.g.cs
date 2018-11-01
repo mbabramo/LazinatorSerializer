@@ -433,7 +433,7 @@ namespace Lazinator.Spans
                 {
                     if (_ByteSpan_Accessed && _ByteSpan != null)
                     {
-                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
