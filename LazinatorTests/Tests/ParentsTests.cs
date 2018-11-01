@@ -621,6 +621,20 @@ namespace LazinatorTests.Tests
             c.MyList[0].MyExampleGrandchild.MyInt.Should().Be(200);
         }
 
+
+        [Fact]
+        public void UpdateBufferForDeserialized_LazinatorList_Struct()
+        {
+            LazinatorListContainer c = new LazinatorListContainer() { MyStructList = new LazinatorList<WByte>() };
+            c.MyStructList.Add(3);
+            c.MyStructList.Add(4);
+            c.MyInt = -234;
+            UpdateStoredBufferFromExisting(c);
+            var item = c.MyStructList[0].CloneLazinatorTyped();
+            var c2 = c.CloneLazinatorTyped();
+            item.WrappedValue.Should().Be(3);
+        }
+
         private static void UpdateStoredBufferFromExisting(ILazinator e)
         {
             e.EnsureLazinatorMemoryUpToDate();
