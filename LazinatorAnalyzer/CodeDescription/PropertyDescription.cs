@@ -771,12 +771,13 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
-            string propertyString = $@"{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct, " = false")};
-                {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{abstractDerivationKeyword}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
+            string propertyString = $@"
+                    {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct, " = false")};
+                {IIF(IncludeRefProperty, $@"{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{abstractDerivationKeyword}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get;
                 }}
-                ")}{GetAttributesToInsert()}{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}
+                ")}{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}
                 {{
                     get;
                     set;
@@ -803,8 +804,9 @@ namespace Lazinator.CodeDescription
 
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
-            string propertyString = $@"        {ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
-        {IIF(IncludeRefProperty, $@"{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
+            string propertyString = $@"
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
+        {IIF(IncludeRefProperty, $@"{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get
                     {{
@@ -812,7 +814,7 @@ namespace Lazinator.CodeDescription
                         return ref _{PropertyName};
                     }}
                 }}
-                ")}{GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+                ")}{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{
@@ -953,8 +955,9 @@ namespace Lazinator.CodeDescription
 
             }
 
-            sb.Append($@"{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
-        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+            sb.Append($@"
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
+        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{
@@ -983,14 +986,14 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
-        {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
+        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
 ");
 
             // Copy property
             if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
 
-                sb.Append($@"{GetAttributesToInsert()}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
+                sb.Append($@"{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
                             {{{StepThroughPropertiesString}
                                 get
                                 {{
@@ -1052,8 +1055,8 @@ namespace Lazinator.CodeDescription
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string castToSpanOfCorrectType;
             castToSpanOfCorrectType = GetReadOnlySpanBackingFieldCast();
-            sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+            sb.Append($@"{ContainingObjectDescription.HideBackingField}private ReadOnlyMemory<byte> _{PropertyName};
+        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{
@@ -1079,8 +1082,8 @@ namespace Lazinator.CodeDescription
         private void AppendReadOnlyMemoryByteProperty(CodeStringBuilder sb)
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
-            sb.Append($@"private ReadOnlyMemory<byte> _{PropertyName};
-        {GetAttributesToInsert()}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+            sb.Append($@"{ContainingObjectDescription.HideBackingField}private ReadOnlyMemory<byte> _{PropertyName};
+        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{
@@ -1117,8 +1120,8 @@ namespace Lazinator.CodeDescription
         private void AppendDirtinessTracking(CodeStringBuilder sb)
         {
             sb.Append($@"
-        private bool _{PropertyName}_Dirty;
-        public bool {PropertyName}_Dirty
+        {ContainingObjectDescription.HideBackingField}private bool _{PropertyName}_Dirty;
+        {ContainingObjectDescription.HideMainProperty}public bool {PropertyName}_Dirty
         {{{StepThroughPropertiesString}
             get => _{PropertyName}_Dirty;{StepThroughPropertiesString}
             set

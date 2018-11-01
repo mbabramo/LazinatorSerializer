@@ -87,6 +87,14 @@ namespace Lazinator.CodeDescription
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
+        /* Strings to hide fields or properties if applicable */
+        internal string HideMainProperty => (Compilation.Config?.HideMainProperties ?? false) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+                    " : "";
+        internal string HideBackingField => (Compilation.Config?.HideBackingFields ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+                    " : "";
+        internal string HideILazinatorProperty => (Compilation.Config?.HideILazinatorProperties ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+                    " : "";
+
         public ObjectDescription()
         {
 
@@ -289,25 +297,25 @@ namespace Lazinator.CodeDescription
 
                         {IIF(!ImplementsAssignCloneProperties, $@"protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
 
-                        ")}public abstract bool HasChanged
+                        ")}{HideILazinatorProperty}public abstract bool HasChanged
                         {{
 			                get;
 			                set;
                         }}
 
-                        public abstract bool IsDirty
+                        {HideILazinatorProperty}public abstract bool IsDirty
                         {{
 			                get;
 			                set;
                         }}
                         
-                        public abstract bool DescendantHasChanged
+                        {HideILazinatorProperty}public abstract bool DescendantHasChanged
                         {{
 			                get;
 			                set;
                         }}
 
-                        public abstract bool DescendantIsDirty
+                        {HideILazinatorProperty}public abstract bool DescendantIsDirty
                         {{
 			                get;
 			                set;
@@ -319,19 +327,19 @@ namespace Lazinator.CodeDescription
 		                
                         public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
 
-                        public abstract LazinatorMemory LazinatorMemoryStorage
+                        {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
                         {{
 			                get;
 			                set;
                         }}
 
-                        public abstract IncludeChildrenMode OriginalIncludeChildrenMode
+                        {HideILazinatorProperty}public abstract IncludeChildrenMode OriginalIncludeChildrenMode
                         {{
                             get;
                             set;
                         }}
 
-                        {ProtectedIfApplicable}abstract ReadOnlyMemory<byte> LazinatorObjectBytes
+                        {HideILazinatorProperty}{ProtectedIfApplicable}abstract ReadOnlyMemory<byte> LazinatorObjectBytes
                         {{
 			                get;
                         }}
@@ -386,9 +394,9 @@ namespace Lazinator.CodeDescription
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
-                        {constructor}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
+                        {constructor}{HideILazinatorProperty}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
-                        public {DerivationKeyword}IncludeChildrenMode OriginalIncludeChildrenMode {{ get; set; }}
+                        {HideILazinatorProperty}public {DerivationKeyword}IncludeChildrenMode OriginalIncludeChildrenMode {{ get; set; }}
 
                         public {DerivationKeyword}int Deserialize()
                         {{
@@ -430,10 +438,10 @@ namespace Lazinator.CodeDescription
 
                         {cloneMethod}
 
-                        public {DerivationKeyword}bool HasChanged {{ get; set; }}
+                        {HideILazinatorProperty}public {DerivationKeyword}bool HasChanged {{ get; set; }}
 
-                        {ProtectedIfApplicable}bool _IsDirty;
-                        public {DerivationKeyword}bool IsDirty
+                        {HideBackingField}{ProtectedIfApplicable}bool _IsDirty;
+                        {HideILazinatorProperty}public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _IsDirty{IIF(!(ObjectType == LazinatorObjectType.Struct), "|| LazinatorObjectBytes.Length == 0")};
@@ -453,8 +461,8 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicable}bool _DescendantHasChanged;
-                        public {DerivationKeyword}bool DescendantHasChanged
+                        {HideBackingField}{ProtectedIfApplicable}bool _DescendantHasChanged;
+                        {HideILazinatorProperty}public {DerivationKeyword}bool DescendantHasChanged
                         {{
                             [DebuggerStepThrough]
                             get => _DescendantHasChanged{additionalDescendantHasChangedChecks};
@@ -465,8 +473,8 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicable}bool _DescendantIsDirty;
-                        public {DerivationKeyword}bool DescendantIsDirty
+                        {HideBackingField}{ProtectedIfApplicable}bool _DescendantIsDirty;
+                        {HideILazinatorProperty}public {DerivationKeyword}bool DescendantIsDirty
                         {{
                             [DebuggerStepThrough]
                             get => _DescendantIsDirty{additionalDescendantDirtinessChecks};
@@ -496,12 +504,12 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
+                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
                         {{
                             get;
                             set;
                         }}
-                        {ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
 
                         public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
                         {{
@@ -662,11 +670,11 @@ namespace Lazinator.CodeDescription
 
         private void AppendAbstractConversions(CodeStringBuilder sb)
         {
-            sb.Append($@"public abstract int LazinatorUniqueID {{ get; }}
-                        {ProtectedIfApplicable}abstract LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
-                        {ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
-                        public abstract LazinatorGenericIDType LazinatorGenericID {{ get; set; }}
-                        public abstract int LazinatorObjectVersion {{ get; set; }}
+            sb.Append($@"{HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
+                        {HideBackingField}{ProtectedIfApplicable}abstract LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
+                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
+                        {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; set; }}
+                        {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
@@ -833,17 +841,17 @@ namespace Lazinator.CodeDescription
 
         private void AppendConversionSectionStart(CodeStringBuilder sb)
         {
-            string containsOpenGenericParametersString = $@"{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};";
+            string containsOpenGenericParametersString = $@"{HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};";
 
             string lazinatorGenericBackingID = "";
             if (!IsDerivedFromNonAbstractLazinator && (ContainsOpenGenericParameters || !IsSealedOrStruct))
-                lazinatorGenericBackingID = $@"{ProtectedIfApplicable}{DerivationKeyword}LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
+                lazinatorGenericBackingID = $@"{HideBackingField}{ProtectedIfApplicable}{DerivationKeyword}LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
                         ";
 
             string lazinatorGenericID;
             if (ContainsOpenGenericParameters)
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {lazinatorGenericBackingID}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
+                        {lazinatorGenericBackingID}{HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
                         {{
                             get
                             {{
@@ -868,19 +876,19 @@ namespace Lazinator.CodeDescription
 
             string selfSerializationVersionString;
             if (Version == -1)
-                selfSerializationVersionString = $@"public int LazinatorObjectVersion
+                selfSerializationVersionString = $@"{HideILazinatorProperty}public int LazinatorObjectVersion
                 {{
                     get => -1;
                     set => throw new LazinatorSerializationException(""Lazinator versioning disabled for {NameIncludingGenerics}."");
                 }}";
             else if (ObjectType == LazinatorObjectType.Class)
-                selfSerializationVersionString = $@"public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
+                selfSerializationVersionString = $@"{HideILazinatorProperty}public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
             else
             { // can't set default property value in struct, so we have a workaround. If the version has not been changed, we assume that it is still Version. 
                 selfSerializationVersionString =
-                        $@"private bool _LazinatorObjectVersionChanged;
-                        private int _LazinatorObjectVersionOverride;
-                        public int LazinatorObjectVersion
+                        $@"{HideBackingField}private bool _LazinatorObjectVersionChanged;
+                        {HideBackingField}private int _LazinatorObjectVersionOverride;
+                        {HideILazinatorProperty}public int LazinatorObjectVersion
                         {{
                             get => _LazinatorObjectVersionChanged ? _LazinatorObjectVersionOverride : { Version };
                             set
@@ -893,7 +901,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
                 /* Conversion */
 
-                public {DerivationKeyword}int LazinatorUniqueID => { UniqueID };
+                {HideILazinatorProperty}public {DerivationKeyword}int LazinatorUniqueID => { UniqueID };
 
                 {lazinatorGenericID}
 

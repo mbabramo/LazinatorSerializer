@@ -22,6 +22,9 @@ namespace LazinatorAnalyzer.Settings
         private const string DefaultAllowRecordLikeRegularStructsString = "DefaultAllowRecordLikeRegularStructs";
         private const string DefaultAllowRecordLikeReadOnlyStructsString = "DefaultAllowRecordLikeReadOnlyStructs";
         private const string ProhibitLazinatorInNonLazinatorString = "ProhibitLazinatorInNonLazinator";
+        private const string HideBackingFieldsString = "HideBackingFields";
+        private const string HideMainPropertiesString = "HideMainProperties";
+        private const string HideILazinatorPropertiesString = "HideILazinatorProperties";
         public string GeneratedCodeFileExtension;
         public bool UseFullyQualifiedNames;
         public Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
@@ -33,6 +36,9 @@ namespace LazinatorAnalyzer.Settings
         public string RelativeGeneratedCodePath, GeneratedCodePath;
         public bool IncludeTracingCode, StepThroughProperties;
         public bool ProhibitLazinatorInNonLazinator;
+        public bool HideBackingFields;
+        public bool HideMainProperties;
+        public bool HideILazinatorProperties;
 
         public LazinatorConfig()
         {
@@ -64,6 +70,9 @@ namespace LazinatorAnalyzer.Settings
                     DefaultAutoChangeParent = json.ContainsKey(DefaultAutoChangeParentString) ? json[DefaultAutoChangeParentString].AsBoolean : true;
                     DefaultAllowRecordLikeRegularStructs = json.ContainsKey(DefaultAllowRecordLikeRegularStructsString) ? json[DefaultAllowRecordLikeRegularStructsString].AsBoolean : false;
                     DefaultAllowRecordLikeReadOnlyStructs = json.ContainsKey(DefaultAllowRecordLikeReadOnlyStructsString) ? json[DefaultAllowRecordLikeReadOnlyStructsString].AsBoolean : true;
+                    HideBackingFields = json.ContainsKey(HideBackingFieldsString) ? json[HideBackingFieldsString].AsBoolean : true;
+                    HideMainProperties = json.ContainsKey(HideMainPropertiesString) ? json[HideMainPropertiesString].AsBoolean : false;
+                    HideILazinatorProperties = json.ContainsKey(HideILazinatorPropertiesString) ? json[HideILazinatorPropertiesString].AsBoolean : true;
                     ConfigFilePath = configPath;
                     if (ConfigFilePath != null)
                     {
