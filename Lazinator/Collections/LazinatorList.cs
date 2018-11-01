@@ -327,10 +327,10 @@ namespace Lazinator.Collections
                     if (current != null)
                     {
                         current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
-                        //if (current.IsStruct)
-                        //{
-                        //    UnderlyingList[index] = current;
-                        //}
+                        if (current.IsStruct)
+                        {
+                            UnderlyingList[index] = current;
+                        }
                     }
                 }
             }
