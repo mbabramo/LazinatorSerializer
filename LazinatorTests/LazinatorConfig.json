@@ -17,5 +17,8 @@
   "DefaultAllowRecordLikeClasses": false,
   "DefaultAllowRecordLikeRegularStructs": false,
   "DefaultAllowRecordLikeReadOnlyStructs": true,
-  "IncludeTracingCode": false
+  "IncludeTracingCode": false,
+  "HideBackingFields": false, 
+  "HideMainProperties": true,
+  "HideILazinatorProperties" :  false
 }
