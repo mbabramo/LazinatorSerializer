@@ -628,8 +628,13 @@ namespace LazinatorTests.Tests
             LazinatorListContainer c = new LazinatorListContainer() { MyStructList = new LazinatorList<WByte>() };
             c.MyStructList.Add(3);
             c.MyStructList.Add(4);
+            c = c.CloneLazinatorTyped();
+            var x = c.MyStructList[0];
             c.MyInt = -234;
             UpdateStoredBufferFromExisting(c);
+            var storageOverall = c.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+            storageOverall.AllocationID.Should().Be(storageItem.AllocationID);
             var item = c.MyStructList[0].CloneLazinatorTyped();
             var c2 = c.CloneLazinatorTyped();
             item.WrappedValue.Should().Be(3);
