@@ -217,6 +217,7 @@ namespace LazinatorTests.Examples.Collections
         private int _Dictionary_Values_Lazinator_EndByteIndex;
         protected virtual int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
         
+        
         protected Dictionary<int, ExampleChild> _MyDictionary;
         public Dictionary<int, ExampleChild> MyDictionary
         {
@@ -247,6 +248,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyDictionary_Accessed;
+        
         protected SortedDictionary<int, ExampleChild> _MySortedDictionary;
         public SortedDictionary<int, ExampleChild> MySortedDictionary
         {
@@ -277,6 +279,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedDictionary_Accessed;
+        
         protected SortedList<int, ExampleChild> _MySortedList;
         public SortedList<int, ExampleChild> MySortedList
         {

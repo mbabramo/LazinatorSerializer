@@ -42,24 +42,28 @@ namespace Lazinator.Wrappers
         
         protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract bool HasChanged
         {
             get;
             set;
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract bool IsDirty
         {
             get;
             set;
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract bool DescendantHasChanged
         {
             get;
             set;
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract bool DescendantIsDirty
         {
             get;
@@ -72,18 +76,21 @@ namespace Lazinator.Wrappers
         
         public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract LazinatorMemory LazinatorMemoryStorage
         {
             get;
             set;
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract IncludeChildrenMode OriginalIncludeChildrenMode
         {
             get;
             set;
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected abstract ReadOnlyMemory<byte> LazinatorObjectBytes
         {
             get;
@@ -102,16 +109,23 @@ namespace Lazinator.Wrappers
         protected int _Wrapped_ByteIndex;
         protected virtual int _Wrapped_ByteLength { get; }
         
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Wrapped_Accessed = false;
         public virtual T Wrapped
         {
             get;
             set;
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorUniqueID { get; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract LazinatorGenericIDType LazinatorGenericID { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);

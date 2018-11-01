@@ -77,6 +77,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _GenericFromBase_T_EndByteIndex = 0;
         protected virtual int _MyT_ByteLength => _GenericFromBase_T_EndByteIndex - _MyT_ByteIndex;
         
+        
         protected int _MyInt;
         public int MyInt
         {
@@ -90,6 +91,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyInt = value;
             }
         }
+        
         protected T _MyT;
         public virtual T MyT
         {

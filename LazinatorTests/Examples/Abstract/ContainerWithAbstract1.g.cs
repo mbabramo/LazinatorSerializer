@@ -217,6 +217,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _ContainerWithAbstract1_EndByteIndex;
         protected virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
         
+        
         protected Abstract1 _AbstractProperty;
         public Abstract1 AbstractProperty
         {

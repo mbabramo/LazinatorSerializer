@@ -217,6 +217,7 @@ namespace LazinatorTests.Examples.Collections
         private int _LazinatorListContainer_EndByteIndex;
         protected virtual int _MyList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyList_ByteIndex;
         
+        
         protected int _MyInt;
         public int MyInt
         {
@@ -230,6 +231,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyInt = value;
             }
         }
+        
         protected long _MyLong;
         public long MyLong
         {
@@ -243,6 +245,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyLong = value;
             }
         }
+        
         protected LazinatorList<ExampleChild> _MyList;
         public LazinatorList<ExampleChild> MyList
         {

@@ -102,24 +102,28 @@ namespace LazinatorTests.Examples.Abstract
         protected int _MyT_ByteIndex;
         protected virtual int _MyT_ByteLength { get; }
         
+        
         protected bool _MyEnumWithinAbstractGeneric_Accessed = false;
         public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
             get;
             set;
         }
+        
         protected bool _MyEnumWithinAbstractGeneric2_Accessed = false;
         public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
             get;
             set;
         }
+        
         protected bool _MyUnofficialInt_Accessed = false;
         public abstract int MyUnofficialInt
         {
             get;
             set;
         }
+        
         protected bool _MyT_Accessed = false;
         public virtual T MyT
         {

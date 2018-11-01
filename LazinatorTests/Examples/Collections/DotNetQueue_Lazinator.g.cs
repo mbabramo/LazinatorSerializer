@@ -215,6 +215,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetQueue_Lazinator_EndByteIndex;
         protected virtual int _MyQueueSerialized_ByteLength => _DotNetQueue_Lazinator_EndByteIndex - _MyQueueSerialized_ByteIndex;
         
+        
         protected Queue<ExampleChild> _MyQueueSerialized;
         public Queue<ExampleChild> MyQueueSerialized
         {

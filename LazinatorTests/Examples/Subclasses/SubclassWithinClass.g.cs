@@ -213,6 +213,7 @@ namespace LazinatorTests.Examples.Subclasses
             /* Property definitions */
             
             
+            
             protected string _StringWithinSubclass;
             public string StringWithinSubclass
             {

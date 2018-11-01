@@ -223,6 +223,7 @@ namespace LazinatorTests.Examples.Hierarchy
         private int _RecursiveExample_EndByteIndex;
         protected virtual int _RecursiveInterface_ByteLength => _RecursiveExample_EndByteIndex - _RecursiveInterface_ByteIndex;
         
+        
         protected RecursiveExample _RecursiveClass;
         public RecursiveExample RecursiveClass
         {
@@ -262,6 +263,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveClass_Accessed;
+        
         protected IRecursiveExample _RecursiveInterface;
         public IRecursiveExample RecursiveInterface
         {

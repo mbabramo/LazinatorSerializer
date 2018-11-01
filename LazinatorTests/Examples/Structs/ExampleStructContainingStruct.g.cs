@@ -245,6 +245,7 @@ namespace LazinatorTests.Examples
             private int _ExampleStructContainingStruct_EndByteIndex;
             int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
             
+            
             ExampleStruct _MyExampleStruct;
             public ExampleStruct MyExampleStruct
             {

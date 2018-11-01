@@ -30,12 +30,14 @@ namespace LazinatorTests.Examples.Abstract
         protected int _IntList4_ByteIndex;
         protected virtual int _IntList4_ByteLength { get; }
         
+        
         protected bool _String4_Accessed = false;
         public abstract string String4
         {
             get;
             set;
         }
+        
         protected bool _IntList4_Accessed = false;
         public abstract List<int> IntList4
         {

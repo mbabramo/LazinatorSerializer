@@ -220,6 +220,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _OpenGeneric_T_EndByteIndex = 0;
         protected virtual int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
         
+        
         protected List<T> _MyListT;
         public virtual List<T> MyListT
         {
@@ -250,6 +251,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyListT_Accessed;
+        
         protected T _MyT;
         public virtual T MyT
         {

@@ -223,6 +223,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _RegularTuple_EndByteIndex;
         protected virtual int _MyTupleSerialized4_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized4_ByteIndex;
         
+        
         protected List<Tuple<uint, ExampleChild, NonLazinatorClass>> _MyListTuple;
         public List<Tuple<uint, ExampleChild, NonLazinatorClass>> MyListTuple
         {
@@ -253,6 +254,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyListTuple_Accessed;
+        
         protected Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized;
         public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized
         {
@@ -283,6 +285,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized_Accessed;
+        
         protected Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized2;
         public Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2
         {
@@ -313,6 +316,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
+        
         protected Tuple<uint?, ExampleChild, NonLazinatorClass> _MyTupleSerialized3;
         public Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3
         {
@@ -343,6 +347,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
+        
         protected Tuple<int, ExampleStruct> _MyTupleSerialized4;
         public Tuple<int, ExampleStruct> MyTupleSerialized4
         {

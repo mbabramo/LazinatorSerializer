@@ -105,18 +105,21 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual int _Example3_ByteLength => _IntList1_ByteIndex - _Example3_ByteIndex;
         protected virtual int _IntList1_ByteLength { get; }
         
+        
         protected bool _String1_Accessed = false;
         public abstract string String1
         {
             get;
             set;
         }
+        
         protected bool _Example3_Accessed = false;
         public abstract Example Example3
         {
             get;
             set;
         }
+        
         protected bool _IntList1_Accessed = false;
         public abstract List<int> IntList1
         {

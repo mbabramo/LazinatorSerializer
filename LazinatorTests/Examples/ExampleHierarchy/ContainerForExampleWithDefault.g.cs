@@ -213,6 +213,7 @@ namespace LazinatorTests.Examples
         private int _ContainerForExampleWithDefault_EndByteIndex;
         protected virtual int _Example_ByteLength => _ContainerForExampleWithDefault_EndByteIndex - _Example_ByteIndex;
         
+        
         protected Example _Example;
         public Example Example
         {

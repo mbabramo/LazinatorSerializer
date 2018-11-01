@@ -73,6 +73,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _Concrete6_EndByteIndex;
         protected virtual int _IntList6_ByteLength => _Concrete6_EndByteIndex - _IntList6_ByteIndex;
         
+        
         protected List<int> _IntList6;
         public List<int> IntList6
         {

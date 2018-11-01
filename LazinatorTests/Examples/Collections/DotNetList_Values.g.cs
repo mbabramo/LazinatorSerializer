@@ -219,6 +219,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Values_EndByteIndex;
         protected virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         
+        
         protected LinkedList<int> _MyLinkedListInt;
         public LinkedList<int> MyLinkedListInt
         {
@@ -267,6 +268,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
+        
         protected List<int> _MyListInt;
         public List<int> MyListInt
         {
@@ -315,6 +317,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
+        
         protected List<int> _MyListInt2;
         public List<int> MyListInt2
         {
@@ -345,6 +348,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListInt2_Accessed;
+        
         protected SortedSet<int> _MySortedSetInt;
         public SortedSet<int> MySortedSetInt
         {

@@ -64,6 +64,7 @@ namespace LazinatorTests.Examples
         
         /* Properties */
         
+        
         protected string _MyListName;
         public string MyListName
         {

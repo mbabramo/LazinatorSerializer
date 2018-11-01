@@ -220,6 +220,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _StructTuple_EndByteIndex;
         protected virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
         
+        
         protected (TestEnum firstEnum, TestEnum anotherEnum) _EnumTuple;
         public (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple
         {
@@ -250,6 +251,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _EnumTuple_Accessed;
+        
         protected (int MyFirstItem, double MySecondItem) _MyNamedTuple;
         public (int MyFirstItem, double MySecondItem) MyNamedTuple
         {
@@ -280,6 +282,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNamedTuple_Accessed;
+        
         protected (int, double)? _MyNullableTuple;
         public (int, double)? MyNullableTuple
         {
@@ -310,6 +313,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNullableTuple_Accessed;
+        
         protected (uint, ExampleChild, NonLazinatorClass) _MyValueTupleSerialized;
         public (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized
         {

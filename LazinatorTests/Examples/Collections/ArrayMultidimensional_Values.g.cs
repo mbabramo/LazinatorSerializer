@@ -216,6 +216,7 @@ namespace LazinatorTests.Examples.Collections
         private int _ArrayMultidimensional_Values_EndByteIndex;
         protected virtual int _MyThreeDimArrayInt_ByteLength => _ArrayMultidimensional_Values_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
         
+        
         protected int[,] _MyArrayInt;
         public int[,] MyArrayInt
         {
@@ -264,6 +265,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
+        
         protected int[][,,][,,,] _MyCrazyJaggedArray;
         public int[][,,][,,,] MyCrazyJaggedArray
         {
@@ -294,6 +296,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyCrazyJaggedArray_Accessed;
+        
         protected int[,,] _MyThreeDimArrayInt;
         public int[,,] MyThreeDimArrayInt
         {

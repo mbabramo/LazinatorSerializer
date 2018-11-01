@@ -217,6 +217,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _DerivedGenericContainer_T_EndByteIndex;
         protected virtual int _Item_ByteLength => _DerivedGenericContainer_T_EndByteIndex - _Item_ByteIndex;
         
+        
         protected AbstractGeneric1<T> _Item;
         public virtual AbstractGeneric1<T> Item
         {

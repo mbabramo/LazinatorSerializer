@@ -247,6 +247,7 @@ namespace LazinatorTests.Examples.Collections
         private int _SpanAndMemory_EndByteIndex;
         protected virtual int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
         
+        
         protected Memory<byte> _MyMemoryByte;
         public Memory<byte> MyMemoryByte
         {
@@ -277,6 +278,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyMemoryByte_Accessed;
+        
         protected Memory<int> _MyMemoryInt;
         public Memory<int> MyMemoryInt
         {
@@ -307,6 +309,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyMemoryInt_Accessed;
+        
         protected Memory<byte>? _MyNullableMemoryByte;
         public Memory<byte>? MyNullableMemoryByte
         {
@@ -337,6 +340,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyNullableMemoryByte_Accessed;
+        
         protected Memory<int>? _MyNullableMemoryInt;
         public Memory<int>? MyNullableMemoryInt
         {
@@ -367,6 +371,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyNullableMemoryInt_Accessed;
+        
         protected ReadOnlyMemory<int>? _MyNullableReadOnlyMemoryInt;
         public ReadOnlyMemory<int>? MyNullableReadOnlyMemoryInt
         {
@@ -418,6 +423,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyReadOnlyMemoryByte_Accessed;
+        
         protected ReadOnlyMemory<char> _MyReadOnlyMemoryChar;
         public ReadOnlyMemory<char> MyReadOnlyMemoryChar
         {
@@ -448,6 +454,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyReadOnlyMemoryChar_Accessed;
+        
         protected ReadOnlyMemory<int> _MyReadOnlyMemoryInt;
         public ReadOnlyMemory<int> MyReadOnlyMemoryInt
         {

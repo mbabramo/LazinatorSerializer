@@ -71,6 +71,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Properties */
         
+        
         protected int _AnotherPropertyAdded;
         public int AnotherPropertyAdded
         {

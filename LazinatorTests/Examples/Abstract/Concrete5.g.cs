@@ -77,6 +77,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _Concrete5_EndByteIndex;
         protected virtual int _IntList5_ByteLength => _Concrete5_EndByteIndex - _IntList5_ByteIndex;
         
+        
         protected string _String4;
         public override string String4
         {
@@ -90,6 +91,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String4 = value;
             }
         }
+        
         protected string _String5;
         public string String5
         {
@@ -103,6 +105,7 @@ namespace LazinatorTests.Examples.Abstract
                 _String5 = value;
             }
         }
+        
         protected List<int> _IntList4;
         public override List<int> IntList4
         {
@@ -132,6 +135,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList4_Accessed = true;
             }
         }
+        
         protected List<int> _IntList5;
         public List<int> IntList5
         {

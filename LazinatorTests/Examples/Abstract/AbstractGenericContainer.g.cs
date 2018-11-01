@@ -102,6 +102,7 @@ namespace LazinatorTests.Examples.Abstract
         protected int _Item_ByteIndex;
         protected virtual int _Item_ByteLength { get; }
         
+        
         protected bool _Item_Accessed = false;
         public virtual IAbstractGeneric1<T> Item
         {

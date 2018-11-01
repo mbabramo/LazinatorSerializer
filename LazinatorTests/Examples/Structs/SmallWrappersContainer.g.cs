@@ -267,6 +267,7 @@ namespace LazinatorTests.Examples.Structs
         private int _SmallWrappersContainer_EndByteIndex;
         protected virtual int _WrappedSByte_ByteLength => _SmallWrappersContainer_EndByteIndex - _WrappedSByte_ByteIndex;
         
+        
         protected LazinatorList<WByte> _ListWrappedBytes;
         public LazinatorList<WByte> ListWrappedBytes
         {
@@ -306,6 +307,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _ListWrappedBytes_Accessed;
+        
         protected WBool _WrappedBool;
         public WBool WrappedBool
         {
@@ -367,6 +369,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WByte _WrappedByte;
         public WByte WrappedByte
         {
@@ -428,6 +431,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WChar _WrappedChar;
         public WChar WrappedChar
         {
@@ -489,6 +493,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WNullableBool _WrappedNullableBool;
         public WNullableBool WrappedNullableBool
         {
@@ -550,6 +555,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WNullableByte _WrappedNullableByte;
         public WNullableByte WrappedNullableByte
         {
@@ -611,6 +617,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WNullableChar _WrappedNullableChar;
         public WNullableChar WrappedNullableChar
         {
@@ -672,6 +679,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WNullableSByte _WrappedNullableSByte;
         public WNullableSByte WrappedNullableSByte
         {
@@ -733,6 +741,7 @@ namespace LazinatorTests.Examples.Structs
                 return cleanCopy;
             }
         }
+        
         protected WSByte _WrappedSByte;
         public WSByte WrappedSByte
         {

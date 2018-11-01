@@ -70,6 +70,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Properties */
         
+        
         protected int _IntInConcreteFromBase;
         public int IntInConcreteFromBase
         {

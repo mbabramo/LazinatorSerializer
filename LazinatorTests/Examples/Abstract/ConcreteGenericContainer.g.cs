@@ -214,6 +214,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGenericContainer_EndByteIndex = 0;
         protected override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
         
+        
         protected IAbstractGeneric1<int> _Item;
         public override IAbstractGeneric1<int> Item
         {

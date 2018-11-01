@@ -244,6 +244,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         private int _OpenGenericStayingOpenContainer_EndByteIndex;
         protected virtual int _ClosedGenericNonexclusiveInterface_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGenericNonexclusiveInterface_ByteIndex;
         
+        
         protected OpenGeneric<Base> _ClosedGenericBase;
         public OpenGeneric<Base> ClosedGenericBase
         {
@@ -283,6 +284,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericBase_Accessed;
+        
         protected OpenGeneric<WFloat> _ClosedGenericFloat;
         public OpenGeneric<WFloat> ClosedGenericFloat
         {
@@ -322,6 +324,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFloat_Accessed;
+        
         protected GenericFromBase<Base> _ClosedGenericFromBaseWithBase;
         public GenericFromBase<Base> ClosedGenericFromBaseWithBase
         {
@@ -361,6 +364,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFromBaseWithBase_Accessed;
+        
         protected OpenGeneric<IExampleChild> _ClosedGenericInterface;
         public OpenGeneric<IExampleChild> ClosedGenericInterface
         {
@@ -400,6 +404,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericInterface_Accessed;
+        
         protected OpenGeneric<IExampleNonexclusiveInterface> _ClosedGenericNonexclusiveInterface;
         public OpenGeneric<IExampleNonexclusiveInterface> ClosedGenericNonexclusiveInterface
         {

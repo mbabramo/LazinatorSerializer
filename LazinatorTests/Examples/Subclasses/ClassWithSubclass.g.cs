@@ -224,6 +224,7 @@ namespace LazinatorTests.Examples.Subclasses
         private int _ClassWithSubclass_EndByteIndex;
         protected virtual int _SubclassInstance2_ByteLength => _ClassWithSubclass_EndByteIndex - _SubclassInstance2_ByteIndex;
         
+        
         protected int _IntWithinSuperclass;
         public int IntWithinSuperclass
         {
@@ -237,6 +238,7 @@ namespace LazinatorTests.Examples.Subclasses
                 _IntWithinSuperclass = value;
             }
         }
+        
         protected global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance1;
         public global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass SubclassInstance1
         {
@@ -276,6 +278,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance1_Accessed;
+        
         protected global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance2;
         public global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass SubclassInstance2
         {

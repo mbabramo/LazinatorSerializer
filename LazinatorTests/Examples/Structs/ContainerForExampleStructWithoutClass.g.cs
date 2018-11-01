@@ -218,6 +218,7 @@ namespace LazinatorTests.Examples.Structs
         private int _ContainerForExampleStructWithoutClass_EndByteIndex;
         protected virtual int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
         
+        
         protected int _MyInt;
         public int MyInt
         {
@@ -231,6 +232,7 @@ namespace LazinatorTests.Examples.Structs
                 _MyInt = value;
             }
         }
+        
         protected ExampleStructWithoutClass _ExampleStructWithoutClass;
         public ExampleStructWithoutClass ExampleStructWithoutClass
         {

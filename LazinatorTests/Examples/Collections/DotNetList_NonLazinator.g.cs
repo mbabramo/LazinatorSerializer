@@ -214,6 +214,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_NonLazinator_EndByteIndex;
         protected virtual int _MyListNonLazinatorType2_ByteLength => _DotNetList_NonLazinator_EndByteIndex - _MyListNonLazinatorType2_ByteIndex;
         
+        
         protected List<NonLazinatorClass> _MyListNonLazinatorType;
         public List<NonLazinatorClass> MyListNonLazinatorType
         {
@@ -262,6 +263,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
+        
         protected List<NonLazinatorClass> _MyListNonLazinatorType2;
         public List<NonLazinatorClass> MyListNonLazinatorType2
         {

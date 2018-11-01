@@ -279,6 +279,7 @@ namespace LazinatorTests.Examples
         private int _Example_EndByteIndex;
         protected virtual int _ExcludableChild_ByteLength => _Example_EndByteIndex - _ExcludableChild_ByteIndex;
         
+        
         protected double? _MyNullableDouble;
         public virtual double? MyNullableDouble
         {
@@ -292,6 +293,7 @@ namespace LazinatorTests.Examples
                 _MyNullableDouble = value;
             }
         }
+        
         protected bool _MyBool;
         public bool MyBool
         {
@@ -305,6 +307,7 @@ namespace LazinatorTests.Examples
                 _MyBool = value;
             }
         }
+        
         protected char _MyChar;
         public ref char MyChar_Ref
         {
@@ -326,6 +329,7 @@ namespace LazinatorTests.Examples
                 _MyChar = value;
             }
         }
+        
         protected DateTime _MyDateTime;
         [Newtonsoft.Json.JsonProperty("MyDT")]
         public DateTime MyDateTime
@@ -340,6 +344,7 @@ namespace LazinatorTests.Examples
                 _MyDateTime = value;
             }
         }
+        
         protected string _MyNewString;
         public string MyNewString
         {
@@ -353,6 +358,7 @@ namespace LazinatorTests.Examples
                 _MyNewString = value;
             }
         }
+        
         protected decimal? _MyNullableDecimal;
         public decimal? MyNullableDecimal
         {
@@ -366,6 +372,7 @@ namespace LazinatorTests.Examples
                 _MyNullableDecimal = value;
             }
         }
+        
         protected TimeSpan? _MyNullableTimeSpan;
         public TimeSpan? MyNullableTimeSpan
         {
@@ -379,6 +386,7 @@ namespace LazinatorTests.Examples
                 _MyNullableTimeSpan = value;
             }
         }
+        
         protected string _MyOldString;
         public string MyOldString
         {
@@ -392,6 +400,7 @@ namespace LazinatorTests.Examples
                 _MyOldString = value;
             }
         }
+        
         protected string _MyString;
         public ref string MyString_Ref
         {
@@ -413,6 +422,7 @@ namespace LazinatorTests.Examples
                 _MyString = value;
             }
         }
+        
         protected string _MyStringBrotli;
         public string MyStringBrotli
         {
@@ -426,6 +436,7 @@ namespace LazinatorTests.Examples
                 _MyStringBrotli = value;
             }
         }
+        
         protected TestEnum _MyTestEnum;
         public TestEnum MyTestEnum
         {
@@ -439,6 +450,7 @@ namespace LazinatorTests.Examples
                 _MyTestEnum = value;
             }
         }
+        
         protected TestEnumByte? _MyTestEnumByteNullable;
         public TestEnumByte? MyTestEnumByteNullable
         {
@@ -452,6 +464,7 @@ namespace LazinatorTests.Examples
                 _MyTestEnumByteNullable = value;
             }
         }
+        
         protected uint _MyUint;
         public uint MyUint
         {
@@ -465,6 +478,7 @@ namespace LazinatorTests.Examples
                 _MyUint = value;
             }
         }
+        
         protected ExampleChild _IncludableChild;
         public ExampleChild IncludableChild
         {
@@ -504,6 +518,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _IncludableChild_Accessed;
+        
         protected ExampleChild _MyChild1;
         public ExampleChild MyChild1
         {
@@ -543,6 +558,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild1_Accessed;
+        
         protected ExampleChild _MyChild2;
         public ExampleChild MyChild2
         {
@@ -582,6 +598,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2_Accessed;
+        
         protected ExampleChild _MyChild2Previous;
         public ExampleChild MyChild2Previous
         {
@@ -621,6 +638,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2Previous_Accessed;
+        
         protected IExampleNonexclusiveInterface _MyInterfaceImplementer;
         public IExampleNonexclusiveInterface MyInterfaceImplementer
         {
@@ -660,6 +678,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyInterfaceImplementer_Accessed;
+        
         protected NonLazinatorClass _MyNonLazinatorChild;
         public NonLazinatorClass MyNonLazinatorChild
         {
@@ -708,6 +727,7 @@ namespace LazinatorTests.Examples
                 }
             }
         }
+        
         protected WInt _WrappedInt;
         public WInt WrappedInt
         {
@@ -769,6 +789,7 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
+        
         protected ExampleChild _ExcludableChild;
         public ExampleChild ExcludableChild
         {

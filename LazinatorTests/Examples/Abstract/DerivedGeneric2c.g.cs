@@ -217,6 +217,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _DerivedGeneric2c_T_EndByteIndex = 0;
         protected override int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;
         
+        
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
@@ -230,6 +231,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric = value;
             }
         }
+        
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
@@ -243,6 +245,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric2 = value;
             }
         }
+        
         protected int _MyUnofficialInt;
         public override int MyUnofficialInt
         {
@@ -256,6 +259,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyUnofficialInt = value;
             }
         }
+        
         protected T _MyT;
         public override T MyT
         {

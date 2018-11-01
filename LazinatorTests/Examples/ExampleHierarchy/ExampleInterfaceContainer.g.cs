@@ -221,6 +221,7 @@ namespace LazinatorTests.Examples.Hierarchy
         private int _ExampleInterfaceContainer_EndByteIndex;
         protected virtual int _ExampleListByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleListByInterface_ByteIndex;
         
+        
         protected IExample _ExampleByInterface;
         public IExample ExampleByInterface
         {
@@ -260,6 +261,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _ExampleByInterface_Accessed;
+        
         protected List<IExample> _ExampleListByInterface;
         public List<IExample> ExampleListByInterface
         {

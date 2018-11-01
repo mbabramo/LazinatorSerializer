@@ -211,6 +211,7 @@ namespace LazinatorTests.Examples
         /* Property definitions */
         
         
+        
         protected int _MyInt;
         public int MyInt
         {

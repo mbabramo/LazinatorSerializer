@@ -226,6 +226,7 @@ namespace LazinatorTests.Examples
         private int _UnofficialInterfaceIncorporator_EndByteIndex;
         protected virtual int _MyUnofficialObject_ByteLength => _UnofficialInterfaceIncorporator_EndByteIndex - _MyUnofficialObject_ByteIndex;
         
+        
         protected long _MyOfficialLong;
         public long MyOfficialLong
         {
@@ -239,6 +240,7 @@ namespace LazinatorTests.Examples
                 _MyOfficialLong = value;
             }
         }
+        
         protected int _MyUnofficialInt;
         private int MyUnofficialInt
         {
@@ -252,6 +254,7 @@ namespace LazinatorTests.Examples
                 _MyUnofficialInt = value;
             }
         }
+        
         protected Concrete5 _MyOfficialObject;
         public Concrete5 MyOfficialObject
         {
@@ -291,6 +294,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyOfficialObject_Accessed;
+        
         protected Concrete3 _MyUnofficialObject;
         private Concrete3 MyUnofficialObject
         {

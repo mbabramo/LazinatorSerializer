@@ -71,6 +71,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Properties */
         
+        
         protected int _YetAnotherInt;
         public int YetAnotherInt
         {

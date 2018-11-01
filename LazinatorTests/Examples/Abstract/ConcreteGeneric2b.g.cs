@@ -225,6 +225,7 @@ namespace LazinatorTests.Examples.Abstract
         private int _ConcreteGeneric2b_EndByteIndex;
         protected virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
         
+        
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
@@ -238,6 +239,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric = value;
             }
         }
+        
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
@@ -251,6 +253,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyEnumWithinAbstractGeneric2 = value;
             }
         }
+        
         protected int _MyUnofficialInt;
         public override int MyUnofficialInt
         {
@@ -264,6 +267,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyUnofficialInt = value;
             }
         }
+        
         protected string _AnotherProperty;
         public string AnotherProperty
         {
@@ -277,6 +281,7 @@ namespace LazinatorTests.Examples.Abstract
                 _AnotherProperty = value;
             }
         }
+        
         protected Example _MyT;
         public override Example MyT
         {
@@ -315,6 +320,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyT_Accessed = true;
             }
         }
+        
         protected Example _LazinatorExample;
         public Example LazinatorExample
         {

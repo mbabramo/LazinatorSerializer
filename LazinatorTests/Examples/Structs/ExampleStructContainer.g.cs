@@ -230,6 +230,7 @@ namespace LazinatorTests.Examples
         private int _ExampleStructContainer_EndByteIndex;
         protected virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
         
+        
         protected WInt _IntWrapper;
         public WInt IntWrapper
         {
@@ -291,6 +292,7 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
+        
         protected ExampleStruct _MyExampleStruct;
         public ExampleStruct MyExampleStruct
         {
@@ -352,6 +354,7 @@ namespace LazinatorTests.Examples
                 return cleanCopy;
             }
         }
+        
         protected List<ExampleStruct> _MyListExampleStruct;
         public List<ExampleStruct> MyListExampleStruct
         {
@@ -382,6 +385,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListExampleStruct_Accessed;
+        
         protected List<WNullableStruct<ExampleStruct>> _MyListNullableExampleStruct;
         public List<WNullableStruct<ExampleStruct>> MyListNullableExampleStruct
         {

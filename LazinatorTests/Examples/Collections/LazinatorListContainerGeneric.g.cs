@@ -214,6 +214,7 @@ namespace LazinatorTests.Examples.Collections
         private int _LazinatorListContainerGeneric_T_EndByteIndex;
         protected virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
         
+        
         protected LazinatorList<T> _MyList;
         public virtual LazinatorList<T> MyList
         {

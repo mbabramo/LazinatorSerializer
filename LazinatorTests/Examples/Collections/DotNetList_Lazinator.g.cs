@@ -211,6 +211,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Lazinator_EndByteIndex;
         protected virtual int _MyListSerialized_ByteLength => _DotNetList_Lazinator_EndByteIndex - _MyListSerialized_ByteIndex;
         
+        
         protected List<ExampleChild> _MyListSerialized;
         public List<ExampleChild> MyListSerialized
         {

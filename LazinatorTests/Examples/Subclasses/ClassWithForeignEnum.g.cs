@@ -211,6 +211,7 @@ namespace LazinatorTests.Examples.Subclasses
         /* Property definitions */
         
         
+        
         protected global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
         public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
         {

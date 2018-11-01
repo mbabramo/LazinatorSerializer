@@ -216,6 +216,7 @@ namespace LazinatorTests.Examples.Collections
         private int _Array_Values_EndByteIndex;
         protected virtual int _MyJaggedArrayInt_ByteLength => _Array_Values_EndByteIndex - _MyJaggedArrayInt_ByteIndex;
         
+        
         protected int[] _MyArrayInt;
         public int[] MyArrayInt
         {
@@ -264,6 +265,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
+        
         protected int?[] _MyArrayNullableInt;
         public int?[] MyArrayNullableInt
         {
@@ -294,6 +296,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayNullableInt_Accessed;
+        
         protected int[][] _MyJaggedArrayInt;
         public int[][] MyJaggedArrayInt
         {

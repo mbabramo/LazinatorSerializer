@@ -31,8 +31,10 @@ namespace Lazinator.Spans
         
         /* Serialization, deserialization, and object relationships */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public int Deserialize()
@@ -108,9 +110,12 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool HasChanged { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _IsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -130,7 +135,9 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _DescendantHasChanged;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
@@ -142,7 +149,9 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _DescendantIsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -172,11 +181,13 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorMemory LazinatorMemoryStorage
         {
             get;
             set;
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -219,6 +230,8 @@ namespace Lazinator.Spans
         private int _LazinatorBitArray_EndByteIndex;
         int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
         
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         int __version;
         private int _version
         {
@@ -234,6 +247,8 @@ namespace Lazinator.Spans
                 __version = value;
             }
         }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         int _m_length;
         private int m_length
         {
@@ -249,6 +264,8 @@ namespace Lazinator.Spans
                 _m_length = value;
             }
         }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         LazinatorByteSpan _ByteSpan;
         private LazinatorByteSpan ByteSpan
         {
@@ -299,6 +316,7 @@ namespace Lazinator.Spans
                 _ByteSpan_Accessed = true;
             }
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _ByteSpan_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
@@ -363,8 +381,10 @@ namespace Lazinator.Spans
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int LazinatorUniqueID => 91;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID
         {
@@ -372,6 +392,7 @@ namespace Lazinator.Spans
             set { }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int LazinatorObjectVersion { get; set; } = 0;
         
         

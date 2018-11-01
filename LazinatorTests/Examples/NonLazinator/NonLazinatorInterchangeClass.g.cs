@@ -240,6 +240,7 @@ namespace LazinatorTests.Examples
             /* Property definitions */
             
             
+            
             int _MyInt;
             public int MyInt
             {
@@ -253,6 +254,7 @@ namespace LazinatorTests.Examples
                     _MyInt = value;
                 }
             }
+            
             string _MyString;
             public string MyString
             {

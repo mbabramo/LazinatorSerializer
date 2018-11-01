@@ -211,6 +211,7 @@ namespace LazinatorTests.Examples.NonLazinator
         /* Property definitions */
         
         
+        
         protected int _MyInt;
         public override int MyInt
         {

@@ -35,8 +35,10 @@ namespace Lazinator.Collections
         {
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public int Deserialize()
@@ -101,9 +103,12 @@ namespace Lazinator.Collections
             typedClone.ReadOnlyBytes = Clone_ReadOnlySpan_Gbyte_g(ReadOnlyBytes, includeChildrenMode);
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool HasChanged { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _IsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsDirty
         {
             [DebuggerStepThrough]
@@ -123,7 +128,9 @@ namespace Lazinator.Collections
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _DescendantHasChanged;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
@@ -135,7 +142,9 @@ namespace Lazinator.Collections
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _DescendantIsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -165,11 +174,13 @@ namespace Lazinator.Collections
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorMemory LazinatorMemoryStorage
         {
             get;
             set;
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public void EnsureLazinatorMemoryUpToDate()
@@ -212,6 +223,7 @@ namespace Lazinator.Collections
         private int _LazinatorFastReadList_T_EndByteIndex;
         int _ReadOnlyBytes_ByteLength => _LazinatorFastReadList_T_EndByteIndex - _ReadOnlyBytes_ByteIndex;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ReadOnlyMemory<byte> _ReadOnlyBytes;
         public ReadOnlySpan<byte> ReadOnlyBytes
         {
@@ -277,8 +289,10 @@ namespace Lazinator.Collections
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int LazinatorUniqueID => 52;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID
         {
@@ -286,6 +300,7 @@ namespace Lazinator.Collections
             set { }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int LazinatorObjectVersion
         {
             get => -1;

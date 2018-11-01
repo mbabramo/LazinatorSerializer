@@ -251,6 +251,7 @@ namespace LazinatorTests.Examples
             private int _NonLazinatorContainer_EndByteIndex;
             int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
             
+            
             NonLazinatorClass _NonLazinatorClass;
             public NonLazinatorClass NonLazinatorClass
             {
@@ -281,6 +282,7 @@ namespace LazinatorTests.Examples
                 }
             }
             bool _NonLazinatorClass_Accessed;
+            
             NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
             public NonLazinatorInterchangeableClass NonLazinatorInterchangeableClass
             {
@@ -311,6 +313,7 @@ namespace LazinatorTests.Examples
                 }
             }
             bool _NonLazinatorInterchangeableClass_Accessed;
+            
             NonLazinatorInterchangeableStruct _NonLazinatorInterchangeableStruct;
             public NonLazinatorInterchangeableStruct NonLazinatorInterchangeableStruct
             {
@@ -340,6 +343,7 @@ namespace LazinatorTests.Examples
                 }
             }
             bool _NonLazinatorInterchangeableStruct_Accessed;
+            
             NonLazinatorStruct _NonLazinatorStruct;
             public NonLazinatorStruct NonLazinatorStruct
             {

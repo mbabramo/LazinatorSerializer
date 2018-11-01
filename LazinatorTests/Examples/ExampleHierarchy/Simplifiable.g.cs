@@ -241,6 +241,7 @@ namespace LazinatorTests.Examples
         private int _Simplifiable_EndByteIndex;
         protected virtual int _Example3_ByteLength => _Simplifiable_EndByteIndex - _Example3_ByteIndex;
         
+        
         protected bool _MyIntsAre3;
         public bool MyIntsAre3
         {
@@ -254,6 +255,7 @@ namespace LazinatorTests.Examples
                 _MyIntsAre3 = value;
             }
         }
+        
         protected char? _Example2Char;
         public char? Example2Char
         {
@@ -267,6 +269,7 @@ namespace LazinatorTests.Examples
                 _Example2Char = value;
             }
         }
+        
         protected bool _Example3IsNull;
         public bool Example3IsNull
         {
@@ -280,6 +283,7 @@ namespace LazinatorTests.Examples
                 _Example3IsNull = value;
             }
         }
+        
         protected bool _ExampleHasDefaultValue;
         public bool ExampleHasDefaultValue
         {
@@ -293,6 +297,7 @@ namespace LazinatorTests.Examples
                 _ExampleHasDefaultValue = value;
             }
         }
+        
         protected int _MyInt;
         public int MyInt
         {
@@ -306,6 +311,7 @@ namespace LazinatorTests.Examples
                 _MyInt = value;
             }
         }
+        
         protected int _MyOtherInt;
         public int MyOtherInt
         {
@@ -319,6 +325,7 @@ namespace LazinatorTests.Examples
                 _MyOtherInt = value;
             }
         }
+        
         protected Example _ANonSkippableEarlierExample;
         public Example ANonSkippableEarlierExample
         {
@@ -358,6 +365,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ANonSkippableEarlierExample_Accessed;
+        
         protected Example _Example;
         public Example Example
         {
@@ -397,6 +405,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example_Accessed;
+        
         protected Example _Example2;
         public Example Example2
         {
@@ -436,6 +445,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example2_Accessed;
+        
         protected Example _Example3;
         public Example Example3
         {

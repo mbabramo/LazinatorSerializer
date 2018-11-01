@@ -221,6 +221,7 @@ namespace LazinatorTests.Examples.Collections
         private int _DotNetList_Wrapper_EndByteIndex;
         protected virtual int _MyListNullableInt_ByteLength => _DotNetList_Wrapper_EndByteIndex - _MyListNullableInt_ByteIndex;
         
+        
         protected List<WInt> _MyListInt;
         public List<WInt> MyListInt
         {
@@ -269,6 +270,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
         }
+        
         protected List<WNullableByte> _MyListNullableByte;
         public List<WNullableByte> MyListNullableByte
         {
@@ -299,6 +301,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNullableByte_Accessed;
+        
         protected List<WNullableInt> _MyListNullableInt;
         public List<WNullableInt> MyListNullableInt
         {

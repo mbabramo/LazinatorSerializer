@@ -239,6 +239,7 @@ namespace LazinatorTests.Examples.Structs
             /* Property definitions */
             
             
+            
             int _MyInt;
             public int MyInt
             {

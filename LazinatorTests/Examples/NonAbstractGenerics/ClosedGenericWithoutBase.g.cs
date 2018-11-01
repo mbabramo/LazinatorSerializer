@@ -218,6 +218,7 @@ namespace LazinatorTests.Examples
         private int _ClosedGenericWithoutBase_EndByteIndex;
         protected virtual int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
         
+        
         protected int _ItemT;
         public int ItemT
         {
@@ -231,6 +232,7 @@ namespace LazinatorTests.Examples
                 _ItemT = value;
             }
         }
+        
         protected ExampleChild _ItemU;
         public ExampleChild ItemU
         {

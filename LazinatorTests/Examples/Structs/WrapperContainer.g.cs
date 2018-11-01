@@ -214,6 +214,7 @@ namespace LazinatorTests.Examples.Structs
         private int _WrapperContainer_EndByteIndex;
         protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         
+        
         protected WInt _WrappedInt;
         public WInt WrappedInt
         {

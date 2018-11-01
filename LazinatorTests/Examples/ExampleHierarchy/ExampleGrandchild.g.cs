@@ -212,6 +212,7 @@ namespace LazinatorTests.Examples
         /* Property definitions */
         
         
+        
         protected string _AString;
         public string AString
         {
@@ -225,6 +226,7 @@ namespace LazinatorTests.Examples
                 _AString = value;
             }
         }
+        
         protected int _MyInt;
         public int MyInt
         {

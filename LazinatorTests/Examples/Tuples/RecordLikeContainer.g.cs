@@ -224,6 +224,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _RecordLikeContainer_EndByteIndex;
         protected virtual int _MyRecordLikeTypeWithLazinator_ByteLength => _RecordLikeContainer_EndByteIndex - _MyRecordLikeTypeWithLazinator_ByteIndex;
         
+        
         protected MismatchedRecordLikeType _MyMismatchedRecordLikeType;
         public MismatchedRecordLikeType MyMismatchedRecordLikeType
         {
@@ -253,6 +254,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyMismatchedRecordLikeType_Accessed;
+        
         protected RecordLikeClass _MyRecordLikeClass;
         public RecordLikeClass MyRecordLikeClass
         {
@@ -283,6 +285,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeClass_Accessed;
+        
         protected RecordLikeType _MyRecordLikeType;
         public RecordLikeType MyRecordLikeType
         {
@@ -312,6 +315,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeType_Accessed;
+        
         protected RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
         public RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator
         {

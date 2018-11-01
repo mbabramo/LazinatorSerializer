@@ -215,6 +215,7 @@ namespace LazinatorTests.Examples.Subclasses
         private int _ClassWithLocalEnum_EndByteIndex;
         protected virtual int _MyEnumList_ByteLength => _ClassWithLocalEnum_EndByteIndex - _MyEnumList_ByteIndex;
         
+        
         protected global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
         public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
         {
@@ -228,6 +229,7 @@ namespace LazinatorTests.Examples.Subclasses
                 _MyEnum = value;
             }
         }
+        
         protected List<EnumWithinClass> _MyEnumList;
         public List<EnumWithinClass> MyEnumList
         {

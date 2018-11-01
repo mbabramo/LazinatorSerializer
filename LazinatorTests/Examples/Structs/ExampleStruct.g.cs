@@ -267,6 +267,7 @@ namespace LazinatorTests.Examples
             private int _ExampleStruct_EndByteIndex;
             int _MyTuple_ByteLength => _ExampleStruct_EndByteIndex - _MyTuple_ByteIndex;
             
+            
             bool _MyBool;
             public bool MyBool
             {
@@ -280,6 +281,7 @@ namespace LazinatorTests.Examples
                     _MyBool = value;
                 }
             }
+            
             char _MyChar;
             public char MyChar
             {
@@ -293,6 +295,7 @@ namespace LazinatorTests.Examples
                     _MyChar = value;
                 }
             }
+            
             ExampleChild _MyChild1;
             public ExampleChild MyChild1
             {
@@ -323,6 +326,7 @@ namespace LazinatorTests.Examples
                 }
             }
             bool _MyChild1_Accessed;
+            
             ExampleChild _MyChild2;
             public ExampleChild MyChild2
             {
@@ -353,6 +357,7 @@ namespace LazinatorTests.Examples
                 }
             }
             bool _MyChild2_Accessed;
+            
             List<Example> _MyLazinatorList;
             public List<Example> MyLazinatorList
             {
@@ -401,6 +406,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             List<int> _MyListValues;
             public List<int> MyListValues
             {
@@ -431,6 +437,7 @@ namespace LazinatorTests.Examples
                 }
             }
             bool _MyListValues_Accessed;
+            
             (NonLazinatorClass myitem1, int? myitem2) _MyTuple;
             public (NonLazinatorClass myitem1, int? myitem2) MyTuple
             {

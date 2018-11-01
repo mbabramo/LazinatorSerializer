@@ -211,6 +211,7 @@ namespace LazinatorTests.Examples.Tuples
         private int _KeyValuePairTuple_EndByteIndex;
         protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
         
+        
         protected KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
         public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
         {

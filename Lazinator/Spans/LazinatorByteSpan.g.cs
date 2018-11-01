@@ -31,8 +31,10 @@ namespace Lazinator.Spans
         
         /* Serialization, deserialization, and object relationships */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public virtual int Deserialize()
@@ -101,9 +103,12 @@ namespace Lazinator.Spans
             typedClone.ReadOrWrite = Clone_Memory_Gbyte_g(ReadOrWrite, includeChildrenMode);
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual bool HasChanged { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _IsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
@@ -123,7 +128,9 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _DescendantHasChanged;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual bool DescendantHasChanged
         {
             [DebuggerStepThrough]
@@ -135,7 +142,9 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _DescendantIsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -165,11 +174,13 @@ namespace Lazinator.Spans
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorMemory LazinatorMemoryStorage
         {
             get;
             set;
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
         public virtual void EnsureLazinatorMemoryUpToDate()
@@ -214,6 +225,7 @@ namespace Lazinator.Spans
         private int _LazinatorByteSpan_EndByteIndex;
         protected virtual int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ReadOnlyMemory<byte> _ReadOnly;
         internal ReadOnlySpan<byte> ReadOnly
         {
@@ -237,6 +249,8 @@ namespace Lazinator.Spans
             }
         }
         protected bool _ReadOnly_Accessed;
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected Memory<byte> _ReadOrWrite;
         internal Memory<byte> ReadOrWrite
         {
@@ -268,6 +282,7 @@ namespace Lazinator.Spans
                 _ReadOrWrite_Accessed = true;
             }
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _ReadOrWrite_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
@@ -313,9 +328,12 @@ namespace Lazinator.Spans
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual int LazinatorUniqueID => 89;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual LazinatorGenericIDType _LazinatorGenericID { get; set; }
         public virtual LazinatorGenericIDType LazinatorGenericID
         {
@@ -323,6 +341,7 @@ namespace Lazinator.Spans
             set { }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
         

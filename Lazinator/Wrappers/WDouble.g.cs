@@ -31,8 +31,10 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
         public int Deserialize()
@@ -97,9 +99,12 @@ namespace Lazinator.Wrappers
             
             clone.IsDirty = false;}
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public bool HasChanged { get; set; }
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             bool _IsDirty;
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public bool IsDirty
             {
                 [DebuggerStepThrough]
@@ -119,7 +124,9 @@ namespace Lazinator.Wrappers
                 }
             }
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             bool _DescendantHasChanged;
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public bool DescendantHasChanged
             {
                 [DebuggerStepThrough]
@@ -131,7 +138,9 @@ namespace Lazinator.Wrappers
                 }
             }
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             bool _DescendantIsDirty;
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public bool DescendantIsDirty
             {
                 [DebuggerStepThrough]
@@ -161,11 +170,13 @@ namespace Lazinator.Wrappers
                 }
             }
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public LazinatorMemory LazinatorMemoryStorage
             {
                 get;
                 set;
             }
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
             
             public void EnsureLazinatorMemoryUpToDate()
@@ -224,6 +235,8 @@ namespace Lazinator.Wrappers
             /* Property definitions */
             
             
+            
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             double _WrappedValue;
             public double WrappedValue
             {
@@ -280,8 +293,10 @@ namespace Lazinator.Wrappers
             
             /* Conversion */
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public int LazinatorUniqueID => 54;
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             bool ContainsOpenGenericParameters => false;
             public LazinatorGenericIDType LazinatorGenericID
             {
@@ -289,6 +304,7 @@ namespace Lazinator.Wrappers
                 set { }
             }
             
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public int LazinatorObjectVersion
             {
                 get => -1;

@@ -75,6 +75,7 @@ namespace LazinatorTests.Examples.Collections
         private int _Derived_DotNetList_Nested_NonLazinator_EndByteIndex;
         protected virtual int _MyLevel2ListNestedNonLazinatorType_ByteLength => _Derived_DotNetList_Nested_NonLazinator_EndByteIndex - _MyLevel2ListNestedNonLazinatorType_ByteIndex;
         
+        
         protected int _MyLevel2Int;
         public int MyLevel2Int
         {
@@ -88,6 +89,7 @@ namespace LazinatorTests.Examples.Collections
                 _MyLevel2Int = value;
             }
         }
+        
         protected List<List<NonLazinatorClass>> _MyLevel2ListNestedNonLazinatorType;
         public List<List<NonLazinatorClass>> MyLevel2ListNestedNonLazinatorType
         {

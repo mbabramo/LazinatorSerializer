@@ -225,6 +225,7 @@ namespace LazinatorTests.Examples
         private int _ExampleChild_EndByteIndex;
         protected virtual int _MyWrapperContainer_ByteLength => _ExampleChild_EndByteIndex - _MyWrapperContainer_ByteIndex;
         
+        
         protected long _MyLong;
         public long MyLong
         {
@@ -238,6 +239,7 @@ namespace LazinatorTests.Examples
                 _MyLong = value;
             }
         }
+        
         protected short _MyShort;
         public short MyShort
         {
@@ -272,6 +274,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ByteSpan_Accessed;
+        
         protected ExampleGrandchild _MyExampleGrandchild;
         public ExampleGrandchild MyExampleGrandchild
         {
@@ -311,6 +314,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyExampleGrandchild_Accessed;
+        
         protected WrapperContainer _MyWrapperContainer;
         public WrapperContainer MyWrapperContainer
         {
