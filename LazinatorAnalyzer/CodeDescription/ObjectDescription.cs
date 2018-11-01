@@ -1038,7 +1038,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
-                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.OffsetForChildString}, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
             sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);
