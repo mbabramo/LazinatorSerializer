@@ -582,6 +582,21 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void CloneMiddleOfHierarchy()
+        {
+            Example e = GetTypicalExample();
+            e.MyChild1.MyShort = 5;
+            e = e.CloneLazinatorTyped();
+            e.MyChild1.MyShort = 6;
+            e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            var f = e.MyChild1.CloneLazinatorTyped();
+            e.MyChar = '5';
+            var e2 = e.CloneLazinatorTyped();
+            var x = e2.MyChild1.MyShort;
+            x.Should().Be(6);
+        }
+
+        [Fact]
         public void UpdateBufferForDeserialized()
         {
             Example e = GetTypicalExample();
@@ -593,6 +608,16 @@ namespace LazinatorTests.Tests
             var e2 = e.CloneLazinatorTyped();
             var x = e2.MyChild1.MyShort;
             x.Should().Be(6);
+        }
+
+        [Fact]
+        public void UpdateBufferForDeserialized_LazinatorList()
+        {
+            LazinatorListContainer c = GetLazinatorListContainer();
+            c.MyList[0].MyExampleGrandchild.MyInt = 200;
+            UpdateStoredBufferFromExisting(c);
+            var c2 = c.CloneLazinatorTyped();
+            c.MyList[0].MyExampleGrandchild.MyInt.Should().Be(200);
         }
 
         private static void UpdateStoredBufferFromExisting(ILazinator e)
@@ -663,18 +688,24 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BuffersUpdateInTandem_LazinatorList()
         {
-            LazinatorListContainer e = new LazinatorListContainer();
-            e.MyList = new LazinatorList<ExampleChild>();
-            e.MyList.Add(GetExampleChild(1));
-            e.MyList[0].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
-            e.MyList.Add(GetExampleChild(1));
-            e.MyList[1].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
-            e = e.CloneLazinatorTyped();
+            LazinatorListContainer e = GetLazinatorListContainer();
             e.MyList[1].MyExampleGrandchild.MyInt = 6;
             e.MyList[1].EnsureLazinatorMemoryUpToDate(); // generate a new buffer in a list member
             ConfirmBuffersUpdateInTandem(e);
             e.MyInt = 17; // keep list clean while making container dirty
             ConfirmBuffersUpdateInTandem(e);
+        }
+
+        private LazinatorListContainer GetLazinatorListContainer()
+        {
+            LazinatorListContainer container = new LazinatorListContainer();
+            container.MyList = new LazinatorList<ExampleChild>();
+            container.MyList.Add(GetExampleChild(1));
+            container.MyList[0].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
+            container.MyList.Add(GetExampleChild(1));
+            container.MyList[1].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
+            container = container.CloneLazinatorTyped();
+            return container;
         }
 
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)

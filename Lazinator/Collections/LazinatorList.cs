@@ -326,7 +326,8 @@ namespace Lazinator.Collections
                     var current = ((IList<T>)UnderlyingList)[index];
                     if (current != null)
                     {
-                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
+                        // DEBUG -- must account for length of _MainListSerialized
+                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
             }
