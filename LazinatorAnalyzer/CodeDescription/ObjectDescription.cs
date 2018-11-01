@@ -249,7 +249,7 @@ namespace Lazinator.CodeDescription
                     {{";
             sb.AppendLine(theBeginning);
             if (BaseLazinatorObject == null)
-                sb.AppendLine($@"public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct ? "true" : "false")};
+                sb.AppendLine($@"{HideILazinatorProperty}public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct ? "true" : "false")};
                         ");
         }
 
@@ -868,7 +868,7 @@ namespace Lazinator.CodeDescription
                         }}";
             else
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {lazinatorGenericBackingID}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
+                        {lazinatorGenericBackingID}{HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
                         {{
                             get => default;
                             set {{ }}
