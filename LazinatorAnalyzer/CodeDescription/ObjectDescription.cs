@@ -977,7 +977,7 @@ namespace Lazinator.CodeDescription
             {{");
             GetCodeBeforeBufferIsUpdated(sb);
             sb.AppendLine($@"
-                var newBuffer = writer.Slice(startPosition);
+                var newBuffer = writer.Slice(startPosition, length);
                 LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);");
             sb.Append($@"}}
 ");
@@ -1039,7 +1039,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
-                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.OffsetForChildString}, _{property.PropertyName}_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
             sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);

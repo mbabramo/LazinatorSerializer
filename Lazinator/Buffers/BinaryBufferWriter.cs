@@ -24,9 +24,18 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Returns the memory in the buffer beginning at the specified position.
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="position">The start position</param>
         /// <returns></returns>
         public LazinatorMemory Slice(int position) => LazinatorMemory.Slice(position);
+
+
+        /// <summary>
+        /// Returns the memory in the buffer beginning at the specified position and with the specified length
+        /// </summary>
+        /// <param name="position">The start position</param>
+        /// <param name="position">The number of bytes to include</param>
+        /// <returns></returns>
+        public LazinatorMemory Slice(int position, int length) => LazinatorMemory.Slice(position, length);
 
         /// <summary>
         /// Creates LazinatorMemory equal to the underlying memory through the current position.

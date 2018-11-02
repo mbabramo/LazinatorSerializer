@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples
                 {
                     if (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null)
                     {
-                        _MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex + sizeof(int), _MyExampleGrandchild_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyExampleGrandchild.UpdateStoredBuffer(ref writer, startPosition + _MyExampleGrandchild_ByteIndex + sizeof(int), _MyExampleGrandchild_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyWrapperContainer_Accessed && _MyWrapperContainer != null)
                     {

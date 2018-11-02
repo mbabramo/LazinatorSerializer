@@ -41,7 +41,8 @@ namespace Lazinator.CodeDescription
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
         private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, _{PropertyName}_ByteIndex, _{PropertyName}_ByteLength{ChildSliceEndString})";
         private string ChildSliceEndString => $", {(OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
-        internal string OffsetForChildString => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (IsGuaranteedSmall ? " + sizeof(byte)" : " + sizeof(int)");
+        internal string IncrementChildStartBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (IsGuaranteedSmall ? " + sizeof(byte)" : " + sizeof(int)");
+        internal string DecrementTotalLengthBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (IsGuaranteedSmall ? " - sizeof(byte)" : " - sizeof(int)");
 
         /* Property type */
         internal LazinatorPropertyType PropertyType { get; set; }
