@@ -220,25 +220,25 @@ namespace LazinatorTests.Tests
 
 
         [Fact]
-        public void DEBUG()
+        public void EnsureLazinatorSimplifiedTest()
         {
             Example e = GetTypicalExample();
             e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
             Example c1 = null; // early clones -- make sure unaffected
-            int repetitions = 4; // DEBUG 8;
+            int repetitions = 4; 
             e.MyChild1.MyLong = 0;
             e.MyChild1.MyShort = 0;
             ((ExampleChildInherited)e.MyChild1).MyInt = 0;
             for (int i = 0; i < repetitions; i++)
             {
-                if (i == 3) // DEBUG 5)
+                if (i == 3)
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
                 }
                 e.MyBool = !e.MyBool;
                 e.EnsureLazinatorMemoryUpToDate();
             }
-            c1.MyChild2.MyLong = -3;
+            c1.MyChild2.MyLong = -3; // make sure we can access it
         }
 
         const int dictsize = 5;
