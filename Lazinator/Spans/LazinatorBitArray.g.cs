@@ -435,7 +435,7 @@ namespace Lazinator.Spans
                 {
                     if (_ByteSpan_Accessed && _ByteSpan != null)
                     {
-                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
@@ -445,7 +445,7 @@ namespace Lazinator.Spans
                 throw new Exception("Cannot update stored buffer when serializing only some children.");
             }
             
-            var newBuffer = writer.Slice(startPosition);
+            var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
         }
         

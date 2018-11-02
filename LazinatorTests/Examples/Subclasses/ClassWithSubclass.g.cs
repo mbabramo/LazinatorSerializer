@@ -458,11 +458,11 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
                     {
-                        _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
                     {
-                        _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
@@ -472,7 +472,7 @@ namespace LazinatorTests.Examples.Subclasses
                 throw new Exception("Cannot update stored buffer when serializing only some children.");
             }
             
-            var newBuffer = writer.Slice(startPosition);
+            var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
         }
         

@@ -509,11 +509,11 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (_MyT_Accessed && _MyT != null)
                     {
-                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_LazinatorExample_Accessed && _LazinatorExample != null)
                     {
-                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), _LazinatorExample_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), _LazinatorExample_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
@@ -523,7 +523,7 @@ namespace LazinatorTests.Examples.Abstract
                 throw new Exception("Cannot update stored buffer when serializing only some children.");
             }
             
-            var newBuffer = writer.Slice(startPosition);
+            var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
         }
         

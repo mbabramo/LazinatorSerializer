@@ -707,19 +707,19 @@ namespace Lazinator.Collections.Avl
                 {
                     if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
                     {
-                        _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Left_Accessed && _Left != null)
                     {
-                        _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex + sizeof(int), _Left_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex + sizeof(int), _Left_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Right_Accessed && _Right != null)
                     {
-                        _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), _Right_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), _Right_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
                     {
-                        _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
@@ -737,7 +737,7 @@ namespace Lazinator.Collections.Avl
                 throw new Exception("Cannot update stored buffer when serializing only some children.");
             }
             
-            var newBuffer = writer.Slice(startPosition);
+            var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
         }
         

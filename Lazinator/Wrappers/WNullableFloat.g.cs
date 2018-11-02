@@ -350,7 +350,7 @@ namespace Lazinator.Wrappers
                     throw new Exception("Cannot update stored buffer when serializing only some children.");
                 }
                 
-                var newBuffer = writer.Slice(startPosition);
+                var newBuffer = writer.Slice(startPosition, length);
                 LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
             }
             

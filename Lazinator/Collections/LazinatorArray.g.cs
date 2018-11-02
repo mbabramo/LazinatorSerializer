@@ -140,7 +140,7 @@ namespace Lazinator.Collections
                 {
                     if (_Offsets_Accessed && _Offsets != null)
                     {
-                        _Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex + sizeof(int), _Offsets_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex + sizeof(int), _Offsets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     OnUpdateDeserializedChildren(ref writer, startPosition);
                 }
@@ -151,7 +151,7 @@ namespace Lazinator.Collections
                 throw new Exception("Cannot update stored buffer when serializing only some children.");
             }
             
-            var newBuffer = writer.Slice(startPosition);
+            var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
         }
         

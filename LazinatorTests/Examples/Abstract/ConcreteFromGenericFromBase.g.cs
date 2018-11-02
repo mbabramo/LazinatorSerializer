@@ -144,7 +144,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<WNullableDecimal>.Default.Equals(_MyT, default(WNullableDecimal)))
                     {
-                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(byte), _MyT_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(byte), _MyT_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 
@@ -155,7 +155,7 @@ namespace LazinatorTests.Examples.Abstract
                 throw new Exception("Cannot update stored buffer when serializing only some children.");
             }
             
-            var newBuffer = writer.Slice(startPosition);
+            var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
         }
         

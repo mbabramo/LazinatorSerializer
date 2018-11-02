@@ -162,7 +162,7 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample();
             e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
-            int repetitions = 8;
+            int repetitions = 4; // DEBUG 8;
             Random r = new Random();
             long randLong = 0;
             short randShort = 0;
@@ -176,7 +176,7 @@ namespace LazinatorTests.Tests
                     e.MyChild1.MyShort = 0;
                     ((ExampleChildInherited)e.MyChild1).MyInt = 0;
                 }
-                if (i == 5)
+                if (i == 3) // DEBUG 5)
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
                     c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
@@ -217,6 +217,29 @@ namespace LazinatorTests.Tests
             }
         }
 
+
+
+        [Fact]
+        public void DEBUG()
+        {
+            Example e = GetTypicalExample();
+            e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
+            Example c1 = null; // early clones -- make sure unaffected
+            int repetitions = 4; // DEBUG 8;
+            e.MyChild1.MyLong = 0;
+            e.MyChild1.MyShort = 0;
+            ((ExampleChildInherited)e.MyChild1).MyInt = 0;
+            for (int i = 0; i < repetitions; i++)
+            {
+                if (i == 3) // DEBUG 5)
+                {
+                    c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
+                }
+                e.MyBool = !e.MyBool;
+                e.EnsureLazinatorMemoryUpToDate();
+            }
+            c1.MyChild2.MyLong = -3;
+        }
 
         const int dictsize = 5;
 
