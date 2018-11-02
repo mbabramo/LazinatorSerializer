@@ -542,10 +542,6 @@ namespace LazinatorCodeGen.Roslyn
         private void AddKnownAttributesForSymbol(ISymbol symbol)
         {
             string symbolName = symbol.GetFullyQualifiedName();
-            if (symbolName.Contains("ISimplifiable.MyInt"))
-            {
-                var DEBUGX = 0;
-            }
             if (KnownAttributes.ContainsKey(symbolName))
                 return;
             AddKnownAttributesForSymbol(symbol, RoslynHelpers.GetKnownAttributes(symbol));
@@ -554,10 +550,6 @@ namespace LazinatorCodeGen.Roslyn
         private void AddKnownAttributesForSymbol(ISymbol symbol, IEnumerable<Attribute> newlyKnownAttributes)
         {
             string symbolName = symbol.GetFullyQualifiedName();
-            if (symbolName.Contains("ISimplifiable.MyInt"))
-            {
-                var DEBUGX = 0;
-            }
             HashSet<Attribute> alreadyKnownAttributes;
             if (KnownAttributes.ContainsKey(symbolName))
                 alreadyKnownAttributes = KnownAttributes[symbolName];

@@ -168,11 +168,6 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
 
             ParseVersionAttributes();
-            
-            if (propertySymbol.ToString().Contains("ISimplifiable.MyInt"))
-            {
-                var DEBUG = 0;
-            }
         
             ParseOtherPropertyAttributes();
 

@@ -195,8 +195,6 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_TestExamples()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
-            throw new Exception("DEBUG");
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ContainerForExampleWithDefault), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
@@ -210,6 +208,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ContainerForExampleStructWithoutClass), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
+            await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(WrapperContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(SmallWrappersContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(RecursiveExample), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
