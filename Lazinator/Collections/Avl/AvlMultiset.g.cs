@@ -401,11 +401,11 @@ namespace Lazinator.Collections.Avl
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -415,7 +415,7 @@ namespace Lazinator.Collections.Avl
                 {
                     if (_UnderlyingSet_Accessed && _UnderlyingSet != null)
                     {
-                        _UnderlyingSet.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingSet_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _UnderlyingSet.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingSet_ByteIndex + sizeof(int), _UnderlyingSet_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

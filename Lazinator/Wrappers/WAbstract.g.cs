@@ -97,7 +97,7 @@ namespace Lazinator.Wrappers
             get;
         }
         
-        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void EnsureLazinatorMemoryUpToDate();
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();

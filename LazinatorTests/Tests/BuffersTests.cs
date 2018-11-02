@@ -370,7 +370,7 @@ namespace LazinatorTests.Tests
             var buffer = new Memory<byte>(e.LazinatorMemoryStorage.Memory.Span.ToArray());
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
-            e.UpdateStoredBuffer(ref b, 0, IncludeChildrenMode.IncludeAllChildren, true);
+            e.UpdateStoredBuffer(ref b, 0, buffer.Span.Length /* DEBUG -- check */, IncludeChildrenMode.IncludeAllChildren, true);
         }
 
         [Fact]

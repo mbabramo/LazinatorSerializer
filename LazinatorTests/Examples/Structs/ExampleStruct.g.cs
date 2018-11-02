@@ -622,11 +622,11 @@ namespace LazinatorTests.Examples
                 WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
                 if (updateStoredBuffer)
                 {
-                    UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
                 }
             }
             
-            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {
                 _IsDirty = false;
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -636,11 +636,11 @@ namespace LazinatorTests.Examples
                     {
                         if (_MyChild1_Accessed && _MyChild1 != null)
                         {
-                            _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                            _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                         }
                         if (_MyChild2_Accessed && _MyChild2 != null)
                         {
-                            _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                            _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                         }
                     }
                     

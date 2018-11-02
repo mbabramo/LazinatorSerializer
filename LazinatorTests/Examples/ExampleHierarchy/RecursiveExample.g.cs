@@ -426,11 +426,11 @@ namespace LazinatorTests.Examples.Hierarchy
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -440,11 +440,11 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     if (_RecursiveClass_Accessed && _RecursiveClass != null)
                     {
-                        _RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex + sizeof(int), _RecursiveClass_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_RecursiveInterface_Accessed && _RecursiveInterface != null)
                     {
-                        _RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex + sizeof(int), _RecursiveInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

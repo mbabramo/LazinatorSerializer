@@ -693,11 +693,11 @@ namespace Lazinator.Collections.Avl
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -707,19 +707,19 @@ namespace Lazinator.Collections.Avl
                 {
                     if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
                     {
-                        _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Left_Accessed && _Left != null)
                     {
-                        _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex + sizeof(int), _Left_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Right_Accessed && _Right != null)
                     {
-                        _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), _Right_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
                     {
-                        _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

@@ -421,11 +421,11 @@ namespace Lazinator.Spans
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -435,7 +435,7 @@ namespace Lazinator.Spans
                 {
                     if (_ByteSpan_Accessed && _ByteSpan != null)
                     {
-                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

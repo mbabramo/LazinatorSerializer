@@ -495,11 +495,11 @@ namespace LazinatorTests.Examples.Abstract
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -509,11 +509,11 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     if (_MyT_Accessed && _MyT != null)
                     {
-                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_LazinatorExample_Accessed && _LazinatorExample != null)
                     {
-                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), _LazinatorExample_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

@@ -326,7 +326,7 @@ namespace Lazinator.Collections
                     var current = ((IList<T>)UnderlyingList)[index];
                     if (current != null)
                     {
-                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
+                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), GetOffset(index + 1) - GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
                         if (current.IsStruct)
                         {
                             UnderlyingList[index] = current;

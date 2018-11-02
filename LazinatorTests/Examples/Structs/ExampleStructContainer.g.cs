@@ -551,11 +551,11 @@ namespace LazinatorTests.Examples
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -565,11 +565,11 @@ namespace LazinatorTests.Examples
                 {
                     if (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt)))
                     {
-                        _IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
+                        _IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), _IntWrapper_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct)))
                     {
-                        _MyExampleStruct.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyExampleStruct.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex + sizeof(int), _MyExampleStruct_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

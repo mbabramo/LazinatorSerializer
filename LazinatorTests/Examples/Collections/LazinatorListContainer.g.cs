@@ -461,11 +461,11 @@ namespace LazinatorTests.Examples.Collections
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -475,11 +475,11 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyList_Accessed && _MyList != null)
                     {
-                        _MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex + sizeof(int), _MyList_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                     if (_MyStructList_Accessed && _MyStructList != null)
                     {
-                        _MyStructList.UpdateStoredBuffer(ref writer, startPosition + _MyStructList_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        _MyStructList.UpdateStoredBuffer(ref writer, startPosition + _MyStructList_ByteIndex + sizeof(int), _MyStructList_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
                 }
                 

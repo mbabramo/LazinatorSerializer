@@ -420,11 +420,11 @@ namespace Lazinator.Wrappers
                 WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
                 if (updateStoredBuffer)
                 {
-                    UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);
+                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
                 }
             }
             
-            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {
                 _IsDirty = false;
                 if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -434,7 +434,7 @@ namespace Lazinator.Wrappers
                     {
                         if (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)))
                         {
-                            _NonNullValue.UpdateStoredBuffer(ref writer, startPosition + _NonNullValue_ByteIndex, IncludeChildrenMode.IncludeAllChildren, true);
+                            _NonNullValue.UpdateStoredBuffer(ref writer, startPosition + _NonNullValue_ByteIndex, _NonNullValue_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                         }
                     }
                     
