@@ -345,7 +345,7 @@ namespace Lazinator.CodeDescription
 			                get;
                         }}
 
-                        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+                        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
                         public abstract void EnsureLazinatorMemoryUpToDate();
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
@@ -962,7 +962,7 @@ namespace Lazinator.CodeDescription
             
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
-                            UpdateStoredBuffer(ref writer, startPosition, includeChildrenMode, false);");
+                            UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);");
             sb.Append($@"}}
 ");
             sb.Append($@"}}
@@ -973,7 +973,7 @@ namespace Lazinator.CodeDescription
         private void AppendUpdateStoredBufferMethod(CodeStringBuilder sb)
         {
             sb.AppendLine($@"
-            public {DerivationKeyword}void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            public {DerivationKeyword}void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
             GetCodeBeforeBufferIsUpdated(sb);
             sb.AppendLine($@"
@@ -1039,7 +1039,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
-                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.OffsetForChildString}, IncludeChildrenMode.IncludeAllChildren, true);
+                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.OffsetForChildString}, _{property.PropertyName}_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
             sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);
