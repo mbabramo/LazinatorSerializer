@@ -182,6 +182,14 @@ namespace LazinatorTests.Examples.Abstract
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_Example2_Accessed && _Example2 != null)
+                    {
+                        _Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                    }
+                    if (_Example3_Accessed && _Example3 != null)
+                    {
+                        _Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                    }
                 }
                 
             }

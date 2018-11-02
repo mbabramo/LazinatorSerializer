@@ -74,7 +74,7 @@ namespace Lazinator.CodeDescription
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
                     propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) { PropertyAccessibility = unofficialProperty.PropertyAccessibility });
             }
-            foreach (var baseType in Container.GetAbstractBaseObjectDescriptions())
+            foreach (var baseType in Container.GetBaseObjectDescriptions())
             {
                 List<IPropertySymbol> additionalProperties;
                 bool baseTypeIsIndexed = Container.Compilation.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol);
@@ -84,7 +84,9 @@ namespace Lazinator.CodeDescription
                     additionalProperties = Container.Compilation.PropertiesForType[baseExclusiveInterface].Select(x => x.Property).ToList();
                 }
                 else
-                    additionalProperties = new List<IPropertySymbol>();
+                {
+                    additionalProperties = Container.PropertiesIncludingInherited?.Select(x => x.PropertySymbol).ToList() ?? new List<IPropertySymbol>();
+                }
                 foreach (var baseProperty in additionalProperties)
                 {
                     if (!propertiesWithLevel.Any(x => x.Property.MetadataName == baseProperty.MetadataName))
