@@ -25,7 +25,7 @@ namespace LazinatorCodeGen.Roslyn
         public INamedTypeSymbol ImplementingTypeSymbol { get; private set; }
         public Accessibility ImplementingTypeAccessibility { get; private set; }
         internal List<TypeDeclarationSyntax> TypeDeclarations { get; private set; }
-        internal HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
+        internal Dictionary<string, ISymbol> RelevantSymbols = new Dictionary<string, ISymbol>();
         internal HashSet<string> ExclusiveInterfaces = new HashSet<string>();
         internal HashSet<string> NonexclusiveInterfaces = new HashSet<string>();
         internal Dictionary<string, HashSet<string>> InterfaceToClasses = new Dictionary<string, HashSet<string>>();
@@ -33,7 +33,7 @@ namespace LazinatorCodeGen.Roslyn
         internal Dictionary<string, string> TypeToExclusiveInterface = new Dictionary<string, string>();
         internal HashSet<(string typeName, string methodName)> TypeImplementsMethod = new HashSet<(string typeName, string methodName)>();
         internal bool ImplementingTypeRequiresParameterlessConstructor { get; set; }
-        internal Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
+        internal Dictionary<string, HashSet<Attribute>> KnownAttributes = new Dictionary<string, HashSet<Attribute>>();
         internal Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
         internal HashSet<string> NonRecordLikeTypes = new HashSet<string>();
         internal Dictionary<string, Guid> InterfaceTextHash = new Dictionary<string, Guid>();
@@ -89,11 +89,11 @@ namespace LazinatorCodeGen.Roslyn
             TypeToExclusiveInterface[TypeSymbolToString(implementingTypeSymbol)] = TypeSymbolToString(exclusiveInterfaceTypeSymbol);
         }
 
-        private HashSet<IPropertySymbol> ILazinatorProperties = null; 
+        private HashSet<string> ILazinatorProperties = null; 
         private void RecordILazinatorProperties()
         {
             INamedTypeSymbol iLazinatorSymbol = Compilation.GetTypeByMetadataName("Lazinator.Core.ILazinator");
-            ILazinatorProperties = new HashSet<IPropertySymbol>(iLazinatorSymbol.GetPropertySymbols());
+            ILazinatorProperties = new HashSet<string>(iLazinatorSymbol.GetPropertySymbols().Select(x => x.GetFullyQualifiedName()));
         }
         
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
@@ -103,10 +103,15 @@ namespace LazinatorCodeGen.Roslyn
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
             foreach (var propertyWithLevelInfo in GetPropertyWithDefinitionInfo(@interface))
             {
-                if (!ILazinatorProperties.Contains(propertyWithLevelInfo.Property))
+                IPropertySymbol property1 = propertyWithLevelInfo.Property;
+                string property1Name = property1.GetFullyQualifiedName();
+                if (!ILazinatorProperties.Contains(property1Name))
                 { // ignore a property that is actually an ILazinator property rather than a property we are looking for
                     propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
-                    RelevantSymbols.Add(propertyWithLevelInfo.Property);
+                    if (!RelevantSymbols.ContainsKey(property1Name))
+                    {
+                        RelevantSymbols.Add(property1Name, property1);
+                    }
                 }
             }
             PropertiesForType[TypeSymbolToString(@interface)] = propertiesInInterfaceWithLevel;
@@ -186,9 +191,10 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
-            if (RelevantSymbols.Contains(type))
+            string typeName = type.GetFullyQualifiedName();
+            if (RelevantSymbols.ContainsKey(typeName))
                 return;
-            RelevantSymbols.Add(type);
+            RelevantSymbols.Add(typeName, type);
             if (type is INamedTypeSymbol namedTypeSymbol)
             {
                 AddKnownAttributesForSymbol(type);
@@ -510,9 +516,10 @@ namespace LazinatorCodeGen.Roslyn
 
         public IEnumerable<Attribute> GetAttributes(ISymbol symbol)
         {
-            if (symbol == null || !KnownAttributes.ContainsKey(symbol))
+            string symbolName = symbol?.GetFullyQualifiedName();
+            if (symbol == null || !KnownAttributes.ContainsKey(symbolName))
                 yield break;
-            foreach (var attribute in KnownAttributes[symbol])
+            foreach (var attribute in KnownAttributes[symbolName])
                 yield return attribute;
         }
 
@@ -533,28 +540,38 @@ namespace LazinatorCodeGen.Roslyn
 
         private void AddKnownAttributesForSymbol(ISymbol symbol)
         {
-            if (KnownAttributes.ContainsKey(symbol))
+            string symbolName = symbol.GetFullyQualifiedName();
+            if (symbolName.Contains("ISimplifiable.MyInt"))
+            {
+                var DEBUGX = 0;
+            }
+            if (KnownAttributes.ContainsKey(symbolName))
                 return;
             AddKnownAttributesForSymbol(symbol, RoslynHelpers.GetKnownAttributes(symbol));
         }
 
         private void AddKnownAttributesForSymbol(ISymbol symbol, IEnumerable<Attribute> newlyKnownAttributes)
         {
+            string symbolName = symbol.GetFullyQualifiedName();
+            if (symbolName.Contains("ISimplifiable.MyInt"))
+            {
+                var DEBUGX = 0;
+            }
             HashSet<Attribute> alreadyKnownAttributes;
-            if (KnownAttributes.ContainsKey(symbol))
-                alreadyKnownAttributes = KnownAttributes[symbol];
+            if (KnownAttributes.ContainsKey(symbolName))
+                alreadyKnownAttributes = KnownAttributes[symbolName];
             else
                 alreadyKnownAttributes = new HashSet<Attribute>();
             foreach (var newlyKnownAttribute in newlyKnownAttributes)
                 alreadyKnownAttributes.Add(newlyKnownAttribute);
-            KnownAttributes[symbol] = alreadyKnownAttributes;
+            KnownAttributes[symbolName] = alreadyKnownAttributes;
         }
 
         public INamedTypeSymbol LookupSymbol(string name)
         {
-            foreach (var symbol in RelevantSymbols)
+            foreach (KeyValuePair<string, ISymbol> keyValuePair in RelevantSymbols)
             {
-                if (symbol is INamedTypeSymbol namedSymbol)
+                if (keyValuePair.Value is INamedTypeSymbol namedSymbol)
                 {
                     string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol);
                     string fullyQualifiedMetadataName = RoslynHelpers.GetFullyQualifiedMetadataName(namedSymbol);
