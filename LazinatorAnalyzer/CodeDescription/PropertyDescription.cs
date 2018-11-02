@@ -471,7 +471,7 @@ namespace Lazinator.CodeDescription
                 IsInterface = t.TypeKind == TypeKind.Interface;
                 if (!IsInterface)
                 {
-                    var exclusiveInterface = ContainingObjectDescription.Compilation.TypeToExclusiveInterface[t.OriginalDefinition];
+                    var exclusiveInterface = LazinatorCompilation.NameTypedSymbolFromString[ContainingObjectDescription.Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(t.OriginalDefinition)]];
                     CloneLazinatorAttribute attribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                     if (attribute == null)
                         throw new LazinatorCodeGenException(
@@ -572,7 +572,7 @@ namespace Lazinator.CodeDescription
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(t) || (ContainingObjectDescription.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal().ToUpper() : t.GetMinimallyQualifiedName())) ?? false))
+            if (!recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(t)) || (ContainingObjectDescription.Compilation.Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal().ToUpper() : t.GetMinimallyQualifiedName())) ?? false))
             {
                 return false;
             }
@@ -582,7 +582,7 @@ namespace Lazinator.CodeDescription
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
             Nullable = false;
 
-            InnerProperties = recordLikeTypes[t]
+            InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
                 .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
             return true;
         }

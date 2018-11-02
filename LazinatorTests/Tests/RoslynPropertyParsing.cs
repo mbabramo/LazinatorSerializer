@@ -47,7 +47,7 @@ namespace LazinatorTests.Tests
 
             string interfaceName = "IDotNetList_Lazinator";
             var interfaceSymbol = lazinatorFiles.LookupSymbol(interfaceName);
-            var properties = lazinatorFiles.PropertiesForType[interfaceSymbol];
+            var properties = lazinatorFiles.PropertiesForType[LazinatorCompilation.TypeSymbolToString(interfaceSymbol)];
             var property = properties.First().Property;
             property.Type.Name.Should().Be("List");
             (property.Type is INamedTypeSymbol).Should().BeTrue();

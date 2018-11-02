@@ -3,6 +3,7 @@ using System.Linq;
 using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.AttributeClones;
 using Microsoft.CodeAnalysis;
+using LazinatorCodeGen.Roslyn;
 
 namespace Lazinator.CodeDescription
 {
@@ -68,7 +69,7 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
-            var propertiesWithLevel = Container.Compilation.PropertiesForType[interfaceSymbol];
+            var propertiesWithLevel = Container.Compilation.PropertiesForType[LazinatorCompilation.TypeSymbolToString(interfaceSymbol)];
             foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol))
             {
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
@@ -77,10 +78,10 @@ namespace Lazinator.CodeDescription
             foreach (var baseType in Container.GetBaseObjectDescriptions())
             {
                 List<IPropertySymbol> additionalProperties;
-                bool baseTypeIsIndexed = Container.Compilation.TypeToExclusiveInterface.ContainsKey(baseType.ILazinatorTypeSymbol);
+                bool baseTypeIsIndexed = Container.Compilation.TypeToExclusiveInterface.ContainsKey(LazinatorCompilation.TypeSymbolToString(baseType.ILazinatorTypeSymbol));
                 if (baseTypeIsIndexed)
                 {
-                    var baseExclusiveInterface = Container.Compilation.TypeToExclusiveInterface[baseType.ILazinatorTypeSymbol];
+                    var baseExclusiveInterface = Container.Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(baseType.ILazinatorTypeSymbol)];
                     additionalProperties = Container.Compilation.PropertiesForType[baseExclusiveInterface].Select(x => x.Property).ToList();
                 }
                 else

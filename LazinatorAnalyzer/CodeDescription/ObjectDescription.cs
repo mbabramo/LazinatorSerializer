@@ -74,8 +74,8 @@ namespace Lazinator.CodeDescription
         public bool IsGeneric => GenericArgumentNames != null && GenericArgumentNames.Any();
         public bool AllGenericsAreNonlazinator { get; set; }
         public bool ContainsOpenGenericParameters => IsGeneric && !AllGenericsAreNonlazinator;
-        public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface.PropertiesToDefineThisLevel;
-        public List<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface.PropertiesIncludingInherited;
+        public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface?.PropertiesToDefineThisLevel;
+        public List<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface?.PropertiesIncludingInherited;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
@@ -140,15 +140,16 @@ namespace Lazinator.CodeDescription
                 }
             }
 
-            if (!Compilation.TypeToExclusiveInterface.ContainsKey(iLazinatorTypeSymbol.OriginalDefinition))
+            if (!Compilation.TypeToExclusiveInterface.ContainsKey(LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)))
             {
                 // This is a nonlazinator base class
                 IsNonLazinatorBaseClass = true;
                 return;
             }
-            INamedTypeSymbol interfaceTypeSymbol = Compilation.TypeToExclusiveInterface[iLazinatorTypeSymbol.OriginalDefinition];
+            INamedTypeSymbol interfaceTypeSymbol = LazinatorCompilation.NameTypedSymbolFromString
+                [Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)]];
             InterfaceTypeSymbol = interfaceTypeSymbol;
-            Hash = Compilation.InterfaceTextHash.ContainsKey(interfaceTypeSymbol) ? Compilation.InterfaceTextHash[interfaceTypeSymbol] : default;
+            Hash = Compilation.InterfaceTextHash.ContainsKey(LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)) ? Compilation.InterfaceTextHash[LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)] : default;
             ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);

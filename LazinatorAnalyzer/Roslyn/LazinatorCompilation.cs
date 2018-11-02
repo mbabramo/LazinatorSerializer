@@ -10,6 +10,7 @@ using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Analyzer;
 using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
+using System.Collections.Concurrent;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -25,17 +26,19 @@ namespace LazinatorCodeGen.Roslyn
         public Accessibility ImplementingTypeAccessibility { get; private set; }
         internal List<TypeDeclarationSyntax> TypeDeclarations { get; private set; }
         internal HashSet<ISymbol> RelevantSymbols = new HashSet<ISymbol>();
-        internal HashSet<INamedTypeSymbol> ExclusiveInterfaces = new HashSet<INamedTypeSymbol>();
-        internal HashSet<INamedTypeSymbol> NonexclusiveInterfaces = new HashSet<INamedTypeSymbol>();
-        internal Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>> InterfaceToClasses = new Dictionary<INamedTypeSymbol, HashSet<INamedTypeSymbol>>();
-        public Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>> PropertiesForType { get; internal set; } = new Dictionary<INamedTypeSymbol, List<PropertyWithDefinitionInfo>>();
-        internal Dictionary<INamedTypeSymbol, INamedTypeSymbol> TypeToExclusiveInterface = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>();
-        internal HashSet<(INamedTypeSymbol type, string methodName)> TypeImplementsMethod = new HashSet<(INamedTypeSymbol type, string methodName)>();
+        internal HashSet<string> ExclusiveInterfaces = new HashSet<string>();
+        internal HashSet<string> NonexclusiveInterfaces = new HashSet<string>();
+        internal Dictionary<string, HashSet<string>> InterfaceToClasses = new Dictionary<string, HashSet<string>>();
+        public Dictionary<string, List<PropertyWithDefinitionInfo>> PropertiesForType { get; internal set; } = new Dictionary<string, List<PropertyWithDefinitionInfo>>();
+        internal Dictionary<string, string> TypeToExclusiveInterface = new Dictionary<string, string>();
+        internal HashSet<(string typeName, string methodName)> TypeImplementsMethod = new HashSet<(string typeName, string methodName)>();
         internal bool ImplementingTypeRequiresParameterlessConstructor { get; set; }
         internal Dictionary<ISymbol, HashSet<Attribute>> KnownAttributes = new Dictionary<ISymbol, HashSet<Attribute>>();
-        internal Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<INamedTypeSymbol, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
-        internal HashSet<INamedTypeSymbol> NonRecordLikeTypes = new HashSet<INamedTypeSymbol>();
-        internal Dictionary<INamedTypeSymbol, Guid> InterfaceTextHash = new Dictionary<INamedTypeSymbol, Guid>();
+        internal Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
+        internal HashSet<string> NonRecordLikeTypes = new HashSet<string>();
+        internal Dictionary<string, Guid> InterfaceTextHash = new Dictionary<string, Guid>();
+        internal static ConcurrentDictionary<string, INamedTypeSymbol> NameTypedSymbolFromString = new ConcurrentDictionary<string, INamedTypeSymbol>();
+        static object LockObj = new object();
 
         public LazinatorCompilation(Compilation compilation, Type type, LazinatorConfig config) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, config)
         {
@@ -83,7 +86,7 @@ namespace LazinatorCodeGen.Roslyn
             RecordInterfaceTextHash(exclusiveInterfaceTypeSymbol, implementingTypeSymbol);
 
             // And save the pair
-            TypeToExclusiveInterface[implementingTypeSymbol] = exclusiveInterfaceTypeSymbol;
+            TypeToExclusiveInterface[TypeSymbolToString(implementingTypeSymbol)] = TypeSymbolToString(exclusiveInterfaceTypeSymbol);
         }
 
         private HashSet<IPropertySymbol> ILazinatorProperties = null; 
@@ -106,7 +109,7 @@ namespace LazinatorCodeGen.Roslyn
                     RelevantSymbols.Add(propertyWithLevelInfo.Property);
                 }
             }
-            PropertiesForType[@interface] = propertiesInInterfaceWithLevel;
+            PropertiesForType[TypeSymbolToString(@interface)] = propertiesInInterfaceWithLevel;
             foreach (var propertyWithLevel in propertiesInInterfaceWithLevel)
             {
                 IPropertySymbol property = propertyWithLevel.Property;
@@ -222,19 +225,19 @@ namespace LazinatorCodeGen.Roslyn
                 {
                     if (GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute>(type) != null)
                     {
-                        ExclusiveInterfaces.Add(namedTypeSymbol);
+                        ExclusiveInterfaces.Add(TypeSymbolToString(namedTypeSymbol));
                         RecordPropertiesForInterface(namedTypeSymbol);
                     }
                     else if (GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneNonexclusiveLazinatorAttribute>(type) != null)
-                        NonexclusiveInterfaces.Add(namedTypeSymbol);
+                        NonexclusiveInterfaces.Add(TypeSymbolToString(namedTypeSymbol));
                 }
             }
         }
 
         private void AddLinkFromTypeToInterface(INamedTypeSymbol namedTypeSymbol, INamedTypeSymbol @interface)
         {
-            if (namedTypeSymbol.TypeKind != TypeKind.Interface && ExclusiveInterfaces.Contains(@interface) && !TypeToExclusiveInterface.ContainsKey(namedTypeSymbol))
-                TypeToExclusiveInterface[namedTypeSymbol.OriginalDefinition] = @interface.OriginalDefinition;
+            if (namedTypeSymbol.TypeKind != TypeKind.Interface && ExclusiveInterfaces.Contains(TypeSymbolToString(@interface)) && !TypeToExclusiveInterface.ContainsKey(TypeSymbolToString(namedTypeSymbol)))
+                TypeToExclusiveInterface[TypeSymbolToString(namedTypeSymbol.OriginalDefinition)] = TypeSymbolToString(@interface.OriginalDefinition);
         }
 
         HashSet<ITypeSymbol> alreadyProduced = new HashSet<ITypeSymbol>();
@@ -304,7 +307,7 @@ namespace LazinatorCodeGen.Roslyn
         private void RecordInterfaceTextHash(INamedTypeSymbol @interface, INamedTypeSymbol implementingType)
         {
             var hash = GetHashForInterface(@interface, implementingType, TypeImplementsMethod, ImplementingTypeRequiresParameterlessConstructor);
-            InterfaceTextHash[@interface] = hash;
+            InterfaceTextHash[TypeSymbolToString(@interface)] = hash;
         }
 
         private static List<SyntaxNode> GetSyntaxNodesForNamedType(INamedTypeSymbol namedType)
@@ -344,7 +347,7 @@ namespace LazinatorCodeGen.Roslyn
         public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType)
         {
             IEnumerable<TypeDeclarationSyntax> typeDeclarations = GetTypeDeclarationsForNamedType(implementingType);
-            HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet =
+            HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet =
                 GetMethodImplementations(typeDeclarations, implementingType);
             bool typeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingType, typeDeclarations);
             return GetHashForInterface(@interface, implementingType, typeImplementsMethodHashSet, typeRequiresParameterlessConstructor);
@@ -355,7 +358,7 @@ namespace LazinatorCodeGen.Roslyn
             return implementingType.IsNonAbstractTypeWithConstructor() && !typeDeclarations.Any(x => x.TypeDeclarationIncludesParameterlessConstructor());
         }
 
-        public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
+        public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
         {
             var syntaxNodes = GetSyntaxNodesForNamedType(@interface);
             if (syntaxNodes.Count() > 1)
@@ -364,7 +367,7 @@ namespace LazinatorCodeGen.Roslyn
             return hash;
         }
 
-        public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
+        public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
         {
             // The advantage of the approach here is that we can determine whether we need an update extremely quickly, thus
             // avoiding delaying compilation. The disadvantage is that it might miss an unusual scenario: where the interface has not
@@ -380,12 +383,12 @@ namespace LazinatorCodeGen.Roslyn
             return hash;
         }
 
-        private static byte GetBitFieldRepresentingImplementedMethods(INamedTypeSymbol implementingType, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethodHashSet)
+        private static byte GetBitFieldRepresentingImplementedMethods(INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet)
         {
             int byteForImplementedMethods = 0;
             for (int methodIndex = 0; methodIndex < _methodNamesToLookFor.Length; methodIndex++)
             {
-                if (typeImplementsMethodHashSet.Contains((implementingType, _methodNamesToLookFor[methodIndex])))
+                if (typeImplementsMethodHashSet.Contains((TypeSymbolToString(implementingType), _methodNamesToLookFor[methodIndex])))
                     byteForImplementedMethods |= 1 << methodIndex;
                 methodIndex++;
             }
@@ -395,20 +398,21 @@ namespace LazinatorCodeGen.Roslyn
 
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
-            if (RecordLikeTypes.ContainsKey(type) || NonRecordLikeTypes.Contains(type))
+            string typeName = TypeSymbolToString(type);
+            if (RecordLikeTypes.ContainsKey(typeName) || NonRecordLikeTypes.Contains(typeName))
                 return;
             // Consider whether to add this as a record-like type
             if (type.IsAbstract)
                 return; 
             if (!IsAllowedAsRecordLikeTypeIfProperlyFormed(type))
             {
-                NonRecordLikeTypes.Add(type);
+                NonRecordLikeTypes.Add(typeName);
                 return;
             }
 
             var constructorCandidates = type.Constructors.OrderByDescending(x => x.Parameters.Count()).ToList();
             if (!constructorCandidates.Any())
-                NonRecordLikeTypes.Add(type);
+                NonRecordLikeTypes.Add(typeName);
             else
             {
                 foreach (var candidate in constructorCandidates)
@@ -423,7 +427,7 @@ namespace LazinatorCodeGen.Roslyn
                     { // better constructor candidates have already been rejected, so reject this too.
                         if (!IsAllowedAsRecordLikeTypeIfMismatched(type))
                         {
-                            NonRecordLikeTypes.Add(type);
+                            NonRecordLikeTypes.Add(typeName);
                             return;
                         }
                     }
@@ -433,15 +437,15 @@ namespace LazinatorCodeGen.Roslyn
                         if (parametersAndProperties.Any(x => !x.parameterSymbol.Type.Equals(x.property.Type)))
                             continue;
                         // we have found the constructor for our record like type
-                        PropertiesForType[type] = properties.ToList();
+                        PropertiesForType[typeName] = properties.ToList();
                         foreach (var property in properties)
                             RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
-                        RecordLikeTypes[type] = parametersAndProperties;
+                        RecordLikeTypes[typeName] = parametersAndProperties;
                         return;
                     }
                 }
             }
-            NonRecordLikeTypes.Add(type);
+            NonRecordLikeTypes.Add(typeName);
         }
 
         private bool IsAllowedAsRecordLikeTypeIfProperlyFormed(INamedTypeSymbol type)
@@ -489,9 +493,10 @@ namespace LazinatorCodeGen.Roslyn
         public IPropertySymbol GetPropertyByName(INamedTypeSymbol type, string name, bool tryCapitalizingProperty)
         {
 
-            if (PropertiesForType.ContainsKey(type))
+            string typeSymbol = TypeSymbolToString(type);
+            if (PropertiesForType.ContainsKey(typeSymbol))
             {
-                var properties = PropertiesForType[type];
+                var properties = PropertiesForType[typeSymbol];
                 var match = properties.FirstOrDefault(x => x.Property.Name == name).Property;
                 if (match != null)
                     return match;
@@ -561,17 +566,17 @@ namespace LazinatorCodeGen.Roslyn
             return null;
         }
 
-        private static HashSet<(INamedTypeSymbol type, string methodName)> GetMethodImplementations(IEnumerable<TypeDeclarationSyntax> typeDeclarations, INamedTypeSymbol typeSymbol)
+        private static HashSet<(string typeName, string methodName)> GetMethodImplementations(IEnumerable<TypeDeclarationSyntax> typeDeclarations, INamedTypeSymbol typeSymbol)
         {
-            HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethod =
-                new HashSet<(INamedTypeSymbol type, string methodName)>();
+            HashSet<(string typeName, string methodName)> typeImplementsMethod =
+                new HashSet<(string typeName, string methodName)>();
             foreach (var typeDeclaration in typeDeclarations)
                 GetMethodImplementationsHelper(typeDeclaration, typeSymbol, typeImplementsMethod);
             return typeImplementsMethod;
         }
 
         private static void GetMethodImplementationsHelper(TypeDeclarationSyntax typeDeclaration,
-            INamedTypeSymbol typeSymbol, HashSet<(INamedTypeSymbol type, string methodName)> typeImplementsMethod)
+            INamedTypeSymbol typeSymbol, HashSet<(string typeName, string methodName)> typeImplementsMethod)
         {
             HashSet<MethodDeclarationSyntax> methodDeclarations = typeDeclaration.GetMethodDeclarations();
             HashSet<TypeDeclarationSyntax> subtypeDeclarations = typeDeclaration.GetSubtypeDeclarations();
@@ -583,7 +588,15 @@ namespace LazinatorCodeGen.Roslyn
             }
             foreach (string methodName in _methodNamesToLookFor)
                 if (methodDeclarations.Any(x => x.Identifier.Text == methodName))
-                    typeImplementsMethod.Add((typeSymbol, methodName));
+                    typeImplementsMethod.Add((typeSymbol.GetFullyQualifiedName(), methodName));
+        }
+
+        public static string TypeSymbolToString(INamedTypeSymbol typeSymbol)
+        {
+            string name = typeSymbol.GetFullyQualifiedName();
+            if (!NameTypedSymbolFromString.ContainsKey(name))
+                NameTypedSymbolFromString[name] = typeSymbol;
+            return name;
         }
     }
 }
