@@ -112,6 +112,15 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void DictionaryRecognizesKeyEquivalent()
+        {
+            LazinatorDictionary<WString, WLong> s = new LazinatorDictionary<WString, WLong>();
+            s["mykey"] = 34;
+            s["mykey"] = 56;
+            s.Count().Should().Be(1);
+        }
+
+        [Fact]
         public void EmptyDictionary()
         {
             LazinatorDictionary<WLong, WString> d = new LazinatorDictionary<WLong, WString>();
