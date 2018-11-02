@@ -86,7 +86,7 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    additionalProperties = Container.PropertiesIncludingInherited?.Select(x => x.PropertySymbol).ToList() ?? new List<IPropertySymbol>();
+                    additionalProperties = new List<IPropertySymbol>();
                 }
                 foreach (var baseProperty in additionalProperties)
                 {
