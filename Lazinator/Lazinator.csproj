@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>0.1.0.274-alpha</Version>
+    <Version>0.1.0.275-alpha</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <IncludeSymbols>true</IncludeSymbols>
