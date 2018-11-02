@@ -172,7 +172,7 @@ namespace Lazinator.Core
                         if (!skipLength)
                         {
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
-                            length -= restrictLengthTo250Bytes ? 1 : 4;
+                            // note that the length is set correctly
                         }
                         if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e && !e.DoNotAutomaticallyReturnToPool && ExpandableBytes.UseMemoryPooling)
                         {
