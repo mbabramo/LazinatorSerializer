@@ -5,6 +5,8 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorQueue<T> : LazinatorList<T>, ILazinatorQueue<T> where T : ILazinator
     {
+        debug; // UpdateStoredBuffer is not inheriting properties -- why not? 
+
         public void Enqueue(T item)
         {
             Add(item);
