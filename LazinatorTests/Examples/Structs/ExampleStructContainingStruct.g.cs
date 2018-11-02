@@ -420,6 +420,10 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = false;
                     if (updateDeserializedChildren)
                     {
+                        if (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct)))
+                        {
+                            _MyExampleStruct.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                        }
                     }
                     
                     _MyExampleStruct_Accessed = false;

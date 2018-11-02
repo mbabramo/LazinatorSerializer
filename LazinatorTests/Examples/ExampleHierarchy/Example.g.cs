@@ -1173,6 +1173,10 @@ namespace LazinatorTests.Examples
                     {
                         _MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
+                    if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)))
+                    {
+                        _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
+                    }
                     if (_ExcludableChild_Accessed && _ExcludableChild != null)
                     {
                         _ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex + sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);

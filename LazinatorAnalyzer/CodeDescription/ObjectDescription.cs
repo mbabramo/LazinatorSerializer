@@ -1034,7 +1034,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
                         if (updateDeserializedChildren)
                         {{");
-            foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !(x.PropertyType == LazinatorPropertyType.LazinatorStruct) && !x.IsNonLazinatorType))
+            foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType))
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
