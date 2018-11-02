@@ -158,12 +158,12 @@ namespace LazinatorCodeGen.Roslyn
 
         public static string GetFullyQualifiedName(this ISymbol symbol)
         {
-            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType));
         }
 
         public static string GetFullyQualifiedNameWithoutGlobal(this ISymbol symbol)
         {
-            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType).WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
         }
 
         public static string GetFullyQualifiedMetadataName(this ISymbol symbol)

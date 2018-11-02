@@ -127,7 +127,8 @@ namespace LazinatorCodeGen.Roslyn
         public List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
             INamedTypeSymbol namedTypeSymbol)
         {
-            return DistinctBy(GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol).ToList(), x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
+            var results = DistinctBy(GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol).ToList(), x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
+            return results;
         }
 
         private static IEnumerable<TSource> DistinctBy<TSource, TKey>
