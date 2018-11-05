@@ -22,6 +22,23 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ExpandableBytesWorks()
+        {
+            ExpandableBytes e = null;
+            for (int i = 0; i < 10; i++)
+            {
+                int bufferSize = 100;
+                e = new ExpandableBytes();
+                for (int j = 0; j < 20; j++)
+                {
+                    bufferSize *= 2;
+                    e.EnsureMinBufferSize(bufferSize);
+                    e.Memory.Span[bufferSize - 1] = 1;
+                }
+            }
+        }
+
+        [Fact]
         public void UsingReturnedMemoryTriggersException()
         {
             const int bufferSize = 64 * 1024;

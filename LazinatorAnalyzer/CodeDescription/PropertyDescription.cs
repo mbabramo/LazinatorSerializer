@@ -1762,7 +1762,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return default({AppropriatelyQualifiedTypeName});
                         }}
-                        storage.DoNotAutomaticallyReturnToPool();
+                        storage.LazinatorShouldNotReturnToPool();
                         ReadOnlySpan<byte> span = storage.Span;
 
                         int bytesSoFar = 0;
@@ -2028,7 +2028,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return default;
                         }}
-                        storage.DoNotAutomaticallyReturnToPool();
+                        storage.LazinatorShouldNotReturnToPool();
                         ReadOnlySpan<byte> span = storage.ReadOnlySpan;
 
                         int bytesSoFar = 0;
@@ -2050,7 +2050,7 @@ namespace Lazinator.CodeDescription
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
-                        writer.LazinatorMemory.DoNotAutomaticallyReturnToPool();
+                        writer.LazinatorMemory.LazinatorShouldNotReturnToPool();
                     ");
 
             if (Nullable)
@@ -2232,7 +2232,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
-                            storage.DoNotAutomaticallyReturnToPool();
+                            storage.LazinatorShouldNotReturnToPool();
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}();
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();

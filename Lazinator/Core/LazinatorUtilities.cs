@@ -174,7 +174,7 @@ namespace Lazinator.Core
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
                             // note that the length is set correctly
                         }
-                        if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e && !e.DoNotAutomaticallyReturnToPool && ExpandableBytes.UseMemoryPooling)
+                        if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e && !e.LazinatorShouldNotReturnToPool && ExpandableBytes.UseMemoryPooling)
                         {
                             child.UpdateStoredBuffer(ref writer, startPosition, length, includeChildrenMode, true);
                         }
@@ -733,7 +733,8 @@ namespace Lazinator.Core
         public static IMemoryOwner<byte> GetRentedMemory(int minimumSize)
         {
             // The following code could alternatively be used if array pooling is not needed: return new SimpleMemoryOwner<byte>(new byte[minimumSize * 2]);
-            return LazinatorMemoryPool.Rent(minimumSize);
+            var toRent = LazinatorMemoryPool.Rent(minimumSize);
+            return toRent;
         }
 
         /// <summary>
@@ -771,7 +772,7 @@ namespace Lazinator.Core
             if (existingBuffer != null && existingBuffer.OwnedMemory != newBuffer.OwnedMemory)
             {
                 var ownedMemory = existingBuffer.OwnedMemory;
-                if (ownedMemory != null && ownedMemory is ExpandableBytes e && e.DoNotAutomaticallyReturnToPool)
+                if (ownedMemory != null && ownedMemory is ExpandableBytes e && e.LazinatorShouldNotReturnToPool)
                     return newBuffer; // don't do anything -- we don't need to replace the existing buffer, since it will be garbage collected automatically.
                 if (parents.ParentSharesBuffer(ownedMemory) || (!isTopOfHierarchy && !parents.Any()) || isStruct)
                 { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, so we must assume that this is a Lazinator embedded in a non-Lazinator in a Lazinator hierarchy to be on the safe side. 

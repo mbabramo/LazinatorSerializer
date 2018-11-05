@@ -169,7 +169,7 @@ namespace LazinatorTests.Tests
             for (int i = 0; i < repetitions; i++)
             {
                 if (doNotAutomaticallyReturnToPool && e.LazinatorMemoryStorage != null)
-                    e.LazinatorMemoryStorage.DoNotAutomaticallyReturnToPool();
+                    e.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
                 if (i == 0)
                 {
                     e.MyChild1.MyLong = 0;
@@ -205,7 +205,7 @@ namespace LazinatorTests.Tests
                 if (makeChildUpToDate)
                 {
                     if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage != null)
-                        e.MyChild1.LazinatorMemoryStorage.DoNotAutomaticallyReturnToPool();
+                        e.MyChild1.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
                     e.MyChild1.EnsureLazinatorMemoryUpToDate();
                 }
                 if (makeParentUpToDate)
@@ -217,7 +217,13 @@ namespace LazinatorTests.Tests
             }
         }
 
-
+        [Fact]
+        public void DEBUG()
+        {
+            CanRepeatedlyEnsureMemoryUpToDate(true, false, RepetitionsToMutate.All, RepetitionsToMutate.All, true);
+            GC.Collect();
+            System.Diagnostics.Debug.WriteLine(ExpandableBytes.PoolTrackerSummary());
+        }
 
         [Fact]
         public void EnsureLazinatorSimplifiedTest()

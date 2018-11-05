@@ -14,6 +14,11 @@ namespace Lazinator.Buffers
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
         public int? AllocationID => OwnedMemory is ExpandableBytes e ? (int?) e.AllocationID : null;
 
+        public override string ToString()
+        {
+            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")} Length {Length} Bytes {String.Join("", Span.Slice(100).ToArray())}";
+        }
+
         #region Constructors
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, JointlyDisposableMemory originalSource) : base()
@@ -70,11 +75,15 @@ namespace Lazinator.Buffers
             DisposeWithThis(newBuffer);
         }
 
-        public void DoNotAutomaticallyReturnToPool()
+        public void LazinatorShouldNotReturnToPool()
         {
             if (OwnedMemory is ExpandableBytes e)
             {
-                e.DoNotAutomaticallyReturnToPool = true;
+                e.LazinatorShouldNotReturnToPool = true;
+                if (ExpandableBytes.TrackMemoryAllocations)
+                {
+                    ExpandableBytes.NotReturnedByLazinatorHashSet.Add(e.AllocationID);
+                }
             }
         }
 
