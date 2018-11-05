@@ -3,6 +3,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Lazinator.Buffers
 {
@@ -12,9 +13,9 @@ namespace Lazinator.Buffers
     public class ExpandableBytes : JointlyDisposableMemory
     {
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
-        public static ulong NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
+        public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
         public bool LazinatorShouldNotReturnToPool;
-        public ulong AllocationID;
+        public long AllocationID;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
         public override Memory<byte> Memory => CurrentBuffer.Memory;
@@ -22,7 +23,7 @@ namespace Lazinator.Buffers
         public static bool UseMemoryPooling = true;
         public static bool TrackMemoryAllocations = false;
         public static List<WeakReference<IMemoryOwner<byte>>> MemoryAllocations = new List<WeakReference<IMemoryOwner<byte>>>();
-        public static HashSet<ulong> NotReturnedByLazinatorHashSet = new HashSet<ulong>(); // DEBUG -- change all DoNotAutomaticallyReturn to something like LazinatorWontReturn
+        public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>(); // DEBUG -- change all DoNotAutomaticallyReturn to something like LazinatorWontReturn
         
         public ExpandableBytes() : this(MinMinBufferSize, null)
         {
@@ -32,7 +33,7 @@ namespace Lazinator.Buffers
         {
             unchecked
             {
-                AllocationID = NextAllocationID++;
+                AllocationID = Interlocked.Increment(ref NextAllocationID) - 1;
             }
             int minimumSize = Math.Max(minBufferSize, MinMinBufferSize);
             if (UseMemoryPooling)
@@ -68,7 +69,13 @@ namespace Lazinator.Buffers
             }
             else if (CurrentBuffer.Memory.Length >= desiredBufferSize)
                 return;
-            var newBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
+            IMemoryOwner<byte> newBuffer;
+            if (UseMemoryPooling)
+            {
+                newBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
+            }
+            else
+                newBuffer = new SimpleMemoryOwner<byte>(new Memory<byte>(new byte[desiredBufferSize]));
             if (TrackMemoryAllocations)
                 MemoryAllocations[(int) AllocationID].SetTarget(newBuffer);
             CurrentBuffer.Memory.Span.CopyTo(newBuffer.Memory.Span);
@@ -94,7 +101,7 @@ namespace Lazinator.Buffers
         public static string PoolTrackerSummary()
         {
             GC.Collect();
-            return $@"{MemoryAllocations.Count()} total allocations; {MemoryAllocations.Where(x => x.TryGetTarget(out _)).Count()} allocations still remain: {String.Join(",", MemoryAllocations.Select((item, index) => new { Index = index, Item = item }).Where(x => x.Item.TryGetTarget(out _)).Select(x => x.Index + (NotReturnedByLazinatorHashSet.Contains((ulong) x.Index) ? "*" : "")).ToArray())}";
+            return $@"{MemoryAllocations.Count()} total allocations; {MemoryAllocations.Where(x => x.TryGetTarget(out _)).Count()} allocations still remain: {String.Join(",", MemoryAllocations.Select((item, index) => new { Index = index, Item = item }).Where(x => x.Item.TryGetTarget(out _)).Select(x => x.Index + (NotReturnedByLazinatorHashSet.Contains((long) x.Index) ? "*" : "")).ToArray())}";
         }
     }
 }
