@@ -176,7 +176,7 @@ namespace Lazinator.Core
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
                             // note that the length is set correctly
                         }
-                        if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e && !e.LazinatorShouldNotReturnToPool && ExpandableBytes.UseMemoryPooling)
+                        if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e)
                         {
                             child.UpdateStoredBuffer(ref writer, startPosition, length, includeChildrenMode, true);
                         }
