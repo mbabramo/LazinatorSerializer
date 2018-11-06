@@ -23,6 +23,8 @@ namespace Lazinator.Core
 
         public delegate void WriteDelegate(ref BinaryBufferWriter writer);
 
+        public delegate void ModifyILazinatorDelegate<T>(ref T lazinator) where T : ILazinator;
+
         public delegate void WritePossiblyVerifyingCleannessDelegate(ref BinaryBufferWriter writer, bool verifyCleanness);
 
         #endregion
