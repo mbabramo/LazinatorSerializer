@@ -12,7 +12,7 @@ namespace Lazinator.Buffers
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
-        public int? AllocationID => OwnedMemory is ExpandableBytes e ? (int?) e.AllocationID : null;
+        public long? AllocationID => OwnedMemory is ExpandableBytes e ? (long?) e.AllocationID : null;
 
         public override string ToString()
         {
