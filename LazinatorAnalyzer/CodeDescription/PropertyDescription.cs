@@ -52,7 +52,15 @@ namespace Lazinator.CodeDescription
         internal bool IsPossiblyStruct => PropertyType == LazinatorPropertyType.LazinatorStruct ||
                                           PropertyType == LazinatorPropertyType.OpenGenericParameter ||
                                           (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) || 
-                                          (PropertyType == LazinatorPropertyType.SupportedTuple && Symbol.IsTupleType);
+                                          (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
+                                          (IsMemoryOrSpan);
+        internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection  &&
+                                        (SupportedCollectionType == LazinatorSupportedCollectionType.Memory ||
+                                        SupportedCollectionType ==
+                                        LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ||
+                                        SupportedCollectionType ==
+                                        LazinatorSupportedCollectionType.ReadOnlyMemoryByte ||
+                                        SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
@@ -1802,7 +1810,7 @@ namespace Lazinator.CodeDescription
             {
                 creationText = $"{AppropriatelyQualifiedTypeName} collection = new {AppropriatelyQualifiedTypeName}();"; // can't initialize collection length
             }
-            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+            else if (IsMemoryOrSpan)
             {
                 creationText =
                     $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
