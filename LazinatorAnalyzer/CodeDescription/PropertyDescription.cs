@@ -1677,21 +1677,22 @@ namespace Lazinator.CodeDescription
                     $"{itemAccessName}[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
             }
 
-            cloneString = InnerProperties[0].GetCloneString(itemString);
+            cloneString = InnerProperties[0].GetCloneStringWithinCloneMethod(itemString);
         }
 
-        private string GetCloneString(string itemString)
+        private string GetCloneStringWithinCloneMethod(string itemString)
         {
             string cloneString;
             if (IsLazinator)
             {
-                if (IsLazinatorStruct)
-                    cloneString = $"{itemString}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
-                else
-                    cloneString = $"{itemString}?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
+                cloneString = $"cloneOrChangeFunc({itemString})";
+                //if (IsLazinatorStruct)
+                //    cloneString = $"cloneOrChangeFunc({itemString}).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
+                //else
+                //    cloneString = $"{itemString}?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
             }
             else if (SupportedCollectionType != null || SupportedTupleType != null)
-                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString}, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer))";
+                cloneString = $"Clone_{AppropriatelyQualifiedTypeNameEncodable}({itemString}, cloneOrChangeFunc)";
             else if (IsPrimitive || IsNonLazinatorType)
                 cloneString = itemString;
             else
@@ -2197,7 +2198,7 @@ namespace Lazinator.CodeDescription
                     .Zip(
                         itemStrings,
                         (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
-                    .Select(z => z.InnerProperty.GetCloneString(z.ItemString))
+                    .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString))
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}({innerClones})";
             sb.Append($@"
