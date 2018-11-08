@@ -409,14 +409,14 @@ namespace Lazinator.CodeDescription
             string nonNullCheck;
             if (includeAccessedCheck)
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter || PropertyType == LazinatorPropertyType.NonLazinator)
                     nonNullCheck = $"_{PropertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName}))";
                 else
                     nonNullCheck = $"_{PropertyName}_Accessed && _{PropertyName} != null";
             }
             else
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter || PropertyType == LazinatorPropertyType.NonLazinator)
                     nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
                 else
                     nonNullCheck = $"{PropertyName} != null";
