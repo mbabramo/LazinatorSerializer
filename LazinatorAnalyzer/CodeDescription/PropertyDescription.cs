@@ -15,7 +15,7 @@ namespace Lazinator.CodeDescription
     public class PropertyDescription
     {
         #region Properties
-
+        
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class;
@@ -49,6 +49,10 @@ namespace Lazinator.CodeDescription
         internal LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
+        internal bool IsPossiblyStruct => PropertyType == LazinatorPropertyType.LazinatorStruct ||
+                                          PropertyType == LazinatorPropertyType.OpenGenericParameter ||
+                                          (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) || 
+                                          (PropertyType == LazinatorPropertyType.SupportedTuple && Symbol.IsTupleType);
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
@@ -397,7 +401,7 @@ namespace Lazinator.CodeDescription
         public string GetNullCheck(string propertyName)
         {
             string nullCheck;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter || PropertyType == LazinatorPropertyType.NonLazinator)
+            if (IsPossiblyStruct)
                 nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
             else
                 nullCheck = $"{propertyName} == null";
@@ -409,14 +413,14 @@ namespace Lazinator.CodeDescription
             string nonNullCheck;
             if (includeAccessedCheck)
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter || PropertyType == LazinatorPropertyType.NonLazinator)
+                if (IsPossiblyStruct)
                     nonNullCheck = $"_{PropertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName}))";
                 else
                     nonNullCheck = $"_{PropertyName}_Accessed && _{PropertyName} != null";
             }
             else
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter || PropertyType == LazinatorPropertyType.NonLazinator)
+                if (IsPossiblyStruct)
                     nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
                 else
                     nonNullCheck = $"{PropertyName} != null";
