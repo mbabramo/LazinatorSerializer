@@ -411,6 +411,8 @@ namespace Lazinator.CodeDescription
             string nullCheck;
             if (IsPossiblyStruct)
                 nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
+            else if (IsMemoryOrSpan)
+                nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
             else
                 nullCheck = $"{propertyName} == null";
             return nullCheck;
@@ -423,6 +425,8 @@ namespace Lazinator.CodeDescription
             {
                 if (IsPossiblyStruct)
                     nonNullCheck = $"_{PropertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                else if (IsMemoryOrSpan)
+                    nonNullCheck = $"{PropertyName}.Length != 0"; // use as equivalent of nullelse
                 else
                     nonNullCheck = $"_{PropertyName}_Accessed && _{PropertyName} != null";
             }
@@ -430,6 +434,8 @@ namespace Lazinator.CodeDescription
             {
                 if (IsPossiblyStruct)
                     nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                else if (IsMemoryOrSpan)
+                    nonNullCheck = $"{PropertyName}.Length != 0"; // use as equivalent of nullelse
                 else
                     nonNullCheck = $"{PropertyName} != null";
             }
