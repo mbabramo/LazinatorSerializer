@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Lazinator typedClone = (DotNetList_Lazinator) clone;
-            typedClone.MyListSerialized = Clone_List_GExampleChild_g(MyListSerialized, includeChildrenMode);
+            typedClone.MyListSerialized = Clone_List_GExampleChild_g(MyListSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<ExampleChild> Clone_List_GExampleChild_g(List<ExampleChild> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<ExampleChild> Clone_List_GExampleChild_g(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -478,7 +478,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (ExampleChild) itemToClone[itemIndex]?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    var itemCopied = (ExampleChild) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
             }
