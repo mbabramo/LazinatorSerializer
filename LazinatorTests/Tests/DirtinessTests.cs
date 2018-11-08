@@ -77,7 +77,7 @@ namespace LazinatorTests.Tests
             c2.IsDirty.Should().BeFalse();
             c2.HasChanged.Should().BeFalse();
 
-            c.MarkHierarchyClassesUnchanged(); // reset HasChanged to false
+            c.MarkHierarchyUnchanged(); // reset HasChanged to false
             c.HasChanged.Should().BeFalse();
             c.DescendantIsDirty = true; // force serialization to test whether the serialization itself causes dirtiness
             c.EnsureLazinatorMemoryUpToDate();
@@ -147,7 +147,7 @@ namespace LazinatorTests.Tests
             clone.DescendantHasChanged.Should().BeTrue();
             clone.MyChild1.MyWrapperContainer.DescendantHasChanged.Should().BeTrue();
             clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeTrue();
-            clone.MarkHierarchyClassesClean();
+            clone.MarkHierarchyClean();
             clone.DescendantHasChanged.Should().BeFalse();
             clone.MyChild1.MyWrapperContainer.DescendantHasChanged.Should().BeFalse();
             clone.MyChild1.MyWrapperContainer.WrappedInt.HasChanged.Should().BeFalse();
