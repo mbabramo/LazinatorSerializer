@@ -861,12 +861,18 @@ namespace Lazinator.CodeDescription
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType))
             {
-                string propertyName = property.PropertyName;
-                sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
+                if (property.IsMemoryOrSpan)
+                {
+                }
+                else
+                {
+                    string propertyName = property.PropertyName;
+                    sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
                             {propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}({propertyName}, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                         }}
 ");
+                }
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange))
             {
