@@ -96,10 +96,10 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Values typedClone = (DotNetList_Values) clone;
-            typedClone.MyLinkedListInt = Clone_LinkedList_Gint_g(MyLinkedListInt, includeChildrenMode);
-            typedClone.MyListInt = Clone_List_Gint_g(MyListInt, includeChildrenMode);
-            typedClone.MyListInt2 = Clone_List_Gint_g(MyListInt2, includeChildrenMode);
-            typedClone.MySortedSetInt = Clone_SortedSet_Gint_g(MySortedSetInt, includeChildrenMode);
+            typedClone.MyLinkedListInt = Clone_LinkedList_Gint_g(MyLinkedListInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListInt = Clone_List_Gint_g(MyListInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListInt2 = Clone_List_Gint_g(MyListInt2, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MySortedSetInt = Clone_SortedSet_Gint_g(MySortedSetInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -645,7 +645,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static LinkedList<int> Clone_LinkedList_Gint_g(LinkedList<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static LinkedList<int> Clone_LinkedList_Gint_g(LinkedList<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -699,7 +699,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<int> Clone_List_Gint_g(List<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -754,7 +754,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedSet<int> Clone_SortedSet_Gint_g(SortedSet<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static SortedSet<int> Clone_SortedSet_Gint_g(SortedSet<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

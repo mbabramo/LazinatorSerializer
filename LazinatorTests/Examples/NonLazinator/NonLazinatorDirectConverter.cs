@@ -31,7 +31,7 @@ namespace LazinatorTests.Examples
             writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
         }
 
-        public static NonLazinatorClass Clone_NonLazinatorClass(NonLazinatorClass itemToClone, IncludeChildrenMode includeChildrenMode)
+        public static NonLazinatorClass Clone_NonLazinatorClass(NonLazinatorClass itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             return itemToClone == null ? null : new NonLazinatorClass() { MyInt = itemToClone.MyInt, MyString = itemToClone.MyString };
         }
@@ -59,7 +59,7 @@ namespace LazinatorTests.Examples
             writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
         }
 
-        public static NonLazinatorStruct Clone_NonLazinatorStruct(NonLazinatorStruct itemToClone, IncludeChildrenMode includeChildrenMode)
+        public static NonLazinatorStruct Clone_NonLazinatorStruct(NonLazinatorStruct itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             return itemToClone;
         }

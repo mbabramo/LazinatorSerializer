@@ -96,9 +96,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Array_Values typedClone = (Array_Values) clone;
-            typedClone.MyArrayInt = Clone_int_B_b(MyArrayInt, includeChildrenMode);
-            typedClone.MyArrayNullableInt = Clone_int_C63_B_b(MyArrayNullableInt, includeChildrenMode);
-            typedClone.MyJaggedArrayInt = Clone_int_B_b_B_b(MyJaggedArrayInt, includeChildrenMode);
+            typedClone.MyArrayInt = Clone_int_B_b(MyArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyArrayNullableInt = Clone_int_C63_B_b(MyArrayNullableInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyJaggedArrayInt = Clone_int_B_b_B_b(MyJaggedArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -551,7 +551,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[] Clone_int_B_b(int[] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[] Clone_int_B_b(int[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -605,7 +605,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int?[] Clone_int_C63_B_b(int?[] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int?[] Clone_int_C63_B_b(int?[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -686,7 +686,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][] Clone_int_B_b_B_b(int[][] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[][] Clone_int_B_b_B_b(int[][] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -704,7 +704,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (int[]) Clone_int_B_b(itemToClone[itemIndex], includeChildrenMode);
+                    var itemCopied = (int[]) Clone_int_B_b(itemToClone[itemIndex], cloneOrChangeFunc);
                     collection[itemIndex] = itemCopied;
                 }
             }

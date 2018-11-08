@@ -67,8 +67,8 @@ namespace LazinatorTests.Examples.Abstract
             Concrete5 typedClone = (Concrete5) clone;
             typedClone.String4 = String4;
             typedClone.String5 = String5;
-            typedClone.IntList4 = Clone_List_Gint_g(IntList4, includeChildrenMode);
-            typedClone.IntList5 = Clone_List_Gint_g(IntList5, includeChildrenMode);
+            typedClone.IntList4 = Clone_List_Gint_g(IntList4, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.IntList5 = Clone_List_Gint_g(IntList5, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         /* Properties */
@@ -361,7 +361,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private static List<int> Clone_List_Gint_g(List<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<int> Clone_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

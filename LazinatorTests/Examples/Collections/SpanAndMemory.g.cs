@@ -100,18 +100,18 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             SpanAndMemory typedClone = (SpanAndMemory) clone;
-            typedClone.MyMemoryByte = Clone_Memory_Gbyte_g(MyMemoryByte, includeChildrenMode);
-            typedClone.MyMemoryInt = Clone_Memory_Gint_g(MyMemoryInt, includeChildrenMode);
-            typedClone.MyNullableMemoryByte = Clone_Memory_Gbyte_g_C63(MyNullableMemoryByte, includeChildrenMode);
-            typedClone.MyNullableMemoryInt = Clone_Memory_Gint_g_C63(MyNullableMemoryInt, includeChildrenMode);
-            typedClone.MyNullableReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g_C63(MyNullableReadOnlyMemoryInt, includeChildrenMode);
-            typedClone.MyReadOnlyMemoryByte = Clone_ReadOnlyMemory_Gbyte_g(MyReadOnlyMemoryByte, includeChildrenMode);
-            typedClone.MyReadOnlyMemoryChar = Clone_ReadOnlyMemory_Gchar_g(MyReadOnlyMemoryChar, includeChildrenMode);
-            typedClone.MyReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g(MyReadOnlyMemoryInt, includeChildrenMode);
-            typedClone.MyReadOnlySpanByte = Clone_ReadOnlySpan_Gbyte_g(MyReadOnlySpanByte, includeChildrenMode);
-            typedClone.MyReadOnlySpanChar = Clone_ReadOnlySpan_Gchar_g(MyReadOnlySpanChar, includeChildrenMode);
-            typedClone.MyReadOnlySpanDateTime = Clone_ReadOnlySpan_GDateTime_g(MyReadOnlySpanDateTime, includeChildrenMode);
-            typedClone.MyReadOnlySpanLong = Clone_ReadOnlySpan_Glong_g(MyReadOnlySpanLong, includeChildrenMode);
+            typedClone.MyMemoryByte = Clone_Memory_Gbyte_g(MyMemoryByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyMemoryInt = Clone_Memory_Gint_g(MyMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNullableMemoryByte = Clone_Memory_Gbyte_g_C63(MyNullableMemoryByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNullableMemoryInt = Clone_Memory_Gint_g_C63(MyNullableMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNullableReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g_C63(MyNullableReadOnlyMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlyMemoryByte = Clone_ReadOnlyMemory_Gbyte_g(MyReadOnlyMemoryByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlyMemoryChar = Clone_ReadOnlyMemory_Gchar_g(MyReadOnlyMemoryChar, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g(MyReadOnlyMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanByte = Clone_ReadOnlySpan_Gbyte_g(MyReadOnlySpanByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanChar = Clone_ReadOnlySpan_Gchar_g(MyReadOnlySpanChar, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanDateTime = Clone_ReadOnlySpan_GDateTime_g(MyReadOnlySpanDateTime, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanLong = Clone_ReadOnlySpan_Glong_g(MyReadOnlySpanLong, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -964,7 +964,7 @@ namespace LazinatorTests.Examples.Collections
             writer.Write(itemToConvert.Span);
         }
         
-        private static Memory<byte> Clone_Memory_Gbyte_g(Memory<byte> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static Memory<byte> Clone_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Length;
@@ -1014,7 +1014,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Memory<int> Clone_Memory_Gint_g(Memory<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static Memory<int> Clone_Memory_Gint_g(Memory<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Length;
@@ -1050,7 +1050,7 @@ namespace LazinatorTests.Examples.Collections
             writer.Write(itemToConvert.Value.Span);
         }
         
-        private static Memory<byte>? Clone_Memory_Gbyte_g_C63(Memory<byte>? itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static Memory<byte>? Clone_Memory_Gbyte_g_C63(Memory<byte>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Value.Length;
@@ -1098,7 +1098,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Memory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
-        private static Memory<int>? Clone_Memory_Gint_g_C63(Memory<int>? itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static Memory<int>? Clone_Memory_Gint_g_C63(Memory<int>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Value.Length;
@@ -1146,7 +1146,7 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlyMemory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
-        private static ReadOnlyMemory<int>? Clone_ReadOnlyMemory_Gint_g_C63(ReadOnlyMemory<int>? itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlyMemory<int>? Clone_ReadOnlyMemory_Gint_g_C63(ReadOnlyMemory<int>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Value.Length;
@@ -1170,7 +1170,7 @@ namespace LazinatorTests.Examples.Collections
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlyMemory<byte> Clone_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlyMemory<byte> Clone_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             var clone = new Memory<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
@@ -1211,7 +1211,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static ReadOnlyMemory<char> Clone_ReadOnlyMemory_Gchar_g(ReadOnlyMemory<char> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlyMemory<char> Clone_ReadOnlyMemory_Gchar_g(ReadOnlyMemory<char> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Length;
@@ -1261,7 +1261,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static ReadOnlyMemory<int> Clone_ReadOnlyMemory_Gint_g(ReadOnlyMemory<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlyMemory<int> Clone_ReadOnlyMemory_Gint_g(ReadOnlyMemory<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Length;
@@ -1285,7 +1285,7 @@ namespace LazinatorTests.Examples.Collections
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlySpan<byte> Clone_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlySpan<byte> Clone_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
@@ -1300,7 +1300,7 @@ namespace LazinatorTests.Examples.Collections
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlySpan<char> Clone_ReadOnlySpan_Gchar_g(ReadOnlySpan<char> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlySpan<char> Clone_ReadOnlySpan_Gchar_g(ReadOnlySpan<char> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(char)]);
             MemoryMarshal.Cast<char, byte>(itemToClone).CopyTo(clone);
@@ -1315,7 +1315,7 @@ namespace LazinatorTests.Examples.Collections
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlySpan<DateTime> Clone_ReadOnlySpan_GDateTime_g(ReadOnlySpan<DateTime> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlySpan<DateTime> Clone_ReadOnlySpan_GDateTime_g(ReadOnlySpan<DateTime> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(long)]);
             MemoryMarshal.Cast<DateTime, byte>(itemToClone).CopyTo(clone);
@@ -1330,7 +1330,7 @@ namespace LazinatorTests.Examples.Collections
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlySpan<long> Clone_ReadOnlySpan_Glong_g(ReadOnlySpan<long> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static ReadOnlySpan<long> Clone_ReadOnlySpan_Glong_g(ReadOnlySpan<long> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(long)]);
             MemoryMarshal.Cast<long, byte>(itemToClone).CopyTo(clone);

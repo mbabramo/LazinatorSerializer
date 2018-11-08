@@ -96,9 +96,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             ArrayMultidimensional_Values typedClone = (ArrayMultidimensional_Values) clone;
-            typedClone.MyArrayInt = Clone_int_B_c_b(MyArrayInt, includeChildrenMode);
-            typedClone.MyCrazyJaggedArray = Clone_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, includeChildrenMode);
-            typedClone.MyThreeDimArrayInt = Clone_int_B_c_c_b(MyThreeDimArrayInt, includeChildrenMode);
+            typedClone.MyArrayInt = Clone_int_B_c_b(MyArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyCrazyJaggedArray = Clone_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyThreeDimArrayInt = Clone_int_B_c_c_b(MyThreeDimArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -556,7 +556,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,] Clone_int_B_c_b(int[,] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[,] Clone_int_B_c_b(int[,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -632,7 +632,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][,,][,,,] Clone_int_B_b_B_c_c_b_B_c_c_c_b(int[][,,][,,,] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[][,,][,,,] Clone_int_B_b_B_c_c_b_B_c_c_c_b(int[][,,][,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -650,7 +650,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (int[,,][,,,]) Clone_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], includeChildrenMode);
+                    var itemCopied = (int[,,][,,,]) Clone_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], cloneOrChangeFunc);
                     collection[itemIndex] = itemCopied;
                 }
             }
@@ -723,7 +723,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,][,,,] Clone_int_B_c_c_b_B_c_c_c_b(int[,,][,,,] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[,,][,,,] Clone_int_B_c_c_b_B_c_c_c_b(int[,,][,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -745,7 +745,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (int[,,,]) Clone_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode);
+                    var itemCopied = (int[,,,]) Clone_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], cloneOrChangeFunc);
                     collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;
                 }
             }
@@ -803,7 +803,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,,] Clone_int_B_c_c_c_b(int[,,,] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[,,,] Clone_int_B_c_c_c_b(int[,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -873,7 +873,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,] Clone_int_B_c_c_b(int[,,] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[,,] Clone_int_B_c_c_b(int[,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

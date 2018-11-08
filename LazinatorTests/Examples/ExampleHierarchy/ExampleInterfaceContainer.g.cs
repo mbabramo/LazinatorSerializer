@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 typedClone.ExampleByInterface = (ExampleByInterface == null) ? default(IExample) : (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.ExampleListByInterface = Clone_List_GIExample_g(ExampleListByInterface, includeChildrenMode);
+            typedClone.ExampleListByInterface = Clone_List_GIExample_g(ExampleListByInterface, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -535,7 +535,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        private static List<IExample> Clone_List_GIExample_g(List<IExample> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<IExample> Clone_List_GIExample_g(List<IExample> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -553,7 +553,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 else
                 {
-                    var itemCopied = (IExample) itemToClone[itemIndex]?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    var itemCopied = (IExample) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
             }

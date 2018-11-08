@@ -99,10 +99,10 @@ namespace LazinatorTests.Examples
         void AssignCloneProperties(ref NonLazinatorContainer clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.NonLazinatorClass = NonLazinatorDirectConverter.Clone_NonLazinatorClass(NonLazinatorClass, includeChildrenMode);
-            clone.NonLazinatorInterchangeableClass = Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, includeChildrenMode);
-            clone.NonLazinatorInterchangeableStruct = Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, includeChildrenMode);
-            clone.NonLazinatorStruct = NonLazinatorDirectConverter.Clone_NonLazinatorStruct(NonLazinatorStruct, includeChildrenMode);
+            clone.NonLazinatorClass = NonLazinatorDirectConverter.Clone_NonLazinatorClass(NonLazinatorClass, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorInterchangeableClass = Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorInterchangeableStruct = Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorStruct = NonLazinatorDirectConverter.Clone_NonLazinatorStruct(NonLazinatorStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -621,7 +621,7 @@ namespace LazinatorTests.Examples
             }
             
             
-            private static NonLazinatorInterchangeableClass Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass itemToClone, IncludeChildrenMode includeChildrenMode)
+            private static NonLazinatorInterchangeableClass Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableClass>.Default.Equals(itemToClone, default(NonLazinatorInterchangeableClass)))
                 {
@@ -656,7 +656,7 @@ namespace LazinatorTests.Examples
             }
             
             
-            private static NonLazinatorInterchangeableStruct Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct itemToClone, IncludeChildrenMode includeChildrenMode)
+            private static NonLazinatorInterchangeableStruct Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableStruct>.Default.Equals(itemToClone, default(NonLazinatorInterchangeableStruct)))
                 {

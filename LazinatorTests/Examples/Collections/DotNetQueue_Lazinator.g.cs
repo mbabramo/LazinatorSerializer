@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Lazinator typedClone = (DotNetQueue_Lazinator) clone;
-            typedClone.MyQueueSerialized = Clone_Queue_GExampleChild_g(MyQueueSerialized, includeChildrenMode);
+            typedClone.MyQueueSerialized = Clone_Queue_GExampleChild_g(MyQueueSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -446,7 +446,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Queue<ExampleChild> Clone_Queue_GExampleChild_g(Queue<ExampleChild> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static Queue<ExampleChild> Clone_Queue_GExampleChild_g(Queue<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -465,7 +465,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (ExampleChild) q[itemIndex]?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    var itemCopied = (ExampleChild) cloneOrChangeFunc(q[itemIndex]);
                     collection.Enqueue(itemCopied);
                 }
             }

@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Nested_NonLazinator typedClone = (DotNetList_Nested_NonLazinator) clone;
-            typedClone.MyListNestedNonLazinatorType = Clone_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType, includeChildrenMode);
+            typedClone.MyListNestedNonLazinatorType = Clone_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<List<NonLazinatorClass>> Clone_List_GList_GNonLazinatorClass_g_g(List<List<NonLazinatorClass>> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<List<NonLazinatorClass>> Clone_List_GList_GNonLazinatorClass_g_g(List<List<NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -459,7 +459,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(itemToClone[itemIndex], includeChildrenMode);
+                    var itemCopied = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc);
                     collection.Add(itemCopied);
                 }
             }
@@ -522,7 +522,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<NonLazinatorClass> Clone_List_GNonLazinatorClass_g(List<NonLazinatorClass> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<NonLazinatorClass> Clone_List_GNonLazinatorClass_g(List<NonLazinatorClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

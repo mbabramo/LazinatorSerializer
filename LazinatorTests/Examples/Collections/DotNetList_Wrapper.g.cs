@@ -101,9 +101,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Wrapper typedClone = (DotNetList_Wrapper) clone;
-            typedClone.MyListInt = Clone_List_GWInt_g(MyListInt, includeChildrenMode);
-            typedClone.MyListNullableByte = Clone_List_GWNullableByte_g(MyListNullableByte, includeChildrenMode);
-            typedClone.MyListNullableInt = Clone_List_GWNullableInt_g(MyListNullableInt, includeChildrenMode);
+            typedClone.MyListInt = Clone_List_GWInt_g(MyListInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListNullableByte = Clone_List_GWNullableByte_g(MyListNullableByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListNullableInt = Clone_List_GWNullableInt_g(MyListNullableInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -561,7 +561,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WInt> Clone_List_GWInt_g(List<WInt> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<WInt> Clone_List_GWInt_g(List<WInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -573,7 +573,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (WInt) itemToClone[itemIndex].CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                var itemCopied = (WInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }
             return collection;
@@ -620,7 +620,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableByte> Clone_List_GWNullableByte_g(List<WNullableByte> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<WNullableByte> Clone_List_GWNullableByte_g(List<WNullableByte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -632,7 +632,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (WNullableByte) itemToClone[itemIndex].CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                var itemCopied = (WNullableByte) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }
             return collection;
@@ -679,7 +679,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableInt> Clone_List_GWNullableInt_g(List<WNullableInt> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<WNullableInt> Clone_List_GWNullableInt_g(List<WNullableInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -691,7 +691,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (WNullableInt) itemToClone[itemIndex].CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                var itemCopied = (WNullableInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }
             return collection;

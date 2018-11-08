@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples.Collections
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             DerivedArray_Values typedClone = (DerivedArray_Values) clone;
-            typedClone.MyArrayInt_DerivedLevel = Clone_int_B_b(MyArrayInt_DerivedLevel, includeChildrenMode);
+            typedClone.MyArrayInt_DerivedLevel = Clone_int_B_b(MyArrayInt_DerivedLevel, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         /* Properties */
@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[] Clone_int_B_b(int[] itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static int[] Clone_int_B_b(int[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

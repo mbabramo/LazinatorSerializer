@@ -114,9 +114,9 @@ namespace LazinatorTests.Examples
             {
                 clone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            clone.MyLazinatorList = Clone_List_GExample_g(MyLazinatorList, includeChildrenMode);
-            clone.MyListValues = Clone_List_Gint_g(MyListValues, includeChildrenMode);
-            clone.MyTuple = Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, includeChildrenMode);
+            clone.MyLazinatorList = Clone_List_GExample_g(MyLazinatorList, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.MyListValues = Clone_List_Gint_g(MyListValues, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.MyTuple = Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -826,7 +826,7 @@ namespace LazinatorTests.Examples
                 }
             }
             
-            private static List<Example> Clone_List_GExample_g(List<Example> itemToClone, IncludeChildrenMode includeChildrenMode)
+            private static List<Example> Clone_List_GExample_g(List<Example> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {
@@ -844,7 +844,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        var itemCopied = (Example) itemToClone[itemIndex]?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                        var itemCopied = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
                         collection.Add(itemCopied);
                     }
                 }
@@ -887,7 +887,7 @@ namespace LazinatorTests.Examples
                 }
             }
             
-            private static List<int> Clone_List_Gint_g(List<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+            private static List<int> Clone_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {
@@ -949,7 +949,7 @@ namespace LazinatorTests.Examples
                 CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.Item2);
             }
             
-            private static (NonLazinatorClass myitem1, int? myitem2) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p((NonLazinatorClass myitem1, int? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode)
+            private static (NonLazinatorClass myitem1, int? myitem2) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p((NonLazinatorClass myitem1, int? myitem2) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 return ((NonLazinatorClass) (itemToConvert.Item1),(int?) (itemToConvert.Item2));
             }

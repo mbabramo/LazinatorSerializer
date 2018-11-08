@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WDecimalArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = Clone_decimal_B_b(WrappedValue, includeChildrenMode);
+            clone.WrappedValue = Clone_decimal_B_b(WrappedValue, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -464,7 +464,7 @@ namespace Lazinator.Wrappers
                 }
             }
             
-            private static decimal[] Clone_decimal_B_b(decimal[] itemToClone, IncludeChildrenMode includeChildrenMode)
+            private static decimal[] Clone_decimal_B_b(decimal[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {

@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WDoubleArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = Clone_double_B_b(WrappedValue, includeChildrenMode);
+            clone.WrappedValue = Clone_double_B_b(WrappedValue, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -464,7 +464,7 @@ namespace Lazinator.Wrappers
                 }
             }
             
-            private static double[] Clone_double_B_b(double[] itemToClone, IncludeChildrenMode includeChildrenMode)
+            private static double[] Clone_double_B_b(double[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {

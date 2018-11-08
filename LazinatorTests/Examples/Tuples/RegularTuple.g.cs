@@ -97,11 +97,11 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             RegularTuple typedClone = (RegularTuple) clone;
-            typedClone.MyListTuple = Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, includeChildrenMode);
-            typedClone.MyTupleSerialized = Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, includeChildrenMode);
-            typedClone.MyTupleSerialized2 = Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, includeChildrenMode);
-            typedClone.MyTupleSerialized3 = Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, includeChildrenMode);
-            typedClone.MyTupleSerialized4 = Clone_Tuple_Gint_c_C32ExampleStruct_g(MyTupleSerialized4, includeChildrenMode);
+            typedClone.MyListTuple = Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyTupleSerialized = Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyTupleSerialized2 = Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyTupleSerialized3 = Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyTupleSerialized4 = Clone_Tuple_Gint_c_C32ExampleStruct_g(MyTupleSerialized4, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -665,7 +665,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static List<Tuple<uint, ExampleChild, NonLazinatorClass>> Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(List<Tuple<uint, ExampleChild, NonLazinatorClass>> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static List<Tuple<uint, ExampleChild, NonLazinatorClass>> Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(List<Tuple<uint, ExampleChild, NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -683,7 +683,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 else
                 {
-                    var itemCopied = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], includeChildrenMode);
+                    var itemCopied = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc);
                     collection.Add(itemCopied);
                 }
             }
@@ -757,13 +757,13 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static Tuple<uint, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode)
+        private static Tuple<uint, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToConvert == null)
             {
                 return default(Tuple<uint, ExampleChild, NonLazinatorClass>);
             }
-            return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) (itemToConvert?.Item2)?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert?.Item3));
+            return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<uint?, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(LazinatorMemory storage)
@@ -833,13 +833,13 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static Tuple<uint?, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode)
+        private static Tuple<uint?, ExampleChild, NonLazinatorClass> Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToConvert == null)
             {
                 return default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
             }
-            return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) (itemToConvert?.Item2)?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer),(NonLazinatorClass) (itemToConvert?.Item3));
+            return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<int, ExampleStruct> ConvertFromBytes_Tuple_Gint_c_C32ExampleStruct_g(LazinatorMemory storage)
@@ -884,13 +884,13 @@ namespace LazinatorTests.Examples.Tuples
             WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
         }
         
-        private static Tuple<int, ExampleStruct> Clone_Tuple_Gint_c_C32ExampleStruct_g(Tuple<int, ExampleStruct> itemToConvert, IncludeChildrenMode includeChildrenMode)
+        private static Tuple<int, ExampleStruct> Clone_Tuple_Gint_c_C32ExampleStruct_g(Tuple<int, ExampleStruct> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToConvert == null)
             {
                 return default(Tuple<int, ExampleStruct>);
             }
-            return new Tuple<int, ExampleStruct>((int) (itemToConvert?.Item1 ?? default),(ExampleStruct) (itemToConvert?.Item2 ?? default).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            return new Tuple<int, ExampleStruct>((int) (itemToConvert?.Item1 ?? default),(ExampleStruct) cloneOrChangeFunc((itemToConvert?.Item2 ?? default)));
         }
         
     }

@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetStack_Values typedClone = (DotNetStack_Values) clone;
-            typedClone.MyStackInt = Clone_Stack_Gint_g(MyStackInt, includeChildrenMode);
+            typedClone.MyStackInt = Clone_Stack_Gint_g(MyStackInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Stack<int> Clone_Stack_Gint_g(Stack<int> itemToClone, IncludeChildrenMode includeChildrenMode)
+        private static Stack<int> Clone_Stack_Gint_g(Stack<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
