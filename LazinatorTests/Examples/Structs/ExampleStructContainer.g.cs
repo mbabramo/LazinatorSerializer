@@ -109,8 +109,8 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyExampleStruct = (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) ? default(ExampleStruct) : (ExampleStruct) MyExampleStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyListExampleStruct = Clone_List_GExampleStruct_g(MyListExampleStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyListNullableExampleStruct = Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListExampleStruct = Clone_List_GExampleStruct_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListNullableExampleStruct = Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

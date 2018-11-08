@@ -96,9 +96,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Array_Values typedClone = (Array_Values) clone;
-            typedClone.MyArrayInt = Clone_int_B_b(MyArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyArrayNullableInt = Clone_int_C63_B_b(MyArrayNullableInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyJaggedArrayInt = Clone_int_B_b_B_b(MyJaggedArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyArrayInt = Clone_int_B_b(MyArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyArrayNullableInt = Clone_int_C63_B_b(MyArrayNullableInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyJaggedArrayInt = Clone_int_B_b_B_b(MyJaggedArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

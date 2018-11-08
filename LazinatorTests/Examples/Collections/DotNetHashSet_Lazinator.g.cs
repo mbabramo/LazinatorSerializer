@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetHashSet_Lazinator typedClone = (DotNetHashSet_Lazinator) clone;
-            typedClone.MyHashSetSerialized = Clone_HashSet_GExampleChild_g(MyHashSetSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyHashSetSerialized = Clone_HashSet_GExampleChild_g(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

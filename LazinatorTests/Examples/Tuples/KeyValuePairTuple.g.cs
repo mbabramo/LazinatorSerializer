@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             KeyValuePairTuple typedClone = (KeyValuePairTuple) clone;
-            typedClone.MyKeyValuePairSerialized = Clone_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyKeyValuePairSerialized = Clone_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

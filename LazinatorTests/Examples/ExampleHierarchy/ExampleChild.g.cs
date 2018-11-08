@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples
             ExampleChild typedClone = (ExampleChild) clone;
             typedClone.MyLong = MyLong;
             typedClone.MyShort = MyShort;
-            typedClone.ByteSpan = Clone_ReadOnlySpan_Gbyte_g(ByteSpan, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.ByteSpan = Clone_ReadOnlySpan_Gbyte_g(ByteSpan, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.MyExampleGrandchild = (MyExampleGrandchild == null) ? default(ExampleGrandchild) : (ExampleGrandchild) MyExampleGrandchild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);

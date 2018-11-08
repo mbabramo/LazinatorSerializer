@@ -1360,9 +1360,9 @@ namespace Lazinator.CodeDescription
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));";
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}Clone_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));";
             sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
         }
 

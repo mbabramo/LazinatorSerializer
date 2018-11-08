@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Lazinator typedClone = (DotNetList_Lazinator) clone;
-            typedClone.MyListSerialized = Clone_List_GExampleChild_g(MyListSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListSerialized = Clone_List_GExampleChild_g(MyListSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Values typedClone = (DotNetQueue_Values) clone;
-            typedClone.MyQueueInt = Clone_Queue_Gint_g(MyQueueInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyQueueInt = Clone_Queue_Gint_g(MyQueueInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

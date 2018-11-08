@@ -100,18 +100,18 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             SpanAndMemory typedClone = (SpanAndMemory) clone;
-            typedClone.MyMemoryByte = Clone_Memory_Gbyte_g(MyMemoryByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyMemoryInt = Clone_Memory_Gint_g(MyMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyNullableMemoryByte = Clone_Memory_Gbyte_g_C63(MyNullableMemoryByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyNullableMemoryInt = Clone_Memory_Gint_g_C63(MyNullableMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyNullableReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g_C63(MyNullableReadOnlyMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlyMemoryByte = Clone_ReadOnlyMemory_Gbyte_g(MyReadOnlyMemoryByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlyMemoryChar = Clone_ReadOnlyMemory_Gchar_g(MyReadOnlyMemoryChar, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g(MyReadOnlyMemoryInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlySpanByte = Clone_ReadOnlySpan_Gbyte_g(MyReadOnlySpanByte, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlySpanChar = Clone_ReadOnlySpan_Gchar_g(MyReadOnlySpanChar, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlySpanDateTime = Clone_ReadOnlySpan_GDateTime_g(MyReadOnlySpanDateTime, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyReadOnlySpanLong = Clone_ReadOnlySpan_Glong_g(MyReadOnlySpanLong, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyMemoryByte = Clone_Memory_Gbyte_g(MyMemoryByte, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyMemoryInt = Clone_Memory_Gint_g(MyMemoryInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNullableMemoryByte = Clone_Memory_Gbyte_g_C63(MyNullableMemoryByte, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNullableMemoryInt = Clone_Memory_Gint_g_C63(MyNullableMemoryInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNullableReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g_C63(MyNullableReadOnlyMemoryInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlyMemoryByte = Clone_ReadOnlyMemory_Gbyte_g(MyReadOnlyMemoryByte, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlyMemoryChar = Clone_ReadOnlyMemory_Gchar_g(MyReadOnlyMemoryChar, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlyMemoryInt = Clone_ReadOnlyMemory_Gint_g(MyReadOnlyMemoryInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanByte = Clone_ReadOnlySpan_Gbyte_g(MyReadOnlySpanByte, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanChar = Clone_ReadOnlySpan_Gchar_g(MyReadOnlySpanChar, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanDateTime = Clone_ReadOnlySpan_GDateTime_g(MyReadOnlySpanDateTime, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyReadOnlySpanLong = Clone_ReadOnlySpan_Glong_g(MyReadOnlySpanLong, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

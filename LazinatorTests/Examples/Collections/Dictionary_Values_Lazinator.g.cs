@@ -97,9 +97,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Dictionary_Values_Lazinator typedClone = (Dictionary_Values_Lazinator) clone;
-            typedClone.MyDictionary = Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MySortedDictionary = Clone_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MySortedList = Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyDictionary = Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MySortedDictionary = Clone_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MySortedList = Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }

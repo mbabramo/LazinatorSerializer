@@ -101,7 +101,7 @@ namespace Lazinator.Collections
         {
             clone.FreeInMemoryObjects();
             LazinatorFastReadList<T> typedClone = (LazinatorFastReadList<T>) clone;
-            typedClone.ReadOnlyBytes = Clone_ReadOnlySpan_Gbyte_g(ReadOnlyBytes, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.ReadOnlyBytes = Clone_ReadOnlySpan_Gbyte_g(ReadOnlyBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

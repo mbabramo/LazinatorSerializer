@@ -114,9 +114,9 @@ namespace LazinatorTests.Examples
             {
                 clone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            clone.MyLazinatorList = Clone_List_GExample_g(MyLazinatorList, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            clone.MyListValues = Clone_List_Gint_g(MyListValues, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            clone.MyTuple = Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.MyLazinatorList = Clone_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.MyListValues = Clone_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.MyTuple = Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             

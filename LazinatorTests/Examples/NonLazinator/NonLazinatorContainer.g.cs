@@ -99,10 +99,10 @@ namespace LazinatorTests.Examples
         void AssignCloneProperties(ref NonLazinatorContainer clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.NonLazinatorClass = NonLazinatorDirectConverter.Clone_NonLazinatorClass(NonLazinatorClass, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            clone.NonLazinatorInterchangeableClass = Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            clone.NonLazinatorInterchangeableStruct = Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            clone.NonLazinatorStruct = NonLazinatorDirectConverter.Clone_NonLazinatorStruct(NonLazinatorStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorClass = NonLazinatorDirectConverter.Clone_NonLazinatorClass(NonLazinatorClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorInterchangeableClass = Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorInterchangeableStruct = Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.NonLazinatorStruct = NonLazinatorDirectConverter.Clone_NonLazinatorStruct(NonLazinatorStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
