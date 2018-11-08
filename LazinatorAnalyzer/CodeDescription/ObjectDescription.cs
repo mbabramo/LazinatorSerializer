@@ -227,6 +227,7 @@ namespace Lazinator.CodeDescription
             {
                 AppendEnumerateLazinatorDescendants(sb);
                 AppendEnumerateNonLazinatorProperties(sb);
+                AppendForEachLazinator(sb);
                 AppendResetProperties(sb);
                 AppendConversionSectionStart(sb);
                 AppendConvertFromBytesAfterHeader(sb);
@@ -325,6 +326,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
+                        public abstract void ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren);
 		                
                         public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
 
@@ -789,8 +791,7 @@ namespace Lazinator.CodeDescription
                 }
             }
         }
-
-
+        
         private void AppendEnumerateNonLazinatorProperties(CodeStringBuilder sb)
         {
             if (IsAbstract)
@@ -838,6 +839,30 @@ namespace Lazinator.CodeDescription
                         }}
                     ");
             }
+        }
+
+        private void AppendForEachLazinator(CodeStringBuilder sb)
+        {
+            if (IsAbstract)
+                return;
+            sb.AppendLine($@"
+                    public {DerivationKeyword}void ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+                    {{
+                        {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                        ")}
+                ");
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
+            {
+                string propertyName = property.PropertyName;
+                sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
+                        {{
+                            {propertyName} = changeFunc({propertyName});
+                        }}
+");
+            }
+            sb.Append($@"
+                            }}
+                        ");
         }
 
         private void AppendConversionSectionStart(CodeStringBuilder sb)
