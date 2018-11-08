@@ -411,11 +411,11 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
             {
-                MyList = (LazinatorList<ExampleChild>) MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyList = (LazinatorList<ExampleChild>) _MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && MyStructList != null) || (_MyStructList_Accessed && _MyStructList != null))
             {
-                MyStructList = (LazinatorList<WByte>) MyStructList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyStructList = (LazinatorList<WByte>) _MyStructList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

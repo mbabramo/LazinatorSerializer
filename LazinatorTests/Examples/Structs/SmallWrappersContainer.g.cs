@@ -1033,39 +1033,39 @@ namespace LazinatorTests.Examples.Structs
         {
             if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
-                ListWrappedBytes = (LazinatorList<WByte>) ListWrappedBytes.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ListWrappedBytes = (LazinatorList<WByte>) _ListWrappedBytes.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))) || (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool))))
             {
-                WrappedBool = (WBool) WrappedBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedBool = (WBool) _WrappedBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))) || (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte))))
             {
-                WrappedByte = (WByte) WrappedByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedByte = (WByte) _WrappedByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))) || (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar))))
             {
-                WrappedChar = (WChar) WrappedChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedChar = (WChar) _WrappedChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))) || (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool))))
             {
-                WrappedNullableBool = (WNullableBool) WrappedNullableBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedNullableBool = (WNullableBool) _WrappedNullableBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))) || (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte))))
             {
-                WrappedNullableByte = (WNullableByte) WrappedNullableByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedNullableByte = (WNullableByte) _WrappedNullableByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))) || (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar))))
             {
-                WrappedNullableChar = (WNullableChar) WrappedNullableChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedNullableChar = (WNullableChar) _WrappedNullableChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))) || (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte))))
             {
-                WrappedNullableSByte = (WNullableSByte) WrappedNullableSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedNullableSByte = (WNullableSByte) _WrappedNullableSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))) || (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte))))
             {
-                WrappedSByte = (WSByte) WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedSByte = (WSByte) _WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

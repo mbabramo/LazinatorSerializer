@@ -351,7 +351,7 @@ namespace LazinatorTests.Examples.Structs
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(ExampleStructWithoutClass, default(ExampleStructWithoutClass))) || (_ExampleStructWithoutClass_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(_ExampleStructWithoutClass, default(ExampleStructWithoutClass))))
             {
-                ExampleStructWithoutClass = (ExampleStructWithoutClass) ExampleStructWithoutClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ExampleStructWithoutClass = (ExampleStructWithoutClass) _ExampleStructWithoutClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

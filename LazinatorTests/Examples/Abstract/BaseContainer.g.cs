@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
             {
-                MyBase = (Base) MyBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyBase = (Base) _MyBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

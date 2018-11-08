@@ -369,7 +369,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
             {
-                MyT = (T) MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

@@ -343,7 +343,7 @@ namespace Lazinator.Collections.Avl
         {
             if ((!exploreOnlyDeserializedChildren && UnderlyingSet != null) || (_UnderlyingSet_Accessed && _UnderlyingSet != null))
             {
-                UnderlyingSet = (AvlSet<LazinatorTuple<T, WInt>>) UnderlyingSet.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _UnderlyingSet = (AvlSet<LazinatorTuple<T, WInt>>) _UnderlyingSet.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

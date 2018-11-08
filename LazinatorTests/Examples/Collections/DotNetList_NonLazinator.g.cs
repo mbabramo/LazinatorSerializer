@@ -332,11 +332,11 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListNonLazinatorType != null) || (_MyListNonLazinatorType_Accessed && _MyListNonLazinatorType != null))
             {
-                MyListNonLazinatorType = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(MyListNonLazinatorType, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListNonLazinatorType = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(_MyListNonLazinatorType, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyListNonLazinatorType2 != null) || (_MyListNonLazinatorType2_Accessed && _MyListNonLazinatorType2 != null))
             {
-                MyListNonLazinatorType2 = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(MyListNonLazinatorType2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListNonLazinatorType2 = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(_MyListNonLazinatorType2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
             {
-                Item = (AbstractGeneric1<T>) Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Item = (AbstractGeneric1<T>) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

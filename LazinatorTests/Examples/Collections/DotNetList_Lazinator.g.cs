@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListSerialized != null) || (_MyListSerialized_Accessed && _MyListSerialized != null))
             {
-                MyListSerialized = (List<ExampleChild>) Clone_List_GExampleChild_g(MyListSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListSerialized = (List<ExampleChild>) Clone_List_GExampleChild_g(_MyListSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

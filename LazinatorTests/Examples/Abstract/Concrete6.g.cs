@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.Abstract
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             if ((!exploreOnlyDeserializedChildren && IntList6 != null) || (_IntList6_Accessed && _IntList6 != null))
             {
-                IntList6 = (List<int>) Clone_List_Gint_g(IntList6, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList6 = (List<int>) Clone_List_Gint_g(_IntList6, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

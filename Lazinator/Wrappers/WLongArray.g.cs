@@ -317,7 +317,7 @@ namespace Lazinator.Wrappers
             {
                 if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
                 {
-                    WrappedValue = (long[]) Clone_long_B_b(WrappedValue, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                    _WrappedValue = (long[]) Clone_long_B_b(_WrappedValue, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                 }
                 return changeFunc(this);
             }

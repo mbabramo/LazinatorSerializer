@@ -495,15 +495,15 @@ namespace Lazinator.Collections
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) || (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T))))
             {
-                Item1 = (T) Item1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Item1 = (T) _Item1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U))))
             {
-                Item2 = (U) Item2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Item2 = (U) _Item2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V))))
             {
-                Item3 = (V) Item3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Item3 = (V) _Item3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

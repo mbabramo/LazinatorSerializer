@@ -308,7 +308,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
             {
-                MyList = (LazinatorList<T>) MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyList = (LazinatorList<T>) _MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

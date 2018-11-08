@@ -435,11 +435,11 @@ namespace LazinatorTests.Examples
         {
             if ((!exploreOnlyDeserializedChildren && MyExampleGrandchild != null) || (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null))
             {
-                MyExampleGrandchild = (ExampleGrandchild) MyExampleGrandchild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyExampleGrandchild = (ExampleGrandchild) _MyExampleGrandchild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
             {
-                MyWrapperContainer = (WrapperContainer) MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyWrapperContainer = (WrapperContainer) _MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

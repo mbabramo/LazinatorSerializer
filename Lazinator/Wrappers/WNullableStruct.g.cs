@@ -361,7 +361,7 @@ namespace Lazinator.Wrappers
             {
                 if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T))))
                 {
-                    NonNullValue = (T) NonNullValue.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                    _NonNullValue = (T) _NonNullValue.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
                 }
                 return changeFunc(this);
             }

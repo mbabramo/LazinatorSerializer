@@ -416,11 +416,11 @@ namespace Lazinator.Collections.Dictionary
         {
             if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
             {
-                Keys = (LazinatorList<TKey>) Keys.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Keys = (LazinatorList<TKey>) _Keys.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
             {
-                Values = (LazinatorList<TValue>) Values.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Values = (LazinatorList<TValue>) _Values.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

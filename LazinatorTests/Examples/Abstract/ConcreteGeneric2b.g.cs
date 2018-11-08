@@ -443,11 +443,11 @@ namespace LazinatorTests.Examples.Abstract
         {
             if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
-                MyT = (Example) MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyT = (Example) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
-                LazinatorExample = (Example) LazinatorExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _LazinatorExample = (Example) _LazinatorExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

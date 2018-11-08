@@ -342,7 +342,7 @@ namespace Lazinator.Collections.Avl
         {
             if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
-                UnderlyingTree = (AvlTree<TKey, WByte>) UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _UnderlyingTree = (AvlTree<TKey, WByte>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

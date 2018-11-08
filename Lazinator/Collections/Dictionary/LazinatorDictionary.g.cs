@@ -342,7 +342,7 @@ namespace Lazinator.Collections.Dictionary
         {
             if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
             {
-                Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) _Buckets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

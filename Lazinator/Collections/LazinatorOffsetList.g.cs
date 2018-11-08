@@ -420,11 +420,11 @@ namespace Lazinator.Collections
         {
             if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
-                FourByteItems = (LazinatorFastReadList<int>) FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _FourByteItems = (LazinatorFastReadList<int>) _FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
             {
-                TwoByteItems = (LazinatorFastReadList<short>) TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _TwoByteItems = (LazinatorFastReadList<short>) _TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

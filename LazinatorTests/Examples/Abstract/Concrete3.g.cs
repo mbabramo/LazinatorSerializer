@@ -524,23 +524,23 @@ namespace LazinatorTests.Examples.Abstract
         {
             if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
-                Example2 = (Example) Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example2 = (Example) _Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
-                Example3 = (Example) Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example3 = (Example) _Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && IntList1 != null) || (_IntList1_Accessed && _IntList1 != null))
             {
-                IntList1 = (List<int>) Clone_List_Gint_g(IntList1, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList1 = (List<int>) Clone_List_Gint_g(_IntList1, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && IntList2 != null) || (_IntList2_Accessed && _IntList2 != null))
             {
-                IntList2 = (List<int>) Clone_List_Gint_g(IntList2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList2 = (List<int>) Clone_List_Gint_g(_IntList2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && IntList3 != null) || (_IntList3_Accessed && _IntList3 != null))
             {
-                IntList3 = (List<int>) Clone_List_Gint_g(IntList3, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList3 = (List<int>) Clone_List_Gint_g(_IntList3, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

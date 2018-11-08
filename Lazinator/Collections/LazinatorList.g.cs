@@ -346,7 +346,7 @@ namespace Lazinator.Collections
         {
             if ((!exploreOnlyDeserializedChildren && Offsets != null) || (_Offsets_Accessed && _Offsets != null))
             {
-                Offsets = (LazinatorOffsetList) Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

@@ -413,11 +413,11 @@ namespace LazinatorTests.Examples
         {
             if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
             {
-                MyOfficialObject = (Concrete5) MyOfficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyOfficialObject = (Concrete5) _MyOfficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
             {
-                MyUnofficialObject = (Concrete3) MyUnofficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyUnofficialObject = (Concrete3) _MyUnofficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

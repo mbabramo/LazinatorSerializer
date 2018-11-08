@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples
         {
             if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
-                Example = (Example) Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example = (Example) _Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

@@ -348,11 +348,11 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
             {
-                ExampleByInterface = (IExample) ExampleByInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ExampleByInterface = (IExample) _ExampleByInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
             {
-                ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(ExampleListByInterface, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(_ExampleListByInterface, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

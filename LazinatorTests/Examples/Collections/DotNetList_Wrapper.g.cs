@@ -372,15 +372,15 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListInt != null) || (_MyListInt_Accessed && _MyListInt != null))
             {
-                MyListInt = (List<WInt>) Clone_List_GWInt_g(MyListInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListInt = (List<WInt>) Clone_List_GWInt_g(_MyListInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyListNullableByte != null) || (_MyListNullableByte_Accessed && _MyListNullableByte != null))
             {
-                MyListNullableByte = (List<WNullableByte>) Clone_List_GWNullableByte_g(MyListNullableByte, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListNullableByte = (List<WNullableByte>) Clone_List_GWNullableByte_g(_MyListNullableByte, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyListNullableInt != null) || (_MyListNullableInt_Accessed && _MyListNullableInt != null))
             {
-                MyListNullableInt = (List<WNullableInt>) Clone_List_GWNullableInt_g(MyListNullableInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListNullableInt = (List<WNullableInt>) Clone_List_GWNullableInt_g(_MyListNullableInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

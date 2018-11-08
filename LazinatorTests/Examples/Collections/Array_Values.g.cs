@@ -367,15 +367,15 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyArrayInt != null) || (_MyArrayInt_Accessed && _MyArrayInt != null))
             {
-                MyArrayInt = (int[]) Clone_int_B_b(MyArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyArrayInt = (int[]) Clone_int_B_b(_MyArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyArrayNullableInt != null) || (_MyArrayNullableInt_Accessed && _MyArrayNullableInt != null))
             {
-                MyArrayNullableInt = (int?[]) Clone_int_C63_B_b(MyArrayNullableInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyArrayNullableInt = (int?[]) Clone_int_C63_B_b(_MyArrayNullableInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyJaggedArrayInt != null) || (_MyJaggedArrayInt_Accessed && _MyJaggedArrayInt != null))
             {
-                MyJaggedArrayInt = (int[][]) Clone_int_B_b_B_b(MyJaggedArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyJaggedArrayInt = (int[][]) Clone_int_B_b_B_b(_MyJaggedArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

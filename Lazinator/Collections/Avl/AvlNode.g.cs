@@ -616,19 +616,19 @@ namespace Lazinator.Collections.Avl
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) || (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey))))
             {
-                Key = (TKey) Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Left != null) || (_Left_Accessed && _Left != null))
             {
-                Left = (AvlNode<TKey, TValue>) Left.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Left = (AvlNode<TKey, TValue>) _Left.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Right != null) || (_Right_Accessed && _Right != null))
             {
-                Right = (AvlNode<TKey, TValue>) Right.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Right = (AvlNode<TKey, TValue>) _Right.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue))))
             {
-                Value = (TValue) Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Value = (TValue) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

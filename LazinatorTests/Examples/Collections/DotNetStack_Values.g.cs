@@ -295,7 +295,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyStackInt != null) || (_MyStackInt_Accessed && _MyStackInt != null))
             {
-                MyStackInt = (Stack<int>) Clone_Stack_Gint_g(MyStackInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyStackInt = (Stack<int>) Clone_Stack_Gint_g(_MyStackInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

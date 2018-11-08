@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples.Structs
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
             {
-                WrappedInt = (WInt) WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

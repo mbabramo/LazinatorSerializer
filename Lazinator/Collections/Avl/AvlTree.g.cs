@@ -322,7 +322,7 @@ namespace Lazinator.Collections.Avl
         {
             if ((!exploreOnlyDeserializedChildren && Root != null) || (_Root_Accessed && _Root != null))
             {
-                Root = (AvlNode<TKey, TValue>) Root.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Root = (AvlNode<TKey, TValue>) _Root.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

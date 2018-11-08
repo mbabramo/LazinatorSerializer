@@ -614,19 +614,19 @@ namespace LazinatorTests.Examples
         {
             if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
             {
-                ANonSkippableEarlierExample = (Example) ANonSkippableEarlierExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ANonSkippableEarlierExample = (Example) _ANonSkippableEarlierExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
-                Example = (Example) Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example = (Example) _Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
-                Example2 = (Example) Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example2 = (Example) _Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
-                Example3 = (Example) Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example3 = (Example) _Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

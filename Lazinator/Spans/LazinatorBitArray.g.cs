@@ -374,7 +374,7 @@ namespace Lazinator.Spans
         {
             if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
             {
-                ByteSpan = (LazinatorByteSpan) ByteSpan.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ByteSpan = (LazinatorByteSpan) _ByteSpan.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

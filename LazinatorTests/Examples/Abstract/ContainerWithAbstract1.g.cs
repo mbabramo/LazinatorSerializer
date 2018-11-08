@@ -311,7 +311,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
             {
-                AbstractProperty = (Abstract1) AbstractProperty.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _AbstractProperty = (Abstract1) _AbstractProperty.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

@@ -582,23 +582,23 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if ((!exploreOnlyDeserializedChildren && ClosedGenericBase != null) || (_ClosedGenericBase_Accessed && _ClosedGenericBase != null))
             {
-                ClosedGenericBase = (OpenGeneric<Base>) ClosedGenericBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericBase = (OpenGeneric<Base>) _ClosedGenericBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericFloat != null) || (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null))
             {
-                ClosedGenericFloat = (OpenGeneric<WFloat>) ClosedGenericFloat.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericFloat = (OpenGeneric<WFloat>) _ClosedGenericFloat.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericFromBaseWithBase != null) || (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null))
             {
-                ClosedGenericFromBaseWithBase = (GenericFromBase<Base>) ClosedGenericFromBaseWithBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericFromBaseWithBase = (GenericFromBase<Base>) _ClosedGenericFromBaseWithBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericInterface != null) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null))
             {
-                ClosedGenericInterface = (OpenGeneric<IExampleChild>) ClosedGenericInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericInterface = (OpenGeneric<IExampleChild>) _ClosedGenericInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericNonexclusiveInterface != null) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null))
             {
-                ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) ClosedGenericNonexclusiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) _ClosedGenericNonexclusiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }

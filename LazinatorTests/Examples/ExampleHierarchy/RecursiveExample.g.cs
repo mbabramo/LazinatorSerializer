@@ -378,11 +378,11 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
             {
-                RecursiveClass = (RecursiveExample) RecursiveClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _RecursiveClass = (RecursiveExample) _RecursiveClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
             {
-                RecursiveInterface = (IRecursiveExample) RecursiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _RecursiveInterface = (IRecursiveExample) _RecursiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
             return changeFunc(this);
         }
