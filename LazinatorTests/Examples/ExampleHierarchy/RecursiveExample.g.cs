@@ -374,6 +374,21 @@ namespace LazinatorTests.Examples.Hierarchy
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
+            {
+                RecursiveClass = (RecursiveExample) RecursiveClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
+            {
+                RecursiveInterface = (IRecursiveExample) RecursiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _RecursiveClass = default;

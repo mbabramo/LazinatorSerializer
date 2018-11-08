@@ -342,6 +342,17 @@ namespace Lazinator.Collections
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && Offsets != null) || (_Offsets_Accessed && _Offsets != null))
+            {
+                Offsets = (LazinatorOffsetList) Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MainListSerialized = default;

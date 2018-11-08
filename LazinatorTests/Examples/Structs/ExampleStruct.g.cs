@@ -550,6 +550,33 @@ namespace LazinatorTests.Examples
                 yield break;
             }
             
+            public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+            {
+                
+                if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
+                {
+                    MyChild1 = (ExampleChild) MyChild1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                }
+                if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
+                {
+                    MyChild2 = (ExampleChild) MyChild2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                }
+                if ((!exploreOnlyDeserializedChildren && MyLazinatorList != null) || (_MyLazinatorList_Accessed && _MyLazinatorList != null))
+                {
+                    MyLazinatorList = (List<Example>) Clone_List_GExample_g(MyLazinatorList, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                if ((!exploreOnlyDeserializedChildren && MyListValues != null) || (_MyListValues_Accessed && _MyListValues != null))
+                {
+                    MyListValues = (List<int>) Clone_List_Gint_g(MyListValues, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(NonLazinatorClass myitem1, int? myitem2)>.Default.Equals(MyTuple, default((NonLazinatorClass myitem1, int? myitem2)))) || (_MyTuple_Accessed && !System.Collections.Generic.EqualityComparer<(NonLazinatorClass myitem1, int? myitem2)>.Default.Equals(_MyTuple, default((NonLazinatorClass myitem1, int? myitem2)))))
+                {
+                    MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                
+                return changeFunc(this);
+            }
+            
             public void FreeInMemoryObjects()
             {
                 _MyChild1 = default;

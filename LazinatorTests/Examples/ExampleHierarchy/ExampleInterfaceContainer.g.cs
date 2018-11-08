@@ -344,6 +344,21 @@ namespace LazinatorTests.Examples.Hierarchy
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
+            {
+                ExampleByInterface = (IExample) ExampleByInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
+            {
+                ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(ExampleListByInterface, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _ExampleByInterface = default;

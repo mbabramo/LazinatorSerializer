@@ -409,6 +409,21 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
+            {
+                MyOfficialObject = (Concrete5) MyOfficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
+            {
+                MyUnofficialObject = (Concrete3) MyUnofficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MyOfficialObject = default;

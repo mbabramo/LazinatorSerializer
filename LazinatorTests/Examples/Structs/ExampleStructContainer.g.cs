@@ -493,6 +493,29 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
+            {
+                IntWrapper = (WInt) IntWrapper.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
+            {
+                MyExampleStruct = (ExampleStruct) MyExampleStruct.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && MyListExampleStruct != null) || (_MyListExampleStruct_Accessed && _MyListExampleStruct != null))
+            {
+                MyListExampleStruct = (List<ExampleStruct>) Clone_List_GExampleStruct_g(MyListExampleStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyListNullableExampleStruct != null) || (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null))
+            {
+                MyListNullableExampleStruct = (List<WNullableStruct<ExampleStruct>>) Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _IntWrapper = default;

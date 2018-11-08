@@ -345,6 +345,25 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && MyDictionary != null) || (_MyDictionary_Accessed && _MyDictionary != null))
+            {
+                MyDictionary = (Dictionary<int, ExampleChild>) Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MySortedDictionary != null) || (_MySortedDictionary_Accessed && _MySortedDictionary != null))
+            {
+                MySortedDictionary = (SortedDictionary<int, ExampleChild>) Clone_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MySortedList != null) || (_MySortedList_Accessed && _MySortedList != null))
+            {
+                MySortedList = (SortedList<int, ExampleChild>) Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MyDictionary = default;

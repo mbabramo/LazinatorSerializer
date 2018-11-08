@@ -412,6 +412,21 @@ namespace Lazinator.Collections.Dictionary
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
+            {
+                Keys = (LazinatorList<TKey>) Keys.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
+            {
+                Values = (LazinatorList<TValue>) Values.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _Keys = default;

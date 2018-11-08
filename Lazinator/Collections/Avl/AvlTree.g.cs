@@ -318,6 +318,17 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && Root != null) || (_Root_Accessed && _Root != null))
+            {
+                Root = (AvlNode<TKey, TValue>) Root.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _Root = default;

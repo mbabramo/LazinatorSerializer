@@ -273,6 +273,17 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && MyNestedTuple != null) || (_MyNestedTuple_Accessed && _MyNestedTuple != null))
+            {
+                MyNestedTuple = (Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>) Clone_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(MyNestedTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MyNestedTuple = default;
@@ -614,7 +625,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int a, string b)? Clone__Pint_C32a_c_C32string_C32b_p_C63((int a, string b)? itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
-            if (itemToConvert == null)
+            if (System.Collections.Generic.EqualityComparer<(int a, string b)?>.Default.Equals(itemToConvert, default((int a, string b)?)))
             {
                 return default((int a, string b)?);
             }

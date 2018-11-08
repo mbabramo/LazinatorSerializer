@@ -283,6 +283,13 @@ namespace Lazinator.Wrappers
                 yield break;
             }
             
+            public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+            {
+                
+                
+                return changeFunc(this);
+            }
+            
             public void FreeInMemoryObjects()
             {
                 

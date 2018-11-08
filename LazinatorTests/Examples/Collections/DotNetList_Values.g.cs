@@ -437,6 +437,29 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && MyLinkedListInt != null) || (_MyLinkedListInt_Accessed && _MyLinkedListInt != null))
+            {
+                MyLinkedListInt = (LinkedList<int>) Clone_LinkedList_Gint_g(MyLinkedListInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyListInt != null) || (_MyListInt_Accessed && _MyListInt != null))
+            {
+                MyListInt = (List<int>) Clone_List_Gint_g(MyListInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyListInt2 != null) || (_MyListInt2_Accessed && _MyListInt2 != null))
+            {
+                MyListInt2 = (List<int>) Clone_List_Gint_g(MyListInt2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MySortedSetInt != null) || (_MySortedSetInt_Accessed && _MySortedSetInt != null))
+            {
+                MySortedSetInt = (SortedSet<int>) Clone_SortedSet_Gint_g(MySortedSetInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MyLinkedListInt = default;

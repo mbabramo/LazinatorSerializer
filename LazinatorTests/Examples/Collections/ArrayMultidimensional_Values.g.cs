@@ -363,6 +363,25 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && MyArrayInt != null) || (_MyArrayInt_Accessed && _MyArrayInt != null))
+            {
+                MyArrayInt = (int[,]) Clone_int_B_c_b(MyArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyCrazyJaggedArray != null) || (_MyCrazyJaggedArray_Accessed && _MyCrazyJaggedArray != null))
+            {
+                MyCrazyJaggedArray = (int[][,,][,,,]) Clone_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyThreeDimArrayInt != null) || (_MyThreeDimArrayInt_Accessed && _MyThreeDimArrayInt != null))
+            {
+                MyThreeDimArrayInt = (int[,,]) Clone_int_B_c_c_b(MyThreeDimArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MyArrayInt = default;

@@ -357,6 +357,17 @@ namespace Lazinator.Wrappers
                 yield break;
             }
             
+            public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+            {
+                
+                if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T))))
+                {
+                    NonNullValue = (T) NonNullValue.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                }
+                
+                return changeFunc(this);
+            }
+            
             public void FreeInMemoryObjects()
             {
                 _NonNullValue = default;

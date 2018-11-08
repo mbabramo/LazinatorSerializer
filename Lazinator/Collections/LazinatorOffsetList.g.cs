@@ -416,6 +416,21 @@ namespace Lazinator.Collections
             yield break;
         }
         
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
+            {
+                FourByteItems = (LazinatorFastReadList<int>) FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
+            {
+                TwoByteItems = (LazinatorFastReadList<short>) TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public void FreeInMemoryObjects()
         {
             _FourByteItems = default;

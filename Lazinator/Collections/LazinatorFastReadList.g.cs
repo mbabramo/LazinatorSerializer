@@ -278,6 +278,13 @@ namespace Lazinator.Collections
             yield break;
         }
         
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            
+            return changeFunc(this);
+        }
+        
         public void FreeInMemoryObjects()
         {
             _ReadOnlyBytes = default;

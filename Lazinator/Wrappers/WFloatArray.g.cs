@@ -313,6 +313,17 @@ namespace Lazinator.Wrappers
                 yield break;
             }
             
+            public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+            {
+                
+                if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
+                {
+                    WrappedValue = (float[]) Clone_float_B_b(WrappedValue, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                
+                return changeFunc(this);
+            }
+            
             public void FreeInMemoryObjects()
             {
                 _WrappedValue = default;

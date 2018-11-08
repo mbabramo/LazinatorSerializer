@@ -417,6 +417,33 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && MyListTuple != null) || (_MyListTuple_Accessed && _MyListTuple != null))
+            {
+                MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyTupleSerialized != null) || (_MyTupleSerialized_Accessed && _MyTupleSerialized != null))
+            {
+                MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyTupleSerialized2 != null) || (_MyTupleSerialized2_Accessed && _MyTupleSerialized2 != null))
+            {
+                MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyTupleSerialized3 != null) || (_MyTupleSerialized3_Accessed && _MyTupleSerialized3 != null))
+            {
+                MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && MyTupleSerialized4 != null) || (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null))
+            {
+                MyTupleSerialized4 = (Tuple<int, ExampleStruct>) Clone_Tuple_Gint_c_C32ExampleStruct_g(MyTupleSerialized4, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public virtual void FreeInMemoryObjects()
         {
             _MyListTuple = default;

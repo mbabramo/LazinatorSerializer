@@ -411,6 +411,29 @@ namespace LazinatorTests.Examples
                 yield break;
             }
             
+            public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+            {
+                
+                if ((!exploreOnlyDeserializedChildren && NonLazinatorInterchangeableClass != null) || (_NonLazinatorInterchangeableClass_Accessed && _NonLazinatorInterchangeableClass != null))
+                {
+                    NonLazinatorInterchangeableClass = (NonLazinatorInterchangeableClass) Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableStruct>.Default.Equals(NonLazinatorInterchangeableStruct, default(NonLazinatorInterchangeableStruct))) || (_NonLazinatorInterchangeableStruct_Accessed && !System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableStruct>.Default.Equals(_NonLazinatorInterchangeableStruct, default(NonLazinatorInterchangeableStruct))))
+                {
+                    NonLazinatorInterchangeableStruct = (NonLazinatorInterchangeableStruct) Clone_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                if ((!exploreOnlyDeserializedChildren && NonLazinatorClass != null) || (_NonLazinatorClass_Accessed && _NonLazinatorClass != null))
+                {
+                    NonLazinatorClass = NonLazinatorDirectConverter.Clone_NonLazinatorClass(NonLazinatorClass, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<NonLazinatorStruct>.Default.Equals(NonLazinatorStruct, default(NonLazinatorStruct))) || (_NonLazinatorStruct_Accessed && !System.Collections.Generic.EqualityComparer<NonLazinatorStruct>.Default.Equals(_NonLazinatorStruct, default(NonLazinatorStruct))))
+                {
+                    NonLazinatorStruct = NonLazinatorDirectConverter.Clone_NonLazinatorStruct(NonLazinatorStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                }
+                
+                return changeFunc(this);
+            }
+            
             public void FreeInMemoryObjects()
             {
                 _NonLazinatorClass = default;
@@ -612,7 +635,7 @@ namespace LazinatorTests.Examples
             NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
             bool verifyCleanness, bool updateStoredBuffer)
             {
-                if (System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableClass>.Default.Equals(itemToConvert, default(NonLazinatorInterchangeableClass)))
+                if (itemToConvert == null)
                 {
                     return;
                 }
@@ -623,7 +646,7 @@ namespace LazinatorTests.Examples
             
             private static NonLazinatorInterchangeableClass Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
-                if (System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableClass>.Default.Equals(itemToClone, default(NonLazinatorInterchangeableClass)))
+                if (itemToClone == null)
                 {
                     return default(NonLazinatorInterchangeableClass);
                 }

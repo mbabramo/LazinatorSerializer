@@ -194,6 +194,22 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            
+            if ((!exploreOnlyDeserializedChildren && IntList4 != null) || (_IntList4_Accessed && _IntList4 != null))
+            {
+                IntList4 = (List<int>) Clone_List_Gint_g(IntList4, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            if ((!exploreOnlyDeserializedChildren && IntList5 != null) || (_IntList5_Accessed && _IntList5 != null))
+            {
+                IntList5 = (List<int>) Clone_List_Gint_g(IntList5, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();

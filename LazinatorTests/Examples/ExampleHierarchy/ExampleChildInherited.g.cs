@@ -174,6 +174,18 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            
+            if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null))
+            {
+                MyGrandchildInInherited = (ExampleGrandchild) MyGrandchildInInherited.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();

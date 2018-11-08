@@ -144,6 +144,18 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            
+            if ((!exploreOnlyDeserializedChildren && MyLevel2ListNestedNonLazinatorType != null) || (_MyLevel2ListNestedNonLazinatorType_Accessed && _MyLevel2ListNestedNonLazinatorType != null))
+            {
+                MyLevel2ListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) Clone_List_GList_GNonLazinatorClass_g_g(MyLevel2ListNestedNonLazinatorType, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+            }
+            
+            return changeFunc(this);
+        }
+        
         public override void FreeInMemoryObjects()
         {
             base.FreeInMemoryObjects();
@@ -394,7 +406,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                if (System.Collections.Generic.EqualityComparer<NonLazinatorClass>.Default.Equals(itemToClone[itemIndex], default(NonLazinatorClass)))
+                if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(NonLazinatorClass));
                 }

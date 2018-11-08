@@ -391,6 +391,17 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            
+            if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
+            {
+                LazinatorExample = (Example) LazinatorExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            }
+            
+            return changeFunc(this);
+        }
+        
         public override void FreeInMemoryObjects()
         {
             _LazinatorExample = default;
