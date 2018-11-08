@@ -53,6 +53,7 @@ namespace Lazinator.CodeDescription
                                           PropertyType == LazinatorPropertyType.OpenGenericParameter ||
                                           (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) || 
                                           (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
+                                          (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
                                           (IsMemoryOrSpan);
         internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection  &&
                                         (SupportedCollectionType == LazinatorSupportedCollectionType.Memory ||
