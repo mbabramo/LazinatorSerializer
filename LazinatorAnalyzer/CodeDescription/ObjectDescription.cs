@@ -326,7 +326,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
-                        public abstract void ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren);
+                        public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren);
 		                
                         public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
 
@@ -846,21 +846,30 @@ namespace Lazinator.CodeDescription
             if (IsAbstract)
                 return;
             sb.AppendLine($@"
-                    public {DerivationKeyword}void ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+                    public {DerivationKeyword}ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
                     {{
                         {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
-                        ")}
-                ");
+                        ")}");
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
             {
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
-                            {propertyName} = changeFunc({propertyName});
+                            {propertyName} = ({property.AppropriatelyQualifiedTypeName}) {propertyName}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                        }}
+");
+            }
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange))
+            {
+                string propertyName = property.PropertyName;
+                sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
+                        {{
+                            {propertyName} = {property.DirectConverterTypeNamePrefix}Clone_{property.AppropriatelyQualifiedTypeNameEncodable}({propertyName}, l => ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                         }}
 ");
             }
             sb.Append($@"
+                            return changeFunc(this);
                             }}
                         ");
         }
