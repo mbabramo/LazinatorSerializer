@@ -330,7 +330,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyListNonLazinatorType != null) || (_MyListNonLazinatorType_Accessed && _MyListNonLazinatorType != null))
             {
                 MyListNonLazinatorType = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(MyListNonLazinatorType, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -339,7 +338,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 MyListNonLazinatorType2 = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(MyListNonLazinatorType2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

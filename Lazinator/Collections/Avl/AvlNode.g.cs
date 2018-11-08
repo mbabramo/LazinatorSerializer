@@ -614,7 +614,6 @@ namespace Lazinator.Collections.Avl
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) || (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey))))
             {
                 Key = (TKey) Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -631,7 +630,6 @@ namespace Lazinator.Collections.Avl
             {
                 Value = (TValue) Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

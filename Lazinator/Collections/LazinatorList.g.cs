@@ -344,12 +344,10 @@ namespace Lazinator.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && Offsets != null) || (_Offsets_Accessed && _Offsets != null))
             {
                 Offsets = (LazinatorOffsetList) Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

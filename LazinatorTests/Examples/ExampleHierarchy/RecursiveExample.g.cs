@@ -376,7 +376,6 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
             {
                 RecursiveClass = (RecursiveExample) RecursiveClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -385,7 +384,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 RecursiveInterface = (IRecursiveExample) RecursiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

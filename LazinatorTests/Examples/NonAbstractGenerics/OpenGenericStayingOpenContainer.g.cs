@@ -580,7 +580,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && ClosedGenericBase != null) || (_ClosedGenericBase_Accessed && _ClosedGenericBase != null))
             {
                 ClosedGenericBase = (OpenGeneric<Base>) ClosedGenericBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -601,7 +600,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) ClosedGenericNonexclusiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

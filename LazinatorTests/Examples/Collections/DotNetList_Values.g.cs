@@ -439,7 +439,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyLinkedListInt != null) || (_MyLinkedListInt_Accessed && _MyLinkedListInt != null))
             {
                 MyLinkedListInt = (LinkedList<int>) Clone_LinkedList_Gint_g(MyLinkedListInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -456,7 +455,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 MySortedSetInt = (SortedSet<int>) Clone_SortedSet_Gint_g(MySortedSetInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

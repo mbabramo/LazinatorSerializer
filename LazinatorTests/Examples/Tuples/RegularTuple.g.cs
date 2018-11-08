@@ -419,7 +419,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyListTuple != null) || (_MyListTuple_Accessed && _MyListTuple != null))
             {
                 MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -440,7 +439,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 MyTupleSerialized4 = (Tuple<int, ExampleStruct>) Clone_Tuple_Gint_c_C32ExampleStruct_g(MyTupleSerialized4, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

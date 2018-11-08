@@ -495,7 +495,6 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
             {
                 IntWrapper = (WInt) IntWrapper.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -512,7 +511,6 @@ namespace LazinatorTests.Examples
             {
                 MyListNullableExampleStruct = (List<WNullableStruct<ExampleStruct>>) Clone_List_GWNullableStruct_GExampleStruct_g_g(MyListNullableExampleStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

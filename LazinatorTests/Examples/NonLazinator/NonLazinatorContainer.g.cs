@@ -413,7 +413,6 @@ namespace LazinatorTests.Examples
             
             public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
             {
-                
                 if ((!exploreOnlyDeserializedChildren && NonLazinatorInterchangeableClass != null) || (_NonLazinatorInterchangeableClass_Accessed && _NonLazinatorInterchangeableClass != null))
                 {
                     NonLazinatorInterchangeableClass = (NonLazinatorInterchangeableClass) Clone_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -430,7 +429,6 @@ namespace LazinatorTests.Examples
                 {
                     NonLazinatorStruct = NonLazinatorDirectConverter.Clone_NonLazinatorStruct(NonLazinatorStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                 }
-                
                 return changeFunc(this);
             }
             

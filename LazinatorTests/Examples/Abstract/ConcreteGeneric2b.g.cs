@@ -441,7 +441,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 MyT = (Example) MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -450,7 +449,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 LazinatorExample = (Example) LazinatorExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

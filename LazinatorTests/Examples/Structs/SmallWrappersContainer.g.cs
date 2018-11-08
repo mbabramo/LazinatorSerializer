@@ -1031,7 +1031,6 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
                 ListWrappedBytes = (LazinatorList<WByte>) ListWrappedBytes.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -1068,7 +1067,6 @@ namespace LazinatorTests.Examples.Structs
             {
                 WrappedSByte = (WSByte) WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

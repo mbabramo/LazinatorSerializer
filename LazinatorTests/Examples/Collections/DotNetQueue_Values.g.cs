@@ -293,12 +293,10 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyQueueInt != null) || (_MyQueueInt_Accessed && _MyQueueInt != null))
             {
                 MyQueueInt = (Queue<int>) Clone_Queue_Gint_g(MyQueueInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

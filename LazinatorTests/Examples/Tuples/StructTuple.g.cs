@@ -383,7 +383,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(TestEnum firstEnum, TestEnum anotherEnum)>.Default.Equals(EnumTuple, default((TestEnum firstEnum, TestEnum anotherEnum)))) || (_EnumTuple_Accessed && !System.Collections.Generic.EqualityComparer<(TestEnum firstEnum, TestEnum anotherEnum)>.Default.Equals(_EnumTuple, default((TestEnum firstEnum, TestEnum anotherEnum)))))
             {
                 EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) Clone__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(EnumTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -400,7 +399,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) Clone__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(MyValueTupleSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

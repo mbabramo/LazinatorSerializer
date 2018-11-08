@@ -347,7 +347,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyDictionary != null) || (_MyDictionary_Accessed && _MyDictionary != null))
             {
                 MyDictionary = (Dictionary<int, ExampleChild>) Clone_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -360,7 +359,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 MySortedList = (SortedList<int, ExampleChild>) Clone_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

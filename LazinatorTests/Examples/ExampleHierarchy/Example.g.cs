@@ -1039,7 +1039,6 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
             {
                 IncludableChild = (ExampleChild) IncludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -1072,7 +1071,6 @@ namespace LazinatorTests.Examples
             {
                 MyNonLazinatorChild = NonLazinatorDirectConverter.Clone_NonLazinatorClass(MyNonLazinatorChild, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

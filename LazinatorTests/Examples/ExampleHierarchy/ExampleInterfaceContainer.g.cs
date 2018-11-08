@@ -346,7 +346,6 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
             {
                 ExampleByInterface = (IExample) ExampleByInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -355,7 +354,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(ExampleListByInterface, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

@@ -385,7 +385,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<MismatchedRecordLikeType>.Default.Equals(MyMismatchedRecordLikeType, default(MismatchedRecordLikeType))) || (_MyMismatchedRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<MismatchedRecordLikeType>.Default.Equals(_MyMismatchedRecordLikeType, default(MismatchedRecordLikeType))))
             {
                 MyMismatchedRecordLikeType = (MismatchedRecordLikeType) Clone_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -402,7 +401,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) Clone_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

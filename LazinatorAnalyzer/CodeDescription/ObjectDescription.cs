@@ -845,7 +845,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsAbstract)
                 return;
-            sb.AppendLine($@"
+            sb.Append($@"
                     public {DerivationKeyword}ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
                     {{
                         {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -883,8 +883,7 @@ namespace Lazinator.CodeDescription
                         }}
 ");
             }
-            sb.Append($@"
-                            return changeFunc(this);
+            sb.Append($@"return changeFunc(this);
                             }}
                         ");
         }

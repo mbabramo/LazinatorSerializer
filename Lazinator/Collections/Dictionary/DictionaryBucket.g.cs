@@ -414,7 +414,6 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
             {
                 Keys = (LazinatorList<TKey>) Keys.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -423,7 +422,6 @@ namespace Lazinator.Collections.Dictionary
             {
                 Values = (LazinatorList<TValue>) Values.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

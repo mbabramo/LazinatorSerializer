@@ -370,7 +370,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyListInt != null) || (_MyListInt_Accessed && _MyListInt != null))
             {
                 MyListInt = (List<WInt>) Clone_List_GWInt_g(MyListInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -383,7 +382,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 MyListNullableInt = (List<WNullableInt>) Clone_List_GWNullableInt_g(MyListNullableInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

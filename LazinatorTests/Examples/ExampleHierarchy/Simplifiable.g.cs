@@ -612,7 +612,6 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
             {
                 ANonSkippableEarlierExample = (Example) ANonSkippableEarlierExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -629,7 +628,6 @@ namespace LazinatorTests.Examples
             {
                 Example3 = (Example) Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

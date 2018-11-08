@@ -433,7 +433,6 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyExampleGrandchild != null) || (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null))
             {
                 MyExampleGrandchild = (ExampleGrandchild) MyExampleGrandchild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -442,7 +441,6 @@ namespace LazinatorTests.Examples
             {
                 MyWrapperContainer = (WrapperContainer) MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

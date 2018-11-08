@@ -295,12 +295,10 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyEnumList != null) || (_MyEnumList_Accessed && _MyEnumList != null))
             {
                 MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(MyEnumList, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

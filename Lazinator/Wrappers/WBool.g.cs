@@ -283,8 +283,6 @@ namespace Lazinator.Wrappers
             
             public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
             {
-                
-                
                 return changeFunc(this);
             }
             

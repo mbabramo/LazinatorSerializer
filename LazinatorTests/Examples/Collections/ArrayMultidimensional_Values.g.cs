@@ -365,7 +365,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyArrayInt != null) || (_MyArrayInt_Accessed && _MyArrayInt != null))
             {
                 MyArrayInt = (int[,]) Clone_int_B_c_b(MyArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
@@ -378,7 +377,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 MyThreeDimArrayInt = (int[,,]) Clone_int_B_c_c_b(MyThreeDimArrayInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

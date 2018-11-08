@@ -409,7 +409,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
             {
                 MyList = (LazinatorList<ExampleChild>) MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -418,7 +417,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 MyStructList = (LazinatorList<WByte>) MyStructList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

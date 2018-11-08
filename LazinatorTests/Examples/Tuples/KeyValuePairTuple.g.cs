@@ -275,12 +275,10 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>))) || (_MyKeyValuePairSerialized_Accessed && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(_MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>))))
             {
                 MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) Clone_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

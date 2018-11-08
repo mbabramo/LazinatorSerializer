@@ -356,7 +356,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
             {
                 MyT = (T) MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -365,7 +364,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 MyListT = (List<T>) Clone_List_GT_g(MyListT, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

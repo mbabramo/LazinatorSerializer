@@ -418,7 +418,6 @@ namespace Lazinator.Collections
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
                 FourByteItems = (LazinatorFastReadList<int>) FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -427,7 +426,6 @@ namespace Lazinator.Collections
             {
                 TwoByteItems = (LazinatorFastReadList<short>) TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

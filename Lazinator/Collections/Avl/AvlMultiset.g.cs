@@ -341,12 +341,10 @@ namespace Lazinator.Collections.Avl
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && UnderlyingSet != null) || (_UnderlyingSet_Accessed && _UnderlyingSet != null))
             {
                 UnderlyingSet = (AvlSet<LazinatorTuple<T, WInt>>) UnderlyingSet.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            
             return changeFunc(this);
         }
         

@@ -148,12 +148,10 @@ namespace LazinatorTests.Examples.Collections
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
-            
             if ((!exploreOnlyDeserializedChildren && MyArrayInt_DerivedLevel != null) || (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null))
             {
                 MyArrayInt_DerivedLevel = (int[]) Clone_int_B_b(MyArrayInt_DerivedLevel, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

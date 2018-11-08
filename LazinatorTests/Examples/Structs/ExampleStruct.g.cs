@@ -552,7 +552,6 @@ namespace LazinatorTests.Examples
             
             public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
             {
-                
                 if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
                 {
                     MyChild1 = (ExampleChild) MyChild1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -573,7 +572,6 @@ namespace LazinatorTests.Examples
                 {
                     MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                 }
-                
                 return changeFunc(this);
             }
             

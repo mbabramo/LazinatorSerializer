@@ -275,12 +275,10 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && MyListNestedNonLazinatorType != null) || (_MyListNestedNonLazinatorType_Accessed && _MyListNestedNonLazinatorType != null))
             {
                 MyListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) Clone_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         

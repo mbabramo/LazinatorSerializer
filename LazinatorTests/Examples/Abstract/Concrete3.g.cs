@@ -522,7 +522,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            
             if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
                 Example2 = (Example) Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
@@ -543,7 +542,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 IntList3 = (List<int>) Clone_List_Gint_g(IntList3, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
-            
             return changeFunc(this);
         }
         
