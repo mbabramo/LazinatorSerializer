@@ -351,7 +351,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void MarkHierarchyClean_ExampleStructContainer()
         {
-            var e = new ExampleStructContainer();
+            var e = new ExampleStructContainerContainingClasses();
             e.EnsureLazinatorMemoryUpToDate();
             e.LazinatorMemoryStorage.Should().NotBeNull();
             e.IntWrapper++;

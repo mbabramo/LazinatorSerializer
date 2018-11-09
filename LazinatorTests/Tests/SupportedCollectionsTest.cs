@@ -138,9 +138,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Null()
         {
-            ExampleStructContainer GetObject()
+            ExampleStructContainerContainingClasses GetObject()
             {
-                return new ExampleStructContainer()
+                return new ExampleStructContainerContainingClasses()
                 {
                     MyListExampleStruct = null,
                 };
@@ -156,9 +156,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorNullableStructs()
         {
-            ExampleStructContainer GetObject()
+            ExampleStructContainerContainingClasses GetObject()
             {
-                var returnObj = new ExampleStructContainer()
+                var returnObj = new ExampleStructContainerContainingClasses()
                 {
                     MyListNullableExampleStruct = new List<WNullableStruct<ExampleStructContainingClasses>>()
                     {
@@ -180,9 +180,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Empty()
         {
-            ExampleStructContainer GetObject()
+            ExampleStructContainerContainingClasses GetObject()
             {
-                return new ExampleStructContainer()
+                return new ExampleStructContainerContainingClasses()
                 {
                     MyListExampleStruct = new List<ExampleStructContainingClasses>(),
                 };
@@ -198,9 +198,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Filled()
         {
-            ExampleStructContainer GetObject()
+            ExampleStructContainerContainingClasses GetObject()
             {
-                var returnObj = new ExampleStructContainer()
+                var returnObj = new ExampleStructContainerContainingClasses()
                 {
                     MyListExampleStruct = new List<ExampleStructContainingClasses>()
                     {

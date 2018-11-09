@@ -431,7 +431,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else
             {
-                throw new Exception("Cannot update stored buffer when serializing only some children.");
+                throw new LazinatorSerializationException("Cannot update stored buffer when serializing only some children.");
             }
             
             var newBuffer = writer.Slice(startPosition, length);

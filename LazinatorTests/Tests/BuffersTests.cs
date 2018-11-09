@@ -341,7 +341,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void RemoveBufferWorks_ExampleStructContainer()
         {
-            ExampleStructContainer e = new ExampleStructContainer();
+            ExampleStructContainerContainingClasses e = new ExampleStructContainerContainingClasses();
             e.IntWrapper++;
             e.EnsureLazinatorMemoryUpToDate();
             e.IntWrapper.LazinatorMemoryStorage.Should().NotBeNull();
