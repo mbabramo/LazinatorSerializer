@@ -258,10 +258,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyListNonLazinatorType_Dirty != value)
                 {
                     _MyListNonLazinatorType_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

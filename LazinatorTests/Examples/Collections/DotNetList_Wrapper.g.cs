@@ -265,10 +265,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyListInt_Dirty != value)
                 {
                     _MyListInt_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

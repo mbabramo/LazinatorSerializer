@@ -263,10 +263,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyLinkedListInt_Dirty != value)
                 {
                     _MyLinkedListInt_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }
@@ -314,10 +314,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyListInt_Dirty != value)
                 {
                     _MyListInt_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }
@@ -397,10 +397,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MySortedSetInt_Dirty != value)
                 {
                     _MySortedSetInt_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

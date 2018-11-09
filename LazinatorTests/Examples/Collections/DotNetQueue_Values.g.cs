@@ -254,10 +254,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyQueueInt_Dirty != value)
                 {
                     _MyQueueInt_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

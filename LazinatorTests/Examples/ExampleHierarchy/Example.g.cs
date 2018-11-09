@@ -742,10 +742,10 @@ namespace LazinatorTests.Examples
                 if (_MyNonLazinatorChild_Dirty != value)
                 {
                     _MyNonLazinatorChild_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

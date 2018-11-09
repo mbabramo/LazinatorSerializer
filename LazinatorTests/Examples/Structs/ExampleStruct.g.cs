@@ -405,10 +405,10 @@ namespace LazinatorTests.Examples
                     if (_MyLazinatorList_Dirty != value)
                     {
                         _MyLazinatorList_Dirty = value;
-                        if (value && !IsDirty)
-                        {
-                            IsDirty = true;
-                        }
+                    }
+                    if (value && !IsDirty)
+                    {
+                        IsDirty = true;
                     }
                 }
             }

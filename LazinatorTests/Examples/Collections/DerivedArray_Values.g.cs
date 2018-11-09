@@ -117,10 +117,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyArrayInt_DerivedLevel_Dirty != value)
                 {
                     _MyArrayInt_DerivedLevel_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

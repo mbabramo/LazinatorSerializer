@@ -254,10 +254,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyStackInt_Dirty != value)
                 {
                     _MyStackInt_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }

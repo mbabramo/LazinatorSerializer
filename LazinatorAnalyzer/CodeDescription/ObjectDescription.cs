@@ -1104,7 +1104,7 @@ namespace Lazinator.CodeDescription
                     string propertyName = property.PropertyName;
                     sb.Append($@"if ({property.GetNonNullCheck(true)})
                         {{
-                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.RemoveBufferOnHierarchy());
+                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.RemoveBufferInHierarchy());
                         }}
 ");
                 }
