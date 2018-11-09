@@ -1153,10 +1153,10 @@ namespace Lazinator.CodeDescription
                 {RepeatedCodeExecution}if (_{PropertyName}_Dirty != value)
                 {{
                     _{PropertyName}_Dirty = value;
-                    if (value && !IsDirty)
-                    {{
-                        IsDirty = true;
-                    }}
+                }}
+                if (value && !IsDirty)
+                {{
+                    IsDirty = true;
                 }}{RepeatedCodeExecution}
             }}
         }}
