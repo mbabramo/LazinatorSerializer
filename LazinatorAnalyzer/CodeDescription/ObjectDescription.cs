@@ -859,20 +859,14 @@ namespace Lazinator.CodeDescription
                         }}
 ");
             }
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {
-                if (property.IsMemoryOrSpan)
-                {
-                }
-                else
-                {
-                    string propertyName = property.PropertyName;
-                    sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
+                string propertyName = property.PropertyName;
+                sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
                             _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                         }}
 ");
-                }
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange))
             {
@@ -884,7 +878,7 @@ namespace Lazinator.CodeDescription
 ");
             }
 
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => (!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan))
             {
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{

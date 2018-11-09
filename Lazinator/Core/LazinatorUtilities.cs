@@ -821,7 +821,7 @@ namespace Lazinator.Core
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
         public static ILazinator RemoveBuffer(this ILazinator lazinator)
         {
-            lazinator.ForEachLazinator(l => l, false); // make sure that everything is deserialized
+            lazinator = lazinator.ForEachLazinator(l => l, false); // make sure that everything is deserialized
             var existingBuffer = lazinator.LazinatorMemoryStorage;
             lazinator.LazinatorMemoryStorage = null;
             // DEBUG -- can't dispose until we're sure we don't need it anymore existingBuffer.Dispose();
