@@ -146,6 +146,34 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorByteSpan_EnsureUpToDate()
+        {
+            byte[] originalBytes = new byte[] { 1, 2, 3 };
+            LazinatorByteSpan lazinatorBytes = new LazinatorByteSpan(originalBytes);
+            lazinatorBytes.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone = lazinatorBytes.CloneLazinatorTyped();
+            var byteSpan = clone.GetSpanToReadOrWrite();
+            clone.IsDirty = true;
+            clone.EnsureLazinatorMemoryUpToDate();
+            var x = byteSpan[0];
+        }
+
+        [Fact]
+        public void SpanAndMemory_EnsureUpToDate()
+        {
+            byte[] originalBytes = new byte[] { 1, 2, 3 };
+            SpanAndMemory spanAndMemory = new SpanAndMemory();
+            spanAndMemory.MyMemoryByte = new Memory<byte>(originalBytes);
+            SpanAndMemory clone = spanAndMemory.CloneLazinatorTyped();
+            spanAndMemory.MyMemoryByte.Span[0] = 5;
+            var byteSpan = clone.MyMemoryByte;
+            clone.IsDirty = true; // trigger replacement of buffer
+            clone.EnsureLazinatorMemoryUpToDate();
+            var x = byteSpan.Span[0];
+            x.Should().Be(1);
+        }
+
+        [Fact]
         public void LazinatorBitArrayWorks()
         {
             LazinatorBitArray reservedArray = new LazinatorBitArray(100);

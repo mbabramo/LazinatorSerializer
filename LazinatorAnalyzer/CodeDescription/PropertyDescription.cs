@@ -2258,7 +2258,7 @@ namespace Lazinator.CodeDescription
                             storage.LazinatorShouldNotReturnToPool();
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}();
                             interchange.DeserializeLazinator(storage);
-                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
+                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
 
                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer,
@@ -2281,7 +2281,7 @@ namespace Lazinator.CodeDescription
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
-                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}();
+                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(true);
                         }}
                         ");
         }
