@@ -339,6 +339,26 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void RemoveBufferWorks_ExampleStructContainer()
+        {
+            ExampleNest e = new ExampleStructContainer();
+            e.IntWrapper++;
+            e.EnsureLazinatorMemoryUpToDate();
+            e.IntWrapper.LazinatorMemoryStorage.Should().NotBeNull();
+            var x = e.IntWrapper;
+            e.IntWrapper++;
+            e.IntWrapper.LazinatorMemoryStorage.Should().BeNull();
+            e.RemoveBufferInHierarchy();
+            e.LazinatorMemoryStorage.Should().BeNull();
+            e.IntWrapper.LazinatorMemoryStorage.Should().BeNull();
+            e.IntWrapper.WrappedValue.Should().Be(x + 1);
+
+            e.EnsureLazinatorMemoryUpToDate();
+            e.IntWrapper.LazinatorMemoryStorage.Should().NotBeNull();
+            e.IntWrapper.WrappedValue.Should().Be(x + 1);
+        }
+
+        [Fact]
         public void RemoveBufferWorks_DotNetList()
         {
             DotNetList_Lazinator lazinator = new DotNetList_Lazinator()
