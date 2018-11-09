@@ -358,6 +358,10 @@ namespace LazinatorTests.Examples.Subclasses
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyEnumList_Accessed && _MyEnumList != null)
+                    {
+                        _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

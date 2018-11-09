@@ -355,6 +355,10 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyQueueInt_Accessed && _MyQueueInt != null)
+                    {
+                        _MyQueueInt = (Queue<int>) Clone_Queue_Gint_g(_MyQueueInt, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

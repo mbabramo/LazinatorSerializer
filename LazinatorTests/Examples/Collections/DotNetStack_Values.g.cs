@@ -355,6 +355,10 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyStackInt_Accessed && _MyStackInt != null)
+                    {
+                        _MyStackInt = (Stack<int>) Clone_Stack_Gint_g(_MyStackInt, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

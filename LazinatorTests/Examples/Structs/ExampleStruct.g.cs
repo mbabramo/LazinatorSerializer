@@ -667,6 +667,18 @@ namespace LazinatorTests.Examples
                         {
                             _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                         }
+                        if (_MyLazinatorList_Accessed && _MyLazinatorList != null)
+                        {
+                            _MyLazinatorList = (List<Example>) Clone_List_GExample_g(_MyLazinatorList, l => l.RemoveBufferOnHierarchy());
+                        }
+                        if (_MyListValues_Accessed && _MyListValues != null)
+                        {
+                            _MyListValues = (List<int>) Clone_List_Gint_g(_MyListValues, l => l.RemoveBufferOnHierarchy());
+                        }
+                        if (_MyTuple_Accessed && !System.Collections.Generic.EqualityComparer<(NonLazinatorClass myitem1, int? myitem2)>.Default.Equals(_MyTuple, default((NonLazinatorClass myitem1, int? myitem2))))
+                        {
+                            _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) Clone__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l.RemoveBufferOnHierarchy());
+                        }
                     }
                     
                 }

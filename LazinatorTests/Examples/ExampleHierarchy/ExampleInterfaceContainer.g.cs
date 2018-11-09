@@ -422,6 +422,10 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
+                    if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
+                    {
+                        _ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

@@ -442,6 +442,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
+                    if (_MyListT_Accessed && _MyListT != null)
+                    {
+                        _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
                 if (_MyT_Accessed && _MyT != null && _MyT.IsStruct && (_MyT.IsDirty || _MyT.DescendantIsDirty))

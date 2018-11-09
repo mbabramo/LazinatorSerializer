@@ -277,6 +277,14 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         _Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex + sizeof(int), _Example3_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
+                    if (_IntList4_Accessed && _IntList4 != null)
+                    {
+                        _IntList4 = (List<int>) Clone_List_Gint_g(_IntList4, l => l.RemoveBufferOnHierarchy());
+                    }
+                    if (_IntList5_Accessed && _IntList5 != null)
+                    {
+                        _IntList5 = (List<int>) Clone_List_Gint_g(_IntList5, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

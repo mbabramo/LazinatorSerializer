@@ -441,6 +441,18 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyArrayInt_Accessed && _MyArrayInt != null)
+                    {
+                        _MyArrayInt = (int[,]) Clone_int_B_c_b(_MyArrayInt, l => l.RemoveBufferOnHierarchy());
+                    }
+                    if (_MyCrazyJaggedArray_Accessed && _MyCrazyJaggedArray != null)
+                    {
+                        _MyCrazyJaggedArray = (int[][,,][,,,]) Clone_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l.RemoveBufferOnHierarchy());
+                    }
+                    if (_MyThreeDimArrayInt_Accessed && _MyThreeDimArrayInt != null)
+                    {
+                        _MyThreeDimArrayInt = (int[,,]) Clone_int_B_c_c_b(_MyThreeDimArrayInt, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

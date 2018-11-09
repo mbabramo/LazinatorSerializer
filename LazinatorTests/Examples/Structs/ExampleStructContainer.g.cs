@@ -592,6 +592,14 @@ namespace LazinatorTests.Examples
                     {
                         _MyExampleStruct.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex + sizeof(int), _MyExampleStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
+                    if (_MyListExampleStruct_Accessed && _MyListExampleStruct != null)
+                    {
+                        _MyListExampleStruct = (List<ExampleStruct>) Clone_List_GExampleStruct_g(_MyListExampleStruct, l => l.RemoveBufferOnHierarchy());
+                    }
+                    if (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null)
+                    {
+                        _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStruct>>) Clone_List_GWNullableStruct_GExampleStruct_g_g(_MyListNullableExampleStruct, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
                 _IntWrapper_Accessed = false;

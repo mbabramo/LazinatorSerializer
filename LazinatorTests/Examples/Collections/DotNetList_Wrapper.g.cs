@@ -446,6 +446,18 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyListInt_Accessed && _MyListInt != null)
+                    {
+                        _MyListInt = (List<WInt>) Clone_List_GWInt_g(_MyListInt, l => l.RemoveBufferOnHierarchy());
+                    }
+                    if (_MyListNullableByte_Accessed && _MyListNullableByte != null)
+                    {
+                        _MyListNullableByte = (List<WNullableByte>) Clone_List_GWNullableByte_g(_MyListNullableByte, l => l.RemoveBufferOnHierarchy());
+                    }
+                    if (_MyListNullableInt_Accessed && _MyListNullableInt != null)
+                    {
+                        _MyListNullableInt = (List<WNullableInt>) Clone_List_GWNullableInt_g(_MyListNullableInt, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

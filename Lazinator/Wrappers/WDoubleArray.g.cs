@@ -384,6 +384,10 @@ namespace Lazinator.Wrappers
                     _DescendantIsDirty = false;
                     if (updateDeserializedChildren)
                     {
+                        if (_WrappedValue_Accessed && _WrappedValue != null)
+                        {
+                            _WrappedValue = (double[]) Clone_double_B_b(_WrappedValue, l => l.RemoveBufferOnHierarchy());
+                        }
                     }
                     
                 }

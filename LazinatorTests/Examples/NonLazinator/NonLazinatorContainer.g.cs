@@ -505,6 +505,14 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = false;
                     if (updateDeserializedChildren)
                     {
+                        if (_NonLazinatorInterchangeableClass_Accessed && _NonLazinatorInterchangeableClass != null)
+                        {
+                            _NonLazinatorInterchangeableClass = (NonLazinatorInterchangeableClass) Clone_NonLazinatorInterchangeableClass(_NonLazinatorInterchangeableClass, l => l.RemoveBufferOnHierarchy());
+                        }
+                        if (_NonLazinatorInterchangeableStruct_Accessed && !System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableStruct>.Default.Equals(_NonLazinatorInterchangeableStruct, default(NonLazinatorInterchangeableStruct)))
+                        {
+                            _NonLazinatorInterchangeableStruct = (NonLazinatorInterchangeableStruct) Clone_NonLazinatorInterchangeableStruct(_NonLazinatorInterchangeableStruct, l => l.RemoveBufferOnHierarchy());
+                        }
                     }
                     
                 }

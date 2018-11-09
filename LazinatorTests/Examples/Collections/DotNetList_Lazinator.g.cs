@@ -356,6 +356,10 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyListSerialized_Accessed && _MyListSerialized != null)
+                    {
+                        _MyListSerialized = (List<ExampleChild>) Clone_List_GExampleChild_g(_MyListSerialized, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

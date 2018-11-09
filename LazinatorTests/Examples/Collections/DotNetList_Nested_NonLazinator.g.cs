@@ -337,6 +337,10 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyListNestedNonLazinatorType_Accessed && _MyListNestedNonLazinatorType != null)
+                    {
+                        _MyListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) Clone_List_GList_GNonLazinatorClass_g_g(_MyListNestedNonLazinatorType, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }

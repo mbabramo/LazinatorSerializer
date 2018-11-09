@@ -341,6 +341,10 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
+                    if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
+                    {
+                        _MyQueueSerialized = (Queue<ExampleChild>) Clone_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferOnHierarchy());
+                    }
                 }
                 
             }
