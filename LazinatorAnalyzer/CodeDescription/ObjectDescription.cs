@@ -883,6 +883,16 @@ namespace Lazinator.CodeDescription
                         }}
 ");
             }
+
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange))
+            {
+                sb.Append($@"if (!exploreOnlyDeserializedChildren)
+                    {{
+                        var deserialized = {property.PropertyName};
+                    }}
+");
+            }
+
             sb.Append($@"return changeFunc(this);
                             }}
                         ");
