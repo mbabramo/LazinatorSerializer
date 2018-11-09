@@ -255,10 +255,10 @@ namespace LazinatorTests.Examples.Collections
                 if (_MyListSerialized_Dirty != value)
                 {
                     _MyListSerialized_Dirty = value;
-                    if (value && !IsDirty)
-                    {
-                        IsDirty = true;
-                    }
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
                 }
             }
         }
