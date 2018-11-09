@@ -824,7 +824,7 @@ namespace Lazinator.Core
             lazinator.ForEachLazinator(l => l, false); // make sure that everything is deserialized
             var existingBuffer = lazinator.LazinatorMemoryStorage;
             lazinator.LazinatorMemoryStorage = null;
-            existingBuffer.Dispose();
+            // DEBUG -- can't dispose until we're sure we don't need it anymore existingBuffer.Dispose();
             return lazinator;
         }
 
