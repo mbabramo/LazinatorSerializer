@@ -16,7 +16,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")} Length {Length} Bytes {String.Join("", Span.Slice(100).ToArray())}";
+            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")} Length {Length} Bytes {String.Join("", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
         }
 
         #region Constructors

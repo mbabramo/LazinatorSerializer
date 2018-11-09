@@ -320,7 +320,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void RemoveBufferWorks()
+        public void RemoveBufferWorks_Example()
         {
             Example e = GetTypicalExample();
             e.EnsureLazinatorMemoryUpToDate();
@@ -339,19 +339,43 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void EnsureLazinatorRemovesBufferWithinNonlazinator()
+        public void RemoveBufferWorks_DotNetList()
         {
-            DotNetList_Lazinator l = new DotNetList_Lazinator()
+            DotNetList_Lazinator lazinator = new DotNetList_Lazinator()
             {
                 MyListSerialized = new List<ExampleChild>()
                 {
-                    GetExampleChild(0),
                     GetExampleChild(1),
+                    GetExampleChild(2),
                     null
                 }
             };
-            l.EnsureLazinatorMemoryUpToDate();
-            throw new NotImplementedException();
+            lazinator.EnsureLazinatorMemoryUpToDate();
+            lazinator.LazinatorMemoryStorage.Should().NotBeNull();
+            var x = lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt;
+            lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt++;
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+
+            lazinator.RemoveBufferInHierarchy();
+            lazinator.LazinatorMemoryStorage.Should().BeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().BeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
+
+            lazinator.EnsureLazinatorMemoryUpToDate();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
+
+            lazinator.EnsureLazinatorMemoryUpToDate();
+            LazinatorMemory lazinatorMemoryStorage = lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage;
+            lazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
+
+            lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt++;
+            lazinator.EnsureLazinatorMemoryUpToDate();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            (lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage == lazinatorMemoryStorage).Should()
+                .BeFalse();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 2);
         }
 
         [Fact]
