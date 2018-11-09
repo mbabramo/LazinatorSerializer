@@ -634,7 +634,7 @@ namespace LazinatorTests.Examples
                 storage.LazinatorShouldNotReturnToPool();
                 NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass();
                 interchange.DeserializeLazinator(storage);
-                return interchange.Interchange_NonLazinatorInterchangeableClass();
+                return interchange.Interchange_NonLazinatorInterchangeableClass(false);
             }
             
             private static void ConvertToBytes_NonLazinatorInterchangeableClass(ref BinaryBufferWriter writer,
@@ -657,7 +657,7 @@ namespace LazinatorTests.Examples
                     return default(NonLazinatorInterchangeableClass);
                 }
                 NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToClone);
-                return interchange.Interchange_NonLazinatorInterchangeableClass();
+                return interchange.Interchange_NonLazinatorInterchangeableClass(true);
             }
             
             private static NonLazinatorInterchangeableStruct ConvertFromBytes_NonLazinatorInterchangeableStruct(LazinatorMemory storage)
@@ -669,7 +669,7 @@ namespace LazinatorTests.Examples
                 storage.LazinatorShouldNotReturnToPool();
                 NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct();
                 interchange.DeserializeLazinator(storage);
-                return interchange.Interchange_NonLazinatorInterchangeableStruct();
+                return interchange.Interchange_NonLazinatorInterchangeableStruct(false);
             }
             
             private static void ConvertToBytes_NonLazinatorInterchangeableStruct(ref BinaryBufferWriter writer,
@@ -692,7 +692,7 @@ namespace LazinatorTests.Examples
                     return default(NonLazinatorInterchangeableStruct);
                 }
                 NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(itemToClone);
-                return interchange.Interchange_NonLazinatorInterchangeableStruct();
+                return interchange.Interchange_NonLazinatorInterchangeableStruct(true);
             }
             
         }

@@ -15,7 +15,7 @@ namespace LazinatorTests.Examples
             MyInt = (int)_privateFieldInfoForMyInt.GetValue(nonLazinatorInterchangeableClass);
         }
 
-        public NonLazinatorInterchangeableClass Interchange_NonLazinatorInterchangeableClass()
+        public NonLazinatorInterchangeableClass Interchange_NonLazinatorInterchangeableClass(bool cloning)
         {
             return new NonLazinatorInterchangeableClass(MyString, MyInt);
             // NOTE: If there weren't a constructor with the private field, we could do _privateFieldInfoForMyInt.SetValue(nonLazinatorInterchangeableClass, MyInt) 
