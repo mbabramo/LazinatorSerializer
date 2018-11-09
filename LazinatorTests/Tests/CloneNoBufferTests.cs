@@ -324,16 +324,16 @@ namespace LazinatorTests.Tests
         {
             VerifyCloningEquivalence(() => new ExampleStructContainingStruct()
             {
-                MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             });
         }
 
         [Fact]
         public void CloneWithoutBuffer_ExampleStruct()
         {
-            ExampleStruct GetExampleStruct()
+            ExampleStructContainingClasses GetExampleStruct()
             {
-                ExampleStruct s = new ExampleStruct();
+                ExampleStructContainingClasses s = new ExampleStructContainingClasses();
                 s.MyBool = true;
                 s.MyChar = 'x';
                 s.MyChild1 = new ExampleChildInherited()

@@ -4,7 +4,7 @@ using Lazinator.Attributes;
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.ExampleStruct)]
-    public interface IExampleStruct
+    public interface IExampleStructContainingClasses
     {
         bool MyBool { get; set; }
         char MyChar { get; set; }

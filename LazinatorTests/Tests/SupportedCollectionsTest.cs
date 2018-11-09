@@ -160,10 +160,10 @@ namespace LazinatorTests.Tests
             {
                 var returnObj = new ExampleStructContainer()
                 {
-                    MyListNullableExampleStruct = new List<WNullableStruct<ExampleStruct>>()
+                    MyListNullableExampleStruct = new List<WNullableStruct<ExampleStructContainingClasses>>()
                     {
-                        new WNullableStruct<ExampleStruct>() { AsNullableStruct = new ExampleStruct() { MyChar = 'd' } },
-                        new WNullableStruct<ExampleStruct>() { AsNullableStruct = null },
+                        new WNullableStruct<ExampleStructContainingClasses>() { AsNullableStruct = new ExampleStructContainingClasses() { MyChar = 'd' } },
+                        new WNullableStruct<ExampleStructContainingClasses>() { AsNullableStruct = null },
                     },
                 };
                 return returnObj;
@@ -184,7 +184,7 @@ namespace LazinatorTests.Tests
             {
                 return new ExampleStructContainer()
                 {
-                    MyListExampleStruct = new List<ExampleStruct>(),
+                    MyListExampleStruct = new List<ExampleStructContainingClasses>(),
                 };
             }
 
@@ -202,10 +202,10 @@ namespace LazinatorTests.Tests
             {
                 var returnObj = new ExampleStructContainer()
                 {
-                    MyListExampleStruct = new List<ExampleStruct>()
+                    MyListExampleStruct = new List<ExampleStructContainingClasses>()
                     {
-                        new ExampleStruct() { MyChar = 'd'},
-                        new ExampleStruct() { MyChar = 'e'},
+                        new ExampleStructContainingClasses() { MyChar = 'd'},
+                        new ExampleStructContainingClasses() { MyChar = 'e'},
                     },
                 };
                 return returnObj;
@@ -281,7 +281,7 @@ namespace LazinatorTests.Tests
             {
                 return new RegularTuple()
                 {
-                    MyTupleSerialized4 = new Tuple<int, ExampleStruct>(3, new ExampleStruct() { MyChar = '5' })
+                    MyTupleSerialized4 = new Tuple<int, ExampleStructContainingClasses>(3, new ExampleStructContainingClasses() { MyChar = '5' })
                 };
             }
 

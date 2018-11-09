@@ -179,7 +179,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessWorksForClassInStruct()
         {
-            ExampleStruct s = new ExampleStruct()
+            ExampleStructContainingClasses s = new ExampleStructContainingClasses()
             {
                 MyChild1 = new ExampleChild()
             };
@@ -192,13 +192,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessNotificationOccursWithStructAsGeneric_ChangingFromDefault()
         {
-            LazinatorTuple<ExampleStruct, ExampleStruct> e = new LazinatorTuple<ExampleStruct, ExampleStruct>();
+            LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses> e = new LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>();
             var c = e.CloneLazinatorTyped();
-            c.Item1 = new ExampleStruct() { MyChar = 'A' }; // because Item1 is set, IsDirty notification occurs
+            c.Item1 = new ExampleStructContainingClasses() { MyChar = 'A' }; // because Item1 is set, IsDirty notification occurs
             c.IsDirty.Should().BeTrue();
 
             // The following code is invalid and thus doesn't present a problem.
-            //e = new LazinatorTuple<ExampleStruct, ExampleStruct>();
+            //e = new LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>();
             //c = e.CloneLazinatorTyped();
             //c.Item1.MyChar = 'A' ; // INVALID -- can't change MyChar b/c Item1 is a struct. Instead, we would do c.Item1 = c.Item1 { MyChar = 'A' }, which works as above
             //c.IsDirty.Should().BeTrue();
@@ -207,13 +207,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessNotificationOccursWithStructAsGeneric()
         {
-            LazinatorTuple<ExampleStruct, ExampleStruct> e = new LazinatorTuple<ExampleStruct, ExampleStruct>
+            LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses> e = new LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>
             (
-                new ExampleStruct() { MyChar = 'B' },
-                new ExampleStruct() { MyChar = 'C' }
+                new ExampleStructContainingClasses() { MyChar = 'B' },
+                new ExampleStructContainingClasses() { MyChar = 'C' }
             );
             var c = e.CloneLazinatorTyped();
-            c.Item1 = new ExampleStruct() { MyChar = 'A' };
+            c.Item1 = new ExampleStructContainingClasses() { MyChar = 'A' };
             c.IsDirty.Should().BeTrue();
         }
 
@@ -310,10 +310,10 @@ namespace LazinatorTests.Tests
         {
             ExampleStructContainingStructContainer e = new ExampleStructContainingStructContainer()
             {
-                Subcontainer = new ExampleStructContainingStruct() { MyExampleStruct = new ExampleStruct() { MyChar = 'Z' } }
+                Subcontainer = new ExampleStructContainingStruct() { MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'Z' } }
             };
             e.Subcontainer.IsDirty.Should().BeTrue();
-            e.Subcontainer.MyExampleStruct.IsDirty.Should().BeTrue();
+            e.Subcontainer.MyExampleStructContainingClasses.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
             e.EnsureLazinatorMemoryUpToDate();
@@ -322,12 +322,12 @@ namespace LazinatorTests.Tests
             e.IsDirty.Should().BeFalse();
             e.DescendantIsDirty.Should().BeFalse();
             e.Subcontainer.IsDirty.Should().BeFalse();
-            e.Subcontainer.MyExampleStruct.IsDirty.Should().BeFalse();
+            e.Subcontainer.MyExampleStructContainingClasses.IsDirty.Should().BeFalse();
             // now consider clone
             c.IsDirty.Should().BeFalse();
             c.DescendantIsDirty.Should().BeFalse();
             c.Subcontainer.IsDirty.Should().BeFalse();
-            c.Subcontainer.MyExampleStruct.IsDirty.Should().BeFalse();
+            c.Subcontainer.MyExampleStructContainingClasses.IsDirty.Should().BeFalse();
         }
 
         [Fact]

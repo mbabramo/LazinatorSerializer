@@ -35,7 +35,7 @@ namespace LazinatorTests.Tests
                 {
                     return new RegularTuple()
                     {
-                        MyTupleSerialized4 = new Tuple<int, ExampleStruct>(2, new ExampleStruct() { MyChar = '1' })
+                        MyTupleSerialized4 = new Tuple<int, ExampleStructContainingClasses>(2, new ExampleStructContainingClasses() { MyChar = '1' })
                     };
                 }
 
@@ -630,7 +630,7 @@ namespace LazinatorTests.Tests
         {
             LazinatorList<ExampleStructContainingStruct> l = new LazinatorList<ExampleStructContainingStruct>()
             {
-                new ExampleStructContainingStruct() { MyExampleStruct = new ExampleStruct() { MyChar = 'Q'} }
+                new ExampleStructContainingStruct() { MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'Q'} }
             };
             l.EnsureLazinatorMemoryUpToDate();
             var c = l.CloneLazinatorTyped();
@@ -638,13 +638,13 @@ namespace LazinatorTests.Tests
             l.IsDirty.Should().BeFalse();
             l.DescendantIsDirty.Should().BeFalse();
             l[0].IsDirty.Should().BeFalse();
-            l[0].MyExampleStruct.IsDirty.Should().BeFalse();
+            l[0].MyExampleStructContainingClasses.IsDirty.Should().BeFalse();
             // now consider clone
             c.IsDirty.Should().BeFalse();
             c.DescendantIsDirty.Should().BeFalse();
             c[0].IsDirty.Should().BeFalse();
-            c[0].MyExampleStruct.IsDirty.Should().BeFalse();
-            c[0].MyExampleStruct.MyChar.Should().Be('Q');
+            c[0].MyExampleStructContainingClasses.IsDirty.Should().BeFalse();
+            c[0].MyExampleStructContainingClasses.MyChar.Should().Be('Q');
         }
 
         [Fact]

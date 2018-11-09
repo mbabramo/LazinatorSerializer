@@ -7,9 +7,9 @@ namespace LazinatorTests.Examples
     [Lazinator((int) ExampleUniqueIDs.ExampleStructContainer)]
     public interface IExampleStructContainer
     {
-        ExampleStruct MyExampleStruct { get; set; }
-        List<ExampleStruct> MyListExampleStruct { get; set; }
-        List<WNullableStruct<ExampleStruct>> MyListNullableExampleStruct { get; set; }
+        ExampleStructContainingClasses MyExampleStructContainingClasses { get; set; }
+        List<ExampleStructContainingClasses> MyListExampleStruct { get; set; }
+        List<WNullableStruct<ExampleStructContainingClasses>> MyListNullableExampleStruct { get; set; }
         WInt IntWrapper { get; set; }
     }
 }

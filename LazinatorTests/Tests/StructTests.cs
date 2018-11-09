@@ -32,11 +32,11 @@ namespace LazinatorTests.Tests
         {
             ExampleStructContainer c = new ExampleStructContainer()
             {
-                MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };
             var c2 = c.CloneLazinatorTyped();
 
-            Action a = () => { var result = c2.MyExampleStruct; };
+            Action a = () => { var result = c2.MyExampleStructContainingClasses; };
             a.Should().Throw<LazinatorDeserializationException>();
         }
 
@@ -77,17 +77,17 @@ namespace LazinatorTests.Tests
         {
             ExampleStructContainingStruct c = new ExampleStructContainingStruct()
             {
-                MyExampleStruct = new ExampleStruct() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };
 
             var c2 = CloneWithOptionalVerification(c, true, false);
-            c2.MyExampleStruct.MyChar.Should().Be('z');
+            c2.MyExampleStructContainingClasses.MyChar.Should().Be('z');
         }
 
         [Fact]
         public void StructLazinatorWorks()
         {
-            ExampleStruct s = new ExampleStruct();
+            ExampleStructContainingClasses s = new ExampleStructContainingClasses();
             s.MyBool = true;
             s.MyChar = 'x';
             s.MyChild1 = new ExampleChildInherited()
@@ -128,7 +128,7 @@ namespace LazinatorTests.Tests
             reserializationAction.Should().Throw<UnexpectedDirtinessException>();
             s3.MyLazinatorList_Dirty = true;
             var s3Serialized = s3.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, true, false);
-            ExampleStruct s3b = new ExampleStruct()
+            ExampleStructContainingClasses s3b = new ExampleStructContainingClasses()
             {
             };
             s3b.DeserializeLazinator(s3Serialized);

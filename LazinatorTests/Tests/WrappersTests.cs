@@ -14,9 +14,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void WrapperNullableStructWorks()
         {
-            WNullableStruct<ExampleStruct> wNullableStruct = new WNullableStruct<ExampleStruct>()
+            WNullableStruct<ExampleStructContainingClasses> wNullableStruct = new WNullableStruct<ExampleStructContainingClasses>()
             {
-                AsNullableStruct = new ExampleStruct()
+                AsNullableStruct = new ExampleStructContainingClasses()
                 {
                     MyChar = 'q'
                 }

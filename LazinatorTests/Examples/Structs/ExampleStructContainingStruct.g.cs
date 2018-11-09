@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples
             clone.FreeInMemoryObjects();
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                clone.MyExampleStruct = (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) ? default(ExampleStruct) : (ExampleStruct) MyExampleStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                clone.MyExampleStructContainingClasses = (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) ? default(ExampleStructContainingClasses) : (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             clone.IsDirty = false;}
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples
             public bool DescendantHasChanged
             {
                 [DebuggerStepThrough]
-                get => _DescendantHasChanged || (_MyExampleStruct_Accessed && (MyExampleStruct.HasChanged || MyExampleStruct.DescendantHasChanged));
+                get => _DescendantHasChanged || (_MyExampleStruct_Accessed && (MyExampleStructContainingClasses.HasChanged || MyExampleStructContainingClasses.DescendantHasChanged));
                 [DebuggerStepThrough]
                 set
                 {
@@ -144,7 +144,7 @@ namespace LazinatorTests.Examples
             public bool DescendantIsDirty
             {
                 [DebuggerStepThrough]
-                get => _DescendantIsDirty || (_MyExampleStruct_Accessed && (MyExampleStruct.IsDirty || MyExampleStruct.DescendantIsDirty));
+                get => _DescendantIsDirty || (_MyExampleStruct_Accessed && (MyExampleStructContainingClasses.IsDirty || MyExampleStructContainingClasses.DescendantIsDirty));
                 [DebuggerStepThrough]
                 set
                 {
@@ -246,9 +246,9 @@ namespace LazinatorTests.Examples
             int _MyExampleStruct_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStruct_ByteIndex;
             
             
-            ExampleStruct _MyExampleStruct;
+            ExampleStructContainingClasses _myExampleStructContainingClasses;
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            public ExampleStruct MyExampleStruct
+            public ExampleStructContainingClasses MyExampleStructContainingClasses
             {
                 get
                 {
@@ -256,30 +256,30 @@ namespace LazinatorTests.Examples
                     {
                         if (LazinatorObjectBytes.Length == 0)
                         {
-                            _MyExampleStruct = default(ExampleStruct);
+                            _myExampleStructContainingClasses = default(ExampleStructContainingClasses);
                         }
                         else
                         {
                             LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                            _MyExampleStruct = new ExampleStruct();
-                            _MyExampleStruct.DeserializeLazinator(childData);
+                            _myExampleStructContainingClasses = new ExampleStructContainingClasses();
+                            _myExampleStructContainingClasses.DeserializeLazinator(childData);
                         }
                         _MyExampleStruct_Accessed = true;
                     } 
-                    return _MyExampleStruct;
+                    return _myExampleStructContainingClasses;
                 }
                 set
                 {
                     
                     IsDirty = true;
                     DescendantIsDirty = true;
-                    _MyExampleStruct = value;
+                    _myExampleStructContainingClasses = value;
                     _MyExampleStruct_Accessed = true;
                 }
             }
             bool _MyExampleStruct_Accessed;
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            public ExampleStruct MyExampleStruct_Copy
+            public ExampleStructContainingClasses MyExampleStructContainingClassesCopy
             {
                 get
                 {
@@ -287,18 +287,18 @@ namespace LazinatorTests.Examples
                     {
                         if (LazinatorObjectBytes.Length == 0)
                         {
-                            return default(ExampleStruct);
+                            return default(ExampleStructContainingClasses);
                         }
                         else
                         {
                             LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStruct_ByteIndex, _MyExampleStruct_ByteLength, false, false, null);
-                            var toReturn = new ExampleStruct();
+                            var toReturn = new ExampleStructContainingClasses();
                             toReturn.DeserializeLazinator(childData);
                             toReturn.IsDirty = false;
                             return toReturn;
                         }
                     }
-                    var cleanCopy = _MyExampleStruct;
+                    var cleanCopy = _myExampleStructContainingClasses;
                     cleanCopy.IsDirty = false;
                     cleanCopy.DescendantIsDirty = false;
                     return cleanCopy;
@@ -324,23 +324,23 @@ namespace LazinatorTests.Examples
             
             public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
             {
-                if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStruct_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))))
+                if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStruct_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
                 {
-                    yield return ("MyExampleStruct", default);
+                    yield return ("MyExampleStructContainingClasses", default);
                 }
-                else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
+                else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_myExampleStructContainingClasses, default(ExampleStructContainingClasses))))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleStruct);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStruct);
+                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
                     if (isMatch)
                     {
-                        yield return ("MyExampleStruct", MyExampleStruct);
+                        yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
                     }
                     if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
                     {
-                        foreach (var toYield in MyExampleStruct.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
-                            yield return ("MyExampleStruct" + "." + toYield.propertyName, toYield.descendant);
+                            yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
                         }
                     }
                 }
@@ -355,16 +355,16 @@ namespace LazinatorTests.Examples
             
             public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
             {
-                if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(MyExampleStruct, default(ExampleStruct))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct))))
+                if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) || (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_myExampleStructContainingClasses, default(ExampleStructContainingClasses))))
                 {
-                    _MyExampleStruct = (ExampleStruct) _MyExampleStruct.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                    _myExampleStructContainingClasses = (ExampleStructContainingClasses) _myExampleStructContainingClasses.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
                 }
                 return changeFunc(this);
             }
             
             public void FreeInMemoryObjects()
             {
-                _MyExampleStruct = default;
+                _myExampleStructContainingClasses = default;
                 _MyExampleStruct_Accessed = false;
                 IsDirty = false;
                 DescendantIsDirty = false;
@@ -429,9 +429,9 @@ namespace LazinatorTests.Examples
                     _DescendantIsDirty = false;
                     if (updateDeserializedChildren)
                     {
-                        if (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStruct>.Default.Equals(_MyExampleStruct, default(ExampleStruct)))
+                        if (_MyExampleStruct_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_myExampleStructContainingClasses, default(ExampleStructContainingClasses)))
                         {
-                            _MyExampleStruct.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex + sizeof(int), _MyExampleStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                            _myExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStruct_ByteIndex + sizeof(int), _MyExampleStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                         }
                     }
                     
@@ -465,12 +465,12 @@ namespace LazinatorTests.Examples
                 {
                     if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyExampleStruct_Accessed)
                     {
-                        var deserialized = MyExampleStruct;
+                        var deserialized = MyExampleStructContainingClasses;
                     }
                     var serializedBytesCopy = LazinatorMemoryStorage;
                     var byteIndexCopy = _MyExampleStruct_ByteIndex;
                     var byteLengthCopy = _MyExampleStruct_ByteLength;
-                    WriteChild(ref writer, ref _MyExampleStruct, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
+                    WriteChild(ref writer, ref _myExampleStructContainingClasses, includeChildrenMode, _MyExampleStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, false, false, null), verifyCleanness, updateStoredBuffer, false, false, null);
                 }
                 if (updateStoredBuffer)
                 {
