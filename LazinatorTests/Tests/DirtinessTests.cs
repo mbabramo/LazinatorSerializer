@@ -330,6 +330,41 @@ namespace LazinatorTests.Tests
             c.Subcontainer.MyExampleStruct.IsDirty.Should().BeFalse();
         }
 
+        [Fact]
+        public void MarkHierarchyClean_Example()
+        {
+            Example e = GetTypicalExample();
+            e.EnsureLazinatorMemoryUpToDate();
+            e.LazinatorMemoryStorage.Should().NotBeNull();
+            e.MyChild1.MyExampleGrandchild.MyInt++;
+            e.MyChild1.MyExampleGrandchild.IsDirty.Should().BeTrue();
+            e.MyChild1.MyExampleGrandchild.HasChanged.Should().BeTrue();
+            e.DescendantIsDirty.Should().BeTrue();
+            e.DescendantHasChanged.Should().BeTrue();
+            e.MarkHierarchyClean();
+            e.MyChild1.MyExampleGrandchild.IsDirty.Should().BeFalse();
+            e.MyChild1.MyExampleGrandchild.HasChanged.Should().BeFalse();
+            e.DescendantIsDirty.Should().BeFalse();
+            e.DescendantHasChanged.Should().BeFalse();
+        }
+
+        [Fact]
+        public void MarkHierarchyClean_ExampleStructContainer()
+        {
+            var e = new ExampleStructContainer();
+            e.EnsureLazinatorMemoryUpToDate();
+            e.LazinatorMemoryStorage.Should().NotBeNull();
+            e.IntWrapper++;
+            e.IntWrapper.IsDirty.Should().BeTrue();
+            e.IntWrapper.HasChanged.Should().BeTrue();
+            e.DescendantIsDirty.Should().BeTrue();
+            e.DescendantHasChanged.Should().BeTrue();
+            e.MarkHierarchyClean();
+            e.IntWrapper.IsDirty.Should().BeFalse();
+            e.IntWrapper.HasChanged.Should().BeFalse();
+            e.DescendantIsDirty.Should().BeFalse();
+            e.DescendantHasChanged.Should().BeFalse();
+        }
 
     }
 }
