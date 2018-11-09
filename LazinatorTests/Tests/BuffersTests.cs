@@ -339,23 +339,27 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void RemoveBufferWorks_ExampleStructContainer()
+        public void RemoveBufferWorks_ExampleStructContainingStructContainer()
         {
-            ExampleStructContainerContainingClasses e = new ExampleStructContainerContainingClasses();
-            e.IntWrapper++;
+            ContainerForExampleStructWithoutClass e = new ContainerForExampleStructWithoutClass();
+            var x = e.ExampleStructWithoutClass;
+            x.MyInt++;
+            e.ExampleStructWithoutClass = x;
             e.EnsureLazinatorMemoryUpToDate();
-            e.IntWrapper.LazinatorMemoryStorage.Should().NotBeNull();
-            var x = e.IntWrapper;
-            e.IntWrapper++;
-            e.IntWrapper.LazinatorMemoryStorage.Should().BeNull();
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().NotBeNull();
+            x = e.ExampleStructWithoutClass;
+            x.MyInt++;
+            var y = x.MyInt;
+            e.ExampleStructWithoutClass = x;
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().NotBeNull();
             e.RemoveBufferInHierarchy();
             e.LazinatorMemoryStorage.Should().BeNull();
-            e.IntWrapper.LazinatorMemoryStorage.Should().BeNull();
-            e.IntWrapper.WrappedValue.Should().Be(x + 1);
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().BeNull();
+            e.ExampleStructWithoutClass.MyInt.Should().Be(y);
 
             e.EnsureLazinatorMemoryUpToDate();
-            e.IntWrapper.LazinatorMemoryStorage.Should().NotBeNull();
-            e.IntWrapper.WrappedValue.Should().Be(x + 1);
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().NotBeNull();
+            e.ExampleStructWithoutClass.MyInt.Should().Be(y);
         }
 
         [Fact]

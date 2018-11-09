@@ -1047,7 +1047,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        throw new Exception(""Cannot update stored buffer when serializing only some children."");
+                        throw new LazinatorSerializationException(""Cannot update stored buffer when serializing only some children."");
                     }}");
         }
 
@@ -1288,7 +1288,7 @@ namespace Lazinator.CodeDescription
                         if (LazinatorParents.Any())
                         {{
                             throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class."");
-                        }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario, the risk of error is too great. 
+                        }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario by setting the deserialized property immediately after mutating it, the risk of error is great, and so we do not allow it.
             }
 
             return classContainingStructContainingClassError;

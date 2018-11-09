@@ -523,7 +523,7 @@ namespace Lazinator.CodeDescription
             }
             catch (Exception ex)
             {
-                throw new Exception($"SetSelfSerializablePropertyType failed; message {ex.Message}");
+                throw new LazinatorCodeGenException($"SetSelfSerializablePropertyType failed; message {ex.Message}");
             }
         }
 
