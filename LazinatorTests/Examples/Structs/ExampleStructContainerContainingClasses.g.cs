@@ -227,8 +227,8 @@ namespace LazinatorTests.Examples
         protected virtual int _IntWrapper_ByteLength => _MyExampleStructContainingClasses_ByteIndex - _IntWrapper_ByteIndex;
         protected virtual int _MyExampleStructContainingClasses_ByteLength => _MyListExampleStruct_ByteIndex - _MyExampleStructContainingClasses_ByteIndex;
         protected virtual int _MyListExampleStruct_ByteLength => _MyListNullableExampleStruct_ByteIndex - _MyListExampleStruct_ByteIndex;
-        private int _ExampleStructContainer_EndByteIndex;
-        protected virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainer_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
+        private int _ExampleStructContainerContainingClasses_EndByteIndex;
+        protected virtual int _MyListNullableExampleStruct_ByteLength => _ExampleStructContainerContainingClasses_EndByteIndex - _MyListNullableExampleStruct_ByteIndex;
         
         
         protected WInt _IntWrapper;
@@ -559,7 +559,7 @@ namespace LazinatorTests.Examples
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListNullableExampleStruct_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            _ExampleStructContainer_EndByteIndex = bytesSoFar;
+            _ExampleStructContainerContainingClasses_EndByteIndex = bytesSoFar;
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -696,7 +696,7 @@ namespace LazinatorTests.Examples
             }
             if (updateStoredBuffer)
             {
-                _ExampleStructContainer_EndByteIndex = writer.Position - startPosition;
+                _ExampleStructContainerContainingClasses_EndByteIndex = writer.Position - startPosition;
             }
         }
         
