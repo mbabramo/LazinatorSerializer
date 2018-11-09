@@ -304,6 +304,10 @@ namespace Lazinator.Wrappers
             
             public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
             {
+                if (!exploreOnlyDeserializedChildren)
+                {
+                    var deserialized = Value;
+                }
                 return changeFunc(this);
             }
             

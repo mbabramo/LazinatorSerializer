@@ -624,6 +624,54 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyMemoryByte;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyMemoryInt;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyNullableMemoryByte;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyNullableMemoryInt;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyNullableReadOnlyMemoryInt;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlyMemoryByte;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlyMemoryChar;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlyMemoryInt;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlySpanByte;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlySpanChar;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlySpanDateTime;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MyReadOnlySpanLong;
+            }
             return changeFunc(this);
         }
         

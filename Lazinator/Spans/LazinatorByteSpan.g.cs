@@ -318,6 +318,14 @@ namespace Lazinator.Spans
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = ReadOnly;
+            }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = ReadOrWrite;
+            }
             return changeFunc(this);
         }
         

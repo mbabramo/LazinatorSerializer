@@ -348,6 +348,10 @@ namespace Lazinator.Collections
             {
                 _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = MainListSerialized;
+            }
             return changeFunc(this);
         }
         

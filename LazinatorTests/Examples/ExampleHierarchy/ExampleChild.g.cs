@@ -441,6 +441,10 @@ namespace LazinatorTests.Examples
             {
                 _MyWrapperContainer = (WrapperContainer) _MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = ByteSpan;
+            }
             return changeFunc(this);
         }
         

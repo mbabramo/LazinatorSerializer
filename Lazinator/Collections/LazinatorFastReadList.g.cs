@@ -280,6 +280,10 @@ namespace Lazinator.Collections
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
+            if (!exploreOnlyDeserializedChildren)
+            {
+                var deserialized = ReadOnlyBytes;
+            }
             return changeFunc(this);
         }
         
