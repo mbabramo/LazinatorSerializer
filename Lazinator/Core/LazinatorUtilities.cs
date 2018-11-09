@@ -815,6 +815,29 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Removes a buffer from this Lazinator node, without affecting its children.
+        /// </summary>
+        /// <param name="lazinator">The Lazinator node</param>
+        /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
+        public static ILazinator RemoveBuffer(this ILazinator lazinator)
+        {
+            var existingBuffer = lazinator.LazinatorMemoryStorage;
+            lazinator.LazinatorMemoryStorage = null;
+            existingBuffer.Dispose();
+            return lazinator;
+        }
+
+        /// <summary>
+        /// Removes a buffer from this Lazinator node and all its deserialized descendants
+        /// </summary>
+        /// <param name="lazinator">The Lazinator node</param>
+        /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
+        public static ILazinator RemoveBufferOnHierarchy(this ILazinator lazinator)
+        {
+            return lazinator.ForEachLazinator(l => RemoveBuffer(l), true);
+        }
+
+        /// <summary>
         /// Get a MemoryStream from ReadOnlyMemory
         /// </summary>
         /// <param name="memory">The source memory</param>

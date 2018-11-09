@@ -1090,6 +1090,22 @@ namespace Lazinator.CodeDescription
                     _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType))
+            {
+                if (property.IsMemoryOrSpan)
+                {
+                }
+                else
+                {
+                    string propertyName = property.PropertyName;
+                    sb.Append($@"if ({property.GetNonNullCheck(true)})
+                        {{
+                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.RemoveBufferOnHierarchy());
+                        }}
+");
+                }
+            }
+
             sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);
                                     ")}}}");
         }
