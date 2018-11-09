@@ -630,34 +630,11 @@ namespace Lazinator.Core
             return l;
         }
 
-        /// <summary>
-        /// Marks all classes in a hierarchy as clean, so that IsDirty and HasChanged will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
-        /// </summary>
-        /// <param name="hierarchy"></param>
-        public static void MarkHierarchyClean(this ILazinator hierarchy)
-        {
-            hierarchy.EnsureLazinatorMemoryUpToDate(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
-            MarkHierarchyUnchanged(hierarchy);
-        }
-
-        /// <summary>
-        /// Marks all classes in a hierarchy as having not been changed. This has no effect on whether the classes are marked as currently dirty.
-        /// </summary>
-        /// <param name="hierarchy"></param>
-        public static void MarkHierarchyUnchanged(this ILazinator hierarchy)
-        {
-            foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true, false))
-            {
-                node.HasChanged = false;
-                node.DescendantHasChanged = false;
-            }
-        }
-
-        //DEBUG
+        // DEBUG -- old
         ///// <summary>
-        ///// Marks all Lazinator objects in a hierarchy as clean, so that IsDirty and HasChanged will be false for every object in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory.
+        ///// Marks all classes in a hierarchy as clean, so that IsDirty and HasChanged will be false for every class in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory. Structs within classes will be unaffected; to obtain a completely clean hierarchy, use CloneLazinatorTyped instead.
         ///// </summary>
-        ///// <param name="hierarchy">The node containing the top of the hierarchy to mark as clean</param>
+        ///// <param name="hierarchy"></param>
         //public static void MarkHierarchyClean(this ILazinator hierarchy)
         //{
         //    hierarchy.EnsureLazinatorMemoryUpToDate(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
@@ -665,20 +642,43 @@ namespace Lazinator.Core
         //}
 
         ///// <summary>
-        ///// Marks all Lazinator objects in a hierarchy as having not been changed. This has no effect on whether the objects are marked as currently dirty.
+        ///// Marks all classes in a hierarchy as having not been changed. This has no effect on whether the classes are marked as currently dirty.
         ///// </summary>
-        ///// <param name="hierarchy">The node containing the top of the hierarchy to mark as unchanged</param>
+        ///// <param name="hierarchy"></param>
         //public static void MarkHierarchyUnchanged(this ILazinator hierarchy)
         //{
-        //    hierarchy.ForEachLazinator(
-        //        node =>
-        //        {
-        //            node.HasChanged = false;
-        //            node.DescendantHasChanged = false;
-        //            return node;
-        //        },
-        //        true);
+        //    foreach (var node in hierarchy.EnumerateLazinatorNodes(x => x.HasChanged || x.DescendantHasChanged, false, x => x.HasChanged || x.DescendantHasChanged, true, false))
+        //    {
+        //        node.HasChanged = false;
+        //        node.DescendantHasChanged = false;
+        //    }
         //}
+
+        /// <summary>
+        /// Marks all Lazinator objects in a hierarchy as clean, so that IsDirty and HasChanged will be false for every object in the hierarchy. This is useful when changes to a node have been persisted to some external store but the node remains in memory.
+        /// </summary>
+        /// <param name="hierarchy">The node containing the top of the hierarchy to mark as clean</param>
+        public static void MarkHierarchyClean(this ILazinator hierarchy)
+        {
+            hierarchy.EnsureLazinatorMemoryUpToDate(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
+            MarkHierarchyUnchanged(hierarchy);
+        }
+
+        /// <summary>
+        /// Marks all Lazinator objects in a hierarchy as having not been changed. This has no effect on whether the objects are marked as currently dirty.
+        /// </summary>
+        /// <param name="hierarchy">The node containing the top of the hierarchy to mark as unchanged</param>
+        public static void MarkHierarchyUnchanged(this ILazinator hierarchy)
+        {
+            hierarchy.ForEachLazinator(
+                node =>
+                {
+                    node.HasChanged = false;
+                    node.DescendantHasChanged = false;
+                    return node;
+                },
+                true);
+        }
 
         public static bool DescendantDirtinessIsConsistent(this ILazinator startPoint)
         {
