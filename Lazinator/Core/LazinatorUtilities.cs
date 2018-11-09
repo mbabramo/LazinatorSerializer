@@ -687,7 +687,7 @@ namespace Lazinator.Core
             if (startPoint != null && startPoint.IsDirty)
             {
                 ILazinator parent = startPoint.LazinatorParents.LastAdded;
-                int levelsF = 0;
+                int levels = 0;
                 const int maxLevels = 1000;
                 while (parent != null)
                 {
