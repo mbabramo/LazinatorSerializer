@@ -320,6 +320,41 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void RemoveBufferWorks()
+        {
+            Example e = GetTypicalExample();
+            e.EnsureLazinatorMemoryUpToDate();
+            e.LazinatorMemoryStorage.Should().NotBeNull();
+            var x = e.MyChild1.MyExampleGrandchild.MyInt;
+            e.MyChild1.MyExampleGrandchild.MyInt++;
+            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            e.RemoveBufferOnHierarchy();
+            e.LazinatorMemoryStorage.Should().BeNull();
+            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().BeNull();
+            e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
+
+            e.EnsureLazinatorMemoryUpToDate();
+            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
+        }
+
+        [Fact]
+        public void EnsureLazinatorRemovesBufferWithinNonlazinator()
+        {
+            DotNetList_Lazinator l = new DotNetList_Lazinator()
+            {
+                MyListSerialized = new List<ExampleChild>()
+                {
+                    GetExampleChild(0),
+                    GetExampleChild(1),
+                    null
+                }
+            };
+            l.EnsureLazinatorMemoryUpToDate();
+            throw new NotImplementedException();
+        }
+
+        [Fact]
         public void UpdateStoredBufferOnInherited()
         {
             Example e = GetTypicalExample();
