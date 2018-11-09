@@ -670,14 +670,15 @@ namespace Lazinator.Core
         /// <param name="hierarchy">The node containing the top of the hierarchy to mark as unchanged</param>
         public static void MarkHierarchyUnchanged(this ILazinator hierarchy)
         {
-            hierarchy.ForEachLazinator(
-                node =>
-                {
-                    node.HasChanged = false;
-                    node.DescendantHasChanged = false;
-                    return node;
-                },
-                true);
+            if (hierarchy != null)
+                hierarchy.ForEachLazinator(
+                    node =>
+                    {
+                        node.HasChanged = false;
+                        node.DescendantHasChanged = false;
+                        return node;
+                    },
+                    true);
         }
 
         public static bool DescendantDirtinessIsConsistent(this ILazinator startPoint)
@@ -686,7 +687,7 @@ namespace Lazinator.Core
             if (startPoint != null && startPoint.IsDirty)
             {
                 ILazinator parent = startPoint.LazinatorParents.LastAdded;
-                int levels = 0;
+                int levelsF = 0;
                 const int maxLevels = 1000;
                 while (parent != null)
                 {
@@ -814,8 +815,15 @@ namespace Lazinator.Core
             return newBuffer;
         }
 
+        /// <summary>
+        /// Fully deserialize the lazinator at this node and below, and return the Lazinator object (or a copy if it is a struct).
+        /// </summary>
+        /// <param name="lazinator">The Lazinator node to deserialize</param>
+        /// <returns></returns>
         public static ILazinator FullyDeserialize(this ILazinator lazinator)
         {
+            if (lazinator == null)
+                return null;
             lazinator = lazinator.ForEachLazinator(l =>
             {
                 return l;
@@ -830,6 +838,8 @@ namespace Lazinator.Core
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
         public static ILazinator RemoveBufferInHierarchy(this ILazinator lazinator)
         {
+            if (lazinator == null)
+                return null;
             lazinator = lazinator.FullyDeserialize();
             return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l), true);
         }
@@ -841,6 +851,8 @@ namespace Lazinator.Core
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
         private static ILazinator RemoveBuffer_Helper(this ILazinator lazinator)
         {
+            if (lazinator == null)
+                return null;
             var existingBuffer = lazinator.LazinatorMemoryStorage;
             lazinator.LazinatorMemoryStorage = null;
             if (existingBuffer != null)
