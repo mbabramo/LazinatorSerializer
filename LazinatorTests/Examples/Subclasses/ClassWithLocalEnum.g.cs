@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     if (_MyEnumList_Accessed && _MyEnumList != null)
                     {
-                        _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferOnHierarchy());
+                        _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

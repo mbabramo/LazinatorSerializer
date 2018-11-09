@@ -631,15 +631,15 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (_IntList1_Accessed && _IntList1 != null)
                     {
-                        _IntList1 = (List<int>) Clone_List_Gint_g(_IntList1, l => l.RemoveBufferOnHierarchy());
+                        _IntList1 = (List<int>) Clone_List_Gint_g(_IntList1, l => l.RemoveBufferInHierarchy());
                     }
                     if (_IntList2_Accessed && _IntList2 != null)
                     {
-                        _IntList2 = (List<int>) Clone_List_Gint_g(_IntList2, l => l.RemoveBufferOnHierarchy());
+                        _IntList2 = (List<int>) Clone_List_Gint_g(_IntList2, l => l.RemoveBufferInHierarchy());
                     }
                     if (_IntList3_Accessed && _IntList3 != null)
                     {
-                        _IntList3 = (List<int>) Clone_List_Gint_g(_IntList3, l => l.RemoveBufferOnHierarchy());
+                        _IntList3 = (List<int>) Clone_List_Gint_g(_IntList3, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

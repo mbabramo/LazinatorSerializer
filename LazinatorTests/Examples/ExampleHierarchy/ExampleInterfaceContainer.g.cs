@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
                     {
-                        _ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferOnHierarchy());
+                        _ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

@@ -386,7 +386,7 @@ namespace Lazinator.Wrappers
                     {
                         if (_WrappedValue_Accessed && _WrappedValue != null)
                         {
-                            _WrappedValue = (long[]) Clone_long_B_b(_WrappedValue, l => l.RemoveBufferOnHierarchy());
+                            _WrappedValue = (long[]) Clone_long_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
                         }
                     }
                     

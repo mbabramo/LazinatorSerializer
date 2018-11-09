@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
                     {
-                        _MyQueueSerialized = (Queue<ExampleChild>) Clone_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferOnHierarchy());
+                        _MyQueueSerialized = (Queue<ExampleChild>) Clone_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

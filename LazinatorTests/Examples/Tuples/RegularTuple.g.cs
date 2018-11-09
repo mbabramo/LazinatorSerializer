@@ -511,23 +511,23 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (_MyListTuple_Accessed && _MyListTuple != null)
                     {
-                        _MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(_MyListTuple, l => l.RemoveBufferOnHierarchy());
+                        _MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) Clone_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(_MyListTuple, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyTupleSerialized_Accessed && _MyTupleSerialized != null)
                     {
-                        _MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized, l => l.RemoveBufferOnHierarchy());
+                        _MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyTupleSerialized2_Accessed && _MyTupleSerialized2 != null)
                     {
-                        _MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized2, l => l.RemoveBufferOnHierarchy());
+                        _MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized2, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyTupleSerialized3_Accessed && _MyTupleSerialized3 != null)
                     {
-                        _MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized3, l => l.RemoveBufferOnHierarchy());
+                        _MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) Clone_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized3, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null)
                     {
-                        _MyTupleSerialized4 = (Tuple<int, ExampleStruct>) Clone_Tuple_Gint_c_C32ExampleStruct_g(_MyTupleSerialized4, l => l.RemoveBufferOnHierarchy());
+                        _MyTupleSerialized4 = (Tuple<int, ExampleStruct>) Clone_Tuple_Gint_c_C32ExampleStruct_g(_MyTupleSerialized4, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

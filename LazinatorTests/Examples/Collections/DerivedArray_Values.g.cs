@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null)
                     {
-                        _MyArrayInt_DerivedLevel = (int[]) Clone_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferOnHierarchy());
+                        _MyArrayInt_DerivedLevel = (int[]) Clone_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

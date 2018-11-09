@@ -328,7 +328,7 @@ namespace LazinatorTests.Tests
             var x = e.MyChild1.MyExampleGrandchild.MyInt;
             e.MyChild1.MyExampleGrandchild.MyInt++;
             e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
-            e.RemoveBufferOnHierarchy();
+            e.RemoveBufferInHierarchy();
             e.LazinatorMemoryStorage.Should().BeNull();
             e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().BeNull();
             e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);

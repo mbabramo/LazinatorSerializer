@@ -425,15 +425,15 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyDictionary_Accessed && _MyDictionary != null)
                     {
-                        _MyDictionary = (Dictionary<int, ExampleChild>) Clone_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferOnHierarchy());
+                        _MyDictionary = (Dictionary<int, ExampleChild>) Clone_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MySortedDictionary_Accessed && _MySortedDictionary != null)
                     {
-                        _MySortedDictionary = (SortedDictionary<int, ExampleChild>) Clone_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferOnHierarchy());
+                        _MySortedDictionary = (SortedDictionary<int, ExampleChild>) Clone_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MySortedList_Accessed && _MySortedList != null)
                     {
-                        _MySortedList = (SortedList<int, ExampleChild>) Clone_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferOnHierarchy());
+                        _MySortedList = (SortedList<int, ExampleChild>) Clone_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

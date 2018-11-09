@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     }
                     if (_MyListT_Accessed && _MyListT != null)
                     {
-                        _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l.RemoveBufferOnHierarchy());
+                        _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

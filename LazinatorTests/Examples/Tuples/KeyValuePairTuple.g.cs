@@ -339,7 +339,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (_MyKeyValuePairSerialized_Accessed && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(_MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>)))
                     {
-                        _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) Clone_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferOnHierarchy());
+                        _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) Clone_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

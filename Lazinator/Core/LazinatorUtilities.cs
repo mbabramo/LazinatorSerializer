@@ -775,7 +775,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
         {
-            if (byteLength == 0)
+            if (serializedBytes == null || byteLength == 0)
             {
                 return EmptyLazinatorMemory;
             }
@@ -814,17 +814,12 @@ namespace Lazinator.Core
             return newBuffer;
         }
 
-        /// <summary>
-        /// Removes a buffer from this Lazinator node, without affecting its children.
-        /// </summary>
-        /// <param name="lazinator">The Lazinator node</param>
-        /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
-        public static ILazinator RemoveBuffer(this ILazinator lazinator)
+        public static ILazinator FullyDeserialize(this ILazinator lazinator)
         {
-            lazinator = lazinator.ForEachLazinator(l => l, false); // make sure that everything is deserialized
-            var existingBuffer = lazinator.LazinatorMemoryStorage;
-            lazinator.LazinatorMemoryStorage = null;
-            // DEBUG -- can't dispose until we're sure we don't need it anymore existingBuffer.Dispose();
+            lazinator = lazinator.ForEachLazinator(l =>
+            {
+                return l;
+            }, false);
             return lazinator;
         }
 
@@ -833,9 +828,23 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="lazinator">The Lazinator node</param>
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
-        public static ILazinator RemoveBufferOnHierarchy(this ILazinator lazinator)
+        public static ILazinator RemoveBufferInHierarchy(this ILazinator lazinator)
         {
-            return lazinator.ForEachLazinator(l => RemoveBuffer(l), true);
+            lazinator = lazinator.FullyDeserialize();
+            return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l), true);
+        }
+
+        /// <summary>
+        /// Removes a buffer from this Lazinator node, without affecting its children. This should not be done if any other node might still need the buffer.
+        /// </summary>
+        /// <param name="lazinator">The Lazinator node</param>
+        /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
+        private static ILazinator RemoveBuffer_Helper(this ILazinator lazinator)
+        {
+            var existingBuffer = lazinator.LazinatorMemoryStorage;
+            lazinator.LazinatorMemoryStorage = null;
+            existingBuffer.Dispose();
+            return lazinator;
         }
 
         /// <summary>

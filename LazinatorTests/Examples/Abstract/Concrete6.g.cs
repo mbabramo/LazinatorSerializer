@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (_IntList6_Accessed && _IntList6 != null)
                     {
-                        _IntList6 = (List<int>) Clone_List_Gint_g(_IntList6, l => l.RemoveBufferOnHierarchy());
+                        _IntList6 = (List<int>) Clone_List_Gint_g(_IntList6, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

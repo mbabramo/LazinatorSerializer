@@ -339,7 +339,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null)
                     {
-                        _MyHashSetSerialized = (HashSet<ExampleChild>) Clone_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.RemoveBufferOnHierarchy());
+                        _MyHashSetSerialized = (HashSet<ExampleChild>) Clone_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

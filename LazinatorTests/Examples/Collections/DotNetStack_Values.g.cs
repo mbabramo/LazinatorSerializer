@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyStackInt_Accessed && _MyStackInt != null)
                     {
-                        _MyStackInt = (Stack<int>) Clone_Stack_Gint_g(_MyStackInt, l => l.RemoveBufferOnHierarchy());
+                        _MyStackInt = (Stack<int>) Clone_Stack_Gint_g(_MyStackInt, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 

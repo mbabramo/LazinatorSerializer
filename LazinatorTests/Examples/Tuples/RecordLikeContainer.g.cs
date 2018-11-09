@@ -470,19 +470,19 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (_MyMismatchedRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<MismatchedRecordLikeType>.Default.Equals(_MyMismatchedRecordLikeType, default(MismatchedRecordLikeType)))
                     {
-                        _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) Clone_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferOnHierarchy());
+                        _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) Clone_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
                     {
-                        _MyRecordLikeClass = (RecordLikeClass) Clone_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferOnHierarchy());
+                        _MyRecordLikeClass = (RecordLikeClass) Clone_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<RecordLikeType>.Default.Equals(_MyRecordLikeType, default(RecordLikeType)))
                     {
-                        _MyRecordLikeType = (RecordLikeType) Clone_RecordLikeType(_MyRecordLikeType, l => l.RemoveBufferOnHierarchy());
+                        _MyRecordLikeType = (RecordLikeType) Clone_RecordLikeType(_MyRecordLikeType, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyRecordLikeTypeWithLazinator_Accessed && !System.Collections.Generic.EqualityComparer<RecordLikeTypeWithLazinator>.Default.Equals(_MyRecordLikeTypeWithLazinator, default(RecordLikeTypeWithLazinator)))
                     {
-                        _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) Clone_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferOnHierarchy());
+                        _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) Clone_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
