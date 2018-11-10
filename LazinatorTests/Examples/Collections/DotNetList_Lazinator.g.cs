@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Lazinator typedClone = (DotNetList_Lazinator) clone;
-            typedClone.MyListSerialized = Clone_List_GExampleChild_g(MyListSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListSerialized = CloneOrChange_List_GExampleChild_g(MyListSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListSerialized != null) || (_MyListSerialized_Accessed && _MyListSerialized != null))
             {
-                _MyListSerialized = (List<ExampleChild>) Clone_List_GExampleChild_g(_MyListSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyListSerialized_Accessed && _MyListSerialized != null)
                     {
-                        _MyListSerialized = (List<ExampleChild>) Clone_List_GExampleChild_g(_MyListSerialized, l => l.RemoveBufferInHierarchy());
+                        _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -473,7 +473,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<ExampleChild> Clone_List_GExampleChild_g(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible = true)
+        private static List<ExampleChild> CloneOrChange_List_GExampleChild_g(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -485,14 +485,6 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                if (avoidCloningIfPossible)
-                {
-                    if (itemToClone[itemIndex] != null)
-                    {
-                        itemToClone[itemIndex] = (ExampleChild) cloneOrChangeFunc(itemToClone[itemIndex]);
-                    }
-                    continue;
-                }
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(ExampleChild));

@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WDecimalArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = Clone_decimal_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.WrappedValue = CloneOrChange_decimal_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -317,7 +317,7 @@ namespace Lazinator.Wrappers
             {
                 if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
                 {
-                    _WrappedValue = (decimal[]) Clone_decimal_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                    _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                 }
                 return changeFunc(this);
             }
@@ -386,7 +386,7 @@ namespace Lazinator.Wrappers
                     {
                         if (_WrappedValue_Accessed && _WrappedValue != null)
                         {
-                            _WrappedValue = (decimal[]) Clone_decimal_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
+                            _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
                         }
                     }
                     
@@ -477,7 +477,7 @@ namespace Lazinator.Wrappers
                 }
             }
             
-            private static decimal[] Clone_decimal_B_b(decimal[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+            private static decimal[] CloneOrChange_decimal_B_b(decimal[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {

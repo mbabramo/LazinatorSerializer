@@ -67,8 +67,8 @@ namespace LazinatorTests.Examples.Abstract
             Concrete5 typedClone = (Concrete5) clone;
             typedClone.String4 = String4;
             typedClone.String5 = String5;
-            typedClone.IntList4 = Clone_List_Gint_g(IntList4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.IntList5 = Clone_List_Gint_g(IntList5, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.IntList4 = CloneOrChange_List_Gint_g(IntList4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.IntList5 = CloneOrChange_List_Gint_g(IntList5, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         /* Properties */
@@ -199,11 +199,11 @@ namespace LazinatorTests.Examples.Abstract
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             if ((!exploreOnlyDeserializedChildren && IntList4 != null) || (_IntList4_Accessed && _IntList4 != null))
             {
-                _IntList4 = (List<int>) Clone_List_Gint_g(_IntList4, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList4 = (List<int>) CloneOrChange_List_Gint_g(_IntList4, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && IntList5 != null) || (_IntList5_Accessed && _IntList5 != null))
             {
-                _IntList5 = (List<int>) Clone_List_Gint_g(_IntList5, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList5 = (List<int>) CloneOrChange_List_Gint_g(_IntList5, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -279,11 +279,11 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (_IntList4_Accessed && _IntList4 != null)
                     {
-                        _IntList4 = (List<int>) Clone_List_Gint_g(_IntList4, l => l.RemoveBufferInHierarchy());
+                        _IntList4 = (List<int>) CloneOrChange_List_Gint_g(_IntList4, l => l.RemoveBufferInHierarchy());
                     }
                     if (_IntList5_Accessed && _IntList5 != null)
                     {
-                        _IntList5 = (List<int>) Clone_List_Gint_g(_IntList5, l => l.RemoveBufferInHierarchy());
+                        _IntList5 = (List<int>) CloneOrChange_List_Gint_g(_IntList5, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -383,7 +383,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private static List<int> Clone_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

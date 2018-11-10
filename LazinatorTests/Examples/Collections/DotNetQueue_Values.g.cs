@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Values typedClone = (DotNetQueue_Values) clone;
-            typedClone.MyQueueInt = Clone_Queue_Gint_g(MyQueueInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyQueueInt = CloneOrChange_Queue_Gint_g(MyQueueInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -295,7 +295,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyQueueInt != null) || (_MyQueueInt_Accessed && _MyQueueInt != null))
             {
-                _MyQueueInt = (Queue<int>) Clone_Queue_Gint_g(_MyQueueInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyQueueInt = (Queue<int>) CloneOrChange_Queue_Gint_g(_MyQueueInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyQueueInt_Accessed && _MyQueueInt != null)
                     {
-                        _MyQueueInt = (Queue<int>) Clone_Queue_Gint_g(_MyQueueInt, l => l.RemoveBufferInHierarchy());
+                        _MyQueueInt = (Queue<int>) CloneOrChange_Queue_Gint_g(_MyQueueInt, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Queue<int> Clone_Queue_Gint_g(Queue<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Queue<int> CloneOrChange_Queue_Gint_g(Queue<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

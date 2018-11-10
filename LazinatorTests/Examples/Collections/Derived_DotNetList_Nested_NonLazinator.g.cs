@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Collections
             base.AssignCloneProperties(clone, includeChildrenMode);
             Derived_DotNetList_Nested_NonLazinator typedClone = (Derived_DotNetList_Nested_NonLazinator) clone;
             typedClone.MyLevel2Int = MyLevel2Int;
-            typedClone.MyLevel2ListNestedNonLazinatorType = Clone_List_GList_GNonLazinatorClass_g_g(MyLevel2ListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyLevel2ListNestedNonLazinatorType = CloneOrChange_List_GList_GNonLazinatorClass_g_g(MyLevel2ListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         /* Properties */
@@ -149,7 +149,7 @@ namespace LazinatorTests.Examples.Collections
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             if ((!exploreOnlyDeserializedChildren && MyLevel2ListNestedNonLazinatorType != null) || (_MyLevel2ListNestedNonLazinatorType_Accessed && _MyLevel2ListNestedNonLazinatorType != null))
             {
-                _MyLevel2ListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) Clone_List_GList_GNonLazinatorClass_g_g(_MyLevel2ListNestedNonLazinatorType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyLevel2ListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) CloneOrChange_List_GList_GNonLazinatorClass_g_g(_MyLevel2ListNestedNonLazinatorType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyLevel2ListNestedNonLazinatorType_Accessed && _MyLevel2ListNestedNonLazinatorType != null)
                     {
-                        _MyLevel2ListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) Clone_List_GList_GNonLazinatorClass_g_g(_MyLevel2ListNestedNonLazinatorType, l => l.RemoveBufferInHierarchy());
+                        _MyLevel2ListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) CloneOrChange_List_GList_GNonLazinatorClass_g_g(_MyLevel2ListNestedNonLazinatorType, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -315,7 +315,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<List<NonLazinatorClass>> Clone_List_GList_GNonLazinatorClass_g_g(List<List<NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<List<NonLazinatorClass>> CloneOrChange_List_GList_GNonLazinatorClass_g_g(List<List<NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -333,7 +333,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (List<NonLazinatorClass>) Clone_List_GNonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc);
+                    var itemCopied = (List<NonLazinatorClass>) CloneOrChange_List_GNonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc);
                     collection.Add(itemCopied);
                 }
             }
@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<NonLazinatorClass> Clone_List_GNonLazinatorClass_g(List<NonLazinatorClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<NonLazinatorClass> CloneOrChange_List_GNonLazinatorClass_g(List<NonLazinatorClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

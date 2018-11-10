@@ -96,9 +96,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             ArrayMultidimensional_Values typedClone = (ArrayMultidimensional_Values) clone;
-            typedClone.MyArrayInt = Clone_int_B_c_b(MyArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyCrazyJaggedArray = Clone_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyThreeDimArrayInt = Clone_int_B_c_c_b(MyThreeDimArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyArrayInt = CloneOrChange_int_B_c_b(MyArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyCrazyJaggedArray = CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyThreeDimArrayInt = CloneOrChange_int_B_c_c_b(MyThreeDimArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -367,15 +367,15 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyArrayInt != null) || (_MyArrayInt_Accessed && _MyArrayInt != null))
             {
-                _MyArrayInt = (int[,]) Clone_int_B_c_b(_MyArrayInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyArrayInt = (int[,]) CloneOrChange_int_B_c_b(_MyArrayInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyCrazyJaggedArray != null) || (_MyCrazyJaggedArray_Accessed && _MyCrazyJaggedArray != null))
             {
-                _MyCrazyJaggedArray = (int[][,,][,,,]) Clone_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyCrazyJaggedArray = (int[][,,][,,,]) CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyThreeDimArrayInt != null) || (_MyThreeDimArrayInt_Accessed && _MyThreeDimArrayInt != null))
             {
-                _MyThreeDimArrayInt = (int[,,]) Clone_int_B_c_c_b(_MyThreeDimArrayInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyThreeDimArrayInt = (int[,,]) CloneOrChange_int_B_c_c_b(_MyThreeDimArrayInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -443,15 +443,15 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyArrayInt_Accessed && _MyArrayInt != null)
                     {
-                        _MyArrayInt = (int[,]) Clone_int_B_c_b(_MyArrayInt, l => l.RemoveBufferInHierarchy());
+                        _MyArrayInt = (int[,]) CloneOrChange_int_B_c_b(_MyArrayInt, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyCrazyJaggedArray_Accessed && _MyCrazyJaggedArray != null)
                     {
-                        _MyCrazyJaggedArray = (int[][,,][,,,]) Clone_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l.RemoveBufferInHierarchy());
+                        _MyCrazyJaggedArray = (int[][,,][,,,]) CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l.RemoveBufferInHierarchy());
                     }
                     if (_MyThreeDimArrayInt_Accessed && _MyThreeDimArrayInt != null)
                     {
-                        _MyThreeDimArrayInt = (int[,,]) Clone_int_B_c_c_b(_MyThreeDimArrayInt, l => l.RemoveBufferInHierarchy());
+                        _MyThreeDimArrayInt = (int[,,]) CloneOrChange_int_B_c_c_b(_MyThreeDimArrayInt, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -585,7 +585,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,] Clone_int_B_c_b(int[,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static int[,] CloneOrChange_int_B_c_b(int[,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -661,7 +661,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[][,,][,,,] Clone_int_B_b_B_c_c_b_B_c_c_c_b(int[][,,][,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static int[][,,][,,,] CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(int[][,,][,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -679,7 +679,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (int[,,][,,,]) Clone_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], cloneOrChangeFunc);
+                    var itemCopied = (int[,,][,,,]) CloneOrChange_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], cloneOrChangeFunc);
                     collection[itemIndex] = itemCopied;
                 }
             }
@@ -752,7 +752,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,][,,,] Clone_int_B_c_c_b_B_c_c_c_b(int[,,][,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static int[,,][,,,] CloneOrChange_int_B_c_c_b_B_c_c_c_b(int[,,][,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -774,7 +774,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (int[,,,]) Clone_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], cloneOrChangeFunc);
+                    var itemCopied = (int[,,,]) CloneOrChange_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], cloneOrChangeFunc);
                     collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;
                 }
             }
@@ -832,7 +832,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,,] Clone_int_B_c_c_c_b(int[,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static int[,,,] CloneOrChange_int_B_c_c_c_b(int[,,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {
@@ -902,7 +902,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[,,] Clone_int_B_c_c_b(int[,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static int[,,] CloneOrChange_int_B_c_c_b(int[,,] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

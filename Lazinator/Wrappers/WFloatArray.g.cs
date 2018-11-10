@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WFloatArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = Clone_float_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.WrappedValue = CloneOrChange_float_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -317,7 +317,7 @@ namespace Lazinator.Wrappers
             {
                 if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
                 {
-                    _WrappedValue = (float[]) Clone_float_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                    _WrappedValue = (float[]) CloneOrChange_float_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                 }
                 return changeFunc(this);
             }
@@ -386,7 +386,7 @@ namespace Lazinator.Wrappers
                     {
                         if (_WrappedValue_Accessed && _WrappedValue != null)
                         {
-                            _WrappedValue = (float[]) Clone_float_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
+                            _WrappedValue = (float[]) CloneOrChange_float_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
                         }
                     }
                     
@@ -477,7 +477,7 @@ namespace Lazinator.Wrappers
                 }
             }
             
-            private static float[] Clone_float_B_b(float[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+            private static float[] CloneOrChange_float_B_b(float[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {

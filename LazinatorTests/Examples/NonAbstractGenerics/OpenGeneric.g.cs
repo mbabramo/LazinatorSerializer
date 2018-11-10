@@ -100,7 +100,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             clone.FreeInMemoryObjects();
             OpenGeneric<T> typedClone = (OpenGeneric<T>) clone;
-            typedClone.MyListT = Clone_List_GT_g(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListT = CloneOrChange_List_GT_g(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.MyT = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if ((!exploreOnlyDeserializedChildren && MyListT != null) || (_MyListT_Accessed && _MyListT != null))
             {
-                _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     }
                     if (_MyListT_Accessed && _MyListT != null)
                     {
-                        _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l.RemoveBufferInHierarchy());
+                        _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -576,7 +576,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        private static List<T> Clone_List_GT_g(List<T> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<T> CloneOrChange_List_GT_g(List<T> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

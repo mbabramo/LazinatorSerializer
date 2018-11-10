@@ -519,7 +519,7 @@ namespace Lazinator.Collections
             writer.Write(itemToConvert.Span);
         }
         
-        private static Memory<byte> Clone_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             
             int collectionLength = itemToClone.Length;

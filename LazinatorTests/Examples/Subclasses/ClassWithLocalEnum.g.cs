@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples.Subclasses
             clone.FreeInMemoryObjects();
             ClassWithLocalEnum typedClone = (ClassWithLocalEnum) clone;
             typedClone.MyEnum = MyEnum;
-            typedClone.MyEnumList = Clone_List_GEnumWithinClass_g(MyEnumList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyEnumList = CloneOrChange_List_GEnumWithinClass_g(MyEnumList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
         }
         
         public virtual bool HasChanged { get; set; }
@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             if ((!exploreOnlyDeserializedChildren && MyEnumList != null) || (_MyEnumList_Accessed && _MyEnumList != null))
             {
-                _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }
@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     if (_MyEnumList_Accessed && _MyEnumList != null)
                     {
-                        _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy());
+                        _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy());
                     }
                 }
                 
@@ -456,7 +456,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        private static List<EnumWithinClass> Clone_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<EnumWithinClass> CloneOrChange_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
         {
             if (itemToClone == null)
             {

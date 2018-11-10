@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WIntArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = Clone_int_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.WrappedValue = CloneOrChange_int_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
             
             clone.IsDirty = false;}
             
@@ -317,7 +317,7 @@ namespace Lazinator.Wrappers
             {
                 if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
                 {
-                    _WrappedValue = (int[]) Clone_int_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                    _WrappedValue = (int[]) CloneOrChange_int_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                 }
                 return changeFunc(this);
             }
@@ -386,7 +386,7 @@ namespace Lazinator.Wrappers
                     {
                         if (_WrappedValue_Accessed && _WrappedValue != null)
                         {
-                            _WrappedValue = (int[]) Clone_int_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
+                            _WrappedValue = (int[]) CloneOrChange_int_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
                         }
                     }
                     
@@ -477,7 +477,7 @@ namespace Lazinator.Wrappers
                 }
             }
             
-            private static int[] Clone_int_B_b(int[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+            private static int[] CloneOrChange_int_B_b(int[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
             {
                 if (itemToClone == null)
                 {
