@@ -19,5 +19,6 @@
   "IncludeTracingCode": false,
   "HideBackingFields": false,
   "HideMainProperties": true,
-  "HideILazinatorProperties": false
+  "HideILazinatorProperties": false,
+  "StepThroughProperties": false
 }
