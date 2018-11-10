@@ -423,26 +423,28 @@ namespace Lazinator.CodeDescription
             return nullCheck;
         }
 
-        public string GetNonNullCheck(bool includeAccessedCheck)
+        public string GetNonNullCheck(bool includeAccessedCheck, string propertyName = null)
         {
+            if (propertyName == null)
+                propertyName = PropertyName;
             string nonNullCheck;
             if (includeAccessedCheck)
             {
                 if (IsMemoryOrSpan)
-                    nonNullCheck = $"{PropertyName}.Length != 0"; // use as equivalent of null
+                    nonNullCheck = $"{propertyName}.Length != 0"; // use as equivalent of null
                 else if (IsPossiblyStruct)
-                    nonNullCheck = $"_{PropertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                    nonNullCheck = $"_{propertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{propertyName}, default({AppropriatelyQualifiedTypeName}))";
                 else 
-                    nonNullCheck = $"_{PropertyName}_Accessed && _{PropertyName} != null";
+                    nonNullCheck = $"_{propertyName}_Accessed && _{propertyName} != null";
             }
             else
             {
                 if (IsPossiblyStruct)
-                    nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({PropertyName}, default({AppropriatelyQualifiedTypeName}))";
+                    nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
                 else if (IsMemoryOrSpan)
-                    nonNullCheck = $"{PropertyName}.Length != 0"; // use as equivalent of nullelse
+                    nonNullCheck = $"{propertyName}.Length != 0"; // use as equivalent of nullelse
                 else
-                    nonNullCheck = $"{PropertyName} != null";
+                    nonNullCheck = $"{propertyName} != null";
             }
             return nonNullCheck;
         }
@@ -1584,7 +1586,7 @@ namespace Lazinator.CodeDescription
                         {{
                             {IIF(avoidCloningIfPossibleOption, $@"if (avoidCloningIfPossible)
                             {{
-                                if ({innerProperty.GetNullCheck("itemToClone[itemIndex]")})
+                                if ({innerProperty.GetNonNullCheck(false, "itemToClone[itemIndex]")})
                                 {{
                                     itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) cloneOrChangeFunc(itemToClone[itemIndex]);
                                 }}
