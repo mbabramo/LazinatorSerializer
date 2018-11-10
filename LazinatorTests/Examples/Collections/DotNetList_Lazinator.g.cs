@@ -473,7 +473,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<ExampleChild> Clone_List_GExampleChild_g(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<ExampleChild> Clone_List_GExampleChild_g(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible = true)
         {
             if (itemToClone == null)
             {
@@ -485,6 +485,14 @@ namespace LazinatorTests.Examples.Collections
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (itemToClone[itemIndex] != null)
+                    {
+                        itemToClone[itemIndex] = (ExampleChild) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(ExampleChild));
