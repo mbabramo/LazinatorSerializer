@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorCodeGen.Roslyn;
@@ -102,6 +103,7 @@ namespace Lazinator.CodeDescription
 
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, bool suppressDate = false)
         {
+            Debug.WriteLine($"Creating object description for {iLazinatorTypeSymbol}"); // DEBUG
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
