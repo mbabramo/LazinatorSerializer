@@ -127,7 +127,7 @@ namespace LazinatorAnalyzer.Analyzer
                 generator = _LastLazinatorCompilation;
                 generator.Initialize(semanticModel.Compilation, lazinatorPairInformation.LazinatorObject.Name, lazinatorPairInformation.LazinatorObject.GetFullMetadataName());
             }
-            var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator);
+            var d = new ObjectDescription(generator.ImplementingTypeSymbol, generator, originalDocument.FilePath);
             var codeBehind = d.GetCodeBehind();
 
             string fileExtension = config?.GeneratedCodeFileExtension ?? ".laz.cs";

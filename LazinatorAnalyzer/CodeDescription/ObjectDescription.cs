@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using LazinatorAnalyzer.AttributeClones;
+using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 
@@ -15,6 +16,7 @@ namespace Lazinator.CodeDescription
         public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
         public LazinatorCompilation Compilation { get; set; }
+        public LazinatorConfig Config { get; set; }
         public Guid Hash { get; set; }
 
         /* Derivation */
@@ -29,6 +31,7 @@ namespace Lazinator.CodeDescription
         public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed) ? "" : "protected ";
 
         /* Names */
+        public string FilePath { get; set; }
         public string Namespace { get; set; }
         public string NameIncludingGenerics { get; set; }
         public string SimpleName { get; set; }
@@ -82,18 +85,18 @@ namespace Lazinator.CodeDescription
         public bool SuppressDate { get; set; }
         public bool AllowNonlazinatorGenerics => InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
-        public bool IncludeTracingCode => Compilation.Config?.IncludeTracingCode ?? false;
-        public bool StepThroughProperties => Compilation.Config?.StepThroughProperties ?? true;
+        public bool IncludeTracingCode => Config?.IncludeTracingCode ?? false;
+        public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
         /* Strings to hide fields or properties if applicable */
-        internal string HideMainProperty => (Compilation.Config?.HideMainProperties ?? false) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        internal string HideMainProperty => (Config?.HideMainProperties ?? false) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
                     " : "";
-        internal string HideBackingField => (Compilation.Config?.HideBackingFields ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        internal string HideBackingField => (Config?.HideBackingFields ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
                     " : "";
-        internal string HideILazinatorProperty => (Compilation.Config?.HideILazinatorProperties ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        internal string HideILazinatorProperty => (Config?.HideILazinatorProperties ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
                     " : "";
 
         public ObjectDescription()
@@ -101,13 +104,19 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, bool suppressDate = false)
+        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, string filePath, bool suppressDate = false)
         {
+            if (iLazinatorTypeSymbol.ToString().Contains("FormulaDecimal"))
+            {
+                var DEBUG = 0;
+            }
             Debug.WriteLine($"Creating object description for {iLazinatorTypeSymbol}"); // DEBUG
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
+            FilePath = filePath;
             Compilation = compilation;
+            Config = compilation.GetConfigForPath(FilePath);
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
@@ -136,7 +145,7 @@ namespace Lazinator.CodeDescription
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
-                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation);
+                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, baseILazinatorType.Locations.Select(x => x.SourceTree.FilePath).FirstOrDefault());
                     if (BaseLazinatorObject.IsNonLazinatorBaseClass)
                         BaseLazinatorObject = null; // ignore base non-lazinator
                 }

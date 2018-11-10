@@ -11,6 +11,7 @@ using LazinatorAnalyzer.Analyzer;
 using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
 using System.Collections.Concurrent;
+using System.IO;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -21,7 +22,7 @@ namespace LazinatorCodeGen.Roslyn
         static readonly string[] _methodNamesToLookFor = new string[] { "LazinatorObjectVersionUpgrade", "PreSerialization", "PostDeserialization", "OnDirty", "ConvertFromBytesAfterHeader", "WritePropertiesIntoBuffer", "EnumerateLazinatorDescendants" };
 
         public Compilation Compilation;
-        public LazinatorConfig Config { get; private set; }
+        public LazinatorConfig DefaultConfig { get; private set; }
         public INamedTypeSymbol ImplementingTypeSymbol { get; private set; }
         public Accessibility ImplementingTypeAccessibility { get; private set; }
         internal List<TypeDeclarationSyntax> TypeDeclarations { get; private set; }
@@ -38,15 +39,16 @@ namespace LazinatorCodeGen.Roslyn
         internal HashSet<string> NonRecordLikeTypes = new HashSet<string>();
         internal Dictionary<string, Guid> InterfaceTextHash = new Dictionary<string, Guid>();
         internal static ConcurrentDictionary<string, INamedTypeSymbol> NameTypedSymbolFromString = new ConcurrentDictionary<string, INamedTypeSymbol>();
+        internal static ConcurrentDictionary<string, LazinatorConfig> AdditionalConfigFiles = new ConcurrentDictionary<string, LazinatorConfig>();
         static object LockObj = new object();
 
         public LazinatorCompilation(Compilation compilation, Type type, LazinatorConfig config) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, config)
         {
         }
 
-        public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName, LazinatorConfig config)
+        public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName, LazinatorConfig defaultConfig)
         {
-            Config = config;
+            DefaultConfig = defaultConfig;
             Initialize(compilation, implementingTypeName, fullImplementingTypeName);
         }
 
@@ -66,6 +68,40 @@ namespace LazinatorCodeGen.Roslyn
             if (exclusiveInterfaceTypeSymbol == null)
                 throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} should implement exactly one Lazinator interface (plus any Lazinator interfaces implemented by that interface, plus any number of nonexclusive interfaces).");
             Initialize(TypeDeclarations, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
+        }
+
+        /// <summary>
+        /// Gets the Config file for the path by checking the specified path and all higher-level paths, caching if necessary. If none is found, then the default config file is used.
+        /// </summary>
+        /// <param name="pathName"></param>
+        /// <returns></returns>
+        public LazinatorConfig GetConfigForPath(string pathName)
+        {
+            while (pathName != null)
+            {
+                string possibleFilePath = Path.Combine(pathName, "LazinatorConfig.json");
+                if (AdditionalConfigFiles.ContainsKey(possibleFilePath))
+                {
+                    LazinatorConfig configFileIfAny = AdditionalConfigFiles[possibleFilePath];
+                    if (configFileIfAny == null)
+                        continue; // there is no config file in this directory
+                }
+                bool exists = File.Exists(possibleFilePath);
+                if (exists)
+                {
+                    string fileText = File.ReadAllText(possibleFilePath, Encoding.UTF8);
+                    LazinatorConfig configFile = new LazinatorConfig(possibleFilePath, fileText);
+                    AdditionalConfigFiles[possibleFilePath] = configFile;
+                    return configFile;
+                }
+                else
+                {
+                    DirectoryInfo directory = Directory.GetParent(pathName);
+                    pathName = directory?.FullName;
+                }
+            }
+
+            return DefaultConfig;
         }
 
         public void AnalyzeAnotherType(string implementingTypeName, string fullImplementingTypeName)
@@ -458,16 +494,16 @@ namespace LazinatorCodeGen.Roslyn
         private bool IsAllowedAsRecordLikeTypeIfProperlyFormed(INamedTypeSymbol type)
         {
             bool defaultAllowRecordLikeClasses = false, defaultAllowRecordLikeRegularStructs = false, defaultAllowRecordLikeReadOnlyStructs = true;
-            if (Config != null)
+            if (DefaultConfig != null)
             {
-                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
-                if (Config.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
+                string appropriatelyQualifiedName = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
-                if (Config.IgnoreRecordLikeTypes.Contains(appropriatelyQualifiedName))
+                if (DefaultConfig.IgnoreRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return false;
-                defaultAllowRecordLikeClasses = Config.DefaultAllowRecordLikeClasses;
-                defaultAllowRecordLikeRegularStructs = Config.DefaultAllowRecordLikeRegularStructs;
-                defaultAllowRecordLikeReadOnlyStructs = Config.DefaultAllowRecordLikeReadOnlyStructs;
+                defaultAllowRecordLikeClasses = DefaultConfig.DefaultAllowRecordLikeClasses;
+                defaultAllowRecordLikeRegularStructs = DefaultConfig.DefaultAllowRecordLikeRegularStructs;
+                defaultAllowRecordLikeReadOnlyStructs = DefaultConfig.DefaultAllowRecordLikeReadOnlyStructs;
             }
             if (type.TypeKind == TypeKind.Class)
                 return defaultAllowRecordLikeClasses;
@@ -478,10 +514,10 @@ namespace LazinatorCodeGen.Roslyn
 
         private bool IsAllowedAsRecordLikeTypeIfMismatched(INamedTypeSymbol type)
         {
-            if (Config != null)
+            if (DefaultConfig != null)
             {
-                string appropriatelyQualifiedName = Config.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
-                if (Config.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
+                string appropriatelyQualifiedName = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
             }
             return false;
