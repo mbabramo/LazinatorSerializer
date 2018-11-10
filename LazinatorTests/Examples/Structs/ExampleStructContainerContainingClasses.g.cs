@@ -757,7 +757,7 @@ namespace LazinatorTests.Examples
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(itemToClone[itemIndex], default(ExampleStructContainingClasses)))
+                    if (!System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(itemToClone[itemIndex], default(ExampleStructContainingClasses)))
                     {
                         itemToClone[itemIndex] = (ExampleStructContainingClasses) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
@@ -824,7 +824,7 @@ namespace LazinatorTests.Examples
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (System.Collections.Generic.EqualityComparer<WNullableStruct<ExampleStructContainingClasses>>.Default.Equals(itemToClone[itemIndex], default(WNullableStruct<ExampleStructContainingClasses>)))
+                    if (!System.Collections.Generic.EqualityComparer<WNullableStruct<ExampleStructContainingClasses>>.Default.Equals(itemToClone[itemIndex], default(WNullableStruct<ExampleStructContainingClasses>)))
                     {
                         itemToClone[itemIndex] = (WNullableStruct<ExampleStructContainingClasses>) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }

@@ -566,7 +566,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (itemToClone[itemIndex] == null)
+                    if (itemToClone[itemIndex] != null)
                     {
                         itemToClone[itemIndex] = (IExample) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }

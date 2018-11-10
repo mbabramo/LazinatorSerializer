@@ -590,7 +590,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
+                    if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
                     {
                         itemToClone[itemIndex] = (T) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }

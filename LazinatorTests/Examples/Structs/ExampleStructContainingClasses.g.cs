@@ -877,7 +877,7 @@ namespace LazinatorTests.Examples
                 {
                     if (avoidCloningIfPossible)
                     {
-                        if (itemToClone[itemIndex] == null)
+                        if (itemToClone[itemIndex] != null)
                         {
                             itemToClone[itemIndex] = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
                         }

@@ -604,7 +604,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(itemToClone[itemIndex], default(WInt)))
+                    if (!System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(itemToClone[itemIndex], default(WInt)))
                     {
                         itemToClone[itemIndex] = (WInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
@@ -671,7 +671,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(itemToClone[itemIndex], default(WNullableByte)))
+                    if (!System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(itemToClone[itemIndex], default(WNullableByte)))
                     {
                         itemToClone[itemIndex] = (WNullableByte) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
@@ -738,7 +738,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (System.Collections.Generic.EqualityComparer<WNullableInt>.Default.Equals(itemToClone[itemIndex], default(WNullableInt)))
+                    if (!System.Collections.Generic.EqualityComparer<WNullableInt>.Default.Equals(itemToClone[itemIndex], default(WNullableInt)))
                     {
                         itemToClone[itemIndex] = (WNullableInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
