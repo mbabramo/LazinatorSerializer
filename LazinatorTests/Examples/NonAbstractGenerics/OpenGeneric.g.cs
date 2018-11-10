@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if ((!exploreOnlyDeserializedChildren && MyListT != null) || (_MyListT_Accessed && _MyListT != null))
             {
-                _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListT = (List<T>) Clone_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

@@ -295,7 +295,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyQueueInt != null) || (_MyQueueInt_Accessed && _MyQueueInt != null))
             {
-                _MyQueueInt = (Queue<int>) Clone_Queue_Gint_g(_MyQueueInt, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyQueueInt = (Queue<int>) Clone_Queue_Gint_g(_MyQueueInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

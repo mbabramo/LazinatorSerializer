@@ -532,15 +532,15 @@ namespace LazinatorTests.Examples.Abstract
             }
             if ((!exploreOnlyDeserializedChildren && IntList1 != null) || (_IntList1_Accessed && _IntList1 != null))
             {
-                _IntList1 = (List<int>) Clone_List_Gint_g(_IntList1, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList1 = (List<int>) Clone_List_Gint_g(_IntList1, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && IntList2 != null) || (_IntList2_Accessed && _IntList2 != null))
             {
-                _IntList2 = (List<int>) Clone_List_Gint_g(_IntList2, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList2 = (List<int>) Clone_List_Gint_g(_IntList2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && IntList3 != null) || (_IntList3_Accessed && _IntList3 != null))
             {
-                _IntList3 = (List<int>) Clone_List_Gint_g(_IntList3, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList3 = (List<int>) Clone_List_Gint_g(_IntList3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

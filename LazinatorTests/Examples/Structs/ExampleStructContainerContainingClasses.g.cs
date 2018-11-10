@@ -505,11 +505,11 @@ namespace LazinatorTests.Examples
             }
             if ((!exploreOnlyDeserializedChildren && MyListExampleStruct != null) || (_MyListExampleStruct_Accessed && _MyListExampleStruct != null))
             {
-                _MyListExampleStruct = (List<ExampleStructContainingClasses>) Clone_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListExampleStruct = (List<ExampleStructContainingClasses>) Clone_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             if ((!exploreOnlyDeserializedChildren && MyListNullableExampleStruct != null) || (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null))
             {
-                _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) Clone_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) Clone_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

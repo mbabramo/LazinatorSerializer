@@ -352,7 +352,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
             {
-                _ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(_ExampleListByInterface, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _ExampleListByInterface = (List<IExample>) Clone_List_GIExample_g(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

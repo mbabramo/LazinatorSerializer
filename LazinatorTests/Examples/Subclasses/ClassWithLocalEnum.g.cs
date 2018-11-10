@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             if ((!exploreOnlyDeserializedChildren && MyEnumList != null) || (_MyEnumList_Accessed && _MyEnumList != null))
             {
-                _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyEnumList = (List<EnumWithinClass>) Clone_List_GEnumWithinClass_g(_MyEnumList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

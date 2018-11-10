@@ -1069,7 +1069,7 @@ namespace LazinatorTests.Examples
             }
             if ((!exploreOnlyDeserializedChildren && MyNonLazinatorChild != null) || (_MyNonLazinatorChild_Accessed && _MyNonLazinatorChild != null))
             {
-                _MyNonLazinatorChild = NonLazinatorDirectConverter.Clone_NonLazinatorClass(_MyNonLazinatorChild, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyNonLazinatorChild = NonLazinatorDirectConverter.Clone_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
             }
             return changeFunc(this);
         }

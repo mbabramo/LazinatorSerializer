@@ -864,7 +864,7 @@ namespace Lazinator.CodeDescription
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
-                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                         }}
 ");
             }
@@ -873,7 +873,7 @@ namespace Lazinator.CodeDescription
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
-                            _{propertyName} = {property.DirectConverterTypeNamePrefix}Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                            _{propertyName} = {property.DirectConverterTypeNamePrefix}Clone_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
                         }}
 ");
             }
