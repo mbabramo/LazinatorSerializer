@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetHashSet_Lazinator typedClone = (DotNetHashSet_Lazinator) clone;
-            typedClone.MyHashSetSerialized = CloneOrChange_HashSet_GExampleChild_g(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyHashSetSerialized = CloneOrChange_HashSet_GExampleChild_g(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -277,7 +277,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyHashSetSerialized != null) || (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null))
             {
-                _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -339,7 +339,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null)
                     {
-                        _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.RemoveBufferInHierarchy());
+                        _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static HashSet<ExampleChild> CloneOrChange_HashSet_GExampleChild_g(HashSet<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static HashSet<ExampleChild> CloneOrChange_HashSet_GExampleChild_g(HashSet<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

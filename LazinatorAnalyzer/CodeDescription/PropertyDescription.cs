@@ -55,6 +55,10 @@ namespace Lazinator.CodeDescription
                                           (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
                                           (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
                                           (IsMemoryOrSpan);
+        internal bool IsSimpleListOrArray => PropertyType == LazinatorPropertyType.SupportedCollection &&
+                                             (SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList ||
+                                              SupportedCollectionType == LazinatorSupportedCollectionType.List || 
+                                              (SupportedCollectionType == LazinatorSupportedCollectionType.Array && ArrayRank == 1));
         internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection  &&
                                         (SupportedCollectionType == LazinatorSupportedCollectionType.Memory ||
                                         SupportedCollectionType ==

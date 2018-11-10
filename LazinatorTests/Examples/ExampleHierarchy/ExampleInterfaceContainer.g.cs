@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 typedClone.ExampleByInterface = (ExampleByInterface == null) ? default(IExample) : (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -352,7 +352,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
             {
-                _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
                     {
-                        _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy());
+                        _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        private static List<IExample> CloneOrChange_List_GIExample_g(List<IExample> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<IExample> CloneOrChange_List_GIExample_g(List<IExample> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

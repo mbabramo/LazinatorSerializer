@@ -106,9 +106,9 @@ namespace LazinatorTests.Examples.Abstract
             {
                 typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.IntList1 = CloneOrChange_List_Gint_g(IntList1, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.IntList2 = CloneOrChange_List_Gint_g(IntList2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.IntList3 = CloneOrChange_List_Gint_g(IntList3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.IntList1 = CloneOrChange_List_Gint_g(IntList1, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.IntList2 = CloneOrChange_List_Gint_g(IntList2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.IntList3 = CloneOrChange_List_Gint_g(IntList3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public override bool HasChanged { get; set; }
@@ -532,15 +532,15 @@ namespace LazinatorTests.Examples.Abstract
             }
             if ((!exploreOnlyDeserializedChildren && IntList1 != null) || (_IntList1_Accessed && _IntList1 != null))
             {
-                _IntList1 = (List<int>) CloneOrChange_List_Gint_g(_IntList1, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList1 = (List<int>) CloneOrChange_List_Gint_g(_IntList1, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && IntList2 != null) || (_IntList2_Accessed && _IntList2 != null))
             {
-                _IntList2 = (List<int>) CloneOrChange_List_Gint_g(_IntList2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList2 = (List<int>) CloneOrChange_List_Gint_g(_IntList2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && IntList3 != null) || (_IntList3_Accessed && _IntList3 != null))
             {
-                _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -631,15 +631,15 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (_IntList1_Accessed && _IntList1 != null)
                     {
-                        _IntList1 = (List<int>) CloneOrChange_List_Gint_g(_IntList1, l => l.RemoveBufferInHierarchy());
+                        _IntList1 = (List<int>) CloneOrChange_List_Gint_g(_IntList1, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_IntList2_Accessed && _IntList2 != null)
                     {
-                        _IntList2 = (List<int>) CloneOrChange_List_Gint_g(_IntList2, l => l.RemoveBufferInHierarchy());
+                        _IntList2 = (List<int>) CloneOrChange_List_Gint_g(_IntList2, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_IntList3_Accessed && _IntList3 != null)
                     {
-                        _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l.RemoveBufferInHierarchy());
+                        _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -797,7 +797,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WDoubleArray clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.WrappedValue = CloneOrChange_double_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.WrappedValue = CloneOrChange_double_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             clone.IsDirty = false;}
             
@@ -317,7 +317,7 @@ namespace Lazinator.Wrappers
             {
                 if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
                 {
-                    _WrappedValue = (double[]) CloneOrChange_double_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                    _WrappedValue = (double[]) CloneOrChange_double_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
                 }
                 return changeFunc(this);
             }
@@ -386,7 +386,7 @@ namespace Lazinator.Wrappers
                     {
                         if (_WrappedValue_Accessed && _WrappedValue != null)
                         {
-                            _WrappedValue = (double[]) CloneOrChange_double_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy());
+                            _WrappedValue = (double[]) CloneOrChange_double_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
                         }
                     }
                     
@@ -477,7 +477,7 @@ namespace Lazinator.Wrappers
                 }
             }
             
-            private static double[] CloneOrChange_double_B_b(double[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+            private static double[] CloneOrChange_double_B_b(double[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
                 if (itemToClone == null)
                 {

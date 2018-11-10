@@ -97,9 +97,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Dictionary_Values_Lazinator typedClone = (Dictionary_Values_Lazinator) clone;
-            typedClone.MyDictionary = CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MySortedDictionary = CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MySortedList = CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyDictionary = CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedDictionary = CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedList = CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -349,15 +349,15 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyDictionary != null) || (_MyDictionary_Accessed && _MyDictionary != null))
             {
-                _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedDictionary != null) || (_MySortedDictionary_Accessed && _MySortedDictionary != null))
             {
-                _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedList != null) || (_MySortedList_Accessed && _MySortedList != null))
             {
-                _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -425,15 +425,15 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyDictionary_Accessed && _MyDictionary != null)
                     {
-                        _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferInHierarchy());
+                        _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MySortedDictionary_Accessed && _MySortedDictionary != null)
                     {
-                        _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferInHierarchy());
+                        _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MySortedList_Accessed && _MySortedList != null)
                     {
-                        _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferInHierarchy());
+                        _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -565,7 +565,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Dictionary<int, ExampleChild> CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Dictionary<int, ExampleChild> CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -576,7 +576,7 @@ namespace LazinatorTests.Examples.Collections
             Dictionary<int, ExampleChild> collection = new Dictionary<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(item.Key, item.Value);
             }
             return collection;
@@ -626,7 +626,7 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
-        private static KeyValuePair<int, ExampleChild> CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static KeyValuePair<int, ExampleChild> CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) cloneOrChangeFunc((itemToConvert.Value)));
         }
@@ -670,7 +670,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedDictionary<int, ExampleChild> CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static SortedDictionary<int, ExampleChild> CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -681,7 +681,7 @@ namespace LazinatorTests.Examples.Collections
             SortedDictionary<int, ExampleChild> collection = new SortedDictionary<int, ExampleChild>();
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(item.Key, item.Value);
             }
             return collection;
@@ -726,7 +726,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedList<int, ExampleChild> CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static SortedList<int, ExampleChild> CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -737,7 +737,7 @@ namespace LazinatorTests.Examples.Collections
             SortedList<int, ExampleChild> collection = new SortedList<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(item.Key, item.Value);
             }
             return collection;

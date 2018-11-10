@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             KeyValuePairTuple typedClone = (KeyValuePairTuple) clone;
-            typedClone.MyKeyValuePairSerialized = CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyKeyValuePairSerialized = CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -277,7 +277,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>))) || (_MyKeyValuePairSerialized_Accessed && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(_MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>))))
             {
-                _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -339,7 +339,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (_MyKeyValuePairSerialized_Accessed && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(_MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>)))
                     {
-                        _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy());
+                        _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static KeyValuePair<uint, ExampleChild> CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<uint, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static KeyValuePair<uint, ExampleChild> CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<uint, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new KeyValuePair<uint, ExampleChild>((uint) (itemToConvert.Key),(ExampleChild) cloneOrChangeFunc((itemToConvert.Value)));
         }

@@ -97,11 +97,11 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             RegularTuple typedClone = (RegularTuple) clone;
-            typedClone.MyListTuple = CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyTupleSerialized = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyTupleSerialized2 = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyTupleSerialized3 = CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyTupleSerialized4 = CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(MyTupleSerialized4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListTuple = CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyTupleSerialized = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyTupleSerialized2 = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyTupleSerialized3 = CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyTupleSerialized4 = CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(MyTupleSerialized4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -421,23 +421,23 @@ namespace LazinatorTests.Examples.Tuples
         {
             if ((!exploreOnlyDeserializedChildren && MyListTuple != null) || (_MyListTuple_Accessed && _MyListTuple != null))
             {
-                _MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(_MyListTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(_MyListTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyTupleSerialized != null) || (_MyTupleSerialized_Accessed && _MyTupleSerialized != null))
             {
-                _MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyTupleSerialized2 != null) || (_MyTupleSerialized2_Accessed && _MyTupleSerialized2 != null))
             {
-                _MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyTupleSerialized3 != null) || (_MyTupleSerialized3_Accessed && _MyTupleSerialized3 != null))
             {
-                _MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyTupleSerialized4 != null) || (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null))
             {
-                _MyTupleSerialized4 = (Tuple<int, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyTupleSerialized4 = (Tuple<int, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -511,23 +511,23 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (_MyListTuple_Accessed && _MyListTuple != null)
                     {
-                        _MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(_MyListTuple, l => l.RemoveBufferInHierarchy());
+                        _MyListTuple = (List<Tuple<uint, ExampleChild, NonLazinatorClass>>) CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(_MyListTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyTupleSerialized_Accessed && _MyTupleSerialized != null)
                     {
-                        _MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized, l => l.RemoveBufferInHierarchy());
+                        _MyTupleSerialized = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyTupleSerialized2_Accessed && _MyTupleSerialized2 != null)
                     {
-                        _MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized2, l => l.RemoveBufferInHierarchy());
+                        _MyTupleSerialized2 = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized2, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyTupleSerialized3_Accessed && _MyTupleSerialized3 != null)
                     {
-                        _MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized3, l => l.RemoveBufferInHierarchy());
+                        _MyTupleSerialized3 = (Tuple<uint?, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(_MyTupleSerialized3, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null)
                     {
-                        _MyTupleSerialized4 = (Tuple<int, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l.RemoveBufferInHierarchy());
+                        _MyTupleSerialized4 = (Tuple<int, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -710,7 +710,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static List<Tuple<uint, ExampleChild, NonLazinatorClass>> CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(List<Tuple<uint, ExampleChild, NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<Tuple<uint, ExampleChild, NonLazinatorClass>> CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(List<Tuple<uint, ExampleChild, NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -728,7 +728,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 else
                 {
-                    var itemCopied = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc);
+                    var itemCopied = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);
                 }
             }
@@ -802,7 +802,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static Tuple<uint, ExampleChild, NonLazinatorClass> CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Tuple<uint, ExampleChild, NonLazinatorClass> CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint, ExampleChild, NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToConvert == null)
             {
@@ -878,7 +878,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        private static Tuple<uint?, ExampleChild, NonLazinatorClass> CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Tuple<uint?, ExampleChild, NonLazinatorClass> CloneOrChange_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(Tuple<uint?, ExampleChild, NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToConvert == null)
             {
@@ -929,7 +929,7 @@ namespace LazinatorTests.Examples.Tuples
             WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
         }
         
-        private static Tuple<int, ExampleStructContainingClasses> CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(Tuple<int, ExampleStructContainingClasses> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Tuple<int, ExampleStructContainingClasses> CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(Tuple<int, ExampleStructContainingClasses> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToConvert == null)
             {

@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples.Collections
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             DerivedArray_Values typedClone = (DerivedArray_Values) clone;
-            typedClone.MyArrayInt_DerivedLevel = CloneOrChange_int_B_b(MyArrayInt_DerivedLevel, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyArrayInt_DerivedLevel = CloneOrChange_int_B_b(MyArrayInt_DerivedLevel, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         /* Properties */
@@ -150,7 +150,7 @@ namespace LazinatorTests.Examples.Collections
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             if ((!exploreOnlyDeserializedChildren && MyArrayInt_DerivedLevel != null) || (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null))
             {
-                _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null)
                     {
-                        _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferInHierarchy());
+                        _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -294,7 +294,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static int[] CloneOrChange_int_B_b(int[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static int[] CloneOrChange_int_B_b(int[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

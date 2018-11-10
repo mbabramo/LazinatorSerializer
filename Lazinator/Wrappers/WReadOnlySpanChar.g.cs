@@ -96,7 +96,7 @@ namespace Lazinator.Wrappers
         void AssignCloneProperties(ref WReadOnlySpanChar clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
-            clone.Value = CloneOrChange_ReadOnlySpan_Gchar_g(Value, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            clone.Value = CloneOrChange_ReadOnlySpan_Gchar_g(Value, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             clone.IsDirty = false;}
             
@@ -425,7 +425,7 @@ namespace Lazinator.Wrappers
             }
             
             /* Conversion of supported collections and tuples */
-            private static ReadOnlySpan<char> CloneOrChange_ReadOnlySpan_Gchar_g(ReadOnlySpan<char> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+            private static ReadOnlySpan<char> CloneOrChange_ReadOnlySpan_Gchar_g(ReadOnlySpan<char> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
                 var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(char)]);
                 MemoryMarshal.Cast<char, byte>(itemToClone).CopyTo(clone);

@@ -101,10 +101,10 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             RecordLikeContainer typedClone = (RecordLikeContainer) clone;
-            typedClone.MyMismatchedRecordLikeType = CloneOrChange_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyRecordLikeClass = CloneOrChange_RecordLikeClass(MyRecordLikeClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyRecordLikeType = CloneOrChange_RecordLikeType(MyRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyRecordLikeTypeWithLazinator = CloneOrChange_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyMismatchedRecordLikeType = CloneOrChange_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyRecordLikeClass = CloneOrChange_RecordLikeClass(MyRecordLikeClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyRecordLikeType = CloneOrChange_RecordLikeType(MyRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyRecordLikeTypeWithLazinator = CloneOrChange_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -387,19 +387,19 @@ namespace LazinatorTests.Examples.Tuples
         {
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<MismatchedRecordLikeType>.Default.Equals(MyMismatchedRecordLikeType, default(MismatchedRecordLikeType))) || (_MyMismatchedRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<MismatchedRecordLikeType>.Default.Equals(_MyMismatchedRecordLikeType, default(MismatchedRecordLikeType))))
             {
-                _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyRecordLikeClass != null) || (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null))
             {
-                _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<RecordLikeType>.Default.Equals(MyRecordLikeType, default(RecordLikeType))) || (_MyRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<RecordLikeType>.Default.Equals(_MyRecordLikeType, default(RecordLikeType))))
             {
-                _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<RecordLikeTypeWithLazinator>.Default.Equals(MyRecordLikeTypeWithLazinator, default(RecordLikeTypeWithLazinator))) || (_MyRecordLikeTypeWithLazinator_Accessed && !System.Collections.Generic.EqualityComparer<RecordLikeTypeWithLazinator>.Default.Equals(_MyRecordLikeTypeWithLazinator, default(RecordLikeTypeWithLazinator))))
             {
-                _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -470,19 +470,19 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (_MyMismatchedRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<MismatchedRecordLikeType>.Default.Equals(_MyMismatchedRecordLikeType, default(MismatchedRecordLikeType)))
                     {
-                        _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy());
+                        _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
                     {
-                        _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy());
+                        _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyRecordLikeType_Accessed && !System.Collections.Generic.EqualityComparer<RecordLikeType>.Default.Equals(_MyRecordLikeType, default(RecordLikeType)))
                     {
-                        _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l.RemoveBufferInHierarchy());
+                        _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyRecordLikeTypeWithLazinator_Accessed && !System.Collections.Generic.EqualityComparer<RecordLikeTypeWithLazinator>.Default.Equals(_MyRecordLikeTypeWithLazinator, default(RecordLikeTypeWithLazinator)))
                     {
-                        _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy());
+                        _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -621,7 +621,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
         }
         
-        private static MismatchedRecordLikeType CloneOrChange_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static MismatchedRecordLikeType CloneOrChange_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new MismatchedRecordLikeType((int) (itemToConvert.Age),(string) (itemToConvert.Name));
         }
@@ -670,7 +670,7 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static RecordLikeClass CloneOrChange_RecordLikeClass(RecordLikeClass itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static RecordLikeClass CloneOrChange_RecordLikeClass(RecordLikeClass itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new RecordLikeClass((int) (itemToConvert.Age),(Example) cloneOrChangeFunc((itemToConvert.Example)));
         }
@@ -704,7 +704,7 @@ namespace LazinatorTests.Examples.Tuples
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
         }
         
-        private static RecordLikeType CloneOrChange_RecordLikeType(RecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static RecordLikeType CloneOrChange_RecordLikeType(RecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new RecordLikeType((int) (itemToConvert.Age),(string) (itemToConvert.Name));
         }
@@ -757,7 +757,7 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age),(string) (itemToConvert.Name),(Example) cloneOrChangeFunc((itemToConvert.Example)));
         }

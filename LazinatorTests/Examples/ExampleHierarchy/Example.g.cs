@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyInterfaceImplementer = (MyInterfaceImplementer == null) ? default(IExampleNonexclusiveInterface) : (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.WrappedInt = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
@@ -1069,7 +1069,7 @@ namespace LazinatorTests.Examples
             }
             if ((!exploreOnlyDeserializedChildren && MyNonLazinatorChild != null) || (_MyNonLazinatorChild_Accessed && _MyNonLazinatorChild != null))
             {
-                _MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }

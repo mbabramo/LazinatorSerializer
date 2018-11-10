@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Lazinator typedClone = (DotNetQueue_Lazinator) clone;
-            typedClone.MyQueueSerialized = CloneOrChange_Queue_GExampleChild_g(MyQueueSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyQueueSerialized = CloneOrChange_Queue_GExampleChild_g(MyQueueSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -281,7 +281,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyQueueSerialized != null) || (_MyQueueSerialized_Accessed && _MyQueueSerialized != null))
             {
-                _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
                     {
-                        _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy());
+                        _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -459,7 +459,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Queue<ExampleChild> CloneOrChange_Queue_GExampleChild_g(Queue<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Queue<ExampleChild> CloneOrChange_Queue_GExampleChild_g(Queue<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

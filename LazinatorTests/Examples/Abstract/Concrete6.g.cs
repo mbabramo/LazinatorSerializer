@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             Concrete6 typedClone = (Concrete6) clone;
-            typedClone.IntList6 = CloneOrChange_List_Gint_g(IntList6, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.IntList6 = CloneOrChange_List_Gint_g(IntList6, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         /* Properties */
@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.Abstract
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             if ((!exploreOnlyDeserializedChildren && IntList6 != null) || (_IntList6_Accessed && _IntList6 != null))
             {
-                _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -202,7 +202,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (_IntList6_Accessed && _IntList6 != null)
                     {
-                        _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l.RemoveBufferInHierarchy());
+                        _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

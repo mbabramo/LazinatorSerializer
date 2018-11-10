@@ -100,8 +100,8 @@ namespace Lazinator.Spans
         {
             clone.FreeInMemoryObjects();
             LazinatorByteSpan typedClone = (LazinatorByteSpan) clone;
-            typedClone.ReadOnly = CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnly, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.ReadOrWrite = CloneOrChange_Memory_Gbyte_g(ReadOrWrite, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.ReadOnly = CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnly, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ReadOrWrite = CloneOrChange_Memory_Gbyte_g(ReadOrWrite, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -475,7 +475,7 @@ namespace Lazinator.Spans
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlySpan<byte> CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static ReadOnlySpan<byte> CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
@@ -492,7 +492,7 @@ namespace Lazinator.Spans
             writer.Write(itemToConvert.Span);
         }
         
-        private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             
             int collectionLength = itemToClone.Length;

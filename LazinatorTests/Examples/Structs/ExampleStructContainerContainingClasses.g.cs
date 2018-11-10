@@ -109,8 +109,8 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyExampleStructContainingClasses = (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) ? default(ExampleStructContainingClasses) : (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
-            typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer));
+            typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
         }
         
         public virtual bool HasChanged { get; set; }
@@ -505,11 +505,11 @@ namespace LazinatorTests.Examples
             }
             if ((!exploreOnlyDeserializedChildren && MyListExampleStruct != null) || (_MyListExampleStruct_Accessed && _MyListExampleStruct != null))
             {
-                _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyListNullableExampleStruct != null) || (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null))
             {
-                _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren));
+                _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -594,11 +594,11 @@ namespace LazinatorTests.Examples
                     }
                     if (_MyListExampleStruct_Accessed && _MyListExampleStruct != null)
                     {
-                        _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l.RemoveBufferInHierarchy());
+                        _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null)
                     {
-                        _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l.RemoveBufferInHierarchy());
+                        _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -743,7 +743,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<ExampleStructContainingClasses> CloneOrChange_List_GExampleStructContainingClasses_g(List<ExampleStructContainingClasses> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<ExampleStructContainingClasses> CloneOrChange_List_GExampleStructContainingClasses_g(List<ExampleStructContainingClasses> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -802,7 +802,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<WNullableStruct<ExampleStructContainingClasses>> CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(List<WNullableStruct<ExampleStructContainingClasses>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc)
+        private static List<WNullableStruct<ExampleStructContainingClasses>> CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(List<WNullableStruct<ExampleStructContainingClasses>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
