@@ -751,10 +751,18 @@ namespace LazinatorTests.Examples
             }
             
             int collectionLength = itemToClone.Count;
-            List<ExampleStructContainingClasses> collection = new List<ExampleStructContainingClasses>(collectionLength);
+            List<ExampleStructContainingClasses> collection = avoidCloningIfPossible ? itemToClone : new List<ExampleStructContainingClasses>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(itemToClone[itemIndex], default(ExampleStructContainingClasses)))
+                    {
+                        itemToClone[itemIndex] = (ExampleStructContainingClasses) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 var itemCopied = (ExampleStructContainingClasses) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }
@@ -810,10 +818,18 @@ namespace LazinatorTests.Examples
             }
             
             int collectionLength = itemToClone.Count;
-            List<WNullableStruct<ExampleStructContainingClasses>> collection = new List<WNullableStruct<ExampleStructContainingClasses>>(collectionLength);
+            List<WNullableStruct<ExampleStructContainingClasses>> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableStruct<ExampleStructContainingClasses>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (System.Collections.Generic.EqualityComparer<WNullableStruct<ExampleStructContainingClasses>>.Default.Equals(itemToClone[itemIndex], default(WNullableStruct<ExampleStructContainingClasses>)))
+                    {
+                        itemToClone[itemIndex] = (WNullableStruct<ExampleStructContainingClasses>) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 var itemCopied = (WNullableStruct<ExampleStructContainingClasses>) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }

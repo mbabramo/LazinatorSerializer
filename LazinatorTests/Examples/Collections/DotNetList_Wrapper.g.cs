@@ -598,10 +598,18 @@ namespace LazinatorTests.Examples.Collections
             }
             
             int collectionLength = itemToClone.Count;
-            List<WInt> collection = new List<WInt>(collectionLength);
+            List<WInt> collection = avoidCloningIfPossible ? itemToClone : new List<WInt>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(itemToClone[itemIndex], default(WInt)))
+                    {
+                        itemToClone[itemIndex] = (WInt) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 var itemCopied = (WInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }
@@ -657,10 +665,18 @@ namespace LazinatorTests.Examples.Collections
             }
             
             int collectionLength = itemToClone.Count;
-            List<WNullableByte> collection = new List<WNullableByte>(collectionLength);
+            List<WNullableByte> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableByte>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(itemToClone[itemIndex], default(WNullableByte)))
+                    {
+                        itemToClone[itemIndex] = (WNullableByte) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 var itemCopied = (WNullableByte) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }
@@ -716,10 +732,18 @@ namespace LazinatorTests.Examples.Collections
             }
             
             int collectionLength = itemToClone.Count;
-            List<WNullableInt> collection = new List<WNullableInt>(collectionLength);
+            List<WNullableInt> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableInt>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (System.Collections.Generic.EqualityComparer<WNullableInt>.Default.Equals(itemToClone[itemIndex], default(WNullableInt)))
+                    {
+                        itemToClone[itemIndex] = (WNullableInt) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 var itemCopied = (WNullableInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                 collection.Add(itemCopied);
             }

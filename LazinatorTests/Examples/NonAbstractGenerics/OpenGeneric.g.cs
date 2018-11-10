@@ -584,10 +584,18 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             
             int collectionLength = itemToClone.Count;
-            List<T> collection = new List<T>(collectionLength);
+            List<T> collection = avoidCloningIfPossible ? itemToClone : new List<T>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
+                    {
+                        itemToClone[itemIndex] = (T) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
                 {
                     collection.Add(default(T));

@@ -481,10 +481,18 @@ namespace LazinatorTests.Examples.Collections
             }
             
             int collectionLength = itemToClone.Count;
-            List<ExampleChild> collection = new List<ExampleChild>(collectionLength);
+            List<ExampleChild> collection = avoidCloningIfPossible ? itemToClone : new List<ExampleChild>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
+                if (avoidCloningIfPossible)
+                {
+                    if (itemToClone[itemIndex] == null)
+                    {
+                        itemToClone[itemIndex] = (ExampleChild) cloneOrChangeFunc(itemToClone[itemIndex]);
+                    }
+                    continue;
+                }
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(ExampleChild));
