@@ -358,9 +358,6 @@ namespace Lazinator.CodeDescription
                         public abstract void EnsureLazinatorMemoryUpToDate();
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
-                        public abstract uint GetBinaryHashCode32();
-                        public abstract ulong GetBinaryHashCode64();
-                        public abstract Guid GetBinaryHashCode128();
 
                         /* Property definitions */
         
@@ -380,27 +377,15 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
+                    
 
-                    string hashCore32 = ObjectType == LazinatorObjectType.Struct
-                        ?
-                        $@"if (LazinatorMemoryStorage == null)
-                        {{
-                            var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                            return FarmhashByteSpans.Hash32(result.Span);
-                        }}
-                        else
-                        {{
-                            EnsureLazinatorMemoryUpToDate();
-                            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
-                        }}"
-                            :
-                        $@"EnsureLazinatorMemoryUpToDate();
-                            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);";
-
-                    string hash32 = NonbinaryHash ? "return (uint) GetHashCode();" :
-                            hashCore32;
-                    string hash64 = hashCore32.Replace("32", "64");
-                    string hash128 = hashCore32.Replace("32", "128");
+                    string hash32 = NonbinaryHash ? $@"
+                            public uint GetBinaryHashCode32()
+                            {{
+                                return (uint) GetHashCode();
+                            }}
+                            " :
+                            "";
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
@@ -540,21 +525,7 @@ namespace Lazinator.CodeDescription
                             EnsureLazinatorMemoryUpToDate();
                             return LazinatorObjectBytes.Length;
                         }}
-
-                        public {DerivationKeyword}uint GetBinaryHashCode32()
-                        {{
-                            {hash32}
-                        }}
-
-                        public {DerivationKeyword}ulong GetBinaryHashCode64()
-                        {{
-                            {hash64}
-                        }}
-
-                        public {DerivationKeyword}Guid GetBinaryHashCode128()
-                        {{
-                            {hash128}
-                        }}
+                        {hash32}
 
                         /* Property definitions */
         
