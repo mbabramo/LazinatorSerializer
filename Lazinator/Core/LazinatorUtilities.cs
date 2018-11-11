@@ -8,6 +8,7 @@ using System.Text;
 using Lazinator.Buffers;
 using Lazinator.Collections;
 using Lazinator.Exceptions;
+using Lazinator.Support;
 
 namespace Lazinator.Core
 {
@@ -901,6 +902,53 @@ namespace Lazinator.Core
         }
 
         #endregion
+
+        #region Hashing
+
+        public static uint GetBinaryHashCode32(this ILazinator lazinator)
+        {
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty)
+                return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
+            else
+            {
+                LazinatorMemory serialized =
+                    lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                var result = FarmhashByteSpans.Hash32(serialized.ReadOnlySpan);
+                serialized.Dispose();
+                return result;
+            }
+        }
+
+        public static ulong GetBinaryHashCode64(this ILazinator lazinator)
+        {
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty)
+                return FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
+            else
+            {
+                LazinatorMemory serialized =
+                    lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                var result = FarmhashByteSpans.Hash64(serialized.ReadOnlySpan);
+                serialized.Dispose();
+                return result;
+            }
+        }
+
+        public static Guid GetBinaryHashCode128(this ILazinator lazinator)
+        {
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty)
+                return FarmhashByteSpans.Hash128(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
+            else
+            {
+                LazinatorMemory serialized =
+                    lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                var result = FarmhashByteSpans.Hash128(serialized.ReadOnlySpan);
+                serialized.Dispose();
+                return result;
+            }
+        }
+
+        #endregion
+
 
     }
 }
