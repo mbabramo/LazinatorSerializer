@@ -106,10 +106,6 @@ namespace Lazinator.CodeDescription
 
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, string filePath, bool suppressDate = false)
         {
-            if (iLazinatorTypeSymbol.ToString().Contains("FormulaDecimal"))
-            {
-                var DEBUG = 0;
-            }
             Debug.WriteLine($"Creating object description for {iLazinatorTypeSymbol}"); // DEBUG
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
@@ -145,7 +141,7 @@ namespace Lazinator.CodeDescription
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
-                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, baseILazinatorType.Locations.Select(x => x.SourceTree.FilePath).FirstOrDefault());
+                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, baseILazinatorType.Locations.Select(x => x?.SourceTree?.FilePath).FirstOrDefault());
                     if (BaseLazinatorObject.IsNonLazinatorBaseClass)
                         BaseLazinatorObject = null; // ignore base non-lazinator
                 }
@@ -164,6 +160,10 @@ namespace Lazinator.CodeDescription
             ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
+            if (iLazinatorTypeSymbol.ToString().Contains("ValueTracker<T>") && iLazinatorTypeSymbol.IsGenericType)
+            {
+                var DEBUG = 0;
+            }
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces

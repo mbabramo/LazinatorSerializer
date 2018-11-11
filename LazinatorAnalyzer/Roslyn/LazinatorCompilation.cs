@@ -73,13 +73,17 @@ namespace LazinatorCodeGen.Roslyn
         /// <summary>
         /// Gets the Config file for the path by checking the specified path and all higher-level paths, caching if necessary. If none is found, then the default config file is used.
         /// </summary>
-        /// <param name="pathName"></param>
+        /// <param name="pathNameOfCodeFile"></param>
         /// <returns></returns>
-        public LazinatorConfig GetConfigForPath(string pathName)
+        public LazinatorConfig GetConfigForPath(string pathNameOfCodeFile)
         {
-            while (pathName != null)
+            if (pathNameOfCodeFile == null)
+                return DefaultConfig;
+            DirectoryInfo directory = Directory.GetParent(pathNameOfCodeFile);
+            pathNameOfCodeFile = directory?.FullName;
+            while (pathNameOfCodeFile != null)
             {
-                string possibleFilePath = Path.Combine(pathName, "LazinatorConfig.json");
+                string possibleFilePath = Path.Combine(pathNameOfCodeFile, "LazinatorConfig.json");
                 if (AdditionalConfigFiles.ContainsKey(possibleFilePath))
                 {
                     LazinatorConfig configFileIfAny = AdditionalConfigFiles[possibleFilePath];
@@ -96,8 +100,8 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 else
                 {
-                    DirectoryInfo directory = Directory.GetParent(pathName);
-                    pathName = directory?.FullName;
+                    directory = Directory.GetParent(pathNameOfCodeFile);
+                    pathNameOfCodeFile = directory?.FullName;
                 }
             }
 
@@ -150,6 +154,15 @@ namespace LazinatorCodeGen.Roslyn
                     }
                 }
             }
+
+            if (TypeSymbolToString(@interface).Contains("IValueTracker<T>"))
+            {
+                var DEBUG = 0;
+                if (propertiesInInterfaceWithLevel.Any(x => x.ToString().Contains("Operand")))
+                {
+                    var DEBUG2 = 0;
+                }
+            }
             PropertiesForType[TypeSymbolToString(@interface)] = propertiesInInterfaceWithLevel;
             foreach (var propertyWithLevel in propertiesInInterfaceWithLevel)
             {
@@ -191,6 +204,10 @@ namespace LazinatorCodeGen.Roslyn
                     .ToDictionary(x => x.Key, x => x.Value);
             }
 
+            if (namedTypeSymbol.ToString().Contains("ValueTracker<T>") && namedTypeSymbol.IsGenericType)
+            {
+                var DEBUG = 0;
+            }
             namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
                 yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
@@ -480,6 +497,15 @@ namespace LazinatorCodeGen.Roslyn
                         if (parametersAndProperties.Any(x => !x.parameterSymbol.Type.Equals(x.property.Type)))
                             continue;
                         // we have found the constructor for our record like type
+
+                        if (typeName.Contains("IValueTracker<T>"))
+                        {
+                            var DEBUG = 0;
+                            if (properties.Any(x => x.ToString().Contains("Operand")))
+                            {
+                                var DEBUG2 = 0;
+                            }
+                        }
                         PropertiesForType[typeName] = properties.ToList();
                         foreach (var property in properties)
                             RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);

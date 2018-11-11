@@ -366,6 +366,10 @@ namespace LazinatorCodeGen.Roslyn
                     .Where(x => x.HasAttributeOfType<CloneLazinatorAttribute>())
                     .OrderByDescending(x => x.GetMembers().Length)
                     .ToList();
+            if (namedTypeSymbol.ToString().Contains("IValueTracker<T>"))
+            {
+                var DEBUG = 0;
+            }
             return interfaces;
         }
 

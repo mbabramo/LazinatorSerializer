@@ -25,6 +25,10 @@ namespace LazinatorAnalyzer.Roslyn
         {
             this.Property = property;
             this.LevelInfo = levelInfo;
+            if (property.ToString().Contains("Operand1"))
+            {
+                var DEBUG = 0;
+            }
         }
 
         public void SpecifyDerivationKeyword(string derivationKeyword)

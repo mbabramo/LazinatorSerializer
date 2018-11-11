@@ -74,7 +74,7 @@ namespace Lazinator.CodeDescription
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
 
         /* Names */
-        private bool UseFullyQualifiedNames => (ContainingObjectDescription.Compilation.DefaultConfig?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
+        private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
         private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -151,7 +151,7 @@ namespace Lazinator.CodeDescription
         private bool AllowLazinatorInNonLazinator { get; set; }
 
         /* Output customization */
-        public LazinatorConfig Config => ContainingObjectDescription.Compilation?.DefaultConfig;
+        public LazinatorConfig Config => ContainingObjectDescription.Config;
         private bool Tracing => Config?.IncludeTracingCode ?? false;
         private string StepThroughPropertiesString => IIF(ContainingObjectDescription.StepThroughProperties, $@"
                         [DebuggerStepThrough]");
@@ -397,8 +397,8 @@ namespace Lazinator.CodeDescription
         {
             Nullable = t.TypeKind == TypeKind.Class;
             PropertyType = LazinatorPropertyType.NonLazinator;
-            InterchangeTypeName = ContainingObjectDescription.Compilation.DefaultConfig?.GetInterchangeConverterTypeName(t);
-            DirectConverterTypeName = ContainingObjectDescription.Compilation.DefaultConfig?.GetDirectConverterTypeName(t);
+            InterchangeTypeName = Config?.GetInterchangeConverterTypeName(t);
+            DirectConverterTypeName = Config?.GetDirectConverterTypeName(t);
             string fullyQualifiedTypeName = t.GetFullyQualifiedNameWithoutGlobal();
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
                 throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} has both an interchange converter and a direct converter type listed. Only one should be used.");
@@ -601,7 +601,7 @@ namespace Lazinator.CodeDescription
         {
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(t)) || (ContainingObjectDescription.Compilation.DefaultConfig?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal().ToUpper() : t.GetMinimallyQualifiedName())) ?? false))
+            if (!recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(t)) || (Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal().ToUpper() : t.GetMinimallyQualifiedName())) ?? false))
             {
                 return false;
             }
