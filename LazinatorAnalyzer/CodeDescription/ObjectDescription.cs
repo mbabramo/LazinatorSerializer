@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
@@ -330,6 +331,10 @@ namespace Lazinator.CodeDescription
 			                set;
                         }}
 
+                        public abstract bool NonBinaryHash32
+                        {{
+                            get;
+                        }}
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
@@ -377,15 +382,6 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
-                    
-
-                    string hash32 = NonbinaryHash ? $@"
-                            public uint GetBinaryHashCode32()
-                            {{
-                                return (uint) GetHashCode();
-                            }}
-                            " :
-                            "";
 
                     boilerplate = $@"        /* Serialization, deserialization, and object relationships */
 
@@ -525,7 +521,8 @@ namespace Lazinator.CodeDescription
                             EnsureLazinatorMemoryUpToDate();
                             return LazinatorObjectBytes.Length;
                         }}
-                        {hash32}
+
+                        public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};
 
                         /* Property definitions */
         
