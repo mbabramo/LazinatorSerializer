@@ -907,6 +907,8 @@ namespace Lazinator.Core
 
         public static uint GetBinaryHashCode32(this ILazinator lazinator)
         {
+            if (lazinator.NonBinaryHash32)
+                return (uint) lazinator.GetHashCode();
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
             else

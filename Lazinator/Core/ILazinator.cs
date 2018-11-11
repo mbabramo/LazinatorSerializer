@@ -120,7 +120,7 @@ namespace Lazinator.Core
         /// </summary>
         bool IsStruct { get; }
         /// <summary>
-        /// Returns true if the Lazinator type hash a NonBinaryHash attribute, in which case calls to GetBinaryHashCode32 use the regular GetHashCode method.
+        /// Returns true if the Lazinator type hash a NonBinaryHash attribute, in which case calls to GetBinaryHashCode32 use the regular GetHashCode method (cast to uint).
         /// </summary>
         bool NonBinaryHash32 { get; }
         /// <summary>
