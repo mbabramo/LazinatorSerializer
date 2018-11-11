@@ -154,15 +154,6 @@ namespace LazinatorCodeGen.Roslyn
                     }
                 }
             }
-
-            if (TypeSymbolToString(@interface).Contains("IValueTracker<T>"))
-            {
-                var DEBUG = 0;
-                if (propertiesInInterfaceWithLevel.Any(x => x.ToString().Contains("Operand")))
-                {
-                    var DEBUG2 = 0;
-                }
-            }
             PropertiesForType[TypeSymbolToString(@interface)] = propertiesInInterfaceWithLevel;
             foreach (var propertyWithLevel in propertiesInInterfaceWithLevel)
             {
@@ -202,11 +193,6 @@ namespace LazinatorCodeGen.Roslyn
                 lowerLevelInterfaces = namedTypeSymbol.GetInterfacesWithAttributeOfType<CloneLazinatorAttribute>()
                     .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
                     .ToDictionary(x => x.Key, x => x.Value);
-            }
-
-            if (namedTypeSymbol.ToString().Contains("ValueTracker<T>") && namedTypeSymbol.IsGenericType)
-            {
-                var DEBUG = 0;
             }
             namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
@@ -497,15 +483,6 @@ namespace LazinatorCodeGen.Roslyn
                         if (parametersAndProperties.Any(x => !x.parameterSymbol.Type.Equals(x.property.Type)))
                             continue;
                         // we have found the constructor for our record like type
-
-                        if (typeName.Contains("IValueTracker<T>"))
-                        {
-                            var DEBUG = 0;
-                            if (properties.Any(x => x.ToString().Contains("Operand")))
-                            {
-                                var DEBUG2 = 0;
-                            }
-                        }
                         PropertiesForType[typeName] = properties.ToList();
                         foreach (var property in properties)
                             RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);

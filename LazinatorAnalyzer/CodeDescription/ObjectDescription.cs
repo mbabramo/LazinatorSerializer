@@ -106,7 +106,7 @@ namespace Lazinator.CodeDescription
 
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, string filePath, bool suppressDate = false)
         {
-            Debug.WriteLine($"Creating object description for {iLazinatorTypeSymbol}"); // DEBUG
+            //Debug.WriteLine($"Creating object description for {iLazinatorTypeSymbol}");
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
@@ -160,10 +160,6 @@ namespace Lazinator.CodeDescription
             ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
-            if (iLazinatorTypeSymbol.ToString().Contains("ValueTracker<T>") && iLazinatorTypeSymbol.IsGenericType)
-            {
-                var DEBUG = 0;
-            }
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces

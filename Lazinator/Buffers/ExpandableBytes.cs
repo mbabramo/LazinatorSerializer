@@ -23,7 +23,7 @@ namespace Lazinator.Buffers
         public static bool UseMemoryPooling = true;
         public static bool TrackMemoryAllocations = false;
         public static List<WeakReference<IMemoryOwner<byte>>> MemoryAllocations = new List<WeakReference<IMemoryOwner<byte>>>();
-        public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>(); // DEBUG -- change all DoNotAutomaticallyReturn to something like LazinatorWontReturn
+        public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>();
         
         public ExpandableBytes() : this(MinMinBufferSize, null)
         {
@@ -81,8 +81,7 @@ namespace Lazinator.Buffers
             CurrentBuffer.Memory.Span.CopyTo(newBuffer.Memory.Span);
             var oldBuffer = CurrentBuffer;
             CurrentBuffer = newBuffer;
-            oldBuffer.Dispose(); // DEBUG? Better if we can leave this
-            // DEBUG -- not necessary? DisposeWithThis(oldBuffer); // keep the old buffer around for now, because we might already have saved memory from it, but when this is disposed, we'll dispose the old buffer as well
+            oldBuffer.Dispose();
         }
 
         public override void Dispose()

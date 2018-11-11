@@ -57,11 +57,6 @@ namespace Lazinator.CodeDescription
                 if (namedInterfaceType == null)
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
-                if (namedInterfaceType.ToString().Contains("IValueTrackerUnofficial"))
-                {
-                    var DEBUG2 = 0;
-                    // DEBUG -- problem found. The Container for the namedInterfaceType needs to be the lowest ranking Container that 
-                }
                 var containerToUse = Container.GetBaseObjectDescriptions().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
                 ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, containerToUse, true);
                 foreach (var property in d.PropertiesToDefineThisLevel)

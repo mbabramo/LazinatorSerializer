@@ -162,7 +162,7 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample();
             e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
             Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
-            int repetitions = 4; // DEBUG 8;
+            int repetitions = 8;
             Random r = new Random();
             long randLong = 0;
             short randShort = 0;
@@ -176,7 +176,7 @@ namespace LazinatorTests.Tests
                     e.MyChild1.MyShort = 0;
                     ((ExampleChildInherited)e.MyChild1).MyInt = 0;
                 }
-                if (i == 3) // DEBUG 5)
+                if (i == 5)
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
                     c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
@@ -215,14 +215,6 @@ namespace LazinatorTests.Tests
             {
                 c.MyChild2.MyLong = -3; // make sure early clone still works
             }
-        }
-
-        [Fact]
-        public void DEBUG()
-        {
-            CanRepeatedlyEnsureMemoryUpToDate(true, false, RepetitionsToMutate.All, RepetitionsToMutate.All, true);
-            GC.Collect();
-            System.Diagnostics.Debug.WriteLine(ExpandableBytes.PoolTrackerSummary());
         }
 
         [Fact]
@@ -523,7 +515,7 @@ namespace LazinatorTests.Tests
             var buffer = new Memory<byte>(e.LazinatorMemoryStorage.Memory.Span.ToArray());
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
-            e.UpdateStoredBuffer(ref b, 0, buffer.Span.Length /* DEBUG -- check */, IncludeChildrenMode.IncludeAllChildren, true);
+            e.UpdateStoredBuffer(ref b, 0, buffer.Span.Length, IncludeChildrenMode.IncludeAllChildren, true);
         }
 
         [Fact]
