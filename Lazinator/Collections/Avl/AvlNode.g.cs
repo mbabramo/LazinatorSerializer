@@ -219,6 +219,7 @@ namespace Lazinator.Collections.Avl
             return LazinatorObjectBytes.Length;
         }
         
+        public bool NonBinaryHash32 => false;
         
         /* Property definitions */
         

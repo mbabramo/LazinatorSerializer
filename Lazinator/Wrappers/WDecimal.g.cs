@@ -200,11 +200,7 @@ namespace Lazinator.Wrappers
                 return LazinatorObjectBytes.Length;
             }
             
-            public uint GetBinaryHashCode32()
-            {
-                return (uint) GetHashCode();
-            }
-            
+            public bool NonBinaryHash32 => true;
             
             /* Property definitions */
             

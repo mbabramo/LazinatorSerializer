@@ -120,6 +120,10 @@ namespace Lazinator.Core
         /// </summary>
         bool IsStruct { get; }
         /// <summary>
+        /// Returns true if the Lazinator type hash a NonBinaryHash attribute, in which case calls to GetBinaryHashCode32 use the regular GetHashCode method.
+        /// </summary>
+        bool NonBinaryHash32 { get; }
+        /// <summary>
         /// The parent (container) of the Lazinator class/struct, or null if there is none (because this is the top of the hierarchy or the parent is a struct or a class that doesn't implement ILazinator).
         /// </summary>
         LazinatorParentsCollection LazinatorParents { get; set; }

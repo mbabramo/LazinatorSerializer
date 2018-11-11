@@ -190,6 +190,7 @@ namespace LazinatorTests.Examples.Subclasses
             return LazinatorObjectBytes.Length;
         }
         
+        public virtual bool NonBinaryHash32 => false;
         
         /* Property definitions */
         

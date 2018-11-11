@@ -71,6 +71,10 @@ namespace Lazinator.Wrappers
             set;
         }
         
+        public abstract bool NonBinaryHash32
+        {
+            get;
+        }
         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
