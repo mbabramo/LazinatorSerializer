@@ -909,8 +909,8 @@ namespace Lazinator.Core
         {
             if (lazinator.NonBinaryHash32)
                 return (uint) lazinator.GetHashCode();
-            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-                return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage != null && lazinator.LazinatorMemoryStorage.Disposed == false)
+                return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage.Memory.Span);
             else
             {
                 LazinatorMemory serialized =
@@ -923,8 +923,8 @@ namespace Lazinator.Core
 
         public static ulong GetBinaryHashCode64(this ILazinator lazinator)
         {
-            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-                return FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage != null && lazinator.LazinatorMemoryStorage.Disposed == false)
+                return FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.Memory.Span);
             else
             {
                 LazinatorMemory serialized =
@@ -937,8 +937,8 @@ namespace Lazinator.Core
 
         public static Guid GetBinaryHashCode128(this ILazinator lazinator)
         {
-            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-                return FarmhashByteSpans.Hash128(lazinator.LazinatorMemoryStorage == null ? LazinatorUtilities.EmptyReadOnlyMemory.Span : lazinator.LazinatorMemoryStorage.Memory.Span);
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage != null && lazinator.LazinatorMemoryStorage.Disposed == false)
+                return FarmhashByteSpans.Hash128(lazinator.LazinatorMemoryStorage.Memory.Span);
             else
             {
                 LazinatorMemory serialized =
