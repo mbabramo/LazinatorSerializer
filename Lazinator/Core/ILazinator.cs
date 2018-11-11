@@ -89,19 +89,6 @@ namespace Lazinator.Core
         /// </summary>
         /// <returns></returns>
         int GetByteLength();
-        /// <summary>
-        /// Calculates a 32-bit noncryptographic hash code based on the bytes of the object.
-        /// </summary>
-        uint GetBinaryHashCode32();
-        /// <summary>
-        /// Calculates a 64-bit noncryptographic hash code based on the bytes of the object.
-        /// </summary>
-        ulong GetBinaryHashCode64();
-        /// <summary>
-        /// Calculates a 64-bit noncryptographic hash code based on the bytes of the object.
-        /// </summary>
-        Guid GetBinaryHashCode128();
-
 
         /// <summary>
         /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 

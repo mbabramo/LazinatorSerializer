@@ -205,33 +205,6 @@ namespace Lazinator.Wrappers
                 return (uint) GetHashCode();
             }
             
-            public ulong GetBinaryHashCode64()
-            {
-                if (LazinatorMemoryStorage == null)
-                {
-                    var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                    return FarmhashByteSpans.Hash64(result.Span);
-                }
-                else
-                {
-                    EnsureLazinatorMemoryUpToDate();
-                    return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
-                }
-            }
-            
-            public Guid GetBinaryHashCode128()
-            {
-                if (LazinatorMemoryStorage == null)
-                {
-                    var result = SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                    return FarmhashByteSpans.Hash128(result.Span);
-                }
-                else
-                {
-                    EnsureLazinatorMemoryUpToDate();
-                    return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
-                }
-            }
             
             /* Property definitions */
             

@@ -200,23 +200,6 @@ namespace Lazinator.Collections
             return LazinatorObjectBytes.Length;
         }
         
-        public uint GetBinaryHashCode32()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
-        }
-        
-        public ulong GetBinaryHashCode64()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
-        }
-        
-        public Guid GetBinaryHashCode128()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
-        }
         
         /* Property definitions */
         

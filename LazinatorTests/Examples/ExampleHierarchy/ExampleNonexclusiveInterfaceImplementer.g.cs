@@ -190,23 +190,6 @@ namespace LazinatorTests.Examples
             return LazinatorObjectBytes.Length;
         }
         
-        public virtual uint GetBinaryHashCode32()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash32(LazinatorObjectBytes.Span);
-        }
-        
-        public virtual ulong GetBinaryHashCode64()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash64(LazinatorObjectBytes.Span);
-        }
-        
-        public virtual Guid GetBinaryHashCode128()
-        {
-            EnsureLazinatorMemoryUpToDate();
-            return FarmhashByteSpans.Hash128(LazinatorObjectBytes.Span);
-        }
         
         /* Property definitions */
         

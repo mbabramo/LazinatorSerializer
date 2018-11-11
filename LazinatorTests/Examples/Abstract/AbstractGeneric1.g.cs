@@ -94,9 +94,6 @@ namespace LazinatorTests.Examples.Abstract
         public abstract void EnsureLazinatorMemoryUpToDate();
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
-        public abstract uint GetBinaryHashCode32();
-        public abstract ulong GetBinaryHashCode64();
-        public abstract Guid GetBinaryHashCode128();
         
         /* Property definitions */
         
