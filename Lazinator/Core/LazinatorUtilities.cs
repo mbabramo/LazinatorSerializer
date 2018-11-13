@@ -694,12 +694,13 @@ namespace Lazinator.Core
         #region Cloning
 
         /// <summary>
-        /// Clones a Lazinator class, returning the object as its own type.
+        /// Clones a Lazinator object, returning the object as its own type.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
         /// <param name="lazinator">The lazinator object</param>
-        /// <param name="disposeCloneIndependently">If true, the memory use for the clone will be managed entirely separately from the memory used for the original.</param>
-        /// <returns>A clone of the Lazinator class</returns>
+        /// <param name="includeChildrenMode">Whether some or all children should be included</param>
+        /// <param name="cloneBufferOptions">How the clone's buffer should relate to the original's</param>
+        /// <returns>A clone of the Lazinator object</returns>
         public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer) where T : ILazinator
         {
             if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
@@ -709,15 +710,15 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Clones a Lazinator class, returning the object as its own type, with an option to exclude children. Thsi cannot be used for Lazinator structs.
+        /// 
         /// </summary>
-        /// <typeparam name="T">The type of the Lazinator object</typeparam>
-        /// <param name="lazinator">The lazinator object</param>
-        /// <param name="includeChildrenMode">Whether to include children of the class being cloned.</param>
-        /// <returns>A clone of the Lazinator class</returns>
-        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode) where T : class, ILazinator
+        /// <returns></returns>
+        public static byte[] CopyToArray(this ILazinator lazinator)
         {
-            return lazinator.CloneLazinator(includeChildrenMode) as T;
+            lazinator.EnsureLazinatorMemoryUpToDate();
+            byte[] array = new byte[lazinator.LazinatorMemoryStorage.Length];
+            lazinator.LazinatorMemoryStorage.Memory.CopyTo(array);
+            return array;
         }
 
         #endregion

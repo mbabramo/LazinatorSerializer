@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace LazinatorAnalyzer.Analyzer
 {
+    #pragma warning disable RS1022
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class LazinatorCodeAnalyzer : DiagnosticAnalyzer
     {

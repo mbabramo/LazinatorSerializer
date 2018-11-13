@@ -22,7 +22,7 @@ namespace Lazinator.Core
         /// Clones the class/struct, possibly excluding some or all children or descendants
         /// </summary>
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
-        /// <param name="cloneBufferOptions">Whether the clone shares a buffer with the original or has a new buffer that either is independent from the original or will be disposed when the original is disposed</param>
+        /// <param name="cloneBufferOptions">How the clone's buffer should relate to the original's</param>
         /// <returns>A cloned copy of the class/struct</returns>
         ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer);
 
