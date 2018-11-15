@@ -336,6 +336,7 @@ namespace Lazinator.Collections
             {
                 var deserialized = MainListSerialized;
             }
+            OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             return changeFunc(this);
         }
         

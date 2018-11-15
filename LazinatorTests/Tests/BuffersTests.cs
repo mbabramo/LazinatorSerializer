@@ -617,9 +617,12 @@ namespace LazinatorTests.Tests
             var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.OwnedMemory).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
-                ExpandableBytes b = x.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
-                if (b != null)
-                    b.AllocationID.Should().Be(allocationID);
+                if (x.LazinatorMemoryStorage != null)
+                {
+                    ExpandableBytes b = x.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+                    if (b != null)
+                        b.AllocationID.Should().Be(allocationID);
+                }
                 return x;
             }, true);
         }

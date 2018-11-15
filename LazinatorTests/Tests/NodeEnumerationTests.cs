@@ -10,6 +10,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Dynamic;
 using System;
+using System.Text;
 
 namespace LazinatorTests.Tests
 {
@@ -148,7 +149,32 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorListForEachLazinatorWorks()
         {
-            throw new NotImplementedException();
+            LazinatorList<WString> l = new LazinatorList<WString>() { "hello", "world" };
+            StringBuilder sb = new StringBuilder();
+            var c = l.ForEachLazinator(x =>
+            {
+                if (x is WString ws)
+                    sb.Append(ws.WrappedValue);
+                return x;
+            }, true);
+            sb.ToString().Should().Be("helloworld");
+            l = l.CloneLazinatorTyped();
+            sb = new StringBuilder();
+            c = l.ForEachLazinator(x =>
+            {
+                if (x is WString ws)
+                    sb.Append(ws.WrappedValue);
+                return x;
+            }, true);
+            sb.ToString().Should().Be("");
+            c = l.ForEachLazinator(x =>
+            {
+                if (x is WString ws)
+                    sb.Append(ws.WrappedValue);
+                return x;
+            }, false); // now deserialize
+            sb.ToString().Should().Be("helloworld");
+
         }
 
         [Fact]

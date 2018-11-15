@@ -440,5 +440,24 @@ namespace Lazinator.Collections
             CountWhenDeserialized = -1;
         }
 
+        public void OnForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        {
+            if (!exploreOnlyDeserializedChildren)
+                FullyDeserializeIfNecessary();
+            if (UnderlyingList == null)
+                return;
+            for (int index = 0; index < UnderlyingList.Count; index++)
+            {
+                if (FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index])
+                {
+                    var current = ((IList<T>)UnderlyingList)[index];
+                    if (current != null)
+                    {
+                        UnderlyingList[index] = (T) changeFunc(current);
+                    }
+                }
+            }
+        }
+
     }
 }
