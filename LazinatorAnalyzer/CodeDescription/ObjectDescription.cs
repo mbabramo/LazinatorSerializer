@@ -66,6 +66,7 @@ namespace Lazinator.CodeDescription
         public bool ImplementsOnDescendantIsDirty => ImplementedMethods.Contains("OnDescendantIsDirty");
         public bool ImplementsOnFreeInMemoryObjects => ImplementedMethods.Contains("OnFreeInMemoryObjects");
         public bool ImplementsOnClone => ImplementedMethods.Contains("OnCompleteClone");
+        public bool ImplementsOnForEachLazinator => ImplementedMethods.Contains("OnForEachLazinator");
         public bool ImplementsConvertFromBytesAfterHeader => ImplementedMethods.Contains("ConvertFromBytesAfterHeader");
         public bool ImplementsOnUpdateDeserializedChildren => ImplementedMethods.Contains("OnUpdateDeserializedChildren");
         public bool ImplementsWritePropertiesIntoBuffer => ImplementedMethods.Contains("WritePropertiesIntoBuffer");
@@ -861,8 +862,9 @@ namespace Lazinator.CodeDescription
                     }}
 ");
             }
-
-            sb.Append($@"return changeFunc(this);
+            
+            sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                    ")}return changeFunc(this);
                             }}
                         ");
         }

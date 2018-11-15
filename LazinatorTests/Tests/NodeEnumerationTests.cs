@@ -9,6 +9,7 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Dynamic;
+using System;
 
 namespace LazinatorTests.Tests
 {
@@ -142,6 +143,12 @@ namespace LazinatorTests.Tests
             var results2 = c.EnumerateAllNodes().ToList();
             results2[0].Should().Be(c);
             results2[1].LazinatorParents.LastAdded.Should().Be(c);
+        }
+
+        [Fact]
+        public void LazinatorListForEachLazinatorWorks()
+        {
+            throw new NotImplementedException();
         }
 
         [Fact]

@@ -585,6 +585,17 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
+        [Fact]
+        public void BuffersUpdateInTandem_LazinatorList_Struct()
+        {
+            LazinatorListContainer e = GetLazinatorListContainer();
+            e.MyStructList[1] = 6;
+            e.MyStructList[1] = e.MyStructList[1].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers); // generate a new buffer in a list member
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyInt = 17; // keep list clean while making container dirty
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
         private LazinatorListContainer GetLazinatorListContainer()
         {
             LazinatorListContainer container = new LazinatorListContainer();
@@ -593,6 +604,9 @@ namespace LazinatorTests.Tests
             container.MyList[0].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
             container.MyList.Add(GetExampleChild(1));
             container.MyList[1].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
+            container.MyStructList = new LazinatorList<WByte>();
+            container.MyStructList.Add(1);
+            container.MyStructList.Add(2);
             container = container.CloneLazinatorTyped();
             return container;
         }
@@ -601,14 +615,13 @@ namespace LazinatorTests.Tests
         {
             itemToUpdate.EnsureLazinatorMemoryUpToDate();
             var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.OwnedMemory).AllocationID;
-            List<ILazinator> descendants = itemToUpdate.EnumerateAllNodes().ToList();
-            for (int i = 0; i < descendants.Count; i++)
+            itemToUpdate.ForEachLazinator(x => 
             {
-                ILazinator lazinator = descendants[i];
-                ExpandableBytes b = lazinator.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+                ExpandableBytes b = x.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
                 if (b != null)
                     b.AllocationID.Should().Be(allocationID);
-            }
+                return x;
+            }, true);
         }
 
         private LazinatorDictionary<WInt, Example> GetDictionary()

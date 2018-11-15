@@ -94,6 +94,7 @@ namespace LazinatorTests.Examples
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             return changeFunc(this);
         }
         
