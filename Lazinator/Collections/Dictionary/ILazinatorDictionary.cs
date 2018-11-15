@@ -9,5 +9,6 @@ namespace Lazinator.Collections.Dictionary
     {
         [SetterAccessibility("private")]
         int Count { get; }
+        LazinatorList<DictionaryBucket<TKey, TValue>> Buckets { get; set; }
     }
 }
