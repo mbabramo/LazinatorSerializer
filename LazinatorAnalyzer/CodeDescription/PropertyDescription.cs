@@ -1560,7 +1560,7 @@ namespace Lazinator.CodeDescription
             PropertyDescription innerProperty = InnerProperties[0];
             string collectionAddItem, collectionAddNull;
             innerProperty.GetSupportedCollectionAddCommands(this, out collectionAddItem, out collectionAddNull);
-            collectionAddItem = collectionAddItem.Replace("item ", "itemCopied ").Replace("item;", "itemCopied;").Replace("item)", "itemCopied)");
+            collectionAddItem = collectionAddItem.Replace("item ", "itemCopied ").Replace("item;", "itemCopied;").Replace("item)", "itemCopied)").Replace("item.", "itemCopied.");
             bool avoidCloningIfPossibleOption = IsSimpleListOrArray && innerProperty.IsLazinator;
             string creationText = GetCreationText(avoidCloningIfPossibleOption);
 
