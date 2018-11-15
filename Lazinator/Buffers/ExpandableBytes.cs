@@ -23,6 +23,7 @@ namespace Lazinator.Buffers
         public static bool UseMemoryPooling = true;
         public static bool TrackMemoryAllocations = false;
         public static List<WeakReference<IMemoryOwner<byte>>> MemoryAllocations = new List<WeakReference<IMemoryOwner<byte>>>();
+        public static List<bool> MemoryAllocationsManuallyReturned = new List<bool>();
         public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>();
         
         public ExpandableBytes() : this(MinMinBufferSize, null)
@@ -44,7 +45,11 @@ namespace Lazinator.Buffers
                 CurrentBuffer = new SimpleMemoryOwner<byte>(new Memory<byte>(new byte[minimumSize]));
 
             if (TrackMemoryAllocations)
+            {
                 MemoryAllocations.Add(new WeakReference<IMemoryOwner<byte>>(CurrentBuffer));
+                MemoryAllocationsManuallyReturned.Add(false);
+            }
+
 
             OriginalSource = originalSource;
             if (OriginalSource != null)
@@ -88,6 +93,8 @@ namespace Lazinator.Buffers
         {
             if (!UseMemoryPooling || LazinatorShouldNotReturnToPool)
                 return; // no need to dispose -- garbage collection will handle it
+            if (TrackMemoryAllocations)
+                MemoryAllocationsManuallyReturned[(int) AllocationID] = true;
             base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
             if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
                 CurrentBuffer.Dispose();
@@ -100,7 +107,7 @@ namespace Lazinator.Buffers
         public static string PoolTrackerSummary()
         {
             GC.Collect();
-            return $@"{MemoryAllocations.Count()} total allocations; {MemoryAllocations.Where(x => x.TryGetTarget(out _)).Count()} allocations still remain: {String.Join(",", MemoryAllocations.Select((item, index) => new { Index = index, Item = item }).Where(x => x.Item.TryGetTarget(out _)).Select(x => x.Index + (NotReturnedByLazinatorHashSet.Contains((long) x.Index) ? "*" : "")).ToArray())}";
+            return $@"{MemoryAllocations.Count()} total allocations; {MemoryAllocations.Where(x => x.TryGetTarget(out _)).Count()} allocations still remain: {String.Join(",", MemoryAllocations.Select((item, index) => new { Index = index, Item = item }).Where(x => x.Item.TryGetTarget(out _)).Select(x => x.Index + (NotReturnedByLazinatorHashSet.Contains((long) x.Index) ? "*" : "") + (MemoryAllocationsManuallyReturned[x.Index] ? "x" : "")).ToArray()) }"; // * means that the reason it hasn't been returned is we're leaving it to the system to do so automatically; x means that we have in fact manually returned this (but it just hasn't registered as returned). DEBUG
         }
     }
 }
