@@ -15,7 +15,13 @@ namespace Lazinator.Buffers
                 if (value == this)
                     _OriginalSource = null;
                 else
+                {
+                    if (_OriginalSource != null && _OriginalSource != value)
+                    {
+                        _OriginalSource.DoNotDisposeWithThis(this, false);
+                    }
                     _OriginalSource = value;
+                }
                 while (_OriginalSource?.OriginalSource != null)
                     _OriginalSource = _OriginalSource.OriginalSource;
             }
@@ -44,6 +50,14 @@ namespace Lazinator.Buffers
             {
                 if (DisposeTogether == null)
                     DisposeTogether = new HashSet<IMemoryOwner<byte>>();
+                if (additionalBuffer is ExpandableBytes e && e.AllocationID == 20)
+                {
+                    System.Diagnostics.Debug.WriteLine("DEBUG");
+                }
+                if (additionalBuffer is LazinatorMemory e2 && e2.AllocationID == 20)
+                {
+                    System.Diagnostics.Debug.WriteLine("DEBUG");
+                }
                 DisposeTogether.Add(additionalBuffer);
             }
         }
@@ -82,6 +96,14 @@ namespace Lazinator.Buffers
                 bool bufferIsThis = buffer == this;
                 if (!bufferIsThis)
                 {
+                    if (buffer is ExpandableBytes e && e.AllocationID == 20)
+                    {
+                        System.Diagnostics.Debug.WriteLine("DEBUG");
+                    }
+                    if (buffer is LazinatorMemory e2 && e2.AllocationID == 20)
+                    {
+                        System.Diagnostics.Debug.WriteLine("DEBUG");
+                    }
                     if (DisposeTogether != null)
                         DisposeTogether.Remove(buffer);
                     if (disposeBufferIfNotOriginalSource)

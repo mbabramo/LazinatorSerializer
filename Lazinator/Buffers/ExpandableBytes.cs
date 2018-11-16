@@ -91,10 +91,13 @@ namespace Lazinator.Buffers
 
         public override void Dispose()
         {
-            if (!UseMemoryPooling || LazinatorShouldNotReturnToPool)
-                return; // no need to dispose -- garbage collection will handle it
             if (TrackMemoryAllocations)
-                MemoryAllocationsManuallyReturned[(int) AllocationID] = true;
+                MemoryAllocationsManuallyReturned[(int)AllocationID] = true;
+            if (LazinatorShouldNotReturnToPool)
+                return; // no need to dispose -- garbage collection will handle it
+            // DEBUG -- uncomment
+            //if (!UseMemoryPooling)
+            //    return; 
             base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
             if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
                 CurrentBuffer.Dispose();

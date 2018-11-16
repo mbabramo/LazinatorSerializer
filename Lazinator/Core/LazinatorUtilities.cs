@@ -710,7 +710,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// 
+        /// Updates the Lazinator's memory storage and then copies this to an array.
         /// </summary>
         /// <returns></returns>
         public static byte[] CopyToArray(this ILazinator lazinator)
@@ -718,6 +718,19 @@ namespace Lazinator.Core
             lazinator.EnsureLazinatorMemoryUpToDate();
             byte[] array = new byte[lazinator.LazinatorMemoryStorage.Length];
             lazinator.LazinatorMemoryStorage.Memory.CopyTo(array);
+            return array;
+        }
+
+        /// <summary>
+        /// Serializes the Lazinator to an array without updating the Lazinator's memory storage.
+        /// </summary>
+        /// <returns></returns>
+        public static byte[] SerializeToArray(this ILazinator lazinator)
+        {
+            LazinatorMemory memory = lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            byte[] array = new byte[memory.Length];
+            memory.Memory.CopyTo(array);
+            memory.Dispose();
             return array;
         }
 
