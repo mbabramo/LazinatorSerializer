@@ -421,7 +421,7 @@ namespace LazinatorCodeGen.Roslyn
             // The workaround for now is to regenerate the code (for example, by making a trivial change to the interface file or by deleting
             // the code behind file).
             var bitFieldRepresentingImplementedMethods = GetBitFieldRepresentingImplementedMethods(implementingType, typeImplementsMethodHashSet);
-            var bytes = interfaceSyntaxNode.GetText().GetChecksum().ToList();
+            var bytes = interfaceSyntaxNode.GetText().GetChecksum().ToList(); // DEBUG -- perhaps this (or something else here) is returning different results on different computers. must fix
             bytes.Add(bitFieldRepresentingImplementedMethods);
             bytes.AddRange(LazinatorCodeGen.Roslyn.LazinatorVersionInfo.LazinatorVersionBytes); // thus, if we change the version, all code behind will need to be regenerated
             var md5 = System.Security.Cryptography.MD5.Create();
