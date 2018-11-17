@@ -29,7 +29,7 @@ namespace Lazinator.Buffers
 
         public bool Disposed { get; protected internal set; }
 
-        private HashSet<IMemoryOwner<byte>> DisposeTogether = null;
+        public HashSet<IMemoryOwner<byte>> DisposeTogether = null;
 
         public abstract Memory<byte> Memory { get; }
 
@@ -60,7 +60,8 @@ namespace Lazinator.Buffers
         /// <param name="newBuffer"></param>
         public virtual void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
         {
-            DoNotDisposeWithThis(this, true);
+            if (this != newBuffer)
+                DoNotDisposeWithThis(this, true);
             DisposeWithThis(newBuffer);
         }
 

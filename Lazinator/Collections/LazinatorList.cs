@@ -7,6 +7,7 @@ using Lazinator.Core;
 using static Lazinator.Core.LazinatorUtilities;
 using Lazinator.Attributes;
 using System.Buffers;
+using System.Linq;
 
 namespace Lazinator.Collections
 {
@@ -227,6 +228,12 @@ namespace Lazinator.Collections
         {
             FullyDeserializeIfNecessary();
             ((IList<T>)UnderlyingList).CopyTo(array, arrayIndex);
+        }
+
+        public bool Any()
+        {
+            CreateUnderlyingListIfNecessary();
+            return UnderlyingList.Any();
         }
 
         public IEnumerator<T> GetEnumerator()

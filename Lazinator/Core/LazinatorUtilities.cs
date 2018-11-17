@@ -793,8 +793,9 @@ namespace Lazinator.Core
                 var ownedMemory = existingBuffer.OwnedMemory;
                 if (ownedMemory != null && ownedMemory is ExpandableBytes e && e.LazinatorShouldNotReturnToPool)
                     return newBuffer; // don't do anything -- we don't need to replace the existing buffer, since it will be garbage collected automatically.
-                if (parents.ParentSharesBuffer(ownedMemory) || (!isTopOfHierarchy && !parents.Any()) || isStruct)
-                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, so we must assume that this is a Lazinator embedded in a non-Lazinator in a Lazinator hierarchy to be on the safe side. 
+
+                if (parents.ParentSharesBuffer(ownedMemory) || isStruct || (!isTopOfHierarchy && (!parents.Any() || parents.Any(x => x.LazinatorMemoryStorage == null))))
+                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, whose ancestors may still be relying on the existing buffer, so we must err on the safe by not disposing of the existing buffer. Eventually, the existing buffer will be garbage collected, even if we are using pooling. 
                     existingBuffer.DisposeWithThis(newBuffer);
                 }
                 else

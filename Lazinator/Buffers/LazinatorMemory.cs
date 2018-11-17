@@ -71,7 +71,13 @@ namespace Lazinator.Buffers
 
         public override void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
         {
-            DoNotDisposeWithThis(OwnedMemory, true);
+            bool disposeBufferIfNotOriginalSource = true;
+            if (OwnedMemory is ExpandableBytes e)
+            {
+                if (e.DisposeTogether != null && (e.DisposeTogether.Contains(newBuffer) || (newBuffer is LazinatorMemory m && e.DisposeTogether.Contains(m.OwnedMemory))))
+                    disposeBufferIfNotOriginalSource = false;
+            }
+            DoNotDisposeWithThis(OwnedMemory, disposeBufferIfNotOriginalSource);
             DisposeWithThis(newBuffer);
         }
 
