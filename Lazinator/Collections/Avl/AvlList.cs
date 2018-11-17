@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlList<T> : IAvlList<T>, IList<T> where T : ILazinator, new()
+    public partial class AvlList<T> : IAvlList<T>, IList<T> where T : ILazinator
     { 
         public AvlList()
         {

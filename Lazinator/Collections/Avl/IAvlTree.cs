@@ -4,7 +4,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlTree)]
-    interface IAvlTree<TKey, TValue> where TKey : ILazinator, new() where TValue : ILazinator, new()
+    interface IAvlTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         AvlNode<TKey, TValue> Root { get; set; }
     }
