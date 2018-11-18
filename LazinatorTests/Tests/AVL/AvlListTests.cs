@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Lazinator.Collections.Avl;
+using Lazinator.Core;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.AVL
@@ -19,6 +20,27 @@ namespace LazinatorTests.AVL
                 list.Add(i);
             for (int i = 0; i < numItems; i++)
                 list[i].WrappedValue.Should().Be(i);
+        }
+
+        [Fact]
+        public void AvlListCloneDoesntRewriteEverything()
+        {
+            int DeserializedNodesCount(AvlList<WInt> avlList)
+            {
+                return avlList.EnumerateLazinatorNodes(x => true, false, x => true, true, false).Where(x => x is AvlNode<WByte, WInt>).Count();
+            }
+
+            AvlList<WInt> list = new AvlList<WInt>();
+            const int numItems = 1000;
+            for (int i = 0; i < numItems; i++)
+                list.Add(i);
+            var list2 = list.CloneLazinatorTyped();
+            int deserializedNodesCount = DeserializedNodesCount(list2);
+            list2.Insert(0, -1);
+            deserializedNodesCount = DeserializedNodesCount(list2);
+            var list3 = list2.CloneLazinatorTyped();
+            deserializedNodesCount = DeserializedNodesCount(list2);
+            deserializedNodesCount.Should().BeLessThan(25); // works out to exactly 20 -- note that this is because we're always looking right and left at each node to determine where to go, so a fair number of nodes are deserialized.
         }
 
         [Fact]

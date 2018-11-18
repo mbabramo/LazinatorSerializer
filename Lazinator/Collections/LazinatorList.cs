@@ -55,7 +55,7 @@ namespace Lazinator.Collections
             }
         }
 
-        private void FullyDeserializeIfNecessary()
+        private void FullyDeserialize()
         {
             if (!FullyDeserialized)
             {
@@ -200,8 +200,8 @@ namespace Lazinator.Collections
         // extracted so that we can call this from lazinatorarray, even though add is overriden
         protected void CompleteAdd(T item)
         {
-            // this is the one change to the list (other than changes to specific indices) that does not require us to fully deserialize,
-            // because it doesn't change anything up to this point
+            // this does not require us to fully deserialize,
+            // because it doesn't change anything earlier in the list
             if (item != null)
                 item.LazinatorParents = item.LazinatorParents.WithAdded(this);
             CreateUnderlyingListIfNecessary();
@@ -213,20 +213,20 @@ namespace Lazinator.Collections
 
         public virtual void Clear()
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             ((IList<T>)UnderlyingList).Clear();
             MarkDirty();
         }
 
         public bool Contains(T item)
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             return ((IList<T>)UnderlyingList).Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             ((IList<T>)UnderlyingList).CopyTo(array, arrayIndex);
         }
 
@@ -238,19 +238,19 @@ namespace Lazinator.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             return ((IList<T>)UnderlyingList).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             return ((IList<T>)UnderlyingList).GetEnumerator();
         }
 
         public int IndexOf(T item)
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             return ((IList<T>)UnderlyingList).IndexOf(item);
         }
 
@@ -258,7 +258,7 @@ namespace Lazinator.Collections
 
         public virtual void Insert(int index, T item)
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             if (item != null)
                 item.LazinatorParents = item.LazinatorParents.WithAdded(this);
             CreateUnderlyingListIfNecessary();
@@ -268,7 +268,7 @@ namespace Lazinator.Collections
 
         public virtual bool Remove(T item)
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             var success = ((IList<T>)UnderlyingList).Remove(item);
             if (success)
                 MarkDirty();
@@ -277,7 +277,7 @@ namespace Lazinator.Collections
 
         public virtual int RemoveAll(Predicate<T> match)
         {
-            FullyDeserializeIfNecessary();
+            FullyDeserialize();
             int matches = 0;
             for (int i = Count - 1; i >= 0; i--) // iterate backwards so that indices stay same during loop
             { 
@@ -295,10 +295,20 @@ namespace Lazinator.Collections
 
         public virtual void RemoveAt(int index)
         {
-            FullyDeserializeIfNecessary();
-            ((IList<T>)UnderlyingList).RemoveAt(index);
-            if (!FullyDeserialized)
-                ItemsAccessedBeforeFullyDeserialized.RemoveAt(index);
+            if (index >= Count || index < 0)
+                throw new Exception("Invalid removal index.");
+            if (index == Count - 1)
+            {
+                CreateUnderlyingListIfNecessary();
+                ((IList<T>)UnderlyingList).RemoveAt(index);
+                if (!FullyDeserialized)
+                    ItemsAccessedBeforeFullyDeserialized.RemoveAt(index);
+            }
+            else
+            {
+                FullyDeserialize();
+                ((IList<T>)UnderlyingList).RemoveAt(index);
+            }
             MarkDirty();
         }
 
@@ -450,7 +460,7 @@ namespace Lazinator.Collections
         public void OnForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
             if (!exploreOnlyDeserializedChildren)
-                FullyDeserializeIfNecessary();
+                FullyDeserialize();
             if (UnderlyingList == null)
                 return;
             for (int index = 0; index < UnderlyingList.Count; index++)

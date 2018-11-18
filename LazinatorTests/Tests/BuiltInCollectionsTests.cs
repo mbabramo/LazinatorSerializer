@@ -712,6 +712,31 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorStack_PopAfterDeserialize()
+        {
+            LazinatorStack<WInt> s = new LazinatorStack<WInt>();
+            s.Push(1);
+            s.Push(2);
+            s.Push(3);
+            s.Count.Should().Be(3);
+            s = s.CloneLazinatorTyped();
+            s.Pop();
+            s.Pop();
+            s = s.CloneLazinatorTyped();
+            s.Count.Should().Be(1);
+            s[0].WrappedValue.Should().Be(1);
+            s.Push(2);
+            s.Push(3);
+            s.Pop();
+            s = s.CloneLazinatorTyped();
+            s.Count.Should().Be(2);
+            s.Pop();
+            s.Pop();
+            s = s.CloneLazinatorTyped();
+            s.Count.Should().Be(0);
+        }
+
+        [Fact]
         public void LazinatorQueueWorks()
         {
             LazinatorQueue<WInt> s = new LazinatorQueue<WInt>();
