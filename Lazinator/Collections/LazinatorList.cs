@@ -14,17 +14,20 @@ namespace Lazinator.Collections
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList<T>, ILazinatorList<T>, ILazinatorList where T : ILazinator
     {
-        [NonSerialized] private bool FullyDeserialized;
-        [NonSerialized] private int CountWhenDeserialized;
-        [NonSerialized] private List<T> UnderlyingList;
-        [NonSerialized] private List<bool> ItemsAccessedBeforeFullyDeserialized;
-        [NonSerialized] private int? FixedID;
-        [NonSerialized] private bool TypeRequiresNonBinaryHashing;
+        [NonSerialized] private bool _FullyDeserialized;
+        [NonSerialized] private int _CountWhenDeserialized;
+        [NonSerialized] private List<T> _UnderlyingList;
+        [NonSerialized] private List<bool> _ItemsAccessedBeforeFullyDeserialized;
+        [NonSerialized] private int? _FixedID;
+        [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
+        [NonSerialized] private int _NumRemovedFromStart;
+        [NonSerialized] private Memory<byte> _PreviousMainListSerialized;
+        [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
 
         public LazinatorList()
         {
-            FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
-            TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
+            _FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
+            _TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
         }
 
         public LazinatorList(int numItems)
@@ -41,32 +44,33 @@ namespace Lazinator.Collections
 
         private void CreateUnderlyingListIfNecessary()
         {
-            if (UnderlyingList == null)
+            if (_UnderlyingList == null)
             {
-                CountWhenDeserialized = Offsets?.Count ?? 0;
+                _CountWhenDeserialized = Offsets?.Count ?? 0;
 
-                UnderlyingList = new List<T>(CountWhenDeserialized);
-                ItemsAccessedBeforeFullyDeserialized = new List<bool>(CountWhenDeserialized);
-                for (int i = 0; i < CountWhenDeserialized; i++)
+                _UnderlyingList = new List<T>(_CountWhenDeserialized);
+                _ItemsAccessedBeforeFullyDeserialized = new List<bool>(_CountWhenDeserialized);
+                for (int i = 0; i < _CountWhenDeserialized; i++)
                 {
-                    UnderlyingList.Add(default);
-                    ItemsAccessedBeforeFullyDeserialized.Add(false);
+                    _UnderlyingList.Add(default);
+                    _ItemsAccessedBeforeFullyDeserialized.Add(false);
                 }
             }
         }
 
         private void FullyDeserialize()
         {
-            if (!FullyDeserialized)
+            if (!_FullyDeserialized)
             {
                 CreateUnderlyingListIfNecessary();
                 int count = Count;
                 for (int i = 0; i < count; i++)
                 {
-                    if (!ItemsAccessedBeforeFullyDeserialized[i])
-                        UnderlyingList[i] = GetSerializedContents(i);
+                    if (!_ItemsAccessedBeforeFullyDeserialized[i])
+                        _UnderlyingList[i] = GetSerializedContents(i);
                 }
-                FullyDeserialized = true;
+                _FullyDeserialized = true;
+                _NumRemovedFromStart = 0;
             }
         }
 
@@ -76,20 +80,20 @@ namespace Lazinator.Collections
             if (byteSpan.Length == 0)
                 return default;
             T n2;
-            if (FixedID == null)
+            if (_FixedID == null)
                 n2 = (T)DeserializationFactory.Instance.CreateFromBytesIncludingID(byteSpan, this);
             else
-                n2 = (T)DeserializationFactory.Instance.CreateKnownID((int)FixedID, byteSpan, this);
+                n2 = (T)DeserializationFactory.Instance.CreateKnownID((int)_FixedID, byteSpan, this);
             return n2;
         }
 
         public uint GetListMemberHash32(int index)
         {
-            if (TypeRequiresNonBinaryHashing)
+            if (_TypeRequiresNonBinaryHashing)
                 return (uint) this[index].GetHashCode();
 
-            if (FullyDeserialized || (UnderlyingList != null && ItemsAccessedBeforeFullyDeserialized[index]))
-                return ((IList<T>)UnderlyingList)[index].GetBinaryHashCode32();
+            if (_FullyDeserialized || (_UnderlyingList != null && _ItemsAccessedBeforeFullyDeserialized[index]))
+                return ((IList<T>)_UnderlyingList)[index].GetBinaryHashCode32();
             
             var byteSpan = GetListMemberSlice(index);
             return FarmhashByteSpans.Hash32(byteSpan.Span);
@@ -97,9 +101,9 @@ namespace Lazinator.Collections
 
         private LazinatorMemory GetListMemberSlice(int index)
         {
-            if (FullyDeserialized)
+            if (_FullyDeserialized)
             { // we can't rely on original offsets, because an insertion/removal may have occurred
-                T underlyingItem = UnderlyingList[index];
+                T underlyingItem = _UnderlyingList[index];
                 if (underlyingItem == null)
                     return LazinatorUtilities.EmptyLazinatorMemory;
                 return underlyingItem.LazinatorMemoryStorage;
@@ -110,10 +114,10 @@ namespace Lazinator.Collections
             // The offset of the first is then 0 and the next offset is Offsets[0].
             // The offset of the second is then Offsets[0] and next offset is Offsets[1].
             // The offste of the third is Offsets[1] and the next offset is Offsets[2], the position at the end of the third item.
-            if (Offsets == null || index >= Offsets.Count)
+            if (Offsets == null || index + _NumRemovedFromStart >= Offsets.Count)
                 return LazinatorUtilities.EmptyLazinatorMemory;
             int offset = GetOffset(index);
-            int nextOffset = Offsets[index];
+            int nextOffset = Offsets[_NumRemovedFromStart + index];
 
             var mainListSerializedStorage = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null); // this is equivalent to MainListSerialized (omitting the length, containing the bytes). We don't use MainListSerialized itself because it's not slicesable
             return mainListSerializedStorage.Slice(offset, nextOffset - offset);
@@ -121,6 +125,7 @@ namespace Lazinator.Collections
 
         private int GetOffset(int index)
         {
+            index += _NumRemovedFromStart; // e.g., if index is 0 in the list now, but two were removed from start since we last updated offsets, then we need to look at slot 2
             int offset;
             if (index == 0)
                 offset = 0;
@@ -133,17 +138,17 @@ namespace Lazinator.Collections
         {
             get
             {
-                if (FullyDeserialized)
-                    return ((IList<T>) UnderlyingList)[index];
+                if (_FullyDeserialized)
+                    return ((IList<T>) _UnderlyingList)[index];
                 CreateUnderlyingListIfNecessary();
-                var current = ((IList<T>) UnderlyingList)[index];
+                var current = ((IList<T>) _UnderlyingList)[index];
                 if (current == null || (current.Equals(default(T))))
                 {
-                    if (ItemsAccessedBeforeFullyDeserialized[index])
+                    if (_ItemsAccessedBeforeFullyDeserialized[index])
                         return default;
                     current = GetSerializedContents(index);
-                    UnderlyingList[index] = current;
-                    ItemsAccessedBeforeFullyDeserialized[index] = true;
+                    _UnderlyingList[index] = current;
+                    _ItemsAccessedBeforeFullyDeserialized[index] = true;
                 }
                 return current;
             }
@@ -152,20 +157,20 @@ namespace Lazinator.Collections
                 var currentOccupant = this[index];
                 if (currentOccupant != null)
                     currentOccupant.LazinatorParents = currentOccupant.LazinatorParents.WithRemoved(this);
-                if (FullyDeserialized)
+                if (_FullyDeserialized)
                 {
-                    ((IList<T>)UnderlyingList)[index] = value;
+                    ((IList<T>)_UnderlyingList)[index] = value;
                     if (value != null)
                         value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                     MarkDirty();
                     return;
                 }
                 CreateUnderlyingListIfNecessary();
-                ((IList<T>) UnderlyingList)[index] = value;
+                ((IList<T>) _UnderlyingList)[index] = value;
                 if (value != null)
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 MarkDirty();
-                ItemsAccessedBeforeFullyDeserialized[index] = true;
+                _ItemsAccessedBeforeFullyDeserialized[index] = true;
             }
         }
 
@@ -181,12 +186,12 @@ namespace Lazinator.Collections
         {
             get
             {
-                if (UnderlyingList == null)
+                if (_UnderlyingList == null)
                 {
-                    CountWhenDeserialized = Offsets?.Count ?? 0;
-                    return CountWhenDeserialized;
+                    _CountWhenDeserialized = Offsets?.Count ?? 0;
+                    return _CountWhenDeserialized;
                 }
-                return ((IList<T>) UnderlyingList).Count; 
+                return ((IList<T>) _UnderlyingList).Count; 
             }
         }
 
@@ -205,53 +210,53 @@ namespace Lazinator.Collections
             if (item != null)
                 item.LazinatorParents = item.LazinatorParents.WithAdded(this);
             CreateUnderlyingListIfNecessary();
-            ((IList<T>)UnderlyingList).Add(item);
-            if (!FullyDeserialized)
-                ItemsAccessedBeforeFullyDeserialized.Add(true);
+            ((IList<T>)_UnderlyingList).Add(item);
+            if (!_FullyDeserialized)
+                _ItemsAccessedBeforeFullyDeserialized.Add(true);
             MarkDirty();
         }
 
         public virtual void Clear()
         {
             FullyDeserialize();
-            ((IList<T>)UnderlyingList).Clear();
+            ((IList<T>)_UnderlyingList).Clear();
             MarkDirty();
         }
 
         public bool Contains(T item)
         {
             FullyDeserialize();
-            return ((IList<T>)UnderlyingList).Contains(item);
+            return ((IList<T>)_UnderlyingList).Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
             FullyDeserialize();
-            ((IList<T>)UnderlyingList).CopyTo(array, arrayIndex);
+            ((IList<T>)_UnderlyingList).CopyTo(array, arrayIndex);
         }
 
         public bool Any()
         {
             CreateUnderlyingListIfNecessary();
-            return UnderlyingList.Any();
+            return _UnderlyingList.Any();
         }
 
         public IEnumerator<T> GetEnumerator()
         {
             FullyDeserialize();
-            return ((IList<T>)UnderlyingList).GetEnumerator();
+            return ((IList<T>)_UnderlyingList).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             FullyDeserialize();
-            return ((IList<T>)UnderlyingList).GetEnumerator();
+            return ((IList<T>)_UnderlyingList).GetEnumerator();
         }
 
         public int IndexOf(T item)
         {
             FullyDeserialize();
-            return ((IList<T>)UnderlyingList).IndexOf(item);
+            return ((IList<T>)_UnderlyingList).IndexOf(item);
         }
 
         // Note: Instead of fully deserializing on inserts and removes, we might keep track of what has been inserted and what has been removed. But if high insert/removes are expected, or especially big lists, we can use AvlList<T> instead.
@@ -262,14 +267,14 @@ namespace Lazinator.Collections
             if (item != null)
                 item.LazinatorParents = item.LazinatorParents.WithAdded(this);
             CreateUnderlyingListIfNecessary();
-            ((IList<T>)UnderlyingList).Insert(index, item);
+            ((IList<T>)_UnderlyingList).Insert(index, item);
             MarkDirty();
         }
 
         public virtual bool Remove(T item)
         {
             FullyDeserialize();
-            var success = ((IList<T>)UnderlyingList).Remove(item);
+            var success = ((IList<T>)_UnderlyingList).Remove(item);
             if (success)
                 MarkDirty();
             return success;
@@ -281,10 +286,10 @@ namespace Lazinator.Collections
             int matches = 0;
             for (int i = Count - 1; i >= 0; i--) // iterate backwards so that indices stay same during loop
             { 
-                var item = UnderlyingList[i];
+                var item = _UnderlyingList[i];
                 if (match(item))
                 {
-                    UnderlyingList.RemoveAt(i);
+                    _UnderlyingList.RemoveAt(i);
                     matches++;
                 }
             }
@@ -297,23 +302,26 @@ namespace Lazinator.Collections
         {
             if (index >= Count || index < 0)
                 throw new Exception("Invalid removal index.");
-            if (index == Count - 1)
+            if (!_FullyDeserialized && index == 0)
             {
                 CreateUnderlyingListIfNecessary();
-                ((IList<T>)UnderlyingList).RemoveAt(index);
-                if (!FullyDeserialized)
-                    ItemsAccessedBeforeFullyDeserialized.RemoveAt(index);
+                ((IList<T>)_UnderlyingList).RemoveAt(0);
+                _ItemsAccessedBeforeFullyDeserialized.RemoveAt(0);
+                _NumRemovedFromStart++;
+            }
+            else if (!_FullyDeserialized && index == Count - 1)
+            {
+                CreateUnderlyingListIfNecessary();
+                ((IList<T>)_UnderlyingList).RemoveAt(index);
+                _ItemsAccessedBeforeFullyDeserialized.RemoveAt(index);
             }
             else
             {
                 FullyDeserialize();
-                ((IList<T>)UnderlyingList).RemoveAt(index);
+                ((IList<T>)_UnderlyingList).RemoveAt(index);
             }
             MarkDirty();
         }
-
-        Memory<byte> _PreviousMainListSerialized;
-        LazinatorOffsetList _PreviousOffsets;
 
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
@@ -334,19 +342,19 @@ namespace Lazinator.Collections
 
         public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (UnderlyingList == null)
+            if (_UnderlyingList == null)
                 return;
-            for (int index = 0; index < UnderlyingList.Count; index++)
+            for (int index = 0; index < _UnderlyingList.Count; index++)
             {
-                if (FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index])
+                if (_FullyDeserialized || _ItemsAccessedBeforeFullyDeserialized[index])
                 {
-                    var current = ((IList<T>)UnderlyingList)[index];
+                    var current = ((IList<T>)_UnderlyingList)[index];
                     if (current != null)
                     {
                         current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), GetOffset(index + 1) - GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
                         if (current.IsStruct)
                         {
-                            UnderlyingList[index] = current;
+                            _UnderlyingList[index] = current;
                         }
                     }
                 }
@@ -360,6 +368,7 @@ namespace Lazinator.Collections
                 // MainListSerialized and Offsets have been updated, and this will match the updated LazinatorMemoryStorage.
                 _PreviousMainListSerialized = null;
                 _PreviousOffsets = null;
+                _NumRemovedFromStart = 0;
             }
             else
             {
@@ -372,7 +381,7 @@ namespace Lazinator.Collections
         private bool ItemHasBeenAccessed(int index)
         {
             CreateUnderlyingListIfNecessary();
-            return FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index];
+            return _FullyDeserialized || _ItemsAccessedBeforeFullyDeserialized[index];
         }
 
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -384,17 +393,17 @@ namespace Lazinator.Collections
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
                     int startingPosition = w.Position;
-                    if (UnderlyingList == null && CountWhenDeserialized > 0)
+                    if (_UnderlyingList == null && _CountWhenDeserialized > 0)
                         CreateUnderlyingListIfNecessary();
-                    for (int i = 0; i < (UnderlyingList?.Count ?? 0); i++)
+                    for (int i = 0; i < (_UnderlyingList?.Count ?? 0); i++)
                     {
                         var itemIndex = i; // avoid closure problem
-                        var underlyingItem = UnderlyingList[itemIndex];
+                        var underlyingItem = _UnderlyingList[itemIndex];
                         WriteChild(ref w, ref underlyingItem, includeChildrenMode, ItemHasBeenAccessed(itemIndex), () => GetListMemberSlice(itemIndex), verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                         if (underlyingItem != null && underlyingItem.IsStruct)
                         { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                             underlyingItem = underlyingItem.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
-                            UnderlyingList[itemIndex] = underlyingItem;
+                            _UnderlyingList[itemIndex] = underlyingItem;
                         }
                         var offset = (int)(w.Position - startingPosition);
                         offsetList.AddOffset(offset);
@@ -451,26 +460,26 @@ namespace Lazinator.Collections
 
         public void OnFreeInMemoryObjects()
         {
-            FullyDeserialized = false;
-            UnderlyingList = null;
-            ItemsAccessedBeforeFullyDeserialized = null;
-            CountWhenDeserialized = -1;
+            _FullyDeserialized = false;
+            _UnderlyingList = null;
+            _ItemsAccessedBeforeFullyDeserialized = null;
+            _CountWhenDeserialized = -1;
         }
 
         public void OnForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
             if (!exploreOnlyDeserializedChildren)
                 FullyDeserialize();
-            if (UnderlyingList == null)
+            if (_UnderlyingList == null)
                 return;
-            for (int index = 0; index < UnderlyingList.Count; index++)
+            for (int index = 0; index < _UnderlyingList.Count; index++)
             {
-                if (FullyDeserialized || ItemsAccessedBeforeFullyDeserialized[index])
+                if (_FullyDeserialized || _ItemsAccessedBeforeFullyDeserialized[index])
                 {
-                    var current = ((IList<T>)UnderlyingList)[index];
+                    var current = ((IList<T>)_UnderlyingList)[index];
                     if (current != null)
                     {
-                        UnderlyingList[index] = (T) changeFunc(current);
+                        _UnderlyingList[index] = (T) changeFunc(current);
                     }
                 }
             }
