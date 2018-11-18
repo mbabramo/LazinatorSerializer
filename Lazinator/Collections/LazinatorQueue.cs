@@ -9,7 +9,6 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorQueue<T> : IEnumerable<T>, ILazinatorQueue<T> where T : ILazinator
     {
-        private AvlList<T> UnderlyingList;
 
         public LazinatorQueue()
         {
