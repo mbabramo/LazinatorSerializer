@@ -10,7 +10,7 @@ namespace Lazinator.Buffers
     /// <summary>
     /// This memory owner rents memory and then returns it and rents more, copying what it has written, when more space is needed.
     /// </summary>
-    public class ExpandableBytes : JointlyDisposableMemory
+    public class ExpandableBytes : TrackedMemory
     {
         public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
         public bool LazinatorShouldNotReturnToPool;

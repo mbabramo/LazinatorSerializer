@@ -3,7 +3,7 @@ using System.Buffers;
 
 namespace Lazinator.Buffers
 {
-    public class LazinatorMemory : JointlyDisposableMemory
+    public class LazinatorMemory : TrackedMemory
     {
         public IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
@@ -15,7 +15,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $@"Allocation {AllocationID} {(OwnedMemory is JointlyDisposableMemory j ? $"(Owned {j.AllocationID}) " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
+            return $@"Allocation {AllocationID} {(OwnedMemory is TrackedMemory j ? $"(Owned {j.AllocationID}) " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
         }
 
         #region Constructors
@@ -56,7 +56,7 @@ namespace Lazinator.Buffers
 
         public bool IndirectlyDisposed()
         {
-            return Disposed || (OwnedMemory != null && OwnedMemory is JointlyDisposableMemory j && j.Disposed);
+            return Disposed || (OwnedMemory != null && OwnedMemory is TrackedMemory j && j.Disposed);
         }
 
         public override void Dispose()

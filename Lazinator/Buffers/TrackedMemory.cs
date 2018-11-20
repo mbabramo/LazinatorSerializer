@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Lazinator.Buffers
 {
-    public abstract class JointlyDisposableMemory : IMemoryOwner<byte>
+    public abstract class TrackedMemory : IMemoryOwner<byte>
     {
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
         public long AllocationID;
@@ -15,7 +15,7 @@ namespace Lazinator.Buffers
             return $@"Allocation {AllocationID} Length {Memory.Length} Bytes {String.Join(",", Memory.Span.Slice(0, Math.Min(Memory.Span.Length, 100)).ToArray())}";
         }
 
-        public JointlyDisposableMemory()
+        public TrackedMemory()
         {
             unchecked
             {
@@ -29,7 +29,6 @@ namespace Lazinator.Buffers
 
 
         #region Memory management
-        
         
         /// <summary>
         /// Disposes of the owned memory, thus allowing it to be reused without garbage collection. Memory can be reclaimed

@@ -20,7 +20,7 @@ namespace LazinatorTests.Tests
     {
 
         [Fact]
-        public void BuffersDisposedJointly()
+        public void BufferOfCloneIsIndependent()
         {
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
@@ -34,40 +34,7 @@ namespace LazinatorTests.Tests
                 var m = e.MyChild1.LazinatorMemoryStorage.Memory;
                 m.Span[0] = 1;
             };
-            a.Should().Throw<ObjectDisposedException>();
-        }
-
-        [Fact]
-        public void BuffersDisposedJointly_WhenChildDisposed()
-        {
-            Example e = GetTypicalExample(); // no memory backing yet
-            e = e.CloneLazinatorTyped(); // now there is a memory buffer
-            e.MyChild1.MyLong = -342356;
-            e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
-            e.MyChild1.EnsureLazinatorMemoryUpToDate();
-            e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
-            e.MyChild1.LazinatorMemoryStorage.Dispose();
-            Action a = () =>
-            {
-                var m = e.LazinatorMemoryStorage.Memory;
-                m.Span[0] = 1;
-            };
-            a.Should().Throw<ObjectDisposedException>();
-        }
-
-        [Fact]
-        public void BuffersDisposedJointly_DisposingOriginalDisposesClone()
-        {
-            Example e = GetTypicalExample(); // no memory backing yet
-            e = e.CloneLazinatorTyped(); // now there is a memory buffer
-            var e2 = e.CloneLazinatorTyped();
-            e.LazinatorMemoryStorage.Dispose();
-            Action a = () =>
-            {
-                var m = e2.LazinatorMemoryStorage.Memory;
-                m.Span[0] = 1;
-            };
-            a.Should().Throw<ObjectDisposedException>();
+            a.Should().NotThrow<ObjectDisposedException>();
         }
 
         [Fact]
@@ -102,21 +69,6 @@ namespace LazinatorTests.Tests
                 m.Span[0] = 1;
             };
             a.Should().NotThrow<ObjectDisposedException>();
-        }
-
-        [Fact]
-        public void BuffersDisposedJointly_DisposingCloneDisposesOriginal()
-        {
-            Example e = GetTypicalExample(); // no memory backing yet
-            e = e.CloneLazinatorTyped(); // now there is a memory buffer
-            var e2 = e.CloneLazinatorTyped();
-            e2.LazinatorMemoryStorage.Dispose();
-            Action a = () =>
-            {
-                var m = e.LazinatorMemoryStorage.Memory;
-                m.Span[0] = 1;
-            };
-            a.Should().Throw<ObjectDisposedException>();
         }
 
         public enum RepetitionsToMutate
@@ -279,7 +231,7 @@ namespace LazinatorTests.Tests
             d.EnsureLazinatorMemoryUpToDate(); // OwnedMemory for this and d[0] share allocation ID of 1
             Example e = d[0];
             d[0] = GetTypicalExample();
-            d.EnsureLazinatorMemoryUpToDate(); // allocation ID 1 disposed.
+            d.LazinatorMemoryStorage.Dispose();
             Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.OwnedMemory.Memory; }; // note that error occurs only when looking at underlying memory
             a.Should().Throw<ObjectDisposedException>();
         }
