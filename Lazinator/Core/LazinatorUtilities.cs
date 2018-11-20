@@ -806,12 +806,12 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="lazinator">The Lazinator node</param>
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
-        public static ILazinator RemoveBufferInHierarchy(this ILazinator lazinator)
+        public static ILazinator RemoveBufferInHierarchy(this ILazinator lazinator, bool disposeBuffer = false)
         {
             if (lazinator == null)
                 return null;
             lazinator = lazinator.FullyDeserialize();
-            return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l), true);
+            return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), true);
         }
 
         /// <summary>
@@ -819,13 +819,13 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="lazinator">The Lazinator node</param>
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
-        private static ILazinator RemoveBuffer_Helper(this ILazinator lazinator)
+        private static ILazinator RemoveBuffer_Helper(this ILazinator lazinator, bool disposeBuffer)
         {
             if (lazinator == null)
                 return null;
             var existingBuffer = lazinator.LazinatorMemoryStorage;
             lazinator.LazinatorMemoryStorage = null;
-            if (existingBuffer != null)
+            if (disposeBuffer && existingBuffer != null)
                 existingBuffer.Dispose();
             return lazinator;
         }
