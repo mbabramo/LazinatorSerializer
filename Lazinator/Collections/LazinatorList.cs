@@ -443,7 +443,7 @@ namespace Lazinator.Collections
             yield break;
         }
 
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
@@ -456,6 +456,8 @@ namespace Lazinator.Collections
                         typedClone.Add(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
                 }
             }
+
+            return this;
         }
 
         public void OnFreeInMemoryObjects()

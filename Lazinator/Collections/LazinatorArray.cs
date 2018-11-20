@@ -38,7 +38,7 @@ namespace Lazinator.Collections
         public int Length => Count;
 
 
-        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
@@ -51,6 +51,8 @@ namespace Lazinator.Collections
                         typedClone.CompleteAdd(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
                 }
             }
+
+            return this;
         }
 
         public override void Add(T item) => throw new NotSupportedInLazinatorArrayException();
