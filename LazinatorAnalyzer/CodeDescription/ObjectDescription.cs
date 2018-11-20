@@ -304,7 +304,7 @@ namespace Lazinator.CodeDescription
                         
                         protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         
-                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer);
+                        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
                         {IIF(!ImplementsAssignCloneProperties, $@"protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
 
@@ -546,7 +546,7 @@ namespace Lazinator.CodeDescription
 
         private string GetCloneMethod()
         {
-            return $@"public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
+            return $@"public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
                             var clone = new {NameIncludingGenerics}()
                             {{
@@ -565,10 +565,6 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
                                 clone.DeserializeLazinator(bytes);
-                                if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
-                                {{
-                                    LazinatorMemoryStorage?.DisposeWithThis(clone.LazinatorMemoryStorage);
-                                }}
                             }}
                             clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}
