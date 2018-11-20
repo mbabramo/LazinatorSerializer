@@ -57,7 +57,7 @@ namespace Lazinator.CodeDescription
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         internal bool AutoChangeParentAllThisLevel => ExclusiveInterface?.AutoChangeParentAll ?? false;
         public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutoChangeParentAllThisLevel);
-
+ 
         /* Implementations */
         public string[] ImplementedMethods { get; set; }
         public bool ImplementsLazinatorObjectVersionUpgrade => ImplementedMethods.Contains("LazinatorObjectVersionUpgrade");
@@ -305,7 +305,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"public abstract public void AssignCloneProperties(ref ILazinator clone, IncludeChildrenMode includeChildrenMode);
+                        {IIF(!ImplementsAssignCloneProperties, $@"protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
 
                         ")}{HideILazinatorProperty}public abstract bool HasChanged
                         {{
@@ -558,11 +558,11 @@ namespace Lazinator.CodeDescription
                             
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                AssignCloneProperties(ref clone, includeChildrenMode);
+                                AssignCloneProperties({IIF(ObjectType == LazinatorObjectType.Struct, "ref ")}clone, includeChildrenMode);
                             }}
                             else
                             {{
-                                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
                                 clone.DeserializeLazinator(bytes);
                             }}
                             clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"
@@ -570,9 +570,9 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        public {DerivationKeyword}void AssignCloneProperties(ref ILazinator clone, IncludeChildrenMode includeChildrenMode)
+                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties({((ObjectType == LazinatorObjectType.Struct) ? $"ref {NameIncludingGenerics}" : "ILazinator")} clone, IncludeChildrenMode includeChildrenMode)
                         {{
-                            {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(ref clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
+                            {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
                             ")}{AppendCloneProperties()}{IIF(ObjectType == LazinatorObjectType.Struct, $@"
                             clone.IsDirty = false;")}}}")}";
@@ -762,7 +762,7 @@ namespace Lazinator.CodeDescription
                 }
             }
         }
-
+        
         private void AppendEnumerateNonLazinatorProperties(CodeStringBuilder sb)
         {
             if (IsAbstract)
@@ -857,7 +857,7 @@ namespace Lazinator.CodeDescription
                     }}
 ");
             }
-
+            
             sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
                     ")}return changeFunc(this);
                             }}
@@ -983,7 +983,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"{ IIF(ImplementsPreSerialization, $@"PreSerialization(verifyCleanness, updateStoredBuffer);
                             ")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
-
+            
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
                             UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);");
