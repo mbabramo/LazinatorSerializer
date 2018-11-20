@@ -783,33 +783,7 @@ namespace Lazinator.Core
                 return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
             return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
-
-        /// <summary>
-        /// Replaces an existing buffer with a new buffer, disposing of the buffer if it is not shared by the object's parents.
-        /// </summary>
-        /// <param name="existingBuffer">The existing buffer</param>
-        /// <param name="newBuffer">The new buffer</param>
-        /// <param name="parents"></param>
-        public static LazinatorMemory ReplaceBuffer(LazinatorMemory existingBuffer, LazinatorMemory newBuffer, LazinatorParentsCollection parents, bool isTopOfHierarchy, bool isStruct)
-        {
-            if (existingBuffer != null && existingBuffer.OwnedMemory != newBuffer.OwnedMemory)
-            {
-                var ownedMemory = existingBuffer.OwnedMemory;
-                if (ownedMemory != null && ownedMemory is ExpandableBytes e && e.LazinatorShouldNotReturnToPool)
-                    return newBuffer; // don't do anything -- we don't need to replace the existing buffer, since it will be garbage collected automatically.
-
-                if (parents.ParentSharesBuffer(ownedMemory) || isStruct || (!isTopOfHierarchy && (!parents.Any() || parents.Any(x => x.LazinatorMemoryStorage == null))))
-                { // we either know that the parent shares a buffer, and will thus dispose it, or we don't know about the parents, whose ancestors may still be relying on the existing buffer, so we must err on the safe by not disposing of the existing buffer. Eventually, the existing buffer will be garbage collected, even if we are using pooling. 
-                    existingBuffer.DisposeWithThis(newBuffer);
-                }
-                else
-                {
-                    existingBuffer.ReplaceWithNewBuffer(newBuffer);
-                }
-                existingBuffer.CopyOriginalSourceToNewBuffer(newBuffer);
-            }
-            return newBuffer;
-        }
+        
 
         /// <summary>
         /// Fully deserialize the lazinator at this node and below, and return the Lazinator object (or a copy if it is a struct).

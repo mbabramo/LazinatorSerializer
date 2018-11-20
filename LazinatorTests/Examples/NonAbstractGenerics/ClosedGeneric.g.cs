@@ -179,7 +179,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             
             var newBuffer = writer.Slice(startPosition, length);
-            LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);
+            LazinatorMemoryStorage = newBuffer;
         }
         
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

@@ -565,9 +565,9 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
                                 clone.DeserializeLazinator(bytes);
-                                if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
+                                if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
                                 {{
-                                    clone.LazinatorMemoryStorage.DisposeIndependently();
+                                    LazinatorMemoryStorage.DisposeWithThis(clone.LazinatorMemoryStorage);
                                 }}
                             }}
                             clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"
@@ -1007,7 +1007,7 @@ namespace Lazinator.CodeDescription
             GetCodeBeforeBufferIsUpdated(sb);
             sb.AppendLine($@"
                 var newBuffer = writer.Slice(startPosition, length);
-                LazinatorMemoryStorage = ReplaceBuffer(LazinatorMemoryStorage, newBuffer, LazinatorParents, startPosition == 0, IsStruct);");
+                LazinatorMemoryStorage = newBuffer;");
             sb.Append($@"}}
 ");
         }
