@@ -45,6 +45,7 @@ namespace Lazinator.CodeDescription
         public bool IsAbstract { get; set; }
         public bool IsSealed { get; set; }
         public string SealedKeyword => IsSealed ? "sealed " : "";
+        public bool IsClass => ObjectType == LazinatorObjectType.Class;
         public bool IsSealedOrStruct => IsSealed || ObjectType != LazinatorObjectType.Class;
 
         /* Interfaces */
@@ -423,7 +424,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                         {{
-                            return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, (EncodeManuallyDelegate) EncodeToNewBuffer);
+                            return EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
                         }}
 
                         {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
