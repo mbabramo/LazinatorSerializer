@@ -219,13 +219,13 @@ namespace Lazinator.CodeDescription
             IEnumerable<ITypeSymbol> supertypes;
             AppendSupertypesInformation(out partialsuperclasses, out supertypes);
             AppendDeclaration(sb, partialsuperclasses);
-            AppendGeneralDefinitions(sb);
             AppendPropertyDefinitions(sb);
-            AppendConversions(sb);
+            AppendGeneralDefinitions(sb);
+            AppendMiscMethods(sb);
             AppendCloseClassSupertypesAndNamespace(sb, supertypes);
         }
 
-        private void AppendConversions(CodeStringBuilder sb)
+        private void AppendMiscMethods(CodeStringBuilder sb)
         {
             if (IsAbstract)
             {
