@@ -551,21 +551,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};
-                            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                            {{
-                                clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                            }}
-                            
-                            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
-                            {{
-                                {IIF(ObjectType == LazinatorObjectType.Struct, $"clone = ({NameIncludingGenerics}) ")}AssignCloneProperties(clone, includeChildrenMode);
-                            }}
-                            else
-                            {{
-                                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
-                                clone.DeserializeLazinator(bytes);
-                            }}
-                            clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"
+                            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"

@@ -734,6 +734,36 @@ namespace Lazinator.Core
         #region Cloning
 
         /// <summary>
+        /// Used internally by CloneLazinator to perform the cloning process.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="clone"></param>
+        /// <param name="includeChildrenMode"></param>
+        /// <param name="cloneBufferOptions"></param>
+        /// <returns></returns>
+        public static T CompleteClone<T>(T source, T clone, IncludeChildrenMode includeChildrenMode, CloneBufferOptions cloneBufferOptions) where T : ILazinator
+        {
+
+            if (clone.LazinatorObjectVersion != source.LazinatorObjectVersion)
+            {
+                clone.LazinatorObjectVersion = source.LazinatorObjectVersion;
+            }
+
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
+            {
+                source.AssignCloneProperties(clone, includeChildrenMode);
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, source.OriginalIncludeChildrenMode, false, source.IsDirty, source.DescendantIsDirty, false, source.LazinatorMemoryStorage, false, source);
+                clone.DeserializeLazinator(bytes);
+            }
+            clone.LazinatorParents = default;
+            return clone;
+        }
+
+        /// <summary>
         /// Clones a Lazinator object, returning the object as its own type.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
