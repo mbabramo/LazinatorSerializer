@@ -705,7 +705,7 @@ namespace Lazinator.Core
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
         /// <param name="cloneBufferOptions">How the clone's buffer should relate to the original's</param>
         /// <returns>A clone of the Lazinator object</returns>
-        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer) where T : ILazinator
+        public static T CloneLazinatorTyped<T>(this T lazinator, IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers) where T : ILazinator
         {
             if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
                 return default(T);

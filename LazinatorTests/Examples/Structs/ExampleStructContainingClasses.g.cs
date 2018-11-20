@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples
         
         LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         
-        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new ExampleStructContainingClasses()
             {
@@ -92,10 +92,6 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
                 clone.DeserializeLazinator(bytes);
-                if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
-                {
-                    LazinatorMemoryStorage?.DisposeWithThis(clone.LazinatorMemoryStorage);
-                }
             }
             clone.LazinatorParents = default;
             return clone;

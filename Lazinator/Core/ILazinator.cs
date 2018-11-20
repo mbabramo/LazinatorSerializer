@@ -24,7 +24,7 @@ namespace Lazinator.Core
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
         /// <param name="cloneBufferOptions">How the clone's buffer should relate to the original's</param>
         /// <returns>A cloned copy of the class/struct</returns>
-        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer);
+        ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
         /// <summary>
         /// Indicates whether a Lazinator object has been dirty since it was last deserialized (or since this property was manually changed). This value does not change after a full or partial serialization, while IsDirty does change.

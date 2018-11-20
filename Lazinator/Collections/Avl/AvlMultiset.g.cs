@@ -69,7 +69,7 @@ namespace Lazinator.Collections.Avl
         
         protected virtual LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
+        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new AvlMultiset<T>()
             {
@@ -88,10 +88,6 @@ namespace Lazinator.Collections.Avl
             {
                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
                 clone.DeserializeLazinator(bytes);
-                if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
-                {
-                    LazinatorMemoryStorage?.DisposeWithThis(clone.LazinatorMemoryStorage);
-                }
             }
             clone.LazinatorParents = default;
             return clone;

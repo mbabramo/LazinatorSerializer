@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.LinkedBuffer)
+        public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new Concrete5()
             {
@@ -52,10 +52,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
                 clone.DeserializeLazinator(bytes);
-                if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
-                {
-                    LazinatorMemoryStorage?.DisposeWithThis(clone.LazinatorMemoryStorage);
-                }
             }
             clone.LazinatorParents = default;
             return clone;

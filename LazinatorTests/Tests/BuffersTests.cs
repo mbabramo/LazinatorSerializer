@@ -162,7 +162,7 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
-            Example c1 = null, c2 = null, c3 = null; // early clones -- make sure unaffected
+            Example c1 = null, c2 = null; // early clones -- make sure unaffected
             int repetitions = 8;
             Random r = new Random();
             long randLong = 0;
@@ -179,9 +179,8 @@ namespace LazinatorTests.Tests
                 }
                 if (i == 5)
                 {
-                    c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
-                    c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
-                    c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
+                    c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
                 }
                 if (MutateThisRepetition(i, mutateParent))
                     e.MyBool = !e.MyBool;
@@ -211,7 +210,7 @@ namespace LazinatorTests.Tests
                 if (makeParentUpToDate)
                     e.EnsureLazinatorMemoryUpToDate();
             }
-            foreach (Example c in new Example[] { c1, c2, c3 })
+            foreach (Example c in new Example[] { c1, c2 })
             {
                 c.MyChild2.MyLong = -3; // make sure early clone still works
             }
@@ -231,7 +230,7 @@ namespace LazinatorTests.Tests
             {
                 if (i == 3)
                 {
-                    c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
+                    c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
                 }
                 e.MyBool = !e.MyBool;
                 e.EnsureLazinatorMemoryUpToDate();

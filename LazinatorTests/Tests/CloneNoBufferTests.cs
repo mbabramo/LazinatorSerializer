@@ -28,7 +28,7 @@ namespace LazinatorTests.Tests
 
         private void VerifyCloningEquivalence(ILazinator lazinator, IncludeChildrenMode includeChildrenMode)
         {
-            var clonedWithBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.LinkedBuffer);
+            var clonedWithBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.IndependentBuffers);
             var clonedNoBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             var clonedWithBufferString = new HierarchyTree(clonedWithBuffer).ToString();
             var clonedNoBufferString = new HierarchyTree(clonedNoBuffer).ToString();
