@@ -90,11 +90,13 @@ namespace LazinatorTests.Examples.NonLazinator
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             FromNonLazinatorBase typedClone = (FromNonLazinatorBase) clone;
             typedClone.MyInt = MyInt;
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

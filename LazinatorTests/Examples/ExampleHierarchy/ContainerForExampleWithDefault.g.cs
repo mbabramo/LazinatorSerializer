@@ -86,7 +86,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ContainerForExampleWithDefault typedClone = (ContainerForExampleWithDefault) clone;
@@ -94,6 +94,8 @@ namespace LazinatorTests.Examples
             {
                 typedClone.Example = (Example == null) ? default(Example) : (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

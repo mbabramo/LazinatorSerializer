@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             ExampleChildInherited typedClone = (ExampleChildInherited) clone;
@@ -66,6 +66,8 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyGrandchildInInherited = (MyGrandchildInInherited == null) ? default(ExampleGrandchild) : (ExampleGrandchild) MyGrandchildInInherited.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         /* Properties */

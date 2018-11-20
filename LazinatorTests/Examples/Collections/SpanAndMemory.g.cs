@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             SpanAndMemory typedClone = (SpanAndMemory) clone;
@@ -106,6 +106,8 @@ namespace LazinatorTests.Examples.Collections
             typedClone.MyReadOnlySpanChar = CloneOrChange_ReadOnlySpan_Gchar_g(MyReadOnlySpanChar, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyReadOnlySpanDateTime = CloneOrChange_ReadOnlySpan_GDateTime_g(MyReadOnlySpanDateTime, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyReadOnlySpanLong = CloneOrChange_ReadOnlySpan_Glong_g(MyReadOnlySpanLong, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

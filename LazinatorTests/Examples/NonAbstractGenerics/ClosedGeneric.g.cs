@@ -58,11 +58,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return clone;
         }
         
-        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             ClosedGeneric typedClone = (ClosedGeneric) clone;
             typedClone.AnotherPropertyAdded = AnotherPropertyAdded;
+            
+            return typedClone;
         }
         
         /* Properties */

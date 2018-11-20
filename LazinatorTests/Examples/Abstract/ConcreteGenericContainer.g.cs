@@ -88,7 +88,7 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
-        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ConcreteGenericContainer typedClone = (ConcreteGenericContainer) clone;
@@ -96,6 +96,8 @@ namespace LazinatorTests.Examples.Abstract
             {
                 typedClone.Item = (Item == null) ? default(IAbstractGeneric1<int>) : (IAbstractGeneric1<int>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         public override bool HasChanged { get; set; }

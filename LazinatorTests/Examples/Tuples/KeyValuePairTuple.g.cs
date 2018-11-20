@@ -87,11 +87,13 @@ namespace LazinatorTests.Examples.Tuples
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             KeyValuePairTuple typedClone = (KeyValuePairTuple) clone;
             typedClone.MyKeyValuePairSerialized = CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

@@ -93,7 +93,7 @@ namespace Lazinator.Spans
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;
@@ -103,6 +103,8 @@ namespace Lazinator.Spans
             {
                 typedClone.ByteSpan = (ByteSpan == null) ? default(LazinatorByteSpan) : (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

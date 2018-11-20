@@ -86,13 +86,15 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ArrayMultidimensional_Values typedClone = (ArrayMultidimensional_Values) clone;
             typedClone.MyArrayInt = CloneOrChange_int_B_c_b(MyArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyCrazyJaggedArray = CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyThreeDimArrayInt = CloneOrChange_int_B_c_c_b(MyThreeDimArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

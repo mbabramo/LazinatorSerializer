@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ContainerForExampleStructWithoutClass typedClone = (ContainerForExampleStructWithoutClass) clone;
@@ -99,6 +99,8 @@ namespace LazinatorTests.Examples.Structs
             {
                 typedClone.ExampleStructWithoutClass = (System.Collections.Generic.EqualityComparer<ExampleStructWithoutClass>.Default.Equals(ExampleStructWithoutClass, default(ExampleStructWithoutClass))) ? default(ExampleStructWithoutClass) : (ExampleStructWithoutClass) ExampleStructWithoutClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

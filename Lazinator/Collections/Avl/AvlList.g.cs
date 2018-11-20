@@ -90,7 +90,7 @@ namespace Lazinator.Collections.Avl
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             AvlList<T> typedClone = (AvlList<T>) clone;
@@ -98,6 +98,8 @@ namespace Lazinator.Collections.Avl
             {
                 typedClone.UnderlyingTree = (UnderlyingTree == null) ? default(AvlTree<WByte, T>) : (AvlTree<WByte, T>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

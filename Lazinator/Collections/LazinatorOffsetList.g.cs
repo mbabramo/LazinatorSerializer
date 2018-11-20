@@ -97,7 +97,7 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorOffsetList typedClone = (LazinatorOffsetList) clone;
@@ -109,6 +109,8 @@ namespace Lazinator.Collections
             {
                 typedClone.TwoByteItems = (TwoByteItems == null) ? default(LazinatorFastReadList<short>) : (LazinatorFastReadList<short>) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

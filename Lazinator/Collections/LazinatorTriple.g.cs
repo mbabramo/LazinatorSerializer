@@ -89,7 +89,7 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;
@@ -105,6 +105,8 @@ namespace Lazinator.Collections
             {
                 typedClone.Item3 = (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

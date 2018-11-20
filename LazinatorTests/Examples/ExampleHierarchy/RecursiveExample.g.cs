@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             RecursiveExample typedClone = (RecursiveExample) clone;
@@ -102,6 +102,8 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 typedClone.RecursiveInterface = (RecursiveInterface == null) ? default(IRecursiveExample) : (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

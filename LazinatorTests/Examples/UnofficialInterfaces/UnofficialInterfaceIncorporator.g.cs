@@ -91,7 +91,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             UnofficialInterfaceIncorporator typedClone = (UnofficialInterfaceIncorporator) clone;
@@ -105,6 +105,8 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyUnofficialObject = (MyUnofficialObject == null) ? default(Concrete3) : (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }

@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Subclasses
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ClassWithSubclass typedClone = (ClassWithSubclass) clone;
@@ -103,6 +103,8 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 typedClone.SubclassInstance2 = (SubclassInstance2 == null) ? default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) : (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
+            return typedClone;
         }
         
         public virtual bool HasChanged { get; set; }
