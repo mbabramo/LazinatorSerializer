@@ -567,7 +567,7 @@ namespace Lazinator.CodeDescription
                                 clone.DeserializeLazinator(bytes);
                                 if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
                                 {{
-                                    LazinatorMemoryStorage.DisposeWithThis(clone.LazinatorMemoryStorage);
+                                    LazinatorMemoryStorage?.DisposeWithThis(clone.LazinatorMemoryStorage);
                                 }}
                             }}
                             clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"

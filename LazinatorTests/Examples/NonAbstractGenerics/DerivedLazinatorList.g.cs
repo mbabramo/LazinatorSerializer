@@ -53,9 +53,9 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, (EncodeManuallyDelegate)EncodeToNewBuffer, false);
                 clone.DeserializeLazinator(bytes);
-                if (cloneBufferOptions == CloneBufferOptions.IndependentBuffers)
+                if (cloneBufferOptions == CloneBufferOptions.LinkedBuffer)
                 {
-                    clone.LazinatorMemoryStorage.DisposeIndependently();
+                    LazinatorMemoryStorage?.DisposeWithThis(clone.LazinatorMemoryStorage);
                 }
             }
             clone.LazinatorParents = default;
