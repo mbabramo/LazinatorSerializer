@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, (EncodeManuallyDelegate)EncodeToNewBuffer);
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, (EncodeManuallyDelegate) EncodeToNewBuffer);
                 clone.DeserializeLazinator(bytes);
             }
             clone.LazinatorParents = default;
@@ -183,7 +183,7 @@ namespace LazinatorTests.Examples
                 {
                     return;
                 }
-                LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, (EncodeManuallyDelegate)EncodeToNewBuffer);
+                LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, (EncodeManuallyDelegate) EncodeToNewBuffer);
                 OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
             }
             
