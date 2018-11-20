@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        public void AssignCloneProperties(ref ExampleStructContainingStruct clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref ExampleStructContainingStruct clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 

@@ -38,7 +38,7 @@ namespace Lazinator.Collections
         public int Length => Count;
 
 
-        public override public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {

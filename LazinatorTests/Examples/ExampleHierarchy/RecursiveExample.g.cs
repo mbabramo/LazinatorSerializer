@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return clone;
         }
         
-        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             RecursiveExample typedClone = (RecursiveExample) clone;

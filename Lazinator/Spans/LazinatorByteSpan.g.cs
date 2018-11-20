@@ -90,7 +90,7 @@ namespace Lazinator.Spans
             return clone;
         }
         
-        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorByteSpan typedClone = (LazinatorByteSpan) clone;

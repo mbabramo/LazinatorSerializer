@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
         
-        protected abstract public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
+        protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
         
         public abstract bool HasChanged
         {

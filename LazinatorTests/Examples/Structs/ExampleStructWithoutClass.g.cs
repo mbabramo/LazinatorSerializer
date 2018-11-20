@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
-        public void AssignCloneProperties(ref ExampleStructWithoutClass clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref ExampleStructWithoutClass clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             clone.MyInt = MyInt;

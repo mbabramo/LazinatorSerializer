@@ -91,7 +91,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        public void AssignCloneProperties(ref WNullableStruct<T> clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref WNullableStruct<T> clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             clone.HasValue = HasValue;

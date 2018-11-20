@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        public void AssignCloneProperties(ref ExampleStructContainingClasses clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref ExampleStructContainingClasses clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             clone.MyBool = MyBool;

@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
-        public override public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             GenericFromBase<T> typedClone = (GenericFromBase<T>) clone;

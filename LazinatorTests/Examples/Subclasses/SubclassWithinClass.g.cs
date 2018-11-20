@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.Subclasses
                 return clone;
             }
             
-            public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+            protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
             {
                 clone.FreeInMemoryObjects();
                 SubclassWithinClass typedClone = (SubclassWithinClass) clone;

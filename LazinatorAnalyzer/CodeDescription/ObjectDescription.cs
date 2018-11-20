@@ -305,7 +305,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"protected abstract public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
+                        {IIF(!ImplementsAssignCloneProperties, $@"protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
 
                         ")}{HideILazinatorProperty}public abstract bool HasChanged
                         {{
@@ -562,7 +562,7 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
                                 clone.DeserializeLazinator(bytes);
                             }}
                             clone.LazinatorParents = default;{IIF(ImplementsOnClone, $@"
@@ -570,7 +570,7 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        {ProtectedIfApplicable}{DerivationKeyword}public void AssignCloneProperties({((ObjectType == LazinatorObjectType.Struct) ? $"ref {NameIncludingGenerics}" : "ILazinator")} clone, IncludeChildrenMode includeChildrenMode)
+                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties({((ObjectType == LazinatorObjectType.Struct) ? $"ref {NameIncludingGenerics}" : "ILazinator")} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;

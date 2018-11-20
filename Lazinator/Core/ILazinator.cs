@@ -108,12 +108,6 @@ namespace Lazinator.Core
         /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
         void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         /// <summary>
-        /// Copies this object's properties to a clone object
-        /// </summary>
-        /// <param name="clone">The clone to which this object's Lazinator properties should be assigned.</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>
-        public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
-        /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's LazinatorObjectBytes.
         /// </summary>
         LazinatorMemory LazinatorMemoryStorage { get; set; }

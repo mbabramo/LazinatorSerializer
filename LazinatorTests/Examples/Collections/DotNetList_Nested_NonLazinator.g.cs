@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
-        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             DotNetList_Nested_NonLazinator typedClone = (DotNetList_Nested_NonLazinator) clone;

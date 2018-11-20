@@ -89,7 +89,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        public void AssignCloneProperties(ref WReadOnlySpanChar clone, IncludeChildrenMode includeChildrenMode)
+        void AssignCloneProperties(ref WReadOnlySpanChar clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             clone.Value = CloneOrChange_ReadOnlySpan_Gchar_g(Value, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);

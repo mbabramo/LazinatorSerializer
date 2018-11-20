@@ -94,7 +94,7 @@ namespace Lazinator.Collections.Dictionary
             return clone;
         }
         
-        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             DictionaryBucket<TKey, TValue> typedClone = (DictionaryBucket<TKey, TValue>) clone;
