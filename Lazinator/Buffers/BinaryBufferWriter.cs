@@ -6,6 +6,11 @@ namespace Lazinator.Buffers
 {
     public ref struct BinaryBufferWriter
     {
+        public override string ToString()
+        {
+            return UnderlyingMemory == null ? "" : "Position " + _Position + " " + UnderlyingMemory.ToString();
+        }
+
         ExpandableBytes UnderlyingMemory { get; set; }
         Span<byte> BufferSpan => UnderlyingMemory == null ? new Span<byte>() : UnderlyingMemory.Memory.Span;
 

@@ -12,7 +12,7 @@ namespace Lazinator.Collections
 
         public LazinatorQueue()
         {
-            UnderlyingList = new AvlList<T>();
+            UnderlyingList = new LazinatorList<T>();
         }
 
         public void Enqueue(T item)

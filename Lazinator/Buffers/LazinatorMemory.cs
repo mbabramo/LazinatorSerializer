@@ -12,11 +12,10 @@ namespace Lazinator.Buffers
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
-        public long? AllocationID => OwnedMemory is ExpandableBytes e ? (long?) e.AllocationID : null;
 
         public override string ToString()
         {
-            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
+            return $@"Allocation {AllocationID} {(OwnedMemory is JointlyDisposableMemory j ? $"(Owned {j.AllocationID}) " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
         }
 
         #region Constructors

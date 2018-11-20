@@ -7,6 +7,6 @@ namespace Lazinator.Collections
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorQueue)]
     interface ILazinatorQueue<T> where T : ILazinator
     {
-        AvlList<T> UnderlyingList { get; set; }
+        LazinatorList<T> UnderlyingList { get; set; }
     }
 }

@@ -1,11 +1,28 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Lazinator.Buffers
 {
     public abstract class JointlyDisposableMemory : IMemoryOwner<byte>
     {
+        public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
+        public long AllocationID;
+
+        public override string ToString()
+        {
+            return $@"Allocation {AllocationID} Length {Memory.Length} Bytes {String.Join(",", Memory.Span.Slice(0, Math.Min(Memory.Span.Length, 100)).ToArray())}";
+        }
+
+        public JointlyDisposableMemory()
+        {
+            unchecked
+            {
+                AllocationID = Interlocked.Increment(ref NextAllocationID) - 1;
+            }
+        }
+
         private JointlyDisposableMemory _OriginalSource;
         public JointlyDisposableMemory OriginalSource
         {
