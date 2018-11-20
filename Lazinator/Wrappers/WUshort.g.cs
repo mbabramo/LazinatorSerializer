@@ -92,7 +92,9 @@ namespace Lazinator.Wrappers
             clone.FreeInMemoryObjects();
             clone.WrappedValue = WrappedValue;
             
-            clone.IsDirty = false;}
+            clone.IsDirty = false;
+
+        }
             
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public bool HasChanged { get; set; }

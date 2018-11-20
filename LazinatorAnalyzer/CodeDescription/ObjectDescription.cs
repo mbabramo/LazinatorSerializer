@@ -305,7 +305,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
+                        {IIF(!ImplementsAssignCloneProperties, $@"public abstract ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
 
                         ")}{HideILazinatorProperty}public abstract bool HasChanged
                         {{
@@ -558,7 +558,7 @@ namespace Lazinator.CodeDescription
                             
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                AssignCloneProperties({IIF(ObjectType == LazinatorObjectType.Struct, "ref ")}clone, includeChildrenMode);
+                                {IIF(ObjectType == LazinatorObjectType.Struct, $"clone = ({NameIncludingGenerics}) ")}AssignCloneProperties(clone, includeChildrenMode);
                             }}
                             else
                             {{
@@ -570,12 +570,14 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        {ProtectedIfApplicable}{DerivationKeyword}void AssignCloneProperties({((ObjectType == LazinatorObjectType.Struct) ? $"ref {NameIncludingGenerics}" : "ILazinator")} clone, IncludeChildrenMode includeChildrenMode)
+                        public {DerivationKeyword}ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
-                            {IIF(ObjectType != LazinatorObjectType.Struct, $@"{NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
-                            ")}{AppendCloneProperties()}{IIF(ObjectType == LazinatorObjectType.Struct, $@"
-                            clone.IsDirty = false;")}}}")}";
+                            {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
+                            {AppendCloneProperties()}{IIF(ObjectType == LazinatorObjectType.Struct, $@"
+                            typedClone.IsDirty = false;")}
+                            return typedClone;
+                        }}")}";
 
         }
 
@@ -583,7 +585,7 @@ namespace Lazinator.CodeDescription
         private string AppendCloneProperties()
         {
             CodeStringBuilder sb = new CodeStringBuilder();
-            string nameOfCloneVariable = (ObjectType == LazinatorObjectType.Struct) ? "clone" : "typedClone";
+            string nameOfCloneVariable = "typedClone";
             foreach (var property in PropertiesToDefineThisLevel)
             {
                 property.AppendCopyPropertyToClone(sb, nameOfCloneVariable);
