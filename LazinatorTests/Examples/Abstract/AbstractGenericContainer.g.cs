@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.Abstract
         }
         
         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-        public abstract void EnsureLazinatorMemoryUpToDate();
+        public abstract void UpdateStoredBuffer();
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
         

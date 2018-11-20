@@ -154,7 +154,7 @@ namespace LazinatorTests.Tests
             LazinatorByteSpan clone = lazinatorBytes.CloneLazinatorTyped();
             var byteSpan = clone.GetSpanToReadOrWrite();
             clone.IsDirty = true;
-            clone.EnsureLazinatorMemoryUpToDate();
+            clone.UpdateStoredBuffer();
             var x = byteSpan[0];
         }
 
@@ -168,7 +168,7 @@ namespace LazinatorTests.Tests
             spanAndMemory.MyMemoryByte.Span[0] = 5;
             var byteSpan = clone.MyMemoryByte;
             clone.IsDirty = true; // trigger replacement of buffer
-            clone.EnsureLazinatorMemoryUpToDate();
+            clone.UpdateStoredBuffer();
             var x = byteSpan.Span[0];
             x.Should().Be(1);
         }

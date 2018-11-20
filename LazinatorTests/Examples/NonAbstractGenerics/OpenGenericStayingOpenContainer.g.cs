@@ -192,7 +192,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
-        public virtual void EnsureLazinatorMemoryUpToDate()
+        public virtual void UpdateStoredBuffer()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual int GetByteLength()
         {
-            EnsureLazinatorMemoryUpToDate();
+            UpdateStoredBuffer();
             return LazinatorObjectBytes.Length;
         }
         

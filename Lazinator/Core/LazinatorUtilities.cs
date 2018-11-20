@@ -155,7 +155,7 @@ namespace Lazinator.Core
                 // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
                 if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode) 
                 {
-                    // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to EnsureLazinatorMemoryUpToDate.
+                    // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to UpdateStoredBuffer.
                     childStorage = child.LazinatorMemoryStorage;
                     if (childStorage != null && childStorage.Memory.Length != 0)
                         childCouldHaveChanged = false;
@@ -641,7 +641,7 @@ namespace Lazinator.Core
         /// <param name="hierarchy">The node containing the top of the hierarchy to mark as clean</param>
         public static void MarkHierarchyClean(this ILazinator hierarchy)
         {
-            hierarchy.EnsureLazinatorMemoryUpToDate(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
+            hierarchy.UpdateStoredBuffer(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
             MarkHierarchyUnchanged(hierarchy);
         }
 
@@ -719,7 +719,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static byte[] CopyToArray(this ILazinator lazinator)
         {
-            lazinator.EnsureLazinatorMemoryUpToDate();
+            lazinator.UpdateStoredBuffer();
             byte[] array = new byte[lazinator.LazinatorMemoryStorage.Length];
             lazinator.LazinatorMemoryStorage.Memory.CopyTo(array);
             return array;
@@ -851,7 +851,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static MemoryStream GetMemoryStream(this ILazinator lazinator)
         {
-            lazinator.EnsureLazinatorMemoryUpToDate();
+            lazinator.UpdateStoredBuffer();
             return lazinator.LazinatorMemoryStorage.ReadOnlyMemory.GetMemoryStream();
         }
 
@@ -862,7 +862,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static (Pipe pipe, int bytes) GetPipe(this ILazinator lazinator)
         {
-            lazinator.EnsureLazinatorMemoryUpToDate();
+            lazinator.UpdateStoredBuffer();
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();

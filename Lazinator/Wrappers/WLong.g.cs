@@ -174,11 +174,11 @@ namespace Lazinator.Wrappers
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
             
-            public void EnsureLazinatorMemoryUpToDate()
+            public void UpdateStoredBuffer()
             {
                 if (LazinatorMemoryStorage == null)
                 {
-                    throw new NotSupportedException("Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead."); 
+                    throw new NotSupportedException("Cannot use UpdateStoredBuffer on a struct that has not been deserialized. Clone the struct instead."); 
                 }
                 if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {
@@ -190,7 +190,7 @@ namespace Lazinator.Wrappers
             
             public int GetByteLength()
             {
-                EnsureLazinatorMemoryUpToDate();
+                UpdateStoredBuffer();
                 return LazinatorObjectBytes.Length;
             }
             

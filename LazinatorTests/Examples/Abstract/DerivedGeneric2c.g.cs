@@ -174,7 +174,7 @@ namespace LazinatorTests.Examples.Abstract
         }
         protected override ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
-        public override void EnsureLazinatorMemoryUpToDate()
+        public override void UpdateStoredBuffer()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
@@ -186,7 +186,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override int GetByteLength()
         {
-            EnsureLazinatorMemoryUpToDate();
+            UpdateStoredBuffer();
             return LazinatorObjectBytes.Length;
         }
         

@@ -183,7 +183,7 @@ namespace LazinatorTests.Tests
             d[a] = "something";
             d[b] = "else";
             LazinatorTuple<WLong, WInt> a2 = new LazinatorTuple<WLong, WInt>(1, 2);
-            a2.EnsureLazinatorMemoryUpToDate();
+            a2.UpdateStoredBuffer();
             string s = d[a2];
             s.Should().Be("something");
             a2.FreeInMemoryObjects();

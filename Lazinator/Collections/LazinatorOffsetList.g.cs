@@ -193,7 +193,7 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
         
-        public void EnsureLazinatorMemoryUpToDate()
+        public void UpdateStoredBuffer()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
@@ -205,7 +205,7 @@ namespace Lazinator.Collections
         
         public int GetByteLength()
         {
-            EnsureLazinatorMemoryUpToDate();
+            UpdateStoredBuffer();
             return LazinatorObjectBytes.Length;
         }
         

@@ -361,7 +361,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-                        public abstract void EnsureLazinatorMemoryUpToDate();
+                        public abstract void UpdateStoredBuffer();
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
 
@@ -503,11 +503,11 @@ namespace Lazinator.CodeDescription
                         }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
 
-                        public {DerivationKeyword}void EnsureLazinatorMemoryUpToDate()
+                        public {DerivationKeyword}void UpdateStoredBuffer()
                         {{
                             {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (LazinatorMemoryStorage == null)
                             {{
-                                throw new NotSupportedException(""Cannot use EnsureLazinatorMemoryUpToDate on a struct that has not been deserialized. Clone the struct instead.""); 
+                                throw new NotSupportedException(""Cannot use UpdateStoredBuffer on a struct that has not been deserialized. Clone the struct instead.""); 
                             }}
                             ")}if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
@@ -519,7 +519,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}int GetByteLength()
                         {{
-                            EnsureLazinatorMemoryUpToDate();
+                            UpdateStoredBuffer();
                             return LazinatorObjectBytes.Length;
                         }}
 
