@@ -30,6 +30,127 @@ namespace LazinatorTests.Examples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyOfficialObject_ByteIndex;
+        protected int _MyUnofficialObject_ByteIndex;
+        protected virtual int _MyOfficialObject_ByteLength => _MyUnofficialObject_ByteIndex - _MyOfficialObject_ByteIndex;
+        private int _UnofficialInterfaceIncorporator_EndByteIndex;
+        protected virtual int _MyUnofficialObject_ByteLength => _UnofficialInterfaceIncorporator_EndByteIndex - _MyUnofficialObject_ByteIndex;
+        
+        
+        protected long _MyOfficialLong;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public long MyOfficialLong
+        {
+            get
+            {
+                return _MyOfficialLong;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyOfficialLong = value;
+            }
+        }
+        
+        protected int _MyUnofficialInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private int MyUnofficialInt
+        {
+            get
+            {
+                return _MyUnofficialInt;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyUnofficialInt = value;
+            }
+        }
+        
+        protected Concrete5 _MyOfficialObject;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Concrete5 MyOfficialObject
+        {
+            get
+            {
+                if (!_MyOfficialObject_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyOfficialObject = default(Concrete5);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
+                        
+                        _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(239, () => new Concrete5(), childData, this); 
+                    }
+                    _MyOfficialObject_Accessed = true;
+                } 
+                return _MyOfficialObject;
+            }
+            set
+            {
+                if (_MyOfficialObject != null)
+                {
+                    _MyOfficialObject.LazinatorParents = _MyOfficialObject.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyOfficialObject = value;
+                _MyOfficialObject_Accessed = true;
+            }
+        }
+        protected bool _MyOfficialObject_Accessed;
+        
+        protected Concrete3 _MyUnofficialObject;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Concrete3 MyUnofficialObject
+        {
+            get
+            {
+                if (!_MyUnofficialObject_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyUnofficialObject = default(Concrete3);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
+                        
+                        _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(237, () => new Concrete3(), childData, this); 
+                    }
+                    _MyUnofficialObject_Accessed = true;
+                } 
+                return _MyUnofficialObject;
+            }
+            set
+            {
+                if (_MyUnofficialObject != null)
+                {
+                    _MyUnofficialObject.LazinatorParents = _MyUnofficialObject.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyUnofficialObject = value;
+                _MyUnofficialObject_Accessed = true;
+            }
+        }
+        protected bool _MyUnofficialObject_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public UnofficialInterfaceIncorporator() : base()
@@ -181,126 +302,6 @@ namespace LazinatorTests.Examples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyOfficialObject_ByteIndex;
-        protected int _MyUnofficialObject_ByteIndex;
-        protected virtual int _MyOfficialObject_ByteLength => _MyUnofficialObject_ByteIndex - _MyOfficialObject_ByteIndex;
-        private int _UnofficialInterfaceIncorporator_EndByteIndex;
-        protected virtual int _MyUnofficialObject_ByteLength => _UnofficialInterfaceIncorporator_EndByteIndex - _MyUnofficialObject_ByteIndex;
-        
-        
-        protected long _MyOfficialLong;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public long MyOfficialLong
-        {
-            get
-            {
-                return _MyOfficialLong;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyOfficialLong = value;
-            }
-        }
-        
-        protected int _MyUnofficialInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private int MyUnofficialInt
-        {
-            get
-            {
-                return _MyUnofficialInt;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyUnofficialInt = value;
-            }
-        }
-        
-        protected Concrete5 _MyOfficialObject;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Concrete5 MyOfficialObject
-        {
-            get
-            {
-                if (!_MyOfficialObject_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyOfficialObject = default(Concrete5);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
-                        
-                        _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(239, () => new Concrete5(), childData, this); 
-                    }
-                    _MyOfficialObject_Accessed = true;
-                } 
-                return _MyOfficialObject;
-            }
-            set
-            {
-                if (_MyOfficialObject != null)
-                {
-                    _MyOfficialObject.LazinatorParents = _MyOfficialObject.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyOfficialObject = value;
-                _MyOfficialObject_Accessed = true;
-            }
-        }
-        protected bool _MyOfficialObject_Accessed;
-        
-        protected Concrete3 _MyUnofficialObject;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Concrete3 MyUnofficialObject
-        {
-            get
-            {
-                if (!_MyUnofficialObject_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyUnofficialObject = default(Concrete3);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
-                        
-                        _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(237, () => new Concrete3(), childData, this); 
-                    }
-                    _MyUnofficialObject_Accessed = true;
-                } 
-                return _MyUnofficialObject;
-            }
-            set
-            {
-                if (_MyUnofficialObject != null)
-                {
-                    _MyUnofficialObject.LazinatorParents = _MyUnofficialObject.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyUnofficialObject = value;
-                _MyUnofficialObject_Accessed = true;
-            }
-        }
-        protected bool _MyUnofficialObject_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

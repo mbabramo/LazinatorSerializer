@@ -32,6 +32,74 @@ namespace Lazinator.Collections.Avl
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _UnderlyingSet_ByteIndex;
+        private int _AvlMultiset_T_EndByteIndex;
+        protected virtual int _UnderlyingSet_ByteLength => _AvlMultiset_T_EndByteIndex - _UnderlyingSet_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected int _NumItemsAdded;
+        public int NumItemsAdded
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _NumItemsAdded;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _NumItemsAdded = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected AvlSet<LazinatorTuple<T, WInt>> _UnderlyingSet;
+        public virtual AvlSet<LazinatorTuple<T, WInt>> UnderlyingSet
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_UnderlyingSet_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _UnderlyingSet = default(AvlSet<LazinatorTuple<T, WInt>>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null);
+                        
+                        _UnderlyingSet = DeserializationFactory.Instance.CreateBaseOrDerivedType(97, () => new AvlSet<LazinatorTuple<T, WInt>>(), childData, this); 
+                    }
+                    _UnderlyingSet_Accessed = true;
+                } 
+                return _UnderlyingSet;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_UnderlyingSet != null)
+                {
+                    _UnderlyingSet.LazinatorParents = _UnderlyingSet.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _UnderlyingSet = value;
+                _UnderlyingSet_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _UnderlyingSet_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -185,73 +253,6 @@ namespace Lazinator.Collections.Avl
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _UnderlyingSet_ByteIndex;
-        private int _AvlMultiset_T_EndByteIndex;
-        protected virtual int _UnderlyingSet_ByteLength => _AvlMultiset_T_EndByteIndex - _UnderlyingSet_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected int _NumItemsAdded;
-        public int NumItemsAdded
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _NumItemsAdded;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _NumItemsAdded = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected AvlSet<LazinatorTuple<T, WInt>> _UnderlyingSet;
-        public virtual AvlSet<LazinatorTuple<T, WInt>> UnderlyingSet
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_UnderlyingSet_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _UnderlyingSet = default(AvlSet<LazinatorTuple<T, WInt>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingSet_ByteIndex, _UnderlyingSet_ByteLength, false, false, null);
-                        
-                        _UnderlyingSet = DeserializationFactory.Instance.CreateBaseOrDerivedType(97, () => new AvlSet<LazinatorTuple<T, WInt>>(), childData, this); 
-                    }
-                    _UnderlyingSet_Accessed = true;
-                } 
-                return _UnderlyingSet;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_UnderlyingSet != null)
-                {
-                    _UnderlyingSet.LazinatorParents = _UnderlyingSet.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _UnderlyingSet = value;
-                _UnderlyingSet_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _UnderlyingSet_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

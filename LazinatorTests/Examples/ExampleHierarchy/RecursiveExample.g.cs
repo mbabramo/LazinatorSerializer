@@ -29,6 +29,97 @@ namespace LazinatorTests.Examples.Hierarchy
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _RecursiveClass_ByteIndex;
+        protected int _RecursiveInterface_ByteIndex;
+        protected virtual int _RecursiveClass_ByteLength => _RecursiveInterface_ByteIndex - _RecursiveClass_ByteIndex;
+        private int _RecursiveExample_EndByteIndex;
+        protected virtual int _RecursiveInterface_ByteLength => _RecursiveExample_EndByteIndex - _RecursiveInterface_ByteIndex;
+        
+        
+        protected RecursiveExample _RecursiveClass;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public RecursiveExample RecursiveClass
+        {
+            get
+            {
+                if (!_RecursiveClass_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _RecursiveClass = default(RecursiveExample);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null);
+                        
+                        _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
+                    }
+                    _RecursiveClass_Accessed = true;
+                } 
+                return _RecursiveClass;
+            }
+            set
+            {
+                if (_RecursiveClass != null)
+                {
+                    _RecursiveClass.LazinatorParents = _RecursiveClass.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _RecursiveClass = value;
+                _RecursiveClass_Accessed = true;
+            }
+        }
+        protected bool _RecursiveClass_Accessed;
+        
+        protected IRecursiveExample _RecursiveInterface;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public IRecursiveExample RecursiveInterface
+        {
+            get
+            {
+                if (!_RecursiveInterface_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _RecursiveInterface = default(IRecursiveExample);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null);
+                        
+                        _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
+                    }
+                    _RecursiveInterface_Accessed = true;
+                } 
+                return _RecursiveInterface;
+            }
+            set
+            {
+                if (_RecursiveInterface != null)
+                {
+                    _RecursiveInterface.LazinatorParents = _RecursiveInterface.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _RecursiveInterface = value;
+                _RecursiveInterface_Accessed = true;
+            }
+        }
+        protected bool _RecursiveInterface_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public RecursiveExample() : base()
@@ -178,96 +269,6 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _RecursiveClass_ByteIndex;
-        protected int _RecursiveInterface_ByteIndex;
-        protected virtual int _RecursiveClass_ByteLength => _RecursiveInterface_ByteIndex - _RecursiveClass_ByteIndex;
-        private int _RecursiveExample_EndByteIndex;
-        protected virtual int _RecursiveInterface_ByteLength => _RecursiveExample_EndByteIndex - _RecursiveInterface_ByteIndex;
-        
-        
-        protected RecursiveExample _RecursiveClass;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public RecursiveExample RecursiveClass
-        {
-            get
-            {
-                if (!_RecursiveClass_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _RecursiveClass = default(RecursiveExample);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null);
-                        
-                        _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
-                    }
-                    _RecursiveClass_Accessed = true;
-                } 
-                return _RecursiveClass;
-            }
-            set
-            {
-                if (_RecursiveClass != null)
-                {
-                    _RecursiveClass.LazinatorParents = _RecursiveClass.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _RecursiveClass = value;
-                _RecursiveClass_Accessed = true;
-            }
-        }
-        protected bool _RecursiveClass_Accessed;
-        
-        protected IRecursiveExample _RecursiveInterface;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IRecursiveExample RecursiveInterface
-        {
-            get
-            {
-                if (!_RecursiveInterface_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _RecursiveInterface = default(IRecursiveExample);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null);
-                        
-                        _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
-                    }
-                    _RecursiveInterface_Accessed = true;
-                } 
-                return _RecursiveInterface;
-            }
-            set
-            {
-                if (_RecursiveInterface != null)
-                {
-                    _RecursiveInterface.LazinatorParents = _RecursiveInterface.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _RecursiveInterface = value;
-                _RecursiveInterface_Accessed = true;
-            }
-        }
-        protected bool _RecursiveInterface_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

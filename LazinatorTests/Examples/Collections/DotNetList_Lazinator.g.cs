@@ -30,6 +30,64 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyListSerialized_ByteIndex;
+        private int _DotNetList_Lazinator_EndByteIndex;
+        protected virtual int _MyListSerialized_ByteLength => _DotNetList_Lazinator_EndByteIndex - _MyListSerialized_ByteIndex;
+        
+        
+        protected List<ExampleChild> _MyListSerialized;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public List<ExampleChild> MyListSerialized
+        {
+            get
+            {
+                if (!_MyListSerialized_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyListSerialized = default(List<ExampleChild>);
+                        _MyListSerialized_Dirty = true; 
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
+                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
+                    }
+                    _MyListSerialized_Accessed = true;
+                } 
+                return _MyListSerialized;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyListSerialized = value;
+                _MyListSerialized_Dirty = true;
+                _MyListSerialized_Accessed = true;
+            }
+        }
+        protected bool _MyListSerialized_Accessed;
+        
+        private bool _MyListSerialized_Dirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public bool MyListSerialized_Dirty
+        {
+            get => _MyListSerialized_Dirty;
+            set
+            {
+                if (_MyListSerialized_Dirty != value)
+                {
+                    _MyListSerialized_Dirty = value;
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
+                }
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -168,63 +226,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyListSerialized_ByteIndex;
-        private int _DotNetList_Lazinator_EndByteIndex;
-        protected virtual int _MyListSerialized_ByteLength => _DotNetList_Lazinator_EndByteIndex - _MyListSerialized_ByteIndex;
-        
-        
-        protected List<ExampleChild> _MyListSerialized;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public List<ExampleChild> MyListSerialized
-        {
-            get
-            {
-                if (!_MyListSerialized_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListSerialized = default(List<ExampleChild>);
-                        _MyListSerialized_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
-                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
-                    }
-                    _MyListSerialized_Accessed = true;
-                } 
-                return _MyListSerialized;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyListSerialized = value;
-                _MyListSerialized_Dirty = true;
-                _MyListSerialized_Accessed = true;
-            }
-        }
-        protected bool _MyListSerialized_Accessed;
-        
-        private bool _MyListSerialized_Dirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public bool MyListSerialized_Dirty
-        {
-            get => _MyListSerialized_Dirty;
-            set
-            {
-                if (_MyListSerialized_Dirty != value)
-                {
-                    _MyListSerialized_Dirty = value;
-                }
-                if (value && !IsDirty)
-                {
-                    IsDirty = true;
-                }
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

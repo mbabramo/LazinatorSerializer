@@ -30,6 +30,54 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyList_ByteIndex;
+        private int _LazinatorListContainerGeneric_T_EndByteIndex;
+        protected virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
+        
+        
+        protected LazinatorList<T> _MyList;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual LazinatorList<T> MyList
+        {
+            get
+            {
+                if (!_MyList_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyList = default(LazinatorList<T>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
+                        
+                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
+                    }
+                    _MyList_Accessed = true;
+                } 
+                return _MyList;
+            }
+            set
+            {
+                if (_MyList != null)
+                {
+                    _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyList = value;
+                _MyList_Accessed = true;
+            }
+        }
+        protected bool _MyList_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -171,53 +219,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyList_ByteIndex;
-        private int _LazinatorListContainerGeneric_T_EndByteIndex;
-        protected virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
-        
-        
-        protected LazinatorList<T> _MyList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorList<T> MyList
-        {
-            get
-            {
-                if (!_MyList_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyList = default(LazinatorList<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
-                        
-                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
-                    }
-                    _MyList_Accessed = true;
-                } 
-                return _MyList;
-            }
-            set
-            {
-                if (_MyList != null)
-                {
-                    _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyList = value;
-                _MyList_Accessed = true;
-            }
-        }
-        protected bool _MyList_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

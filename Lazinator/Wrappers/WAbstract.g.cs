@@ -30,6 +30,19 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Wrapped_ByteIndex;
+        protected virtual int _Wrapped_ByteLength { get; }
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Wrapped_Accessed = false;
+        public virtual T Wrapped
+        {
+            get;
+            set;
+        }
         /* Abstract declarations */
         public abstract LazinatorParentsCollection LazinatorParents { get; set; }
         
@@ -105,19 +118,6 @@ namespace Lazinator.Wrappers
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
         
-        /* Property definitions */
-        
-        protected int _Wrapped_ByteIndex;
-        protected virtual int _Wrapped_ByteLength { get; }
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Wrapped_Accessed = false;
-        public virtual T Wrapped
-        {
-            get;
-            set;
-        }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorUniqueID { get; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

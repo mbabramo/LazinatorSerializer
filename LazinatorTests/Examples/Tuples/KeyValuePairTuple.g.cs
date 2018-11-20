@@ -30,6 +30,45 @@ namespace LazinatorTests.Examples.Tuples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyKeyValuePairSerialized_ByteIndex;
+        private int _KeyValuePairTuple_EndByteIndex;
+        protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
+        
+        
+        protected KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
+        {
+            get
+            {
+                if (!_MyKeyValuePairSerialized_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyKeyValuePairSerialized = default(KeyValuePair<uint, ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null);
+                        _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
+                    }
+                    _MyKeyValuePairSerialized_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyKeyValuePairSerialized;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyKeyValuePairSerialized = value;
+                _MyKeyValuePairSerialized_Accessed = true;
+            }
+        }
+        protected bool _MyKeyValuePairSerialized_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -168,44 +207,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyKeyValuePairSerialized_ByteIndex;
-        private int _KeyValuePairTuple_EndByteIndex;
-        protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
-        
-        
-        protected KeyValuePair<uint, ExampleChild> _MyKeyValuePairSerialized;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public KeyValuePair<uint, ExampleChild> MyKeyValuePairSerialized
-        {
-            get
-            {
-                if (!_MyKeyValuePairSerialized_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyKeyValuePairSerialized = default(KeyValuePair<uint, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null);
-                        _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
-                    }
-                    _MyKeyValuePairSerialized_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyKeyValuePairSerialized;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyKeyValuePairSerialized = value;
-                _MyKeyValuePairSerialized_Accessed = true;
-            }
-        }
-        protected bool _MyKeyValuePairSerialized_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

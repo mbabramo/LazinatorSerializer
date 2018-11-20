@@ -30,6 +30,125 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Item1_ByteIndex;
+        protected int _Item2_ByteIndex;
+        protected virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
+        private int _LazinatorTuple_T_U_EndByteIndex = 0;
+        protected virtual int _Item2_ByteLength => _LazinatorTuple_T_U_EndByteIndex - _Item2_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected T _Item1;
+        public virtual T Item1
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Item1_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Item1 = default(T);
+                        if (_Item1 != null)
+                        { // Item1 is a struct
+                            _Item1.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, false, false, null);
+                        
+                        _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
+                    }
+                    _Item1_Accessed = true;
+                } 
+                return _Item1;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (value != null && value.IsStruct)
+                {
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+                else
+                {
+                    if (_Item1 != null)
+                    {
+                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Item1 = value;
+                _Item1_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Item1_Accessed;
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected U _Item2;
+        public virtual U Item2
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Item2_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Item2 = default(U);
+                        if (_Item2 != null)
+                        { // Item2 is a struct
+                            _Item2.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, false, false, null);
+                        
+                        _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
+                    }
+                    _Item2_Accessed = true;
+                } 
+                return _Item2;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (value != null && value.IsStruct)
+                {
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+                else
+                {
+                    if (_Item2 != null)
+                    {
+                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Item2 = value;
+                _Item2_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Item2_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -186,124 +305,6 @@ namespace Lazinator.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _Item1_ByteIndex;
-        protected int _Item2_ByteIndex;
-        protected virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
-        private int _LazinatorTuple_T_U_EndByteIndex = 0;
-        protected virtual int _Item2_ByteLength => _LazinatorTuple_T_U_EndByteIndex - _Item2_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected T _Item1;
-        public virtual T Item1
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Item1_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Item1 = default(T);
-                        if (_Item1 != null)
-                        { // Item1 is a struct
-                            _Item1.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, false, false, null);
-                        
-                        _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                    }
-                    _Item1_Accessed = true;
-                } 
-                return _Item1;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (value != null && value.IsStruct)
-                {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
-                }
-                else
-                {
-                    if (_Item1 != null)
-                    {
-                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
-                    }
-                    if (value != null)
-                    {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                    }
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Item1 = value;
-                _Item1_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Item1_Accessed;
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected U _Item2;
-        public virtual U Item2
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Item2_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Item2 = default(U);
-                        if (_Item2 != null)
-                        { // Item2 is a struct
-                            _Item2.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, false, false, null);
-                        
-                        _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
-                    }
-                    _Item2_Accessed = true;
-                } 
-                return _Item2;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (value != null && value.IsStruct)
-                {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
-                }
-                else
-                {
-                    if (_Item2 != null)
-                    {
-                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
-                    }
-                    if (value != null)
-                    {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                    }
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Item2 = value;
-                _Item2_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Item2_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

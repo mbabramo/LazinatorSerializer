@@ -30,166 +30,6 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
-        /* Serialization, deserialization, and object relationships */
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorParentsCollection LazinatorParents { get; set; }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
-        
-        public virtual int Deserialize()
-        {
-            FreeInMemoryObjects();
-            int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            if (span.Length == 0)
-            {
-                return 0;
-            }
-            
-            LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
-            
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
-            
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
-            
-            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
-            
-            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return bytesSoFar;
-        }
-        
-        public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, this);
-        
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
-        {
-            var clone = new LazinatorTriple<T, U, V>()
-            {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
-            return clone;
-        }
-        
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
-        {
-            clone.FreeInMemoryObjects();
-            LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                typedClone.Item1 = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                typedClone.Item2 = (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                typedClone.Item3 = (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            
-            return typedClone;
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual bool HasChanged { get; set; }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _IsDirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual bool IsDirty
-        {
-            [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
-            [DebuggerStepThrough]
-            set
-            {
-                if (_IsDirty != value)
-                {
-                    _IsDirty = value;
-                    if (_IsDirty)
-                    {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        HasChanged = true;
-                    }
-                }
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _DescendantHasChanged;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual bool DescendantHasChanged
-        {
-            [DebuggerStepThrough]
-            get => _DescendantHasChanged;
-            [DebuggerStepThrough]
-            set
-            {
-                _DescendantHasChanged = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _DescendantIsDirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual bool DescendantIsDirty
-        {
-            [DebuggerStepThrough]
-            get => _DescendantIsDirty;
-            [DebuggerStepThrough]
-            set
-            {
-                if (_DescendantIsDirty != value)
-                {
-                    _DescendantIsDirty = value;
-                    if (_DescendantIsDirty)
-                    {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        _DescendantHasChanged = true;
-                    }
-                }
-            }
-        }
-        
-        public virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
-        {
-            LazinatorMemoryStorage = serializedBytes;
-            int length = Deserialize();
-            if (length != LazinatorMemoryStorage.Length)
-            {
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorMemory LazinatorMemoryStorage
-        {
-            get;
-            set;
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-        
-        public virtual void UpdateStoredBuffer()
-        {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                return;
-            }
-            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, this);
-            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-        }
-        
-        public virtual int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
-        }
-        
-        public virtual bool NonBinaryHash32 => false;
-        
         /* Property definitions */
         
         protected int _Item1_ByteIndex;
@@ -365,6 +205,167 @@ namespace Lazinator.Collections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Item3_Accessed;
+        
+        /* Serialization, deserialization, and object relationships */
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual LazinatorParentsCollection LazinatorParents { get; set; }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
+        
+        public virtual int Deserialize()
+        {
+            FreeInMemoryObjects();
+            int bytesSoFar = 0;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            if (span.Length == 0)
+            {
+                return 0;
+            }
+            
+            LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
+            
+            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            
+            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            
+            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+            
+            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+            return bytesSoFar;
+        }
+        
+        public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, this);
+        
+        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+        {
+            var clone = new LazinatorTriple<T, U, V>()
+            {
+                OriginalIncludeChildrenMode = includeChildrenMode
+            };
+            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+            return clone;
+        }
+        
+        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            clone.FreeInMemoryObjects();
+            LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Item1 = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Item2 = (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.Item3 = (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            
+            return typedClone;
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual bool HasChanged { get; set; }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _IsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual bool IsDirty
+        {
+            [DebuggerStepThrough]
+            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            [DebuggerStepThrough]
+            set
+            {
+                if (_IsDirty != value)
+                {
+                    _IsDirty = value;
+                    if (_IsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        HasChanged = true;
+                    }
+                }
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _DescendantHasChanged;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual bool DescendantHasChanged
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasChanged;
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasChanged = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _DescendantIsDirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual bool DescendantIsDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantIsDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                if (_DescendantIsDirty != value)
+                {
+                    _DescendantIsDirty = value;
+                    if (_DescendantIsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        _DescendantHasChanged = true;
+                    }
+                }
+            }
+        }
+        
+        public virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        {
+            LazinatorMemoryStorage = serializedBytes;
+            int length = Deserialize();
+            if (length != LazinatorMemoryStorage.Length)
+            {
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual LazinatorMemory LazinatorMemoryStorage
+        {
+            get;
+            set;
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+        
+        public virtual void UpdateStoredBuffer()
+        {
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                return;
+            }
+            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, this);
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
+        }
+        
+        public virtual int GetByteLength()
+        {
+            UpdateStoredBuffer();
+            return LazinatorObjectBytes.Length;
+        }
+        
+        public virtual bool NonBinaryHash32 => false;
+        
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

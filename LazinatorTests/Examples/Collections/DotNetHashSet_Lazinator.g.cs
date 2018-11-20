@@ -30,6 +30,45 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyHashSetSerialized_ByteIndex;
+        private int _DotNetHashSet_Lazinator_EndByteIndex;
+        protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
+        
+        
+        protected HashSet<ExampleChild> _MyHashSetSerialized;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public HashSet<ExampleChild> MyHashSetSerialized
+        {
+            get
+            {
+                if (!_MyHashSetSerialized_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyHashSetSerialized = default(HashSet<ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null);
+                        _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
+                    }
+                    _MyHashSetSerialized_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyHashSetSerialized;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyHashSetSerialized = value;
+                _MyHashSetSerialized_Accessed = true;
+            }
+        }
+        protected bool _MyHashSetSerialized_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -168,44 +207,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyHashSetSerialized_ByteIndex;
-        private int _DotNetHashSet_Lazinator_EndByteIndex;
-        protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
-        
-        
-        protected HashSet<ExampleChild> _MyHashSetSerialized;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public HashSet<ExampleChild> MyHashSetSerialized
-        {
-            get
-            {
-                if (!_MyHashSetSerialized_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyHashSetSerialized = default(HashSet<ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null);
-                        _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
-                    }
-                    _MyHashSetSerialized_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyHashSetSerialized;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyHashSetSerialized = value;
-                _MyHashSetSerialized_Accessed = true;
-            }
-        }
-        protected bool _MyHashSetSerialized_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

@@ -30,6 +30,37 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Example3_ByteIndex;
+        protected int _IntList1_ByteIndex;
+        protected virtual int _Example3_ByteLength => _IntList1_ByteIndex - _Example3_ByteIndex;
+        protected virtual int _IntList1_ByteLength { get; }
+        
+        
+        protected bool _String1_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract string String1
+        {
+            get;
+            set;
+        }
+        
+        protected bool _Example3_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract Example Example3
+        {
+            get;
+            set;
+        }
+        
+        protected bool _IntList1_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract List<int> IntList1
+        {
+            get;
+            set;
+        }
         /* Abstract declarations */
         public abstract LazinatorParentsCollection LazinatorParents { get; set; }
         
@@ -98,37 +129,6 @@ namespace LazinatorTests.Examples.Abstract
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
         
-        /* Property definitions */
-        
-        protected int _Example3_ByteIndex;
-        protected int _IntList1_ByteIndex;
-        protected virtual int _Example3_ByteLength => _IntList1_ByteIndex - _Example3_ByteIndex;
-        protected virtual int _IntList1_ByteLength { get; }
-        
-        
-        protected bool _String1_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract string String1
-        {
-            get;
-            set;
-        }
-        
-        protected bool _Example3_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract Example Example3
-        {
-            get;
-            set;
-        }
-        
-        protected bool _IntList1_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract List<int> IntList1
-        {
-            get;
-            set;
-        }
         public abstract int LazinatorUniqueID { get; }
         protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
         protected virtual bool ContainsOpenGenericParameters => false;

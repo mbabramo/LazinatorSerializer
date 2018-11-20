@@ -29,6 +29,10 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        
+        
         /* Serialization, deserialization, and object relationships */
         
         public Base() : base()
@@ -169,9 +173,6 @@ namespace LazinatorTests.Examples.Abstract
         }
         
         public virtual bool NonBinaryHash32 => false;
-        
-        /* Property definitions */
-        
         
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)

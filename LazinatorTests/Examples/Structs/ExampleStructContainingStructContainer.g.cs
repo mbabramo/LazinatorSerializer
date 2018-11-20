@@ -30,6 +30,77 @@ namespace LazinatorTests.Examples.Structs
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Subcontainer_ByteIndex;
+        private int _ExampleStructContainingStructContainer_EndByteIndex;
+        protected virtual int _Subcontainer_ByteLength => _ExampleStructContainingStructContainer_EndByteIndex - _Subcontainer_ByteIndex;
+        
+        
+        protected ExampleStructContainingStruct _Subcontainer;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ExampleStructContainingStruct Subcontainer
+        {
+            get
+            {
+                if (!_Subcontainer_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Subcontainer = default(ExampleStructContainingStruct);
+                        _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
+                        _Subcontainer = new ExampleStructContainingStruct()
+                        {
+                            LazinatorParents = new LazinatorParentsCollection(this)
+                        };
+                        _Subcontainer.DeserializeLazinator(childData);
+                    }
+                    _Subcontainer_Accessed = true;
+                } 
+                return _Subcontainer;
+            }
+            set
+            {
+                value.LazinatorParents = new LazinatorParentsCollection(this);
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Subcontainer = value;
+                _Subcontainer_Accessed = true;
+            }
+        }
+        protected bool _Subcontainer_Accessed;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ExampleStructContainingStruct Subcontainer_Copy
+        {
+            get
+            {
+                if (!_Subcontainer_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        return default(ExampleStructContainingStruct);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
+                        var toReturn = new ExampleStructContainingStruct();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
+                    }
+                }
+                var cleanCopy = _Subcontainer;
+                cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
+                return cleanCopy;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public ExampleStructContainingStructContainer() : base()
@@ -175,76 +246,6 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _Subcontainer_ByteIndex;
-        private int _ExampleStructContainingStructContainer_EndByteIndex;
-        protected virtual int _Subcontainer_ByteLength => _ExampleStructContainingStructContainer_EndByteIndex - _Subcontainer_ByteIndex;
-        
-        
-        protected ExampleStructContainingStruct _Subcontainer;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ExampleStructContainingStruct Subcontainer
-        {
-            get
-            {
-                if (!_Subcontainer_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Subcontainer = default(ExampleStructContainingStruct);
-                        _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
-                        _Subcontainer = new ExampleStructContainingStruct()
-                        {
-                            LazinatorParents = new LazinatorParentsCollection(this)
-                        };
-                        _Subcontainer.DeserializeLazinator(childData);
-                    }
-                    _Subcontainer_Accessed = true;
-                } 
-                return _Subcontainer;
-            }
-            set
-            {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Subcontainer = value;
-                _Subcontainer_Accessed = true;
-            }
-        }
-        protected bool _Subcontainer_Accessed;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ExampleStructContainingStruct Subcontainer_Copy
-        {
-            get
-            {
-                if (!_Subcontainer_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        return default(ExampleStructContainingStruct);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
-                        var toReturn = new ExampleStructContainingStruct();
-                        toReturn.DeserializeLazinator(childData);
-                        toReturn.IsDirty = false;
-                        return toReturn;
-                    }
-                }
-                var cleanCopy = _Subcontainer;
-                cleanCopy.IsDirty = false;
-                cleanCopy.DescendantIsDirty = false;
-                return cleanCopy;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

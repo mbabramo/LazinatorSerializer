@@ -29,6 +29,40 @@ namespace LazinatorTests.Examples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        
+        
+        protected string _AString;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public string AString
+        {
+            get
+            {
+                return _AString;
+            }
+            set
+            {
+                IsDirty = true;
+                _AString = value;
+            }
+        }
+        
+        protected int _MyInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MyInt
+        {
+            get
+            {
+                return _MyInt;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyInt = value;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public ExampleGrandchild() : base()
@@ -172,39 +206,6 @@ namespace LazinatorTests.Examples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        
-        
-        protected string _AString;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string AString
-        {
-            get
-            {
-                return _AString;
-            }
-            set
-            {
-                IsDirty = true;
-                _AString = value;
-            }
-        }
-        
-        protected int _MyInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int MyInt
-        {
-            get
-            {
-                return _MyInt;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyInt = value;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

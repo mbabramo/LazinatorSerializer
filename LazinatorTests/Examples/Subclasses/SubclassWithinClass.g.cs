@@ -31,6 +31,25 @@ namespace LazinatorTests.Examples.Subclasses
         {
             public bool IsStruct => false;
             
+            /* Property definitions */
+            
+            
+            
+            protected string _StringWithinSubclass;
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+            public string StringWithinSubclass
+            {
+                get
+                {
+                    return _StringWithinSubclass;
+                }
+                set
+                {
+                    IsDirty = true;
+                    _StringWithinSubclass = value;
+                }
+            }
+            
             /* Serialization, deserialization, and object relationships */
             
             public SubclassWithinClass() : base()
@@ -173,24 +192,6 @@ namespace LazinatorTests.Examples.Subclasses
             
             public virtual bool NonBinaryHash32 => false;
             
-            /* Property definitions */
-            
-            
-            
-            protected string _StringWithinSubclass;
-            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            public string StringWithinSubclass
-            {
-                get
-                {
-                    return _StringWithinSubclass;
-                }
-                set
-                {
-                    IsDirty = true;
-                    _StringWithinSubclass = value;
-                }
-            }
             
             public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
             {

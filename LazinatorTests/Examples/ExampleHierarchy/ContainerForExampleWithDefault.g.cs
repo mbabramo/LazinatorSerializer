@@ -29,6 +29,54 @@ namespace LazinatorTests.Examples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Example_ByteIndex;
+        private int _ContainerForExampleWithDefault_EndByteIndex;
+        protected virtual int _Example_ByteLength => _ContainerForExampleWithDefault_EndByteIndex - _Example_ByteIndex;
+        
+        
+        protected Example _Example;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Example Example
+        {
+            get
+            {
+                if (!_Example_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Example = default(Example);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, false, false, null);
+                        
+                        _Example = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                    }
+                    _Example_Accessed = true;
+                } 
+                return _Example;
+            }
+            set
+            {
+                if (_Example != null)
+                {
+                    _Example.LazinatorParents = _Example.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Example = value;
+                _Example_Accessed = true;
+            }
+        }
+        protected bool _Example_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -170,53 +218,6 @@ namespace LazinatorTests.Examples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _Example_ByteIndex;
-        private int _ContainerForExampleWithDefault_EndByteIndex;
-        protected virtual int _Example_ByteLength => _ContainerForExampleWithDefault_EndByteIndex - _Example_ByteIndex;
-        
-        
-        protected Example _Example;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Example Example
-        {
-            get
-            {
-                if (!_Example_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Example = default(Example);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, false, false, null);
-                        
-                        _Example = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
-                    }
-                    _Example_Accessed = true;
-                } 
-                return _Example;
-            }
-            set
-            {
-                if (_Example != null)
-                {
-                    _Example.LazinatorParents = _Example.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Example = value;
-                _Example_Accessed = true;
-            }
-        }
-        protected bool _Example_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

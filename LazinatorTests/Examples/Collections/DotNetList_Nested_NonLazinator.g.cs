@@ -30,6 +30,45 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyListNestedNonLazinatorType_ByteIndex;
+        private int _DotNetList_Nested_NonLazinator_EndByteIndex;
+        protected virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonLazinator_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
+        
+        
+        protected List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public List<List<NonLazinatorClass>> MyListNestedNonLazinatorType
+        {
+            get
+            {
+                if (!_MyListNestedNonLazinatorType_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null);
+                        _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
+                    }
+                    _MyListNestedNonLazinatorType_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyListNestedNonLazinatorType;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyListNestedNonLazinatorType = value;
+                _MyListNestedNonLazinatorType_Accessed = true;
+            }
+        }
+        protected bool _MyListNestedNonLazinatorType_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -168,44 +207,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyListNestedNonLazinatorType_ByteIndex;
-        private int _DotNetList_Nested_NonLazinator_EndByteIndex;
-        protected virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonLazinator_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
-        
-        
-        protected List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public List<List<NonLazinatorClass>> MyListNestedNonLazinatorType
-        {
-            get
-            {
-                if (!_MyListNestedNonLazinatorType_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null);
-                        _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
-                    }
-                    _MyListNestedNonLazinatorType_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyListNestedNonLazinatorType;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyListNestedNonLazinatorType = value;
-                _MyListNestedNonLazinatorType_Accessed = true;
-            }
-        }
-        protected bool _MyListNestedNonLazinatorType_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

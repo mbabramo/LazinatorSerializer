@@ -29,6 +29,54 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyBase_ByteIndex;
+        private int _BaseContainer_EndByteIndex;
+        protected virtual int _MyBase_ByteLength => _BaseContainer_EndByteIndex - _MyBase_ByteIndex;
+        
+        
+        protected Base _MyBase;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Base MyBase
+        {
+            get
+            {
+                if (!_MyBase_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyBase = default(Base);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, false, false, null);
+                        
+                        _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(266, () => new Base(), childData, this); 
+                    }
+                    _MyBase_Accessed = true;
+                } 
+                return _MyBase;
+            }
+            set
+            {
+                if (_MyBase != null)
+                {
+                    _MyBase.LazinatorParents = _MyBase.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyBase = value;
+                _MyBase_Accessed = true;
+            }
+        }
+        protected bool _MyBase_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public BaseContainer() : base()
@@ -174,53 +222,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyBase_ByteIndex;
-        private int _BaseContainer_EndByteIndex;
-        protected virtual int _MyBase_ByteLength => _BaseContainer_EndByteIndex - _MyBase_ByteIndex;
-        
-        
-        protected Base _MyBase;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Base MyBase
-        {
-            get
-            {
-                if (!_MyBase_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyBase = default(Base);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, false, false, null);
-                        
-                        _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(266, () => new Base(), childData, this); 
-                    }
-                    _MyBase_Accessed = true;
-                } 
-                return _MyBase;
-            }
-            set
-            {
-                if (_MyBase != null)
-                {
-                    _MyBase.LazinatorParents = _MyBase.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyBase = value;
-                _MyBase_Accessed = true;
-            }
-        }
-        protected bool _MyBase_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

@@ -29,6 +29,69 @@ namespace LazinatorTests.Examples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _ItemU_ByteIndex;
+        private int _ClosedGenericWithoutBase_EndByteIndex;
+        protected virtual int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
+        
+        
+        protected int _ItemT;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int ItemT
+        {
+            get
+            {
+                return _ItemT;
+            }
+            set
+            {
+                IsDirty = true;
+                _ItemT = value;
+            }
+        }
+        
+        protected ExampleChild _ItemU;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ExampleChild ItemU
+        {
+            get
+            {
+                if (!_ItemU_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _ItemU = default(ExampleChild);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null);
+                        
+                        _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
+                    }
+                    _ItemU_Accessed = true;
+                } 
+                return _ItemU;
+            }
+            set
+            {
+                if (_ItemU != null)
+                {
+                    _ItemU.LazinatorParents = _ItemU.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _ItemU = value;
+                _ItemU_Accessed = true;
+            }
+        }
+        protected bool _ItemU_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public ClosedGenericWithoutBase() : base()
@@ -175,68 +238,6 @@ namespace LazinatorTests.Examples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _ItemU_ByteIndex;
-        private int _ClosedGenericWithoutBase_EndByteIndex;
-        protected virtual int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
-        
-        
-        protected int _ItemT;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int ItemT
-        {
-            get
-            {
-                return _ItemT;
-            }
-            set
-            {
-                IsDirty = true;
-                _ItemT = value;
-            }
-        }
-        
-        protected ExampleChild _ItemU;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ExampleChild ItemU
-        {
-            get
-            {
-                if (!_ItemU_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ItemU = default(ExampleChild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null);
-                        
-                        _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(213, () => new ExampleChild(), childData, this); 
-                    }
-                    _ItemU_Accessed = true;
-                } 
-                return _ItemU;
-            }
-            set
-            {
-                if (_ItemU != null)
-                {
-                    _ItemU.LazinatorParents = _ItemU.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _ItemU = value;
-                _ItemU_Accessed = true;
-            }
-        }
-        protected bool _ItemU_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

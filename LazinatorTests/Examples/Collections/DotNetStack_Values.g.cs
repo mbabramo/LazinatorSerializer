@@ -29,6 +29,64 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyStackInt_ByteIndex;
+        private int _DotNetStack_Values_EndByteIndex;
+        protected virtual int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
+        
+        
+        protected Stack<int> _MyStackInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Stack<int> MyStackInt
+        {
+            get
+            {
+                if (!_MyStackInt_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyStackInt = default(Stack<int>);
+                        _MyStackInt_Dirty = true; 
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
+                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
+                    }
+                    _MyStackInt_Accessed = true;
+                } 
+                return _MyStackInt;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyStackInt = value;
+                _MyStackInt_Dirty = true;
+                _MyStackInt_Accessed = true;
+            }
+        }
+        protected bool _MyStackInt_Accessed;
+        
+        private bool _MyStackInt_Dirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public bool MyStackInt_Dirty
+        {
+            get => _MyStackInt_Dirty;
+            set
+            {
+                if (_MyStackInt_Dirty != value)
+                {
+                    _MyStackInt_Dirty = value;
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
+                }
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -167,63 +225,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyStackInt_ByteIndex;
-        private int _DotNetStack_Values_EndByteIndex;
-        protected virtual int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
-        
-        
-        protected Stack<int> _MyStackInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Stack<int> MyStackInt
-        {
-            get
-            {
-                if (!_MyStackInt_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyStackInt = default(Stack<int>);
-                        _MyStackInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
-                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
-                    }
-                    _MyStackInt_Accessed = true;
-                } 
-                return _MyStackInt;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyStackInt = value;
-                _MyStackInt_Dirty = true;
-                _MyStackInt_Accessed = true;
-            }
-        }
-        protected bool _MyStackInt_Accessed;
-        
-        private bool _MyStackInt_Dirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public bool MyStackInt_Dirty
-        {
-            get => _MyStackInt_Dirty;
-            set
-            {
-                if (_MyStackInt_Dirty != value)
-                {
-                    _MyStackInt_Dirty = value;
-                }
-                if (value && !IsDirty)
-                {
-                    IsDirty = true;
-                }
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

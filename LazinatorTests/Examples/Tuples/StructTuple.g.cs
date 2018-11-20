@@ -30,6 +30,147 @@ namespace LazinatorTests.Examples.Tuples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _EnumTuple_ByteIndex;
+        protected int _MyNamedTuple_ByteIndex;
+        protected int _MyNullableTuple_ByteIndex;
+        protected int _MyValueTupleSerialized_ByteIndex;
+        protected virtual int _EnumTuple_ByteLength => _MyNamedTuple_ByteIndex - _EnumTuple_ByteIndex;
+        protected virtual int _MyNamedTuple_ByteLength => _MyNullableTuple_ByteIndex - _MyNamedTuple_ByteIndex;
+        protected virtual int _MyNullableTuple_ByteLength => _MyValueTupleSerialized_ByteIndex - _MyNullableTuple_ByteIndex;
+        private int _StructTuple_EndByteIndex;
+        protected virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
+        
+        
+        protected (TestEnum firstEnum, TestEnum anotherEnum) _EnumTuple;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple
+        {
+            get
+            {
+                if (!_EnumTuple_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _EnumTuple = default((TestEnum firstEnum, TestEnum anotherEnum));
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _EnumTuple_ByteIndex, _EnumTuple_ByteLength, false, false, null);
+                        _EnumTuple = ConvertFromBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(childData);
+                    }
+                    _EnumTuple_Accessed = true;
+                }
+                IsDirty = true; 
+                return _EnumTuple;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _EnumTuple = value;
+                _EnumTuple_Accessed = true;
+            }
+        }
+        protected bool _EnumTuple_Accessed;
+        
+        protected (int MyFirstItem, double MySecondItem) _MyNamedTuple;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (int MyFirstItem, double MySecondItem) MyNamedTuple
+        {
+            get
+            {
+                if (!_MyNamedTuple_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyNamedTuple = default((int MyFirstItem, double MySecondItem));
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNamedTuple_ByteIndex, _MyNamedTuple_ByteLength, false, false, null);
+                        _MyNamedTuple = ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(childData);
+                    }
+                    _MyNamedTuple_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyNamedTuple;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyNamedTuple = value;
+                _MyNamedTuple_Accessed = true;
+            }
+        }
+        protected bool _MyNamedTuple_Accessed;
+        
+        protected (int, double)? _MyNullableTuple;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (int, double)? MyNullableTuple
+        {
+            get
+            {
+                if (!_MyNullableTuple_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyNullableTuple = default((int, double)?);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableTuple_ByteIndex, _MyNullableTuple_ByteLength, false, false, null);
+                        _MyNullableTuple = ConvertFromBytes__Pint_c_C32double_p_C63(childData);
+                    }
+                    _MyNullableTuple_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyNullableTuple;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyNullableTuple = value;
+                _MyNullableTuple_Accessed = true;
+            }
+        }
+        protected bool _MyNullableTuple_Accessed;
+        
+        protected (uint, ExampleChild, NonLazinatorClass) _MyValueTupleSerialized;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized
+        {
+            get
+            {
+                if (!_MyValueTupleSerialized_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyValueTupleSerialized = default((uint, ExampleChild, NonLazinatorClass));
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyValueTupleSerialized_ByteIndex, _MyValueTupleSerialized_ByteLength, false, false, null);
+                        _MyValueTupleSerialized = ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(childData);
+                    }
+                    _MyValueTupleSerialized_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyValueTupleSerialized;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyValueTupleSerialized = value;
+                _MyValueTupleSerialized_Accessed = true;
+            }
+        }
+        protected bool _MyValueTupleSerialized_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -171,146 +312,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _EnumTuple_ByteIndex;
-        protected int _MyNamedTuple_ByteIndex;
-        protected int _MyNullableTuple_ByteIndex;
-        protected int _MyValueTupleSerialized_ByteIndex;
-        protected virtual int _EnumTuple_ByteLength => _MyNamedTuple_ByteIndex - _EnumTuple_ByteIndex;
-        protected virtual int _MyNamedTuple_ByteLength => _MyNullableTuple_ByteIndex - _MyNamedTuple_ByteIndex;
-        protected virtual int _MyNullableTuple_ByteLength => _MyValueTupleSerialized_ByteIndex - _MyNullableTuple_ByteIndex;
-        private int _StructTuple_EndByteIndex;
-        protected virtual int _MyValueTupleSerialized_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleSerialized_ByteIndex;
-        
-        
-        protected (TestEnum firstEnum, TestEnum anotherEnum) _EnumTuple;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple
-        {
-            get
-            {
-                if (!_EnumTuple_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _EnumTuple = default((TestEnum firstEnum, TestEnum anotherEnum));
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _EnumTuple_ByteIndex, _EnumTuple_ByteLength, false, false, null);
-                        _EnumTuple = ConvertFromBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(childData);
-                    }
-                    _EnumTuple_Accessed = true;
-                }
-                IsDirty = true; 
-                return _EnumTuple;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _EnumTuple = value;
-                _EnumTuple_Accessed = true;
-            }
-        }
-        protected bool _EnumTuple_Accessed;
-        
-        protected (int MyFirstItem, double MySecondItem) _MyNamedTuple;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (int MyFirstItem, double MySecondItem) MyNamedTuple
-        {
-            get
-            {
-                if (!_MyNamedTuple_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyNamedTuple = default((int MyFirstItem, double MySecondItem));
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNamedTuple_ByteIndex, _MyNamedTuple_ByteLength, false, false, null);
-                        _MyNamedTuple = ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(childData);
-                    }
-                    _MyNamedTuple_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyNamedTuple;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyNamedTuple = value;
-                _MyNamedTuple_Accessed = true;
-            }
-        }
-        protected bool _MyNamedTuple_Accessed;
-        
-        protected (int, double)? _MyNullableTuple;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (int, double)? MyNullableTuple
-        {
-            get
-            {
-                if (!_MyNullableTuple_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyNullableTuple = default((int, double)?);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableTuple_ByteIndex, _MyNullableTuple_ByteLength, false, false, null);
-                        _MyNullableTuple = ConvertFromBytes__Pint_c_C32double_p_C63(childData);
-                    }
-                    _MyNullableTuple_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyNullableTuple;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyNullableTuple = value;
-                _MyNullableTuple_Accessed = true;
-            }
-        }
-        protected bool _MyNullableTuple_Accessed;
-        
-        protected (uint, ExampleChild, NonLazinatorClass) _MyValueTupleSerialized;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (uint, ExampleChild, NonLazinatorClass) MyValueTupleSerialized
-        {
-            get
-            {
-                if (!_MyValueTupleSerialized_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyValueTupleSerialized = default((uint, ExampleChild, NonLazinatorClass));
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyValueTupleSerialized_ByteIndex, _MyValueTupleSerialized_ByteLength, false, false, null);
-                        _MyValueTupleSerialized = ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(childData);
-                    }
-                    _MyValueTupleSerialized_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyValueTupleSerialized;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyValueTupleSerialized = value;
-                _MyValueTupleSerialized_Accessed = true;
-            }
-        }
-        protected bool _MyValueTupleSerialized_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

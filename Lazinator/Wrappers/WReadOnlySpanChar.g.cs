@@ -30,6 +30,37 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => true;
         
+        /* Property definitions */
+        
+        int _Value_ByteIndex;
+        private int _WReadOnlySpanChar_EndByteIndex;
+        int _Value_ByteLength => _WReadOnlySpanChar_EndByteIndex - _Value_ByteIndex;
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ReadOnlyMemory<byte> _Value;
+        public ReadOnlySpan<char> Value
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Value_Accessed)
+                {
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
+                    _Value = childData.ReadOnlyMemory;
+                    _Value_Accessed = true;
+                }
+                return MemoryMarshal.Cast<byte, char>(_Value.Span);
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _Value = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<char, byte>(value).ToArray());
+                _Value_Accessed = true;
+            }
+        }
+        bool _Value_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -184,36 +215,6 @@ namespace Lazinator.Wrappers
         
         public bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        int _Value_ByteIndex;
-        private int _WReadOnlySpanChar_EndByteIndex;
-        int _Value_ByteLength => _WReadOnlySpanChar_EndByteIndex - _Value_ByteIndex;
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ReadOnlyMemory<byte> _Value;
-        public ReadOnlySpan<char> Value
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Value_Accessed)
-                {
-                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
-                    _Value = childData.ReadOnlyMemory;
-                    _Value_Accessed = true;
-                }
-                return MemoryMarshal.Cast<byte, char>(_Value.Span);
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _Value = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<char, byte>(value).ToArray());
-                _Value_Accessed = true;
-            }
-        }
-        bool _Value_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

@@ -30,6 +30,45 @@ namespace LazinatorTests.Examples.Tuples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyNestedTuple_ByteIndex;
+        private int _NestedTuple_EndByteIndex;
+        protected virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
+        
+        
+        protected Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> _MyNestedTuple;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> MyNestedTuple
+        {
+            get
+            {
+                if (!_MyNestedTuple_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyNestedTuple = default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
+                        _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
+                    }
+                    _MyNestedTuple_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyNestedTuple;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyNestedTuple = value;
+                _MyNestedTuple_Accessed = true;
+            }
+        }
+        protected bool _MyNestedTuple_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -168,44 +207,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyNestedTuple_ByteIndex;
-        private int _NestedTuple_EndByteIndex;
-        protected virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
-        
-        
-        protected Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> _MyNestedTuple;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> MyNestedTuple
-        {
-            get
-            {
-                if (!_MyNestedTuple_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyNestedTuple = default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
-                        _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
-                    }
-                    _MyNestedTuple_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyNestedTuple;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyNestedTuple = value;
-                _MyNestedTuple_Accessed = true;
-            }
-        }
-        protected bool _MyNestedTuple_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

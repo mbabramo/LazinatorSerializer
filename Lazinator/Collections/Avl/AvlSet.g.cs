@@ -31,6 +31,74 @@ namespace Lazinator.Collections.Avl
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _UnderlyingTree_ByteIndex;
+        private int _AvlSet_TKey_EndByteIndex;
+        protected virtual int _UnderlyingTree_ByteLength => _AvlSet_TKey_EndByteIndex - _UnderlyingTree_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected int _Count;
+        public int Count
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _Count;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _Count = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected AvlTree<TKey, WByte> _UnderlyingTree;
+        public virtual AvlTree<TKey, WByte> UnderlyingTree
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_UnderlyingTree_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _UnderlyingTree = default(AvlTree<TKey, WByte>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
+                        
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(94, () => new AvlTree<TKey, WByte>(), childData, this); 
+                    }
+                    _UnderlyingTree_Accessed = true;
+                } 
+                return _UnderlyingTree;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_UnderlyingTree != null)
+                {
+                    _UnderlyingTree.LazinatorParents = _UnderlyingTree.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _UnderlyingTree = value;
+                _UnderlyingTree_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _UnderlyingTree_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -184,73 +252,6 @@ namespace Lazinator.Collections.Avl
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _UnderlyingTree_ByteIndex;
-        private int _AvlSet_TKey_EndByteIndex;
-        protected virtual int _UnderlyingTree_ByteLength => _AvlSet_TKey_EndByteIndex - _UnderlyingTree_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected int _Count;
-        public int Count
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _Count;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _Count = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected AvlTree<TKey, WByte> _UnderlyingTree;
-        public virtual AvlTree<TKey, WByte> UnderlyingTree
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_UnderlyingTree_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _UnderlyingTree = default(AvlTree<TKey, WByte>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
-                        
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(94, () => new AvlTree<TKey, WByte>(), childData, this); 
-                    }
-                    _UnderlyingTree_Accessed = true;
-                } 
-                return _UnderlyingTree;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_UnderlyingTree != null)
-                {
-                    _UnderlyingTree.LazinatorParents = _UnderlyingTree.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _UnderlyingTree = value;
-                _UnderlyingTree_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _UnderlyingTree_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

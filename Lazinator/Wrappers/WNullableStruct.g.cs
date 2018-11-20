@@ -30,6 +30,66 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => true;
         
+        /* Property definitions */
+        
+        int _NonNullValue_ByteIndex;
+        private int _WNullableStruct_T_EndByteIndex;
+        int _NonNullValue_ByteLength => _WNullableStruct_T_EndByteIndex - _NonNullValue_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        bool _HasValue;
+        public bool HasValue
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _HasValue;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _HasValue = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        T _NonNullValue;
+        public T NonNullValue
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_NonNullValue_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _NonNullValue = default(T);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
+                        
+                        _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
+                    }
+                    _NonNullValue_Accessed = true;
+                } 
+                return _NonNullValue;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _NonNullValue = value;
+                _NonNullValue_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        bool _NonNullValue_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -190,65 +250,6 @@ namespace Lazinator.Wrappers
         
         public bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        int _NonNullValue_ByteIndex;
-        private int _WNullableStruct_T_EndByteIndex;
-        int _NonNullValue_ByteLength => _WNullableStruct_T_EndByteIndex - _NonNullValue_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool _HasValue;
-        public bool HasValue
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _HasValue;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _HasValue = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        T _NonNullValue;
-        public T NonNullValue
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_NonNullValue_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NonNullValue = default(T);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
-                        
-                        _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
-                    }
-                    _NonNullValue_Accessed = true;
-                } 
-                return _NonNullValue;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _NonNullValue = value;
-                _NonNullValue_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool _NonNullValue_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

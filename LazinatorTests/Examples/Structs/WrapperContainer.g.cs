@@ -30,6 +30,77 @@ namespace LazinatorTests.Examples.Structs
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _WrappedInt_ByteIndex;
+        private int _WrapperContainer_EndByteIndex;
+        protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
+        
+        
+        protected WInt _WrappedInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public WInt WrappedInt
+        {
+            get
+            {
+                if (!_WrappedInt_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _WrappedInt = default(WInt);
+                        _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
+                        _WrappedInt = new WInt()
+                        {
+                            LazinatorParents = new LazinatorParentsCollection(this)
+                        };
+                        _WrappedInt.DeserializeLazinator(childData);
+                    }
+                    _WrappedInt_Accessed = true;
+                } 
+                return _WrappedInt;
+            }
+            set
+            {
+                value.LazinatorParents = new LazinatorParentsCollection(this);
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _WrappedInt = value;
+                _WrappedInt_Accessed = true;
+            }
+        }
+        protected bool _WrappedInt_Accessed;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public WInt WrappedInt_Copy
+        {
+            get
+            {
+                if (!_WrappedInt_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        return default(WInt);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
+                        var toReturn = new WInt();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
+                    }
+                }
+                var cleanCopy = _WrappedInt;
+                cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
+                return cleanCopy;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -171,76 +242,6 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _WrappedInt_ByteIndex;
-        private int _WrapperContainer_EndByteIndex;
-        protected virtual int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
-        
-        
-        protected WInt _WrappedInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public WInt WrappedInt
-        {
-            get
-            {
-                if (!_WrappedInt_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _WrappedInt = default(WInt);
-                        _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
-                        _WrappedInt = new WInt()
-                        {
-                            LazinatorParents = new LazinatorParentsCollection(this)
-                        };
-                        _WrappedInt.DeserializeLazinator(childData);
-                    }
-                    _WrappedInt_Accessed = true;
-                } 
-                return _WrappedInt;
-            }
-            set
-            {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _WrappedInt = value;
-                _WrappedInt_Accessed = true;
-            }
-        }
-        protected bool _WrappedInt_Accessed;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public WInt WrappedInt_Copy
-        {
-            get
-            {
-                if (!_WrappedInt_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        return default(WInt);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
-                        var toReturn = new WInt();
-                        toReturn.DeserializeLazinator(childData);
-                        toReturn.IsDirty = false;
-                        return toReturn;
-                    }
-                }
-                var cleanCopy = _WrappedInt;
-                cleanCopy.IsDirty = false;
-                cleanCopy.DescendantIsDirty = false;
-                return cleanCopy;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

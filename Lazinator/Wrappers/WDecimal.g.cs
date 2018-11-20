@@ -30,6 +30,27 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => true;
         
+        /* Property definitions */
+        
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        decimal _WrappedValue;
+        public decimal WrappedValue
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _WrappedValue;
+            }
+            [DebuggerStepThrough]
+            private set
+            {
+                IsDirty = true;
+                _WrappedValue = value;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -184,26 +205,6 @@ namespace Lazinator.Wrappers
         
         public bool NonBinaryHash32 => true;
         
-        /* Property definitions */
-        
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        decimal _WrappedValue;
-        public decimal WrappedValue
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _WrappedValue;
-            }
-            [DebuggerStepThrough]
-            private set
-            {
-                IsDirty = true;
-                _WrappedValue = value;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

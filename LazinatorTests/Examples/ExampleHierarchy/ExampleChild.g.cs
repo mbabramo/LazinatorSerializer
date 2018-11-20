@@ -30,6 +30,151 @@ namespace LazinatorTests.Examples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _ByteSpan_ByteIndex;
+        protected int _MyExampleGrandchild_ByteIndex;
+        protected int _MyWrapperContainer_ByteIndex;
+        protected virtual int _ByteSpan_ByteLength => _MyExampleGrandchild_ByteIndex - _ByteSpan_ByteIndex;
+        protected virtual int _MyExampleGrandchild_ByteLength => _MyWrapperContainer_ByteIndex - _MyExampleGrandchild_ByteIndex;
+        private int _ExampleChild_EndByteIndex;
+        protected virtual int _MyWrapperContainer_ByteLength => _ExampleChild_EndByteIndex - _MyWrapperContainer_ByteIndex;
+        
+        
+        protected long _MyLong;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public long MyLong
+        {
+            get
+            {
+                return _MyLong;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyLong = value;
+            }
+        }
+        
+        protected short _MyShort;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public short MyShort
+        {
+            get
+            {
+                return _MyShort;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyShort = value;
+            }
+        }
+        private ReadOnlyMemory<byte> _ByteSpan;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ReadOnlySpan<byte> ByteSpan
+        {
+            get
+            {
+                if (!_ByteSpan_Accessed)
+                {
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
+                    _ByteSpan = childData.ReadOnlyMemory;
+                    _ByteSpan_Accessed = true;
+                }
+                return _ByteSpan.Span;
+            }
+            set
+            {
+                IsDirty = true;
+                _ByteSpan = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
+                _ByteSpan_Accessed = true;
+            }
+        }
+        protected bool _ByteSpan_Accessed;
+        
+        protected ExampleGrandchild _MyExampleGrandchild;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ExampleGrandchild MyExampleGrandchild
+        {
+            get
+            {
+                if (!_MyExampleGrandchild_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyExampleGrandchild = default(ExampleGrandchild);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, false, false, null);
+                        
+                        _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(279, () => new ExampleGrandchild(), childData, this); 
+                    }
+                    _MyExampleGrandchild_Accessed = true;
+                } 
+                return _MyExampleGrandchild;
+            }
+            set
+            {
+                if (_MyExampleGrandchild != null)
+                {
+                    _MyExampleGrandchild.LazinatorParents = _MyExampleGrandchild.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyExampleGrandchild = value;
+                _MyExampleGrandchild_Accessed = true;
+            }
+        }
+        protected bool _MyExampleGrandchild_Accessed;
+        
+        protected WrapperContainer _MyWrapperContainer;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public WrapperContainer MyWrapperContainer
+        {
+            get
+            {
+                if (!_MyWrapperContainer_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyWrapperContainer = default(WrapperContainer);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null);
+                        
+                        _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(248, () => new WrapperContainer(), childData, this); 
+                    }
+                    _MyWrapperContainer_Accessed = true;
+                } 
+                return _MyWrapperContainer;
+            }
+            set
+            {
+                if (_MyWrapperContainer != null)
+                {
+                    _MyWrapperContainer.LazinatorParents = _MyWrapperContainer.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyWrapperContainer = value;
+                _MyWrapperContainer_Accessed = true;
+            }
+        }
+        protected bool _MyWrapperContainer_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -178,150 +323,6 @@ namespace LazinatorTests.Examples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _ByteSpan_ByteIndex;
-        protected int _MyExampleGrandchild_ByteIndex;
-        protected int _MyWrapperContainer_ByteIndex;
-        protected virtual int _ByteSpan_ByteLength => _MyExampleGrandchild_ByteIndex - _ByteSpan_ByteIndex;
-        protected virtual int _MyExampleGrandchild_ByteLength => _MyWrapperContainer_ByteIndex - _MyExampleGrandchild_ByteIndex;
-        private int _ExampleChild_EndByteIndex;
-        protected virtual int _MyWrapperContainer_ByteLength => _ExampleChild_EndByteIndex - _MyWrapperContainer_ByteIndex;
-        
-        
-        protected long _MyLong;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public long MyLong
-        {
-            get
-            {
-                return _MyLong;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyLong = value;
-            }
-        }
-        
-        protected short _MyShort;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public short MyShort
-        {
-            get
-            {
-                return _MyShort;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyShort = value;
-            }
-        }
-        private ReadOnlyMemory<byte> _ByteSpan;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlySpan<byte> ByteSpan
-        {
-            get
-            {
-                if (!_ByteSpan_Accessed)
-                {
-                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
-                    _ByteSpan = childData.ReadOnlyMemory;
-                    _ByteSpan_Accessed = true;
-                }
-                return _ByteSpan.Span;
-            }
-            set
-            {
-                IsDirty = true;
-                _ByteSpan = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
-                _ByteSpan_Accessed = true;
-            }
-        }
-        protected bool _ByteSpan_Accessed;
-        
-        protected ExampleGrandchild _MyExampleGrandchild;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ExampleGrandchild MyExampleGrandchild
-        {
-            get
-            {
-                if (!_MyExampleGrandchild_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyExampleGrandchild = default(ExampleGrandchild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, false, false, null);
-                        
-                        _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(279, () => new ExampleGrandchild(), childData, this); 
-                    }
-                    _MyExampleGrandchild_Accessed = true;
-                } 
-                return _MyExampleGrandchild;
-            }
-            set
-            {
-                if (_MyExampleGrandchild != null)
-                {
-                    _MyExampleGrandchild.LazinatorParents = _MyExampleGrandchild.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyExampleGrandchild = value;
-                _MyExampleGrandchild_Accessed = true;
-            }
-        }
-        protected bool _MyExampleGrandchild_Accessed;
-        
-        protected WrapperContainer _MyWrapperContainer;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public WrapperContainer MyWrapperContainer
-        {
-            get
-            {
-                if (!_MyWrapperContainer_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyWrapperContainer = default(WrapperContainer);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null);
-                        
-                        _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(248, () => new WrapperContainer(), childData, this); 
-                    }
-                    _MyWrapperContainer_Accessed = true;
-                } 
-                return _MyWrapperContainer;
-            }
-            set
-            {
-                if (_MyWrapperContainer != null)
-                {
-                    _MyWrapperContainer.LazinatorParents = _MyWrapperContainer.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyWrapperContainer = value;
-                _MyWrapperContainer_Accessed = true;
-            }
-        }
-        protected bool _MyWrapperContainer_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

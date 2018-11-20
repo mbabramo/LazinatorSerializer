@@ -29,6 +29,25 @@ namespace LazinatorTests.Examples.NonLazinator
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        
+        
+        protected int _MyInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public override int MyInt
+        {
+            get
+            {
+                return _MyInt;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyInt = value;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public FromNonLazinatorBase() : base()
@@ -171,24 +190,6 @@ namespace LazinatorTests.Examples.NonLazinator
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        
-        
-        protected int _MyInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int MyInt
-        {
-            get
-            {
-                return _MyInt;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyInt = value;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

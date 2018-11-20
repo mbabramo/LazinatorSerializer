@@ -32,6 +32,127 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyList_ByteIndex;
+        protected int _MyStructList_ByteIndex;
+        protected virtual int _MyList_ByteLength => _MyStructList_ByteIndex - _MyList_ByteIndex;
+        private int _LazinatorListContainer_EndByteIndex;
+        protected virtual int _MyStructList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyStructList_ByteIndex;
+        
+        
+        protected int _MyInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MyInt
+        {
+            get
+            {
+                return _MyInt;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyInt = value;
+            }
+        }
+        
+        protected long _MyLong;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public long MyLong
+        {
+            get
+            {
+                return _MyLong;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyLong = value;
+            }
+        }
+        
+        protected LazinatorList<ExampleChild> _MyList;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public LazinatorList<ExampleChild> MyList
+        {
+            get
+            {
+                if (!_MyList_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyList = default(LazinatorList<ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
+                        
+                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<ExampleChild>(), childData, this); 
+                    }
+                    _MyList_Accessed = true;
+                } 
+                return _MyList;
+            }
+            set
+            {
+                if (_MyList != null)
+                {
+                    _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyList = value;
+                _MyList_Accessed = true;
+            }
+        }
+        protected bool _MyList_Accessed;
+        
+        protected LazinatorList<WByte> _MyStructList;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public LazinatorList<WByte> MyStructList
+        {
+            get
+            {
+                if (!_MyStructList_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyStructList = default(LazinatorList<WByte>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, false, false, null);
+                        
+                        _MyStructList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<WByte>(), childData, this); 
+                    }
+                    _MyStructList_Accessed = true;
+                } 
+                return _MyStructList;
+            }
+            set
+            {
+                if (_MyStructList != null)
+                {
+                    _MyStructList.LazinatorParents = _MyStructList.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyStructList = value;
+                _MyStructList_Accessed = true;
+            }
+        }
+        protected bool _MyStructList_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -179,126 +300,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyList_ByteIndex;
-        protected int _MyStructList_ByteIndex;
-        protected virtual int _MyList_ByteLength => _MyStructList_ByteIndex - _MyList_ByteIndex;
-        private int _LazinatorListContainer_EndByteIndex;
-        protected virtual int _MyStructList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyStructList_ByteIndex;
-        
-        
-        protected int _MyInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int MyInt
-        {
-            get
-            {
-                return _MyInt;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyInt = value;
-            }
-        }
-        
-        protected long _MyLong;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public long MyLong
-        {
-            get
-            {
-                return _MyLong;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyLong = value;
-            }
-        }
-        
-        protected LazinatorList<ExampleChild> _MyList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public LazinatorList<ExampleChild> MyList
-        {
-            get
-            {
-                if (!_MyList_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyList = default(LazinatorList<ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
-                        
-                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<ExampleChild>(), childData, this); 
-                    }
-                    _MyList_Accessed = true;
-                } 
-                return _MyList;
-            }
-            set
-            {
-                if (_MyList != null)
-                {
-                    _MyList.LazinatorParents = _MyList.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyList = value;
-                _MyList_Accessed = true;
-            }
-        }
-        protected bool _MyList_Accessed;
-        
-        protected LazinatorList<WByte> _MyStructList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public LazinatorList<WByte> MyStructList
-        {
-            get
-            {
-                if (!_MyStructList_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyStructList = default(LazinatorList<WByte>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, false, false, null);
-                        
-                        _MyStructList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<WByte>(), childData, this); 
-                    }
-                    _MyStructList_Accessed = true;
-                } 
-                return _MyStructList;
-            }
-            set
-            {
-                if (_MyStructList != null)
-                {
-                    _MyStructList.LazinatorParents = _MyStructList.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyStructList = value;
-                _MyStructList_Accessed = true;
-            }
-        }
-        protected bool _MyStructList_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

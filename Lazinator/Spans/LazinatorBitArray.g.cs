@@ -30,6 +30,101 @@ namespace Lazinator.Spans
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        int _ByteSpan_ByteIndex;
+        private int _LazinatorBitArray_EndByteIndex;
+        int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        int __version;
+        private int _version
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return __version;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                __version = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        int _m_length;
+        private int m_length
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _m_length;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _m_length = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        LazinatorByteSpan _ByteSpan;
+        private LazinatorByteSpan ByteSpan
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_ByteSpan_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _ByteSpan = default(LazinatorByteSpan);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
+                        if (childData.Length == 0)
+                        {
+                            _ByteSpan = default;
+                        }
+                        else 
+                        {
+                            _ByteSpan = new LazinatorByteSpan()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _ByteSpan.DeserializeLazinator(childData);
+                        }
+                    }
+                    _ByteSpan_Accessed = true;
+                } 
+                return _ByteSpan;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_ByteSpan != null)
+                {
+                    _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _ByteSpan = value;
+                _ByteSpan_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        bool _ByteSpan_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -188,100 +283,6 @@ namespace Lazinator.Spans
         
         public bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        int _ByteSpan_ByteIndex;
-        private int _LazinatorBitArray_EndByteIndex;
-        int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        int __version;
-        private int _version
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return __version;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                __version = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        int _m_length;
-        private int m_length
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _m_length;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _m_length = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        LazinatorByteSpan _ByteSpan;
-        private LazinatorByteSpan ByteSpan
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_ByteSpan_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ByteSpan = default(LazinatorByteSpan);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
-                        if (childData.Length == 0)
-                        {
-                            _ByteSpan = default;
-                        }
-                        else 
-                        {
-                            _ByteSpan = new LazinatorByteSpan()
-                            {
-                                LazinatorParents = new LazinatorParentsCollection(this)
-                            };
-                            _ByteSpan.DeserializeLazinator(childData);
-                        }
-                    }
-                    _ByteSpan_Accessed = true;
-                } 
-                return _ByteSpan;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_ByteSpan != null)
-                {
-                    _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _ByteSpan = value;
-                _ByteSpan_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool _ByteSpan_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

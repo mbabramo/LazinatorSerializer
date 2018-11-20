@@ -30,6 +30,45 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyQueueSerialized_ByteIndex;
+        private int _DotNetQueue_Lazinator_EndByteIndex;
+        protected virtual int _MyQueueSerialized_ByteLength => _DotNetQueue_Lazinator_EndByteIndex - _MyQueueSerialized_ByteIndex;
+        
+        
+        protected Queue<ExampleChild> _MyQueueSerialized;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Queue<ExampleChild> MyQueueSerialized
+        {
+            get
+            {
+                if (!_MyQueueSerialized_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyQueueSerialized = default(Queue<ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null);
+                        _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
+                    }
+                    _MyQueueSerialized_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyQueueSerialized;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyQueueSerialized = value;
+                _MyQueueSerialized_Accessed = true;
+            }
+        }
+        protected bool _MyQueueSerialized_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public DotNetQueue_Lazinator() : base()
@@ -172,44 +211,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyQueueSerialized_ByteIndex;
-        private int _DotNetQueue_Lazinator_EndByteIndex;
-        protected virtual int _MyQueueSerialized_ByteLength => _DotNetQueue_Lazinator_EndByteIndex - _MyQueueSerialized_ByteIndex;
-        
-        
-        protected Queue<ExampleChild> _MyQueueSerialized;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Queue<ExampleChild> MyQueueSerialized
-        {
-            get
-            {
-                if (!_MyQueueSerialized_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyQueueSerialized = default(Queue<ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null);
-                        _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
-                    }
-                    _MyQueueSerialized_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyQueueSerialized;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyQueueSerialized = value;
-                _MyQueueSerialized_Accessed = true;
-            }
-        }
-        protected bool _MyQueueSerialized_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

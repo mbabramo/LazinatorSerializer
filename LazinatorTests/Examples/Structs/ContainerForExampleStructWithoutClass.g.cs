@@ -29,6 +29,92 @@ namespace LazinatorTests.Examples.Structs
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _ExampleStructWithoutClass_ByteIndex;
+        private int _ContainerForExampleStructWithoutClass_EndByteIndex;
+        protected virtual int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
+        
+        
+        protected int _MyInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public int MyInt
+        {
+            get
+            {
+                return _MyInt;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyInt = value;
+            }
+        }
+        
+        protected ExampleStructWithoutClass _ExampleStructWithoutClass;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ExampleStructWithoutClass ExampleStructWithoutClass
+        {
+            get
+            {
+                if (!_ExampleStructWithoutClass_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _ExampleStructWithoutClass = default(ExampleStructWithoutClass);
+                        _ExampleStructWithoutClass.LazinatorParents = new LazinatorParentsCollection(this);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
+                        _ExampleStructWithoutClass = new ExampleStructWithoutClass()
+                        {
+                            LazinatorParents = new LazinatorParentsCollection(this)
+                        };
+                        _ExampleStructWithoutClass.DeserializeLazinator(childData);
+                    }
+                    _ExampleStructWithoutClass_Accessed = true;
+                } 
+                return _ExampleStructWithoutClass;
+            }
+            set
+            {
+                value.LazinatorParents = new LazinatorParentsCollection(this);
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _ExampleStructWithoutClass = value;
+                _ExampleStructWithoutClass_Accessed = true;
+            }
+        }
+        protected bool _ExampleStructWithoutClass_Accessed;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ExampleStructWithoutClass ExampleStructWithoutClass_Copy
+        {
+            get
+            {
+                if (!_ExampleStructWithoutClass_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        return default(ExampleStructWithoutClass);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
+                        var toReturn = new ExampleStructWithoutClass();
+                        toReturn.DeserializeLazinator(childData);
+                        toReturn.IsDirty = false;
+                        return toReturn;
+                    }
+                }
+                var cleanCopy = _ExampleStructWithoutClass;
+                cleanCopy.IsDirty = false;
+                cleanCopy.DescendantIsDirty = false;
+                return cleanCopy;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public ContainerForExampleStructWithoutClass() : base()
@@ -175,91 +261,6 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _ExampleStructWithoutClass_ByteIndex;
-        private int _ContainerForExampleStructWithoutClass_EndByteIndex;
-        protected virtual int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
-        
-        
-        protected int _MyInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int MyInt
-        {
-            get
-            {
-                return _MyInt;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyInt = value;
-            }
-        }
-        
-        protected ExampleStructWithoutClass _ExampleStructWithoutClass;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ExampleStructWithoutClass ExampleStructWithoutClass
-        {
-            get
-            {
-                if (!_ExampleStructWithoutClass_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ExampleStructWithoutClass = default(ExampleStructWithoutClass);
-                        _ExampleStructWithoutClass.LazinatorParents = new LazinatorParentsCollection(this);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
-                        _ExampleStructWithoutClass = new ExampleStructWithoutClass()
-                        {
-                            LazinatorParents = new LazinatorParentsCollection(this)
-                        };
-                        _ExampleStructWithoutClass.DeserializeLazinator(childData);
-                    }
-                    _ExampleStructWithoutClass_Accessed = true;
-                } 
-                return _ExampleStructWithoutClass;
-            }
-            set
-            {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _ExampleStructWithoutClass = value;
-                _ExampleStructWithoutClass_Accessed = true;
-            }
-        }
-        protected bool _ExampleStructWithoutClass_Accessed;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ExampleStructWithoutClass ExampleStructWithoutClass_Copy
-        {
-            get
-            {
-                if (!_ExampleStructWithoutClass_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        return default(ExampleStructWithoutClass);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
-                        var toReturn = new ExampleStructWithoutClass();
-                        toReturn.DeserializeLazinator(childData);
-                        toReturn.IsDirty = false;
-                        return toReturn;
-                    }
-                }
-                var cleanCopy = _ExampleStructWithoutClass;
-                cleanCopy.IsDirty = false;
-                cleanCopy.DescendantIsDirty = false;
-                return cleanCopy;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

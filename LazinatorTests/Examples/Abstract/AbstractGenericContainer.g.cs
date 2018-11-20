@@ -29,6 +29,19 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Item_ByteIndex;
+        protected virtual int _Item_ByteLength { get; }
+        
+        
+        protected bool _Item_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual IAbstractGeneric1<T> Item
+        {
+            get;
+            set;
+        }
         /* Abstract declarations */
         public abstract LazinatorParentsCollection LazinatorParents { get; set; }
         
@@ -97,19 +110,6 @@ namespace LazinatorTests.Examples.Abstract
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
         
-        /* Property definitions */
-        
-        protected int _Item_ByteIndex;
-        protected virtual int _Item_ByteLength { get; }
-        
-        
-        protected bool _Item_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual IAbstractGeneric1<T> Item
-        {
-            get;
-            set;
-        }
         public abstract int LazinatorUniqueID { get; }
         protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
         protected virtual bool ContainsOpenGenericParameters => true;

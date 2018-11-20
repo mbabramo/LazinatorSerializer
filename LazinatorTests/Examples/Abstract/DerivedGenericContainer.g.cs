@@ -29,6 +29,54 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Item_ByteIndex;
+        private int _DerivedGenericContainer_T_EndByteIndex;
+        protected virtual int _Item_ByteLength => _DerivedGenericContainer_T_EndByteIndex - _Item_ByteIndex;
+        
+        
+        protected AbstractGeneric1<T> _Item;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual AbstractGeneric1<T> Item
+        {
+            get
+            {
+                if (!_Item_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Item = default(AbstractGeneric1<T>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, false, false, null);
+                        
+                        _Item = DeserializationFactory.Instance.CreateAbstractType<AbstractGeneric1<T>>(childData, this); 
+                    }
+                    _Item_Accessed = true;
+                } 
+                return _Item;
+            }
+            set
+            {
+                if (_Item != null)
+                {
+                    _Item.LazinatorParents = _Item.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Item = value;
+                _Item_Accessed = true;
+            }
+        }
+        protected bool _Item_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public DerivedGenericContainer() : base()
@@ -174,53 +222,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _Item_ByteIndex;
-        private int _DerivedGenericContainer_T_EndByteIndex;
-        protected virtual int _Item_ByteLength => _DerivedGenericContainer_T_EndByteIndex - _Item_ByteIndex;
-        
-        
-        protected AbstractGeneric1<T> _Item;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual AbstractGeneric1<T> Item
-        {
-            get
-            {
-                if (!_Item_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Item = default(AbstractGeneric1<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, false, false, null);
-                        
-                        _Item = DeserializationFactory.Instance.CreateAbstractType<AbstractGeneric1<T>>(childData, this); 
-                    }
-                    _Item_Accessed = true;
-                } 
-                return _Item;
-            }
-            set
-            {
-                if (_Item != null)
-                {
-                    _Item.LazinatorParents = _Item.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Item = value;
-                _Item_Accessed = true;
-            }
-        }
-        protected bool _Item_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

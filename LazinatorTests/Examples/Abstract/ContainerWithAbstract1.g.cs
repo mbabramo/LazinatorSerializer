@@ -29,6 +29,54 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _AbstractProperty_ByteIndex;
+        private int _ContainerWithAbstract1_EndByteIndex;
+        protected virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
+        
+        
+        protected Abstract1 _AbstractProperty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Abstract1 AbstractProperty
+        {
+            get
+            {
+                if (!_AbstractProperty_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _AbstractProperty = default(Abstract1);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, false, false, null);
+                        
+                        _AbstractProperty = DeserializationFactory.Instance.CreateAbstractType<Abstract1>(childData, this); 
+                    }
+                    _AbstractProperty_Accessed = true;
+                } 
+                return _AbstractProperty;
+            }
+            set
+            {
+                if (_AbstractProperty != null)
+                {
+                    _AbstractProperty.LazinatorParents = _AbstractProperty.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _AbstractProperty = value;
+                _AbstractProperty_Accessed = true;
+            }
+        }
+        protected bool _AbstractProperty_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public ContainerWithAbstract1() : base()
@@ -174,53 +222,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _AbstractProperty_ByteIndex;
-        private int _ContainerWithAbstract1_EndByteIndex;
-        protected virtual int _AbstractProperty_ByteLength => _ContainerWithAbstract1_EndByteIndex - _AbstractProperty_ByteIndex;
-        
-        
-        protected Abstract1 _AbstractProperty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Abstract1 AbstractProperty
-        {
-            get
-            {
-                if (!_AbstractProperty_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _AbstractProperty = default(Abstract1);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, false, false, null);
-                        
-                        _AbstractProperty = DeserializationFactory.Instance.CreateAbstractType<Abstract1>(childData, this); 
-                    }
-                    _AbstractProperty_Accessed = true;
-                } 
-                return _AbstractProperty;
-            }
-            set
-            {
-                if (_AbstractProperty != null)
-                {
-                    _AbstractProperty.LazinatorParents = _AbstractProperty.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _AbstractProperty = value;
-                _AbstractProperty_Accessed = true;
-            }
-        }
-        protected bool _AbstractProperty_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

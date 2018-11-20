@@ -29,6 +29,64 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyQueueInt_ByteIndex;
+        private int _DotNetQueue_Values_EndByteIndex;
+        protected virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
+        
+        
+        protected Queue<int> _MyQueueInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Queue<int> MyQueueInt
+        {
+            get
+            {
+                if (!_MyQueueInt_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyQueueInt = default(Queue<int>);
+                        _MyQueueInt_Dirty = true; 
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null);
+                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
+                    }
+                    _MyQueueInt_Accessed = true;
+                } 
+                return _MyQueueInt;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyQueueInt = value;
+                _MyQueueInt_Dirty = true;
+                _MyQueueInt_Accessed = true;
+            }
+        }
+        protected bool _MyQueueInt_Accessed;
+        
+        private bool _MyQueueInt_Dirty;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public bool MyQueueInt_Dirty
+        {
+            get => _MyQueueInt_Dirty;
+            set
+            {
+                if (_MyQueueInt_Dirty != value)
+                {
+                    _MyQueueInt_Dirty = value;
+                }
+                if (value && !IsDirty)
+                {
+                    IsDirty = true;
+                }
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -167,63 +225,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyQueueInt_ByteIndex;
-        private int _DotNetQueue_Values_EndByteIndex;
-        protected virtual int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
-        
-        
-        protected Queue<int> _MyQueueInt;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Queue<int> MyQueueInt
-        {
-            get
-            {
-                if (!_MyQueueInt_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyQueueInt = default(Queue<int>);
-                        _MyQueueInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null);
-                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
-                    }
-                    _MyQueueInt_Accessed = true;
-                } 
-                return _MyQueueInt;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyQueueInt = value;
-                _MyQueueInt_Dirty = true;
-                _MyQueueInt_Accessed = true;
-            }
-        }
-        protected bool _MyQueueInt_Accessed;
-        
-        private bool _MyQueueInt_Dirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public bool MyQueueInt_Dirty
-        {
-            get => _MyQueueInt_Dirty;
-            set
-            {
-                if (_MyQueueInt_Dirty != value)
-                {
-                    _MyQueueInt_Dirty = value;
-                }
-                if (value && !IsDirty)
-                {
-                    IsDirty = true;
-                }
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

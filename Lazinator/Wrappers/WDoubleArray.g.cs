@@ -30,6 +30,48 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => true;
         
+        /* Property definitions */
+        
+        int _WrappedValue_ByteIndex;
+        private int _WDoubleArray_EndByteIndex;
+        int _WrappedValue_ByteLength => _WDoubleArray_EndByteIndex - _WrappedValue_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        double[] _WrappedValue;
+        public double[] WrappedValue
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_WrappedValue_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _WrappedValue = default(double[]);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
+                        _WrappedValue = ConvertFromBytes_double_B_b(childData);
+                    }
+                    _WrappedValue_Accessed = true;
+                }
+                IsDirty = true; 
+                return _WrappedValue;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _WrappedValue = value;
+                _WrappedValue_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        bool _WrappedValue_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -184,47 +226,6 @@ namespace Lazinator.Wrappers
         
         public bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        int _WrappedValue_ByteIndex;
-        private int _WDoubleArray_EndByteIndex;
-        int _WrappedValue_ByteLength => _WDoubleArray_EndByteIndex - _WrappedValue_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        double[] _WrappedValue;
-        public double[] WrappedValue
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_WrappedValue_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _WrappedValue = default(double[]);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
-                        _WrappedValue = ConvertFromBytes_double_B_b(childData);
-                    }
-                    _WrappedValue_Accessed = true;
-                }
-                IsDirty = true; 
-                return _WrappedValue;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _WrappedValue = value;
-                _WrappedValue_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool _WrappedValue_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

@@ -30,6 +30,113 @@ namespace LazinatorTests.Examples.Collections
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyDictionary_ByteIndex;
+        protected int _MySortedDictionary_ByteIndex;
+        protected int _MySortedList_ByteIndex;
+        protected virtual int _MyDictionary_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionary_ByteIndex;
+        protected virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
+        private int _Dictionary_Values_Lazinator_EndByteIndex;
+        protected virtual int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
+        
+        
+        protected Dictionary<int, ExampleChild> _MyDictionary;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Dictionary<int, ExampleChild> MyDictionary
+        {
+            get
+            {
+                if (!_MyDictionary_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyDictionary = default(Dictionary<int, ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null);
+                        _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
+                    }
+                    _MyDictionary_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyDictionary;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyDictionary = value;
+                _MyDictionary_Accessed = true;
+            }
+        }
+        protected bool _MyDictionary_Accessed;
+        
+        protected SortedDictionary<int, ExampleChild> _MySortedDictionary;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public SortedDictionary<int, ExampleChild> MySortedDictionary
+        {
+            get
+            {
+                if (!_MySortedDictionary_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MySortedDictionary = default(SortedDictionary<int, ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null);
+                        _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
+                    }
+                    _MySortedDictionary_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MySortedDictionary;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MySortedDictionary = value;
+                _MySortedDictionary_Accessed = true;
+            }
+        }
+        protected bool _MySortedDictionary_Accessed;
+        
+        protected SortedList<int, ExampleChild> _MySortedList;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public SortedList<int, ExampleChild> MySortedList
+        {
+            get
+            {
+                if (!_MySortedList_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MySortedList = default(SortedList<int, ExampleChild>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null);
+                        _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
+                    }
+                    _MySortedList_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MySortedList;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MySortedList = value;
+                _MySortedList_Accessed = true;
+            }
+        }
+        protected bool _MySortedList_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
@@ -170,112 +277,6 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyDictionary_ByteIndex;
-        protected int _MySortedDictionary_ByteIndex;
-        protected int _MySortedList_ByteIndex;
-        protected virtual int _MyDictionary_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionary_ByteIndex;
-        protected virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
-        private int _Dictionary_Values_Lazinator_EndByteIndex;
-        protected virtual int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
-        
-        
-        protected Dictionary<int, ExampleChild> _MyDictionary;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Dictionary<int, ExampleChild> MyDictionary
-        {
-            get
-            {
-                if (!_MyDictionary_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyDictionary = default(Dictionary<int, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null);
-                        _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
-                    }
-                    _MyDictionary_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyDictionary;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyDictionary = value;
-                _MyDictionary_Accessed = true;
-            }
-        }
-        protected bool _MyDictionary_Accessed;
-        
-        protected SortedDictionary<int, ExampleChild> _MySortedDictionary;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public SortedDictionary<int, ExampleChild> MySortedDictionary
-        {
-            get
-            {
-                if (!_MySortedDictionary_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MySortedDictionary = default(SortedDictionary<int, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null);
-                        _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
-                    }
-                    _MySortedDictionary_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MySortedDictionary;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MySortedDictionary = value;
-                _MySortedDictionary_Accessed = true;
-            }
-        }
-        protected bool _MySortedDictionary_Accessed;
-        
-        protected SortedList<int, ExampleChild> _MySortedList;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public SortedList<int, ExampleChild> MySortedList
-        {
-            get
-            {
-                if (!_MySortedList_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MySortedList = default(SortedList<int, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null);
-                        _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
-                    }
-                    _MySortedList_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MySortedList;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MySortedList = value;
-                _MySortedList_Accessed = true;
-            }
-        }
-        protected bool _MySortedList_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

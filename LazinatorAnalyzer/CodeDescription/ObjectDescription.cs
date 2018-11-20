@@ -363,8 +363,6 @@ namespace Lazinator.CodeDescription
                         public abstract void UpdateStoredBuffer();
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
-
-                        /* Property definitions */
         
                 ";
                 else
@@ -383,7 +381,8 @@ namespace Lazinator.CodeDescription
 
                                     ";
 
-                    boilerplate = $@"        /* Serialization, deserialization, and object relationships */
+                    boilerplate = $@"
+                        /* Serialization, deserialization, and object relationships */
 
                         {constructor}{HideILazinatorProperty}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
@@ -520,8 +519,6 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};
-
-                        /* Property definitions */
         
                 ";
                 }
@@ -578,6 +575,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
         {
+            sb.AppendLine($@"/* Property definitions */
+                ");
             var thisLevel = PropertiesToDefineThisLevel;
             var withRecordedIndices = thisLevel
                 .Where(property =>

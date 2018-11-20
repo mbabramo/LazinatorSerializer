@@ -29,6 +29,99 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyListT_ByteIndex;
+        protected int _MyT_ByteIndex;
+        protected virtual int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
+        private int _OpenGeneric_T_EndByteIndex = 0;
+        protected virtual int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
+        
+        
+        protected List<T> _MyListT;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual List<T> MyListT
+        {
+            get
+            {
+                if (!_MyListT_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyListT = default(List<T>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null);
+                        _MyListT = ConvertFromBytes_List_GT_g(childData);
+                    }
+                    _MyListT_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyListT;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyListT = value;
+                _MyListT_Accessed = true;
+            }
+        }
+        protected bool _MyListT_Accessed;
+        
+        protected T _MyT;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual T MyT
+        {
+            get
+            {
+                if (!_MyT_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyT = default(T);
+                        if (_MyT != null)
+                        { // MyT is a struct
+                            _MyT.LazinatorParents = new LazinatorParentsCollection(this);
+                        }
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
+                        
+                        _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
+                    }
+                    _MyT_Accessed = true;
+                } 
+                return _MyT;
+            }
+            set
+            {
+                if (value != null && value.IsStruct)
+                {
+                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+                else
+                {
+                    if (_MyT != null)
+                    {
+                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
+                    }
+                    if (value != null)
+                    {
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                    }
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyT = value;
+                _MyT_Accessed = true;
+            }
+        }
+        protected bool _MyT_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public OpenGeneric() : base()
@@ -175,98 +268,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyListT_ByteIndex;
-        protected int _MyT_ByteIndex;
-        protected virtual int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
-        private int _OpenGeneric_T_EndByteIndex = 0;
-        protected virtual int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
-        
-        
-        protected List<T> _MyListT;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual List<T> MyListT
-        {
-            get
-            {
-                if (!_MyListT_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListT = default(List<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null);
-                        _MyListT = ConvertFromBytes_List_GT_g(childData);
-                    }
-                    _MyListT_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyListT;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyListT = value;
-                _MyListT_Accessed = true;
-            }
-        }
-        protected bool _MyListT_Accessed;
-        
-        protected T _MyT;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual T MyT
-        {
-            get
-            {
-                if (!_MyT_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyT = default(T);
-                        if (_MyT != null)
-                        { // MyT is a struct
-                            _MyT.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
-                        
-                        _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                    }
-                    _MyT_Accessed = true;
-                } 
-                return _MyT;
-            }
-            set
-            {
-                if (value != null && value.IsStruct)
-                {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
-                }
-                else
-                {
-                    if (_MyT != null)
-                    {
-                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
-                    }
-                    if (value != null)
-                    {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                    }
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyT = value;
-                _MyT_Accessed = true;
-            }
-        }
-        protected bool _MyT_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

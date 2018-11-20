@@ -29,6 +29,43 @@ namespace LazinatorTests.Examples.Abstract
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyT_ByteIndex;
+        protected virtual int _MyT_ByteLength { get; }
+        
+        
+        protected bool _MyEnumWithinAbstractGeneric_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
+        {
+            get;
+            set;
+        }
+        
+        protected bool _MyEnumWithinAbstractGeneric2_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
+        {
+            get;
+            set;
+        }
+        
+        protected bool _MyUnofficialInt_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract int MyUnofficialInt
+        {
+            get;
+            set;
+        }
+        
+        protected bool _MyT_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public virtual T MyT
+        {
+            get;
+            set;
+        }
         /* Abstract declarations */
         public abstract LazinatorParentsCollection LazinatorParents { get; set; }
         
@@ -97,43 +134,6 @@ namespace LazinatorTests.Examples.Abstract
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
         
-        /* Property definitions */
-        
-        protected int _MyT_ByteIndex;
-        protected virtual int _MyT_ByteLength { get; }
-        
-        
-        protected bool _MyEnumWithinAbstractGeneric_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
-        {
-            get;
-            set;
-        }
-        
-        protected bool _MyEnumWithinAbstractGeneric2_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
-        {
-            get;
-            set;
-        }
-        
-        protected bool _MyUnofficialInt_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract int MyUnofficialInt
-        {
-            get;
-            set;
-        }
-        
-        protected bool _MyT_Accessed = false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual T MyT
-        {
-            get;
-            set;
-        }
         public abstract int LazinatorUniqueID { get; }
         protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
         protected virtual bool ContainsOpenGenericParameters => true;

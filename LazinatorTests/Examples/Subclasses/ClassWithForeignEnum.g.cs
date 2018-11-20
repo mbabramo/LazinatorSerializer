@@ -29,6 +29,25 @@ namespace LazinatorTests.Examples.Subclasses
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        
+        
+        protected global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
+        {
+            get
+            {
+                return _MyEnum;
+            }
+            set
+            {
+                IsDirty = true;
+                _MyEnum = value;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public ClassWithForeignEnum() : base()
@@ -171,24 +190,6 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        
-        
-        protected global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass MyEnum
-        {
-            get
-            {
-                return _MyEnum;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyEnum = value;
-            }
-        }
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

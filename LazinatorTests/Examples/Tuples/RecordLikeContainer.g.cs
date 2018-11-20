@@ -30,6 +30,145 @@ namespace LazinatorTests.Examples.Tuples
     {
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _MyMismatchedRecordLikeType_ByteIndex;
+        protected int _MyRecordLikeClass_ByteIndex;
+        protected int _MyRecordLikeType_ByteIndex;
+        protected int _MyRecordLikeTypeWithLazinator_ByteIndex;
+        protected virtual int _MyMismatchedRecordLikeType_ByteLength => _MyRecordLikeClass_ByteIndex - _MyMismatchedRecordLikeType_ByteIndex;
+        protected virtual int _MyRecordLikeClass_ByteLength => _MyRecordLikeType_ByteIndex - _MyRecordLikeClass_ByteIndex;
+        protected virtual int _MyRecordLikeType_ByteLength => _MyRecordLikeTypeWithLazinator_ByteIndex - _MyRecordLikeType_ByteIndex;
+        private int _RecordLikeContainer_EndByteIndex;
+        protected virtual int _MyRecordLikeTypeWithLazinator_ByteLength => _RecordLikeContainer_EndByteIndex - _MyRecordLikeTypeWithLazinator_ByteIndex;
+        
+        
+        protected MismatchedRecordLikeType _MyMismatchedRecordLikeType;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public MismatchedRecordLikeType MyMismatchedRecordLikeType
+        {
+            get
+            {
+                if (!_MyMismatchedRecordLikeType_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyMismatchedRecordLikeType = default(MismatchedRecordLikeType);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, false, false, null);
+                        _MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData);
+                    }
+                    _MyMismatchedRecordLikeType_Accessed = true;
+                } 
+                return _MyMismatchedRecordLikeType;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyMismatchedRecordLikeType = value;
+                _MyMismatchedRecordLikeType_Accessed = true;
+            }
+        }
+        protected bool _MyMismatchedRecordLikeType_Accessed;
+        
+        protected RecordLikeClass _MyRecordLikeClass;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public RecordLikeClass MyRecordLikeClass
+        {
+            get
+            {
+                if (!_MyRecordLikeClass_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyRecordLikeClass = default(RecordLikeClass);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, false, false, null);
+                        _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
+                    }
+                    _MyRecordLikeClass_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyRecordLikeClass;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyRecordLikeClass = value;
+                _MyRecordLikeClass_Accessed = true;
+            }
+        }
+        protected bool _MyRecordLikeClass_Accessed;
+        
+        protected RecordLikeType _MyRecordLikeType;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public RecordLikeType MyRecordLikeType
+        {
+            get
+            {
+                if (!_MyRecordLikeType_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyRecordLikeType = default(RecordLikeType);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength, false, false, null);
+                        _MyRecordLikeType = ConvertFromBytes_RecordLikeType(childData);
+                    }
+                    _MyRecordLikeType_Accessed = true;
+                } 
+                return _MyRecordLikeType;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyRecordLikeType = value;
+                _MyRecordLikeType_Accessed = true;
+            }
+        }
+        protected bool _MyRecordLikeType_Accessed;
+        
+        protected RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator
+        {
+            get
+            {
+                if (!_MyRecordLikeTypeWithLazinator_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyRecordLikeTypeWithLazinator = default(RecordLikeTypeWithLazinator);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, false, false, null);
+                        _MyRecordLikeTypeWithLazinator = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
+                    }
+                    _MyRecordLikeTypeWithLazinator_Accessed = true;
+                }
+                IsDirty = true; 
+                return _MyRecordLikeTypeWithLazinator;
+            }
+            set
+            {
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _MyRecordLikeTypeWithLazinator = value;
+                _MyRecordLikeTypeWithLazinator_Accessed = true;
+            }
+        }
+        protected bool _MyRecordLikeTypeWithLazinator_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public RecordLikeContainer() : base()
@@ -175,144 +314,6 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _MyMismatchedRecordLikeType_ByteIndex;
-        protected int _MyRecordLikeClass_ByteIndex;
-        protected int _MyRecordLikeType_ByteIndex;
-        protected int _MyRecordLikeTypeWithLazinator_ByteIndex;
-        protected virtual int _MyMismatchedRecordLikeType_ByteLength => _MyRecordLikeClass_ByteIndex - _MyMismatchedRecordLikeType_ByteIndex;
-        protected virtual int _MyRecordLikeClass_ByteLength => _MyRecordLikeType_ByteIndex - _MyRecordLikeClass_ByteIndex;
-        protected virtual int _MyRecordLikeType_ByteLength => _MyRecordLikeTypeWithLazinator_ByteIndex - _MyRecordLikeType_ByteIndex;
-        private int _RecordLikeContainer_EndByteIndex;
-        protected virtual int _MyRecordLikeTypeWithLazinator_ByteLength => _RecordLikeContainer_EndByteIndex - _MyRecordLikeTypeWithLazinator_ByteIndex;
-        
-        
-        protected MismatchedRecordLikeType _MyMismatchedRecordLikeType;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public MismatchedRecordLikeType MyMismatchedRecordLikeType
-        {
-            get
-            {
-                if (!_MyMismatchedRecordLikeType_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyMismatchedRecordLikeType = default(MismatchedRecordLikeType);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, false, false, null);
-                        _MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData);
-                    }
-                    _MyMismatchedRecordLikeType_Accessed = true;
-                } 
-                return _MyMismatchedRecordLikeType;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyMismatchedRecordLikeType = value;
-                _MyMismatchedRecordLikeType_Accessed = true;
-            }
-        }
-        protected bool _MyMismatchedRecordLikeType_Accessed;
-        
-        protected RecordLikeClass _MyRecordLikeClass;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public RecordLikeClass MyRecordLikeClass
-        {
-            get
-            {
-                if (!_MyRecordLikeClass_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyRecordLikeClass = default(RecordLikeClass);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, false, false, null);
-                        _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
-                    }
-                    _MyRecordLikeClass_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyRecordLikeClass;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyRecordLikeClass = value;
-                _MyRecordLikeClass_Accessed = true;
-            }
-        }
-        protected bool _MyRecordLikeClass_Accessed;
-        
-        protected RecordLikeType _MyRecordLikeType;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public RecordLikeType MyRecordLikeType
-        {
-            get
-            {
-                if (!_MyRecordLikeType_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyRecordLikeType = default(RecordLikeType);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeType_ByteIndex, _MyRecordLikeType_ByteLength, false, false, null);
-                        _MyRecordLikeType = ConvertFromBytes_RecordLikeType(childData);
-                    }
-                    _MyRecordLikeType_Accessed = true;
-                } 
-                return _MyRecordLikeType;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyRecordLikeType = value;
-                _MyRecordLikeType_Accessed = true;
-            }
-        }
-        protected bool _MyRecordLikeType_Accessed;
-        
-        protected RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator
-        {
-            get
-            {
-                if (!_MyRecordLikeTypeWithLazinator_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyRecordLikeTypeWithLazinator = default(RecordLikeTypeWithLazinator);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, false, false, null);
-                        _MyRecordLikeTypeWithLazinator = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
-                    }
-                    _MyRecordLikeTypeWithLazinator_Accessed = true;
-                }
-                IsDirty = true; 
-                return _MyRecordLikeTypeWithLazinator;
-            }
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MyRecordLikeTypeWithLazinator = value;
-                _MyRecordLikeTypeWithLazinator_Accessed = true;
-            }
-        }
-        protected bool _MyRecordLikeTypeWithLazinator_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

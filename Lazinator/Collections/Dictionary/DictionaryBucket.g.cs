@@ -31,6 +31,120 @@ namespace Lazinator.Collections.Dictionary
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Keys_ByteIndex;
+        protected int _Values_ByteIndex;
+        protected virtual int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
+        private int _DictionaryBucket_TKey_TValue_EndByteIndex;
+        protected virtual int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Initialized;
+        public bool Initialized
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _Initialized;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _Initialized = value;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected LazinatorList<TKey> _Keys;
+        public virtual LazinatorList<TKey> Keys
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Keys_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Keys = default(LazinatorList<TKey>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, false, false, null);
+                        
+                        _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<TKey>(), childData, this); 
+                    }
+                    _Keys_Accessed = true;
+                } 
+                return _Keys;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_Keys != null)
+                {
+                    _Keys.LazinatorParents = _Keys.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Keys = value;
+                _Keys_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Keys_Accessed;
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected LazinatorList<TValue> _Values;
+        public virtual LazinatorList<TValue> Values
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Values_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Values = default(LazinatorList<TValue>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, false, false, null);
+                        
+                        _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<TValue>(), childData, this); 
+                    }
+                    _Values_Accessed = true;
+                } 
+                return _Values;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_Values != null)
+                {
+                    _Values.LazinatorParents = _Values.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Values = value;
+                _Values_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Values_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         public DictionaryBucket() : base()
@@ -192,119 +306,6 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _Keys_ByteIndex;
-        protected int _Values_ByteIndex;
-        protected virtual int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
-        private int _DictionaryBucket_TKey_TValue_EndByteIndex;
-        protected virtual int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Initialized;
-        public bool Initialized
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                return _Initialized;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                _Initialized = value;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected LazinatorList<TKey> _Keys;
-        public virtual LazinatorList<TKey> Keys
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Keys_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Keys = default(LazinatorList<TKey>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, false, false, null);
-                        
-                        _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<TKey>(), childData, this); 
-                    }
-                    _Keys_Accessed = true;
-                } 
-                return _Keys;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_Keys != null)
-                {
-                    _Keys.LazinatorParents = _Keys.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Keys = value;
-                _Keys_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Keys_Accessed;
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected LazinatorList<TValue> _Values;
-        public virtual LazinatorList<TValue> Values
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Values_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Values = default(LazinatorList<TValue>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, false, false, null);
-                        
-                        _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<TValue>(), childData, this); 
-                    }
-                    _Values_Accessed = true;
-                } 
-                return _Values;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_Values != null)
-                {
-                    _Values.LazinatorParents = _Values.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Values = value;
-                _Values_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Values_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

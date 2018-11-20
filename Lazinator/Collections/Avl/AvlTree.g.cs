@@ -30,6 +30,57 @@ namespace Lazinator.Collections.Avl
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _Root_ByteIndex;
+        private int _AvlTree_TKey_TValue_EndByteIndex;
+        protected virtual int _Root_ByteLength => _AvlTree_TKey_TValue_EndByteIndex - _Root_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected AvlNode<TKey, TValue> _Root;
+        public virtual AvlNode<TKey, TValue> Root
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_Root_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _Root = default(AvlNode<TKey, TValue>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, false, false, null);
+                        
+                        _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(93, () => new AvlNode<TKey, TValue>(), childData, this); 
+                    }
+                    _Root_Accessed = true;
+                } 
+                return _Root;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_Root != null)
+                {
+                    _Root.LazinatorParents = _Root.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _Root = value;
+                _Root_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Root_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -182,56 +233,6 @@ namespace Lazinator.Collections.Avl
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _Root_ByteIndex;
-        private int _AvlTree_TKey_TValue_EndByteIndex;
-        protected virtual int _Root_ByteLength => _AvlTree_TKey_TValue_EndByteIndex - _Root_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected AvlNode<TKey, TValue> _Root;
-        public virtual AvlNode<TKey, TValue> Root
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_Root_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Root = default(AvlNode<TKey, TValue>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, false, false, null);
-                        
-                        _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(93, () => new AvlNode<TKey, TValue>(), childData, this); 
-                    }
-                    _Root_Accessed = true;
-                } 
-                return _Root;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_Root != null)
-                {
-                    _Root.LazinatorParents = _Root.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _Root = value;
-                _Root_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _Root_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

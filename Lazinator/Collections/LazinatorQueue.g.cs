@@ -30,6 +30,57 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool IsStruct => false;
         
+        /* Property definitions */
+        
+        protected int _UnderlyingList_ByteIndex;
+        private int _LazinatorQueue_T_EndByteIndex;
+        protected virtual int _UnderlyingList_ByteLength => _LazinatorQueue_T_EndByteIndex - _UnderlyingList_ByteIndex;
+        
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected LazinatorList<T> _UnderlyingList;
+        public virtual LazinatorList<T> UnderlyingList
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                if (!_UnderlyingList_Accessed)
+                {
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _UnderlyingList = default(LazinatorList<T>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, false, false, null);
+                        
+                        _UnderlyingList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
+                    }
+                    _UnderlyingList_Accessed = true;
+                } 
+                return _UnderlyingList;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                if (_UnderlyingList != null)
+                {
+                    _UnderlyingList.LazinatorParents = _UnderlyingList.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
+                IsDirty = true;
+                DescendantIsDirty = true;
+                _UnderlyingList = value;
+                _UnderlyingList_Accessed = true;
+            }
+        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _UnderlyingList_Accessed;
+        
         /* Serialization, deserialization, and object relationships */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -182,56 +233,6 @@ namespace Lazinator.Collections
         
         public virtual bool NonBinaryHash32 => false;
         
-        /* Property definitions */
-        
-        protected int _UnderlyingList_ByteIndex;
-        private int _LazinatorQueue_T_EndByteIndex;
-        protected virtual int _UnderlyingList_ByteLength => _LazinatorQueue_T_EndByteIndex - _UnderlyingList_ByteIndex;
-        
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected LazinatorList<T> _UnderlyingList;
-        public virtual LazinatorList<T> UnderlyingList
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_UnderlyingList_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _UnderlyingList = default(LazinatorList<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, false, false, null);
-                        
-                        _UnderlyingList = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<T>(), childData, this); 
-                    }
-                    _UnderlyingList_Accessed = true;
-                } 
-                return _UnderlyingList;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_UnderlyingList != null)
-                {
-                    _UnderlyingList.LazinatorParents = _UnderlyingList.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _UnderlyingList = value;
-                _UnderlyingList_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _UnderlyingList_Accessed;
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {

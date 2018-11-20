@@ -29,172 +29,6 @@ namespace LazinatorTests.Examples
     {
         public bool IsStruct => true;
         
-        /* Serialization, deserialization, and object relationships */
-        
-        public LazinatorParentsCollection LazinatorParents { get; set; }
-        
-        public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
-        
-        public int Deserialize()
-        {
-            FreeInMemoryObjects();
-            int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
-            if (span.Length == 0)
-            {
-                return 0;
-            }
-            
-            if (LazinatorParents.Any())
-            {
-                throw new LazinatorDeserializationException("A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.");
-            }
-            
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
-            if (uniqueID != LazinatorUniqueID)
-            {
-                throw new FormatException("Wrong Lazinator type initialized.");
-            }
-            
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
-            
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
-            
-            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
-            
-            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return bytesSoFar;
-        }
-        
-        public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, (EncodeManuallyDelegate) EncodeToNewBuffer);
-        
-        LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-        
-        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
-        {
-            var clone = new ExampleStructContainingClasses()
-            {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
-            return clone;
-        }
-        
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
-        {
-            clone.FreeInMemoryObjects();
-            ExampleStructContainingClasses typedClone = (ExampleStructContainingClasses) clone;
-            typedClone.MyBool = MyBool;
-            typedClone.MyChar = MyChar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                typedClone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTuple = CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            
-            typedClone.IsDirty = false;
-            return typedClone;
-        }
-        
-        public bool HasChanged { get; set; }
-        
-        bool _IsDirty;
-        public bool IsDirty
-        {
-            [DebuggerStepThrough]
-            get => _IsDirty;
-            [DebuggerStepThrough]
-            set
-            {
-                if (_IsDirty != value)
-                {
-                    _IsDirty = value;
-                    if (_IsDirty)
-                    {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        HasChanged = true;
-                    }
-                }
-            }
-        }
-        
-        bool _DescendantHasChanged;
-        public bool DescendantHasChanged
-        {
-            [DebuggerStepThrough]
-            get => _DescendantHasChanged || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.HasChanged || MyChild1.DescendantHasChanged)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.HasChanged || MyChild2.DescendantHasChanged));
-            [DebuggerStepThrough]
-            set
-            {
-                _DescendantHasChanged = value;
-            }
-        }
-        
-        bool _DescendantIsDirty;
-        public bool DescendantIsDirty
-        {
-            [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
-            [DebuggerStepThrough]
-            set
-            {
-                if (_DescendantIsDirty != value)
-                {
-                    _DescendantIsDirty = value;
-                    if (_DescendantIsDirty)
-                    {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        _DescendantHasChanged = true;
-                    }
-                }
-            }
-        }
-        
-        public void DeserializeLazinator(LazinatorMemory serializedBytes)
-        {
-            LazinatorMemoryStorage = serializedBytes;
-            int length = Deserialize();
-            if (length != LazinatorMemoryStorage.Length)
-            {
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
-            }
-        }
-        
-        public LazinatorMemory LazinatorMemoryStorage
-        {
-            get;
-            set;
-        }
-        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
-        
-        public void UpdateStoredBuffer()
-        {
-            if (LazinatorMemoryStorage == null)
-            {
-                throw new NotSupportedException("Cannot use UpdateStoredBuffer on a struct that has not been deserialized. Clone the struct instead."); 
-            }
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                return;
-            }
-            LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, (EncodeManuallyDelegate) EncodeToNewBuffer);
-            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-        }
-        
-        public int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
-        }
-        
-        public bool NonBinaryHash32 => false;
-        
         /* Property definitions */
         
         int _MyChild1_ByteIndex;
@@ -418,6 +252,173 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyTuple_Accessed;
+        
+        /* Serialization, deserialization, and object relationships */
+        
+        public LazinatorParentsCollection LazinatorParents { get; set; }
+        
+        public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
+        
+        public int Deserialize()
+        {
+            FreeInMemoryObjects();
+            int bytesSoFar = 0;
+            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            if (span.Length == 0)
+            {
+                return 0;
+            }
+            
+            if (LazinatorParents.Any())
+            {
+                throw new LazinatorDeserializationException("A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.");
+            }
+            
+            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            if (uniqueID != LazinatorUniqueID)
+            {
+                throw new FormatException("Wrong Lazinator type initialized.");
+            }
+            
+            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            
+            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            
+            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
+            
+            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+            return bytesSoFar;
+        }
+        
+        public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, (EncodeManuallyDelegate) EncodeToNewBuffer);
+        
+        LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+        
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+        {
+            var clone = new ExampleStructContainingClasses()
+            {
+                OriginalIncludeChildrenMode = includeChildrenMode
+            };
+            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+            return clone;
+        }
+        
+        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            clone.FreeInMemoryObjects();
+            ExampleStructContainingClasses typedClone = (ExampleStructContainingClasses) clone;
+            typedClone.MyBool = MyBool;
+            typedClone.MyChar = MyChar;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            }
+            typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyTuple = CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            
+            typedClone.IsDirty = false;
+            return typedClone;
+        }
+        
+        public bool HasChanged { get; set; }
+        
+        bool _IsDirty;
+        public bool IsDirty
+        {
+            [DebuggerStepThrough]
+            get => _IsDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                if (_IsDirty != value)
+                {
+                    _IsDirty = value;
+                    if (_IsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        HasChanged = true;
+                    }
+                }
+            }
+        }
+        
+        bool _DescendantHasChanged;
+        public bool DescendantHasChanged
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasChanged || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.HasChanged || MyChild1.DescendantHasChanged)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.HasChanged || MyChild2.DescendantHasChanged));
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasChanged = value;
+            }
+        }
+        
+        bool _DescendantIsDirty;
+        public bool DescendantIsDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantIsDirty || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
+            [DebuggerStepThrough]
+            set
+            {
+                if (_DescendantIsDirty != value)
+                {
+                    _DescendantIsDirty = value;
+                    if (_DescendantIsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        _DescendantHasChanged = true;
+                    }
+                }
+            }
+        }
+        
+        public void DeserializeLazinator(LazinatorMemory serializedBytes)
+        {
+            LazinatorMemoryStorage = serializedBytes;
+            int length = Deserialize();
+            if (length != LazinatorMemoryStorage.Length)
+            {
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
+            }
+        }
+        
+        public LazinatorMemory LazinatorMemoryStorage
+        {
+            get;
+            set;
+        }
+        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+        
+        public void UpdateStoredBuffer()
+        {
+            if (LazinatorMemoryStorage == null)
+            {
+                throw new NotSupportedException("Cannot use UpdateStoredBuffer on a struct that has not been deserialized. Clone the struct instead."); 
+            }
+            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                return;
+            }
+            LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, (EncodeManuallyDelegate) EncodeToNewBuffer);
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
+        }
+        
+        public int GetByteLength()
+        {
+            UpdateStoredBuffer();
+            return LazinatorObjectBytes.Length;
+        }
+        
+        public bool NonBinaryHash32 => false;
+        
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
