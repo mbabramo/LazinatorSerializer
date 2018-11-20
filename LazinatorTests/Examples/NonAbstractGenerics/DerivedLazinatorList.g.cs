@@ -40,21 +40,7 @@ namespace LazinatorTests.Examples
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
-            if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-            {
-                clone.LazinatorObjectVersion = LazinatorObjectVersion;
-            }
-            
-            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
-            {
-                AssignCloneProperties(clone, includeChildrenMode);
-            }
-            else
-            {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
-                clone.DeserializeLazinator(bytes);
-            }
-            clone.LazinatorParents = default;
+            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
             return clone;
         }
         
