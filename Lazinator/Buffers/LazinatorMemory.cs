@@ -20,12 +20,11 @@ namespace Lazinator.Buffers
 
         #region Constructors
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled, JointlyDisposableMemory originalSource) : base()
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled) : base()
         {
             OwnedMemory = ownedMemory;
             StartPosition = startPosition;
             Length = bytesFilled;
-            OriginalSource = originalSource;
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
@@ -53,7 +52,6 @@ namespace Lazinator.Buffers
             OwnedMemory = existingMemoryToCopy.OwnedMemory;
             StartPosition = existingMemoryToCopy.StartPosition;
             Length = existingMemoryToCopy.Length;
-            OriginalSource = existingMemoryToCopy.OriginalSource;
         }
 
         public bool IndirectlyDisposed()
@@ -96,7 +94,7 @@ namespace Lazinator.Buffers
         }
 
         public LazinatorMemory Slice(int position) => Slice(position, Length - position);
-        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length, OriginalSource);
+        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length);
 
         #endregion
 

@@ -27,7 +27,6 @@ namespace LazinatorTests.Tests
             e.MyChild1.MyLong = -342356;
             e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
             e.MyChild1.EnsureLazinatorMemoryUpToDate();
-            e.MyChild1.LazinatorMemoryStorage.DisposeWithThis(e.LazinatorMemoryStorage); // must do this manually
             e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
@@ -96,7 +95,6 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             var e2 = e.CloneLazinatorTyped();
-            e2.LazinatorMemoryStorage.DisposeIndependently();
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
             {

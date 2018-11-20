@@ -24,11 +24,11 @@ namespace Lazinator.Buffers
         public static List<bool> MemoryAllocationsManuallyReturned = new List<bool>();
         public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>();
         
-        public ExpandableBytes() : this(MinMinBufferSize, null)
+        public ExpandableBytes() : this(MinMinBufferSize)
         {
         }
 
-        public ExpandableBytes(int minBufferSize, JointlyDisposableMemory originalSource) : base()
+        public ExpandableBytes(int minBufferSize) : base()
         {
             int minimumSize = Math.Max(minBufferSize, MinMinBufferSize);
             if (UseMemoryPooling)
@@ -43,19 +43,11 @@ namespace Lazinator.Buffers
                 MemoryAllocations.Add(new WeakReference<IMemoryOwner<byte>>(CurrentBuffer));
                 MemoryAllocationsManuallyReturned.Add(false);
             }
-
-
-            OriginalSource = originalSource;
-            if (OriginalSource != null)
-                OriginalSource.DisposeWithThis(this);
         }
 
-        public ExpandableBytes(IMemoryOwner<byte> initialBuffer, JointlyDisposableMemory originalSource)
+        public ExpandableBytes(IMemoryOwner<byte> initialBuffer)
         {
             CurrentBuffer = initialBuffer;
-            OriginalSource = originalSource;
-            if (OriginalSource != null)
-                OriginalSource.DisposeWithThis(this);
         }
 
         public void EnsureMinBufferSize(int desiredBufferSize = 0)

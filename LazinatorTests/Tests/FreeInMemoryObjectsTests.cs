@@ -55,7 +55,6 @@ namespace LazinatorTests.Tests
             var origValue = typical2.MyChild1.MyLong;
             LazinatorList<Example> l = new LazinatorList<Example>() { typical1, typical2 };
             l.EnsureLazinatorMemoryUpToDate();
-            l.LazinatorMemoryStorage.DisposeIndependently();
             l.FreeInMemoryObjects();
             typical2.MyChild1.MyLong = 46523496; // should not affect the list now
             l[0].MyChild1.MyLong.Should().Be(origValue);
