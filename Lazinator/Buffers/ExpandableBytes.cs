@@ -12,7 +12,7 @@ namespace Lazinator.Buffers
     /// </summary>
     public class ExpandableBytes : TrackedMemory
     {
-        public const int MinMinBufferSize = 1024; // never allocate a pooled buffer smaller than this
+        public const int DefaultMinBufferSize = 1024; 
         public bool LazinatorShouldNotReturnToPool;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
@@ -24,13 +24,13 @@ namespace Lazinator.Buffers
         public static List<bool> MemoryAllocationsManuallyReturned = new List<bool>();
         public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>();
         
-        public ExpandableBytes() : this(MinMinBufferSize)
+        public ExpandableBytes() : this(DefaultMinBufferSize)
         {
         }
 
         public ExpandableBytes(int minBufferSize) : base()
         {
-            int minimumSize = Math.Max(minBufferSize, MinMinBufferSize);
+            int minimumSize = Math.Max(minBufferSize, DefaultMinBufferSize);
             if (UseMemoryPooling)
             {
                 CurrentBuffer = LazinatorUtilities.GetRentedMemory(minimumSize);
@@ -55,8 +55,8 @@ namespace Lazinator.Buffers
             if (desiredBufferSize <= 0)
             {
                 desiredBufferSize = CurrentBuffer.Memory.Length * 2;
-                if (desiredBufferSize < MinMinBufferSize)
-                    desiredBufferSize = MinMinBufferSize;
+                if (desiredBufferSize < DefaultMinBufferSize)
+                    desiredBufferSize = DefaultMinBufferSize;
             }
             else if (CurrentBuffer.Memory.Length >= desiredBufferSize)
                 return;

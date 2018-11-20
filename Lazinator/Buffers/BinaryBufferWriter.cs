@@ -16,6 +16,8 @@ namespace Lazinator.Buffers
 
         public BinaryBufferWriter(int minimumSize)
         {
+            if (minimumSize == 0)
+                minimumSize = ExpandableBytes.DefaultMinBufferSize;
             UnderlyingMemory = new ExpandableBytes(minimumSize);
             _Position = 0;
         }
