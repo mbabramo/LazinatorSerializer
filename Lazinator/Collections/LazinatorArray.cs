@@ -52,7 +52,7 @@ namespace Lazinator.Collections
                 }
             }
 
-            return this;
+            return clone;
         }
 
         public override void Add(T item) => throw new NotSupportedInLazinatorArrayException();

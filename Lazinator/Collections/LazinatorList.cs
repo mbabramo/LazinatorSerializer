@@ -457,7 +457,7 @@ namespace Lazinator.Collections
                 }
             }
 
-            return this;
+            return clone;
         }
 
         public void OnFreeInMemoryObjects()

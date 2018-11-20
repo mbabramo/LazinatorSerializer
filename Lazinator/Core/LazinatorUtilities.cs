@@ -752,7 +752,7 @@ namespace Lazinator.Core
 
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                source.AssignCloneProperties(clone, includeChildrenMode);
+                clone = (T) source.AssignCloneProperties(clone, includeChildrenMode);
             }
             else
             {
