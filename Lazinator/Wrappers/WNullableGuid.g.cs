@@ -87,7 +87,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        void AssignCloneProperties(ref WNullableGuid clone, IncludeChildrenMode includeChildrenMode)
+        public void AssignCloneProperties(ref WNullableGuid clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             clone.WrappedValue = WrappedValue;

@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
-        protected override void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public override public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             Concrete3 typedClone = (Concrete3) clone;

@@ -39,7 +39,7 @@ namespace Lazinator.Wrappers
         
         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
         
-        protected abstract void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
+        protected abstract public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract bool HasChanged

@@ -91,7 +91,7 @@ namespace Lazinator.Collections.Avl
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             AvlMultiset<T> typedClone = (AvlMultiset<T>) clone;

@@ -83,7 +83,7 @@ namespace Lazinator.Core
         /// <param name="isDefinitelyClean">An indication whether any storage, if it exists, is definitely clean. If the storage has never been converted into bytes, then it is definitely clean. If the storage does not exist (it hasn't been serialized yet), then this is irrelevant, because there is no need to verify cleanliness.</param>
         /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
         /// <param name="updateStoredBuffer">If true, the internal storage is updated</param>
-        /// <param name="lazinator">A Lazinator class (for a struct, the other overload of this function should be called).</param>
+        /// <param name="lazinator">A Lazinator object (for a struct, the other overload of this function should be called if updateStoredBuffer == true).</param>
         /// <returns></returns>
         public static LazinatorMemory EncodeOrRecycleToNewBuffer<T>(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, bool updateStoredBuffer, T lazinator) where T : ILazinator
         {

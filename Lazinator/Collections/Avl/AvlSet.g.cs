@@ -90,7 +90,7 @@ namespace Lazinator.Collections.Avl
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             AvlSet<TKey> typedClone = (AvlSet<TKey>) clone;

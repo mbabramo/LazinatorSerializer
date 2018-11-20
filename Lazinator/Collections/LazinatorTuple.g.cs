@@ -89,7 +89,7 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorTuple<T, U> typedClone = (LazinatorTuple<T, U>) clone;

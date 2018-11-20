@@ -97,7 +97,7 @@ namespace Lazinator.Collections
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorOffsetList typedClone = (LazinatorOffsetList) clone;

@@ -93,7 +93,7 @@ namespace Lazinator.Spans
             return clone;
         }
         
-        void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;

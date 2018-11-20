@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             OpenGeneric<T> typedClone = (OpenGeneric<T>) clone;

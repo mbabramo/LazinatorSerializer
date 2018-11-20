@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
-        protected virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual void AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             BaseContainer typedClone = (BaseContainer) clone;
