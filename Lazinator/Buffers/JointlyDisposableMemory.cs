@@ -56,18 +56,18 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Remembers an additional buffer that should be disposed when this is disposed. 
         /// </summary>
-        /// <param name="additionalBuffer">The buffer to dispose with this buffer.</param>
-        public void DisposeWithThis(IMemoryOwner<byte> additionalBuffer)
+        /// <param name="buffer">The buffer to dispose with this buffer.</param>
+        public virtual void DisposeWithThis(IMemoryOwner<byte> buffer)
         {
-            if (additionalBuffer is LazinatorMemory lazinatorMemory && lazinatorMemory.OwnedMemory != null)
-                additionalBuffer = lazinatorMemory.OwnedMemory;
+            if (buffer is LazinatorMemory lazinatorMemory && lazinatorMemory.OwnedMemory != null)
+                buffer = lazinatorMemory.OwnedMemory;
             if (OriginalSource != null)
-                OriginalSource.DisposeWithThis(additionalBuffer);
+                OriginalSource.DisposeWithThis(buffer);
             else
             {
                 if (DisposeTogether == null)
                     DisposeTogether = new HashSet<IMemoryOwner<byte>>();
-                DisposeTogether.Add(additionalBuffer);
+                DisposeTogether.Add(buffer);
             }
         }
 
@@ -75,8 +75,10 @@ namespace Lazinator.Buffers
         /// Specifies that when this is disposed, the buffer should not be disposed with it. 
         /// </summary>
         /// <param name="buffer"></param>
-        public void DoNotDisposeWithThis(IMemoryOwner<byte> buffer, bool disposeBufferIfNotOriginalSource)
+        public virtual void DoNotDisposeWithThis(IMemoryOwner<byte> buffer, bool disposeBufferIfNotOriginalSource)
         {
+            if (buffer is LazinatorMemory lazinatorMemory && lazinatorMemory.OwnedMemory != null)
+                buffer = lazinatorMemory.OwnedMemory;
             if (OriginalSource != null)
                 OriginalSource.DoNotDisposeWithThis(buffer, disposeBufferIfNotOriginalSource);
             else
