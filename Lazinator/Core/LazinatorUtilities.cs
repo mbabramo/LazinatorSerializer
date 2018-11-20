@@ -47,7 +47,7 @@ namespace Lazinator.Core
         /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, i.e. has had its dirty flag set.</param>
         /// <param name="isDefinitelyClean">An indication whether any storage, if it exists, is definitely clean. If the storage has never been converted into bytes, then it is definitely clean. If the storage does not exist (it hasn't been serialized yet), then this is irrelevant, because there is no need to verify cleanliness.</param>
         /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
-        /// <param name="encodeManuallyFn">The function that completes the conversion to bytes, without considering using the original storage for the item as a whole.</param>
+        /// <param name="encodeManuallyFn">The function that completes the conversion to bytes, without using the original storage for the item as a whole.</param>
         /// <returns></returns>
         public static LazinatorMemory EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, EncodeManuallyDelegate encodeManuallyFn, bool updateStoredBuffer)
         {
