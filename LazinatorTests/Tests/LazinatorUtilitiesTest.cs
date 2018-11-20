@@ -54,7 +54,7 @@ namespace LazinatorTests.Tests
             const int bufferSize = 64 * 1024;
             for (int i = 0; i < 1; i++)
             { // same as above; higher iterations causes no memory leak
-                BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize, null);
+                BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
                 var rented = writer.LazinatorMemory;
                 rented.OwnedMemory.Memory.Length.Should().BeGreaterOrEqualTo(bufferSize);
             }
@@ -64,7 +64,7 @@ namespace LazinatorTests.Tests
         public void CanWriteBeyondInitialBufferSize()
         {
             const int bufferSize = 1024;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize, null);
+            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             for (int j = 0; j < 5000; j++)
                 writer.Write(j);
             var written = writer.Written;
