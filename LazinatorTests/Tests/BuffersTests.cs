@@ -161,7 +161,7 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
-            Example c1 = null, c2 = null, c3 = null, c4 = null; // early clones -- make sure unaffected
+            Example c1 = null, c2 = null, c3 = null; // early clones -- make sure unaffected
             int repetitions = 8;
             Random r = new Random();
             long randLong = 0;
@@ -180,8 +180,7 @@ namespace LazinatorTests.Tests
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.LinkedBuffer);
                     c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
-                    c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.SharedBuffer);
-                    c4 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    c3 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
                 }
                 if (MutateThisRepetition(i, mutateParent))
                     e.MyBool = !e.MyBool;
@@ -211,7 +210,7 @@ namespace LazinatorTests.Tests
                 if (makeParentUpToDate)
                     e.EnsureLazinatorMemoryUpToDate();
             }
-            foreach (Example c in new Example[] { c1, c2, c3, c4 })
+            foreach (Example c in new Example[] { c1, c2, c3 })
             {
                 c.MyChild2.MyLong = -3; // make sure early clone still works
             }
