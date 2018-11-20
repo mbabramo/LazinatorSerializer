@@ -56,14 +56,14 @@ namespace Lazinator.Core
             // unless the original storage is definitely clean.
             if (originalStorage == null || originalStorage.Length == 0 ||
                 includeChildrenMode != originalIncludeChildrenMode ||
-                        (!isDefinitelyClean
-                            &&
+                    (!isDefinitelyClean
+                        &&
                         (verifyCleanness ||
                         isBelievedDirty ||
                         (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && descendantIsBelievedDirty)
-                         )
-                         )
-            )
+                        )
+                     )
+                )
                 return encodeManuallyFn(includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
@@ -401,7 +401,11 @@ namespace Lazinator.Core
 
             BinaryBufferWriter writer = new BinaryBufferWriter();
             binaryWriterAction(ref writer, true);
-            return writer.LazinatorMemory.Memory;
+            var memory = writer.LazinatorMemory.Memory;
+            byte[] bytes = new byte[memory.Length];
+            memory.CopyTo(bytes);
+            writer.LazinatorMemory.Dispose();
+            return bytes;
         }
 
         /// <summary>

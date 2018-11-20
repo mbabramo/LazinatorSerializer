@@ -118,7 +118,9 @@ namespace Lazinator.Buffers
                 }
             }
 
-            return new string(MemoryMarshal.Cast<byte, char>(decompressionBuffer.Written));
+            string s = new string(MemoryMarshal.Cast<byte, char>(decompressionBuffer.Written));
+            decompressionBuffer.UnderlyingMemory?.Dispose();
+            return s;
         }
     }
 }
