@@ -72,28 +72,6 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Specifies that an old buffer is being replaced with a new buffer. Thus, the old buffer should be disposed now if it is not the original source. The new buffer should be disposed together with the original source.
-        /// </summary>
-        /// <param name="newBuffer"></param>
-        public virtual void ReplaceWithNewBuffer(IMemoryOwner<byte> newBuffer)
-        {
-            if (this != newBuffer)
-                DoNotDisposeWithThis(this, true);
-            DisposeWithThis(newBuffer);
-        }
-
-        
-        public void CopyOriginalSourceToNewBuffer(IMemoryOwner<byte> newBuffer)
-        {
-            if (newBuffer is JointlyDisposableMemory j)
-            {
-                j.OriginalSource = this.OriginalSource ?? this;
-                if (newBuffer is LazinatorMemory m && m.OwnedMemory is JointlyDisposableMemory m2)
-                    m2.OriginalSource = this.OriginalSource ?? this;
-            }
-        }
-
-        /// <summary>
         /// Specifies that when this is disposed, the buffer should not be disposed with it. 
         /// </summary>
         /// <param name="buffer"></param>

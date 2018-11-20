@@ -27,6 +27,7 @@ namespace LazinatorTests.Tests
             e.MyChild1.MyLong = -342356;
             e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
             e.MyChild1.EnsureLazinatorMemoryUpToDate();
+            e.MyChild1.LazinatorMemoryStorage.DisposeWithThis(e.LazinatorMemoryStorage); // must do this manually
             e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
