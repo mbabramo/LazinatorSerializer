@@ -56,7 +56,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null);
-                        _MyDictionary = ConvertFromBytes_Dictionary⋖int≀_C32ExampleChild_C62(childData);
+                        _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
                     }
                     _MyDictionary_Accessed = true;
                 }
@@ -88,7 +88,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null);
-                        _MySortedDictionary = ConvertFromBytes_SortedDictionary⋖int≀_C32ExampleChild_C62(childData);
+                        _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
                     }
                     _MySortedDictionary_Accessed = true;
                 }
@@ -120,7 +120,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null);
-                        _MySortedList = ConvertFromBytes_SortedList⋖int≀_C32ExampleChild_C62(childData);
+                        _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
                     }
                     _MySortedList_Accessed = true;
                 }
@@ -181,9 +181,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Dictionary_Values_Lazinator typedClone = (Dictionary_Values_Lazinator) clone;
-            typedClone.MyDictionary = CloneOrChange_Dictionary⋖int≀_C32ExampleChild_C62(MyDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MySortedDictionary = CloneOrChange_SortedDictionary⋖int≀_C32ExampleChild_C62(MySortedDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MySortedList = CloneOrChange_SortedList⋖int≀_C32ExampleChild_C62(MySortedList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyDictionary = CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedDictionary = CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedList = CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -318,15 +318,15 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyDictionary != null) || (_MyDictionary_Accessed && _MyDictionary != null))
             {
-                _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary⋖int≀_C32ExampleChild_C62(_MyDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedDictionary != null) || (_MySortedDictionary_Accessed && _MySortedDictionary != null))
             {
-                _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary⋖int≀_C32ExampleChild_C62(_MySortedDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedList != null) || (_MySortedList_Accessed && _MySortedList != null))
             {
-                _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList⋖int≀_C32ExampleChild_C62(_MySortedList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -394,15 +394,15 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyDictionary_Accessed && _MyDictionary != null)
                     {
-                        _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary⋖int≀_C32ExampleChild_C62(_MyDictionary, l => l.RemoveBufferInHierarchy(), true);
+                        _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MySortedDictionary_Accessed && _MySortedDictionary != null)
                     {
-                        _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary⋖int≀_C32ExampleChild_C62(_MySortedDictionary, l => l.RemoveBufferInHierarchy(), true);
+                        _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MySortedList_Accessed && _MySortedList != null)
                     {
-                        _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList⋖int≀_C32ExampleChild_C62(_MySortedList, l => l.RemoveBufferInHierarchy(), true);
+                        _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -447,7 +447,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Dictionary⋖int≀_C32ExampleChild_C62(ref w, _MyDictionary,
+            ConvertToBytes_Dictionary_Gint_c_C32ExampleChild_g(ref w, _MyDictionary,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -464,7 +464,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_SortedDictionary⋖int≀_C32ExampleChild_C62(ref w, _MySortedDictionary,
+            ConvertToBytes_SortedDictionary_Gint_c_C32ExampleChild_g(ref w, _MySortedDictionary,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -481,7 +481,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_SortedList⋖int≀_C32ExampleChild_C62(ref w, _MySortedList,
+            ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(ref w, _MySortedList,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -495,7 +495,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Dictionary<int, ExampleChild> ConvertFromBytes_Dictionary⋖int≀_C32ExampleChild_C62(LazinatorMemory storage)
+        private static Dictionary<int, ExampleChild> ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -512,7 +512,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(childData);
+                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -520,7 +520,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Dictionary⋖int≀_C32ExampleChild_C62(ref BinaryBufferWriter writer, Dictionary<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_Dictionary_Gint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, Dictionary<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(Dictionary<int, ExampleChild>))
             {
@@ -529,12 +529,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
-        private static Dictionary<int, ExampleChild> CloneOrChange_Dictionary⋖int≀_C32ExampleChild_C62(Dictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static Dictionary<int, ExampleChild> CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -545,13 +545,13 @@ namespace LazinatorTests.Examples.Collections
             Dictionary<int, ExampleChild> collection = new Dictionary<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair⋖int≀_C32ExampleChild_C62(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(itemCopied.Key, itemCopied.Value);
             }
             return collection;
         }
         
-        private static KeyValuePair<int, ExampleChild> ConvertFromBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(LazinatorMemory storage)
+        private static KeyValuePair<int, ExampleChild> ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -578,7 +578,7 @@ namespace LazinatorTests.Examples.Collections
             return tupleType;
         }
         
-        private static void ConvertToBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(ref BinaryBufferWriter writer, KeyValuePair<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, KeyValuePair<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             writer.LazinatorMemory.LazinatorShouldNotReturnToPool();
             
@@ -595,12 +595,12 @@ namespace LazinatorTests.Examples.Collections
             };
         }
         
-        private static KeyValuePair<int, ExampleChild> CloneOrChange_KeyValuePair⋖int≀_C32ExampleChild_C62(KeyValuePair<int, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static KeyValuePair<int, ExampleChild> CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) cloneOrChangeFunc((itemToConvert.Value)));
         }
         
-        private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary⋖int≀_C32ExampleChild_C62(LazinatorMemory storage)
+        private static SortedDictionary<int, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -617,7 +617,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(childData);
+                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -625,7 +625,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedDictionary⋖int≀_C32ExampleChild_C62(ref BinaryBufferWriter writer, SortedDictionary<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_SortedDictionary_Gint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, SortedDictionary<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(SortedDictionary<int, ExampleChild>))
             {
@@ -634,12 +634,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
-        private static SortedDictionary<int, ExampleChild> CloneOrChange_SortedDictionary⋖int≀_C32ExampleChild_C62(SortedDictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static SortedDictionary<int, ExampleChild> CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -650,13 +650,13 @@ namespace LazinatorTests.Examples.Collections
             SortedDictionary<int, ExampleChild> collection = new SortedDictionary<int, ExampleChild>();
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair⋖int≀_C32ExampleChild_C62(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(itemCopied.Key, itemCopied.Value);
             }
             return collection;
         }
         
-        private static SortedList<int, ExampleChild> ConvertFromBytes_SortedList⋖int≀_C32ExampleChild_C62(LazinatorMemory storage)
+        private static SortedList<int, ExampleChild> ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -673,7 +673,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(childData);
+                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -681,7 +681,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedList⋖int≀_C32ExampleChild_C62(ref BinaryBufferWriter writer, SortedList<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_SortedList_Gint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, SortedList<int, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(SortedList<int, ExampleChild>))
             {
@@ -690,12 +690,12 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair⋖int≀_C32ExampleChild_C62(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
-        private static SortedList<int, ExampleChild> CloneOrChange_SortedList⋖int≀_C32ExampleChild_C62(SortedList<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static SortedList<int, ExampleChild> CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -706,7 +706,7 @@ namespace LazinatorTests.Examples.Collections
             SortedList<int, ExampleChild> collection = new SortedList<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
             {
-                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair⋖int≀_C32ExampleChild_C62(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                var itemCopied = (KeyValuePair<int, ExampleChild>) CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(itemCopied.Key, itemCopied.Value);
             }
             return collection;

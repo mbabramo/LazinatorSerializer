@@ -58,7 +58,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null);
-                        _MyLinkedListInt = ConvertFromBytes_LinkedList⋖int_C62(childData);
+                        _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData);
                     }
                     _MyLinkedListInt_Accessed = true;
                 } 
@@ -109,7 +109,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List⋖int_C62(childData);
+                        _MyListInt = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _MyListInt_Accessed = true;
                 } 
@@ -159,7 +159,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, false, false, null);
-                        _MyListInt2 = ConvertFromBytes_List⋖int_C62(childData);
+                        _MyListInt2 = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _MyListInt2_Accessed = true;
                 }
@@ -192,7 +192,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null);
-                        _MySortedSetInt = ConvertFromBytes_SortedSet⋖int_C62(childData);
+                        _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData);
                     }
                     _MySortedSetInt_Accessed = true;
                 } 
@@ -271,10 +271,10 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Values typedClone = (DotNetList_Values) clone;
-            typedClone.MyLinkedListInt = CloneOrChange_LinkedList⋖int_C62(MyLinkedListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListInt = CloneOrChange_List⋖int_C62(MyListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListInt2 = CloneOrChange_List⋖int_C62(MyListInt2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MySortedSetInt = CloneOrChange_SortedSet⋖int_C62(MySortedSetInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyLinkedListInt = CloneOrChange_LinkedList_Gint_g(MyLinkedListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListInt = CloneOrChange_List_Gint_g(MyListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListInt2 = CloneOrChange_List_Gint_g(MyListInt2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedSetInt = CloneOrChange_SortedSet_Gint_g(MySortedSetInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -410,19 +410,19 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyLinkedListInt != null) || (_MyLinkedListInt_Accessed && _MyLinkedListInt != null))
             {
-                _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList⋖int_C62(_MyLinkedListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList_Gint_g(_MyLinkedListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyListInt != null) || (_MyListInt_Accessed && _MyListInt != null))
             {
-                _MyListInt = (List<int>) CloneOrChange_List⋖int_C62(_MyListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListInt = (List<int>) CloneOrChange_List_Gint_g(_MyListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyListInt2 != null) || (_MyListInt2_Accessed && _MyListInt2 != null))
             {
-                _MyListInt2 = (List<int>) CloneOrChange_List⋖int_C62(_MyListInt2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListInt2 = (List<int>) CloneOrChange_List_Gint_g(_MyListInt2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedSetInt != null) || (_MySortedSetInt_Accessed && _MySortedSetInt != null))
             {
-                _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet⋖int_C62(_MySortedSetInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet_Gint_g(_MySortedSetInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -493,19 +493,19 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyLinkedListInt_Accessed && _MyLinkedListInt != null)
                     {
-                        _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList⋖int_C62(_MyLinkedListInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList_Gint_g(_MyLinkedListInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyListInt_Accessed && _MyListInt != null)
                     {
-                        _MyListInt = (List<int>) CloneOrChange_List⋖int_C62(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListInt = (List<int>) CloneOrChange_List_Gint_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyListInt2_Accessed && _MyListInt2 != null)
                     {
-                        _MyListInt2 = (List<int>) CloneOrChange_List⋖int_C62(_MyListInt2, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListInt2 = (List<int>) CloneOrChange_List_Gint_g(_MyListInt2, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MySortedSetInt_Accessed && _MySortedSetInt != null)
                     {
-                        _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet⋖int_C62(_MySortedSetInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet_Gint_g(_MySortedSetInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -550,7 +550,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_LinkedList⋖int_C62(ref w, _MyLinkedListInt,
+            ConvertToBytes_LinkedList_Gint_g(ref w, _MyLinkedListInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -567,7 +567,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖int_C62(ref w, _MyListInt,
+            ConvertToBytes_List_Gint_g(ref w, _MyListInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -584,7 +584,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖int_C62(ref w, _MyListInt2,
+            ConvertToBytes_List_Gint_g(ref w, _MyListInt2,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -601,7 +601,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_SortedSet⋖int_C62(ref w, _MySortedSetInt,
+            ConvertToBytes_SortedSet_Gint_g(ref w, _MySortedSetInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -615,7 +615,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static LinkedList<int> ConvertFromBytes_LinkedList⋖int_C62(LazinatorMemory storage)
+        private static LinkedList<int> ConvertFromBytes_LinkedList_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -637,7 +637,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_LinkedList⋖int_C62(ref BinaryBufferWriter writer, LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_LinkedList_Gint_g(ref BinaryBufferWriter writer, LinkedList<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(LinkedList<int>))
             {
@@ -651,7 +651,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static LinkedList<int> CloneOrChange_LinkedList⋖int_C62(LinkedList<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static LinkedList<int> CloneOrChange_LinkedList_Gint_g(LinkedList<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -669,7 +669,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static List<int> ConvertFromBytes_List⋖int_C62(LazinatorMemory storage)
+        private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -691,7 +691,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖int_C62(ref BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_Gint_g(ref BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<int>))
             {
@@ -705,7 +705,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<int> CloneOrChange_List⋖int_C62(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -723,7 +723,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static SortedSet<int> ConvertFromBytes_SortedSet⋖int_C62(LazinatorMemory storage)
+        private static SortedSet<int> ConvertFromBytes_SortedSet_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -745,7 +745,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedSet⋖int_C62(ref BinaryBufferWriter writer, SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_SortedSet_Gint_g(ref BinaryBufferWriter writer, SortedSet<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(SortedSet<int>))
             {
@@ -760,7 +760,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static SortedSet<int> CloneOrChange_SortedSet⋖int_C62(SortedSet<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static SortedSet<int> CloneOrChange_SortedSet_Gint_g(SortedSet<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

@@ -79,7 +79,7 @@ namespace Lazinator.Spans
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null);
-                        _ReadOrWrite = ConvertFromBytes_Memory⋖byte_C62(childData);
+                        _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
                     }
                     _ReadOrWrite_Accessed = true;
                 }
@@ -145,8 +145,8 @@ namespace Lazinator.Spans
         {
             clone.FreeInMemoryObjects();
             LazinatorByteSpan typedClone = (LazinatorByteSpan) clone;
-            typedClone.ReadOnly = CloneOrChange_ReadOnlySpan⋖byte_C62(ReadOnly, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.ReadOrWrite = CloneOrChange_Memory⋖byte_C62(ReadOrWrite, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ReadOnly = CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnly, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ReadOrWrite = CloneOrChange_Memory_Gbyte_g(ReadOrWrite, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -405,7 +405,7 @@ namespace Lazinator.Spans
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_ReadOnlySpan⋖byte_C62(ref w, _ReadOnly.Span,
+            ConvertToBytes_ReadOnlySpan_Gbyte_g(ref w, _ReadOnly.Span,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -422,7 +422,7 @@ namespace Lazinator.Spans
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Memory⋖byte_C62(ref w, _ReadOrWrite,
+            ConvertToBytes_Memory_Gbyte_g(ref w, _ReadOrWrite,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -436,7 +436,7 @@ namespace Lazinator.Spans
         
         /* Conversion of supported collections and tuples */
         
-        private static void ConvertToBytes_ReadOnlySpan⋖byte_C62(ref BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
@@ -444,24 +444,24 @@ namespace Lazinator.Spans
                 writer.Write(toConvert[i]);
             }
         }
-        private static ReadOnlySpan<byte> CloneOrChange_ReadOnlySpan⋖byte_C62(ReadOnlySpan<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static ReadOnlySpan<byte> CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(byte)]);
             itemToClone.CopyTo(clone);
             return clone;
         }
         
-        private static Memory<byte> ConvertFromBytes_Memory⋖byte_C62(LazinatorMemory storage)
+        private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
         {
             return storage.Memory;
         }
         
-        private static void ConvertToBytes_Memory⋖byte_C62(ref BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_Memory_Gbyte_g(ref BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             writer.Write(itemToConvert.Span);
         }
         
-        private static Memory<byte> CloneOrChange_Memory⋖byte_C62(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             
             int collectionLength = itemToClone.Length;

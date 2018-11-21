@@ -34,34 +34,34 @@ namespace LazinatorCodeGen.Roslyn
                     switch (c)
                     {
                         case '[':
-                            b.Append("⊏");
+                            b.Append("_B");
                             break;
                         case ']':
-                            b.Append("⊐");
+                            b.Append("_b");
                             break;
                         case '(':
-                            b.Append("⊂");
+                            b.Append("_P");
                             break;
                         case ')':
-                            b.Append("⊃");
+                            b.Append("_p");
                             break;
                         case '<':
-                            b.Append("⋖");
+                            b.Append("_G");
                             break;
-                        case '⋗':
+                        case '>':
                             b.Append("_g");
                             break;
                         case '.':
-                            b.Append("∘");
+                            b.Append("__");
                             break;
                         case '_':
-                            b.Append("∹");
+                            b.Append("_u");
                             break;
                         case ',':
-                            b.Append("≀");
+                            b.Append("_c");
                             break;
                         case '`':
-                            b.Append("⨩ ");
+                            b.Append("_q");
                             break;
                         default:
                             b.Append("_C" + ((short)c).ToString());

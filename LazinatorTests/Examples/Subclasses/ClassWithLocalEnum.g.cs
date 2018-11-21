@@ -66,7 +66,7 @@ namespace LazinatorTests.Examples.Subclasses
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null);
-                        _MyEnumList = ConvertFromBytes_List⋖EnumWithinClass_C62(childData);
+                        _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
                     }
                     _MyEnumList_Accessed = true;
                 }
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples.Subclasses
             clone.FreeInMemoryObjects();
             ClassWithLocalEnum typedClone = (ClassWithLocalEnum) clone;
             typedClone.MyEnum = MyEnum;
-            typedClone.MyEnumList = CloneOrChange_List⋖EnumWithinClass_C62(MyEnumList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyEnumList = CloneOrChange_List_GEnumWithinClass_g(MyEnumList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -266,7 +266,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             if ((!exploreOnlyDeserializedChildren && MyEnumList != null) || (_MyEnumList_Accessed && _MyEnumList != null))
             {
-                _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List⋖EnumWithinClass_C62(_MyEnumList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     if (_MyEnumList_Accessed && _MyEnumList != null)
                     {
-                        _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List⋖EnumWithinClass_C62(_MyEnumList, l => l.RemoveBufferInHierarchy(), true);
+                        _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples.Subclasses
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖EnumWithinClass_C62(ref w, _MyEnumList,
+            ConvertToBytes_List_GEnumWithinClass_g(ref w, _MyEnumList,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -389,7 +389,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Conversion of supported collections and tuples */
         
-        private static List<EnumWithinClass> ConvertFromBytes_List⋖EnumWithinClass_C62(LazinatorMemory storage)
+        private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -411,7 +411,7 @@ namespace LazinatorTests.Examples.Subclasses
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖EnumWithinClass_C62(ref BinaryBufferWriter writer, List<EnumWithinClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_GEnumWithinClass_g(ref BinaryBufferWriter writer, List<EnumWithinClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<EnumWithinClass>))
             {
@@ -425,7 +425,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        private static List<EnumWithinClass> CloneOrChange_List⋖EnumWithinClass_C62(List<EnumWithinClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<EnumWithinClass> CloneOrChange_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

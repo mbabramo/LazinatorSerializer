@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
-                        _MyListSerialized = ConvertFromBytes_List⋖ExampleChild_C62(childData);
+                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
                     }
                     _MyListSerialized_Accessed = true;
                 } 
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Lazinator typedClone = (DotNetList_Lazinator) clone;
-            typedClone.MyListSerialized = CloneOrChange_List⋖ExampleChild_C62(MyListSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListSerialized = CloneOrChange_List_GExampleChild_g(MyListSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -265,7 +265,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListSerialized != null) || (_MyListSerialized_Accessed && _MyListSerialized != null))
             {
-                _MyListSerialized = (List<ExampleChild>) CloneOrChange_List⋖ExampleChild_C62(_MyListSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -327,7 +327,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyListSerialized_Accessed && _MyListSerialized != null)
                     {
-                        _MyListSerialized = (List<ExampleChild>) CloneOrChange_List⋖ExampleChild_C62(_MyListSerialized, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖ExampleChild_C62(ref w, _MyListSerialized,
+            ConvertToBytes_List_GExampleChild_g(ref w, _MyListSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -386,7 +386,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static List<ExampleChild> ConvertFromBytes_List⋖ExampleChild_C62(LazinatorMemory storage)
+        private static List<ExampleChild> ConvertFromBytes_List_GExampleChild_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -418,7 +418,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖ExampleChild_C62(ref BinaryBufferWriter writer, List<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_GExampleChild_g(ref BinaryBufferWriter writer, List<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<ExampleChild>))
             {
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<ExampleChild> CloneOrChange_List⋖ExampleChild_C62(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<ExampleChild> CloneOrChange_List_GExampleChild_g(List<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

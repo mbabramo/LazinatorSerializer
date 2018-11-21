@@ -154,7 +154,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
-                        _MyLazinatorList = ConvertFromBytes_List⋖Example_C62(childData);
+                        _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData);
                     }
                     _MyLazinatorList_Accessed = true;
                 } 
@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
-                        _MyListValues = ConvertFromBytes_List⋖int_C62(childData);
+                        _MyListValues = ConvertFromBytes_List_Gint_g(childData);
                     }
                     _MyListValues_Accessed = true;
                 }
@@ -236,7 +236,7 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
-                        _MyTuple = ConvertFromBytes_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(childData);
+                        _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData);
                     }
                     _MyTuple_Accessed = true;
                 }
@@ -318,9 +318,9 @@ namespace LazinatorTests.Examples
             {
                 typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.MyLazinatorList = CloneOrChange_List⋖Example_C62(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListValues = CloneOrChange_List⋖int_C62(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTuple = CloneOrChange_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyTuple = CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             typedClone.IsDirty = false;
             return typedClone;
@@ -506,15 +506,15 @@ namespace LazinatorTests.Examples
             }
             if ((!exploreOnlyDeserializedChildren && MyLazinatorList != null) || (_MyLazinatorList_Accessed && _MyLazinatorList != null))
             {
-                _MyLazinatorList = (List<Example>) CloneOrChange_List⋖Example_C62(_MyLazinatorList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyLazinatorList = (List<Example>) CloneOrChange_List_GExample_g(_MyLazinatorList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyListValues != null) || (_MyListValues_Accessed && _MyListValues != null))
             {
-                _MyListValues = (List<int>) CloneOrChange_List⋖int_C62(_MyListValues, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(_MyTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -613,15 +613,15 @@ namespace LazinatorTests.Examples
                     }
                     if (_MyLazinatorList_Accessed && _MyLazinatorList != null)
                     {
-                        _MyLazinatorList = (List<Example>) CloneOrChange_List⋖Example_C62(_MyLazinatorList, l => l.RemoveBufferInHierarchy(), true);
+                        _MyLazinatorList = (List<Example>) CloneOrChange_List_GExample_g(_MyLazinatorList, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyListValues_Accessed && _MyListValues != null)
                     {
-                        _MyListValues = (List<int>) CloneOrChange_List⋖int_C62(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (true)
                     {
-                        _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(_MyTuple, l => l.RemoveBufferInHierarchy(), true);
+                        _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -698,7 +698,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyLazinatorList, byteIndexCopy_MyLazinatorList, byteLengthCopy_MyLazinatorList, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖Example_C62(ref w, copy_MyLazinatorList, includeChildrenMode, v, updateStoredBuffer));
+            ConvertToBytes_List_GExample_g(ref w, copy_MyLazinatorList, includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyLazinatorList_ByteIndex = startOfObjectPosition - startPosition;
@@ -718,7 +718,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyListValues, byteIndexCopy_MyListValues, byteLengthCopy_MyListValues, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖int_C62(ref w, copy_MyListValues, includeChildrenMode, v, updateStoredBuffer));
+            ConvertToBytes_List_Gint_g(ref w, copy_MyListValues, includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListValues_ByteIndex = startOfObjectPosition - startPosition;
@@ -738,7 +738,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_MyTuple, byteIndexCopy_MyTuple, byteLengthCopy_MyTuple, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(ref w, copy_MyTuple, includeChildrenMode, v, updateStoredBuffer));
+            ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(ref w, copy_MyTuple, includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyTuple_ByteIndex = startOfObjectPosition - startPosition;
@@ -751,7 +751,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion of supported collections and tuples */
         
-        private static List<Example> ConvertFromBytes_List⋖Example_C62(LazinatorMemory storage)
+        private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -783,7 +783,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖Example_C62(ref BinaryBufferWriter writer, List<Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_GExample_g(ref BinaryBufferWriter writer, List<Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<Example>))
             {
@@ -807,7 +807,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<Example> CloneOrChange_List⋖Example_C62(List<Example> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example> CloneOrChange_List_GExample_g(List<Example> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -840,7 +840,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static List<int> ConvertFromBytes_List⋖int_C62(LazinatorMemory storage)
+        private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -862,7 +862,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖int_C62(ref BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_Gint_g(ref BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<int>))
             {
@@ -876,7 +876,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<int> CloneOrChange_List⋖int_C62(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -894,7 +894,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static (NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(LazinatorMemory storage)
+        private static (NonLazinatorClass myitem1, int? myitem2) ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -921,7 +921,7 @@ namespace LazinatorTests.Examples
             return tupleType;
         }
         
-        private static void ConvertToBytes_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃(ref BinaryBufferWriter writer, (NonLazinatorClass myitem1, int? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(ref BinaryBufferWriter writer, (NonLazinatorClass myitem1, int? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             writer.LazinatorMemory.LazinatorShouldNotReturnToPool();
             
@@ -938,7 +938,7 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.Item2);
         }
         
-        private static (NonLazinatorClass myitem1, int? myitem2) CloneOrChange_⊂NonLazinatorClass_C32myitem1≀_C32int_C63_C32myitem2⊃((NonLazinatorClass myitem1, int? myitem2) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static (NonLazinatorClass myitem1, int? myitem2) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p((NonLazinatorClass myitem1, int? myitem2) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return ((NonLazinatorClass) (itemToConvert.Item1),(int?) (itemToConvert.Item2));
         }

@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
-                        _MyStackInt = ConvertFromBytes_Stack⋖int_C62(childData);
+                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
                     }
                     _MyStackInt_Accessed = true;
                 } 
@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetStack_Values typedClone = (DotNetStack_Values) clone;
-            typedClone.MyStackInt = CloneOrChange_Stack⋖int_C62(MyStackInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyStackInt = CloneOrChange_Stack_Gint_g(MyStackInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyStackInt != null) || (_MyStackInt_Accessed && _MyStackInt != null))
             {
-                _MyStackInt = (Stack<int>) CloneOrChange_Stack⋖int_C62(_MyStackInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyStackInt = (Stack<int>) CloneOrChange_Stack_Gint_g(_MyStackInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyStackInt_Accessed && _MyStackInt != null)
                     {
-                        _MyStackInt = (Stack<int>) CloneOrChange_Stack⋖int_C62(_MyStackInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MyStackInt = (Stack<int>) CloneOrChange_Stack_Gint_g(_MyStackInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Stack⋖int_C62(ref w, _MyStackInt,
+            ConvertToBytes_Stack_Gint_g(ref w, _MyStackInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -385,7 +385,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Stack<int> ConvertFromBytes_Stack⋖int_C62(LazinatorMemory storage)
+        private static Stack<int> ConvertFromBytes_Stack_Gint_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -407,7 +407,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Stack⋖int_C62(ref BinaryBufferWriter writer, Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_Stack_Gint_g(ref BinaryBufferWriter writer, Stack<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(Stack<int>))
             {
@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Stack<int> CloneOrChange_Stack⋖int_C62(Stack<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static Stack<int> CloneOrChange_Stack_Gint_g(Stack<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

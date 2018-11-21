@@ -53,7 +53,7 @@ namespace Lazinator.Wrappers
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
-                        _WrappedValue = ConvertFromBytes_long⊏⊐(childData);
+                        _WrappedValue = ConvertFromBytes_long_B_b(childData);
                     }
                     _WrappedValue_Accessed = true;
                 }
@@ -118,7 +118,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WLongArray typedClone = (WLongArray) clone;
-            typedClone.WrappedValue = CloneOrChange_long⊏⊐(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.WrappedValue = CloneOrChange_long_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             typedClone.IsDirty = false;
             return typedClone;
@@ -261,7 +261,7 @@ namespace Lazinator.Wrappers
         {
             if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
             {
-                _WrappedValue = (long[]) CloneOrChange_long⊏⊐(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _WrappedValue = (long[]) CloneOrChange_long_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -330,7 +330,7 @@ namespace Lazinator.Wrappers
                 {
                     if (_WrappedValue_Accessed && _WrappedValue != null)
                     {
-                        _WrappedValue = (long[]) CloneOrChange_long⊏⊐(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
+                        _WrappedValue = (long[]) CloneOrChange_long_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -372,7 +372,7 @@ namespace Lazinator.Wrappers
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_WrappedValue, byteIndexCopy_WrappedValue, byteLengthCopy_WrappedValue, true, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_long⊏⊐(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
+            ConvertToBytes_long_B_b(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _WrappedValue_ByteIndex = startOfObjectPosition - startPosition;
@@ -385,7 +385,7 @@ namespace Lazinator.Wrappers
         
         /* Conversion of supported collections and tuples */
         
-        private static long[] ConvertFromBytes_long⊏⊐(LazinatorMemory storage)
+        private static long[] ConvertFromBytes_long_B_b(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -407,7 +407,7 @@ namespace Lazinator.Wrappers
             return collection;
         }
         
-        private static void ConvertToBytes_long⊏⊐(ref BinaryBufferWriter writer, long[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_long_B_b(ref BinaryBufferWriter writer, long[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(long[]))
             {
@@ -421,7 +421,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private static long[] CloneOrChange_long⊏⊐(long[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static long[] CloneOrChange_long_B_b(long[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

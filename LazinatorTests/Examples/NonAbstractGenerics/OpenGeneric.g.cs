@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null);
-                        _MyListT = ConvertFromBytes_List⋖T_C62(childData);
+                        _MyListT = ConvertFromBytes_List_GT_g(childData);
                     }
                     _MyListT_Accessed = true;
                 }
@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             clone.FreeInMemoryObjects();
             OpenGeneric<T> typedClone = (OpenGeneric<T>) clone;
-            typedClone.MyListT = CloneOrChange_List⋖T_C62(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListT = CloneOrChange_List_GT_g(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 typedClone.MyT = (MyT == null) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if ((!exploreOnlyDeserializedChildren && MyListT != null) || (_MyListT_Accessed && _MyListT != null))
             {
-                _MyListT = (List<T>) CloneOrChange_List⋖T_C62(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -413,7 +413,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     }
                     if (_MyListT_Accessed && _MyListT != null)
                     {
-                        _MyListT = (List<T>) CloneOrChange_List⋖T_C62(_MyListT, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -462,7 +462,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖T_C62(ref w, _MyListT,
+            ConvertToBytes_List_GT_g(ref w, _MyListT,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -489,7 +489,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Conversion of supported collections and tuples */
         
-        private static List<T> ConvertFromBytes_List⋖T_C62(LazinatorMemory storage)
+        private static List<T> ConvertFromBytes_List_GT_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -521,7 +521,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖T_C62(ref BinaryBufferWriter writer, List<T> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_GT_g(ref BinaryBufferWriter writer, List<T> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<T>))
             {
@@ -545,7 +545,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        private static List<T> CloneOrChange_List⋖T_C62(List<T> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<T> CloneOrChange_List_GT_g(List<T> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

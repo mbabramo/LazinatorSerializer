@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
-                        _ExampleListByInterface = ConvertFromBytes_List⋖IExample_C62(childData);
+                        _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
                     }
                     _ExampleListByInterface_Accessed = true;
                 }
@@ -164,7 +164,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 typedClone.ExampleByInterface = (ExampleByInterface == null) ? default(IExample) : (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            typedClone.ExampleListByInterface = CloneOrChange_List⋖IExample_C62(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -321,7 +321,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
             {
-                _ExampleListByInterface = (List<IExample>) CloneOrChange_List⋖IExample_C62(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -393,7 +393,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                     if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
                     {
-                        _ExampleListByInterface = (List<IExample>) CloneOrChange_List⋖IExample_C62(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
+                        _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -451,7 +451,7 @@ namespace LazinatorTests.Examples.Hierarchy
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List⋖IExample_C62(ref w, _ExampleListByInterface,
+            ConvertToBytes_List_GIExample_g(ref w, _ExampleListByInterface,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -465,7 +465,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Conversion of supported collections and tuples */
         
-        private static List<IExample> ConvertFromBytes_List⋖IExample_C62(LazinatorMemory storage)
+        private static List<IExample> ConvertFromBytes_List_GIExample_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -497,7 +497,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return collection;
         }
         
-        private static void ConvertToBytes_List⋖IExample_C62(ref BinaryBufferWriter writer, List<IExample> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_GIExample_g(ref BinaryBufferWriter writer, List<IExample> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<IExample>))
             {
@@ -521,7 +521,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         
-        private static List<IExample> CloneOrChange_List⋖IExample_C62(List<IExample> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<IExample> CloneOrChange_List_GIExample_g(List<IExample> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
