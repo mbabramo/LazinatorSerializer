@@ -65,9 +65,7 @@ namespace Lazinator.CodeDescription
         internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection &&
                                         (SupportedCollectionType == LazinatorSupportedCollectionType.Memory ||
                                         SupportedCollectionType ==
-                                        LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ||
-                                        SupportedCollectionType ==
-                                        LazinatorSupportedCollectionType.ReadOnlyMemoryByte ||
+                                        LazinatorSupportedCollectionType.ReadOnlyMemory ||
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
@@ -96,7 +94,7 @@ namespace Lazinator.CodeDescription
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
-        internal string BackingFieldString => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte) ?
+        internal string BackingFieldString => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
                     GetReadOnlySpanBackingFieldCast() : $"_{PropertyName}";
 
         /* Enums */
@@ -733,7 +731,7 @@ namespace Lazinator.CodeDescription
                     PropertyType = LazinatorPropertyType.SupportedCollection;
                     break;
                 case "ReadOnlyMemory":
-                    SupportedCollectionType = LazinatorSupportedCollectionType.ReadOnlyMemoryByte; // subject to change in SetSupportedCollectionTypeNameAndPropertyType, if inner property is not a byte
+                    SupportedCollectionType = LazinatorSupportedCollectionType.ReadOnlyMemory;
                     PropertyType = LazinatorPropertyType.SupportedCollection;
                     break;
                 case "HashSet":
@@ -760,16 +758,13 @@ namespace Lazinator.CodeDescription
         static INamedTypeSymbol keyValuePairType = null;
         private void SetSupportedCollectionTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
-            if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemoryByte)
+            if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan)
                 Nullable = true;
 
             InnerProperties = t.TypeArguments
                 .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
 
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte && InnerProperties[0].AppropriatelyQualifiedTypeName != "byte")
-                SupportedCollectionType = LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte;
-
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte)
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                 if (InnerProperties[0].Nullable)
                     throw new LazinatorCodeGenException("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
 
@@ -873,12 +868,6 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
                 AppendReadOnlySpanProperty(sb);
-                return;
-            }
-
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte)
-            {
-                AppendReadOnlyMemoryByteProperty(sb);
                 return;
             }
 
@@ -1117,33 +1106,6 @@ namespace Lazinator.CodeDescription
 ");
         }
 
-        private void AppendReadOnlyMemoryByteProperty(CodeStringBuilder sb)
-        {
-            var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
-            sb.Append($@"{ContainingObjectDescription.HideBackingField}private ReadOnlyMemory<byte> _{PropertyName};
-        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{{StepThroughPropertiesString}
-            get
-            {{
-                if (!_{PropertyName}_Accessed)
-                {{
-                    LazinatorMemory childData = {ChildSliceString};
-                    _{PropertyName} = childData.Memory;
-                    _{PropertyName}_Accessed = true;
-                }}
-                return _{PropertyName};
-            }}{StepThroughPropertiesString}
-            set
-            {{
-                {RepeatedCodeExecution}IsDirty = true;
-                _{PropertyName} = value;
-                _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
-            }}
-        }}
-        {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
-");
-        }
-
         private string GetReadOnlySpanBackingFieldCast()
         {
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
@@ -1340,7 +1302,7 @@ namespace Lazinator.CodeDescription
             else
             { // as above, must copy local struct variables for anon lambda.
                 string binaryWriterAction;
-                if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte))
+                if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan))
                     binaryWriterAction = $"copy_{PropertyName}.Write(ref w)";
                 else
                     binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
@@ -1427,12 +1389,6 @@ namespace Lazinator.CodeDescription
                 AppendReadOnlySpanOrMemory_Clone(sb);
                 return;
             }
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte)
-            {
-                AppendReadOnlyMemory_ConvertToBytes(sb);
-                AppendReadOnlySpanOrMemory_Clone(sb);
-                return;
-            }
 
             AppendSupportedCollection_ConvertFromBytes(sb);
             AppendSupportedCollection_ConvertToBytes(sb);
@@ -1492,7 +1448,7 @@ namespace Lazinator.CodeDescription
                 (
                     (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName != "byte")
                     ||
-                    SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte
+                    SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory
                 )
                 && Nullable)
             {
@@ -1556,7 +1512,7 @@ namespace Lazinator.CodeDescription
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
                         {{
                             return;
                         }}
@@ -1581,7 +1537,7 @@ namespace Lazinator.CodeDescription
             string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
             GetItemAccessStrings(out lengthWord, out itemString, out itemStringSetup, out forStatement, out cloneString, "itemToClone");
 
-            if (Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryByte))
+            if (Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory))
                 lengthWord = $"Value.{lengthWord}";
             if (ArrayRank > 1)
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
@@ -1589,7 +1545,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : GetNullCheckIfThen("", "itemToClone", "return default;", ""))}
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("", "itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
                         {creationText}
                         {forStatement}
@@ -1627,7 +1583,7 @@ namespace Lazinator.CodeDescription
             {
                 lengthWord = "Count";
             }
-            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
             {
                 lengthWord = "Length";
             }
@@ -1643,7 +1599,7 @@ namespace Lazinator.CodeDescription
                 forStatement = $@"foreach (var item in {itemAccessName})";
                 itemString = "item"; // can't index into hash set
             }
-            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            else if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
             {
                 forStatement =
                         $@"var {itemAccessName}Span = {itemAccessName}{IIF(Nullable, ".Value")}.Span;
@@ -1840,7 +1796,7 @@ namespace Lazinator.CodeDescription
                 creationText =
                     $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
                             var collectionAsSpan = collection.Span;"; // for now, create array on the heap
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+                if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
                     creationText = creationText.Replace("ReadOnlyMemory<", "Memory<"); // we must use Memory here so that it can be assigned to
             }
             else if (isArray)
@@ -1962,7 +1918,7 @@ namespace Lazinator.CodeDescription
                     collectionAddNull = $"collection[{innerArrayText}] = default({AppropriatelyQualifiedTypeName});";
                 }
             }
-            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte)
+            else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
             {
                 collectionAddItem = "collectionAsSpan[itemIndex] = item;";
                 collectionAddNull = $"collectionAsSpan[itemIndex] = default({AppropriatelyQualifiedTypeName});";

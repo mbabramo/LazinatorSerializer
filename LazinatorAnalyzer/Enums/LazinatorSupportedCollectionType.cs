@@ -14,7 +14,6 @@
         SortedSet,
         Memory,
         ReadOnlySpan,
-        ReadOnlyMemoryByte,
-        ReadOnlyMemoryNotByte,
+        ReadOnlyMemory,
     }
 }
