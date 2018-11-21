@@ -3,7 +3,7 @@ using System.Buffers;
 
 namespace Lazinator.Buffers
 {
-    public class LazinatorMemory : IMemoryOwner<byte>
+    public readonly struct LazinatorMemory : IMemoryOwner<byte>
     {
         public readonly IMemoryOwner<byte> OwnedMemory;
         public readonly int StartPosition;
@@ -21,14 +21,14 @@ namespace Lazinator.Buffers
 
         #region Constructors
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled) : base()
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled)
         {
             OwnedMemory = ownedMemory;
             StartPosition = startPosition;
             Length = bytesFilled;
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
         {
             OwnedMemory = ownedMemory;
             StartPosition = 0;
