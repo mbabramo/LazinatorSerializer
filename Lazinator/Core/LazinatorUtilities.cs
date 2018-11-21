@@ -877,7 +877,6 @@ namespace Lazinator.Core
         {
             if (lazinator == null)
                 return null;
-            lazinator = lazinator.FullyDeserialize();
             return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), true);
         }
 

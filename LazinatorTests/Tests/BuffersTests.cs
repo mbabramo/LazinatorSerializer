@@ -400,6 +400,15 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void UpdateStoredBuffer_Struct()
+        {
+            WInt w = 3;
+            w.UpdateStoredBuffer();
+            w.LazinatorMemoryStorage.Should().NotBeNull();
+            w.WrappedValue.Should().Be(3);
+        }
+
+        [Fact]
         public void CloneMiddleOfHierarchy()
         {
             Example e = GetTypicalExample();
@@ -598,7 +607,6 @@ namespace LazinatorTests.Tests
             uint h = e.MyChild1.MyExampleGrandchild.GetBinaryHashCode32();
             uint h2 = (new ExampleGrandchild() { MyInt = 17 }).GetBinaryHashCode32();
             h.Should().Be(h2);
-
         }
     }
 }

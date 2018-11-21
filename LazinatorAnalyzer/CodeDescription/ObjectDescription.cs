@@ -360,7 +360,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-                        public abstract void UpdateStoredBuffer();
+                        public abstract void UpdateStoredBuffer(bool disposePreviousBuffer = false);
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
         
@@ -498,18 +498,19 @@ namespace Lazinator.CodeDescription
                         }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
 
-                        public {DerivationKeyword}void UpdateStoredBuffer()
+                        public {DerivationKeyword}void UpdateStoredBuffer(bool disposePreviousBuffer = false)
                         {{
-                            {IIF(ObjectType == LazinatorObjectType.Struct, $@"if (LazinatorMemoryStorage == null)
-                            {{
-                                throw new NotSupportedException(""Cannot use UpdateStoredBuffer on a struct that has not been deserialized. Clone the struct instead.""); 
-                            }}
-                            ")}if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
                                 return;
                             }}
-                            {IIF(ObjectType == LazinatorObjectType.Struct, "LazinatorMemoryStorage = ")}EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, true, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
+                            var previousBuffer = LazinatorMemoryStorage;
+                            {IIF(ObjectType == LazinatorObjectType.Struct, "LazinatorMemoryStorage = ")}EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
                             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
+                            if (disposePreviousBuffer)
+                            {{
+                                previousBuffer.Dispose();
+                            }}
                         }}
 
                         public {DerivationKeyword}int GetByteLength()

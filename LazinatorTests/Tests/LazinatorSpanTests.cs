@@ -337,5 +337,26 @@ namespace LazinatorTests.Tests
             result.MyNullableMemoryInt.Value.Length.Should().Be(0);
             result.MyMemoryInt.Length.Should().Be(0);
         }
+
+
+
+        [Fact]
+        public void MemorySurvivesDisposalOfBuffer()
+        {
+            // Note: This test result is unfortunate and highlights a danger of using Memory<byte> properties. If the buffer containing them is disposed, the Memory<byte> can still be accessed. But that means that if the buffer is recycled, then its contents can change. This is true even for ReadOnlyMemory. Thus, we must be careful not to copy memory<byte> etc. properties somewhere that may survive a buffer change.
+            SpanAndMemory s = new SpanAndMemory()
+            {
+                MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 })
+            };
+            s = s.CloneLazinatorTyped();
+            var memory = s.MyReadOnlyMemoryByte;
+            s.LazinatorMemoryStorage.Dispose();
+            s.LazinatorMemoryStorage.Disposed.Should().BeTrue();
+            Action a = () =>
+            {
+                var m2 = memory.Span[0];
+            };
+            a.Should().NotThrow<ObjectDisposedException>();
+        }
     }
 }
