@@ -5,9 +5,10 @@ namespace Lazinator.Buffers
 {
     public class LazinatorMemory : IMemoryOwner<byte>
     {
-        public IMemoryOwner<byte> OwnedMemory;
-        public int StartPosition { get; set; }
-        public int Length { get; private set; }
+        public readonly IMemoryOwner<byte> OwnedMemory;
+        public readonly int StartPosition;
+        public readonly int Length;
+        public long? AllocationID => (OwnedMemory as ExpandableBytes)?.AllocationID;
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
@@ -15,7 +16,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $@"{(OwnedMemory is ExpandableBytes e ? $"{e.AllocationID}) " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
+            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
         }
 
         #region Constructors
@@ -30,12 +31,14 @@ namespace Lazinator.Buffers
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : base()
         {
             OwnedMemory = ownedMemory;
+            StartPosition = 0;
             Length = bytesFilled;
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory)
         {
             OwnedMemory = ownedMemory;
+            StartPosition = 0;
             Length = ownedMemory.Memory.Length;
         }
 
@@ -45,13 +48,6 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(byte[] array) : this(new SimpleMemoryOwner<byte>(new Memory<byte>(array)), array.Length)
         {
-        }
-
-        public void CopyFrom(LazinatorMemory existingMemoryToCopy)
-        {
-            OwnedMemory = existingMemoryToCopy.OwnedMemory;
-            StartPosition = existingMemoryToCopy.StartPosition;
-            Length = existingMemoryToCopy.Length;
         }
 
         public bool Disposed => OwnedMemory != null && OwnedMemory is ExpandableBytes e && e.Disposed;
