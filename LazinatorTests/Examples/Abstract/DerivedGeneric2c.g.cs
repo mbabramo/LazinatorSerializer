@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Abstract
             get;
             set;
         }
-        protected override ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+        protected override ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
         
         public override void UpdateStoredBuffer(bool disposePreviousBuffer = false)
         {

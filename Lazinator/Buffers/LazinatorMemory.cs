@@ -8,6 +8,7 @@ namespace Lazinator.Buffers
         public readonly IMemoryOwner<byte> OwnedMemory;
         public readonly int StartPosition;
         public readonly int Length;
+        public bool IsEmpty => OwnedMemory == null || Length == 0;
         public long? AllocationID => (OwnedMemory as ExpandableBytes)?.AllocationID;
         public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
@@ -85,6 +86,19 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory Slice(int position) => Slice(position, Length - position);
         public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length);
+
+        public override bool Equals(object obj) => obj is LazinatorMemory lm && lm.OwnedMemory.Equals(OwnedMemory) &&
+                                                   lm.StartPosition == StartPosition && lm.Length == Length;
+
+        public static bool operator ==(LazinatorMemory x, LazinatorMemory y)
+        {
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(LazinatorMemory x, LazinatorMemory y)
+        {
+            return !(x == y);
+        }
 
         #endregion
 

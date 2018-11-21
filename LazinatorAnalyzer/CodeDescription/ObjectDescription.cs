@@ -496,7 +496,7 @@ namespace Lazinator.CodeDescription
                             get;
                             set;
                         }}
-                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsUninitialized ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
 
                         public {DerivationKeyword}void UpdateStoredBuffer(bool disposePreviousBuffer = false)
                         {{

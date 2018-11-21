@@ -771,7 +771,7 @@ namespace LazinatorTests.Examples.Structs
             get;
             set;
         }
-        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
         
         public virtual void UpdateStoredBuffer(bool disposePreviousBuffer = false)
         {

@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples.Structs
             get;
             set;
         }
-        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage?.Memory ?? LazinatorUtilities.EmptyReadOnlyMemory;
+        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
         
         public void UpdateStoredBuffer(bool disposePreviousBuffer = false)
         {

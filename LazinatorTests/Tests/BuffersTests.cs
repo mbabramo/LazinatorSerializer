@@ -340,7 +340,7 @@ namespace LazinatorTests.Tests
             lazinator.MyListSerialized_Dirty = true;
             lazinator.UpdateStoredBuffer();
             lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
-            (lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage == lazinatorMemoryStorage).Should()
+            (lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Equals(lazinatorMemoryStorage)).Should()
                 .BeFalse();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 2);
         }

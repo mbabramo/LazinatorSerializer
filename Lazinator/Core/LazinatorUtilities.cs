@@ -55,7 +55,7 @@ namespace Lazinator.Core
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
             // unless the original storage is definitely clean.
-            if (originalStorage == null || originalStorage.Length == 0 ||
+            if (originalStorage.IsEmpty ||
                 includeChildrenMode != originalIncludeChildrenMode ||
                     (!isDefinitelyClean
                         &&
@@ -68,7 +68,7 @@ namespace Lazinator.Core
                 return encodeManuallyFn(includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage?.Length ?? 0); 
+            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length); 
             writer.Write(originalStorage.Span);
             return writer.LazinatorMemory;
         }
@@ -90,7 +90,7 @@ namespace Lazinator.Core
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
             // unless the original storage is definitely clean.
-            if (originalStorage == null || originalStorage.Length == 0 ||
+            if (originalStorage.IsEmpty ||
                 includeChildrenMode != originalIncludeChildrenMode ||
                     (!isDefinitelyClean
                         &&
@@ -103,14 +103,14 @@ namespace Lazinator.Core
                 return EncodeToNewBinaryBufferWriter(lazinator, includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage?.Length ?? 0);
+            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length);
             writer.Write(originalStorage.Span);
             return writer.LazinatorMemory;
         }
 
         public static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator
         {
-            int bufferSize = lazinatorObject.LazinatorMemoryStorage?.Length ?? ExpandableBytes.DefaultMinBufferSize;
+            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             lazinatorObject.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
@@ -184,7 +184,7 @@ namespace Lazinator.Core
             if (!childHasBeenAccessed && child != null)
             {
                 childStorage = getChildSliceFn();
-                if (childStorage == null || childStorage.Memory.Length == 0)
+                if (childStorage.IsEmpty)
                     childCouldHaveChanged = true; // child might be an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
             }
             else
@@ -194,7 +194,7 @@ namespace Lazinator.Core
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to UpdateStoredBuffer.
                     childStorage = child.LazinatorMemoryStorage;
-                    if (childStorage != null && childStorage.Memory.Length != 0)
+                    if (!childStorage.IsEmpty)
                         childCouldHaveChanged = false;
                 }
             }
@@ -212,7 +212,7 @@ namespace Lazinator.Core
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
                             // note that the length is set correctly
                         }
-                        if (child.LazinatorMemoryStorage?.OwnedMemory is ExpandableBytes e)
+                        if (child.LazinatorMemoryStorage.OwnedMemory is ExpandableBytes e)
                         {
                             child.UpdateStoredBuffer(ref writer, startPosition, length, includeChildrenMode, true);
                         }
@@ -247,7 +247,7 @@ namespace Lazinator.Core
         public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
         {
             // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
-            if (childStorage == null || childStorage.Length == 0)
+            if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (skipLength)
                 writer.Write(childStorage.Span);
@@ -280,7 +280,7 @@ namespace Lazinator.Core
             T childCopy = child;
             void action(ref BinaryBufferWriter w)
             {
-                if (childCopy.LazinatorMemoryStorage == null || childCopy.LazinatorMemoryStorage.Length == 0 || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
+                if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
                     childCopy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
                     w.Write(childCopy.LazinatorMemoryStorage.Span); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
