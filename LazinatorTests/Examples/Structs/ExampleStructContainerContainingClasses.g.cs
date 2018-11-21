@@ -285,11 +285,11 @@ namespace LazinatorTests.Examples
             ExampleStructContainerContainingClasses typedClone = (ExampleStructContainerContainingClasses) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.IntWrapper = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) ? default(WInt) : (WInt) IntWrapper.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.IntWrapper = (false) ? default(WInt) : (WInt) IntWrapper.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyExampleStructContainingClasses = (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) ? default(ExampleStructContainingClasses) : (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.MyExampleStructContainingClasses = (false) ? default(ExampleStructContainingClasses) : (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
@@ -411,11 +411,11 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IntWrapper_Accessed) && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IntWrapper_Accessed) && (false))
             {
                 yield return ("IntWrapper", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(IntWrapper);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(IntWrapper);
@@ -431,11 +431,11 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && (false))
             {
                 yield return ("MyExampleStructContainingClasses", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) || (_MyExampleStructContainingClasses_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
@@ -464,11 +464,11 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(IntWrapper, default(WInt))) || (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _IntWrapper = (WInt) _IntWrapper.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) || (_MyExampleStructContainingClasses_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyExampleStructContainingClasses = (ExampleStructContainingClasses) _MyExampleStructContainingClasses.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -553,11 +553,11 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_IntWrapper_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_IntWrapper, default(WInt)))
+                    if (true)
                     {
                         _IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), _IntWrapper_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_MyExampleStructContainingClasses_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_MyExampleStructContainingClasses, default(ExampleStructContainingClasses)))
+                    if (true)
                     {
                         _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
@@ -726,7 +726,7 @@ namespace LazinatorTests.Examples
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (!System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(itemToClone[itemIndex], default(ExampleStructContainingClasses)))
+                    if (true)
                     {
                         itemToClone[itemIndex] = (ExampleStructContainingClasses) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
@@ -793,7 +793,7 @@ namespace LazinatorTests.Examples
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (!System.Collections.Generic.EqualityComparer<WNullableStruct<ExampleStructContainingClasses>>.Default.Equals(itemToClone[itemIndex], default(WNullableStruct<ExampleStructContainingClasses>)))
+                    if (true)
                     {
                         itemToClone[itemIndex] = (WNullableStruct<ExampleStructContainingClasses>) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }

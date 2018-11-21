@@ -661,35 +661,35 @@ namespace LazinatorTests.Examples.Structs
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedBool = (System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))) ? default(WBool) : (WBool) WrappedBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedBool = (false) ? default(WBool) : (WBool) WrappedBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedByte = (System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))) ? default(WByte) : (WByte) WrappedByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedByte = (false) ? default(WByte) : (WByte) WrappedByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedChar = (System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))) ? default(WChar) : (WChar) WrappedChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedChar = (false) ? default(WChar) : (WChar) WrappedChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedNullableBool = (System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))) ? default(WNullableBool) : (WNullableBool) WrappedNullableBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedNullableBool = (false) ? default(WNullableBool) : (WNullableBool) WrappedNullableBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedNullableByte = (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))) ? default(WNullableByte) : (WNullableByte) WrappedNullableByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedNullableByte = (false) ? default(WNullableByte) : (WNullableByte) WrappedNullableByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedNullableChar = (System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))) ? default(WNullableChar) : (WNullableChar) WrappedNullableChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedNullableChar = (false) ? default(WNullableChar) : (WNullableChar) WrappedNullableChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedNullableSByte = (System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))) ? default(WNullableSByte) : (WNullableSByte) WrappedNullableSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedNullableSByte = (false) ? default(WNullableSByte) : (WNullableSByte) WrappedNullableSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedSByte = (System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))) ? default(WSByte) : (WSByte) WrappedSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedSByte = (false) ? default(WSByte) : (WSByte) WrappedSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -829,11 +829,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedBool_Accessed) && (System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedBool_Accessed) && (false))
             {
                 yield return ("WrappedBool", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))) || (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedBool);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedBool);
@@ -849,11 +849,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedByte_Accessed) && (System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedByte_Accessed) && (false))
             {
                 yield return ("WrappedByte", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))) || (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedByte);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedByte);
@@ -869,11 +869,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedChar_Accessed) && (System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedChar_Accessed) && (false))
             {
                 yield return ("WrappedChar", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))) || (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedChar);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedChar);
@@ -889,11 +889,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableBool_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableBool_Accessed) && (false))
             {
                 yield return ("WrappedNullableBool", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))) || (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableBool);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableBool);
@@ -909,11 +909,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableByte_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableByte_Accessed) && (false))
             {
                 yield return ("WrappedNullableByte", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))) || (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableByte);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableByte);
@@ -929,11 +929,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableChar_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableChar_Accessed) && (false))
             {
                 yield return ("WrappedNullableChar", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))) || (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableChar);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableChar);
@@ -949,11 +949,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableSByte_Accessed) && (System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableSByte_Accessed) && (false))
             {
                 yield return ("WrappedNullableSByte", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))) || (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableSByte);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableSByte);
@@ -969,11 +969,11 @@ namespace LazinatorTests.Examples.Structs
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedSByte_Accessed) && (System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedSByte_Accessed) && (false))
             {
                 yield return ("WrappedSByte", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))) || (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedSByte);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedSByte);
@@ -1004,35 +1004,35 @@ namespace LazinatorTests.Examples.Structs
             {
                 _ListWrappedBytes = (LazinatorList<WByte>) _ListWrappedBytes.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(WrappedBool, default(WBool))) || (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedBool = (WBool) _WrappedBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(WrappedByte, default(WByte))) || (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedByte = (WByte) _WrappedByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(WrappedChar, default(WChar))) || (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedChar = (WChar) _WrappedChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(WrappedNullableBool, default(WNullableBool))) || (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedNullableBool = (WNullableBool) _WrappedNullableBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(WrappedNullableByte, default(WNullableByte))) || (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedNullableByte = (WNullableByte) _WrappedNullableByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(WrappedNullableChar, default(WNullableChar))) || (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedNullableChar = (WNullableChar) _WrappedNullableChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(WrappedNullableSByte, default(WNullableSByte))) || (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedNullableSByte = (WNullableSByte) _WrappedNullableSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(WrappedSByte, default(WSByte))) || (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedSByte = (WSByte) _WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -1134,35 +1134,35 @@ namespace LazinatorTests.Examples.Structs
                     {
                         _ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex + sizeof(int), _ListWrappedBytes_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedBool_Accessed && !System.Collections.Generic.EqualityComparer<WBool>.Default.Equals(_WrappedBool, default(WBool)))
+                    if (true)
                     {
                         _WrappedBool.UpdateStoredBuffer(ref writer, startPosition + _WrappedBool_ByteIndex, _WrappedBool_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedByte_Accessed && !System.Collections.Generic.EqualityComparer<WByte>.Default.Equals(_WrappedByte, default(WByte)))
+                    if (true)
                     {
                         _WrappedByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedByte_ByteIndex, _WrappedByte_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedChar_Accessed && !System.Collections.Generic.EqualityComparer<WChar>.Default.Equals(_WrappedChar, default(WChar)))
+                    if (true)
                     {
                         _WrappedChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedChar_ByteIndex, _WrappedChar_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedNullableBool_Accessed && !System.Collections.Generic.EqualityComparer<WNullableBool>.Default.Equals(_WrappedNullableBool, default(WNullableBool)))
+                    if (true)
                     {
                         _WrappedNullableBool.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedNullableByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(_WrappedNullableByte, default(WNullableByte)))
+                    if (true)
                     {
                         _WrappedNullableByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableByte_ByteIndex + sizeof(byte), _WrappedNullableByte_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedNullableChar_Accessed && !System.Collections.Generic.EqualityComparer<WNullableChar>.Default.Equals(_WrappedNullableChar, default(WNullableChar)))
+                    if (true)
                     {
                         _WrappedNullableChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableChar_ByteIndex + sizeof(byte), _WrappedNullableChar_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedNullableSByte_Accessed && !System.Collections.Generic.EqualityComparer<WNullableSByte>.Default.Equals(_WrappedNullableSByte, default(WNullableSByte)))
+                    if (true)
                     {
                         _WrappedNullableSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableSByte_ByteIndex + sizeof(byte), _WrappedNullableSByte_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedSByte_Accessed && !System.Collections.Generic.EqualityComparer<WSByte>.Default.Equals(_WrappedSByte, default(WSByte)))
+                    if (true)
                     {
                         _WrappedSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }

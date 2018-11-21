@@ -147,7 +147,7 @@ namespace LazinatorTests.Examples
             ExampleStructContainingStruct typedClone = (ExampleStructContainingStruct) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyExampleStructContainingClasses = (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) ? default(ExampleStructContainingClasses) : (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.MyExampleStructContainingClasses = (false) ? default(ExampleStructContainingClasses) : (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             typedClone.IsDirty = false;
@@ -268,11 +268,11 @@ namespace LazinatorTests.Examples
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && (false))
             {
                 yield return ("MyExampleStructContainingClasses", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) || (_MyExampleStructContainingClasses_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(MyExampleStructContainingClasses, default(ExampleStructContainingClasses))) || (_MyExampleStructContainingClasses_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_MyExampleStructContainingClasses, default(ExampleStructContainingClasses))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyExampleStructContainingClasses = (ExampleStructContainingClasses) _MyExampleStructContainingClasses.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -373,7 +373,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyExampleStructContainingClasses_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingClasses>.Default.Equals(_MyExampleStructContainingClasses, default(ExampleStructContainingClasses)))
+                    if (true)
                     {
                         _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }

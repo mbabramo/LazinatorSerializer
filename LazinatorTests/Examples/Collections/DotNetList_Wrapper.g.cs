@@ -573,7 +573,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (!System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(itemToClone[itemIndex], default(WInt)))
+                    if (true)
                     {
                         itemToClone[itemIndex] = (WInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
@@ -640,7 +640,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (!System.Collections.Generic.EqualityComparer<WNullableByte>.Default.Equals(itemToClone[itemIndex], default(WNullableByte)))
+                    if (true)
                     {
                         itemToClone[itemIndex] = (WNullableByte) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
@@ -707,7 +707,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (!System.Collections.Generic.EqualityComparer<WNullableInt>.Default.Equals(itemToClone[itemIndex], default(WNullableInt)))
+                    if (true)
                     {
                         itemToClone[itemIndex] = (WNullableInt) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }

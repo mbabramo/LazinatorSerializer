@@ -141,7 +141,7 @@ namespace Lazinator.Wrappers
             typedClone.HasValue = HasValue;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.NonNullValue = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) ? default(T) : (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.NonNullValue = (false) ? default(T) : (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             typedClone.IsDirty = false;
@@ -179,7 +179,7 @@ namespace Lazinator.Wrappers
         public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
-            get => _DescendantHasChanged || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)) && (NonNullValue.HasChanged || NonNullValue.DescendantHasChanged));
+            get => _DescendantHasChanged || (true && (NonNullValue.HasChanged || NonNullValue.DescendantHasChanged));
             [DebuggerStepThrough]
             set
             {
@@ -193,7 +193,7 @@ namespace Lazinator.Wrappers
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)) && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty));
+            get => _DescendantIsDirty || (true && (NonNullValue.IsDirty || NonNullValue.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -271,11 +271,11 @@ namespace Lazinator.Wrappers
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullValue_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullValue_Accessed) && (false))
             {
                 yield return ("NonNullValue", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(NonNullValue);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(NonNullValue);
@@ -303,7 +303,7 @@ namespace Lazinator.Wrappers
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(NonNullValue, default(T))) || (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _NonNullValue = (T) _NonNullValue.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -385,7 +385,7 @@ namespace Lazinator.Wrappers
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_NonNullValue_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_NonNullValue, default(T)))
+                    if (true)
                     {
                         _NonNullValue.UpdateStoredBuffer(ref writer, startPosition + _NonNullValue_ByteIndex, _NonNullValue_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
                     }

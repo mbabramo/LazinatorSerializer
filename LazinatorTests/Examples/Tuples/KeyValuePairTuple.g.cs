@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>))) || (_MyKeyValuePairSerialized_Accessed && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(_MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Tuples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyKeyValuePairSerialized_Accessed && !System.Collections.Generic.EqualityComparer<KeyValuePair<uint, ExampleChild>>.Default.Equals(_MyKeyValuePairSerialized, default(KeyValuePair<uint, ExampleChild>)))
+                    if (true)
                     {
                         _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }

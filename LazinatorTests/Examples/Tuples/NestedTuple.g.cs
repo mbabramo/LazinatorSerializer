@@ -596,7 +596,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int a, string b)? CloneOrChange__Pint_C32a_c_C32string_C32b_p_C63((int a, string b)? itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (System.Collections.Generic.EqualityComparer<(int a, string b)?>.Default.Equals(itemToConvert, default((int a, string b)?)))
+            if (false)
             {
                 return default((int a, string b)?);
             }

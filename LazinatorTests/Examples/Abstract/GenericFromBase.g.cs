@@ -123,7 +123,7 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.MyInt = MyInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyT = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.MyT = (MyT == null) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -137,11 +137,11 @@ namespace LazinatorTests.Examples.Abstract
             {
                 yield return inheritedYield;
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (MyT == null))
             {
                 yield return ("MyT", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
+            else if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(MyT);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(MyT);
@@ -174,7 +174,7 @@ namespace LazinatorTests.Examples.Abstract
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
+            if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Abstract
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)))
+                    if (_MyT_Accessed && _MyT != null)
                     {
                         _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }

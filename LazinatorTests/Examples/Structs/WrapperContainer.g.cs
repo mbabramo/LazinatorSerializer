@@ -147,7 +147,7 @@ namespace LazinatorTests.Examples.Structs
             WrapperContainer typedClone = (WrapperContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedInt = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedInt = (false) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -267,11 +267,11 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && (false))
             {
                 yield return ("WrappedInt", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -363,7 +363,7 @@ namespace LazinatorTests.Examples.Structs
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)))
+                    if (true)
                     {
                         _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(byte), _WrappedInt_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }

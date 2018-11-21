@@ -349,7 +349,7 @@ namespace Lazinator.Collections.Avl
             typedClone.Count = Count;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Key = (System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) ? default(TKey) : (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Key = (Key == null) ? default(TKey) : (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
@@ -361,7 +361,7 @@ namespace Lazinator.Collections.Avl
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Value = (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) ? default(TValue) : (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Value = (Value == null) ? default(TValue) : (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -490,11 +490,11 @@ namespace Lazinator.Collections.Avl
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Key_Accessed) && (System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Key_Accessed) && (Key == null))
             {
                 yield return ("Key", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) || (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey))))
+            else if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(Key);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(Key);
@@ -550,11 +550,11 @@ namespace Lazinator.Collections.Avl
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && (Value == null))
             {
                 yield return ("Value", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue))))
+            else if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(Value);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(Value);
@@ -583,7 +583,7 @@ namespace Lazinator.Collections.Avl
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(Key, default(TKey))) || (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey))))
+            if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
             {
                 _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -595,7 +595,7 @@ namespace Lazinator.Collections.Avl
             {
                 _Right = (AvlNode<TKey, TValue>) _Right.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(Value, default(TValue))) || (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue))))
+            if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
             {
                 _Value = (TValue) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -695,7 +695,7 @@ namespace Lazinator.Collections.Avl
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Key_Accessed && !System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(_Key, default(TKey)))
+                    if (_Key_Accessed && _Key != null)
                     {
                         _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
@@ -707,7 +707,7 @@ namespace Lazinator.Collections.Avl
                     {
                         _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), _Right_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_Value_Accessed && !System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(_Value, default(TValue)))
+                    if (_Value_Accessed && _Value != null)
                     {
                         _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }

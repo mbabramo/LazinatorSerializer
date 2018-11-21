@@ -28,8 +28,6 @@ namespace Lazinator.CodeDescription
         private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol)PropertySymbol.Type : (ITypeSymbol)TypeSymbolIfNoProperty;
         internal bool GenericConstrainedToClass => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasReferenceTypeConstraint;
         internal bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
-        private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
-        private bool IsLazinatorStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
         internal bool Nullable { get; set; }
@@ -49,7 +47,9 @@ namespace Lazinator.CodeDescription
         internal LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
-        internal bool IsDefinitelyStruct => PropertyType == LazinatorPropertyType.LazinatorStruct ||
+        private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
+        private bool IsLazinatorStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
+        internal bool IsDefinitelyStruct => IsLazinatorStruct ||
                                             (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) ||
                                             (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
                                             (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||

@@ -717,7 +717,7 @@ namespace LazinatorTests.Examples
             typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedInt = (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedInt = (false) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
@@ -943,11 +943,11 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && (System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && (false))
             {
                 yield return ("WrappedInt", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
@@ -1028,7 +1028,7 @@ namespace LazinatorTests.Examples
             {
                 _MyInterfaceImplementer = (IExampleNonexclusiveInterface) _MyInterfaceImplementer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(WrappedInt, default(WInt))) || (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -1179,7 +1179,7 @@ namespace LazinatorTests.Examples
                     {
                         _MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex + sizeof(int), _MyInterfaceImplementer_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_WrappedInt_Accessed && !System.Collections.Generic.EqualityComparer<WInt>.Default.Equals(_WrappedInt, default(WInt)))
+                    if (true)
                     {
                         _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(byte), _WrappedInt_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }

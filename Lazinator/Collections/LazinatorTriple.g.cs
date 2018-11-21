@@ -254,15 +254,15 @@ namespace Lazinator.Collections
             LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item1 = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Item1 = (Item1 == null) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item2 = (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Item2 = (Item2 == null) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item3 = (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Item3 = (Item3 == null) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -391,11 +391,11 @@ namespace Lazinator.Collections
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item1_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item1_Accessed) && (Item1 == null))
             {
                 yield return ("Item1", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) || (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T))))
+            else if ((!exploreOnlyDeserializedChildren && Item1 != null) || (_Item1_Accessed && _Item1 != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(Item1);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(Item1);
@@ -411,11 +411,11 @@ namespace Lazinator.Collections
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item2_Accessed) && (System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item2_Accessed) && (Item2 == null))
             {
                 yield return ("Item2", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U))))
+            else if ((!exploreOnlyDeserializedChildren && Item2 != null) || (_Item2_Accessed && _Item2 != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(Item2);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(Item2);
@@ -431,11 +431,11 @@ namespace Lazinator.Collections
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item3_Accessed) && (System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item3_Accessed) && (Item3 == null))
             {
                 yield return ("Item3", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V))))
+            else if ((!exploreOnlyDeserializedChildren && Item3 != null) || (_Item3_Accessed && _Item3 != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(Item3);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(Item3);
@@ -462,15 +462,15 @@ namespace Lazinator.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(Item1, default(T))) || (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T))))
+            if ((!exploreOnlyDeserializedChildren && Item1 != null) || (_Item1_Accessed && _Item1 != null))
             {
                 _Item1 = (T) _Item1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(Item2, default(U))) || (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U))))
+            if ((!exploreOnlyDeserializedChildren && Item2 != null) || (_Item2_Accessed && _Item2 != null))
             {
                 _Item2 = (U) _Item2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(Item3, default(V))) || (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V))))
+            if ((!exploreOnlyDeserializedChildren && Item3 != null) || (_Item3_Accessed && _Item3 != null))
             {
                 _Item3 = (V) _Item3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -562,15 +562,15 @@ namespace Lazinator.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Item1_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_Item1, default(T)))
+                    if (_Item1_Accessed && _Item1 != null)
                     {
                         _Item1.UpdateStoredBuffer(ref writer, startPosition + _Item1_ByteIndex + sizeof(int), _Item1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_Item2_Accessed && !System.Collections.Generic.EqualityComparer<U>.Default.Equals(_Item2, default(U)))
+                    if (_Item2_Accessed && _Item2 != null)
                     {
                         _Item2.UpdateStoredBuffer(ref writer, startPosition + _Item2_ByteIndex + sizeof(int), _Item2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
-                    if (_Item3_Accessed && !System.Collections.Generic.EqualityComparer<V>.Default.Equals(_Item3, default(V)))
+                    if (_Item3_Accessed && _Item3 != null)
                     {
                         _Item3.UpdateStoredBuffer(ref writer, startPosition + _Item3_ByteIndex + sizeof(int), _Item3_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }

@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Structs
             ExampleStructContainingStructContainer typedClone = (ExampleStructContainingStructContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Subcontainer = (System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(Subcontainer, default(ExampleStructContainingStruct))) ? default(ExampleStructContainingStruct) : (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Subcontainer = (false) ? default(ExampleStructContainingStruct) : (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -271,11 +271,11 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Subcontainer_Accessed) && (System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(Subcontainer, default(ExampleStructContainingStruct))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Subcontainer_Accessed) && (false))
             {
                 yield return ("Subcontainer", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(Subcontainer, default(ExampleStructContainingStruct))) || (_Subcontainer_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(_Subcontainer, default(ExampleStructContainingStruct))))
+            else if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(Subcontainer);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(Subcontainer);
@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(Subcontainer, default(ExampleStructContainingStruct))) || (_Subcontainer_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(_Subcontainer, default(ExampleStructContainingStruct))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _Subcontainer = (ExampleStructContainingStruct) _Subcontainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples.Structs
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Subcontainer_Accessed && !System.Collections.Generic.EqualityComparer<ExampleStructContainingStruct>.Default.Equals(_Subcontainer, default(ExampleStructContainingStruct)))
+                    if (true)
                     {
                         _Subcontainer.UpdateStoredBuffer(ref writer, startPosition + _Subcontainer_ByteIndex + sizeof(int), _Subcontainer_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }

@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             typedClone.MyListT = CloneOrChange_List_GT_g(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyT = (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.MyT = (MyT == null) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
@@ -293,11 +293,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (MyT == null))
             {
                 yield return ("MyT", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
+            else if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(MyT);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(MyT);
@@ -325,7 +325,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(MyT, default(T))) || (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T))))
+            if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             }
@@ -407,7 +407,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<T>.Default.Equals(_MyT, default(T)))
+                    if (_MyT_Accessed && _MyT != null)
                     {
                         _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                     }
@@ -559,13 +559,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (avoidCloningIfPossible)
                 {
-                    if (!System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
+                    if (itemToClone[itemIndex] != null)
                     {
                         itemToClone[itemIndex] = (T) cloneOrChangeFunc(itemToClone[itemIndex]);
                     }
                     continue;
                 }
-                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(itemToClone[itemIndex], default(T)))
+                if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(T));
                 }

@@ -134,7 +134,7 @@ namespace LazinatorTests.Examples.Abstract
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyT_Accessed && !System.Collections.Generic.EqualityComparer<WNullableDecimal>.Default.Equals(_MyT, default(WNullableDecimal)))
+                    if (true)
                     {
                         _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(byte), _MyT_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
                     }

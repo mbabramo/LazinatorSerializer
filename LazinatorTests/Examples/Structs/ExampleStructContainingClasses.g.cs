@@ -512,7 +512,7 @@ namespace LazinatorTests.Examples
             {
                 _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(NonLazinatorClass myitem1, int? myitem2)>.Default.Equals(MyTuple, default((NonLazinatorClass myitem1, int? myitem2)))) || (_MyTuple_Accessed && !System.Collections.Generic.EqualityComparer<(NonLazinatorClass myitem1, int? myitem2)>.Default.Equals(_MyTuple, default((NonLazinatorClass myitem1, int? myitem2)))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
@@ -619,7 +619,7 @@ namespace LazinatorTests.Examples
                     {
                         _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
                     }
-                    if (_MyTuple_Accessed && !System.Collections.Generic.EqualityComparer<(NonLazinatorClass myitem1, int? myitem2)>.Default.Equals(_MyTuple, default((NonLazinatorClass myitem1, int? myitem2))))
+                    if (true)
                     {
                         _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l.RemoveBufferInHierarchy(), true);
                     }

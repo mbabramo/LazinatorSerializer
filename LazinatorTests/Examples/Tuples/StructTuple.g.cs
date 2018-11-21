@@ -352,19 +352,19 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
         {
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(TestEnum firstEnum, TestEnum anotherEnum)>.Default.Equals(EnumTuple, default((TestEnum firstEnum, TestEnum anotherEnum)))) || (_EnumTuple_Accessed && !System.Collections.Generic.EqualityComparer<(TestEnum firstEnum, TestEnum anotherEnum)>.Default.Equals(_EnumTuple, default((TestEnum firstEnum, TestEnum anotherEnum)))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(_EnumTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(int MyFirstItem, double MySecondItem)>.Default.Equals(MyNamedTuple, default((int MyFirstItem, double MySecondItem)))) || (_MyNamedTuple_Accessed && !System.Collections.Generic.EqualityComparer<(int MyFirstItem, double MySecondItem)>.Default.Equals(_MyNamedTuple, default((int MyFirstItem, double MySecondItem)))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(int, double)?>.Default.Equals(MyNullableTuple, default((int, double)?))) || (_MyNullableTuple_Accessed && !System.Collections.Generic.EqualityComparer<(int, double)?>.Default.Equals(_MyNullableTuple, default((int, double)?))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
-            if ((!exploreOnlyDeserializedChildren && !System.Collections.Generic.EqualityComparer<(uint, ExampleChild, NonLazinatorClass)>.Default.Equals(MyValueTupleSerialized, default((uint, ExampleChild, NonLazinatorClass)))) || (_MyValueTupleSerialized_Accessed && !System.Collections.Generic.EqualityComparer<(uint, ExampleChild, NonLazinatorClass)>.Default.Equals(_MyValueTupleSerialized, default((uint, ExampleChild, NonLazinatorClass)))))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 _MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(_MyValueTupleSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
@@ -435,19 +435,19 @@ namespace LazinatorTests.Examples.Tuples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_EnumTuple_Accessed && !System.Collections.Generic.EqualityComparer<(TestEnum firstEnum, TestEnum anotherEnum)>.Default.Equals(_EnumTuple, default((TestEnum firstEnum, TestEnum anotherEnum))))
+                    if (true)
                     {
                         _EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(_EnumTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
-                    if (_MyNamedTuple_Accessed && !System.Collections.Generic.EqualityComparer<(int MyFirstItem, double MySecondItem)>.Default.Equals(_MyNamedTuple, default((int MyFirstItem, double MySecondItem))))
+                    if (true)
                     {
                         _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
-                    if (_MyNullableTuple_Accessed && !System.Collections.Generic.EqualityComparer<(int, double)?>.Default.Equals(_MyNullableTuple, default((int, double)?)))
+                    if (true)
                     {
                         _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
-                    if (_MyValueTupleSerialized_Accessed && !System.Collections.Generic.EqualityComparer<(uint, ExampleChild, NonLazinatorClass)>.Default.Equals(_MyValueTupleSerialized, default((uint, ExampleChild, NonLazinatorClass))))
+                    if (true)
                     {
                         _MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(_MyValueTupleSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
@@ -662,7 +662,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int, double)? CloneOrChange__Pint_c_C32double_p_C63((int, double)? itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (System.Collections.Generic.EqualityComparer<(int, double)?>.Default.Equals(itemToConvert, default((int, double)?)))
+            if (false)
             {
                 return default((int, double)?);
             }
