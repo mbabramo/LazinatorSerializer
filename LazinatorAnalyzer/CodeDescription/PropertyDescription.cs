@@ -1281,7 +1281,7 @@ namespace Lazinator.CodeDescription
         {
             if (conditional.Trim() == "" || conditional.Trim() == "if (true)")
                 return consequent;
-            else if (conditional.Trim() == "if (true)" || (conditional.EndsWith("&& false)")))
+            else if (conditional.Trim() == "if (false)" || (conditional.EndsWith("&& false)")))
                 return elseConsequent;
             var conditionalString = $@"{conditional}
                         {{
@@ -2255,11 +2255,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {IIF(Nullable, $@"if ({GetNullCheck("itemToConvert")})
-                        {{
-                            return default({AppropriatelyQualifiedTypeName});
-                        }}
-                        ")}return {creationText};
+                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $"return default({AppropriatelyQualifiedTypeName});", ""))}return {creationText};
                     }}
             ");
         }

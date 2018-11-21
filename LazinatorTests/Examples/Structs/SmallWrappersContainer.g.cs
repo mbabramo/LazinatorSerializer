@@ -668,91 +668,35 @@ namespace LazinatorTests.Examples.Structs
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedBool = default(WBool);
-                }
-                else
-                {
-                    typedClone.WrappedBool = (WBool) WrappedBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedBool = (WBool) WrappedBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedByte = default(WByte);
-                }
-                else
-                {
-                    typedClone.WrappedByte = (WByte) WrappedByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedByte = (WByte) WrappedByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedChar = default(WChar);
-                }
-                else
-                {
-                    typedClone.WrappedChar = (WChar) WrappedChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedChar = (WChar) WrappedChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedNullableBool = default(WNullableBool);
-                }
-                else
-                {
-                    typedClone.WrappedNullableBool = (WNullableBool) WrappedNullableBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedNullableBool = (WNullableBool) WrappedNullableBool.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedNullableByte = default(WNullableByte);
-                }
-                else
-                {
-                    typedClone.WrappedNullableByte = (WNullableByte) WrappedNullableByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedNullableByte = (WNullableByte) WrappedNullableByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedNullableChar = default(WNullableChar);
-                }
-                else
-                {
-                    typedClone.WrappedNullableChar = (WNullableChar) WrappedNullableChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedNullableChar = (WNullableChar) WrappedNullableChar.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedNullableSByte = default(WNullableSByte);
-                }
-                else
-                {
-                    typedClone.WrappedNullableSByte = (WNullableSByte) WrappedNullableSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedNullableSByte = (WNullableSByte) WrappedNullableSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.WrappedSByte = default(WSByte);
-                }
-                else
-                {
-                    typedClone.WrappedSByte = (WSByte) WrappedSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.WrappedSByte = (WSByte) WrappedSByte.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;

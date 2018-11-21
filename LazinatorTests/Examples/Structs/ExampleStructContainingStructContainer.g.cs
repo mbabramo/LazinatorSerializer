@@ -151,14 +151,7 @@ namespace LazinatorTests.Examples.Structs
             ExampleStructContainingStructContainer typedClone = (ExampleStructContainingStructContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (false)
-                {
-                    typedClone.Subcontainer = default(ExampleStructContainingStruct);
-                }
-                else
-                {
-                    typedClone.Subcontainer = (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
+                typedClone.Subcontainer = (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             return typedClone;
