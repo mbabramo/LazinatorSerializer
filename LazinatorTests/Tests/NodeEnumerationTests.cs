@@ -86,10 +86,10 @@ namespace LazinatorTests.Tests
             (results[0] is Example).Should().BeTrue();
 
             results = c.EnumerateLazinatorNodes(null, false, x => !(x is WrapperContainer), true, false).ToList();
-            results.Count().Should().Be(4); // WrapperContainer is yielded but not further explored; dirtiness is not a consideration
+            results.Count().Should().Be(5); // WrapperContainer is yielded but not further explored; dirtiness is not a consideration; meanwhile, all structs are included
 
             results = c.EnumerateLazinatorNodes(x => x is WInt, false, null, true, false).ToList();
-            results.Count().Should().Be(1); // full exploration, but only WInt returned 
+            results.Count().Should().Be(2); // full exploration, with all structs returned 
             (results[0] is WInt).Should().BeTrue();
         }
 
@@ -131,7 +131,7 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped();
             var loaded = e.MyChild1;
             deserializedOnly = e.ViewLazinatorChildren(true);
-            GetCount(deserializedOnly).Should().Be(1);
+            GetCount(deserializedOnly).Should().Be(2); // counting a struct that will always be included
             all = e.ViewLazinatorChildren();
             (GetCount(all) > 1).Should().BeTrue();
         }
