@@ -24,23 +24,28 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled)
         {
-            OwnedMemory = ownedMemory;
-            StartPosition = startPosition;
-            Length = bytesFilled;
+            if (bytesFilled < 0)
+                throw new ArgumentException();
+            if (bytesFilled == 0)
+            {
+                OwnedMemory = null;
+                StartPosition = 0;
+                Length = 0;
+            }
+            else
+            {
+                OwnedMemory = ownedMemory;
+                StartPosition = startPosition;
+                Length = bytesFilled;
+            }
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : this(ownedMemory, 0, bytesFilled)
         {
-            OwnedMemory = ownedMemory;
-            StartPosition = 0;
-            Length = bytesFilled;
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory) : this(ownedMemory, 0, ownedMemory.Memory.Length)
         {
-            OwnedMemory = ownedMemory;
-            StartPosition = 0;
-            Length = ownedMemory.Memory.Length;
         }
 
         public LazinatorMemory(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)

@@ -94,7 +94,7 @@ namespace Lazinator.Core
         public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, LazinatorMemory storage, ILazinator parent = null) where T : ILazinator, new()
         {
             // Note: It's important that CreateBaseOrDerivedType be generic, because that often allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
-            if (storage.Memory.Length <= 1)
+            if (storage.IsEmpty || storage.Length == 1)
                 return default;
             int bytesSoFar = 0;
             var span = (ReadOnlySpan<byte>)storage.Memory.Span;

@@ -142,7 +142,7 @@ namespace Lazinator.Collections
                     return ((IList<T>) _UnderlyingList)[index];
                 CreateUnderlyingListIfNecessary();
                 var current = ((IList<T>) _UnderlyingList)[index];
-                if (current == null || (current.Equals(default(T))))
+                if (current == null) // DEBUG || (current.Equals(default(T))))
                 {
                     if (_ItemsAccessedBeforeFullyDeserialized[index])
                         return default;
