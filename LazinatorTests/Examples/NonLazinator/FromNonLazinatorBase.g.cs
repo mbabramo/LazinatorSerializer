@@ -179,7 +179,7 @@ namespace LazinatorTests.Examples.NonLazinator
                 return;
             }
             var previousBuffer = LazinatorMemoryStorage;
-            EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, this);
+            LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, this);
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
             if (disposePreviousBuffer)
             {

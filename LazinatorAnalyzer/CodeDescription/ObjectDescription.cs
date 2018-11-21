@@ -505,7 +505,7 @@ namespace Lazinator.CodeDescription
                                 return;
                             }}
                             var previousBuffer = LazinatorMemoryStorage;
-                            {IIF(ObjectType == LazinatorObjectType.Struct, "LazinatorMemoryStorage = ")}EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
+                            LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
                             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
                             if (disposePreviousBuffer)
                             {{
