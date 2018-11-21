@@ -308,23 +308,26 @@ namespace Lazinator.Spans
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ByteSpan_Accessed) && (ByteSpan == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ByteSpan_Accessed) && ByteSpan == null)
             {
                 yield return ("ByteSpan", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(ByteSpan);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(ByteSpan);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
                 {
-                    yield return ("ByteSpan", ByteSpan);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(ByteSpan);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ByteSpan);
+                    if (isMatch)
                     {
-                        yield return ("ByteSpan" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("ByteSpan", ByteSpan);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("ByteSpan" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

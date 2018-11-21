@@ -277,23 +277,26 @@ namespace Lazinator.Collections.Dictionary
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Buckets_Accessed) && (Buckets == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Buckets_Accessed) && Buckets == null)
             {
                 yield return ("Buckets", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(Buckets);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(Buckets);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
                 {
-                    yield return ("Buckets", Buckets);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in Buckets.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(Buckets);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Buckets);
+                    if (isMatch)
                     {
-                        yield return ("Buckets" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("Buckets", Buckets);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in Buckets.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("Buckets" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

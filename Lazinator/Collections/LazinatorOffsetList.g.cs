@@ -336,43 +336,49 @@ namespace Lazinator.Collections
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _FourByteItems_Accessed) && (FourByteItems == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _FourByteItems_Accessed) && FourByteItems == null)
             {
                 yield return ("FourByteItems", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(FourByteItems);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(FourByteItems);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
                 {
-                    yield return ("FourByteItems", FourByteItems);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in FourByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(FourByteItems);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(FourByteItems);
+                    if (isMatch)
                     {
-                        yield return ("FourByteItems" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("FourByteItems", FourByteItems);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in FourByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("FourByteItems" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && (TwoByteItems == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && TwoByteItems == null)
             {
                 yield return ("TwoByteItems", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(TwoByteItems);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(TwoByteItems);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
                 {
-                    yield return ("TwoByteItems", TwoByteItems);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in TwoByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(TwoByteItems);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(TwoByteItems);
+                    if (isMatch)
                     {
-                        yield return ("TwoByteItems" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("TwoByteItems", TwoByteItems);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in TwoByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("TwoByteItems" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

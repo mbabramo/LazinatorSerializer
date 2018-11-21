@@ -247,23 +247,26 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _AbstractProperty_Accessed) && (AbstractProperty == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _AbstractProperty_Accessed) && AbstractProperty == null)
             {
                 yield return ("AbstractProperty", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(AbstractProperty);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(AbstractProperty);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
                 {
-                    yield return ("AbstractProperty", AbstractProperty);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in AbstractProperty.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(AbstractProperty);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(AbstractProperty);
+                    if (isMatch)
                     {
-                        yield return ("AbstractProperty" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("AbstractProperty", AbstractProperty);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in AbstractProperty.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("AbstractProperty" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

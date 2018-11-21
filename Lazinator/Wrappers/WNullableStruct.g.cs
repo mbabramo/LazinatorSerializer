@@ -271,11 +271,7 @@ namespace Lazinator.Wrappers
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullValue_Accessed) && (false))
-            {
-                yield return ("NonNullValue", default);
-            }
-            else if ((!exploreOnlyDeserializedChildren && true) || (true))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(NonNullValue);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(NonNullValue);

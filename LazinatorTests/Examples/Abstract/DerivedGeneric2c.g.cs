@@ -302,23 +302,26 @@ namespace LazinatorTests.Examples.Abstract
         
         public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && (MyT == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && MyT == null)
             {
                 yield return ("MyT", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(MyT);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyT);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {
-                    yield return ("MyT", MyT);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(MyT);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyT);
+                    if (isMatch)
                     {
-                        yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("MyT", MyT);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("MyT" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

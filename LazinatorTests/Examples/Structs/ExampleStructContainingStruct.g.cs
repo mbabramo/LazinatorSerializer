@@ -268,11 +268,7 @@ namespace LazinatorTests.Examples
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && (false))
-            {
-                yield return ("MyExampleStructContainingClasses", default);
-            }
-            else if ((!exploreOnlyDeserializedChildren && true) || (true))
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
                 bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);

@@ -327,43 +327,49 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyOfficialObject_Accessed) && (MyOfficialObject == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyOfficialObject_Accessed) && MyOfficialObject == null)
             {
                 yield return ("MyOfficialObject", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(MyOfficialObject);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyOfficialObject);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
                 {
-                    yield return ("MyOfficialObject", MyOfficialObject);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyOfficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(MyOfficialObject);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyOfficialObject);
+                    if (isMatch)
                     {
-                        yield return ("MyOfficialObject" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("MyOfficialObject", MyOfficialObject);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in MyOfficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("MyOfficialObject" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyUnofficialObject_Accessed) && (MyUnofficialObject == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyUnofficialObject_Accessed) && MyUnofficialObject == null)
             {
                 yield return ("MyUnofficialObject", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(MyUnofficialObject);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyUnofficialObject);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
                 {
-                    yield return ("MyUnofficialObject", MyUnofficialObject);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyUnofficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(MyUnofficialObject);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyUnofficialObject);
+                    if (isMatch)
                     {
-                        yield return ("MyUnofficialObject" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("MyUnofficialObject", MyUnofficialObject);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in MyUnofficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("MyUnofficialObject" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

@@ -247,23 +247,26 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyBase_Accessed) && (MyBase == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyBase_Accessed) && MyBase == null)
             {
                 yield return ("MyBase", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(MyBase);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyBase);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
                 {
-                    yield return ("MyBase", MyBase);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyBase.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(MyBase);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyBase);
+                    if (isMatch)
                     {
-                        yield return ("MyBase" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("MyBase", MyBase);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in MyBase.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("MyBase" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

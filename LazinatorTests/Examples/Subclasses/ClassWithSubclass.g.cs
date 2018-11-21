@@ -310,43 +310,49 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance1_Accessed) && (SubclassInstance1 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance1_Accessed) && SubclassInstance1 == null)
             {
                 yield return ("SubclassInstance1", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance1);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(SubclassInstance1);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
                 {
-                    yield return ("SubclassInstance1", SubclassInstance1);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in SubclassInstance1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance1);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(SubclassInstance1);
+                    if (isMatch)
                     {
-                        yield return ("SubclassInstance1" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("SubclassInstance1", SubclassInstance1);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in SubclassInstance1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("SubclassInstance1" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance2_Accessed) && (SubclassInstance2 == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance2_Accessed) && SubclassInstance2 == null)
             {
                 yield return ("SubclassInstance2", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance2);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(SubclassInstance2);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
                 {
-                    yield return ("SubclassInstance2", SubclassInstance2);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in SubclassInstance2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance2);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(SubclassInstance2);
+                    if (isMatch)
                     {
-                        yield return ("SubclassInstance2" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("SubclassInstance2", SubclassInstance2);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in SubclassInstance2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("SubclassInstance2" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

@@ -259,23 +259,26 @@ namespace Lazinator.Collections.Avl
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _UnderlyingTree_Accessed) && (UnderlyingTree == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _UnderlyingTree_Accessed) && UnderlyingTree == null)
             {
                 yield return ("UnderlyingTree", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(UnderlyingTree);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(UnderlyingTree);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
                 {
-                    yield return ("UnderlyingTree", UnderlyingTree);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in UnderlyingTree.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(UnderlyingTree);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(UnderlyingTree);
+                    if (isMatch)
                     {
-                        yield return ("UnderlyingTree" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("UnderlyingTree", UnderlyingTree);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in UnderlyingTree.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("UnderlyingTree" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

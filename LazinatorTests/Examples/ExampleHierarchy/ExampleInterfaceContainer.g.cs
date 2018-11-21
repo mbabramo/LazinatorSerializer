@@ -283,23 +283,26 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExampleByInterface_Accessed) && (ExampleByInterface == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExampleByInterface_Accessed) && ExampleByInterface == null)
             {
                 yield return ("ExampleByInterface", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(ExampleByInterface);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(ExampleByInterface);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
                 {
-                    yield return ("ExampleByInterface", ExampleByInterface);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in ExampleByInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(ExampleByInterface);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ExampleByInterface);
+                    if (isMatch)
                     {
-                        yield return ("ExampleByInterface" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("ExampleByInterface", ExampleByInterface);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in ExampleByInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("ExampleByInterface" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

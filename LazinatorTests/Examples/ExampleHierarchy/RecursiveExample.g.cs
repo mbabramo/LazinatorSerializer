@@ -294,43 +294,49 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveClass_Accessed) && (RecursiveClass == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveClass_Accessed) && RecursiveClass == null)
             {
                 yield return ("RecursiveClass", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(RecursiveClass);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(RecursiveClass);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
                 {
-                    yield return ("RecursiveClass", RecursiveClass);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in RecursiveClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(RecursiveClass);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(RecursiveClass);
+                    if (isMatch)
                     {
-                        yield return ("RecursiveClass" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("RecursiveClass", RecursiveClass);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in RecursiveClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("RecursiveClass" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && (RecursiveInterface == null))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && RecursiveInterface == null)
             {
                 yield return ("RecursiveInterface", default);
             }
-            else if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
+            else
             {
-                bool isMatch = matchCriterion == null || matchCriterion(RecursiveInterface);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(RecursiveInterface);
-                if (isMatch)
+                if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
                 {
-                    yield return ("RecursiveInterface", RecursiveInterface);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in RecursiveInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(RecursiveInterface);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(RecursiveInterface);
+                    if (isMatch)
                     {
-                        yield return ("RecursiveInterface" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("RecursiveInterface", RecursiveInterface);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in RecursiveInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("RecursiveInterface" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }

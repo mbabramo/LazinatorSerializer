@@ -1404,7 +1404,13 @@ namespace Lazinator.CodeDescription
         {
             string copyInstruction = "";
             if (IsLazinator)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
+            {
+                copyInstruction = GetNullCheckIfThen("", PropertyName,
+                    $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName});",
+                    $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
+                copyInstruction =
+                    $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
+            }
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
