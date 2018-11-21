@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples.Abstract
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null);
-                        _IntList6 = ConvertFromBytes_List_Gint_g(childData);
+                        _IntList6 = ConvertFromBytes_List⋖int_C62(childData);
                     }
                     _IntList6_Accessed = true;
                 }
@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             Concrete6 typedClone = (Concrete6) clone;
-            typedClone.IntList6 = CloneOrChange_List_Gint_g(IntList6, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.IntList6 = CloneOrChange_List⋖int_C62(IntList6, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -117,7 +117,7 @@ namespace LazinatorTests.Examples.Abstract
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
             if ((!exploreOnlyDeserializedChildren && IntList6 != null) || (_IntList6_Accessed && _IntList6 != null))
             {
-                _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _IntList6 = (List<int>) CloneOrChange_List⋖int_C62(_IntList6, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                     if (_IntList6_Accessed && _IntList6 != null)
                     {
-                        _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l.RemoveBufferInHierarchy(), true);
+                        _IntList6 = (List<int>) CloneOrChange_List⋖int_C62(_IntList6, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Abstract
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_Gint_g(ref w, _IntList6,
+            ConvertToBytes_List⋖int_C62(ref w, _IntList6,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -233,7 +233,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion of supported collections and tuples */
         
-        private static List<int> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)
+        private static List<int> ConvertFromBytes_List⋖int_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -255,7 +255,7 @@ namespace LazinatorTests.Examples.Abstract
             return collection;
         }
         
-        private static void ConvertToBytes_List_Gint_g(ref BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List⋖int_C62(ref BinaryBufferWriter writer, List<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<int>))
             {
@@ -269,7 +269,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        private static List<int> CloneOrChange_List_Gint_g(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<int> CloneOrChange_List⋖int_C62(List<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null);
-                        _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
+                        _MyQueueSerialized = ConvertFromBytes_Queue⋖ExampleChild_C62(childData);
                     }
                     _MyQueueSerialized_Accessed = true;
                 }
@@ -117,7 +117,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Lazinator typedClone = (DotNetQueue_Lazinator) clone;
-            typedClone.MyQueueSerialized = CloneOrChange_Queue_GExampleChild_g(MyQueueSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyQueueSerialized = CloneOrChange_Queue⋖ExampleChild_C62(MyQueueSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyQueueSerialized != null) || (_MyQueueSerialized_Accessed && _MyQueueSerialized != null))
             {
-                _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue⋖ExampleChild_C62(_MyQueueSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -312,7 +312,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
                     {
-                        _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy(), true);
+                        _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue⋖ExampleChild_C62(_MyQueueSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Queue_GExampleChild_g(ref w, _MyQueueSerialized,
+            ConvertToBytes_Queue⋖ExampleChild_C62(ref w, _MyQueueSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Queue<ExampleChild> ConvertFromBytes_Queue_GExampleChild_g(LazinatorMemory storage)
+        private static Queue<ExampleChild> ConvertFromBytes_Queue⋖ExampleChild_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -403,7 +403,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Queue_GExampleChild_g(ref BinaryBufferWriter writer, Queue<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_Queue⋖ExampleChild_C62(ref BinaryBufferWriter writer, Queue<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(Queue<ExampleChild>))
             {
@@ -428,7 +428,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Queue<ExampleChild> CloneOrChange_Queue_GExampleChild_g(Queue<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static Queue<ExampleChild> CloneOrChange_Queue⋖ExampleChild_C62(Queue<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

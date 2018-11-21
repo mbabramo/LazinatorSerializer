@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null);
-                        _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
+                        _MyHashSetSerialized = ConvertFromBytes_HashSet⋖ExampleChild_C62(childData);
                     }
                     _MyHashSetSerialized_Accessed = true;
                 }
@@ -113,7 +113,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetHashSet_Lazinator typedClone = (DotNetHashSet_Lazinator) clone;
-            typedClone.MyHashSetSerialized = CloneOrChange_HashSet_GExampleChild_g(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyHashSetSerialized = CloneOrChange_HashSet⋖ExampleChild_C62(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyHashSetSerialized != null) || (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null))
             {
-                _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet⋖ExampleChild_C62(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -308,7 +308,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null)
                     {
-                        _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.RemoveBufferInHierarchy(), true);
+                        _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet⋖ExampleChild_C62(_MyHashSetSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -353,7 +353,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_HashSet_GExampleChild_g(ref w, _MyHashSetSerialized,
+            ConvertToBytes_HashSet⋖ExampleChild_C62(ref w, _MyHashSetSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static HashSet<ExampleChild> ConvertFromBytes_HashSet_GExampleChild_g(LazinatorMemory storage)
+        private static HashSet<ExampleChild> ConvertFromBytes_HashSet⋖ExampleChild_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -399,7 +399,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_HashSet_GExampleChild_g(ref BinaryBufferWriter writer, HashSet<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_HashSet⋖ExampleChild_C62(ref BinaryBufferWriter writer, HashSet<ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(HashSet<ExampleChild>))
             {
@@ -422,7 +422,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static HashSet<ExampleChild> CloneOrChange_HashSet_GExampleChild_g(HashSet<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static HashSet<ExampleChild> CloneOrChange_HashSet⋖ExampleChild_C62(HashSet<ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

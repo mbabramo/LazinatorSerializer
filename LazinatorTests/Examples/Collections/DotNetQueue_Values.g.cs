@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null);
-                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
+                        _MyQueueInt = ConvertFromBytes_Queue⋖int_C62(childData);
                     }
                     _MyQueueInt_Accessed = true;
                 } 
@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Values typedClone = (DotNetQueue_Values) clone;
-            typedClone.MyQueueInt = CloneOrChange_Queue_Gint_g(MyQueueInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyQueueInt = CloneOrChange_Queue⋖int_C62(MyQueueInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyQueueInt != null) || (_MyQueueInt_Accessed && _MyQueueInt != null))
             {
-                _MyQueueInt = (Queue<int>) CloneOrChange_Queue_Gint_g(_MyQueueInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyQueueInt = (Queue<int>) CloneOrChange_Queue⋖int_C62(_MyQueueInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -326,7 +326,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyQueueInt_Accessed && _MyQueueInt != null)
                     {
-                        _MyQueueInt = (Queue<int>) CloneOrChange_Queue_Gint_g(_MyQueueInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MyQueueInt = (Queue<int>) CloneOrChange_Queue⋖int_C62(_MyQueueInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Queue_Gint_g(ref w, _MyQueueInt,
+            ConvertToBytes_Queue⋖int_C62(ref w, _MyQueueInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -385,7 +385,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Queue<int> ConvertFromBytes_Queue_Gint_g(LazinatorMemory storage)
+        private static Queue<int> ConvertFromBytes_Queue⋖int_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -407,7 +407,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_Queue_Gint_g(ref BinaryBufferWriter writer, Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_Queue⋖int_C62(ref BinaryBufferWriter writer, Queue<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(Queue<int>))
             {
@@ -422,7 +422,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static Queue<int> CloneOrChange_Queue_Gint_g(Queue<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static Queue<int> CloneOrChange_Queue⋖int_C62(Queue<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

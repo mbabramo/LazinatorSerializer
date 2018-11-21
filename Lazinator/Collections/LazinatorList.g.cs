@@ -56,7 +56,7 @@ namespace Lazinator.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
-                        _MainListSerialized = ConvertFromBytes_Memory_Gbyte_g(childData);
+                        _MainListSerialized = ConvertFromBytes_Memory⋖byte_C62(childData);
                     }
                     _MainListSerialized_Accessed = true;
                 } 
@@ -477,17 +477,17 @@ namespace Lazinator.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
+        private static Memory<byte> ConvertFromBytes_Memory⋖byte_C62(LazinatorMemory storage)
         {
             return storage.Memory;
         }
         
-        private static void ConvertToBytes_Memory_Gbyte_g(ref BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_Memory⋖byte_C62(ref BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             writer.Write(itemToConvert.Span);
         }
         
-        private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static Memory<byte> CloneOrChange_Memory⋖byte_C62(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             
             int collectionLength = itemToClone.Length;

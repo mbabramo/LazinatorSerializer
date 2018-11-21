@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List_GWInt_g(childData);
+                        _MyListInt = ConvertFromBytes_List⋖WInt_C62(childData);
                     }
                     _MyListInt_Accessed = true;
                 } 
@@ -107,7 +107,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
-                        _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
+                        _MyListNullableByte = ConvertFromBytes_List⋖WNullableByte_C62(childData);
                     }
                     _MyListNullableByte_Accessed = true;
                 }
@@ -139,7 +139,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
-                        _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData);
+                        _MyListNullableInt = ConvertFromBytes_List⋖WNullableInt_C62(childData);
                     }
                     _MyListNullableInt_Accessed = true;
                 }
@@ -204,9 +204,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Wrapper typedClone = (DotNetList_Wrapper) clone;
-            typedClone.MyListInt = CloneOrChange_List_GWInt_g(MyListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListNullableByte = CloneOrChange_List_GWNullableByte_g(MyListNullableByte, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListNullableInt = CloneOrChange_List_GWNullableInt_g(MyListNullableInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListInt = CloneOrChange_List⋖WInt_C62(MyListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNullableByte = CloneOrChange_List⋖WNullableByte_C62(MyListNullableByte, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNullableInt = CloneOrChange_List⋖WNullableInt_C62(MyListNullableInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -341,15 +341,15 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListInt != null) || (_MyListInt_Accessed && _MyListInt != null))
             {
-                _MyListInt = (List<WInt>) CloneOrChange_List_GWInt_g(_MyListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListInt = (List<WInt>) CloneOrChange_List⋖WInt_C62(_MyListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyListNullableByte != null) || (_MyListNullableByte_Accessed && _MyListNullableByte != null))
             {
-                _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List_GWNullableByte_g(_MyListNullableByte, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List⋖WNullableByte_C62(_MyListNullableByte, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyListNullableInt != null) || (_MyListNullableInt_Accessed && _MyListNullableInt != null))
             {
-                _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List_GWNullableInt_g(_MyListNullableInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List⋖WNullableInt_C62(_MyListNullableInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -417,15 +417,15 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyListInt_Accessed && _MyListInt != null)
                     {
-                        _MyListInt = (List<WInt>) CloneOrChange_List_GWInt_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListInt = (List<WInt>) CloneOrChange_List⋖WInt_C62(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyListNullableByte_Accessed && _MyListNullableByte != null)
                     {
-                        _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List_GWNullableByte_g(_MyListNullableByte, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List⋖WNullableByte_C62(_MyListNullableByte, l => l.RemoveBufferInHierarchy(), true);
                     }
                     if (_MyListNullableInt_Accessed && _MyListNullableInt != null)
                     {
-                        _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List_GWNullableInt_g(_MyListNullableInt, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List⋖WNullableInt_C62(_MyListNullableInt, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -470,7 +470,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GWInt_g(ref w, _MyListInt,
+            ConvertToBytes_List⋖WInt_C62(ref w, _MyListInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -487,7 +487,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GWNullableByte_g(ref w, _MyListNullableByte,
+            ConvertToBytes_List⋖WNullableByte_C62(ref w, _MyListNullableByte,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -504,7 +504,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GWNullableInt_g(ref w, _MyListNullableInt,
+            ConvertToBytes_List⋖WNullableInt_C62(ref w, _MyListNullableInt,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -518,7 +518,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static List<WInt> ConvertFromBytes_List_GWInt_g(LazinatorMemory storage)
+        private static List<WInt> ConvertFromBytes_List⋖WInt_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -544,7 +544,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GWInt_g(ref BinaryBufferWriter writer, List<WInt> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List⋖WInt_C62(ref BinaryBufferWriter writer, List<WInt> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<WInt>))
             {
@@ -559,7 +559,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WInt> CloneOrChange_List_GWInt_g(List<WInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<WInt> CloneOrChange_List⋖WInt_C62(List<WInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -585,7 +585,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static List<WNullableByte> ConvertFromBytes_List_GWNullableByte_g(LazinatorMemory storage)
+        private static List<WNullableByte> ConvertFromBytes_List⋖WNullableByte_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -611,7 +611,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GWNullableByte_g(ref BinaryBufferWriter writer, List<WNullableByte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List⋖WNullableByte_C62(ref BinaryBufferWriter writer, List<WNullableByte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<WNullableByte>))
             {
@@ -626,7 +626,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableByte> CloneOrChange_List_GWNullableByte_g(List<WNullableByte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<WNullableByte> CloneOrChange_List⋖WNullableByte_C62(List<WNullableByte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -652,7 +652,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static List<WNullableInt> ConvertFromBytes_List_GWNullableInt_g(LazinatorMemory storage)
+        private static List<WNullableInt> ConvertFromBytes_List⋖WNullableInt_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -678,7 +678,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GWNullableInt_g(ref BinaryBufferWriter writer, List<WNullableInt> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List⋖WNullableInt_C62(ref BinaryBufferWriter writer, List<WNullableInt> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<WNullableInt>))
             {
@@ -693,7 +693,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<WNullableInt> CloneOrChange_List_GWNullableInt_g(List<WNullableInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<WNullableInt> CloneOrChange_List⋖WNullableInt_C62(List<WNullableInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

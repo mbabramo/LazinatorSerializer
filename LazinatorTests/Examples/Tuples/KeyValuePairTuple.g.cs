@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Tuples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null);
-                        _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
+                        _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair⋖uint≀_C32ExampleChild_C62(childData);
                     }
                     _MyKeyValuePairSerialized_Accessed = true;
                 }
@@ -113,7 +113,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             KeyValuePairTuple typedClone = (KeyValuePairTuple) clone;
-            typedClone.MyKeyValuePairSerialized = CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(MyKeyValuePairSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyKeyValuePairSerialized = CloneOrChange_KeyValuePair⋖uint≀_C32ExampleChild_C62(MyKeyValuePairSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair⋖uint≀_C32ExampleChild_C62(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -308,7 +308,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     if (true)
                     {
-                        _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);
+                        _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair⋖uint≀_C32ExampleChild_C62(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -353,7 +353,7 @@ namespace LazinatorTests.Examples.Tuples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref w, _MyKeyValuePairSerialized,
+            ConvertToBytes_KeyValuePair⋖uint≀_C32ExampleChild_C62(ref w, _MyKeyValuePairSerialized,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion of supported collections and tuples */
         
-        private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(LazinatorMemory storage)
+        private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair⋖uint≀_C32ExampleChild_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -394,7 +394,7 @@ namespace LazinatorTests.Examples.Tuples
             return tupleType;
         }
         
-        private static void ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, KeyValuePair<uint, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_KeyValuePair⋖uint≀_C32ExampleChild_C62(ref BinaryBufferWriter writer, KeyValuePair<uint, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             writer.LazinatorMemory.LazinatorShouldNotReturnToPool();
             
@@ -411,7 +411,7 @@ namespace LazinatorTests.Examples.Tuples
             };
         }
         
-        private static KeyValuePair<uint, ExampleChild> CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<uint, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static KeyValuePair<uint, ExampleChild> CloneOrChange_KeyValuePair⋖uint≀_C32ExampleChild_C62(KeyValuePair<uint, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return new KeyValuePair<uint, ExampleChild>((uint) (itemToConvert.Key),(ExampleChild) cloneOrChangeFunc((itemToConvert.Value)));
         }

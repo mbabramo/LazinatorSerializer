@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Collections
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null);
-                        _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
+                        _MyListNestedNonLazinatorType = ConvertFromBytes_List⋖List⋖NonLazinatorClass_C62_C62(childData);
                     }
                     _MyListNestedNonLazinatorType_Accessed = true;
                 }
@@ -113,7 +113,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Nested_NonLazinator typedClone = (DotNetList_Nested_NonLazinator) clone;
-            typedClone.MyListNestedNonLazinatorType = CloneOrChange_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNestedNonLazinatorType = CloneOrChange_List⋖List⋖NonLazinatorClass_C62_C62(MyListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyListNestedNonLazinatorType != null) || (_MyListNestedNonLazinatorType_Accessed && _MyListNestedNonLazinatorType != null))
             {
-                _MyListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) CloneOrChange_List_GList_GNonLazinatorClass_g_g(_MyListNestedNonLazinatorType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) CloneOrChange_List⋖List⋖NonLazinatorClass_C62_C62(_MyListNestedNonLazinatorType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -308,7 +308,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (_MyListNestedNonLazinatorType_Accessed && _MyListNestedNonLazinatorType != null)
                     {
-                        _MyListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) CloneOrChange_List_GList_GNonLazinatorClass_g_g(_MyListNestedNonLazinatorType, l => l.RemoveBufferInHierarchy(), true);
+                        _MyListNestedNonLazinatorType = (List<List<NonLazinatorClass>>) CloneOrChange_List⋖List⋖NonLazinatorClass_C62_C62(_MyListNestedNonLazinatorType, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -353,7 +353,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref w, _MyListNestedNonLazinatorType,
+            ConvertToBytes_List⋖List⋖NonLazinatorClass_C62_C62(ref w, _MyListNestedNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -367,7 +367,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion of supported collections and tuples */
         
-        private static List<List<NonLazinatorClass>> ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(LazinatorMemory storage)
+        private static List<List<NonLazinatorClass>> ConvertFromBytes_List⋖List⋖NonLazinatorClass_C62_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -390,7 +390,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                    var item = ConvertFromBytes_List⋖NonLazinatorClass_C62(childData);
                     collection.Add(item);
                 }
                 bytesSoFar += lengthCollectionMember;
@@ -399,7 +399,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref BinaryBufferWriter writer, List<List<NonLazinatorClass>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List⋖List⋖NonLazinatorClass_C62_C62(ref BinaryBufferWriter writer, List<List<NonLazinatorClass>> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<List<NonLazinatorClass>>))
             {
@@ -416,14 +416,14 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => ConvertToBytes_List_GNonLazinatorClass_g(ref w, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => ConvertToBytes_List⋖NonLazinatorClass_C62(ref w, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
                 
             }
         }
         
-        private static List<List<NonLazinatorClass>> CloneOrChange_List_GList_GNonLazinatorClass_g_g(List<List<NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<List<NonLazinatorClass>> CloneOrChange_List⋖List⋖NonLazinatorClass_C62_C62(List<List<NonLazinatorClass>> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -441,14 +441,14 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (List<NonLazinatorClass>) CloneOrChange_List_GNonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
+                    var itemCopied = (List<NonLazinatorClass>) CloneOrChange_List⋖NonLazinatorClass_C62(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);
                 }
             }
             return collection;
         }
         
-        private static List<NonLazinatorClass> ConvertFromBytes_List_GNonLazinatorClass_g(LazinatorMemory storage)
+        private static List<NonLazinatorClass> ConvertFromBytes_List⋖NonLazinatorClass_C62(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -480,7 +480,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GNonLazinatorClass_g(ref BinaryBufferWriter writer, List<NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List⋖NonLazinatorClass_C62(ref BinaryBufferWriter writer, List<NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<NonLazinatorClass>))
             {
@@ -504,7 +504,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<NonLazinatorClass> CloneOrChange_List_GNonLazinatorClass_g(List<NonLazinatorClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<NonLazinatorClass> CloneOrChange_List⋖NonLazinatorClass_C62(List<NonLazinatorClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

@@ -53,7 +53,7 @@ namespace Lazinator.Wrappers
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
-                        _WrappedValue = ConvertFromBytes_decimal_B_b(childData);
+                        _WrappedValue = ConvertFromBytes_decimal⊏⊐(childData);
                     }
                     _WrappedValue_Accessed = true;
                 }
@@ -118,7 +118,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WDecimalArray typedClone = (WDecimalArray) clone;
-            typedClone.WrappedValue = CloneOrChange_decimal_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.WrappedValue = CloneOrChange_decimal⊏⊐(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             typedClone.IsDirty = false;
             return typedClone;
@@ -261,7 +261,7 @@ namespace Lazinator.Wrappers
         {
             if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
             {
-                _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _WrappedValue = (decimal[]) CloneOrChange_decimal⊏⊐(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
             return changeFunc(this);
         }
@@ -330,7 +330,7 @@ namespace Lazinator.Wrappers
                 {
                     if (_WrappedValue_Accessed && _WrappedValue != null)
                     {
-                        _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
+                        _WrappedValue = (decimal[]) CloneOrChange_decimal⊏⊐(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
                     }
                 }
                 
@@ -372,7 +372,7 @@ namespace Lazinator.Wrappers
             getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_WrappedValue, byteIndexCopy_WrappedValue, byteLengthCopy_WrappedValue, true, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_decimal_B_b(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
+            ConvertToBytes_decimal⊏⊐(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _WrappedValue_ByteIndex = startOfObjectPosition - startPosition;
@@ -385,7 +385,7 @@ namespace Lazinator.Wrappers
         
         /* Conversion of supported collections and tuples */
         
-        private static decimal[] ConvertFromBytes_decimal_B_b(LazinatorMemory storage)
+        private static decimal[] ConvertFromBytes_decimal⊏⊐(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -407,7 +407,7 @@ namespace Lazinator.Wrappers
             return collection;
         }
         
-        private static void ConvertToBytes_decimal_B_b(ref BinaryBufferWriter writer, decimal[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_decimal⊏⊐(ref BinaryBufferWriter writer, decimal[] itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(decimal[]))
             {
@@ -421,7 +421,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        private static decimal[] CloneOrChange_decimal_B_b(decimal[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static decimal[] CloneOrChange_decimal⊏⊐(decimal[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
