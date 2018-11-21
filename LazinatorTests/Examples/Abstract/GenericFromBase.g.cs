@@ -123,7 +123,14 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.MyInt = MyInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyT = (MyT == null) ? default(T) : (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyT == null)
+                {
+                    typedClone.MyT = default(T);
+                }
+                else
+                {
+                    typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

@@ -166,7 +166,14 @@ namespace LazinatorTests.Examples.Structs
             typedClone.MyInt = MyInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ExampleStructWithoutClass = (false) ? default(ExampleStructWithoutClass) : (ExampleStructWithoutClass) ExampleStructWithoutClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (false)
+                {
+                    typedClone.ExampleStructWithoutClass = default(ExampleStructWithoutClass);
+                }
+                else
+                {
+                    typedClone.ExampleStructWithoutClass = (ExampleStructWithoutClass) ExampleStructWithoutClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

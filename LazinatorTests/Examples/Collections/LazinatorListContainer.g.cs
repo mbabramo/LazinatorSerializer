@@ -201,11 +201,25 @@ namespace LazinatorTests.Examples.Collections
             typedClone.MyLong = MyLong;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyList = (MyList == null) ? default(LazinatorList<ExampleChild>) : (LazinatorList<ExampleChild>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyList == null)
+                {
+                    typedClone.MyList = default(LazinatorList<ExampleChild>);
+                }
+                else
+                {
+                    typedClone.MyList = (LazinatorList<ExampleChild>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyStructList = (MyStructList == null) ? default(LazinatorList<WByte>) : (LazinatorList<WByte>) MyStructList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyStructList == null)
+                {
+                    typedClone.MyStructList = default(LazinatorList<WByte>);
+                }
+                else
+                {
+                    typedClone.MyStructList = (LazinatorList<WByte>) MyStructList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

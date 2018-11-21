@@ -129,7 +129,14 @@ namespace Lazinator.Collections.Avl
             AvlTree<TKey, TValue> typedClone = (AvlTree<TKey, TValue>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Root = (Root == null) ? default(AvlNode<TKey, TValue>) : (AvlNode<TKey, TValue>) Root.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Root == null)
+                {
+                    typedClone.Root = default(AvlNode<TKey, TValue>);
+                }
+                else
+                {
+                    typedClone.Root = (AvlNode<TKey, TValue>) Root.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

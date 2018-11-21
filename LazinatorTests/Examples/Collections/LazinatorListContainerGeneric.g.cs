@@ -124,7 +124,14 @@ namespace LazinatorTests.Examples.Collections
             LazinatorListContainerGeneric<T> typedClone = (LazinatorListContainerGeneric<T>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyList = (MyList == null) ? default(LazinatorList<T>) : (LazinatorList<T>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyList == null)
+                {
+                    typedClone.MyList = default(LazinatorList<T>);
+                }
+                else
+                {
+                    typedClone.MyList = (LazinatorList<T>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

@@ -162,7 +162,14 @@ namespace LazinatorTests.Examples.Hierarchy
             ExampleInterfaceContainer typedClone = (ExampleInterfaceContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                typedClone.ExampleByInterface = (ExampleByInterface == null) ? default(IExample) : (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ExampleByInterface == null)
+                {
+                    typedClone.ExampleByInterface = default(IExample);
+                }
+                else
+                {
+                    typedClone.ExampleByInterface = (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             

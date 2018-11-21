@@ -696,32 +696,81 @@ namespace LazinatorTests.Examples
             typedClone.MyUint = MyUint;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
             {
-                typedClone.IncludableChild = (IncludableChild == null) ? default(ExampleChild) : (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (IncludableChild == null)
+                {
+                    typedClone.IncludableChild = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.IncludableChild = (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyChild1 == null)
+                {
+                    typedClone.MyChild1 = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyChild2 == null)
+                {
+                    typedClone.MyChild2 = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
             {
-                typedClone.MyChild2Previous = (MyChild2Previous == null) ? default(ExampleChild) : (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyChild2Previous == null)
+                {
+                    typedClone.MyChild2Previous = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.MyChild2Previous = (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyInterfaceImplementer = (MyInterfaceImplementer == null) ? default(IExampleNonexclusiveInterface) : (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyInterfaceImplementer == null)
+                {
+                    typedClone.MyInterfaceImplementer = default(IExampleNonexclusiveInterface);
+                }
+                else
+                {
+                    typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedInt = (false) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (false)
+                {
+                    typedClone.WrappedInt = default(WInt);
+                }
+                else
+                {
+                    typedClone.WrappedInt = (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
             {
-                typedClone.ExcludableChild = (ExcludableChild == null) ? default(ExampleChild) : (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ExcludableChild == null)
+                {
+                    typedClone.ExcludableChild = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.ExcludableChild = (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

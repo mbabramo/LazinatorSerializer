@@ -312,11 +312,25 @@ namespace LazinatorTests.Examples
             typedClone.MyChar = MyChar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyChild1 = (MyChild1 == null) ? default(ExampleChild) : (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyChild1 == null)
+                {
+                    typedClone.MyChild1 = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyChild2 = (MyChild2 == null) ? default(ExampleChild) : (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyChild2 == null)
+                {
+                    typedClone.MyChild2 = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);

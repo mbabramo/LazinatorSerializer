@@ -198,11 +198,25 @@ namespace Lazinator.Collections.Dictionary
             typedClone.Initialized = Initialized;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Keys = (Keys == null) ? default(LazinatorList<TKey>) : (LazinatorList<TKey>) Keys.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Keys == null)
+                {
+                    typedClone.Keys = default(LazinatorList<TKey>);
+                }
+                else
+                {
+                    typedClone.Keys = (LazinatorList<TKey>) Keys.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Values = (Values == null) ? default(LazinatorList<TValue>) : (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Values == null)
+                {
+                    typedClone.Values = default(LazinatorList<TValue>);
+                }
+                else
+                {
+                    typedClone.Values = (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

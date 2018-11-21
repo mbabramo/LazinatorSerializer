@@ -206,7 +206,14 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.AnotherProperty = AnotherProperty;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.LazinatorExample = (LazinatorExample == null) ? default(Example) : (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (LazinatorExample == null)
+                {
+                    typedClone.LazinatorExample = default(Example);
+                }
+                else
+                {
+                    typedClone.LazinatorExample = (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

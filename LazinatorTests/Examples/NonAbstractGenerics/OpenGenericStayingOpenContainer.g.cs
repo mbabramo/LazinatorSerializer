@@ -302,23 +302,58 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             OpenGenericStayingOpenContainer typedClone = (OpenGenericStayingOpenContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ClosedGenericBase = (ClosedGenericBase == null) ? default(OpenGeneric<Base>) : (OpenGeneric<Base>) ClosedGenericBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ClosedGenericBase == null)
+                {
+                    typedClone.ClosedGenericBase = default(OpenGeneric<Base>);
+                }
+                else
+                {
+                    typedClone.ClosedGenericBase = (OpenGeneric<Base>) ClosedGenericBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ClosedGenericFloat = (ClosedGenericFloat == null) ? default(OpenGeneric<WFloat>) : (OpenGeneric<WFloat>) ClosedGenericFloat.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ClosedGenericFloat == null)
+                {
+                    typedClone.ClosedGenericFloat = default(OpenGeneric<WFloat>);
+                }
+                else
+                {
+                    typedClone.ClosedGenericFloat = (OpenGeneric<WFloat>) ClosedGenericFloat.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ClosedGenericFromBaseWithBase = (ClosedGenericFromBaseWithBase == null) ? default(GenericFromBase<Base>) : (GenericFromBase<Base>) ClosedGenericFromBaseWithBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ClosedGenericFromBaseWithBase == null)
+                {
+                    typedClone.ClosedGenericFromBaseWithBase = default(GenericFromBase<Base>);
+                }
+                else
+                {
+                    typedClone.ClosedGenericFromBaseWithBase = (GenericFromBase<Base>) ClosedGenericFromBaseWithBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ClosedGenericInterface = (ClosedGenericInterface == null) ? default(OpenGeneric<IExampleChild>) : (OpenGeneric<IExampleChild>) ClosedGenericInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ClosedGenericInterface == null)
+                {
+                    typedClone.ClosedGenericInterface = default(OpenGeneric<IExampleChild>);
+                }
+                else
+                {
+                    typedClone.ClosedGenericInterface = (OpenGeneric<IExampleChild>) ClosedGenericInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ClosedGenericNonexclusiveInterface = (ClosedGenericNonexclusiveInterface == null) ? default(OpenGeneric<IExampleNonexclusiveInterface>) : (OpenGeneric<IExampleNonexclusiveInterface>) ClosedGenericNonexclusiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ClosedGenericNonexclusiveInterface == null)
+                {
+                    typedClone.ClosedGenericNonexclusiveInterface = default(OpenGeneric<IExampleNonexclusiveInterface>);
+                }
+                else
+                {
+                    typedClone.ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) ClosedGenericNonexclusiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

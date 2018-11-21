@@ -143,7 +143,14 @@ namespace LazinatorTests.Examples
             typedClone.ItemT = ItemT;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ItemU = (ItemU == null) ? default(ExampleChild) : (ExampleChild) ItemU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ItemU == null)
+                {
+                    typedClone.ItemU = default(ExampleChild);
+                }
+                else
+                {
+                    typedClone.ItemU = (ExampleChild) ItemU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

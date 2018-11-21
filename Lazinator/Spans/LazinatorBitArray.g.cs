@@ -179,7 +179,14 @@ namespace Lazinator.Spans
             typedClone.m_length = m_length;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ByteSpan = (ByteSpan == null) ? default(LazinatorByteSpan) : (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ByteSpan == null)
+                {
+                    typedClone.ByteSpan = default(LazinatorByteSpan);
+                }
+                else
+                {
+                    typedClone.ByteSpan = (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

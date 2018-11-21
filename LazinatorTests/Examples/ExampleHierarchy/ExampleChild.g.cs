@@ -224,11 +224,25 @@ namespace LazinatorTests.Examples
             typedClone.ByteSpan = CloneOrChange_ReadOnlySpan_Gbyte_g(ByteSpan, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyExampleGrandchild = (MyExampleGrandchild == null) ? default(ExampleGrandchild) : (ExampleGrandchild) MyExampleGrandchild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyExampleGrandchild == null)
+                {
+                    typedClone.MyExampleGrandchild = default(ExampleGrandchild);
+                }
+                else
+                {
+                    typedClone.MyExampleGrandchild = (ExampleGrandchild) MyExampleGrandchild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyWrapperContainer = (MyWrapperContainer == null) ? default(WrapperContainer) : (WrapperContainer) MyWrapperContainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyWrapperContainer == null)
+                {
+                    typedClone.MyWrapperContainer = default(WrapperContainer);
+                }
+                else
+                {
+                    typedClone.MyWrapperContainer = (WrapperContainer) MyWrapperContainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

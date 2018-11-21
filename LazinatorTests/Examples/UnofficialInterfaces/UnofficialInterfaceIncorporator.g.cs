@@ -203,11 +203,25 @@ namespace LazinatorTests.Examples
             typedClone.MyUnofficialInt = MyUnofficialInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyOfficialObject = (MyOfficialObject == null) ? default(Concrete5) : (Concrete5) MyOfficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyOfficialObject == null)
+                {
+                    typedClone.MyOfficialObject = default(Concrete5);
+                }
+                else
+                {
+                    typedClone.MyOfficialObject = (Concrete5) MyOfficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyUnofficialObject = (MyUnofficialObject == null) ? default(Concrete3) : (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyUnofficialObject == null)
+                {
+                    typedClone.MyUnofficialObject = default(Concrete3);
+                }
+                else
+                {
+                    typedClone.MyUnofficialObject = (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

@@ -141,7 +141,14 @@ namespace Lazinator.Wrappers
             typedClone.HasValue = HasValue;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.NonNullValue = (false) ? default(T) : (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (false)
+                {
+                    typedClone.NonNullValue = default(T);
+                }
+                else
+                {
+                    typedClone.NonNullValue = (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             typedClone.IsDirty = false;

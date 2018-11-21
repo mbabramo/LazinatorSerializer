@@ -148,7 +148,14 @@ namespace Lazinator.Collections.Dictionary
             typedClone.Count = Count;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Buckets = (Buckets == null) ? default(LazinatorList<DictionaryBucket<TKey, TValue>>) : (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Buckets == null)
+                {
+                    typedClone.Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
+                }
+                else
+                {
+                    typedClone.Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

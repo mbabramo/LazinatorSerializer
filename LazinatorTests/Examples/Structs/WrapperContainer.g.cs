@@ -147,7 +147,14 @@ namespace LazinatorTests.Examples.Structs
             WrapperContainer typedClone = (WrapperContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.WrappedInt = (false) ? default(WInt) : (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (false)
+                {
+                    typedClone.WrappedInt = default(WInt);
+                }
+                else
+                {
+                    typedClone.WrappedInt = (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

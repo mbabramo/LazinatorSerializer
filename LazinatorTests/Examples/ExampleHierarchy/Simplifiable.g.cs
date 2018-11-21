@@ -352,19 +352,47 @@ namespace LazinatorTests.Examples
             typedClone.MyOtherInt = MyOtherInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.ANonSkippableEarlierExample = (ANonSkippableEarlierExample == null) ? default(Example) : (Example) ANonSkippableEarlierExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (ANonSkippableEarlierExample == null)
+                {
+                    typedClone.ANonSkippableEarlierExample = default(Example);
+                }
+                else
+                {
+                    typedClone.ANonSkippableEarlierExample = (Example) ANonSkippableEarlierExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Example = (Example == null) ? default(Example) : (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Example == null)
+                {
+                    typedClone.Example = default(Example);
+                }
+                else
+                {
+                    typedClone.Example = (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion >= 4) 
             {
-                typedClone.Example2 = (Example2 == null) ? default(Example) : (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Example2 == null)
+                {
+                    typedClone.Example2 = default(Example);
+                }
+                else
+                {
+                    typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Example3 == null)
+                {
+                    typedClone.Example3 = default(Example);
+                }
+                else
+                {
+                    typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

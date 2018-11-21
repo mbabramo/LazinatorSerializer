@@ -1406,10 +1406,8 @@ namespace Lazinator.CodeDescription
             if (IsLazinator)
             {
                 copyInstruction = GetNullCheckIfThen("", PropertyName,
-                    $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName});",
+                    $"{nameOfCloneVariable}.{PropertyName} = default({AppropriatelyQualifiedTypeName});",
                     $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
-                copyInstruction =
-                    $"{nameOfCloneVariable}.{PropertyName} = ({GetNullCheck(PropertyName)}) ? default({AppropriatelyQualifiedTypeName}) : ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
             }
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
@@ -1601,11 +1599,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : $@"if ({GetNullCheck("itemToClone")})
-                        {{
-                            return default;
-                        }}
-                        ")}
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ? "" : GetNullCheckIfThen("", "itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
                         {creationText}
                         {forStatement}

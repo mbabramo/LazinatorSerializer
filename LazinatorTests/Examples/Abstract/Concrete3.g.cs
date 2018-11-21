@@ -307,11 +307,25 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.String3 = String3;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Example2 = (Example2 == null) ? default(Example) : (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Example2 == null)
+                {
+                    typedClone.Example2 = default(Example);
+                }
+                else
+                {
+                    typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Example3 = (Example3 == null) ? default(Example) : (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Example3 == null)
+                {
+                    typedClone.Example3 = default(Example);
+                }
+                else
+                {
+                    typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             typedClone.IntList1 = CloneOrChange_List_Gint_g(IntList1, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.IntList2 = CloneOrChange_List_Gint_g(IntList2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);

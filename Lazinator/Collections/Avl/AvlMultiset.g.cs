@@ -149,7 +149,14 @@ namespace Lazinator.Collections.Avl
             typedClone.NumItemsAdded = NumItemsAdded;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.UnderlyingSet = (UnderlyingSet == null) ? default(AvlSet<LazinatorTuple<T, WInt>>) : (AvlSet<LazinatorTuple<T, WInt>>) UnderlyingSet.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (UnderlyingSet == null)
+                {
+                    typedClone.UnderlyingSet = default(AvlSet<LazinatorTuple<T, WInt>>);
+                }
+                else
+                {
+                    typedClone.UnderlyingSet = (AvlSet<LazinatorTuple<T, WInt>>) UnderlyingSet.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

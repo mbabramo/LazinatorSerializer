@@ -254,15 +254,36 @@ namespace Lazinator.Collections
             LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item1 = (Item1 == null) ? default(T) : (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Item1 == null)
+                {
+                    typedClone.Item1 = default(T);
+                }
+                else
+                {
+                    typedClone.Item1 = (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item2 = (Item2 == null) ? default(U) : (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Item2 == null)
+                {
+                    typedClone.Item2 = default(U);
+                }
+                else
+                {
+                    typedClone.Item2 = (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item3 = (Item3 == null) ? default(V) : (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Item3 == null)
+                {
+                    typedClone.Item3 = default(V);
+                }
+                else
+                {
+                    typedClone.Item3 = (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

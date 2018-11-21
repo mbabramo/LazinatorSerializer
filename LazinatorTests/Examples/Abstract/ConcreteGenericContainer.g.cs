@@ -123,7 +123,14 @@ namespace LazinatorTests.Examples.Abstract
             ConcreteGenericContainer typedClone = (ConcreteGenericContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item = (Item == null) ? default(IAbstractGeneric1<int>) : (IAbstractGeneric1<int>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Item == null)
+                {
+                    typedClone.Item = default(IAbstractGeneric1<int>);
+                }
+                else
+                {
+                    typedClone.Item = (IAbstractGeneric1<int>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

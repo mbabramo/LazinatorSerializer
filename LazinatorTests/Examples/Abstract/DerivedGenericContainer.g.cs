@@ -127,7 +127,14 @@ namespace LazinatorTests.Examples.Abstract
             DerivedGenericContainer<T> typedClone = (DerivedGenericContainer<T>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Item = (Item == null) ? default(AbstractGeneric1<T>) : (AbstractGeneric1<T>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Item == null)
+                {
+                    typedClone.Item = default(AbstractGeneric1<T>);
+                }
+                else
+                {
+                    typedClone.Item = (AbstractGeneric1<T>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

@@ -203,11 +203,25 @@ namespace Lazinator.Collections
             LazinatorOffsetList typedClone = (LazinatorOffsetList) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.FourByteItems = (FourByteItems == null) ? default(LazinatorFastReadList<int>) : (LazinatorFastReadList<int>) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (FourByteItems == null)
+                {
+                    typedClone.FourByteItems = default(LazinatorFastReadList<int>);
+                }
+                else
+                {
+                    typedClone.FourByteItems = (LazinatorFastReadList<int>) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.TwoByteItems = (TwoByteItems == null) ? default(LazinatorFastReadList<short>) : (LazinatorFastReadList<short>) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (TwoByteItems == null)
+                {
+                    typedClone.TwoByteItems = default(LazinatorFastReadList<short>);
+                }
+                else
+                {
+                    typedClone.TwoByteItems = (LazinatorFastReadList<short>) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

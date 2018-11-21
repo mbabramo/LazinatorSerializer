@@ -129,7 +129,14 @@ namespace Lazinator.Collections
             LazinatorQueue<T> typedClone = (LazinatorQueue<T>) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.UnderlyingList = (UnderlyingList == null) ? default(LazinatorList<T>) : (LazinatorList<T>) UnderlyingList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (UnderlyingList == null)
+                {
+                    typedClone.UnderlyingList = default(LazinatorList<T>);
+                }
+                else
+                {
+                    typedClone.UnderlyingList = (LazinatorList<T>) UnderlyingList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

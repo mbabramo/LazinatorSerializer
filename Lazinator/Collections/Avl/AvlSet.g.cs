@@ -148,7 +148,14 @@ namespace Lazinator.Collections.Avl
             typedClone.Count = Count;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.UnderlyingTree = (UnderlyingTree == null) ? default(AvlTree<TKey, WByte>) : (AvlTree<TKey, WByte>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (UnderlyingTree == null)
+                {
+                    typedClone.UnderlyingTree = default(AvlTree<TKey, WByte>);
+                }
+                else
+                {
+                    typedClone.UnderlyingTree = (AvlTree<TKey, WByte>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

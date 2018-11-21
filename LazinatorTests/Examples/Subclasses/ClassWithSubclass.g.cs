@@ -186,11 +186,25 @@ namespace LazinatorTests.Examples.Subclasses
             typedClone.IntWithinSuperclass = IntWithinSuperclass;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.SubclassInstance1 = (SubclassInstance1 == null) ? default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) : (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (SubclassInstance1 == null)
+                {
+                    typedClone.SubclassInstance1 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+                }
+                else
+                {
+                    typedClone.SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.SubclassInstance2 = (SubclassInstance2 == null) ? default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) : (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (SubclassInstance2 == null)
+                {
+                    typedClone.SubclassInstance2 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+                }
+                else
+                {
+                    typedClone.SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

@@ -112,7 +112,14 @@ namespace LazinatorTests.Examples
             typedClone.MyInt = MyInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyGrandchildInInherited = (MyGrandchildInInherited == null) ? default(ExampleGrandchild) : (ExampleGrandchild) MyGrandchildInInherited.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyGrandchildInInherited == null)
+                {
+                    typedClone.MyGrandchildInInherited = default(ExampleGrandchild);
+                }
+                else
+                {
+                    typedClone.MyGrandchildInInherited = (ExampleGrandchild) MyGrandchildInInherited.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

@@ -349,19 +349,47 @@ namespace Lazinator.Collections.Avl
             typedClone.Count = Count;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Key = (Key == null) ? default(TKey) : (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Key == null)
+                {
+                    typedClone.Key = default(TKey);
+                }
+                else
+                {
+                    typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Left = (Left == null) ? default(AvlNode<TKey, TValue>) : (AvlNode<TKey, TValue>) Left.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Left == null)
+                {
+                    typedClone.Left = default(AvlNode<TKey, TValue>);
+                }
+                else
+                {
+                    typedClone.Left = (AvlNode<TKey, TValue>) Left.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Right = (Right == null) ? default(AvlNode<TKey, TValue>) : (AvlNode<TKey, TValue>) Right.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Right == null)
+                {
+                    typedClone.Right = default(AvlNode<TKey, TValue>);
+                }
+                else
+                {
+                    typedClone.Right = (AvlNode<TKey, TValue>) Right.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.Value = (Value == null) ? default(TValue) : (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (Value == null)
+                {
+                    typedClone.Value = default(TValue);
+                }
+                else
+                {
+                    typedClone.Value = (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

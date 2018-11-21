@@ -170,11 +170,25 @@ namespace LazinatorTests.Examples.Hierarchy
             RecursiveExample typedClone = (RecursiveExample) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.RecursiveClass = (RecursiveClass == null) ? default(RecursiveExample) : (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (RecursiveClass == null)
+                {
+                    typedClone.RecursiveClass = default(RecursiveExample);
+                }
+                else
+                {
+                    typedClone.RecursiveClass = (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.RecursiveInterface = (RecursiveInterface == null) ? default(IRecursiveExample) : (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (RecursiveInterface == null)
+                {
+                    typedClone.RecursiveInterface = default(IRecursiveExample);
+                }
+                else
+                {
+                    typedClone.RecursiveInterface = (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;

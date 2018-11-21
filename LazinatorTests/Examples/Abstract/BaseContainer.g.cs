@@ -127,7 +127,14 @@ namespace LazinatorTests.Examples.Abstract
             BaseContainer typedClone = (BaseContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                typedClone.MyBase = (MyBase == null) ? default(Base) : (Base) MyBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                if (MyBase == null)
+                {
+                    typedClone.MyBase = default(Base);
+                }
+                else
+                {
+                    typedClone.MyBase = (Base) MyBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
             }
             
             return typedClone;
