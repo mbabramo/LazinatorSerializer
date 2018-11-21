@@ -657,7 +657,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             LinkedList<int> collection = new LinkedList<int>();
             int itemToCloneCount = itemToClone.Count;
@@ -711,7 +710,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<int> collection = new List<int>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -766,7 +764,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             SortedSet<int> collection = new SortedSet<int>();
             int itemToCloneCount = itemToClone.Count;

@@ -561,7 +561,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<T> collection = avoidCloningIfPossible ? itemToClone : new List<T>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

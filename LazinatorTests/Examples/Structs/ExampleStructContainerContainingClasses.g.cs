@@ -724,7 +724,6 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<ExampleStructContainingClasses> collection = avoidCloningIfPossible ? itemToClone : new List<ExampleStructContainingClasses>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -791,7 +790,6 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<WNullableStruct<ExampleStructContainingClasses>> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableStruct<ExampleStructContainingClasses>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

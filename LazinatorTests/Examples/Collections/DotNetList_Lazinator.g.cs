@@ -448,7 +448,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<ExampleChild> collection = avoidCloningIfPossible ? itemToClone : new List<ExampleChild>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

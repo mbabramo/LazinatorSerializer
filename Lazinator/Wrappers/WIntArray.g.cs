@@ -427,7 +427,6 @@ namespace Lazinator.Wrappers
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             int[] collection = new int[collectionLength];
             int itemToCloneCount = itemToClone.Length;

@@ -429,7 +429,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<List<NonLazinatorClass>> collection = new List<List<NonLazinatorClass>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -510,7 +509,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<NonLazinatorClass> collection = new List<NonLazinatorClass>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

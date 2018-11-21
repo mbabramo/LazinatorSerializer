@@ -537,7 +537,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<IExample> collection = avoidCloningIfPossible ? itemToClone : new List<IExample>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

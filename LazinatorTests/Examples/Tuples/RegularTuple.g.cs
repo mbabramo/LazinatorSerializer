@@ -685,7 +685,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<Tuple<uint, ExampleChild, NonLazinatorClass>> collection = new List<Tuple<uint, ExampleChild, NonLazinatorClass>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

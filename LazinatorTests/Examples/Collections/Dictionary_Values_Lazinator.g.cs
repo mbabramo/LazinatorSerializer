@@ -540,7 +540,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             Dictionary<int, ExampleChild> collection = new Dictionary<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
@@ -645,7 +644,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             SortedDictionary<int, ExampleChild> collection = new SortedDictionary<int, ExampleChild>();
             foreach (var item in itemToClone)
@@ -701,7 +699,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             SortedList<int, ExampleChild> collection = new SortedList<int, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
