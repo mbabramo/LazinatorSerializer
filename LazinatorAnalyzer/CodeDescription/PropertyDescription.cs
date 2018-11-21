@@ -2291,10 +2291,7 @@ namespace Lazinator.CodeDescription
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
-                            if ({GetNullCheck("itemToConvert")})
-                            {{
-                                return;
-                            }}
+                            {GetNullCheckIfThen("", "itemToConvert", "return;", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
                             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
@@ -2302,10 +2299,7 @@ namespace Lazinator.CodeDescription
 
                         private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
-                            if ({GetNullCheck("itemToClone")})
-                            {{
-                                return default({AppropriatelyQualifiedTypeName});
-                            }}
+                            {GetNullCheckIfThen("", "itemToClone", $"return default({AppropriatelyQualifiedTypeName});", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(true);
                         }}
