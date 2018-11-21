@@ -119,7 +119,7 @@ namespace LazinatorTests.Tests
             short randShort = 0;
             for (int i = 0; i < repetitions; i++)
             {
-                if (doNotAutomaticallyReturnToPool && e.LazinatorMemoryStorage != null)
+                if (doNotAutomaticallyReturnToPool && e.LazinatorMemoryStorage.IsEmpty == false)
                     e.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
                 if (i == 0)
                 {
@@ -153,7 +153,7 @@ namespace LazinatorTests.Tests
                 }
                 if (makeChildUpToDate)
                 {
-                    if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage != null)
+                    if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage.IsEmpty == false)
                         e.MyChild1.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
                     e.MyChild1.UpdateStoredBuffer();
                 }
@@ -575,7 +575,7 @@ namespace LazinatorTests.Tests
             var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.OwnedMemory).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
-                if (x.LazinatorMemoryStorage != null)
+                if (x.LazinatorMemoryStorage.IsEmpty == false)
                 {
                     ExpandableBytes b = x.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
                     if (b != null)

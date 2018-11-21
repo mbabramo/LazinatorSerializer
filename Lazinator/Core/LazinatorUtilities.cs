@@ -838,7 +838,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
         {
-            if (serializedBytes == null || byteLength == 0)
+            if (serializedBytes.IsEmpty)
             {
                 return EmptyLazinatorMemory;
             }
@@ -968,7 +968,7 @@ namespace Lazinator.Core
         {
             if (lazinator.NonBinaryHash32)
                 return (uint) lazinator.GetHashCode();
-            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage != null && lazinator.LazinatorMemoryStorage.Disposed == false)
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
                 return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage.Memory.Span);
             else
             {
@@ -982,7 +982,7 @@ namespace Lazinator.Core
 
         public static ulong GetBinaryHashCode64(this ILazinator lazinator)
         {
-            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage != null && lazinator.LazinatorMemoryStorage.Disposed == false)
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
                 return FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.Memory.Span);
             else
             {
@@ -996,7 +996,7 @@ namespace Lazinator.Core
 
         public static Guid GetBinaryHashCode128(this ILazinator lazinator)
         {
-            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage != null && lazinator.LazinatorMemoryStorage.Disposed == false)
+            if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
                 return FarmhashByteSpans.Hash128(lazinator.LazinatorMemoryStorage.Memory.Span);
             else
             {
