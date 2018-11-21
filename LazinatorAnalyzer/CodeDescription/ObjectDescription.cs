@@ -719,11 +719,7 @@ namespace Lazinator.CodeDescription
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
                         string propertyName = property.PropertyName;
-                        sb.Append($@"if (enumerateNulls && (!exploreOnlyDeserializedChildren || _{propertyName}_Accessed) && ({property.GetNullCheck(propertyName)}))
-                                {{
-                                    yield return (""{propertyName}"", default);
-                                }}
-                                else if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
+                        string ifThenStatement = property.GetNullCheckIfThen($"enumerateNulls && (!exploreOnlyDeserializedChildren || _{propertyName}_Accessed) && ", propertyName, $@"yield return (""{propertyName}"", default);", $@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{
                                     bool isMatch = matchCriterion == null || matchCriterion({propertyName});
                                     bool shouldExplore = exploreCriterion == null || exploreCriterion({propertyName});
@@ -738,8 +734,8 @@ namespace Lazinator.CodeDescription
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
                                     }}
-                                }}
-    ");
+                                }}");
+                        sb.AppendLine(ifThenStatement);
                     }
                     sb.Append($@"yield break;
                             }}

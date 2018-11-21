@@ -414,6 +414,11 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        public string GetNullCheckIfThen(string precedingNullCheckInIf, string propertyName, string consequent, string elseConsequent)
+        {
+            return CreateConditional($"if ({precedingNullCheckInIf}{GetNullCheck(propertyName)})", consequent, elseConsequent);
+        }
+
         public string GetNullCheck(string propertyName)
         {
             if (PropertyName != null && PropertyName.Contains("MyNullableTuple"))
@@ -1272,10 +1277,12 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private string CreateConditional(string conditional, string consequent, string elseConsequent = null)
+        public static string CreateConditional(string conditional, string consequent, string elseConsequent = null)
         {
-            if (conditional.Trim() == "")
+            if (conditional.Trim() == "" || conditional.Trim() == "if (true)")
                 return consequent;
+            else if (conditional.Trim() == "if (true)" || (conditional.EndsWith("&& false)")))
+                return elseConsequent;
             var conditionalString = $@"{conditional}
                         {{
                             {consequent}
