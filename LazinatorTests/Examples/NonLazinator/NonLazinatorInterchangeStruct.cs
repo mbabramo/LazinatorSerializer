@@ -9,8 +9,6 @@ namespace LazinatorTests.Examples
         public NonLazinatorInterchangeStruct(
             NonLazinatorInterchangeableStruct nonLazinatorInterchangeableStruct) : this()
         {
-            if (System.Collections.Generic.EqualityComparer<NonLazinatorInterchangeableStruct>.Default.Equals(nonLazinatorInterchangeableStruct, default(NonLazinatorInterchangeableStruct)))
-                throw new System.Exception();
             MyString = nonLazinatorInterchangeableStruct.MyString;
             MyInt = (int)_privateFieldInfoForMyInt.GetValue(nonLazinatorInterchangeableStruct);
         }

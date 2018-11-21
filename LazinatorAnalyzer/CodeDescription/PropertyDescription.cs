@@ -50,10 +50,12 @@ namespace Lazinator.CodeDescription
         private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
         private bool IsLazinatorStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
         internal bool IsDefinitelyStruct => IsLazinatorStruct ||
-                                            (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) ||
-                                            (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
-                                            (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
-                                            (IsMemoryOrSpan);
+                                            (!Nullable && (
+                                                (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) ||
+                                                (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
+                                                (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
+                                                (IsMemoryOrSpan)
+                                             ));
         internal bool IsPossiblyStruct => IsDefinitelyStruct ||
                                           PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSimpleListOrArray => PropertyType == LazinatorPropertyType.SupportedCollection &&
@@ -414,10 +416,16 @@ namespace Lazinator.CodeDescription
 
         public string GetNullCheck(string propertyName)
         {
-            if (propertyName.Contains("NonNull"))
+            if (PropertyName != null && PropertyName.Contains("MyNullableTuple"))
             {
                 var DEBUG = 0;
             }
+
+            if (AppropriatelyQualifiedTypeNameEncodable == "Pint_c_C32double_p_C63")
+            {
+                var DEBUG = 0;
+            }
+
             string nullCheck;
             if (IsMemoryOrSpan)
                 nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null

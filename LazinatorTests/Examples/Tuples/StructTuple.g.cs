@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            if ((!exploreOnlyDeserializedChildren && MyNullableTuple != null) || (_MyNullableTuple_Accessed && _MyNullableTuple != null))
             {
                 _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
             }
@@ -443,7 +443,7 @@ namespace LazinatorTests.Examples.Tuples
                     {
                         _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
-                    if (true)
+                    if (_MyNullableTuple_Accessed && _MyNullableTuple != null)
                     {
                         _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.RemoveBufferInHierarchy(), true);
                     }
@@ -662,7 +662,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (int, double)? CloneOrChange__Pint_c_C32double_p_C63((int, double)? itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (false)
+            if (itemToConvert == null)
             {
                 return default((int, double)?);
             }
