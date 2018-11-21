@@ -1612,15 +1612,9 @@ namespace Lazinator.CodeDescription
                                 }}
                                 continue;
                             }}
-                            ")}{IIF(innerProperty.Nullable, $@"if ({innerProperty.GetNullCheck(itemString)})
-                            {{
-                                {collectionAddNull}
-                            }}
-                            else
-                            {{
-                                ")}var itemCopied = {cloneString};
-                                {collectionAddItem}{IIF(innerProperty.Nullable, $@"
-                            }}")}
+                            ")}{IIF(innerProperty.Nullable, innerProperty.GetNullCheckIfThen("", itemString, $@"{collectionAddNull}", $@"var itemCopied = {cloneString};
+                                {collectionAddItem}"))}{IIF(!innerProperty.Nullable, $@"var itemCopied = {cloneString};
+                                {collectionAddItem}")}
                         }}
                         return collection;
                     }}
