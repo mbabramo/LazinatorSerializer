@@ -3,19 +3,19 @@ using System.Buffers;
 
 namespace Lazinator.Buffers
 {
-    public class LazinatorMemory : TrackedMemory
+    public class LazinatorMemory : IMemoryOwner<byte>
     {
         public IMemoryOwner<byte> OwnedMemory;
         public int StartPosition { get; set; }
         public int Length { get; private set; }
-        public override Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
+        public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
 
         public override string ToString()
         {
-            return $@"Allocation {AllocationID} {(OwnedMemory is TrackedMemory j ? $"(Owned {j.AllocationID}) " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
+            return $@"{(OwnedMemory is ExpandableBytes e ? $"{e.AllocationID}) " : "")} Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
         }
 
         #region Constructors
@@ -54,16 +54,11 @@ namespace Lazinator.Buffers
             Length = existingMemoryToCopy.Length;
         }
 
-        public bool IndirectlyDisposed()
-        {
-            return Disposed || (OwnedMemory != null && OwnedMemory is TrackedMemory j && j.Disposed);
-        }
+        public bool Disposed => OwnedMemory != null && OwnedMemory is ExpandableBytes e && e.Disposed;
 
-        public override void Dispose()
+        public void Dispose()
         {
-            base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
-            if (!(OwnedMemory is SimpleMemoryOwner<byte>))
-                OwnedMemory.Dispose();
+            OwnedMemory?.Dispose();
         }
 
         public void LazinatorShouldNotReturnToPool()

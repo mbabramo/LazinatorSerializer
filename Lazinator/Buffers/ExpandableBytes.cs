@@ -10,25 +10,34 @@ namespace Lazinator.Buffers
     /// <summary>
     /// This memory owner rents memory and then returns it and rents more, copying what it has written, when more space is needed.
     /// </summary>
-    public class ExpandableBytes : TrackedMemory
+    public class ExpandableBytes : IMemoryOwner<byte>
     {
         public const int DefaultMinBufferSize = 1024; 
         public bool LazinatorShouldNotReturnToPool;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
-        public override Memory<byte> Memory => CurrentBuffer.Memory;
+        public Memory<byte> Memory => CurrentBuffer.Memory;
 
+
+        public bool Disposed { get; protected internal set; }
+        public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
+        public long AllocationID;
         public static bool UseMemoryPooling = true;
         public static bool TrackMemoryAllocations = false;
         public static List<WeakReference<IMemoryOwner<byte>>> MemoryAllocations = new List<WeakReference<IMemoryOwner<byte>>>();
         public static List<bool> MemoryAllocationsManuallyReturned = new List<bool>();
         public static HashSet<long> NotReturnedByLazinatorHashSet = new HashSet<long>();
-        
+
+        public override string ToString()
+        {
+            return $@"Allocation {AllocationID} Length {Memory.Length} Bytes {String.Join(",", Memory.Span.Slice(0, Math.Min(Memory.Span.Length, 100)).ToArray())}";
+        }
+
         public ExpandableBytes() : this(DefaultMinBufferSize)
         {
         }
 
-        public ExpandableBytes(int minBufferSize) : base()
+        public ExpandableBytes(int minBufferSize)
         {
             int minimumSize = Math.Max(minBufferSize, DefaultMinBufferSize);
             if (UseMemoryPooling)
@@ -38,6 +47,10 @@ namespace Lazinator.Buffers
             else
                 CurrentBuffer = new SimpleMemoryOwner<byte>(new Memory<byte>(new byte[minimumSize]));
 
+            unchecked
+            {
+                AllocationID = Interlocked.Increment(ref NextAllocationID) - 1;
+            }
             if (TrackMemoryAllocations)
             {
                 MemoryAllocations.Add(new WeakReference<IMemoryOwner<byte>>(CurrentBuffer));
@@ -75,15 +88,17 @@ namespace Lazinator.Buffers
             oldBuffer.Dispose();
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
+            if (Disposed)
+                return;
+            Disposed = true;
             if (TrackMemoryAllocations)
                 MemoryAllocationsManuallyReturned[(int)AllocationID] = true;
             if (LazinatorShouldNotReturnToPool)
                 return; // no need to dispose -- garbage collection will handle it
             if (!UseMemoryPooling)
                 return;
-            base.Dispose(); // dispose anything that we are supposed to dispose besides the current buffer
             if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
                 CurrentBuffer.Dispose();
         }
