@@ -15,7 +15,7 @@ namespace Lazinator.CodeDescription
     public class PropertyDescription
     {
         #region Properties
-        
+
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class;
@@ -49,17 +49,18 @@ namespace Lazinator.CodeDescription
         internal LazinatorSupportedCollectionType? SupportedCollectionType { get; set; }
         private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
-        internal bool IsPossiblyStruct => PropertyType == LazinatorPropertyType.LazinatorStruct ||
-                                          PropertyType == LazinatorPropertyType.OpenGenericParameter ||
-                                          (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) || 
-                                          (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
-                                          (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
-                                          (IsMemoryOrSpan);
+        internal bool IsDefinitelyStruct => PropertyType == LazinatorPropertyType.LazinatorStruct ||
+                                            (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) ||
+                                            (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
+                                            (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
+                                            (IsMemoryOrSpan);
+        internal bool IsPossiblyStruct => IsDefinitelyStruct ||
+                                          PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSimpleListOrArray => PropertyType == LazinatorPropertyType.SupportedCollection &&
                                              (SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList ||
-                                              SupportedCollectionType == LazinatorSupportedCollectionType.List || 
+                                              SupportedCollectionType == LazinatorSupportedCollectionType.List ||
                                               (SupportedCollectionType == LazinatorSupportedCollectionType.Array && ArrayRank == 1));
-        internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection  &&
+        internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection &&
                                         (SupportedCollectionType == LazinatorSupportedCollectionType.Memory ||
                                         SupportedCollectionType ==
                                         LazinatorSupportedCollectionType.ReadOnlyMemoryNotByte ||
@@ -189,7 +190,7 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} should omit the set because because it uses an inconsistent SetterAccessibilityAttribute.");
 
             ParseVersionAttributes();
-        
+
             ParseOtherPropertyAttributes();
 
             SetPropertyType(propertySymbol.Type as ITypeSymbol);
@@ -416,9 +417,9 @@ namespace Lazinator.CodeDescription
             string nullCheck;
             if (IsMemoryOrSpan)
                 nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
-            else if (IsPossiblyStruct)
-                nullCheck = $"System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
-            else 
+            else if (IsDefinitelyStruct)
+                nullCheck = $"false";
+            else // could be open generic or class -- either way, what we're interested in is whether this is dereferenceable
                 nullCheck = $"{propertyName} == null";
             return nullCheck;
         }
@@ -432,17 +433,17 @@ namespace Lazinator.CodeDescription
             {
                 if (IsMemoryOrSpan)
                     nonNullCheck = $"{propertyName}.Length != 0"; // use as equivalent of null
-                else if (IsPossiblyStruct)
-                    nonNullCheck = $"_{propertyName}_Accessed && !System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals(_{propertyName}, default({AppropriatelyQualifiedTypeName}))";
-                else 
+                else if (IsDefinitelyStruct)
+                    nonNullCheck = "true";
+                else
                     nonNullCheck = $"_{propertyName}_Accessed && _{propertyName} != null";
             }
             else
             {
-                if (IsPossiblyStruct)
-                    nonNullCheck = $"!System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({propertyName}, default({AppropriatelyQualifiedTypeName}))";
-                else if (IsMemoryOrSpan)
+                if (IsMemoryOrSpan)
                     nonNullCheck = $"{propertyName}.Length != 0"; // use as equivalent of nullelse
+                else if (IsDefinitelyStruct)
+                    nonNullCheck = "true";
                 else
                     nonNullCheck = $"{propertyName} != null";
             }
