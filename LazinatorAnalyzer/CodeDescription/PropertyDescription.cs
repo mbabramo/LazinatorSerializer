@@ -414,6 +414,10 @@ namespace Lazinator.CodeDescription
 
         public string GetNullCheck(string propertyName)
         {
+            if (propertyName.Contains("NonNull"))
+            {
+                var DEBUG = 0;
+            }
             string nullCheck;
             if (IsMemoryOrSpan)
                 nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
