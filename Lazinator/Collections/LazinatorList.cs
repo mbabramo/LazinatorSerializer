@@ -450,8 +450,8 @@ namespace Lazinator.Collections
                 LazinatorList<T> typedClone = (LazinatorList<T>)clone;
                 foreach (T member in this)
                 {
-                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(member, default(T)))
-                        typedClone.Add(default(T));
+                    if (EqualityComparer<T>.Default.Equals(member, default))
+                        typedClone.Add(default);
                     else
                         typedClone.Add(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
                 }

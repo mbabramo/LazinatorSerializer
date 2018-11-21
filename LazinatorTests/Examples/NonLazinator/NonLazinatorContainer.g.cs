@@ -620,10 +620,7 @@ namespace LazinatorTests.Examples
         NonLazinatorInterchangeableStruct itemToConvert, IncludeChildrenMode includeChildrenMode,
         bool verifyCleanness, bool updateStoredBuffer)
         {
-            if (false)
-            {
-                return;
-            }
+            
             NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(itemToConvert);
             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
@@ -631,10 +628,7 @@ namespace LazinatorTests.Examples
         
         private static NonLazinatorInterchangeableStruct CloneOrChange_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (false)
-            {
-                return default(NonLazinatorInterchangeableStruct);
-            }
+            
             NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(itemToClone);
             return interchange.Interchange_NonLazinatorInterchangeableStruct(true);
         }
