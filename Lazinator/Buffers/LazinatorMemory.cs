@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using Lazinator.Exceptions;
+using Lazinator.Support;
 
 namespace Lazinator.Buffers
 {
@@ -89,6 +90,11 @@ namespace Lazinator.Buffers
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") : 
             obj is LazinatorMemory lm && lm.OwnedMemory.Equals(OwnedMemory) && lm.StartPosition == StartPosition && lm.Length == Length;
+
+        public override int GetHashCode()
+        {
+            return (int) FarmhashByteSpans.Hash32(Span);
+        }
 
         public static bool operator ==(LazinatorMemory x, LazinatorMemory y)
         {
