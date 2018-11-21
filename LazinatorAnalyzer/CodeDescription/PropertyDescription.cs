@@ -421,16 +421,6 @@ namespace Lazinator.CodeDescription
 
         public string GetNullCheck(string propertyName)
         {
-            if (PropertyName != null && PropertyName.Contains("MyNullableTuple"))
-            {
-                var DEBUG = 0;
-            }
-
-            if (AppropriatelyQualifiedTypeNameEncodable == "Pint_c_C32double_p_C63")
-            {
-                var DEBUG = 0;
-            }
-
             string nullCheck;
             if (IsMemoryOrSpan)
                 nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
@@ -1814,7 +1804,6 @@ namespace Lazinator.CodeDescription
                         {{
                             return default({AppropriatelyQualifiedTypeName});
                         }}
-                        storage.LazinatorShouldNotReturnToPool();
                         ReadOnlySpan<byte> span = storage.Span;
 
                         int bytesSoFar = 0;
@@ -2080,7 +2069,6 @@ namespace Lazinator.CodeDescription
                         {{
                             return default;
                         }}
-                        storage.LazinatorShouldNotReturnToPool();
                         ReadOnlySpan<byte> span = storage.ReadOnlySpan;
 
                         int bytesSoFar = 0;
@@ -2102,7 +2090,6 @@ namespace Lazinator.CodeDescription
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
-                        writer.LazinatorMemory.LazinatorShouldNotReturnToPool();
                     ");
 
             if (Nullable)
@@ -2280,7 +2267,6 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
-                            storage.LazinatorShouldNotReturnToPool();
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}();
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);

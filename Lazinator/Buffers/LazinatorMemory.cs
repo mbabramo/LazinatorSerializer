@@ -68,7 +68,6 @@ namespace Lazinator.Buffers
 
         public void LazinatorShouldNotReturnToPool()
         {
-            return; // DEBUG -- no longer needed
             if (OwnedMemory is ExpandableBytes e)
             {
                 e.LazinatorShouldNotReturnToPool = true;
