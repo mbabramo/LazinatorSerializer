@@ -265,17 +265,17 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             e.UpdateStoredBuffer();
-            e.LazinatorMemoryStorage.Should().NotBeNull();
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = e.MyChild1.MyExampleGrandchild.MyInt;
             e.MyChild1.MyExampleGrandchild.MyInt++;
-            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.RemoveBufferInHierarchy();
-            e.LazinatorMemoryStorage.Should().BeNull();
-            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().BeNull();
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             e.UpdateStoredBuffer();
-            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
         }
 
@@ -287,19 +287,19 @@ namespace LazinatorTests.Tests
             x.MyInt++;
             e.ExampleStructWithoutClass = x;
             e.UpdateStoredBuffer();
-            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().NotBeNull();
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             x = e.ExampleStructWithoutClass;
             x.MyInt++;
             var y = x.MyInt;
             e.ExampleStructWithoutClass = x;
-            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().NotBeNull();
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.RemoveBufferInHierarchy();
-            e.LazinatorMemoryStorage.Should().BeNull();
-            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().BeNull();
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             e.ExampleStructWithoutClass.MyInt.Should().Be(y);
 
             e.UpdateStoredBuffer();
-            e.ExampleStructWithoutClass.LazinatorMemoryStorage.Should().NotBeNull();
+            e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.ExampleStructWithoutClass.MyInt.Should().Be(y);
         }
 
@@ -316,19 +316,19 @@ namespace LazinatorTests.Tests
                 }
             };
             lazinator.UpdateStoredBuffer();
-            lazinator.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt;
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt++;
             lazinator.MyListSerialized_Dirty = true;
-            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
 
             lazinator.RemoveBufferInHierarchy();
-            lazinator.LazinatorMemoryStorage.Should().BeNull();
-            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().BeNull();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             lazinator.UpdateStoredBuffer();
-            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             lazinator.UpdateStoredBuffer();
@@ -339,7 +339,7 @@ namespace LazinatorTests.Tests
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt++;
             lazinator.MyListSerialized_Dirty = true;
             lazinator.UpdateStoredBuffer();
-            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             (lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Equals(lazinatorMemoryStorage)).Should()
                 .BeFalse();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 2);
@@ -357,18 +357,18 @@ namespace LazinatorTests.Tests
                 }
             };
             lazinator.UpdateStoredBuffer();
-            lazinator.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt;
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt++;
-            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
 
             lazinator.RemoveBufferInHierarchy();
-            lazinator.LazinatorMemoryStorage.Should().BeNull();
-            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.Should().BeNull();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             lazinator.UpdateStoredBuffer();
-            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             lazinator.UpdateStoredBuffer();
@@ -378,7 +378,7 @@ namespace LazinatorTests.Tests
 
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt++;
             lazinator.UpdateStoredBuffer();
-            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.Should().NotBeNull();
+            lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             (lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage == lazinatorMemoryStorage).Should()
                 .BeFalse();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt.Should().Be(x + 2);
@@ -404,7 +404,7 @@ namespace LazinatorTests.Tests
         {
             WInt w = 3;
             w.UpdateStoredBuffer();
-            w.LazinatorMemoryStorage.Should().NotBeNull();
+            w.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             w.WrappedValue.Should().Be(3);
         }
 

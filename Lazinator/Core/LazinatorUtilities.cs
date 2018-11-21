@@ -892,8 +892,8 @@ namespace Lazinator.Core
             if (lazinator == null)
                 return null;
             var existingBuffer = lazinator.LazinatorMemoryStorage;
-            lazinator.LazinatorMemoryStorage = null;
-            if (disposeBuffer && existingBuffer != null)
+            lazinator.LazinatorMemoryStorage = default;
+            if (disposeBuffer)
                 existingBuffer.Dispose();
             return lazinator;
         }

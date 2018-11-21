@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using Lazinator.Exceptions;
 
 namespace Lazinator.Buffers
 {
@@ -24,20 +25,14 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int bytesFilled)
         {
-            if (bytesFilled < 0)
+            OwnedMemory = ownedMemory;
+            if (startPosition < 0)
                 throw new ArgumentException();
-            if (bytesFilled == 0)
-            {
-                OwnedMemory = null;
-                StartPosition = 0;
+            StartPosition = startPosition;
+            if (bytesFilled < 0)
                 Length = 0;
-            }
             else
-            {
-                OwnedMemory = ownedMemory;
-                StartPosition = startPosition;
                 Length = bytesFilled;
-            }
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int bytesFilled) : this(ownedMemory, 0, bytesFilled)
@@ -92,8 +87,8 @@ namespace Lazinator.Buffers
         public LazinatorMemory Slice(int position) => Slice(position, Length - position);
         public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length);
 
-        public override bool Equals(object obj) => obj is LazinatorMemory lm && lm.OwnedMemory.Equals(OwnedMemory) &&
-                                                   lm.StartPosition == StartPosition && lm.Length == Length;
+        public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") : 
+            obj is LazinatorMemory lm && lm.OwnedMemory.Equals(OwnedMemory) && lm.StartPosition == StartPosition && lm.Length == Length;
 
         public static bool operator ==(LazinatorMemory x, LazinatorMemory y)
         {

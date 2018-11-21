@@ -335,7 +335,7 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             e.UpdateStoredBuffer();
-            e.LazinatorMemoryStorage.Should().NotBeNull();
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.MyChild1.MyExampleGrandchild.MyInt++;
             e.MyChild1.MyExampleGrandchild.IsDirty.Should().BeTrue();
             e.MyChild1.MyExampleGrandchild.HasChanged.Should().BeTrue();
@@ -353,7 +353,7 @@ namespace LazinatorTests.Tests
         {
             var e = new ExampleStructContainerContainingClasses();
             e.UpdateStoredBuffer();
-            e.LazinatorMemoryStorage.Should().NotBeNull();
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.IntWrapper++;
             e.IntWrapper.IsDirty.Should().BeTrue();
             e.IntWrapper.HasChanged.Should().BeTrue();
