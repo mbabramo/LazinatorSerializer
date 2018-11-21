@@ -217,7 +217,8 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyNullableReadOnlyMemoryInt_Accessed;
-        private ReadOnlyMemory<byte> _MyReadOnlyMemoryByte;
+        
+        protected ReadOnlyMemory<byte> _MyReadOnlyMemoryByte;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ReadOnlyMemory<byte> MyReadOnlyMemoryByte
         {
@@ -225,15 +226,24 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlyMemoryByte_Accessed)
                 {
-                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, false, false, null);
-                    _MyReadOnlyMemoryByte = childData.Memory;
+                    if (LazinatorObjectBytes.Length == 0)
+                    {
+                        _MyReadOnlyMemoryByte = default(ReadOnlyMemory<byte>);
+                    }
+                    else
+                    {
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, false, false, null);
+                        _MyReadOnlyMemoryByte = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
+                    }
                     _MyReadOnlyMemoryByte_Accessed = true;
                 }
+                IsDirty = true; 
                 return _MyReadOnlyMemoryByte;
             }
             set
             {
                 IsDirty = true;
+                DescendantIsDirty = true;
                 _MyReadOnlyMemoryByte = value;
                 _MyReadOnlyMemoryByte_Accessed = true;
             }
@@ -1181,19 +1191,53 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
+        private static ReadOnlyMemory<byte> ConvertFromBytes_ReadOnlyMemory_Gbyte_g(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default(ReadOnlyMemory<byte>);
+            }
+            ReadOnlySpan<byte> span = storage.Span;
+            
+            int bytesSoFar = 0;
+            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            
+            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
+            {
+                byte item = span.ToByte(ref bytesSoFar);
+                collectionAsSpan[itemIndex] = item;
+            }
+            
+            return collection;
+        }
+        
         private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert.Span);
-            for (int i = 0; i < toConvert.Length; i++)
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
+            var itemToConvertSpan = itemToConvert.Span;
+            int itemToConvertCount = itemToConvertSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                writer.Write(toConvert[i]);
+                WriteUncompressedPrimitives.WriteByte(ref writer, itemToConvertSpan[itemIndex]);
             }
         }
+        
         private static ReadOnlyMemory<byte> CloneOrChange_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            var clone = new Memory<byte>(new byte[itemToClone.Length * sizeof(byte)]);
-            itemToClone.CopyTo(clone);
-            return clone;
+            
+            int collectionLength = itemToClone.Length;
+            Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var itemCopied = (byte) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
+            }
+            return collection;
         }
         
         private static ReadOnlyMemory<char> ConvertFromBytes_ReadOnlyMemory_Gchar_g(LazinatorMemory storage)
