@@ -12,10 +12,11 @@ namespace Lazinator.Buffers
         public readonly int Length;
         public bool IsEmpty => OwnedMemory == null || Length == 0;
         public long? AllocationID => (OwnedMemory as ExpandableBytes)?.AllocationID;
-        public Memory<byte> Memory => OwnedMemory.Memory.Slice(StartPosition, Length);
+        public Memory<byte> Memory => IsEmpty ? EmptyMemory : OwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
+        public static Memory<byte> EmptyMemory = new Memory<byte>();
 
         public override string ToString()
         {
