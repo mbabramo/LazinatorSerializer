@@ -2255,7 +2255,8 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $"return default({AppropriatelyQualifiedTypeName});", ""))}return {creationText};
+                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return default({AppropriatelyQualifiedTypeName});
+                            ", ""))}return {creationText};
                     }}
             ");
         }
