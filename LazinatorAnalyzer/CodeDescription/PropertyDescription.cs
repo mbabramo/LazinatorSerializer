@@ -1082,6 +1082,8 @@ namespace Lazinator.CodeDescription
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string castToSpanOfCorrectType;
             castToSpanOfCorrectType = GetReadOnlySpanBackingFieldCast();
+            string coreOfGet = SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? $@"return {GetReadOnlySpanBackingFieldCast("childData")};" : $@"_{PropertyName} = childData.ReadOnlyMemory;
+                    _{PropertyName}_Accessed = true;"; // for a read-only span, we directly return the lazinator, and don't update accessed, where the property hasn't been accessed
             sb.Append($@"{ContainingObjectDescription.HideBackingField}private ReadOnlyMemory<byte> _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
@@ -1090,8 +1092,7 @@ namespace Lazinator.CodeDescription
                 if (!_{PropertyName}_Accessed)
                 {{
                     LazinatorMemory childData = {ChildSliceString};
-                    _{PropertyName} = childData.ReadOnlyMemory;
-                    _{PropertyName}_Accessed = true;
+                    {coreOfGet}
                 }}
                 return {castToSpanOfCorrectType};
             }}{StepThroughPropertiesString}
@@ -1106,14 +1107,16 @@ namespace Lazinator.CodeDescription
 ");
         }
 
-        private string GetReadOnlySpanBackingFieldCast()
+        private string GetReadOnlySpanBackingFieldCast(string propertyName = null)
         {
+            if (propertyName == null)
+                propertyName = "_" + PropertyName;
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string spanAccessor = IIF(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, ".Span");
             string castToSpanOfCorrectType;
             if (innerFullType == "byte")
-                castToSpanOfCorrectType = $"_{PropertyName}{spanAccessor}";
-            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>(_{PropertyName}{spanAccessor})";
+                castToSpanOfCorrectType = $"{propertyName}{spanAccessor}";
+            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>({propertyName}{spanAccessor})";
             return castToSpanOfCorrectType;
         }
 
