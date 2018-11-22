@@ -344,8 +344,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlySpanChar_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, false, false, null);
-                    _MyReadOnlySpanChar = childData.ReadOnlyMemory;
-                    _MyReadOnlySpanChar_Accessed = true;
+                    return MemoryMarshal.Cast<byte, char>(childData.Span);
                 }
                 return MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span);
             }
