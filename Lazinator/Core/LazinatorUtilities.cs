@@ -871,7 +871,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Removes a buffer from this Lazinator node and all its deserialized descendants
+        /// Removes a buffer from this Lazinator node and ensures that all descendants are deserialized, since the buffer will no longer be available to deserialize them.
         /// </summary>
         /// <param name="lazinator">The Lazinator node</param>
         /// <returns>The node with the buffer removed (or a copy if a Lazinator struct)</returns>
@@ -879,6 +879,7 @@ namespace Lazinator.Core
         {
             if (lazinator == null)
                 return null;
+            lazinator.FullyDeserialize();
             return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), true);
         }
 

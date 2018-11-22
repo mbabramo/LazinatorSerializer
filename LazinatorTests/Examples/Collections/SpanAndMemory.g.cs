@@ -313,7 +313,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyReadOnlyMemoryInt_Accessed;
-        private LazinatorMemory _MyReadOnlySpanByte;
+        private ReadOnlyMemory<byte> _MyReadOnlySpanByte;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ReadOnlySpan<byte> MyReadOnlySpanByte
         {
@@ -321,7 +321,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlySpanByte_Accessed)
                 {
-                    _MyReadOnlySpanByte = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null);
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null);
+                    _MyReadOnlySpanByte = childData.ReadOnlyMemory;
                     _MyReadOnlySpanByte_Accessed = true;
                 }
                 return _MyReadOnlySpanByte.Span;
@@ -329,21 +330,7 @@ namespace LazinatorTests.Examples.Collections
             set
             {
                 IsDirty = true;
-                _MyReadOnlySpanByte = new Memory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
-                _MyReadOnlySpanByte_Accessed = true;
-            }
-        }
-        public LazinatorMemory MyReadOnlySpanByte_LazinatorMemory
-        {
-            get
-            {
-                var deserialized = MyReadOnlySpanByte;
-                return _MyReadOnlySpanByte;
-            }
-            set
-            {
-                IsDirty = true;
-                _MyReadOnlySpanByte = value;
+                _MyReadOnlySpanByte = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
                 _MyReadOnlySpanByte_Accessed = true;
             }
         }
@@ -755,10 +742,6 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyReadOnlySpanByte_Accessed && !_MyReadOnlySpanByte.IsEmpty)
-                    {
-                        _MyReadOnlySpanByte = GetChildSlice(writer.LazinatorMemory, startPosition + _MyReadOnlySpanByte_ByteIndex + sizeof(int), _MyReadOnlySpanByte_ByteLength - sizeof(int), false, false, null);
-                    }
                 }
                 
             }
