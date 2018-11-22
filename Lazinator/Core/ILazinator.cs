@@ -78,7 +78,7 @@ namespace Lazinator.Core
         /// <returns>The names of properties along with the property values converted to object</returns>
         IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         /// <summary>
-        /// Applies a function to each child of the Lazinator and to itself. It then returns itself (or if the Lazinator is a struct, a copy of itself).
+        /// Applies a function to each descendant of the Lazinator and to itself. It then returns itself (or if the Lazinator is a struct, a copy of itself).
         /// </summary>
         /// <param name="changeFunc">A function to change the Lazinator</param>
         /// <param name="exploreOnlyDeserializedChildren">If true, children that have not been deserialized are ignored.</param>

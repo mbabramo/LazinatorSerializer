@@ -855,7 +855,7 @@ namespace Lazinator.Core
         
 
         /// <summary>
-        /// Fully deserialize the lazinator at this node and below, and return the Lazinator object (or a copy if it is a struct).
+        /// Fully deserialize the lazinator at this node and return the Lazinator object (or a copy if it is a struct).
         /// </summary>
         /// <param name="lazinator">The Lazinator node to deserialize</param>
         /// <returns></returns>
@@ -879,8 +879,8 @@ namespace Lazinator.Core
         {
             if (lazinator == null)
                 return null;
-            lazinator.FullyDeserialize();
-            return lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), true);
+            lazinator = lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), false); // this will visit every node, thus deserializing everything, and it will remove the buffer at each node if needed.
+            return lazinator;
         }
 
         /// <summary>

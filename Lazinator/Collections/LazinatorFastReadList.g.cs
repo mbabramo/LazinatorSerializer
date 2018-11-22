@@ -46,8 +46,7 @@ namespace Lazinator.Collections
                 if (!_ReadOnlyBytes_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, true, false, null);
-                    _ReadOnlyBytes = childData.ReadOnlyMemory;
-                    _ReadOnlyBytes_Accessed = true;
+                    return childData.Span;
                 }
                 return _ReadOnlyBytes.Span;
             }
