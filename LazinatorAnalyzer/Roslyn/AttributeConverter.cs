@@ -52,6 +52,11 @@ namespace LazinatorCodeGen.Roslyn
                     if (!(attributeText is string ))
                         return null;
                     return new CloneInsertAttributeAttribute((string)attributeText);
+                case "InsertCodeAttribute":
+                    var codeToInsert = attributeData.GetAttributeConstructorValueByParameterName("codeToInsert");
+                    if (!(codeToInsert is string))
+                        return null;
+                    return new CloneInsertCodeAttribute((string)codeToInsert);
                 case "SkipIfAttribute":
                     var skipCondition = attributeData.GetAttributeConstructorValueByParameterName("skipCondition");
                     if (!(skipCondition is string))

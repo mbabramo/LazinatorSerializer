@@ -19,6 +19,7 @@ namespace Lazinator.CodeDescription
         public LazinatorCompilation Compilation { get; set; }
         public LazinatorConfig Config { get; set; }
         public Guid Hash { get; set; }
+        public string CodeToInsert { get; set; }
 
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
@@ -113,6 +114,7 @@ namespace Lazinator.CodeDescription
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
+            CodeToInsert = iLazinatorTypeSymbol.GetKnownAttribute<CloneInsertCodeAttribute>()?.CodeToInsert;
             FilePath = filePath;
             Compilation = compilation;
             Config = compilation.GetConfigForPath(FilePath);
@@ -260,6 +262,12 @@ namespace Lazinator.CodeDescription
                     {AccessibilityConverter.Convert(Accessibility)} { SealedKeyword }partial { (ObjectType == LazinatorObjectType.Class ? "class" : "struct") } { NameIncludingGenerics } : {IIF(IsDerivedFromNonAbstractLazinator, () => BaseObjectName + ", ")}ILazinator
                     {{";
             sb.AppendLine(theBeginning);
+            if (CodeToInsert != null && CodeToInsert != "")
+            {
+                sb.AppendLine("");
+                sb.AppendLine(CodeToInsert);
+            }
+
             if (BaseLazinatorObject == null)
                 sb.AppendLine($@"{HideILazinatorProperty}public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct ? "true" : "false")};
                         ");
