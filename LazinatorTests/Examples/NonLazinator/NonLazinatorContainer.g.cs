@@ -600,7 +600,7 @@ namespace LazinatorTests.Examples
                 return default(NonLazinatorInterchangeableClass);
             }
             NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToClone);
-            return interchange.Interchange_NonLazinatorInterchangeableClass(true);
+            return interchange.Interchange_NonLazinatorInterchangeableClass(avoidCloningIfPossible ? false : true);
         }
         
         private static NonLazinatorInterchangeableStruct ConvertFromBytes_NonLazinatorInterchangeableStruct(LazinatorMemory storage)
@@ -628,7 +628,7 @@ namespace LazinatorTests.Examples
         {
             
             NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(itemToClone);
-            return interchange.Interchange_NonLazinatorInterchangeableStruct(true);
+            return interchange.Interchange_NonLazinatorInterchangeableStruct(avoidCloningIfPossible ? false : true);
         }
         
     }

@@ -2245,7 +2245,7 @@ namespace Lazinator.CodeDescription
                         {{
                             {GetNullCheckIfThen("", "itemToClone", $"return default({AppropriatelyQualifiedTypeName});", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
-                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(true);
+                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(avoidCloningIfPossible ? false : true);
                         }}
                         ");
         }
