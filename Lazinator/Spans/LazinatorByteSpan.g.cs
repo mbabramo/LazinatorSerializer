@@ -289,6 +289,10 @@ namespace Lazinator.Spans
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = ReadOnly;
+                if (!_ReadOnly_Accessed)
+                {
+                    ReadOnly = deserialized;
+                }
             }
             if (!exploreOnlyDeserializedChildren)
             {

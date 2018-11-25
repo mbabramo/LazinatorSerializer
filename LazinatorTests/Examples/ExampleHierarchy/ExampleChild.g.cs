@@ -432,6 +432,10 @@ namespace LazinatorTests.Examples
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = ByteSpan;
+                if (!_ByteSpan_Accessed)
+                {
+                    ByteSpan = deserialized;
+                }
             }
             return changeFunc(this);
         }

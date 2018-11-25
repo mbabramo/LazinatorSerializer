@@ -250,6 +250,10 @@ namespace Lazinator.Wrappers
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = Value;
+                if (!_Value_Accessed)
+                {
+                    Value = deserialized;
+                }
             }
             return changeFunc(this);
         }

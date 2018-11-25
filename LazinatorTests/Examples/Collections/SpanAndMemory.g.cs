@@ -634,18 +634,34 @@ namespace LazinatorTests.Examples.Collections
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = MyReadOnlySpanByte;
+                if (!_MyReadOnlySpanByte_Accessed)
+                {
+                    MyReadOnlySpanByte = deserialized;
+                }
             }
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = MyReadOnlySpanChar;
+                if (!_MyReadOnlySpanChar_Accessed)
+                {
+                    MyReadOnlySpanChar = deserialized;
+                }
             }
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = MyReadOnlySpanDateTime;
+                if (!_MyReadOnlySpanDateTime_Accessed)
+                {
+                    MyReadOnlySpanDateTime = deserialized;
+                }
             }
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = MyReadOnlySpanLong;
+                if (!_MyReadOnlySpanLong_Accessed)
+                {
+                    MyReadOnlySpanLong = deserialized;
+                }
             }
             return changeFunc(this);
         }

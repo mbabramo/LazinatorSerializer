@@ -251,6 +251,10 @@ namespace Lazinator.Collections
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = ReadOnlyBytes;
+                if (!_ReadOnlyBytes_Accessed)
+                {
+                    ReadOnlyBytes = deserialized;
+                }
             }
             return changeFunc(this);
         }
