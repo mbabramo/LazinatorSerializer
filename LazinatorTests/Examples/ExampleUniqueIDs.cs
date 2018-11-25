@@ -83,6 +83,7 @@
         ContainerForExampleWithDefault,
         ClosedGenericWithGeneric,
         NonLazinatorInterchangeableStruct_LazinatorInterchange,
-        ExampleGrandchild
+        ExampleGrandchild,
+        SpanInDotNetList
     }
 }

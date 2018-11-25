@@ -840,9 +840,14 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in PropertiesToDefineThisLevel.Where(x => (!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan))
             {
+                // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
-                        var deserialized = {property.PropertyName};
+                        var deserialized = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
+                        if (!_{property.PropertyName}_Accessed)
+                        {{
+                            {property.PropertyName} = deserialized;
+                        }}")}
                     }}
 ");
             }

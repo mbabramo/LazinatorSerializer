@@ -346,6 +346,52 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void RemoveBufferWorks_SpanInDotNetList()
+        {
+            SpanInDotNetList lazinator = new SpanInDotNetList()
+            {
+                SpanList = new List<SpanAndMemory>()
+                {
+                    new SpanAndMemory()
+                    {
+                        MyReadOnlySpanByte = new byte[] { 1, 2, 3 }
+                    }
+                }
+            };
+            var x = lazinator.SpanList[0].MyReadOnlySpanByte[1];
+            x.Should().Be(2);
+            lazinator.UpdateStoredBuffer();
+            var memoryStorage = lazinator.LazinatorMemoryStorage;
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            x = lazinator.SpanList[0].MyReadOnlySpanByte[1];
+            x.Should().Be(2);
+
+            lazinator.RemoveBufferInHierarchy();
+            memoryStorage.Dispose();
+            memoryStorage.Disposed.Should().BeTrue();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            x = lazinator.SpanList[0].MyReadOnlySpanByte[1]; // this should be in memory storage that was copied at the time of RemoveBufferInHierarchy
+            x.Should().Be(2);
+            lazinator.SpanList[0].MyReadOnlySpanChar = new ReadOnlySpan<char>(new char[2] {'a', 'b'});
+
+            // check works on first access
+            lazinator = lazinator.CloneLazinatorTyped();
+            x = lazinator.SpanList[0].MyReadOnlySpanByte[1];
+            x.Should().Be(2);
+
+            // check works after removal of buffer before access
+            lazinator = lazinator.CloneLazinatorTyped();
+            memoryStorage = lazinator.LazinatorMemoryStorage;
+            lazinator.RemoveBufferInHierarchy();
+            memoryStorage.Dispose();
+            memoryStorage.Disposed.Should().BeTrue();
+            x = lazinator.SpanList[0].MyReadOnlySpanByte[1];
+            x.Should().Be(2);
+            var y = lazinator.SpanList[0].MyReadOnlySpanChar[1];
+            y.Should().Be('b');
+        }
+
+        [Fact]
         public void RemoveBufferWorks_DotNetHashSet()
         {
             DotNetHashSet_Lazinator lazinator = new DotNetHashSet_Lazinator()

@@ -53,7 +53,7 @@ namespace Lazinator.Buffers
         {
         }
 
-        public bool Disposed => OwnedMemory != null && OwnedMemory is ExpandableBytes e && e.Disposed;
+        public bool Disposed => OwnedMemory != null && (OwnedMemory is ExpandableBytes e && e.Disposed) || (OwnedMemory is SimpleMemoryOwner<byte> s && s.Disposed);
 
         public void Dispose()
         {
