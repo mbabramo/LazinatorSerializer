@@ -269,11 +269,6 @@ namespace LazinatorTests.Examples
                 return 0;
             }
             
-            if (LazinatorParents.Any())
-            {
-                throw new LazinatorDeserializationException("A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class.");
-            }
-            
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
             {

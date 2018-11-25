@@ -1246,8 +1246,11 @@ namespace Lazinator.CodeDescription
             return constructor;
         }
 
+        public static bool AllowClassContainingStructContainingClass = true; // for now, let's allow this scenario
         private string GetClassContainingStructContainingClassError()
         {
+            if (AllowClassContainingStructContainingClass)
+                return "";
             string classContainingStructContainingClassError = "";
             if (ObjectType == LazinatorObjectType.Struct)
             {

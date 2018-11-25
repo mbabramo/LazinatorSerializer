@@ -28,7 +28,30 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void ClassContainingStructContainingClassThrows()
+        public void ClassContainingStructContainingClassWorks()
+        {
+            ExampleStructContainerContainingClasses c = new ExampleStructContainerContainingClasses()
+            {
+                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+            };
+            var c2 = c.CloneLazinatorTyped();
+
+            var temp = c2.MyExampleStructContainingClasses;
+            temp.MyChild1 = GetExampleChild(1);
+            c2.MyExampleStructContainingClasses = temp;
+
+            var c3 = c2.CloneLazinatorTyped();
+            temp = c3.MyExampleStructContainingClasses;
+            temp.MyChild1 = GetExampleChild(1);
+            temp.MyChild1.MyLong = 65748;
+            c3.MyExampleStructContainingClasses = temp;
+
+            var c4 = c3.CloneLazinatorTyped();
+            c4.MyExampleStructContainingClasses.MyChild1.MyLong.Should().Be(65748);
+        }
+
+        [Fact]
+        public void ClassContainingStructContainingClassThrowsIfDisallowed()
         {
             ExampleStructContainerContainingClasses c = new ExampleStructContainerContainingClasses()
             {
@@ -37,7 +60,10 @@ namespace LazinatorTests.Tests
             var c2 = c.CloneLazinatorTyped();
 
             Action a = () => { var result = c2.MyExampleStructContainingClasses; };
-            a.Should().Throw<LazinatorDeserializationException>();
+            if (Lazinator.CodeDescription.ObjectDescription.AllowClassContainingStructContainingClass)
+                a.Should().NotThrow<LazinatorDeserializationException>();
+            else
+                a.Should().Throw<LazinatorDeserializationException>();
         }
 
         [Fact]

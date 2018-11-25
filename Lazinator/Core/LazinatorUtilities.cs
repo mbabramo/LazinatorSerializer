@@ -681,14 +681,15 @@ namespace Lazinator.Core
         public static void MarkHierarchyClean(this ILazinator hierarchy)
         {
             hierarchy.UpdateStoredBuffer(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
-            MarkHierarchyUnchanged(hierarchy);
+            MarkHierarchyUnchanged(hierarchy, true);
         }
 
         /// <summary>
         /// Marks all Lazinator objects in a hierarchy as having not been changed. This has no effect on whether the objects are marked as currently dirty.
         /// </summary>
         /// <param name="hierarchy">The node containing the top of the hierarchy to mark as unchanged</param>
-        public static void MarkHierarchyUnchanged(this ILazinator hierarchy)
+        /// <param name="alsoKeepClean">If true, nodes are marked as not being dirty. However, this should be used only after updating the stored buffer.</param>
+        public static void MarkHierarchyUnchanged(this ILazinator hierarchy, bool alsoKeepClean = false)
         {
             if (hierarchy != null)
                 hierarchy.ForEachLazinator(
@@ -696,6 +697,11 @@ namespace Lazinator.Core
                     {
                         node.HasChanged = false;
                         node.DescendantHasChanged = false;
+                        if (alsoKeepClean)
+                        {
+                            node.IsDirty = false;
+                            node.DescendantIsDirty = false;
+                        }
                         return node;
                     },
                     true);
