@@ -815,7 +815,8 @@ namespace Lazinator.CodeDescription
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
-                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                            {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
                         }}
 ");
             }
@@ -824,7 +825,8 @@ namespace Lazinator.CodeDescription
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
-                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                            {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
                         }}
 ");
             }
@@ -833,14 +835,15 @@ namespace Lazinator.CodeDescription
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
-                            _{propertyName} = {property.DirectConverterTypeNamePrefix}CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                            {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
+                            ")}_{propertyName} = {property.DirectConverterTypeNamePrefix}CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
                         }}
 ");
             }
 
             foreach (var property in PropertiesToDefineThisLevel.Where(x => (!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan))
             {
-                // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)
+                // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)F
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
                         var deserialized = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
