@@ -688,7 +688,7 @@ namespace LazinatorTests.Examples
                 _MyHashSetExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
                 if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
                 {
-                    _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>)CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
+                    _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
                 }
             }
             startOfObjectPosition = writer.Position;

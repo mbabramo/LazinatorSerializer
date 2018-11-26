@@ -1287,8 +1287,7 @@ namespace Lazinator.CodeDescription
                         if ({GetNonNullCheck(true)})
                         {{
                             _{PropertyName} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}(_{PropertyName}, l => l.RemoveBufferInHierarchy(), true);
-                        }}
-";
+                        }}";
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{
                                     _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;{removeBuffers}

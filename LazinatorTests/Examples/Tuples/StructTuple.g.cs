@@ -619,6 +619,10 @@ namespace LazinatorTests.Examples.Tuples
             if (updateStoredBuffer)
             {
                 _MyValueTupleStructs_ByteIndex = startOfObjectPosition - startPosition;
+                if (true)
+                {
+                    _MyValueTupleStructs = ((WInt, WInt)) CloneOrChange__PWInt_c_C32WInt_p(_MyValueTupleStructs, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             if (updateStoredBuffer)
             {

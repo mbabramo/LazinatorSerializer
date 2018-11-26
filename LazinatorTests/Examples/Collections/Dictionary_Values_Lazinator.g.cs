@@ -452,6 +452,10 @@ namespace LazinatorTests.Examples.Collections
             if (updateStoredBuffer)
             {
                 _MyDictionary_ByteIndex = startOfObjectPosition - startPosition;
+                if (_MyDictionary_Accessed && _MyDictionary != null)
+                {
+                    _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MySortedDictionary_Accessed)
@@ -469,6 +473,10 @@ namespace LazinatorTests.Examples.Collections
             if (updateStoredBuffer)
             {
                 _MySortedDictionary_ByteIndex = startOfObjectPosition - startPosition;
+                if (_MySortedDictionary_Accessed && _MySortedDictionary != null)
+                {
+                    _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MySortedList_Accessed)
@@ -486,6 +494,10 @@ namespace LazinatorTests.Examples.Collections
             if (updateStoredBuffer)
             {
                 _MySortedList_ByteIndex = startOfObjectPosition - startPosition;
+                if (_MySortedList_Accessed && _MySortedList != null)
+                {
+                    _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             if (updateStoredBuffer)
             {

@@ -614,6 +614,10 @@ namespace LazinatorTests.Examples.Tuples
             if (updateStoredBuffer)
             {
                 _MyTupleSerialized4_ByteIndex = startOfObjectPosition - startPosition;
+                if (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null)
+                {
+                    _MyTupleSerialized4 = (Tuple<int, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             if (updateStoredBuffer)
             {
