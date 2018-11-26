@@ -600,6 +600,33 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
+        [Fact]
+        public void BuffersUpdateInTandem_List_Struct()
+        {
+            ExampleStructContainerContainingClasses e = new ExampleStructContainerContainingClasses()
+            {
+                MyListExampleStruct = new List<ExampleStructContainingClasses>()
+                {
+                    new ExampleStructContainingClasses()
+                    {
+                        MyChar = 'h'
+                    }
+                }
+            };
+
+            e.MyListExampleStruct[0] = new ExampleStructContainingClasses()
+            {
+                MyChar = 'i'
+            };
+            e.MyListExampleStruct[0] = e.MyListExampleStruct[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers); // generate a new buffer in a list member
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyExampleStructContainingClasses = new ExampleStructContainingClasses()
+            {
+                MyChar = 'j'
+            }; // keep list clean while making container dirty
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
         private LazinatorListContainer GetLazinatorListContainer()
         {
             LazinatorListContainer container = new LazinatorListContainer();
