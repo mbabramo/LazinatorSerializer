@@ -1488,7 +1488,7 @@ namespace Lazinator.CodeDescription
                 }
                 else
                     writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
-                string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString);
+                string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString, IsSimpleListOrArray);
                 if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
                 {
                     sb.AppendLine($@"
@@ -1954,7 +1954,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private string GetSupportedCollectionWriteCommands(string itemString)
+        private string GetSupportedCollectionWriteCommands(string itemString, bool outerPropertyIsSimpleListOrArray)
         {
             string GetSupportedCollectionWriteCommandsHelper()
             {
@@ -1965,6 +1965,17 @@ namespace Lazinator.CodeDescription
                     return ($@"
                     void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemString}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
+                else if (IsLazinatorStruct && outerPropertyIsSimpleListOrArray)
+                {
+                    return ($@"
+                    void action(ref BinaryBufferWriter w) 
+                    {{
+                        var copy = {itemString};
+                        copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        {itemString} = copy;
+                    }}
+                    WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
+                }
                 else
                     return ($@"
                     void action(ref BinaryBufferWriter w) => {itemString}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
