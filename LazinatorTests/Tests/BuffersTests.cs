@@ -627,6 +627,28 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
+        [Fact]
+        public void BuffersUpdateInTandem_List_OpenGeneric_Struct()
+        {
+            OpenGenericStayingOpenContainer e = new OpenGenericStayingOpenContainer()
+            {
+                ClosedGenericFloat = new OpenGeneric<WFloat>()
+                {
+                    MyListT = new List<WFloat>()
+                    {
+                        3.4F
+                    }
+                }
+            };
+
+            e.ClosedGenericFloat.MyListT[0] = new WFloat(4.0F);
+            e.ClosedGenericFloat.MyListT[0] = e.ClosedGenericFloat.MyListT[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers); // generate a new buffer in a list member
+            ConfirmBuffersUpdateInTandem(e);
+            e.ClosedGenericFloat.MyT = 10.0F; // keep list clean while making container dirty
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+
 
         [Fact]
         public void BuffersUpdateInTandem_HashSet_Struct()

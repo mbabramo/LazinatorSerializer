@@ -553,7 +553,12 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void action(ref BinaryBufferWriter w) 
+                {
+                    var copy = itemToConvert[itemIndex];
+                    copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    itemToConvert[itemIndex] = copy;
+                }
                 WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
         }
@@ -618,7 +623,12 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void action(ref BinaryBufferWriter w) 
+                {
+                    var copy = itemToConvert[itemIndex];
+                    copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    itemToConvert[itemIndex] = copy;
+                }
                 WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
         }
@@ -683,7 +693,12 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void action(ref BinaryBufferWriter w) 
+                {
+                    var copy = itemToConvert[itemIndex];
+                    copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    itemToConvert[itemIndex] = copy;
+                }
                 WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
         }
