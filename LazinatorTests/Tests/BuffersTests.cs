@@ -603,7 +603,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BuffersUpdateInTandem_List_Struct()
         {
-            ExampleStructContainerContainingClasses e = new ExampleStructContainerContainingClasses()
+            ExampleContainerContainingClassesStructContainingClasses e = new ExampleContainerContainingClassesStructContainingClasses()
             {
                 MyListExampleStruct = new List<ExampleStructContainingClasses>()
                 {
@@ -619,6 +619,33 @@ namespace LazinatorTests.Tests
                 MyChar = 'i'
             };
             e.MyListExampleStruct[0] = e.MyListExampleStruct[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers); // generate a new buffer in a list member
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyExampleStructContainingClasses = new ExampleStructContainingClasses()
+            {
+                MyChar = 'j'
+            }; // keep list clean while making container dirty
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+
+        [Fact]
+        public void BuffersUpdateInTandem_HashSet_Struct()
+        {
+            ExampleContainerContainingClassesStructContainingClasses e = new ExampleContainerContainingClassesStructContainingClasses()
+            {
+                MyHashSetExampleStruct = new HashSet<ExampleStructContainingClasses>()
+                {
+                    new ExampleStructContainingClasses()
+                    {
+                        MyChar = 'h'
+                    }
+                }
+            };
+
+            e.MyHashSetExampleStruct.Add(new ExampleStructContainingClasses()
+            {
+                MyChar = 'i'
+            }.CloneLazinatorTyped());
             ConfirmBuffersUpdateInTandem(e);
             e.MyExampleStructContainingClasses = new ExampleStructContainingClasses()
             {

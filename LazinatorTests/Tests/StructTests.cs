@@ -30,7 +30,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ClassContainingStructContainingClassWorks()
         {
-            ExampleStructContainerContainingClasses c = new ExampleStructContainerContainingClasses()
+            ExampleContainerContainingClassesStructContainingClasses c = new ExampleContainerContainingClassesStructContainingClasses()
             {
                 MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };
@@ -53,7 +53,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ClassContainingStructContainingClassThrowsIfDisallowed()
         {
-            ExampleStructContainerContainingClasses c = new ExampleStructContainerContainingClasses()
+            ExampleContainerContainingClassesStructContainingClasses c = new ExampleContainerContainingClassesStructContainingClasses()
             {
                 MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };

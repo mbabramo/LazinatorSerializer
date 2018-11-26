@@ -138,9 +138,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Null()
         {
-            ExampleStructContainerContainingClasses GetObject()
+            ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
-                return new ExampleStructContainerContainingClasses()
+                return new ExampleContainerContainingClassesStructContainingClasses()
                 {
                     MyListExampleStruct = null,
                 };
@@ -156,9 +156,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorNullableStructs()
         {
-            ExampleStructContainerContainingClasses GetObject()
+            ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
-                var returnObj = new ExampleStructContainerContainingClasses()
+                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
                 {
                     MyListNullableExampleStruct = new List<WNullableStruct<ExampleStructContainingClasses>>()
                     {
@@ -180,9 +180,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Empty()
         {
-            ExampleStructContainerContainingClasses GetObject()
+            ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
-                return new ExampleStructContainerContainingClasses()
+                return new ExampleContainerContainingClassesStructContainingClasses()
                 {
                     MyListExampleStruct = new List<ExampleStructContainingClasses>(),
                 };
@@ -198,9 +198,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Filled()
         {
-            ExampleStructContainerContainingClasses GetObject()
+            ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
-                var returnObj = new ExampleStructContainerContainingClasses()
+                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
                 {
                     MyListExampleStruct = new List<ExampleStructContainingClasses>()
                     {
