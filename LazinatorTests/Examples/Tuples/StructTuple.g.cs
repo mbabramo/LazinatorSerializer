@@ -812,7 +812,7 @@ namespace LazinatorTests.Examples.Tuples
             int bytesSoFar = 0;
             
             WInt item1 = default;
-            int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
+            int lengthCollectionMember_item1 = span.ToByte(ref bytesSoFar);
             if (lengthCollectionMember_item1 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
@@ -822,7 +822,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar += lengthCollectionMember_item1;
             
             WInt item2 = default;
-            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToByte(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
