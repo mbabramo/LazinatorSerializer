@@ -804,6 +804,23 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorValueTuple_LazinatorStruct()
+        {
+            StructTuple GetObject()
+            {
+                return new StructTuple()
+                {
+                    MyValueTupleStructs = (3, 4) // WInts
+                };
+            }
+
+            var original = GetObject();
+            var result = original.CloneLazinatorTyped();
+            result.MyValueTupleStructs.Item1.WrappedValue.Should().Be(3);
+            result.MyValueTupleStructs.Item2.WrappedValue.Should().Be(4);
+        }
+
+        [Fact]
         public void LazinatorRegularTuple()
         {
 

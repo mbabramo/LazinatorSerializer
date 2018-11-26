@@ -1881,13 +1881,7 @@ namespace Lazinator.CodeDescription
             }
             else // Lazinator type
             {
-                string lengthCollectionMemberString = null;
-                if (IsGuaranteedFixedLength)
-                    lengthCollectionMemberString = $"int lengthCollectionMember = {FixedLength};";
-                else if (IsGuaranteedSmall)
-                    lengthCollectionMemberString = "int lengthCollectionMember = span.ToByte(ref bytesSoFar);";
-                else
-                    lengthCollectionMemberString = "int lengthCollectionMember = span.ToInt32(ref bytesSoFar);";
+                string lengthCollectionMemberString = $"int lengthCollectionMember = {GetSpanReadLength()};";
                 if (Nullable)
                     return ($@"
                         {lengthCollectionMemberString}
@@ -1912,6 +1906,16 @@ namespace Lazinator.CodeDescription
                         {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
             }
+        }
+
+        private string GetSpanReadLength()
+        {
+            if (IsGuaranteedFixedLength)
+                return $"{FixedLength}";
+            else if (IsGuaranteedSmall)
+                return "span.ToByte(ref bytesSoFar)";
+            else
+                return "span.ToInt32(ref bytesSoFar)";
         }
 
         private void GetSupportedCollectionAddCommands(PropertyDescription outerProperty, out string collectionAddItem, out string collectionAddNull)
@@ -2128,7 +2132,7 @@ namespace Lazinator.CodeDescription
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
                     return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = default;
-                        int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
+                        int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
@@ -2138,7 +2142,7 @@ namespace Lazinator.CodeDescription
                         bytesSoFar += lengthCollectionMember_{itemName};");
                 else return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = default;
-                        int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
+                        int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
