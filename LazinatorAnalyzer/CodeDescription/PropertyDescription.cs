@@ -1965,7 +1965,7 @@ namespace Lazinator.CodeDescription
                     return ($@"
                     void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemString}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
-                else if (IsLazinatorStruct && outerPropertyIsSimpleListOrArray)
+                else if (IsPossiblyStruct && outerPropertyIsSimpleListOrArray)
                 {
                     return ($@"
                     void action(ref BinaryBufferWriter w) 

@@ -401,6 +401,19 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void CloneWithoutBuffer_StructTupleWithStructs()
+        {
+            StructTuple GetObject()
+            {
+                return new StructTuple()
+                {
+                    MyValueTupleStructs = (3, 4) // wint, wint
+                };
+            }
+            VerifyCloningEquivalence(() => GetObject());
+        }
+
+        [Fact]
         public void CloneWithoutBuffer_StructTuple()
         {
             StructTuple GetObject()

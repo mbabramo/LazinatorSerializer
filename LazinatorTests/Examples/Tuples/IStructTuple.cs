@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.Tuples
 {
@@ -9,5 +10,6 @@ namespace LazinatorTests.Examples.Tuples
         (int, double)? MyNullableTuple { get; set; }
         (int MyFirstItem, double MySecondItem) MyNamedTuple { get; set; }
         (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple { get; set; }
+        (WInt, WInt) MyValueTupleStructs { get; set; }
     }
 }

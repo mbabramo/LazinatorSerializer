@@ -13,6 +13,7 @@ using Lazinator.Buffers;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Collections;
+using LazinatorTests.Examples.Tuples;
 
 namespace LazinatorTests.Tests
 {
@@ -648,7 +649,20 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
+        [Fact]
+        public void BuffersUpdateInTandem_StructTuple()
+        {
+            StructTuple e = new StructTuple
+            {
+                MyValueTupleStructs = (3, 4), // WInts
+                MyValueTupleSerialized = (4, GetExampleChild(0), GetNonLazinatorType(1))
+            };
 
+            e = e.CloneLazinatorTyped();
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyNamedTuple = (3, 4.0);
+            ConfirmBuffersUpdateInTandem(e);
+        }
 
         [Fact]
         public void BuffersUpdateInTandem_HashSet_Struct()

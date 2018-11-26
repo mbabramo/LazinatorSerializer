@@ -547,7 +547,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) 
+                    {
+                        var copy = itemToConvert[itemIndex];
+                        copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        itemToConvert[itemIndex] = copy;
+                    }
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
                 

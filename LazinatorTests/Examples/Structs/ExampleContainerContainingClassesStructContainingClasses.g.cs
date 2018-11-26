@@ -686,6 +686,10 @@ namespace LazinatorTests.Examples
             if (updateStoredBuffer)
             {
                 _MyHashSetExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
+                if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
+                {
+                    _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>)CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_MyListExampleStruct_Accessed)
