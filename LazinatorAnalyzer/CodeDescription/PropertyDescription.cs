@@ -1277,12 +1277,23 @@ namespace Lazinator.CodeDescription
             }
             if (SkipCondition != null)
                 sb.AppendLine($@"}}");
-            // Now, we update the byte index
+            // Now, we update the byte index (and remove buffers for certain supported collections).
             if (!IsPrimitive)
+            {
+                string removeBuffers = "";
+                if (IsSupportedCollectionOrTuple && !IsSimpleListOrArray &&
+                    InnerProperties.Any(x => x.IsPossiblyStruct))
+                    removeBuffers = $@"
+                        if ({GetNonNullCheck(true)})
+                        {{
+                            _{PropertyName} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}(_{PropertyName}, l => l.RemoveBufferInHierarchy(), true);
+                        }}
+";
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{
-                                    _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;
+                                    _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;{removeBuffers}
                                 }}");
+            }
         }
 
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
