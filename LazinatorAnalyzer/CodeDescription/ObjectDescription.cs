@@ -644,6 +644,7 @@ namespace Lazinator.CodeDescription
                         {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+                        {ProtectedIfApplicable}abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition);
                         {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
 ");
         }
@@ -1002,6 +1003,7 @@ namespace Lazinator.CodeDescription
                 LazinatorMemoryStorage = newBuffer;");
             sb.Append($@"}}
 ");
+            AppendUpdateDeserializedChildren(sb);
         }
 
         private void GetCodeBeforeBufferIsUpdated(CodeStringBuilder sb)
@@ -1010,7 +1012,14 @@ namespace Lazinator.CodeDescription
                         if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                         {{
                             _DescendantIsDirty = false;");
-            AppendUpdateStoredBufferForDeserializedChildren(sb);
+            sb.AppendLine($@"
+                        if (updateDeserializedChildren)
+                        {{
+                            UpdateDeserializedChildren(ref writer, startPosition);");
+
+
+            sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);
+                                    ")}}}");
             sb.Append(GetStructAndOpenGenericReset()); // needed for dirtiness to be set correctly
             sb.AppendLine($@"
                     }}
@@ -1051,12 +1060,20 @@ namespace Lazinator.CodeDescription
             return reset;
         }
 
-        private void AppendUpdateStoredBufferForDeserializedChildren(CodeStringBuilder sb)
+        private void AppendUpdateDeserializedChildren(CodeStringBuilder sb)
         {
-            sb.AppendLine($@"
-                        if (updateDeserializedChildren)
+            if (IsDerivedFromNonAbstractLazinator)
+                sb.AppendLine(
+                    $@"
+                        {ProtectedIfApplicable}override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+                        {{
+                            base.UpdateDeserializedChildren(ref writer, startPosition);");
+            else
+                sb.AppendLine(
+                    $@"
+                        {ProtectedIfApplicable}{DerivationKeyword}void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
                         {{");
-            foreach (var property in PropertiesIncludingInherited.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType))
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
@@ -1078,9 +1095,8 @@ namespace Lazinator.CodeDescription
 ");
                 }
             }
-
-            sb.AppendLine($@"{IIF(ImplementsOnFreeInMemoryObjects, $@"OnUpdateDeserializedChildren(ref writer, startPosition);
-                                    ")}}}");
+            sb.AppendLine($@"}}
+                    ");
         }
 
         string skipWritePropertiesIntoBufferString = "// WritePropertiesIntoBuffer defined in main class; thus skipped here";
