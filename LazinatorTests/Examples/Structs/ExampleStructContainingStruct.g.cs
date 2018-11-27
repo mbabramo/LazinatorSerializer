@@ -370,10 +370,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (true)
-                    {
-                        _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
                 _MyExampleStructContainingClasses_Accessed = false;
@@ -386,6 +383,15 @@ namespace LazinatorTests.Examples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (true)
+            {
+                _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

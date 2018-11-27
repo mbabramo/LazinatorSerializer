@@ -477,14 +477,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyOfficialObject_Accessed && _MyOfficialObject != null)
-                    {
-                        _MyOfficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyOfficialObject_ByteIndex + sizeof(int), _MyOfficialObject_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_MyUnofficialObject_Accessed && _MyUnofficialObject != null)
-                    {
-                        _MyUnofficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyUnofficialObject_ByteIndex + sizeof(int), _MyUnofficialObject_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -496,6 +489,19 @@ namespace LazinatorTests.Examples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyOfficialObject_Accessed && _MyOfficialObject != null)
+            {
+                _MyOfficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyOfficialObject_ByteIndex + sizeof(int), _MyOfficialObject_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_MyUnofficialObject_Accessed && _MyUnofficialObject != null)
+            {
+                _MyUnofficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyUnofficialObject_ByteIndex + sizeof(int), _MyUnofficialObject_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

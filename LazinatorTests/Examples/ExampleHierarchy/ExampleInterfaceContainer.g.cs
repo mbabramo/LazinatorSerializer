@@ -397,14 +397,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
-                    {
-                        _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
-                    {
-                        _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -416,6 +409,19 @@ namespace LazinatorTests.Examples.Hierarchy
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
+            {
+                _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
+            {
+                _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

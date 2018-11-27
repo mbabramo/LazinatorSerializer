@@ -440,22 +440,7 @@ namespace LazinatorTests.Examples.Tuples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (true)
-                    {
-                        _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
-                    {
-                        _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (true)
-                    {
-                        _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (true)
-                    {
-                        _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -467,6 +452,27 @@ namespace LazinatorTests.Examples.Tuples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (true)
+            {
+                _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
+            {
+                _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (true)
+            {
+                _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (true)
+            {
+                _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

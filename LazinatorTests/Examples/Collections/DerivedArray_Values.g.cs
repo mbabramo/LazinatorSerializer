@@ -197,10 +197,7 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null)
-                    {
-                        _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -212,6 +209,16 @@ namespace LazinatorTests.Examples.Collections
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            base.UpdateDeserializedChildren(ref writer, startPosition);
+            if (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null)
+            {
+                _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

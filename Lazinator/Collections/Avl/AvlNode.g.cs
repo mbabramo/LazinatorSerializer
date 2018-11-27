@@ -735,22 +735,7 @@ namespace Lazinator.Collections.Avl
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Key_Accessed && _Key != null)
-                    {
-                        _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_Left_Accessed && _Left != null)
-                    {
-                        _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex + sizeof(int), _Left_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_Right_Accessed && _Right != null)
-                    {
-                        _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), _Right_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_Value_Accessed && _Value != null)
-                    {
-                        _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
                 if (_Key_Accessed && _Key != null && _Key.IsStruct && (_Key.IsDirty || _Key.DescendantIsDirty))
@@ -770,6 +755,27 @@ namespace Lazinator.Collections.Avl
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_Key_Accessed && _Key != null)
+            {
+                _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_Left_Accessed && _Left != null)
+            {
+                _Left.UpdateStoredBuffer(ref writer, startPosition + _Left_ByteIndex + sizeof(int), _Left_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_Right_Accessed && _Right != null)
+            {
+                _Right.UpdateStoredBuffer(ref writer, startPosition + _Right_ByteIndex + sizeof(int), _Right_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_Value_Accessed && _Value != null)
+            {
+                _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

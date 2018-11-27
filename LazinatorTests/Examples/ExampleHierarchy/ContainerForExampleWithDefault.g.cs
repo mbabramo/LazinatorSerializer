@@ -349,10 +349,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Example_Accessed && _Example != null)
-                    {
-                        _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex + sizeof(int), _Example_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -364,6 +361,15 @@ namespace LazinatorTests.Examples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_Example_Accessed && _Example != null)
+            {
+                _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex + sizeof(int), _Example_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

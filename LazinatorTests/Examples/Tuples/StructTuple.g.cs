@@ -483,26 +483,7 @@ namespace LazinatorTests.Examples.Tuples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (true)
-                    {
-                        _EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(_EnumTuple, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (true)
-                    {
-                        _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyNullableTuple_Accessed && _MyNullableTuple != null)
-                    {
-                        _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (true)
-                    {
-                        _MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(_MyValueTupleSerialized, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (true)
-                    {
-                        _MyValueTupleStructs = ((WInt, WInt)) CloneOrChange__PWInt_c_C32WInt_p(_MyValueTupleStructs, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -514,6 +495,31 @@ namespace LazinatorTests.Examples.Tuples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (true)
+            {
+                _EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(_EnumTuple, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (true)
+            {
+                _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyNullableTuple_Accessed && _MyNullableTuple != null)
+            {
+                _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (true)
+            {
+                _MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(_MyValueTupleSerialized, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (true)
+            {
+                _MyValueTupleStructs = ((WInt, WInt)) CloneOrChange__PWInt_c_C32WInt_p(_MyValueTupleStructs, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

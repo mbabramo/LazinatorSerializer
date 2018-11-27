@@ -327,10 +327,7 @@ namespace LazinatorTests.Examples.Subclasses
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyEnumList_Accessed && _MyEnumList != null)
-                    {
-                        _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -342,6 +339,15 @@ namespace LazinatorTests.Examples.Subclasses
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyEnumList_Accessed && _MyEnumList != null)
+            {
+                _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

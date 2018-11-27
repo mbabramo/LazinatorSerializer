@@ -255,22 +255,7 @@ namespace LazinatorTests.Examples.Abstract
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Example2_Accessed && _Example2 != null)
-                    {
-                        _Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex + sizeof(int), _Example2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_Example3_Accessed && _Example3 != null)
-                    {
-                        _Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex + sizeof(int), _Example3_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_IntList4_Accessed && _IntList4 != null)
-                    {
-                        _IntList4 = (List<int>) CloneOrChange_List_Gint_g(_IntList4, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_IntList5_Accessed && _IntList5 != null)
-                    {
-                        _IntList5 = (List<int>) CloneOrChange_List_Gint_g(_IntList5, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -282,6 +267,20 @@ namespace LazinatorTests.Examples.Abstract
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            base.UpdateDeserializedChildren(ref writer, startPosition);
+            if (_IntList4_Accessed && _IntList4 != null)
+            {
+                _IntList4 = (List<int>) CloneOrChange_List_Gint_g(_IntList4, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_IntList5_Accessed && _IntList5 != null)
+            {
+                _IntList5 = (List<int>) CloneOrChange_List_Gint_g(_IntList5, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

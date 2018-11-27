@@ -410,18 +410,7 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyArrayInt_Accessed && _MyArrayInt != null)
-                    {
-                        _MyArrayInt = (int[,]) CloneOrChange_int_B_c_b(_MyArrayInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyCrazyJaggedArray_Accessed && _MyCrazyJaggedArray != null)
-                    {
-                        _MyCrazyJaggedArray = (int[][,,][,,,]) CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyThreeDimArrayInt_Accessed && _MyThreeDimArrayInt != null)
-                    {
-                        _MyThreeDimArrayInt = (int[,,]) CloneOrChange_int_B_c_c_b(_MyThreeDimArrayInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -433,6 +422,23 @@ namespace LazinatorTests.Examples.Collections
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyArrayInt_Accessed && _MyArrayInt != null)
+            {
+                _MyArrayInt = (int[,]) CloneOrChange_int_B_c_b(_MyArrayInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyCrazyJaggedArray_Accessed && _MyCrazyJaggedArray != null)
+            {
+                _MyCrazyJaggedArray = (int[][,,][,,,]) CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(_MyCrazyJaggedArray, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyThreeDimArrayInt_Accessed && _MyThreeDimArrayInt != null)
+            {
+                _MyThreeDimArrayInt = (int[,,]) CloneOrChange_int_B_c_c_b(_MyThreeDimArrayInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

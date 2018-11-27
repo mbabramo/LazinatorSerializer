@@ -491,22 +491,7 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyLinkedListInt_Accessed && _MyLinkedListInt != null)
-                    {
-                        _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList_Gint_g(_MyLinkedListInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListInt_Accessed && _MyListInt != null)
-                    {
-                        _MyListInt = (List<int>) CloneOrChange_List_Gint_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListInt2_Accessed && _MyListInt2 != null)
-                    {
-                        _MyListInt2 = (List<int>) CloneOrChange_List_Gint_g(_MyListInt2, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MySortedSetInt_Accessed && _MySortedSetInt != null)
-                    {
-                        _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet_Gint_g(_MySortedSetInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -518,6 +503,27 @@ namespace LazinatorTests.Examples.Collections
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyLinkedListInt_Accessed && _MyLinkedListInt != null)
+            {
+                _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList_Gint_g(_MyLinkedListInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListInt_Accessed && _MyListInt != null)
+            {
+                _MyListInt = (List<int>) CloneOrChange_List_Gint_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListInt2_Accessed && _MyListInt2 != null)
+            {
+                _MyListInt2 = (List<int>) CloneOrChange_List_Gint_g(_MyListInt2, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MySortedSetInt_Accessed && _MySortedSetInt != null)
+            {
+                _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet_Gint_g(_MySortedSetInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

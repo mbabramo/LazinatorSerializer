@@ -590,26 +590,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (true)
-                    {
-                        _IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), _IntWrapper_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (true)
-                    {
-                        _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
-                    {
-                        _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListExampleStruct_Accessed && _MyListExampleStruct != null)
-                    {
-                        _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null)
-                    {
-                        _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
                 _IntWrapper_Accessed = false;
@@ -623,6 +604,31 @@ namespace LazinatorTests.Examples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (true)
+            {
+                _IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), _IntWrapper_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (true)
+            {
+                _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
+            {
+                _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListExampleStruct_Accessed && _MyListExampleStruct != null)
+            {
+                _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null)
+            {
+                _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

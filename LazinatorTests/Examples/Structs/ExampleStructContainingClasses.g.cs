@@ -619,26 +619,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyChild1_Accessed && _MyChild1 != null)
-                    {
-                        _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_MyChild2_Accessed && _MyChild2 != null)
-                    {
-                        _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_MyLazinatorList_Accessed && _MyLazinatorList != null)
-                    {
-                        _MyLazinatorList = (List<Example>) CloneOrChange_List_GExample_g(_MyLazinatorList, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListValues_Accessed && _MyListValues != null)
-                    {
-                        _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (true)
-                    {
-                        _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -650,6 +631,31 @@ namespace LazinatorTests.Examples
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyChild1_Accessed && _MyChild1 != null)
+            {
+                _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_MyChild2_Accessed && _MyChild2 != null)
+            {
+                _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_MyLazinatorList_Accessed && _MyLazinatorList != null)
+            {
+                _MyLazinatorList = (List<Example>) CloneOrChange_List_GExample_g(_MyLazinatorList, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListValues_Accessed && _MyListValues != null)
+            {
+                _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (true)
+            {
+                _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

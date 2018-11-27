@@ -421,10 +421,7 @@ namespace Lazinator.Spans
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_ByteSpan_Accessed && _ByteSpan != null)
-                    {
-                        _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -436,6 +433,15 @@ namespace Lazinator.Spans
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_ByteSpan_Accessed && _ByteSpan != null)
+            {
+                _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

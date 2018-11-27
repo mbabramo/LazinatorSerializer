@@ -400,10 +400,7 @@ namespace Lazinator.Collections.Dictionary
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_Buckets_Accessed && _Buckets != null)
-                    {
-                        _Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex + sizeof(int), _Buckets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -415,6 +412,15 @@ namespace Lazinator.Collections.Dictionary
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_Buckets_Accessed && _Buckets != null)
+            {
+                _Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex + sizeof(int), _Buckets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

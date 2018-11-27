@@ -458,14 +458,7 @@ namespace LazinatorTests.Examples.Subclasses
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
-                    {
-                        _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
-                    if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
-                    {
-                        _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -477,6 +470,19 @@ namespace LazinatorTests.Examples.Subclasses
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
+            {
+                _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+            if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
+            {
+                _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

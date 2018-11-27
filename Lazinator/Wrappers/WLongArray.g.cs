@@ -328,10 +328,7 @@ namespace Lazinator.Wrappers
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_WrappedValue_Accessed && _WrappedValue != null)
-                    {
-                        _WrappedValue = (long[]) CloneOrChange_long_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -343,6 +340,15 @@ namespace Lazinator.Wrappers
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_WrappedValue_Accessed && _WrappedValue != null)
+            {
+                _WrappedValue = (long[]) CloneOrChange_long_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

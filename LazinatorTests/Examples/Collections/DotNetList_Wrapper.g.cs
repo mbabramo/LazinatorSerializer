@@ -415,18 +415,7 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyListInt_Accessed && _MyListInt != null)
-                    {
-                        _MyListInt = (List<WInt>) CloneOrChange_List_GWInt_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListNullableByte_Accessed && _MyListNullableByte != null)
-                    {
-                        _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List_GWNullableByte_g(_MyListNullableByte, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    if (_MyListNullableInt_Accessed && _MyListNullableInt != null)
-                    {
-                        _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List_GWNullableInt_g(_MyListNullableInt, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -438,6 +427,23 @@ namespace LazinatorTests.Examples.Collections
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyListInt_Accessed && _MyListInt != null)
+            {
+                _MyListInt = (List<WInt>) CloneOrChange_List_GWInt_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListNullableByte_Accessed && _MyListNullableByte != null)
+            {
+                _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List_GWNullableByte_g(_MyListNullableByte, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyListNullableInt_Accessed && _MyListNullableInt != null)
+            {
+                _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List_GWNullableInt_g(_MyListNullableInt, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {

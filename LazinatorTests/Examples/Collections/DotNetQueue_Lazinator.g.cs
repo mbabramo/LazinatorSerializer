@@ -310,10 +310,7 @@ namespace LazinatorTests.Examples.Collections
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
-                    {
-                        _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy(), true);
-                    }
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -325,6 +322,15 @@ namespace LazinatorTests.Examples.Collections
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
         }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
+            {
+                _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy(), true);
+            }
+        }
+        
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
