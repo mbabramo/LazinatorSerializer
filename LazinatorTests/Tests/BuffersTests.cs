@@ -281,6 +281,32 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void RemoveBufferWorks_RecordLikeContainer()
+        {
+            RecordLikeContainer e = new RecordLikeContainer
+            {
+                MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 17 })
+            };
+
+            e = e.CloneLazinatorTyped();
+            e.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
+            e.RemoveBufferInHierarchy();
+            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            e.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            var x = e.MyRecordLikeTypeWithLazinator.Example.MyChar;
+            e.UpdateStoredBuffer(); // should remove the buffer within the struct
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse(); 
+            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            e.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            e = e.CloneLazinatorTyped();
+            e.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
+            e.UpdateStoredBuffer();
+            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            e.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+        }
+
+        [Fact]
         public void RemoveBufferWorks_ExampleStructContainingStructContainer()
         {
             ContainerForExampleStructWithoutClass e = new ContainerForExampleStructWithoutClass();
@@ -669,7 +695,7 @@ namespace LazinatorTests.Tests
         {
             RecordLikeContainer e = new RecordLikeContainer
             {
-                MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample())
+                MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 17 })
             };
 
             e = e.CloneLazinatorTyped();

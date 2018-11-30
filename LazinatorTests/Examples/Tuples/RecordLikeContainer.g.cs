@@ -16,6 +16,7 @@ namespace LazinatorTests.Examples.Tuples
     using Lazinator.Exceptions;
     using Lazinator.Support;
     using LazinatorTests.Examples;
+    using LazinatorTests.Examples.Structs;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
@@ -561,6 +562,10 @@ namespace LazinatorTests.Examples.Tuples
             if (updateStoredBuffer)
             {
                 _MyRecordLikeTypeWithLazinator_ByteIndex = startOfObjectPosition - startPosition;
+                if (true)
+                {
+                    _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
+                }
             }
             if (updateStoredBuffer)
             {
@@ -712,7 +717,17 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new RecordLikeTypeWithLazinator(item1, item2, item3);
+            ExampleStructWithoutClass item4 = default;
+            int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item4 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
+                item4 = new ExampleStructWithoutClass();
+                item4.DeserializeLazinator(childData);;
+            }
+            bytesSoFar += lengthCollectionMember_item4;
+            
+            var tupleType = new RecordLikeTypeWithLazinator(item1, item2, item3, item4);
             
             return tupleType;
         }
@@ -733,11 +748,14 @@ namespace LazinatorTests.Examples.Tuples
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
             };
+            
+            void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
         }
         
         private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age),(string) (itemToConvert.Name),(Example) cloneOrChangeFunc((itemToConvert.Example)));
+            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age),(string) (itemToConvert.Name),(Example) cloneOrChangeFunc((itemToConvert.Example)),(ExampleStructWithoutClass) cloneOrChangeFunc((itemToConvert.ExampleStruct)));
         }
         
     }
