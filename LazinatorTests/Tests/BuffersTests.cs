@@ -665,6 +665,20 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void BuffersUpdateInTandem_RecordLikeContainer()
+        {
+            RecordLikeContainer e = new RecordLikeContainer
+            {
+                MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample())
+            };
+
+            e = e.CloneLazinatorTyped();
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // just to make container dirty
+            ConfirmBuffersUpdateInTandem(e);
+        }
+
+        [Fact]
         public void BuffersUpdateInTandem_HashSet_Struct()
         {
             ExampleContainerContainingClassesStructContainingClasses e = new ExampleContainerContainingClassesStructContainingClasses()

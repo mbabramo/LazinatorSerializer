@@ -1032,7 +1032,18 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorSerializationRecordLikeTypes()
+        public void RecordLikeTypes_DefaultValues()
+        {
+            RecordLikeContainer original = new RecordLikeContainer()
+            {
+            };
+            var clone = original.CloneLazinatorTyped();
+            clone.MyRecordLikeClass.Should().BeNull();
+            clone.MyRecordLikeType.Age.Should().Be(0); // default value in struct
+        }
+
+        [Fact]
+        public void RecordLikeTypes()
         {
             RecordLikeContainer original = new RecordLikeContainer()
             {
