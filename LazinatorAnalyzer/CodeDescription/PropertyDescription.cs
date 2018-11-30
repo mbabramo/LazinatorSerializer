@@ -1358,7 +1358,7 @@ namespace Lazinator.CodeDescription
 
         private string EnsureExcludableChildrenLoaded()
         {
-            return $@"if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_{PropertyName}_Accessed)
+            return $@"if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_{PropertyName}_Accessed)
                                 {{
                                    var deserialized = {PropertyName};
                                 }}
