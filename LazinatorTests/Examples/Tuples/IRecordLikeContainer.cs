@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using System.Collections.Generic;
 
 namespace LazinatorTests.Examples.Tuples
 {
@@ -9,5 +10,6 @@ namespace LazinatorTests.Examples.Tuples
         RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator { get; set; }
         RecordLikeClass MyRecordLikeClass { get; set; }
         MismatchedRecordLikeType MyMismatchedRecordLikeType { get; set; }
+        int MyInt { get; set; }
     }
 }

@@ -699,16 +699,72 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void BuffersUpdateInTandem_RecordLikeCollections()
+        {
+            RecordLikeCollections e = new RecordLikeCollections
+            {
+                MyDictionaryWithRecordLikeTypeValues = new Dictionary<int, RecordLikeTypeWithLazinator>() { { 0, new RecordLikeTypeWithLazinator(12, "Sam", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 18 }) } },
+                MyDictionaryWithRecordLikeContainers = new Dictionary<int, RecordLikeContainer>() { { 0, new RecordLikeContainer() { MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(12, "Sam", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 18 } ) } } }
+            };
+            DateTime expectedDateTime = new DateTime(1972, 10, 22, 17, 36, 0);
+            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
+            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
+            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
+
+            e = e.CloneLazinatorTyped();
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
+            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
+            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
+
+            e = e.CloneLazinatorTyped();
+            e.MyInt = 25; // make container dirty
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
+            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
+
+            e = e.CloneLazinatorTyped();
+            e.MyInt = 25; // make container dirty
+            var x = e.MyDictionaryWithRecordLikeTypeValues;
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
+            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
+            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
+
+            e = e.CloneLazinatorTyped();
+            e.MyInt = 25; // make container dirty
+            var y = e.MyDictionaryWithRecordLikeTypeValues[0];
+            ConfirmBuffersUpdateInTandem(e);
+            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
+            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
+            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
+
+            e = e.CloneLazinatorTyped();
+            e.MyInt = 25; // make container dirty
+            var z = e.MyDictionaryWithRecordLikeTypeValues[0].Example;
+            e.MyDictionaryWithRecordLikeTypeValues[1] = new RecordLikeTypeWithLazinator(12, "Sam", GetTypicalExample(),
+                new ExampleStructWithoutClass() { MyInt = 18 });
+            ConfirmBuffersUpdateInTandem(e);
+            e = e.CloneLazinatorTyped();
+            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
+            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
+            e.MyDictionaryWithRecordLikeTypeValues[1].ExampleStruct.MyInt.Should().Be(18);
+            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
+        }
+
+        [Fact]
         public void BuffersUpdateInTandem_RecordLikeContainer()
         {
             RecordLikeContainer e = new RecordLikeContainer
             {
-                MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 17 })
+                MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 17 }),
             };
 
             e = e.CloneLazinatorTyped();
             ConfirmBuffersUpdateInTandem(e);
-            e.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // just to make container dirty
+
+            e = e.CloneLazinatorTyped();
+            e.MyInt = 25; // make container dirty
             ConfirmBuffersUpdateInTandem(e);
         }
 

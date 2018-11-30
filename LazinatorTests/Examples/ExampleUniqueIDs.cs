@@ -84,6 +84,7 @@
         ClosedGenericWithGeneric,
         NonLazinatorInterchangeableStruct_LazinatorInterchange,
         ExampleGrandchild,
-        SpanInDotNetList
+        SpanInDotNetList,
+        RecordLikeCollections
     }
 }
