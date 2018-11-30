@@ -371,7 +371,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _SomeInt);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_SpanList_Accessed)
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_SpanList_Accessed)
             {
                 var deserialized = SpanList;
             }

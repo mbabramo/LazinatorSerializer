@@ -291,7 +291,7 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String4);
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String5);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList4_Accessed)
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList4_Accessed)
             {
                 var deserialized = IntList4;
             }
@@ -308,7 +308,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList4_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode && !_IntList5_Accessed)
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList5_Accessed)
             {
                 var deserialized = IntList5;
             }
