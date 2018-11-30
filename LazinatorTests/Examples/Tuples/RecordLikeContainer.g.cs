@@ -630,6 +630,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static void ConvertToBytes_RecordLikeClass(ref BinaryBufferWriter writer, RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (itemToConvert == null)
+            {
+                return;
+            }
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
             
@@ -646,7 +650,11 @@ namespace LazinatorTests.Examples.Tuples
         
         private static RecordLikeClass CloneOrChange_RecordLikeClass(RecordLikeClass itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new RecordLikeClass((int) (itemToConvert.Age),(Example) cloneOrChangeFunc((itemToConvert.Example)));
+            if (itemToConvert == null)
+            {
+                return default(RecordLikeClass);
+            }
+            return new RecordLikeClass((int) (itemToConvert?.Age ?? default),(Example) cloneOrChangeFunc((itemToConvert?.Example)));
         }
         
         private static RecordLikeType ConvertFromBytes_RecordLikeType(LazinatorMemory storage)

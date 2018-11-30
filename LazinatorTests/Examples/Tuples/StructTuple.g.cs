@@ -738,7 +738,8 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert == null)
             {
                 return default((int, double)?);
-            }return ((int) (itemToConvert?.Item1 ?? default),(double) (itemToConvert?.Item2 ?? default));
+            }
+            return ((int) (itemToConvert?.Item1 ?? default),(double) (itemToConvert?.Item2 ?? default));
         }
         
         private static (uint, ExampleChild, NonLazinatorClass) ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(LazinatorMemory storage)

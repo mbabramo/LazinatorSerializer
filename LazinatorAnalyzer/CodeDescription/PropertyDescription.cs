@@ -615,7 +615,7 @@ namespace Lazinator.CodeDescription
             TypeSymbolIfNoProperty = t;
             PropertyType = LazinatorPropertyType.SupportedTuple;
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
-            Nullable = false;
+            Nullable = !t.IsValueType;
 
             InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
                 .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
@@ -2226,7 +2226,8 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return default({AppropriatelyQualifiedTypeName});", ""))}return {creationText};
+                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return default({AppropriatelyQualifiedTypeName});", ""))}{IIF(Nullable,$@"
+                            ")}return {creationText};
                     }}
             ");
         }

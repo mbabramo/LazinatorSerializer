@@ -782,7 +782,8 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert == null)
             {
                 return default(Tuple<uint, ExampleChild, NonLazinatorClass>);
-            }return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
+            }
+            return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<uint?, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(LazinatorMemory storage)
@@ -855,7 +856,8 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert == null)
             {
                 return default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
-            }return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
+            }
+            return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<int, ExampleStructContainingClasses> ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(LazinatorMemory storage)
@@ -903,7 +905,8 @@ namespace LazinatorTests.Examples.Tuples
             if (itemToConvert == null)
             {
                 return default(Tuple<int, ExampleStructContainingClasses>);
-            }return new Tuple<int, ExampleStructContainingClasses>((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses) cloneOrChangeFunc((itemToConvert?.Item2 ?? default)));
+            }
+            return new Tuple<int, ExampleStructContainingClasses>((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses) cloneOrChangeFunc((itemToConvert?.Item2 ?? default)));
         }
         
     }
