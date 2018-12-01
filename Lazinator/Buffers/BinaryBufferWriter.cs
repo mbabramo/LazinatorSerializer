@@ -6,7 +6,7 @@ namespace Lazinator.Buffers
 {
     public ref struct BinaryBufferWriter
     {
-        public static bool LittleEndianStorage = false;
+        public static bool LittleEndianStorage = true;
 
         public override string ToString()
         {

@@ -5,6 +5,7 @@ using Xunit;
 
 namespace LazinatorTests.Tests
 {
+    [Collection("EncodePrimitives")]
     public class EncodePrimitivesTest
     {
         [Fact]

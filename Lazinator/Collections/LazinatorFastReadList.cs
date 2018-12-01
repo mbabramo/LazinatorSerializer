@@ -11,13 +11,13 @@ namespace Lazinator.Collections
     /// </summary>
     /// <typeparam name="T">A primitive value type (such as int, float, char, etc.) Note that using numeric types will work only on little endian processors. </typeparam>
     [Implements(new string[] { "PreSerialization" })]
-    public sealed partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
+    public partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
     {
         //TODO: Do conversions if necessary in the ReadOnly property and in ConvertFromList if on a big-endian processor. Ideally, this conversion should be handled at the level of ReadOnlySpan etc.
         //   [NonSerialized]
         //bool _IsBigEndian = !BitConverter.IsLittleEndian;
 
-        public ReadOnlySpan<T> ReadOnly
+        public virtual ReadOnlySpan<T> ReadOnly
         {
             get => MemoryMarshal.Cast<byte, T>(ReadOnlyBytes);
             set => ReadOnlyBytes = MemoryMarshal.Cast<T, byte>(value);
