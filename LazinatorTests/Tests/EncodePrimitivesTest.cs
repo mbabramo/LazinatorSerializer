@@ -5,7 +5,6 @@ using Xunit;
 
 namespace LazinatorTests.Tests
 {
-    [Collection("EncodePrimitives")]
     public class EncodePrimitivesTest
     {
         [Fact]
@@ -84,13 +83,9 @@ namespace LazinatorTests.Tests
             }
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeInt16(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeInt16()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             Int16 valueToWrite = 1790;
             Int16 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -105,16 +100,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeInt32(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeInt32()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             Int32 valueToWrite = 179021;
             Int32 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -129,16 +119,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeInt64(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeInt64()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             Int64 valueToWrite = 179021235;
             Int64 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -153,16 +138,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeUInt16(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeUInt16()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             UInt16 valueToWrite = 1790;
             UInt16 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -177,16 +157,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeUInt32(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeUInt32()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             UInt32 valueToWrite = 179021;
             UInt32 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -201,16 +176,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeUInt64(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeUInt64()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             UInt64 valueToWrite = 179021235;
             UInt64 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -225,16 +195,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeSingle(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeSingle()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             float valueToWrite = 3.4F;
             float valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -250,16 +215,11 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
-        [Theory]
-        [InlineData(new object[] { true })]
-        [InlineData(new object[] { false })]
-        public void ReadOnlySpan_CanEncodeDouble(bool littleEndian)
+        [Fact]
+        public void ReadOnlySpan_CanEncodeDouble()
         {
-            bool originalEndiannessSetting = BinaryBufferWriter.LittleEndianStorage;
-            BinaryBufferWriter.LittleEndianStorage = littleEndian;
             double valueToWrite = 3.4;
             double valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
@@ -274,7 +234,6 @@ namespace LazinatorTests.Tests
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
             }
-            BinaryBufferWriter.LittleEndianStorage = originalEndiannessSetting;
         }
 
         [Fact]

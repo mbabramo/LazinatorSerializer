@@ -6,6 +6,9 @@ namespace Lazinator.Buffers
 {
     public ref struct BinaryBufferWriter
     {
+        /// <summary>
+        /// Indicates whether storage should be in little Endian format. This should be true unless the intent is to use software primarily on big Endian computers, which are comparatively rarer.
+        /// </summary>
         public static bool LittleEndianStorage = true;
 
         public override string ToString()
