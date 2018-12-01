@@ -509,29 +509,33 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
-                _Example2 = (Example) _Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example2 = (Example) _Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
-                _Example3 = (Example) _Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Example3 = (Example) _Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && IntList1 != null) || (_IntList1_Accessed && _IntList1 != null))
             {
-                _IntList1 = (List<int>) CloneOrChange_List_Gint_g(_IntList1, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _IntList1 = (List<int>) CloneOrChange_List_Gint_g(_IntList1, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && IntList2 != null) || (_IntList2_Accessed && _IntList2 != null))
             {
-                _IntList2 = (List<int>) CloneOrChange_List_Gint_g(_IntList2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _IntList2 = (List<int>) CloneOrChange_List_Gint_g(_IntList2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && IntList3 != null) || (_IntList3_Accessed && _IntList3 != null))
             {
-                _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public override void FreeInMemoryObjects()

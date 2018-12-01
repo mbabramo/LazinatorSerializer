@@ -468,7 +468,7 @@ namespace Lazinator.Collections
             _CountWhenDeserialized = -1;
         }
 
-        public void OnForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public void OnForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if (!exploreOnlyDeserializedChildren)
                 FullyDeserialize();

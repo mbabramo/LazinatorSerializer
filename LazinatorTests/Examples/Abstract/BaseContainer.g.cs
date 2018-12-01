@@ -286,13 +286,17 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
             {
-                _MyBase = (Base) _MyBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyBase = (Base) _MyBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

@@ -351,25 +351,29 @@ namespace LazinatorTests.Examples.Collections
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && MyDictionary != null) || (_MyDictionary_Accessed && _MyDictionary != null))
             {
-                _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyDictionary = (Dictionary<int, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyDictionaryStructs != null) || (_MyDictionaryStructs_Accessed && _MyDictionaryStructs != null))
             {
-                _MyDictionaryStructs = (Dictionary<WInt, WInt>) CloneOrChange_Dictionary_GWInt_c_C32WInt_g(_MyDictionaryStructs, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyDictionaryStructs = (Dictionary<WInt, WInt>) CloneOrChange_Dictionary_GWInt_c_C32WInt_g(_MyDictionaryStructs, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedDictionary != null) || (_MySortedDictionary_Accessed && _MySortedDictionary != null))
             {
-                _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MySortedDictionary = (SortedDictionary<int, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedList != null) || (_MySortedList_Accessed && _MySortedList != null))
             {
-                _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MySortedList = (SortedList<int, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

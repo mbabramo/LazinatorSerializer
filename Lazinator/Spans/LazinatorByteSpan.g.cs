@@ -284,7 +284,7 @@ namespace Lazinator.Spans
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if (!exploreOnlyDeserializedChildren)
             {
@@ -298,7 +298,11 @@ namespace Lazinator.Spans
             {
                 var deserialized = ReadOrWrite;
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

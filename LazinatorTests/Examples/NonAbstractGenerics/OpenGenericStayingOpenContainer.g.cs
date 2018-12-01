@@ -597,29 +597,33 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && ClosedGenericBase != null) || (_ClosedGenericBase_Accessed && _ClosedGenericBase != null))
             {
-                _ClosedGenericBase = (OpenGeneric<Base>) _ClosedGenericBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericBase = (OpenGeneric<Base>) _ClosedGenericBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericFloat != null) || (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null))
             {
-                _ClosedGenericFloat = (OpenGeneric<WFloat>) _ClosedGenericFloat.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericFloat = (OpenGeneric<WFloat>) _ClosedGenericFloat.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericFromBaseWithBase != null) || (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null))
             {
-                _ClosedGenericFromBaseWithBase = (GenericFromBase<Base>) _ClosedGenericFromBaseWithBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericFromBaseWithBase = (GenericFromBase<Base>) _ClosedGenericFromBaseWithBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericInterface != null) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null))
             {
-                _ClosedGenericInterface = (OpenGeneric<IExampleChild>) _ClosedGenericInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericInterface = (OpenGeneric<IExampleChild>) _ClosedGenericInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && ClosedGenericNonexclusiveInterface != null) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null))
             {
-                _ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) _ClosedGenericNonexclusiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) _ClosedGenericNonexclusiveInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

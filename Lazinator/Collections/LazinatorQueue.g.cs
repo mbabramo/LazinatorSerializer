@@ -297,13 +297,17 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || (_UnderlyingList_Accessed && _UnderlyingList != null))
             {
-                _UnderlyingList = (LazinatorList<T>) _UnderlyingList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _UnderlyingList = (LazinatorList<T>) _UnderlyingList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

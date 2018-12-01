@@ -245,7 +245,7 @@ namespace Lazinator.Wrappers
             yield break;
         }
         
-        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if (!exploreOnlyDeserializedChildren)
             {
@@ -255,7 +255,11 @@ namespace Lazinator.Wrappers
                     Value = deserialized;
                 }
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public void FreeInMemoryObjects()

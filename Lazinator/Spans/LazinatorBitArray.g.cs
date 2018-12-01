@@ -349,13 +349,17 @@ namespace Lazinator.Spans
             yield break;
         }
         
-        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
             {
-                _ByteSpan = (LazinatorByteSpan) _ByteSpan.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ByteSpan = (LazinatorByteSpan) _ByteSpan.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public void FreeInMemoryObjects()

@@ -318,13 +318,17 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && UnderlyingSet != null) || (_UnderlyingSet_Accessed && _UnderlyingSet != null))
             {
-                _UnderlyingSet = (AvlSet<LazinatorTuple<T, WInt>>) _UnderlyingSet.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _UnderlyingSet = (AvlSet<LazinatorTuple<T, WInt>>) _UnderlyingSet.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

@@ -1065,42 +1065,46 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
             {
-                _IncludableChild = (ExampleChild) _IncludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _IncludableChild = (ExampleChild) _IncludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
             {
-                _MyChild1 = (ExampleChild) _MyChild1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyChild1 = (ExampleChild) _MyChild1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
             {
-                _MyChild2 = (ExampleChild) _MyChild2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyChild2 = (ExampleChild) _MyChild2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || (_MyChild2Previous_Accessed && _MyChild2Previous != null))
             {
-                _MyChild2Previous = (ExampleChild) _MyChild2Previous.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyChild2Previous = (ExampleChild) _MyChild2Previous.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
             {
-                _MyInterfaceImplementer = (IExampleNonexclusiveInterface) _MyInterfaceImplementer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyInterfaceImplementer = (IExampleNonexclusiveInterface) _MyInterfaceImplementer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 var deserialized = WrappedInt;
-                _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || (_ExcludableChild_Accessed && _ExcludableChild != null))
             {
-                _ExcludableChild = (ExampleChild) _ExcludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _ExcludableChild = (ExampleChild) _ExcludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && MyNonLazinatorChild != null) || (_MyNonLazinatorChild_Accessed && _MyNonLazinatorChild != null))
             {
-                _MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

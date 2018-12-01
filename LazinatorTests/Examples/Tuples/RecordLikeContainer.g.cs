@@ -151,9 +151,9 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeType_Accessed = true;
             }
         }
-        public bool _MyRecordLikeType_Accessed;
-
-        public RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
+        protected bool _MyRecordLikeType_Accessed;
+        
+        protected RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator
         {
@@ -183,7 +183,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeTypeWithLazinator_Accessed = true;
             }
         }
-        public bool _MyRecordLikeTypeWithLazinator_Accessed;
+        protected bool _MyRecordLikeTypeWithLazinator_Accessed;
         
         /* Serialization, deserialization, and object relationships */
         
@@ -370,28 +370,32 @@ namespace LazinatorTests.Examples.Tuples
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 var deserialized = MyMismatchedRecordLikeType;
-                _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && MyRecordLikeClass != null) || (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null))
             {
-                _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 var deserialized = MyRecordLikeType;
-                _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
                 var deserialized = MyRecordLikeTypeWithLazinator;
-                _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

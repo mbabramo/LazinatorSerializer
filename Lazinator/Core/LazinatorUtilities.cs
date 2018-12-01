@@ -704,7 +704,7 @@ namespace Lazinator.Core
                         }
                         return node;
                     },
-                    true);
+                    true, true);
         }
 
         public static bool DescendantDirtinessIsConsistent(this ILazinator startPoint)
@@ -872,7 +872,7 @@ namespace Lazinator.Core
             lazinator = lazinator.ForEachLazinator(l =>
             {
                 return l;
-            }, false);
+            }, false, true);
             return lazinator;
         }
 
@@ -885,7 +885,7 @@ namespace Lazinator.Core
         {
             if (lazinator == null)
                 return null;
-            lazinator = lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), false); // this will visit every node, thus deserializing everything, and it will remove the buffer at each node if needed.
+            lazinator = lazinator.ForEachLazinator(l => RemoveBuffer_Helper(l, disposeBuffer), false, true); // this will visit every node, thus deserializing everything, and it will remove the buffer at each node if needed.
             return lazinator;
         }
 

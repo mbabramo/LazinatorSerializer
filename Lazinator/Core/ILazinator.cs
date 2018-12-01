@@ -82,8 +82,9 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="changeFunc">A function to change the Lazinator</param>
         /// <param name="exploreOnlyDeserializedChildren">If true, children that have not been deserialized are ignored.</param>
-        /// <returns></returns>
-        ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren);
+        /// <param name="changeThisLevel">Whether the change function should be applied at this level or only at lower levels</param>
+        /// <returns>The Lazinator object, as transformed. (This is necessary to support this operation on Lazinator structs.)</returns>
+        ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 
         /// <summary>
         /// Returns the serialized length of an object, performing the serialization needed to make the computation if necessary.

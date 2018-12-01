@@ -156,7 +156,7 @@ namespace LazinatorTests.Tests
                 if (x is WString ws)
                     sb.Append(ws.WrappedValue);
                 return x;
-            }, true);
+            }, true, true);
             sb.ToString().Should().Be("helloworld");
             l = l.CloneLazinatorTyped();
             sb = new StringBuilder();
@@ -165,14 +165,14 @@ namespace LazinatorTests.Tests
                 if (x is WString ws)
                     sb.Append(ws.WrappedValue);
                 return x;
-            }, true);
+            }, true, true);
             sb.ToString().Should().Be("");
             c = l.ForEachLazinator(x =>
             {
                 if (x is WString ws)
                     sb.Append(ws.WrappedValue);
                 return x;
-            }, false); // now deserialize
+            }, false, true); // now deserialize
             sb.ToString().Should().Be("helloworld");
 
         }

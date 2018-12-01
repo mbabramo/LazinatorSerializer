@@ -405,17 +405,21 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
-                _FourByteItems = (LazinatorFastReadList<int>) _FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _FourByteItems = (LazinatorFastReadList<int>) _FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
             {
-                _TwoByteItems = (LazinatorFastReadList<short>) _TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _TwoByteItems = (LazinatorFastReadList<short>) _TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public void FreeInMemoryObjects()

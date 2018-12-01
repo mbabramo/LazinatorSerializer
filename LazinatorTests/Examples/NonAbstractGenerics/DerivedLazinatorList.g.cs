@@ -75,10 +75,14 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
-            return changeFunc(this);
+            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public override void FreeInMemoryObjects()

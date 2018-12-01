@@ -419,15 +419,15 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && MyExampleGrandchild != null) || (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null))
             {
-                _MyExampleGrandchild = (ExampleGrandchild) _MyExampleGrandchild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyExampleGrandchild = (ExampleGrandchild) _MyExampleGrandchild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
             {
-                _MyWrapperContainer = (WrapperContainer) _MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _MyWrapperContainer = (WrapperContainer) _MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (!exploreOnlyDeserializedChildren)
             {
@@ -437,7 +437,11 @@ namespace LazinatorTests.Examples
                     ByteSpan = deserialized;
                 }
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

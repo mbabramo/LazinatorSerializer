@@ -112,14 +112,18 @@ namespace LazinatorTests.Examples.Abstract
             yield break;
         }
         
-        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+            base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
             if ((!exploreOnlyDeserializedChildren && IntList6 != null) || (_IntList6_Accessed && _IntList6 != null))
             {
-                _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                _IntList6 = (List<int>) CloneOrChange_List_Gint_g(_IntList6, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public override void FreeInMemoryObjects()

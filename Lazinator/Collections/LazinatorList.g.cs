@@ -309,18 +309,22 @@ namespace Lazinator.Collections
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && Offsets != null) || (_Offsets_Accessed && _Offsets != null))
             {
-                _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = MainListSerialized;
             }
-            OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
-            return changeFunc(this);
+            OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public virtual void FreeInMemoryObjects()

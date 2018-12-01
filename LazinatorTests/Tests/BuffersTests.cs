@@ -792,7 +792,7 @@ namespace LazinatorTests.Tests
                         b.AllocationID.Should().Be(allocationID);
                 }
                 return x;
-            }, true);
+            }, true, true);
         }
 
         private LazinatorDictionary<WInt, Example> GetDictionary()

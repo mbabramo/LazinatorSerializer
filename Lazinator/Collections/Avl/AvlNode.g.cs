@@ -621,25 +621,29 @@ namespace Lazinator.Collections.Avl
             yield break;
         }
         
-        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
             {
-                _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && Left != null) || (_Left_Accessed && _Left != null))
             {
-                _Left = (AvlNode<TKey, TValue>) _Left.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Left = (AvlNode<TKey, TValue>) _Left.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && Right != null) || (_Right_Accessed && _Right != null))
             {
-                _Right = (AvlNode<TKey, TValue>) _Right.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Right = (AvlNode<TKey, TValue>) _Right.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
             {
-                _Value = (TValue) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                _Value = (TValue) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            return changeFunc(this);
+            if (changeThisLevel)
+            {
+                return changeFunc(this);
+            }
+            return this;
         }
         
         public void FreeInMemoryObjects()
