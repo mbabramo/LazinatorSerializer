@@ -562,7 +562,11 @@ namespace LazinatorTests.Examples.Tuples
             {
                 void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
-                if (itemToConvert.Value._MyRecordLikeTypeWithLazinator.Example == null)
+                if (itemToConvert.Value._MyRecordLikeTypeWithLazinator_Accessed == false)
+                {
+                    var DEBUG = 0;
+                }
+                if (itemToConvert.Value._MyRecordLikeTypeWithLazinator.Example == null && updateStoredBuffer)
                 {
                     var DEBUG = 0;
                 }

@@ -712,43 +712,13 @@ namespace LazinatorTests.Tests
             e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
 
             e = e.CloneLazinatorTyped();
+            e.MyInt = 30;
+            var deserialized = e.MyDictionaryWithRecordLikeContainers;
+            e.UpdateStoredBuffer();
+            e = e.CloneLazinatorTyped();
             ConfirmBuffersUpdateInTandem(e);
             e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
             e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
-            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
-
-            e = e.CloneLazinatorTyped();
-            e.MyInt = 25; // make container dirty
-            ConfirmBuffersUpdateInTandem(e);
-            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
-            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
-
-            e = e.CloneLazinatorTyped();
-            e.MyInt = 25; // make container dirty
-            var x = e.MyDictionaryWithRecordLikeTypeValues;
-            ConfirmBuffersUpdateInTandem(e);
-            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
-            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
-            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
-
-            e = e.CloneLazinatorTyped();
-            e.MyInt = 25; // make container dirty
-            var y = e.MyDictionaryWithRecordLikeTypeValues[0];
-            ConfirmBuffersUpdateInTandem(e);
-            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
-            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
-            e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
-
-            e = e.CloneLazinatorTyped();
-            e.MyInt = 25; // make container dirty
-            var z = e.MyDictionaryWithRecordLikeTypeValues[0].Example;
-            e.MyDictionaryWithRecordLikeTypeValues[1] = new RecordLikeTypeWithLazinator(12, "Sam", GetTypicalExample(),
-                new ExampleStructWithoutClass() { MyInt = 18 });
-            ConfirmBuffersUpdateInTandem(e);
-            e = e.CloneLazinatorTyped();
-            e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
-            e.MyDictionaryWithRecordLikeTypeValues[0].ExampleStruct.MyInt.Should().Be(18);
-            e.MyDictionaryWithRecordLikeTypeValues[1].ExampleStruct.MyInt.Should().Be(18);
             e.MyDictionaryWithRecordLikeContainers[0].MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(expectedDateTime);
         }
 

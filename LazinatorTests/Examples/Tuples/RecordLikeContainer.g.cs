@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeType_Accessed = true;
             }
         }
-        protected bool _MyRecordLikeType_Accessed;
+        public bool _MyRecordLikeType_Accessed;
 
         public RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -183,7 +183,7 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeTypeWithLazinator_Accessed = true;
             }
         }
-        protected bool _MyRecordLikeTypeWithLazinator_Accessed;
+        public bool _MyRecordLikeTypeWithLazinator_Accessed;
         
         /* Serialization, deserialization, and object relationships */
         
