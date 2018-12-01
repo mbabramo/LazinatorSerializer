@@ -6,6 +6,8 @@ namespace Lazinator.Buffers
 {
     public ref struct BinaryBufferWriter
     {
+        public static bool LittleEndianStorage = true;
+
         public override string ToString()
         {
             return UnderlyingMemory == null ? "" : "Position " + _Position + " " + UnderlyingMemory.ToString();
@@ -201,7 +203,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteInt16LittleEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteInt16LittleEndian(Free, value) : TryWriteInt16BigEndian(Free, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -213,7 +215,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteUInt16LittleEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteUInt16LittleEndian(Free, value) : TryWriteUInt16BigEndian(Free, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -225,7 +227,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteInt32LittleEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteInt32LittleEndian(Free, value) : TryWriteInt32BigEndian(Free, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -249,7 +251,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteUInt32LittleEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteUInt32LittleEndian(Free, value) : TryWriteUInt32BigEndian(Free, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -261,7 +263,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteInt64LittleEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteInt64LittleEndian(Free, value) : TryWriteInt64BigEndian(Free, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -273,7 +275,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteUInt64LittleEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteUInt64LittleEndian(Free, value) : TryWriteUInt64BigEndian(Free, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
