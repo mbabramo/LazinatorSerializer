@@ -138,14 +138,12 @@ namespace Lazinator.Buffers
 
         public void Write(float value)
         {
-            WriteEnlargingIfNecessary(ref value);
-            Position += sizeof(float);
+            Write(BitConverter.SingleToInt32Bits(value));
         }
 
         public void Write(double value)
         {
-            WriteEnlargingIfNecessary(ref value);
-            Position += sizeof(double);
+            Write(BitConverter.DoubleToInt64Bits(value));
         }
 
         public void Write(decimal value)
