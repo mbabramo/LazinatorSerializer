@@ -346,7 +346,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
-                        public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren);
+                        public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 		                
                         public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
 
@@ -807,9 +807,9 @@ namespace Lazinator.CodeDescription
             if (IsAbstract)
                 return;
             sb.Append($@"
-                    public {DerivationKeyword}ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren)
+                    public {DerivationKeyword}ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
                     {{
-                        {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                        {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
                         ")}");
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
             {
@@ -817,7 +817,7 @@ namespace Lazinator.CodeDescription
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
                             {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
                         }}
 ");
             }
@@ -827,7 +827,7 @@ namespace Lazinator.CodeDescription
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
                             {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren), true);
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
                         }}
 ");
             }
@@ -856,10 +856,14 @@ namespace Lazinator.CodeDescription
 ");
             }
             
-            sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren);
-                    ")}return changeFunc(this);
-                            }}
-                        ");
+            sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
+                    ")}if (changeThisLevel)
+                        {{
+                            return changeFunc(this);
+                        }}
+                        return this;
+                    }}
+                ");
         }
 
         private void AppendConversionSectionStart(CodeStringBuilder sb)
