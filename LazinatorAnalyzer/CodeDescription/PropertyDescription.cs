@@ -1099,12 +1099,22 @@ namespace Lazinator.CodeDescription
             set
             {{
                 {RepeatedCodeExecution}IsDirty = true;
-                _{PropertyName} = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<{innerFullType}, byte>(value).ToArray());
+                _{PropertyName} = new ReadOnlyMemory<byte>({GetSpanCast(innerFullType, true)}(value).ToArray());
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}
         {ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;
 ");
+        }
+
+        private string GetSpanCast(string type, bool toByte)
+        {
+            if (type == "byte")
+                return "";
+            if (new string[]
+                {"Int16", "Int32", "Int64", "UInt16", "UInt32", "UInt64", "DateTime", "TimeSpan"}.Contains(type))
+                return toByte ? "Spans.CastSpanFrom" + type : "Spans.CastSpanTo" + type;
+            return toByte ? $"MemoryMarshal.Cast<{type}, byte>" : $"MemoryMarshal.Cast<byte, {type}>";
         }
 
         private string GetReadOnlySpanBackingFieldCast(string propertyName = null)
@@ -1116,7 +1126,7 @@ namespace Lazinator.CodeDescription
             string castToSpanOfCorrectType;
             if (innerFullType == "byte")
                 castToSpanOfCorrectType = $"{propertyName}{spanAccessor}";
-            else castToSpanOfCorrectType = $"MemoryMarshal.Cast<byte, {innerFullType}>({propertyName}{spanAccessor})";
+            else castToSpanOfCorrectType = $"{GetSpanCast(innerFullType, false)}({propertyName}{spanAccessor})";
             return castToSpanOfCorrectType;
         }
 
@@ -1416,8 +1426,8 @@ namespace Lazinator.CodeDescription
             string memoryOrSpanWord = isMemory ? "Memory" : "Span";
             string innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
             string innerFullTypeSizeEquivalent = (innerFullType == "DateTime" || innerFullType == "TimeSpan") ? "long" : innerFullType;
-            string source = (innerFullType == "byte") ? "itemToClone" : $"MemoryMarshal.Cast<{innerFullType}, byte>(itemToClone)";
-            string toReturn = (innerFullType == "byte") ? "clone" : $"MemoryMarshal.Cast<byte, {innerFullType}>(clone)";
+            string source = (innerFullType == "byte") ? "itemToClone" : $"{GetSpanCast(innerFullType, true)}(itemToClone)";
+            string toReturn = (innerFullType == "byte") ? "clone" : $"{GetSpanCast(innerFullType, false)}(clone)";
 
             sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {{
@@ -1443,7 +1453,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                          private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                         {{
-                            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<{innerFullType}, byte>(itemToConvert{(isSpan ? "" : ".Span")});
+                            ReadOnlySpan<byte> toConvert = {GetSpanCast(innerFullType, true)}(itemToConvert{(isSpan ? "" : ".Span")});
                             for (int i = 0; i < toConvert.Length; i++)
                             {{
                                 writer.Write(toConvert[i]);
@@ -2279,3 +2289,4 @@ namespace Lazinator.CodeDescription
         #endregion
     }
 }
+

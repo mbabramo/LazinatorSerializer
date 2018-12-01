@@ -7,7 +7,7 @@ namespace Lazinator.Buffers
 {
     public static class Spans
     {
-        public static ReadOnlySpan<Int16> CastToInt16(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<Int16> CastSpanToInt16(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, Int16>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -17,7 +17,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(cast[i]);
             return new Memory<Int16>(reversed).Span;
         }
-        public static ReadOnlySpan<Int32> CastToInt32(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<Int32> CastSpanToInt32(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, Int32>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(cast[i]);
             return new Memory<Int32>(reversed).Span;
         }
-        public static ReadOnlySpan<Int64> CastToInt64(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<Int64> CastSpanToInt64(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, Int64>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -37,7 +37,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(cast[i]);
             return new Memory<Int64>(reversed).Span;
         }
-        public static ReadOnlySpan<DateTime> CastToDateTime(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<DateTime> CastSpanToDateTime(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, DateTime>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -47,7 +47,7 @@ namespace Lazinator.Buffers
                 reversed[i] = new DateTime(BinaryPrimitives.ReverseEndianness(cast[i].Ticks));
             return new Memory<DateTime>(reversed).Span;
         }
-        public static ReadOnlySpan<TimeSpan> CastToTimeSpan(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<TimeSpan> CastSpanToTimeSpan(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, TimeSpan>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -57,7 +57,7 @@ namespace Lazinator.Buffers
                 reversed[i] = new TimeSpan(BinaryPrimitives.ReverseEndianness(cast[i].Ticks));
             return new Memory<TimeSpan>(reversed).Span;
         }
-        public static ReadOnlySpan<UInt16> CastToUInt16(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<UInt16> CastSpanToUInt16(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, UInt16>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -67,7 +67,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(cast[i]);
             return new Memory<UInt16>(reversed).Span;
         }
-        public static ReadOnlySpan<UInt32> CastToUInt32(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<UInt32> CastSpanToUInt32(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, UInt32>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -77,7 +77,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(cast[i]);
             return new Memory<UInt32>(reversed).Span;
         }
-        public static ReadOnlySpan<UInt64> CastToUInt64(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<UInt64> CastSpanToUInt64(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, UInt64>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
@@ -88,7 +88,7 @@ namespace Lazinator.Buffers
             return new Memory<UInt64>(reversed).Span;
         }
 
-        public static ReadOnlySpan<byte> CastFromInt16(ReadOnlySpan<Int16> s)
+        public static ReadOnlySpan<byte> CastSpanFromInt16(ReadOnlySpan<Int16> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<Int16, byte>(s);
@@ -97,7 +97,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(s[i]);
             return MemoryMarshal.Cast<Int16, byte>(new Memory<Int16>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromInt32(ReadOnlySpan<Int32> s)
+        public static ReadOnlySpan<byte> CastSpanFromInt32(ReadOnlySpan<Int32> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<Int32, byte>(s);
@@ -106,7 +106,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(s[i]);
             return MemoryMarshal.Cast<Int32, byte>(new Memory<Int32>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromInt64(ReadOnlySpan<Int64> s)
+        public static ReadOnlySpan<byte> CastSpanFromInt64(ReadOnlySpan<Int64> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<Int64, byte>(s);
@@ -115,7 +115,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(s[i]);
             return MemoryMarshal.Cast<Int64, byte>(new Memory<Int64>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromDateTime(ReadOnlySpan<DateTime> s)
+        public static ReadOnlySpan<byte> CastSpanFromDateTime(ReadOnlySpan<DateTime> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<DateTime, byte>(s);
@@ -124,7 +124,7 @@ namespace Lazinator.Buffers
                 reversed[i] = new DateTime(BinaryPrimitives.ReverseEndianness(s[i].Ticks));
             return MemoryMarshal.Cast<DateTime, byte>(new Memory<DateTime>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromTimeSpan(ReadOnlySpan<TimeSpan> s)
+        public static ReadOnlySpan<byte> CastSpanFromTimeSpan(ReadOnlySpan<TimeSpan> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<TimeSpan, byte>(s);
@@ -133,7 +133,7 @@ namespace Lazinator.Buffers
                 reversed[i] = new TimeSpan(BinaryPrimitives.ReverseEndianness(s[i].Ticks));
             return MemoryMarshal.Cast<TimeSpan, byte>(new Memory<TimeSpan>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromUInt16(ReadOnlySpan<UInt16> s)
+        public static ReadOnlySpan<byte> CastSpanFromUInt16(ReadOnlySpan<UInt16> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<UInt16, byte>(s);
@@ -142,7 +142,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(s[i]);
             return MemoryMarshal.Cast<UInt16, byte>(new Memory<UInt16>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromUInt32(ReadOnlySpan<UInt32> s)
+        public static ReadOnlySpan<byte> CastSpanFromUInt32(ReadOnlySpan<UInt32> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<UInt32, byte>(s);
@@ -151,7 +151,7 @@ namespace Lazinator.Buffers
                 reversed[i] = BinaryPrimitives.ReverseEndianness(s[i]);
             return MemoryMarshal.Cast<UInt32, byte>(new Memory<UInt32>(reversed).Span);
         }
-        public static ReadOnlySpan<byte> CastFromUInt64(ReadOnlySpan<UInt64> s)
+        public static ReadOnlySpan<byte> CastSpanFromUInt64(ReadOnlySpan<UInt64> s)
         {
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)
                 return MemoryMarshal.Cast<UInt64, byte>(s);
