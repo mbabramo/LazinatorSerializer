@@ -13,8 +13,6 @@ namespace LazinatorTests.Tests
 
         static char[] chars = "Hello, world".ToCharArray();
 
-        static DateTime now = DateTime.Now;
-
         public static SpanAndMemory GetSpanAndMemory(bool emptySpans)
         {
             if (emptySpans)
@@ -25,7 +23,6 @@ namespace LazinatorTests.Tests
                     MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { }),
                     MyReadOnlySpanByte = new Span<byte>(new byte[] { }),
                     MyReadOnlySpanChar = new ReadOnlySpan<char>(new char[] { }),
-                    MyReadOnlySpanDateTime = new Span<DateTime>(), // should also work with no array
                     MyReadOnlySpanLong = new Span<long>(new long[] { }),
                     MyMemoryByte = new Memory<byte>(new byte[] { }),
                     MyMemoryInt = new Memory<int>(new int[] { }),
@@ -41,7 +38,6 @@ namespace LazinatorTests.Tests
                 MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 }),
                 MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
                 MyReadOnlySpanChar = new ReadOnlySpan<char>(chars),
-                MyReadOnlySpanDateTime = new Span<DateTime>(new DateTime[] { now }),
                 MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue }),
                 MyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
                 MyMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
@@ -71,8 +67,6 @@ namespace LazinatorTests.Tests
                 result.MyReadOnlySpanByte[1].Should().Be(4);
                 new string(result.MyReadOnlySpanChar).Equals("Hello, world").Should().BeTrue();
                 new string(result.MyReadOnlySpanChar.Slice(0, 5)).Equals("Hello").Should().BeTrue();
-                result.MyReadOnlySpanDateTime.Length.Should().Be(1);
-                result.MyReadOnlySpanDateTime[0].Should().Be(now);
                 result.MyReadOnlySpanLong.Length.Should().Be(2);
                 result.MyReadOnlySpanLong[1].Should().Be(long.MaxValue);
                 result.MyMemoryByte.Span[1].Should().Be(4);
@@ -98,7 +92,6 @@ namespace LazinatorTests.Tests
                 result.MyReadOnlyMemoryInt.Length.Should().Be(0);
                 result.MyReadOnlySpanByte.Length.Should().Be(0);
                 result.MyReadOnlySpanChar.Length.Should().Be(0);
-                result.MyReadOnlySpanDateTime.Length.Should().Be(0);
                 result.MyReadOnlySpanLong.Length.Should().Be(0);
                 result.MyMemoryByte.Length.Should().Be(0);
                 result.MyMemoryInt.Length.Should().Be(0);
