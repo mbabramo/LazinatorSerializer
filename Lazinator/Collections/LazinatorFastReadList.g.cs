@@ -54,7 +54,7 @@ namespace Lazinator.Collections
             set
             {
                 IsDirty = true;
-                _ReadOnlyBytes = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
+                _ReadOnlyBytes = new ReadOnlyMemory<byte>((value).ToArray());
                 _ReadOnlyBytes_Accessed = true;
             }
         }
@@ -384,7 +384,7 @@ namespace Lazinator.Collections
         
         private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
+            ReadOnlySpan<byte> toConvert = (itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
             {
                 writer.Write(toConvert[i]);

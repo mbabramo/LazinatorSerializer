@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Collections
             set
             {
                 IsDirty = true;
-                _MyReadOnlySpanByte = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<byte, byte>(value).ToArray());
+                _MyReadOnlySpanByte = new ReadOnlyMemory<byte>((value).ToArray());
                 _MyReadOnlySpanByte_Accessed = true;
             }
         }
@@ -364,14 +364,14 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlySpanDateTime_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanDateTime_ByteIndex, _MyReadOnlySpanDateTime_ByteLength, false, false, null);
-                    return MemoryMarshal.Cast<byte, DateTime>(childData.Span);
+                    return Spans.CastSpanToDateTime(childData.Span);
                 }
-                return MemoryMarshal.Cast<byte, DateTime>(_MyReadOnlySpanDateTime.Span);
+                return Spans.CastSpanToDateTime(_MyReadOnlySpanDateTime.Span);
             }
             set
             {
                 IsDirty = true;
-                _MyReadOnlySpanDateTime = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<DateTime, byte>(value).ToArray());
+                _MyReadOnlySpanDateTime = new ReadOnlyMemory<byte>(Spans.CastSpanFromDateTime(value).ToArray());
                 _MyReadOnlySpanDateTime_Accessed = true;
             }
         }
@@ -977,7 +977,7 @@ namespace LazinatorTests.Examples.Collections
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanDateTime_ByteIndex, _MyReadOnlySpanDateTime_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_ReadOnlySpan_GDateTime_g(ref w, MemoryMarshal.Cast<byte, DateTime>(_MyReadOnlySpanDateTime.Span),
+            ConvertToBytes_ReadOnlySpan_GDateTime_g(ref w, Spans.CastSpanToDateTime(_MyReadOnlySpanDateTime.Span),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -1362,7 +1362,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<byte, byte>(itemToConvert);
+            ReadOnlySpan<byte> toConvert = (itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
             {
                 writer.Write(toConvert[i]);
@@ -1392,7 +1392,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static void ConvertToBytes_ReadOnlySpan_GDateTime_g(ref BinaryBufferWriter writer, ReadOnlySpan<DateTime> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            ReadOnlySpan<byte> toConvert = MemoryMarshal.Cast<DateTime, byte>(itemToConvert);
+            ReadOnlySpan<byte> toConvert = Spans.CastSpanFromDateTime(itemToConvert);
             for (int i = 0; i < toConvert.Length; i++)
             {
                 writer.Write(toConvert[i]);
@@ -1401,8 +1401,8 @@ namespace LazinatorTests.Examples.Collections
         private static ReadOnlySpan<DateTime> CloneOrChange_ReadOnlySpan_GDateTime_g(ReadOnlySpan<DateTime> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(long)]);
-            MemoryMarshal.Cast<DateTime, byte>(itemToClone).CopyTo(clone);
-            return MemoryMarshal.Cast<byte, DateTime>(clone);
+            Spans.CastSpanFromDateTime(itemToClone).CopyTo(clone);
+            return Spans.CastSpanToDateTime(clone);
         }
         
         private static void ConvertToBytes_ReadOnlySpan_Glong_g(ref BinaryBufferWriter writer, ReadOnlySpan<long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
