@@ -24,6 +24,7 @@ namespace LazinatorTests.Examples.Collections
         // a ref struct, using Span<T> as the backing field.
         ReadOnlySpan<long> MyReadOnlySpanLong { get; set; }
         ReadOnlySpan<byte> MyReadOnlySpanByte { get; set; }
+        ReadOnlySpan<DateTime> MyReadOnlySpanDateTime { get; set; }
         ReadOnlySpan<char> MyReadOnlySpanChar { get; set; }
         Memory<byte> MyMemoryByte { get; set; }
         Memory<byte>? MyNullableMemoryByte { get; set; }
