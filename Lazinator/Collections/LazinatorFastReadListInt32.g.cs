@@ -109,6 +109,13 @@ namespace Lazinator.Collections
             set { }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public override int LazinatorObjectVersion
+        {
+            get => -1;
+            set => throw new LazinatorSerializationException("Lazinator versioning disabled for LazinatorFastReadListInt32.");
+        }
+        
         
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
