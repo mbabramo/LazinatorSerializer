@@ -26,7 +26,7 @@ namespace Lazinator.Collections
             else
             {
                 if (FourByteItems == null)
-                    FourByteItems = new LazinatorFastReadList<int>();
+                    FourByteItems = new LazinatorFastReadListInt32();
                 FourByteItems.AsList.Add(offset);
             }
         }

@@ -157,15 +157,15 @@ namespace LazinatorTests.Tests
         [Fact]
         public void FastReadListIntWorks()
         {
-            LazinatorFastReadList<int> r = new LazinatorFastReadList<int>();
+            LazinatorFastReadListInt32 r = new LazinatorFastReadListInt32();
             r.AsList = new List<int>() { 3, 4, 5 };
             r.IsDirty.Should().BeTrue();
-            LazinatorFastReadList<int> r2 = r.CloneLazinatorTyped();
+            LazinatorFastReadListInt32 r2 = r.CloneLazinatorTyped();
             r2[0].Should().Be(3);
             r2.IsDirty.Should().BeFalse();
             r2.AsList.Add(6);
             r2.IsDirty.Should().BeTrue();
-            LazinatorFastReadList<int> r3 = r2.CloneLazinatorTyped();
+            LazinatorFastReadListInt32 r3 = r2.CloneLazinatorTyped();
             r3.AsList.Count().Should().Be(4);
         }
 

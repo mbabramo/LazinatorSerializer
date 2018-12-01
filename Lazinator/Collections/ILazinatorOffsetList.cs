@@ -6,6 +6,6 @@ namespace Lazinator.Collections
     interface ILazinatorOffsetList
     {
         LazinatorFastReadListInt16 TwoByteItems { get; set; }
-        LazinatorFastReadList<int> FourByteItems { get; set; }
+        LazinatorFastReadListInt32 FourByteItems { get; set; }
     }
 }
