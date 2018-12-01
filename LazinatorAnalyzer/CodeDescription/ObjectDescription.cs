@@ -903,7 +903,7 @@ namespace Lazinator.CodeDescription
 
             string selfSerializationVersionString;
             if (Version == -1)
-                selfSerializationVersionString = $@"{HideILazinatorProperty}public int LazinatorObjectVersion
+                selfSerializationVersionString = $@"{HideILazinatorProperty}public {DerivationKeyword}int LazinatorObjectVersion
                 {{
                     get => -1;
                     set => throw new LazinatorSerializationException(""Lazinator versioning disabled for {NameIncludingGenerics}."");

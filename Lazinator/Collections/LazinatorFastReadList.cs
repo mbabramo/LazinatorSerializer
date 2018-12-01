@@ -13,10 +13,6 @@ namespace Lazinator.Collections
     [Implements(new string[] { "PreSerialization" })]
     public partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
     {
-        //TODO: Do conversions if necessary in the ReadOnly property and in ConvertFromList if on a big-endian processor. Ideally, this conversion should be handled at the level of ReadOnlySpan etc.
-        //   [NonSerialized]
-        //bool _IsBigEndian = !BitConverter.IsLittleEndian;
-
         public virtual ReadOnlySpan<T> ReadOnly
         {
             get => MemoryMarshal.Cast<byte, T>(ReadOnlyBytes);
