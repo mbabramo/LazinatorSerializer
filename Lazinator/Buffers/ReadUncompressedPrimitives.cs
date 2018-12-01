@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 
 namespace Lazinator.Buffers
 {
@@ -155,56 +156,56 @@ namespace Lazinator.Buffers
         public static float ToSingle(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToSingle(byteSpan);
+            var result = BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(byteSpan));
             index += sizeof(float);
             return result;
         }
         public static double ToDouble(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToDouble(byteSpan);
+            var result = BitConverter.Int64BitsToDouble(BinaryPrimitives.ReadInt64LittleEndian(byteSpan));
             index += sizeof(double);
             return result;
         }
         public static short ToInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToInt16(byteSpan);
+            var result = BinaryPrimitives.ReadInt16LittleEndian(b);
             index += sizeof(short);
             return result;
         }
         public static int ToInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToInt32(byteSpan);
+            var result = BinaryPrimitives.ReadInt32LittleEndian(byteSpan);
             index += sizeof(int);
             return result;
         }
         public static long ToInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToInt64(byteSpan);
+            var result = BinaryPrimitives.ReadInt64LittleEndian(byteSpan);
             index += sizeof(long);
             return result;
         }
         public static ushort ToUInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToUInt16(byteSpan);
+            var result = BinaryPrimitives.ReadUInt16LittleEndian(byteSpan);
             index += sizeof(ushort);
             return result;
         }
         public static uint ToUInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToUInt32(byteSpan);
+            var result = BinaryPrimitives.ReadUInt32LittleEndian(byteSpan);
             index += sizeof(uint);
             return result;
         }
         public static ulong ToUInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.ToUInt64(byteSpan);
+            var result = BinaryPrimitives.ReadUInt64LittleEndian(byteSpan);
             index += sizeof(ulong);
             return result;
         }
@@ -224,19 +225,9 @@ namespace Lazinator.Buffers
 
         public static Guid ToGuid(this ReadOnlySpan<byte> b, ref int index)
         {
-            int itema = b.ToInt32(ref index);
-            short itemb = b.ToInt16(ref index);
-            short itemc = b.ToInt16(ref index);
-            byte itemd = b.ToByte(ref index);
-            byte iteme = b.ToByte(ref index);
-            byte itemf = b.ToByte(ref index);
-            byte itemg = b.ToByte(ref index);
-            byte itemh = b.ToByte(ref index);
-            byte itemi = b.ToByte(ref index);
-            byte itemj = b.ToByte(ref index);
-            byte itemk = b.ToByte(ref index);
-            var result = new Guid(itema, itemb, itemc, itemd, iteme, itemf, itemg, itemh, itemi, itemj, itemk);
-            return result;
+            Guid g = new Guid(b.Slice(index, 16));
+            index += 16;
+            return g;
         }
 
         public const byte DecimalSignBit = 128;
@@ -245,9 +236,9 @@ namespace Lazinator.Buffers
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = new decimal(
-                BitConverter.ToInt32(byteSpan),
-                BitConverter.ToInt32(byteSpan.Slice(sizeof(int))),
-                BitConverter.ToInt32(byteSpan.Slice(2*sizeof(int))),
+                BinaryPrimitives.ReadInt32LittleEndian(byteSpan),
+                BinaryPrimitives.ReadInt32LittleEndian(byteSpan.Slice(sizeof(int))),
+                BinaryPrimitives.ReadInt32LittleEndian(byteSpan.Slice(2*sizeof(int))),
                 byteSpan[15] == DecimalSignBit,
                 byteSpan[14]); // see https://stackoverflow.com/questions/16979164/efficiently-convert-byte-array-to-decimal
             index += sizeof(decimal);

@@ -153,7 +153,7 @@ namespace Lazinator.Buffers
             Write(cd.DecomposedDecimal.lo);
             Write(cd.DecomposedDecimal.mid);
             Write(cd.DecomposedDecimal.hi);
-            Write(cd.DecomposedDecimal.flags);
+            WriteAlwaysLittleEndian(cd.DecomposedDecimal.flags); // we always write this in little endian since our read method looks specifically at bits, assuming little endianness
             // The above is equivalent to the following:
             //int[] integerComponents = Decimal.GetBits(value);
             //foreach (var integerComponent in integerComponents)
@@ -221,6 +221,18 @@ namespace Lazinator.Buffers
         }
 
         public void Write(int value)
+        {
+            bool success = false;
+            while (!success)
+            {
+                success = TryWriteInt32LittleEndian(Free, value);
+                if (!success)
+                    EnsureMinBufferSize();
+            }
+            Position += sizeof(int);
+        }
+
+        public void WriteAlwaysLittleEndian(int value)
         {
             bool success = false;
             while (!success)
