@@ -2,7 +2,7 @@
 {
     public enum LazinatorCollectionUniqueIDs
     {
-        LazinatorOffsetList = 50, // leave room for built-in types
+        LazinatorOffsetList = 50, // leave room for other built-in types
         LazinatorList,
         LazinatorFastReadList,
         WByte,
@@ -63,5 +63,7 @@
         LazinatorStack,
         LazinatorArray,
         AvlList,
+        LazinatorFastReadListInt32,
+        LazinatorFastReadListInt16,
     }
 }

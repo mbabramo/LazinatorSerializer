@@ -9,7 +9,7 @@ namespace Lazinator.Collections
     /// <summary>
     /// A list of primitive values that can be indexed without deserialization if the list is not changed. The AsList property provides an underlying List, which can be mutated. 
     /// </summary>
-    /// <typeparam name="T">A primitive value type (such as int, float, char, etc.) Note that using numeric types will work only on little endian processors. </typeparam>
+    /// <typeparam name="T">A primitive value type (such as int, float, char, etc.) If big endian support is needed, a numeric type may be used only by a subclass that overrides ReadOnly, as in LazinatorFastReadListInt16. </typeparam>
     [Implements(new string[] { "PreSerialization" })]
     public partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
     {

@@ -2,7 +2,7 @@
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorFastReadListInt32 : LazinatorFastReadList<Int32>
+    public partial class LazinatorFastReadListInt32 : LazinatorFastReadList<Int32>, ILazinatorFastReadListInt32
     {
         public override ReadOnlySpan<Int32> ReadOnly
         {
