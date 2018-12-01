@@ -20,7 +20,7 @@ namespace Lazinator.Collections
             if (offset <= short.MaxValue)
             {
                 if (TwoByteItems == null)
-                    TwoByteItems = new LazinatorFastReadList<short>();
+                    TwoByteItems = new LazinatorFastReadListInt16();
                 TwoByteItems.AsList.Add((short) offset);
             }
             else

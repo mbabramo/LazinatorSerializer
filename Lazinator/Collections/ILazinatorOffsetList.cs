@@ -5,7 +5,7 @@ namespace Lazinator.Collections
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorOffsetList)]
     interface ILazinatorOffsetList
     {
-        LazinatorFastReadList<short> TwoByteItems { get; set; }
+        LazinatorFastReadListInt16 TwoByteItems { get; set; }
         LazinatorFastReadList<int> FourByteItems { get; set; }
     }
 }
