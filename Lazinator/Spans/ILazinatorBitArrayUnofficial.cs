@@ -1,13 +1,13 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Collections;
-
+using System;
 
 namespace Lazinator.Spans
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorBitArrayUnofficial)]
     internal interface ILazinatorBitArrayUnofficial
     {
-        LazinatorByteSpan ByteSpan { get; set; }
+        Memory<int> IntStorage { get; set; }
         int m_length { get; set; }
         int _version { get; set; }
     }
