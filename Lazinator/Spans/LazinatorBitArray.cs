@@ -40,74 +40,14 @@ namespace Lazinator.Spans
             }
             Contract.EndContractBlock();
 
-            ByteSpan = new LazinatorByteSpan();
-            ByteSpan.SetMemory(new byte[GetByteArrayLength(length, BitsPerInt32)]);
+            IntStorage = new Memory<int>(new int[GetArrayLength(length, BitsPerInt32)]);
             m_length = length;
 
             int fillValue = defaultValue ? unchecked(((int)0xffffffff)) : 0;
-            var span = ByteSpan.GetSpanToReadOrWrite<int>();
+            var span = IntStorage.Span;
             for (int i = 0; i < span.Length; i++)
             {
                 span[i] = fillValue;
-            }
-
-            _version = 0;
-        }
-
-        /*=========================================================================
-        ** Allocates space to hold the bit values in bytes. bytes[0] represents
-        ** bits 0 - 7, bytes[1] represents bits 8 - 15, etc. The LSB of each byte
-        ** represents the lowest index value; bytes[0] & 1 represents bit 0,
-        ** bytes[0] & 2 represents bit 1, bytes[0] & 4 represents bit 2, etc.
-        **
-        ** Exceptions: ArgumentException if bytes == null.
-        =========================================================================*/
-        public LazinatorBitArray(ReadOnlySpan<byte> bytes)
-        {
-            if (bytes == null)
-            {
-                throw new ArgumentNullException("bytes");
-            }
-            Contract.EndContractBlock();
-            // this value is chosen to prevent overflow when computing m_length.
-            // m_length is of type int32 and is exposed as a property, so 
-            // type of m_length can't be changed to accommodate.
-            if (bytes.Length > Int32.MaxValue / BitsPerByte)
-            {
-                throw new ArgumentException("Argument_ArrayTooLarge", "bytes");
-            }
-
-            ByteSpan = new LazinatorByteSpan(new byte[GetByteArrayLength(bytes.Length, BytesPerInt32)]);
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
-            m_length = bytes.Length * BitsPerByte;
-
-            int i = 0;
-            int j = 0;
-            while (bytes.Length - j >= 4)
-            {
-                s[i++] = (bytes[j] & 0xff) |
-                              ((bytes[j + 1] & 0xff) << 8) |
-                              ((bytes[j + 2] & 0xff) << 16) |
-                              ((bytes[j + 3] & 0xff) << 24);
-                j += 4;
-            }
-
-            Contract.Assert(bytes.Length - j >= 0, "BitArray byteLength problem");
-            Contract.Assert(bytes.Length - j < 4, "BitArray byteLength problem #2");
-
-            switch (bytes.Length - j)
-            {
-                case 3:
-                    s[i] = ((bytes[j + 2] & 0xff) << 16);
-                    goto case 2;
-                // fall through
-                case 2:
-                    s[i] |= ((bytes[j + 1] & 0xff) << 8);
-                    goto case 1;
-                // fall through
-                case 1:
-                    s[i] |= (bytes[j] & 0xff);
-                    break;
             }
 
             _version = 0;
@@ -121,8 +61,8 @@ namespace Lazinator.Spans
             }
             Contract.EndContractBlock();
 
-            ByteSpan = new LazinatorByteSpan(new byte[GetByteArrayLength(values.Length, BitsPerInt32)]);
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
+            IntStorage = new Memory<int>(new int[GetArrayLength(values.Length, BitsPerInt32)]);
+            Span<int> s = IntStorage.Span;
             m_length = values.Length;
 
             for (int i = 0; i < values.Length; i++)
@@ -143,7 +83,7 @@ namespace Lazinator.Spans
         **
         ** Exceptions: ArgumentException if values == null.
         =========================================================================*/
-        public LazinatorBitArray(int[] values)
+        public LazinatorBitArray(ReadOnlySpan<int> values)
         {
             if (values == null)
             {
@@ -156,8 +96,8 @@ namespace Lazinator.Spans
                 throw new ArgumentException("Argument_ArrayTooLarge", "values");
             }
 
-            ByteSpan = new LazinatorByteSpan(new byte[values.Length * 4]);
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
+            IntStorage = new Memory<int>(new int[values.Length]);
+            Span<int> s = IntStorage.Span;
             m_length = values.Length * BitsPerInt32;
 
             for (int i = 0; i < values.Length; i++)
@@ -180,9 +120,9 @@ namespace Lazinator.Spans
             Contract.EndContractBlock();
 
             int arrayLength = GetArrayLength(lazinatorBits.m_length, BitsPerInt32);
-            ByteSpan = new LazinatorByteSpan(new byte[arrayLength * 4]);
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
-            ReadOnlySpan<int> lazinatorBitsSpan = lazinatorBits.ByteSpan.GetSpanToReadOnly<int>();
+            IntStorage = new Memory<int>(new int[arrayLength]);
+            Span<int> s = IntStorage.Span;
+            ReadOnlySpan<int> lazinatorBitsSpan = lazinatorBits.IntStorage.Span;
             m_length = lazinatorBits.m_length;
 
             lazinatorBitsSpan.CopyTo(s);
@@ -216,7 +156,7 @@ namespace Lazinator.Spans
             }
             Contract.EndContractBlock();
 
-            ReadOnlySpan<int> s = ByteSpan.GetSpanToReadOnly<int>();
+            ReadOnlySpan<int> s = IntStorage.Span;
             return (s[index / 32] & (1 << (index % 32))) != 0;
         }
 
@@ -234,7 +174,7 @@ namespace Lazinator.Spans
             }
             Contract.EndContractBlock();
 
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
+            Span<int> s = IntStorage.Span;
 
             if (value)
             {
@@ -253,7 +193,7 @@ namespace Lazinator.Spans
         =========================================================================*/
         public void SetAll(bool value)
         {
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
+            Span<int> s = IntStorage.Span;
             int fillValue = value ? unchecked(((int)0xffffffff)) : 0;
             int ints = GetArrayLength(m_length, BitsPerInt32);
             for (int i = 0; i < ints; i++)
@@ -278,8 +218,8 @@ namespace Lazinator.Spans
                 throw new ArgumentException("Arg_ArrayLengthsDiffer");
             Contract.EndContractBlock();
 
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
-            ReadOnlySpan<int> valueSpan = value.ByteSpan.GetSpanToReadOnly<int>();
+            Span<int> s = IntStorage.Span;
+            ReadOnlySpan<int> valueSpan = value.IntStorage.Span;
             int ints = GetArrayLength(m_length, BitsPerInt32);
             for (int i = 0; i < ints; i++)
             {
@@ -304,8 +244,8 @@ namespace Lazinator.Spans
                 throw new ArgumentException("Arg_ArrayLengthsDiffer");
             Contract.EndContractBlock();
 
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
-            ReadOnlySpan<int> valueSpan = value.ByteSpan.GetSpanToReadOnly<int>();
+            Span<int> s = IntStorage.Span;
+            ReadOnlySpan<int> valueSpan = value.IntStorage.Span;
             int ints = GetArrayLength(m_length, BitsPerInt32);
             for (int i = 0; i < ints; i++)
             {
@@ -330,8 +270,8 @@ namespace Lazinator.Spans
                 throw new ArgumentException("Arg_ArrayLengthsDiffer");
             Contract.EndContractBlock();
 
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
-            ReadOnlySpan<int> valueSpan = value.ByteSpan.GetSpanToReadOnly<int>();
+            Span<int> s = IntStorage.Span;
+            ReadOnlySpan<int> valueSpan = value.IntStorage.Span;
             int ints = GetArrayLength(m_length, BitsPerInt32);
             for (int i = 0; i < ints; i++)
             {
@@ -349,7 +289,7 @@ namespace Lazinator.Spans
         =========================================================================*/
         public LazinatorBitArray Not()
         {
-            Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
+            Span<int> s = IntStorage.Span;
             int ints = GetArrayLength(m_length, BitsPerInt32);
             for (int i = 0; i < ints; i++)
             {
@@ -369,7 +309,7 @@ namespace Lazinator.Spans
             }
             set
             {
-                Span<int> s = ByteSpan.GetSpanToReadOrWrite<int>();
+                Span<int> s = IntStorage.Span;
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException("value", "ArgumentOutOfRange_NeedNonNegNum");
@@ -380,13 +320,11 @@ namespace Lazinator.Spans
                 if (newints > s.Length || newints + _ShrinkThreshold < s.Length)
                 {
                     // grow or shrink (if wasting more than _ShrinkThreshold ints)
-                    byte[] newarray = new byte[newints * 4];
-                    Span<byte> newspan = new Span<byte>(newarray);
-                    Span<int> newspanint = MemoryMarshal.Cast<byte, int>(newspan);
+                    int[] newarray = new int[newints];
                     int lengthToCopy = newints > s.Length ? s.Length : newints;
                     for (int i = 0; i < lengthToCopy; i++)
-                        newspanint[i] = s[i];
-                    ByteSpan.SetMemory(newarray);
+                        newarray[i] = s[i];
+                    IntStorage = new Memory<int>(newarray);
                 }
 
                 if (value > m_length)
@@ -422,7 +360,7 @@ namespace Lazinator.Spans
 
             Contract.EndContractBlock();
 
-            ReadOnlySpan<int> s = ByteSpan.GetSpanToReadOnly<int>();
+            ReadOnlySpan<int> s = IntStorage.Span;
             if (array is int[] intarray)
             {
                 int arrayLength = GetArrayLength(m_length, BitsPerInt32);
@@ -467,7 +405,7 @@ namespace Lazinator.Spans
             Contract.Ensures(Contract.Result<Object>() != null);
             Contract.Ensures(((LazinatorBitArray)Contract.Result<Object>()).Length == this.Length);
 
-            LazinatorBitArray lazinatorBitArray = new LazinatorBitArray(ByteSpan.GetSpanToReadOnly());
+            LazinatorBitArray lazinatorBitArray = new LazinatorBitArray(IntStorage.Span);
             lazinatorBitArray._version = _version;
             lazinatorBitArray.m_length = m_length;
             return lazinatorBitArray;
@@ -531,8 +469,6 @@ namespace Lazinator.Spans
             Contract.Assert(div > 0, "GetArrayLength: div arg must be greater than 0");
             return n > 0 ? (((n - 1) / div) + 1) : 0;
         }
-
-        private static int GetByteArrayLength(int n, int div) => GetArrayLength(n, div) * 4;
 
         [Serializable]
         private class BitArrayEnumeratorSimple : IEnumerator, ICloneable
