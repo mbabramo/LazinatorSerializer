@@ -374,6 +374,7 @@ namespace Lazinator.Collections
             {
                 // Because LazinatorMemoryStorage is the same, we need to return MainListSerialized and especially Offsets to their previous values.
                 MainListSerialized = _PreviousMainListSerialized;
+                _PreviousMainListSerialized = null;
                 Offsets = _PreviousOffsets;
             }
         }
