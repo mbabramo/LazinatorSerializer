@@ -32,9 +32,9 @@ namespace Lazinator.Spans
         
         /* Property definitions */
         
-        int _IntStorage_ByteIndex;
+        int _ByteSpan_ByteIndex;
         private int _LazinatorBitArray_EndByteIndex;
-        int _IntStorage_ByteLength => _LazinatorBitArray_EndByteIndex - _IntStorage_ByteIndex;
+        int _ByteSpan_ByteLength => _LazinatorBitArray_EndByteIndex - _ByteSpan_ByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -72,39 +72,58 @@ namespace Lazinator.Spans
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Memory<int> _IntStorage;
-        private Memory<int> IntStorage
+        LazinatorByteSpan _ByteSpan;
+        private LazinatorByteSpan ByteSpan
         {
             [DebuggerStepThrough]
             get
             {
-                if (!_IntStorage_Accessed)
+                if (!_ByteSpan_Accessed)
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _IntStorage = default(Memory<int>);
+                        _ByteSpan = default(LazinatorByteSpan);
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, false, false, null);
-                        _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
+                        if (childData.Length == 0)
+                        {
+                            _ByteSpan = default;
+                        }
+                        else 
+                        {
+                            _ByteSpan = new LazinatorByteSpan()
+                            {
+                                LazinatorParents = new LazinatorParentsCollection(this)
+                            };
+                            _ByteSpan.DeserializeLazinator(childData);
+                        }
                     }
-                    _IntStorage_Accessed = true;
-                }
-                IsDirty = true; 
-                return _IntStorage;
+                    _ByteSpan_Accessed = true;
+                } 
+                return _ByteSpan;
             }
             [DebuggerStepThrough]
             set
             {
+                if (_ByteSpan != null)
+                {
+                    _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
+                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
+                
                 IsDirty = true;
                 DescendantIsDirty = true;
-                _IntStorage = value;
-                _IntStorage_Accessed = true;
+                _ByteSpan = value;
+                _ByteSpan_Accessed = true;
             }
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool _IntStorage_Accessed;
+        bool _ByteSpan_Accessed;
         
         /* Serialization, deserialization, and object relationships */
         
@@ -158,7 +177,17 @@ namespace Lazinator.Spans
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;
             typedClone._version = _version;
             typedClone.m_length = m_length;
-            typedClone.IntStorage = CloneOrChange_Memory_Gint_g(IntStorage, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                if (ByteSpan == null)
+                {
+                    typedClone.ByteSpan = default(LazinatorByteSpan);
+                }
+                else
+                {
+                    typedClone.ByteSpan = (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                }
+            }
             
             return typedClone;
         }
@@ -286,6 +315,29 @@ namespace Lazinator.Spans
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ByteSpan_Accessed) && ByteSpan == null)
+            {
+                yield return ("ByteSpan", default);
+            }
+            else
+            {
+                if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
+                {
+                    bool isMatch = matchCriterion == null || matchCriterion(ByteSpan);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ByteSpan);
+                    if (isMatch)
+                    {
+                        yield return ("ByteSpan", ByteSpan);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("ByteSpan" + "." + toYield.propertyName, toYield.descendant);
+                        }
+                    }
+                }
+            }
             yield break;
         }
         
@@ -294,15 +346,14 @@ namespace Lazinator.Spans
         {
             yield return ("_version", (object)_version);
             yield return ("m_length", (object)m_length);
-            yield return ("IntStorage", (object)IntStorage);
             yield break;
         }
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if (!exploreOnlyDeserializedChildren)
+            if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
             {
-                var deserialized = IntStorage;
+                _ByteSpan = (LazinatorByteSpan) _ByteSpan.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (changeThisLevel)
             {
@@ -313,8 +364,8 @@ namespace Lazinator.Spans
         
         public void FreeInMemoryObjects()
         {
-            _IntStorage = default;
-            _IntStorage_Accessed = false;
+            _ByteSpan = default;
+            _ByteSpan_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;
@@ -344,8 +395,11 @@ namespace Lazinator.Spans
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             __version = span.ToDecompressedInt(ref bytesSoFar);
             _m_length = span.ToDecompressedInt(ref bytesSoFar);
-            _IntStorage_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            _ByteSpan_ByteIndex = bytesSoFar;
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            {
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            }
             _LazinatorBitArray_EndByteIndex = bytesSoFar;
         }
         
@@ -386,6 +440,10 @@ namespace Lazinator.Spans
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
+            if (_ByteSpan_Accessed && _ByteSpan != null)
+            {
+                _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            }
         }
         
         
@@ -406,77 +464,22 @@ namespace Lazinator.Spans
             CompressedIntegralTypes.WriteCompressedInt(ref writer, __version);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _m_length);
             startOfObjectPosition = writer.Position;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                var deserialized = IntStorage;
+                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ByteSpan_Accessed)
+                {
+                    var deserialized = ByteSpan;
+                }
+                WriteChild(ref writer, ref _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _IntStorage, isBelievedDirty: _IntStorage_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _IntStorage_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, false, false, null),
-            verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
-            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
-                _IntStorage_ByteIndex = startOfObjectPosition - startPosition;
+                _ByteSpan_ByteIndex = startOfObjectPosition - startPosition;
             }
             if (updateStoredBuffer)
             {
                 _LazinatorBitArray_EndByteIndex = writer.Position - startPosition;
             }
-        }
-        
-        /* Conversion of supported collections and tuples */
-        
-        private static Memory<int> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default(Memory<int>);
-            }
-            ReadOnlySpan<byte> span = storage.Span;
-            
-            int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
-            
-            Memory<int> collection = new Memory<int>(new int[collectionLength]);
-            var collectionAsSpan = collection.Span;
-            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
-            {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
-                collectionAsSpan[itemIndex] = item;
-            }
-            
-            return collection;
-        }
-        
-        private static void ConvertToBytes_Memory_Gint_g(ref BinaryBufferWriter writer, Memory<int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
-            var itemToConvertSpan = itemToConvert.Span;
-            int itemToConvertCount = itemToConvertSpan.Length;
-            for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
-            {
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvertSpan[itemIndex]);
-            }
-        }
-        
-        private static Memory<int> CloneOrChange_Memory_Gint_g(Memory<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            
-            int collectionLength = itemToClone.Length;
-            Memory<int> collection = new Memory<int>(new int[collectionLength]);
-            var collectionAsSpan = collection.Span;
-            var itemToCloneSpan = itemToClone.Span;
-            int itemToCloneCount = itemToCloneSpan.Length;
-            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
-            {
-                var itemCopied = (int) itemToCloneSpan[itemIndex];
-                collectionAsSpan[itemIndex] = itemCopied;
-            }
-            return collection;
         }
         
     }
