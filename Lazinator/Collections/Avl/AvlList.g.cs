@@ -229,12 +229,10 @@ namespace Lazinator.Collections.Avl
             {
                 return;
             }
-
-            bool disposePreviousBuffer = !LazinatorParents.Any();
             var previousBuffer = LazinatorMemoryStorage;
             LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, this);
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-            if (disposePreviousBuffer)
+            if (!LazinatorParents.Any())
             {
                 previousBuffer.Dispose();
             }

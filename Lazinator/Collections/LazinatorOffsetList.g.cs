@@ -307,7 +307,7 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
         
-        public void UpdateStoredBuffer(bool disposePreviousBuffer = false)
+        public void UpdateStoredBuffer()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
@@ -316,7 +316,7 @@ namespace Lazinator.Collections
             var previousBuffer = LazinatorMemoryStorage;
             LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, this);
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-            if (disposePreviousBuffer)
+            if (!LazinatorParents.Any())
             {
                 previousBuffer.Dispose();
             }

@@ -46,8 +46,7 @@ namespace Lazinator.Core
         /// <summary>
         /// Internally serializes the Lazinator, if it has changed, and resets dirtiness properties (but not HasChanged). This does not need to be called manually before serialization.
         /// </summary>
-        /// <param name="disposePreviousBuffer">If true and the buffer needs updating, then the previous buffer is disposed.</param>
-        void UpdateStoredBuffer(bool disposePreviousBuffer = false);
+        void UpdateStoredBuffer();
         /// <summary>
         /// Removes any native .Net objects, including those previously deserialized. Subsequent access to properties will thus be satisfied through the Lazinator memory storage. Typically, this is preceded by a call to UpdateStoredBuffer; otherwise, this has the effect of reverting to the last point at which the memory was up to date (e.g., initial deserialization or when a hash was obtained).
         /// </summary>

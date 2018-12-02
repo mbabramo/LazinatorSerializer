@@ -298,7 +298,7 @@ namespace LazinatorTests.Examples
         }
         protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
         
-        public virtual void UpdateStoredBuffer(bool disposePreviousBuffer = false)
+        public virtual void UpdateStoredBuffer()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples
             var previousBuffer = LazinatorMemoryStorage;
             LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, this);
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-            if (disposePreviousBuffer)
+            if (!LazinatorParents.Any())
             {
                 previousBuffer.Dispose();
             }
