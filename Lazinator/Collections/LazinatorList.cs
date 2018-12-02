@@ -481,7 +481,7 @@ namespace Lazinator.Collections
                     var current = ((IList<T>)_UnderlyingList)[index];
                     if (current != null)
                     {
-                        _UnderlyingList[index] = (T) changeFunc(current);
+                        _UnderlyingList[index] = (T)current.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
                     }
                 }
             }
