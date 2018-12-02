@@ -32,9 +32,7 @@ namespace Lazinator.Spans
         
         /* Property definitions */
         
-        int _ByteSpan_ByteIndex;
         int _IntStorage_ByteIndex;
-        int _ByteSpan_ByteLength => _IntStorage_ByteIndex - _ByteSpan_ByteIndex;
         private int _LazinatorBitArray_EndByteIndex;
         int _IntStorage_ByteLength => _LazinatorBitArray_EndByteIndex - _IntStorage_ByteIndex;
         
@@ -72,60 +70,6 @@ namespace Lazinator.Spans
                 _m_length = value;
             }
         }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        LazinatorByteSpan _ByteSpan;
-        private LazinatorByteSpan ByteSpan
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_ByteSpan_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ByteSpan = default(LazinatorByteSpan);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
-                        if (childData.Length == 0)
-                        {
-                            _ByteSpan = default;
-                        }
-                        else 
-                        {
-                            _ByteSpan = new LazinatorByteSpan()
-                            {
-                                LazinatorParents = new LazinatorParentsCollection(this)
-                            };
-                            _ByteSpan.DeserializeLazinator(childData);
-                        }
-                    }
-                    _ByteSpan_Accessed = true;
-                } 
-                return _ByteSpan;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                if (_ByteSpan != null)
-                {
-                    _ByteSpan.LazinatorParents = _ByteSpan.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
-                
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _ByteSpan = value;
-                _ByteSpan_Accessed = true;
-            }
-        }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        bool _ByteSpan_Accessed;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         Memory<int> _IntStorage;
@@ -214,17 +158,6 @@ namespace Lazinator.Spans
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;
             typedClone._version = _version;
             typedClone.m_length = m_length;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                if (ByteSpan == null)
-                {
-                    typedClone.ByteSpan = default(LazinatorByteSpan);
-                }
-                else
-                {
-                    typedClone.ByteSpan = (LazinatorByteSpan) ByteSpan.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
-            }
             typedClone.IntStorage = CloneOrChange_Memory_Gint_g(IntStorage, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
@@ -353,29 +286,6 @@ namespace Lazinator.Spans
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ByteSpan_Accessed) && ByteSpan == null)
-            {
-                yield return ("ByteSpan", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
-                {
-                    bool isMatch = matchCriterion == null || matchCriterion(ByteSpan);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ByteSpan);
-                    if (isMatch)
-                    {
-                        yield return ("ByteSpan", ByteSpan);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in ByteSpan.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("ByteSpan" + "." + toYield.propertyName, toYield.descendant);
-                        }
-                    }
-                }
-            }
             yield break;
         }
         
@@ -390,10 +300,6 @@ namespace Lazinator.Spans
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ByteSpan != null) || (_ByteSpan_Accessed && _ByteSpan != null))
-            {
-                _ByteSpan = (LazinatorByteSpan) _ByteSpan.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized = IntStorage;
@@ -407,9 +313,8 @@ namespace Lazinator.Spans
         
         public void FreeInMemoryObjects()
         {
-            _ByteSpan = default;
             _IntStorage = default;
-            _ByteSpan_Accessed = _IntStorage_Accessed = false;
+            _IntStorage_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;
@@ -439,11 +344,6 @@ namespace Lazinator.Spans
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             __version = span.ToDecompressedInt(ref bytesSoFar);
             _m_length = span.ToDecompressedInt(ref bytesSoFar);
-            _ByteSpan_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
             _IntStorage_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _LazinatorBitArray_EndByteIndex = bytesSoFar;
@@ -486,10 +386,6 @@ namespace Lazinator.Spans
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_ByteSpan_Accessed && _ByteSpan != null)
-            {
-                _ByteSpan.UpdateStoredBuffer(ref writer, startPosition + _ByteSpan_ByteIndex + sizeof(int), _ByteSpan_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            }
         }
         
         
@@ -509,19 +405,6 @@ namespace Lazinator.Spans
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, __version);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _m_length);
-            startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
-            {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ByteSpan_Accessed)
-                {
-                    var deserialized = ByteSpan;
-                }
-                WriteChild(ref writer, ref _ByteSpan, includeChildrenMode, _ByteSpan_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
-            }
-            if (updateStoredBuffer)
-            {
-                _ByteSpan_ByteIndex = startOfObjectPosition - startPosition;
-            }
             startOfObjectPosition = writer.Position;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)
             {
