@@ -30,20 +30,10 @@ namespace Lazinator.Spans
             return ReadOrWrite.Span;
         }
 
-        public ReadOnlySpan<T> GetSpanToReadOnly<T>() where T : struct
-        {
-            return MemoryMarshal.Cast<byte, T>(GetSpanToReadOnly());
-        }
-
         public Span<byte> GetSpanToReadOrWrite()
         {
             MakeWritable();
             return ReadOrWrite.Span;
-        }
-
-        public Span<T> GetSpanToReadOrWrite<T>() where T : struct
-        {
-            return MemoryMarshal.Cast<byte, T>(GetSpanToReadOrWrite());
         }
 
         public void SetReadOnlySpan(ReadOnlySpan<byte> span)
@@ -51,11 +41,6 @@ namespace Lazinator.Spans
             ReadOnlyMode = true;
             ReadOnly = span;
             ReadOrWrite = new Memory<byte>();
-        }
-
-        public void SetReadOnlySpan<T>(ReadOnlySpan<T> span) where T : struct
-        {
-            SetReadOnlySpan(MemoryMarshal.Cast<T, byte>(span));
         }
 
         public void SetMemory(Memory<byte> memory)
