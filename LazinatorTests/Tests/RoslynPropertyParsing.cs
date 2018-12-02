@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using LazinatorCodeGen.Roslyn;
 using System.Collections.Immutable;
+using System.IO;
 using LazinatorTests.Support;
 
 namespace LazinatorTests.Tests
@@ -31,13 +32,20 @@ namespace LazinatorTests.Tests
         [Fact]
         public async Task CanParseInterfaceAttributes()
         {
-            LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(Example));
-            INamedTypeSymbol exampleInterface = lazinatorFiles.LookupSymbol("IExample");
-            ImmutableArray<AttributeData> attributes = exampleInterface.GetAttributes();
-            attributes.Count().Should().Be(1);
-            Attribute converted = AttributeConverter.ConvertAttribute(attributes[0]);
-            LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute cloneLazinatorAttribute = converted as LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute;
-            cloneLazinatorAttribute.UniqueID.Should().NotBe(0);
+            try
+            {
+                LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(Example));
+                INamedTypeSymbol exampleInterface = lazinatorFiles.LookupSymbol("IExample");
+                ImmutableArray<AttributeData> attributes = exampleInterface.GetAttributes();
+                attributes.Count().Should().Be(1);
+                Attribute converted = AttributeConverter.ConvertAttribute(attributes[0]);
+                LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute cloneLazinatorAttribute = converted as LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute;
+                cloneLazinatorAttribute.UniqueID.Should().NotBe(0);
+            }
+            catch (IOException)
+            {
+                // occurs rarely if other process is looking up same file at same time, so let's ignore it
+            }
         }
 
         [Fact]
