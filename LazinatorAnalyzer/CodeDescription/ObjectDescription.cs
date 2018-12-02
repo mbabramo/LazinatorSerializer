@@ -368,7 +368,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-                        public abstract void UpdateStoredBuffer(bool disposePreviousBuffer = false);
+                        public abstract void UpdateStoredBuffer();
                         public abstract void FreeInMemoryObjects();
                         public abstract int GetByteLength();
         
@@ -506,7 +506,7 @@ namespace Lazinator.CodeDescription
                         }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
 
-                        public {DerivationKeyword}void UpdateStoredBuffer(bool disposePreviousBuffer = false)
+                        public {DerivationKeyword}void UpdateStoredBuffer()
                         {{
                             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
@@ -515,7 +515,7 @@ namespace Lazinator.CodeDescription
                             var previousBuffer = LazinatorMemoryStorage;
                             LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
                             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-                            if (disposePreviousBuffer)
+                            if (!LazinatorParents.Any())
                             {{
                                 previousBuffer.Dispose();
                             }}

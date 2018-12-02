@@ -223,12 +223,14 @@ namespace Lazinator.Collections.Avl
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorUtilities.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
         
-        public virtual void UpdateStoredBuffer(bool disposePreviousBuffer = false)
+        public virtual void UpdateStoredBuffer()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
+
+            bool disposePreviousBuffer = !LazinatorParents.Any();
             var previousBuffer = LazinatorMemoryStorage;
             LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, this);
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
