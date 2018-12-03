@@ -1509,7 +1509,7 @@ namespace Lazinator.CodeDescription
                 else
                     writeCollectionLengthCommand = $"CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.{lengthWord});";
                 string writeCommand = InnerProperties[0].GetSupportedCollectionWriteCommands(itemString, IsSimpleListOrArray);
-                if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
+                if ((SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory) && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
                 {
                     sb.AppendLine($@"
 
@@ -1722,7 +1722,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
         {
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
+            if ((SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory) && InnerProperties[0].AppropriatelyQualifiedTypeName == "byte")
             {
                 sb.AppendLine($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
