@@ -131,7 +131,7 @@ namespace LazinatorTests.Tests
                 if (i == 5)
                 {
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
-                    c2 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.NoBuffer);
+                    c2 = e.CloneNoBuffer();
                 }
                 if (MutateThisRepetition(i, mutateParent))
                     e.MyBool = !e.MyBool;
