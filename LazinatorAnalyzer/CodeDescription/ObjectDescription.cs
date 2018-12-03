@@ -575,7 +575,7 @@ namespace Lazinator.CodeDescription
         {
             CodeStringBuilder sb = new CodeStringBuilder();
             string nameOfCloneVariable = "typedClone";
-            foreach (var property in PropertiesToDefineThisLevel)
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.PlaceholderMemoryWriteMethod == null))
             {
                 property.AppendCopyPropertyToClone(sb, nameOfCloneVariable);
             }
@@ -652,7 +652,7 @@ namespace Lazinator.CodeDescription
         private void AppendResetProperties(CodeStringBuilder sb)
         {
             string resetAccessed = "", resetStorage = "";
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && x.PlaceholderMemoryWriteMethod == null))
             {
                 resetStorage += $@"_{property.PropertyName} = default;
                         ";
@@ -781,7 +781,7 @@ namespace Lazinator.CodeDescription
                         {{");
                 }
 
-                foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsLazinator))
+                foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
                 {
                     if (!property.DoNotEnumerate)
                     {
@@ -811,7 +811,7 @@ namespace Lazinator.CodeDescription
                     {{
                         {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
                         ")}");
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
@@ -831,7 +831,7 @@ namespace Lazinator.CodeDescription
                         }}
 ");
             }
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
@@ -842,9 +842,9 @@ namespace Lazinator.CodeDescription
 ");
             }
 
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => (!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => ((!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan) && x.PlaceholderMemoryWriteMethod == null))
             {
-                // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)F
+                // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
                         var deserialized = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
@@ -1077,14 +1077,14 @@ namespace Lazinator.CodeDescription
                     $@"
                         {ProtectedIfApplicable}{DerivationKeyword}void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
                         {{");
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
                     _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
-            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType))
+            foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
             {
                 if (property.IsMemoryOrSpan)
                 {

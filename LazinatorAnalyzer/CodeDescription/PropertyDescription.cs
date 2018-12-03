@@ -123,7 +123,7 @@ namespace Lazinator.CodeDescription
         private string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         private CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
         private string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
-        private string PlaceholderMemory { get; set; }
+        public string PlaceholderMemoryWriteMethod { get; set; }
         private int? IntroducedWithVersion { get; set; }
         private int? EliminatedWithVersion { get; set; }
         internal bool DoNotEnumerate { get; set; }
@@ -239,7 +239,7 @@ namespace Lazinator.CodeDescription
         {
             ClonePlaceholderMemoryAttribute placeholderMemory = UserAttributes.OfType<ClonePlaceholderMemoryAttribute>().FirstOrDefault();
             if (placeholderMemory != null)
-                PlaceholderMemory = placeholderMemory.WriteMethod;
+                PlaceholderMemoryWriteMethod = placeholderMemory.WriteMethod;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
@@ -865,6 +865,12 @@ namespace Lazinator.CodeDescription
 
         private void AppendNonPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
+            if (PlaceholderMemoryWriteMethod != null)
+            {
+                AppendPlaceholderMemoryProperty(sb);
+                return;
+            }
+
             if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
                 AppendReadOnlySpanProperty(sb);
@@ -1073,6 +1079,15 @@ namespace Lazinator.CodeDescription
                         {doCreation}
                     }}";
             return creation;
+        }
+
+        private void AppendPlaceholderMemoryProperty(CodeStringBuilder sb)
+        {
+            sb.AppendLine($@"public ReadOnlyMemory<byte> MainListSerialized
+                {{
+                    get => throw new NotImplementedException(); // placeholder only
+                    set => throw new NotImplementedException(); // placeholder only
+                }}");
         }
 
         private void AppendReadOnlySpanProperty(CodeStringBuilder sb) => AppendReadOnlyMemoryOrReadOnlySpanProperty(sb);
@@ -1308,29 +1323,35 @@ namespace Lazinator.CodeDescription
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
-            string writeMethodName = PlaceholderMemory == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemory;
-            sb.Append($"{EnsureDeserialized()}");
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+            string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
+            if (PlaceholderMemoryWriteMethod == null)
             {
-                sb.AppendLine(
-                    $@"WriteNonLazinatorObject{omitLengthSuffix}(
-                        nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")} || (includeChildrenMode != OriginalIncludeChildrenMode),
-                        isAccessed: _{PropertyName}_Accessed, writer: ref writer,
-                        getChildSliceForFieldFn: () => {ChildSliceString},
-                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
-                        binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                            {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString},
-                                includeChildrenMode, v, updateStoredBuffer));");
-            }
-            else
-            { // as above, must copy local struct variables for anon lambda.
-                string binaryWriterAction;
-                if (PlaceholderMemory == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan))
-                    binaryWriterAction = $"copy_{PropertyName}.Write(ref w)";
+                sb.Append($"{EnsureDeserialized()}");
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                {
+                    sb.AppendLine(
+                        $@"WriteNonLazinatorObject{omitLengthSuffix}(
+                    nonLazinatorObject: _{PropertyName}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"_{PropertyName}_Accessed")} || (includeChildrenMode != OriginalIncludeChildrenMode),
+                    isAccessed: _{PropertyName}_Accessed, writer: ref writer,
+                    getChildSliceForFieldFn: () => {ChildSliceString},
+                    verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
+                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString},
+                            includeChildrenMode, v, updateStoredBuffer));");
+
+                }
                 else
-                    binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
-                sb.AppendLine(
-                    $@"var serializedBytesCopy_{PropertyName} = LazinatorMemoryStorage;
+                {
+                    // as above, must copy local struct variables for anon lambda.
+                    string binaryWriterAction;
+                    if (PlaceholderMemoryWriteMethod == null &&
+                        (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan))
+                        binaryWriterAction = $"copy_{PropertyName}.Write(ref w)";
+                    else
+                        binaryWriterAction =
+                            $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
+                    sb.AppendLine(
+                        $@"var serializedBytesCopy_{PropertyName} = LazinatorMemoryStorage;
                         var byteIndexCopy_{PropertyName} = _{PropertyName}_ByteIndex;
                         var byteLengthCopy_{PropertyName} = _{PropertyName}_ByteLength;
                         var copy_{PropertyName} = _{PropertyName};
@@ -1342,7 +1363,17 @@ namespace Lazinator.CodeDescription
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {binaryWriterAction});");
 
+                }
             }
+            else
+                sb.AppendLine($@"WriteNonLazinatorObject{omitLengthSuffix}(
+                        nonLazinatorObject: default, isBelievedDirty: true,
+                        isAccessed: true, writer: ref writer,
+                        getChildSliceForFieldFn: () => {ChildSliceString},
+                        verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
+                        binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                            {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, default,
+                                includeChildrenMode, v, updateStoredBuffer));");
         }
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)

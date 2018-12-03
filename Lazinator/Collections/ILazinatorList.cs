@@ -18,7 +18,6 @@ namespace Lazinator.Collections
         [PlaceholderMemory("WriteMainList")]
         [DoNotEnumerate]
         ReadOnlyMemory<byte> MainListSerialized { get; set; }
-        bool MainListSerialized_Dirty { get; set; }
         LazinatorOffsetList Offsets { get; set; }
     }
 }
