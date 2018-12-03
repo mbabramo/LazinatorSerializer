@@ -388,7 +388,7 @@ namespace Lazinator.Collections
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int originalStartingPosition = writer.Position;
-            if (IsDirty || DescendantIsDirty|| includeChildrenMode != OriginalIncludeChildrenMode)
+            if (IsDirty || DescendantIsDirty || includeChildrenMode != OriginalIncludeChildrenMode)
             {
                 var offsetList = new LazinatorOffsetList();
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
