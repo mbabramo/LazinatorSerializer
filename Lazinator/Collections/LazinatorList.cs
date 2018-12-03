@@ -21,7 +21,6 @@ namespace Lazinator.Collections
         [NonSerialized] private int? _FixedID;
         [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
         [NonSerialized] private int _NumRemovedFromStart;
-        [NonSerialized] private ReadOnlyMemory<byte> _PreviousMainListSerialized;
         [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
 
         public LazinatorList()
@@ -329,9 +328,8 @@ namespace Lazinator.Collections
             {
                 MainListSerialized_Dirty = true;
             }
-
-            MainListSerialized = MainListSerialized; // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
-            _PreviousMainListSerialized = MainListSerialized; 
+            
+            var deserialized = MainListSerialized;  // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
             _PreviousOffsets = Offsets;
         }
 
@@ -340,15 +338,16 @@ namespace Lazinator.Collections
             if (updateStoredBuffer)
             {
                 // MainListSerialized and Offsets have been updated, and this will match the updated LazinatorMemoryStorage.
-                _PreviousMainListSerialized = null;
                 _PreviousOffsets = null;
                 _NumRemovedFromStart = 0;
+                _MainListSerialized = default;
+                _MainListSerialized_Accessed = false;
             }
             else
             {
                 // Because LazinatorMemoryStorage is the same, we need to return MainListSerialized and Offsets to their previous values. We don't want to have the updated LazinatorMemoryStorage
-                MainListSerialized = _PreviousMainListSerialized;
-                _PreviousMainListSerialized = null;
+                _MainListSerialized = default;
+                _MainListSerialized_Accessed = false;
                 Offsets = _PreviousOffsets;
             }
         }
