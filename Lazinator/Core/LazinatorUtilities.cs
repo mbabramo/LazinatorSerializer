@@ -774,6 +774,17 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Clones a Lazinator object into an object that contains no buffer.
+        /// </summary>
+        /// <typeparam name="T">The type of the Lazinator object</typeparam>
+        /// <param name="lazinator">The lazinator object</param>
+        /// <param name="includeChildrenMode">Whether some or all children should be included</param>
+        /// <returns>A clone of the Lazinator object</returns>
+        public static T CloneNoBuffer<T>(this T lazinator,
+            IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren) where T : ILazinator =>
+            CloneLazinatorTyped(lazinator, includeChildrenMode, CloneBufferOptions.NoBuffer);
+
+        /// <summary>
         /// Clones a Lazinator object, returning the object as its own type.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
