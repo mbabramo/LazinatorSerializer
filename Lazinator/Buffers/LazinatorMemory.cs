@@ -17,6 +17,8 @@ namespace Lazinator.Buffers
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
         public static Memory<byte> EmptyMemory = new Memory<byte>();
+        public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
+        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
 
         public override string ToString()
         {
@@ -86,8 +88,8 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        public LazinatorMemory Slice(int position) => Slice(position, Length - position);
-        public LazinatorMemory Slice(int position, int length) => new LazinatorMemory(OwnedMemory, StartPosition + position, length);
+        public LazinatorMemory Slice(int position) => Length - position is int revisedLength ? Slice(position, revisedLength) : LazinatorMemory.EmptyLazinatorMemory;
+        public LazinatorMemory Slice(int position, int length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(OwnedMemory, StartPosition + position, length);
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") : 
             obj is LazinatorMemory lm && lm.OwnedMemory.Equals(OwnedMemory) && lm.StartPosition == StartPosition && lm.Length == Length;

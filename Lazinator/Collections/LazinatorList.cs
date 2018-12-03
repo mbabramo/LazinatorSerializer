@@ -105,7 +105,7 @@ namespace Lazinator.Collections
             { // we can't rely on original offsets, because an insertion/removal may have occurred
                 T underlyingItem = _UnderlyingList[index];
                 if (underlyingItem == null)
-                    return LazinatorUtilities.EmptyLazinatorMemory;
+                    return LazinatorMemory.EmptyLazinatorMemory;
                 return underlyingItem.LazinatorMemoryStorage;
             }
             // The 1st item (# 0) has index 0 always, so it's not stored in Offsets.
@@ -115,7 +115,7 @@ namespace Lazinator.Collections
             // The offset of the second is then Offsets[0] and next offset is Offsets[1].
             // The offste of the third is Offsets[1] and the next offset is Offsets[2], the position at the end of the third item.
             if (Offsets == null || index + _NumRemovedFromStart >= Offsets.Count)
-                return LazinatorUtilities.EmptyLazinatorMemory;
+                return LazinatorMemory.EmptyLazinatorMemory;
             int offset = GetOffset(index);
             int nextOffset = Offsets[_NumRemovedFromStart + index];
 

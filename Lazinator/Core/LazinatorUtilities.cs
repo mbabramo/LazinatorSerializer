@@ -27,15 +27,7 @@ namespace Lazinator.Core
         public delegate void WritePossiblyVerifyingCleannessDelegate(ref BinaryBufferWriter writer, bool verifyCleanness);
 
         #endregion
-
-        #region Empties
-
-        public static Memory<byte> EmptyMemory = new Memory<byte>();
-        public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
-        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
-
-        #endregion
-
+        
         #region Encoding
 
         /// <summary>
@@ -860,7 +852,7 @@ namespace Lazinator.Core
         {
             if (serializedBytes.IsEmpty)
             {
-                return EmptyLazinatorMemory;
+                return LazinatorMemory.EmptyLazinatorMemory;
             }
             if (omitLength) // length is omitted because the child takes up the full slice
                 return serializedBytes.Slice(byteOffset, byteLength);
