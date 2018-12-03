@@ -372,7 +372,7 @@ namespace Lazinator.Collections
             }
             else
             {
-                // Because LazinatorMemoryStorage is the same, we need to return MainListSerialized and especially Offsets to their previous values.
+                // Because LazinatorMemoryStorage is the same, we need to return MainListSerialized and Offsets to their previous values. We don't want to have the updated LazinatorMemoryStorage
                 MainListSerialized = _PreviousMainListSerialized;
                 _PreviousMainListSerialized = null;
                 Offsets = _PreviousOffsets;
@@ -387,10 +387,10 @@ namespace Lazinator.Collections
 
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            int originalStartingPosition = writer.Position;
             if (IsDirty || DescendantIsDirty|| includeChildrenMode != OriginalIncludeChildrenMode)
             {
                 var offsetList = new LazinatorOffsetList();
-                int originalStartingPosition = writer.Position;
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
                     int startingPosition = w.Position;
@@ -410,13 +410,16 @@ namespace Lazinator.Collections
                         offsetList.AddOffset(offset);
                     }
                 });
-                MainListSerialized = writer.LazinatorMemory.Memory.Slice(originalStartingPosition);
                 _Offsets_Accessed = true;
                 _Offsets = offsetList;
                 _Offsets.IsDirty = true;
             }
             else
-                ConvertToBytes_Memory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            {
+                ConvertToBytes_Memory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness,
+                    updateStoredBuffer);
+            }
+            MainListSerialized = writer.LazinatorMemory.Memory.Slice(originalStartingPosition); // may be unupdated in OnPropertiesWritten, where updateStoredBuffer == false
         }
 
 

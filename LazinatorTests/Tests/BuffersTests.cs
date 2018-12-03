@@ -275,9 +275,78 @@ namespace LazinatorTests.Tests
             e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
+            var original = e.LazinatorMemoryStorage;
             e.UpdateStoredBuffer();
+            original.Dispose(); // make sure that attempting to access original will cause problems
+
             e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
+        }
+
+        [Theory]
+        [InlineData(true, false, false, true, true)]
+        [InlineData(true, false, false, true, false)]
+        [InlineData(true, false, false, false, true)]
+        [InlineData(true, false, false, false, false)]
+        [InlineData(false, true, false, true, true)]
+        [InlineData(false, true, false, true, false)]
+        [InlineData(false, true, false, false, true)]
+        [InlineData(false, true, false, false, false)]
+        [InlineData(false, false, true, true, true)]
+        [InlineData(false, false, true, true, false)]
+        [InlineData(false, false, true, false, true)]
+        [InlineData(false, false, true, false, false)]
+        public void RemoveBufferWorks_SpanAndMemory(bool readOnlySpan, bool memory, bool readOnlyMemory, bool readBeforeUpdate, bool setBeforeUpdate)
+        {
+            SpanAndMemory duplicate = LazinatorSpanTests.GetSpanAndMemory(false);
+            SpanAndMemory main = LazinatorSpanTests.GetSpanAndMemory(false);
+            main = main.CloneLazinatorTyped();
+            if (readBeforeUpdate)
+            {
+                if (readOnlySpan)
+                {
+                    var read = main.MyReadOnlySpanChar;
+                }
+                else if (memory)
+                {
+                    var read = main.MyMemoryByte;
+                }
+                else if (readOnlyMemory)
+                {
+                    var read = main.MyReadOnlyMemoryChar;
+                }
+            }
+
+            if (setBeforeUpdate)
+            {
+                if (readOnlySpan)
+                {
+                    main.MyReadOnlySpanChar = duplicate.MyReadOnlySpanChar;
+                }
+                else if (memory)
+                {
+                    main.MyMemoryByte = duplicate.MyMemoryByte;
+                }
+                else if (readOnlyMemory)
+                {
+                    main.MyReadOnlyMemoryChar = duplicate.MyReadOnlyMemoryChar;
+                }
+            }
+            var original = main.LazinatorMemoryStorage;
+            main.RemoveBufferInHierarchy();
+            original.Dispose(); // make sure that attempting to access original will cause problems
+            if (readOnlySpan)
+            {
+                main.MyReadOnlySpanChar.ToArray().SequenceEqual(duplicate.MyReadOnlySpanChar.ToArray()).Should().BeTrue();
+            }
+            else if (memory)
+            {
+                main.MyMemoryByte.ToArray().SequenceEqual(duplicate.MyMemoryByte.ToArray()).Should().BeTrue();
+            }
+            else if (readOnlyMemory)
+            {
+                main.MyReadOnlyMemoryChar.ToArray().SequenceEqual(duplicate.MyReadOnlyMemoryChar.ToArray()).Should().BeTrue();
+            }
         }
 
         [Fact]
@@ -378,6 +447,56 @@ namespace LazinatorTests.Tests
             (lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Equals(lazinatorMemoryStorage)).Should()
                 .BeFalse();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 2);
+        }
+
+
+        [Fact]
+        public void RemoveBufferWorks_LazinatorList()
+        {
+            LazinatorListContainer lazinator = new LazinatorListContainer()
+            {
+                MyStructList = new LazinatorList<WByte>()
+                {
+                    3,
+                    4,
+                    5
+                }
+            };
+            lazinator.UpdateStoredBuffer();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            var x = lazinator.MyStructList[0].WrappedValue;
+            lazinator.MyStructList[0] = 6;
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+
+            lazinator.RemoveBufferInHierarchy();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList[0].WrappedValue.Should().Be(6);
+
+            lazinator.UpdateStoredBuffer();
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList[0].WrappedValue.Should().Be(6);
+
+            lazinator.UpdateStoredBuffer();
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList[0].WrappedValue.Should().Be(6);
+
+            lazinator.MyStructList[0] = 7;
+            lazinator.UpdateStoredBuffer();
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList[0].WrappedValue.Should().Be(7);
+
+            WByte w = new WByte(8).CloneLazinatorTyped(); // make 
+            lazinator.MyStructList[0] = w;
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            lazinator.RemoveBufferInHierarchy();
+            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+
+            lazinator.MyStructList[1] = w;
+            lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            lazinator.UpdateStoredBuffer();
+            lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+
         }
 
         [Fact]

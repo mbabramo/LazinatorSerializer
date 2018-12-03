@@ -1309,7 +1309,7 @@ namespace Lazinator.CodeDescription
         {
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
-            sb.Append($"{EnsureExcludableChildrenLoaded()}");
+            sb.Append($"{EnsureDeserialized()}");
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 sb.AppendLine(
@@ -1350,7 +1350,7 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
                 sb.AppendLine(
-                    CreateConditional(WriteInclusionConditional, $"{EnsureExcludableChildrenLoaded()}WriteChild(ref writer, ref _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
+                    CreateConditional(WriteInclusionConditional, $"{EnsureDeserialized()}WriteChild(ref writer, ref _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
             }
             else
             {
@@ -1358,7 +1358,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine(
                     $@"{WriteInclusionConditional} 
                         {{
-                            {EnsureExcludableChildrenLoaded()}var serializedBytesCopy = LazinatorMemoryStorage;
+                            {EnsureDeserialized()}var serializedBytesCopy = LazinatorMemoryStorage;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
                             WriteChild(ref writer, ref _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);
@@ -1366,7 +1366,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private string EnsureExcludableChildrenLoaded()
+        private string EnsureDeserialized()
         {
             return $@"if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_{PropertyName}_Accessed)
                                 {{
