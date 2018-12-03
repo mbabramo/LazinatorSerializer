@@ -453,6 +453,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void RemoveBufferWorks_LazinatorList()
         {
+            // when we remove the buffer from a lazinatorlist, it completely deserializes.
+
             LazinatorListContainer lazinator = new LazinatorListContainer()
             {
                 MyStructList = new LazinatorList<WByte>()
@@ -497,6 +499,21 @@ namespace LazinatorTests.Tests
             lazinator.UpdateStoredBuffer();
             lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
 
+            lazinator = new LazinatorListContainer()
+            {
+                MyStructList = new LazinatorList<WByte>()
+                {
+                    3,
+                    4,
+                    5
+                }
+            };
+            lazinator = lazinator.CloneLazinatorTyped();
+            var list = lazinator.MyStructList;
+            lazinator.RemoveBufferInHierarchy();
+            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            lazinator.MyStructList[0].WrappedValue.Should().Be(3);
         }
 
         [Fact]
