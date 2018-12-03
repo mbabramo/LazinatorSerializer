@@ -13,10 +13,15 @@ namespace Lazinator.Collections
     }
 
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorList)]
+    [UnofficiallyIncorporateInterface("Lazinator.Collections.ILazinatorListUnofficial", "protected")]
     public interface ILazinatorList<T> where T : ILazinator
     {
+    }
+
+    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorListUnofficial)]
+    public interface ILazinatorListUnofficial
+    {
         [PlaceholderMemory("WriteMainList")]
-        [DoNotEnumerate]
         ReadOnlyMemory<byte> MainListSerialized { get; set; }
         LazinatorOffsetList Offsets { get; set; }
     }

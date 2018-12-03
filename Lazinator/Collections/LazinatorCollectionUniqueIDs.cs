@@ -65,5 +65,6 @@
         AvlList,
         LazinatorFastReadListInt32,
         LazinatorFastReadListInt16,
+        LazinatorListUnofficial,
     }
 }
