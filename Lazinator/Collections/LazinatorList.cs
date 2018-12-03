@@ -328,9 +328,10 @@ namespace Lazinator.Collections
             if (IsDirty || DescendantIsDirty)
             {
                 MainListSerialized_Dirty = true;
-                _PreviousMainListSerialized = MainListSerialized; // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
-                _PreviousOffsets = Offsets;
             }
+
+            _PreviousMainListSerialized = MainListSerialized; // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
+            _PreviousOffsets = Offsets;
         }
 
 
