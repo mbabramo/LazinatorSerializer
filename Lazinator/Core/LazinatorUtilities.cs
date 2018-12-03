@@ -654,10 +654,11 @@ namespace Lazinator.Core
         public static List<ILazinator> GetClassAncestorsToTop(this ILazinator startNode)
         {
             List<ILazinator> currentList = new List<ILazinator>();
-            while (startNode.LazinatorParents.Any())
+            while (startNode != null && startNode.LazinatorParents.Any())
             {
                 startNode = startNode.LazinatorParents.LastAdded;
-                currentList.Add(startNode);
+                if (startNode != null) // could become null after call to Any
+                    currentList.Add(startNode);
             }
             return currentList;
         }

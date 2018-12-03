@@ -14,8 +14,8 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static ILazinator GetPrincipalRoot(this ILazinator node)
         {
-            while (node.LazinatorParents.LastAdded != null)
-                node = node.LazinatorParents.LastAdded;
+            while (node.LazinatorParents.LastAdded is ILazinator nonNull)
+                node = nonNull;
             return node;
         }
 
@@ -33,7 +33,7 @@ namespace Lazinator.Core
                     return node;
                 if (count > 1)
                     return null;
-                node = node.LazinatorParents.LastAdded ?? node.LazinatorParents.EnumerateParents().First();
+                node = node.LazinatorParents.LastAdded ?? node.LazinatorParents.EnumerateParents().FirstOrDefault(); // FirstOrDefault needed since the number of parents may have fallen, if the weak reference stored in the parents collection goes stale
             } while (true);
         }
 
