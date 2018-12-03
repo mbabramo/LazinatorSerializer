@@ -21,7 +21,7 @@ namespace Lazinator.Collections
         [NonSerialized] private int? _FixedID;
         [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
         [NonSerialized] private int _NumRemovedFromStart;
-        [NonSerialized] private Memory<byte> _PreviousMainListSerialized;
+        [NonSerialized] private ReadOnlyMemory<byte> _PreviousMainListSerialized;
         [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
 
         public LazinatorList()
@@ -330,7 +330,8 @@ namespace Lazinator.Collections
                 MainListSerialized_Dirty = true;
             }
 
-            _PreviousMainListSerialized = MainListSerialized; // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
+            MainListSerialized = MainListSerialized; // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
+            _PreviousMainListSerialized = MainListSerialized; 
             _PreviousOffsets = Offsets;
         }
 
@@ -417,7 +418,7 @@ namespace Lazinator.Collections
             }
             else
             {
-                ConvertToBytes_Memory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness,
+                ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref writer, MainListSerialized, includeChildrenMode, verifyCleanness,
                     updateStoredBuffer);
             }
             MainListSerialized = writer.LazinatorMemory.Memory.Slice(originalStartingPosition); // may be unupdated in OnPropertiesWritten, where updateStoredBuffer == false

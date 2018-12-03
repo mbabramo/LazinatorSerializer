@@ -17,7 +17,7 @@ namespace Lazinator.Collections
     {
         [CustomNonlazinatorWrite("WriteMainList")]
         [DoNotEnumerate]
-        Memory<byte> MainListSerialized { get; set; }
+        ReadOnlyMemory<byte> MainListSerialized { get; set; }
         bool MainListSerialized_Dirty { get; set; }
         LazinatorOffsetList Offsets { get; set; }
     }
