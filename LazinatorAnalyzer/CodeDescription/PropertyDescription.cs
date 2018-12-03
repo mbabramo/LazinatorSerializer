@@ -1731,11 +1731,13 @@ namespace Lazinator.CodeDescription
                     sb.Append($@"int index = 0;
                             bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
                             if (isNull)
+                            {{
                                 return null;
-                            return storage.Memory.Slice(1);
+                            }}
+                            return storage.Memory.Slice(1).ToArray();
                         }}");
                 else
-                    sb.Append($@"return storage.Memory;
+                    sb.Append($@"return storage.Memory.ToArray();
                     }}"
                     );
                 return;
