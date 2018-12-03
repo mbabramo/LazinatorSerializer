@@ -13,16 +13,32 @@ namespace Lazinator.Core
     /// </summary>
     public readonly struct LazinatorParentsCollection
     {
+        // A weak reference to the last parent added. Weak references are used so that when objects are removed from a 
+        // hierarchy, we do not have a memory leak, with the previous parent's entire hierarchy unable to be garbage
+        // collected. 
+        private readonly WeakReference<ILazinator> LastAddedReference;
+
         // A complication is that an object can have the same parent more than once (that is, two childs of an
         // object can be the same), so we have to keep track of the number of times a parent is a parent.
         // Since usually this will only have one or two items at most, we use a linked list rather than a dictionary.
         private readonly LinkedList<(ILazinator parent, int count)> OtherParents;
 
+
         /// <summary>
         /// The last Lazinator parent added. If the last added is subsequently removed, this will 
         /// be null, even if some other parents were added earlier.
         /// </summary>
-        public readonly ILazinator LastAdded;
+        public ILazinator LastAdded => GetWeakReferenceTargetOrNull(LastAddedReference);
+
+        private ILazinator GetWeakReferenceTargetOrNull(WeakReference<ILazinator> weakLazinator)
+        {
+            if (weakLazinator != null && weakLazinator.TryGetTarget(out ILazinator reference))
+            {
+                return reference;
+            }
+
+            return null;
+        }
 
         private readonly int LastAddedCount;
 
@@ -54,14 +70,14 @@ namespace Lazinator.Core
 
         public LazinatorParentsCollection(ILazinator lastAdded, LinkedList<(ILazinator parent, int count)> otherParents = null)
         {
-            LastAdded = lastAdded;
+            LastAddedReference = new WeakReference<ILazinator>(lastAdded);
             LastAddedCount = (lastAdded == null) ? 0 : 1;
             OtherParents = otherParents;
         }
 
         public LazinatorParentsCollection(ILazinator lastAdded, int lastAddedCount, LinkedList<(ILazinator parent, int count)> otherParents = null)
         {
-            LastAdded = lastAdded;
+            LastAddedReference = new WeakReference<ILazinator>(lastAdded);
             LastAddedCount = lastAddedCount;
             OtherParents = otherParents;
         }
@@ -176,3 +192,4 @@ namespace Lazinator.Core
         }
     }
 }
+
