@@ -329,21 +329,12 @@ namespace Lazinator.Collections
 
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
-            if (IsDirty || DescendantIsDirty)
-            {
-                MainListSerialized_Dirty = true;
-            }
-
-            _MainListSerialized_Accessed = true;
-            // var deserialized = MainListSerialized;  // has side effect of loading _MainListSerialized and setting _MainListSerialized_Accessed to true, thus making sure we call WriteMainList
             _PreviousOffsets = Offsets;
         }
 
         public void OnPropertiesWritten(bool updateStoredBuffer)
         {
             // either we have fully deserialized, or we have LazinatorMemoryStorage. Either way, we don't need MainListSerialized to be loaded.
-            _MainListSerialized = default;
-            _MainListSerialized_Accessed = false;
             if (updateStoredBuffer)
             {
                 // MainListSerialized and Offsets have been updated, and this will match the updated LazinatorMemoryStorage.

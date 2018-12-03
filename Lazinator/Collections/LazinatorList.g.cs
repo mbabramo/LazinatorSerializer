@@ -39,41 +39,11 @@ namespace Lazinator.Collections
         protected virtual int _Offsets_ByteLength => _LazinatorList_T_EndByteIndex - _Offsets_ByteIndex;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected ReadOnlyMemory<byte> _MainListSerialized;
         public ReadOnlyMemory<byte> MainListSerialized
         {
-            [DebuggerStepThrough]
-            get
-            {
-                if (!_MainListSerialized_Accessed)
-                {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MainListSerialized = default(ReadOnlyMemory<byte>);
-                        _MainListSerialized_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null);
-                        _MainListSerialized = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
-                    }
-                    _MainListSerialized_Accessed = true;
-                } 
-                return _MainListSerialized;
-            }
-            [DebuggerStepThrough]
-            set
-            {
-                IsDirty = true;
-                DescendantIsDirty = true;
-                _MainListSerialized = value;
-                _MainListSerialized_Dirty = true;
-                _MainListSerialized_Accessed = true;
-            }
+            get => throw new NotImplementedException(); // placeholder
+            set => throw new NotImplementedException();
         }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _MainListSerialized_Accessed;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool _MainListSerialized_Dirty;
@@ -315,10 +285,6 @@ namespace Lazinator.Collections
             {
                 _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (!exploreOnlyDeserializedChildren)
-            {
-                var deserialized = MainListSerialized;
-            }
             OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
             if (changeThisLevel)
             {
@@ -329,9 +295,8 @@ namespace Lazinator.Collections
         
         public virtual void FreeInMemoryObjects()
         {
-            _MainListSerialized = default;
             _Offsets = default;
-            _MainListSerialized_Accessed = _Offsets_Accessed = false;
+            _Offsets_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;
@@ -449,17 +414,13 @@ namespace Lazinator.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MainListSerialized_Accessed)
-            {
-                var deserialized = MainListSerialized;
-            }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MainListSerialized, isBelievedDirty: MainListSerialized_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _MainListSerialized_Accessed, writer: ref writer,
+            nonLazinatorObject: default, isBelievedDirty: true,
+            isAccessed: true, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, false, false, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            WriteMainList(ref w, _MainListSerialized,
+            WriteMainList(ref w, default,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
