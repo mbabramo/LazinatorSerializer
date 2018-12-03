@@ -36,12 +36,12 @@ namespace LazinatorCodeGen.Roslyn
                     }
                     else
                         return new CloneLazinatorAttribute((int)uniqueID);
-
-                case "CustomNonlazinatorWriteAttribute":
+                
+                case "PlaceholderMemoryAttribute":
                     var writeMethod = attributeData.GetAttributeConstructorValueByParameterName("writeMethod");
                     if (writeMethod != null && !(writeMethod is string))
                         return null;
-                    return new CloneCustomNonlazinatorWriteAttribute((string)writeMethod);
+                    return new ClonePlaceholderMemoryAttribute((string)writeMethod);
                 case "ImplementsAttribute":
                     var implemented = attributeData.GetAttributeConstructorValuesByParameterName("implemented");
                     if (implemented != null && implemented.Any(x => !(x is string)))

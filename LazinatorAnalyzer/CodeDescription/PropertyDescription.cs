@@ -123,7 +123,7 @@ namespace Lazinator.CodeDescription
         private string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";
         private CloneSetterAccessibilityAttribute SetterAccessibility { get; set; }
         private string SetterAccessibilityString => SetterAccessibility == null ? "" : SetterAccessibility.Choice + " ";
-        private string CustomNonlazinatorWrite { get; set; }
+        private string PlaceholderMemory { get; set; }
         private int? IntroducedWithVersion { get; set; }
         private int? EliminatedWithVersion { get; set; }
         internal bool DoNotEnumerate { get; set; }
@@ -237,9 +237,9 @@ namespace Lazinator.CodeDescription
 
         private void ParseOtherPropertyAttributes()
         {
-            CloneCustomNonlazinatorWriteAttribute nonlazinatorWrite = UserAttributes.OfType<CloneCustomNonlazinatorWriteAttribute>().FirstOrDefault();
-            if (nonlazinatorWrite != null)
-                CustomNonlazinatorWrite = nonlazinatorWrite.WriteMethod;
+            ClonePlaceholderMemoryAttribute placeholderMemory = UserAttributes.OfType<ClonePlaceholderMemoryAttribute>().FirstOrDefault();
+            if (placeholderMemory != null)
+                PlaceholderMemory = placeholderMemory.WriteMethod;
             CloneIncludableChildAttribute includable = UserAttributes.OfType<CloneIncludableChildAttribute>().FirstOrDefault();
             IncludableWhenExcludingMostChildren = includable != null;
             CloneExcludableChildAttribute excludable = UserAttributes.OfType<CloneExcludableChildAttribute>().FirstOrDefault();
@@ -1308,7 +1308,7 @@ namespace Lazinator.CodeDescription
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
-            string writeMethodName = CustomNonlazinatorWrite == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : CustomNonlazinatorWrite;
+            string writeMethodName = PlaceholderMemory == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemory;
             sb.Append($"{EnsureDeserialized()}");
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
             {
@@ -1325,7 +1325,7 @@ namespace Lazinator.CodeDescription
             else
             { // as above, must copy local struct variables for anon lambda.
                 string binaryWriterAction;
-                if (CustomNonlazinatorWrite == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan))
+                if (PlaceholderMemory == null && (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan))
                     binaryWriterAction = $"copy_{PropertyName}.Write(ref w)";
                 else
                     binaryWriterAction = $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";

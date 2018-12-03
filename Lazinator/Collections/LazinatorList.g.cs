@@ -41,8 +41,8 @@ namespace Lazinator.Collections
         
         public ReadOnlyMemory<byte> MainListSerialized
         {
-            get => throw new NotImplementedException(); // placeholder
-            set => throw new NotImplementedException();
+            get => throw new NotImplementedException(); // placeholder only
+            set => throw new NotImplementedException(); // placeholder only
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

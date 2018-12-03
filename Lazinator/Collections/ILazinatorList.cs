@@ -15,7 +15,7 @@ namespace Lazinator.Collections
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorList)]
     public interface ILazinatorList<T> where T : ILazinator
     {
-        [CustomNonlazinatorWrite("WriteMainList")]
+        [PlaceholderMemory("WriteMainList")]
         [DoNotEnumerate]
         ReadOnlyMemory<byte> MainListSerialized { get; set; }
         bool MainListSerialized_Dirty { get; set; }
