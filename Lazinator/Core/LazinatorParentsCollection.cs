@@ -70,24 +70,22 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// The number of parents stored. A parent is counted only once even if stored more often.
+        /// The number of parents stored (regardless of whether they have been garbage collected). A parent is counted only once even if stored more often.
         /// </summary>
-        public int Count => (LastAdded == null ? 0 : 1) + (OtherParents?.Count() ?? 0);
+        public int Count => (LastAddedReference == null ? 0 : 1) + (OtherParents?.Count() ?? 0);
 
         public LazinatorParentsCollection(ILazinator lastAdded, LinkedList<(WeakReference<ILazinator> parent, int count)> otherParents = null)
         {
-            LastAddedReference = new WeakReference<ILazinator>(lastAdded);
+            LastAddedReference = lastAdded == null ? null : new WeakReference<ILazinator>(lastAdded);
             LastAddedCount = (lastAdded == null) ? 0 : 1;
-            var filtered = otherParents == null ? null : new LinkedList<(WeakReference<ILazinator> parent, int count)>(otherParents.Where(x => x.parent is WeakReference<ILazinator> w && w.TryGetTarget(out ILazinator resolvedTarget)));
-            OtherParents = filtered;
+            OtherParents = WithGarbageCollectedRemoved(otherParents);
         }
 
         public LazinatorParentsCollection(ILazinator lastAdded, int lastAddedCount, LinkedList<(WeakReference<ILazinator> parent, int count)> otherParents = null)
         {
-            LastAddedReference = new WeakReference<ILazinator>(lastAdded);
+            LastAddedReference = lastAdded == null ? null : new WeakReference<ILazinator>(lastAdded);
             LastAddedCount = lastAddedCount;
-            var filtered = otherParents == null ? null : new LinkedList<(WeakReference<ILazinator> parent, int count)>(otherParents.Where(x => x.parent is WeakReference<ILazinator> w && w.TryGetTarget(out ILazinator resolvedTarget)));
-            OtherParents = filtered;
+            OtherParents = WithGarbageCollectedRemoved(otherParents);
         }
 
         public T GetSoleParentOfType<T>() where T : class, ILazinator
@@ -162,33 +160,63 @@ namespace Lazinator.Core
             return new LazinatorParentsCollection(parentTarget, otherParentsWithAddition);
         }
 
+        private bool AnyGarbageCollected()
+        {
+            if (LastAddedReference != null && LastAdded == null)
+                return true;
+            if (OtherParents != null)
+            {
+                var includedParents = OtherParents;
+                if (AnyGarbageCollected(includedParents))
+                    return true;
+            }
+            return false;
+        }
+
+        private static bool AnyGarbageCollected(LinkedList<(WeakReference<ILazinator> parent, int count)> includedParents)
+        {
+            foreach (var node in includedParents)
+                if (node.parent.TryGetTarget(out _) == false)
+                    return true;
+            return false;
+        }
+
+        private static LinkedList<(WeakReference<ILazinator> parent, int count)> WithGarbageCollectedRemoved(LinkedList<(WeakReference<ILazinator> parent, int count)> includedParents)
+        {
+            if (includedParents == null || !AnyGarbageCollected(includedParents))
+                return includedParents;
+            var filtered = includedParents == null ? null : new LinkedList<(WeakReference<ILazinator> parent, int count)>(includedParents.Where(x => x.parent is WeakReference<ILazinator> w && w.TryGetTarget(out ILazinator resolvedTarget)));
+            return filtered;
+        }
+
+        public LazinatorParentsCollection WithGarbageCollectedRemoved()
+        {
+            if (!AnyGarbageCollected())
+                return this;
+            return new LazinatorParentsCollection(LastAdded, WithGarbageCollectedRemoved(OtherParents));
+        }
+
         public LazinatorParentsCollection WithRemoved(ILazinator parent)
         {
             var lastAdded = LastAdded;
-            if (LastAddedReference != null && lastAdded == null) // no longer valid reference
-            {
-                var filtered = OtherParents == null ? null : new LinkedList<(WeakReference<ILazinator> parent, int count)>(OtherParents.Where(x => x.parent is WeakReference<ILazinator> w && w.TryGetTarget(out ILazinator resolvedTarget) && resolvedTarget != parent));
-                return new LazinatorParentsCollection(null, filtered);
-            }
-
             if (lastAdded == parent)
             { 
                 if (LastAddedCount > 1)
                 {
-                    return new LazinatorParentsCollection(parent, LastAddedCount - 1, OtherParents);
+                    return new LazinatorParentsCollection(parent, LastAddedCount - 1, OtherParents).WithGarbageCollectedRemoved();
                 }
                 else
-                    return new LazinatorParentsCollection(null, OtherParents);
+                    return new LazinatorParentsCollection(null, OtherParents).WithGarbageCollectedRemoved();
             }
             var node = GetNodeWithParent(parent);
             if (node == null)
-                return this; // nothing to remove
+                return WithGarbageCollectedRemoved(); // nothing else we can see to remove
             var otherParents = OtherParents;
             if (node.Value.count == 1)
                 otherParents.Remove(node);
             else
                 node.Value = (node.Value.parent, node.Value.count - 1);
-            return new LazinatorParentsCollection(lastAdded, otherParents);
+            return new LazinatorParentsCollection(lastAdded, otherParents).WithGarbageCollectedRemoved();
         }
 
         public void InformParentsOfDirtiness()

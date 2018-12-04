@@ -867,6 +867,8 @@ namespace Lazinator.CodeDescription
         {
             if (PlaceholderMemoryWriteMethod != null)
             {
+                if (SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory)
+                    throw new LazinatorCodeGenException("PlaceholderMemory attribute should be used only with type ReadOnlyMemory<byte>.");
                 AppendPlaceholderMemoryProperty(sb);
                 return;
             }
