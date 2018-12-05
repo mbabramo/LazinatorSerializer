@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
@@ -43,7 +44,8 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public bool NodeVisitedDuringChange { get; set; }
+        [NonSerialized]
+        internal bool NodeVisitedDuringChange;
 
         public void RecalculateCount()
         {
