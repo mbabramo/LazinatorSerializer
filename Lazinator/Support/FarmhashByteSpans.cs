@@ -509,6 +509,12 @@ namespace Lazinator.Support
             ReadOnlySpan<byte> s2 = s.Slice(halfBytes);
             ulong h1 = Hash64(s1);
             ulong h2 = Hash64(s2);
+            ulong h3, h4;
+            unchecked
+            {
+                h3 = h1 * h2 + 37 * h2 + 19;
+                h4 = h1 + 101 * h2 + 119;
+            }
             Guid r = ConvertUlongsToGuid(h1, h2);
             return r;
         }
