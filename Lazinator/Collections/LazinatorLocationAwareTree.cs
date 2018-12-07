@@ -54,11 +54,13 @@ namespace Lazinator.Collections
 
         private void OnRemoveChildComplete(LazinatorGeneralTree<T> child)
         {
+            InitializeLocationsIfNecessary();
             Locations.Remove(child.Item);
         }
 
         public LazinatorGeneralTree<T> GetTreeForItem(T item)
         {
+            InitializeLocationsIfNecessary();
             if (Locations.ContainsKey(item))
             {
                 var locationAsLazinatorList = Locations[item];
