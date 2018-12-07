@@ -18,7 +18,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanCreateLazinatorTree()
         {
-            LazinatorTree<WString> root = new LazinatorTree<WString>("Root");
+            LazinatorGeneralTree<WString> root = new LazinatorGeneralTree<WString>("Root");
             root.GetLocationInTree().SequenceEqual(new List<int>() { }).Should().BeTrue();
             var root_0 = root.AddChild("Root-0");
             root_0.GetLocationInTree().SequenceEqual(new List<int>() {0}).Should().BeTrue();
@@ -35,7 +35,7 @@ namespace LazinatorTests.Tests
         [InlineData(false)]
         public void CanTraverseLazinatorTree(bool clone)
         {
-            LazinatorTree<WString> root = GetTree(clone);
+            LazinatorGeneralTree<WString> root = GetTree(clone);
             var traversed = root.Traverse().ToList();
             var expected = new List<(WString, int)>()
             {
@@ -51,9 +51,9 @@ namespace LazinatorTests.Tests
             traversed.SequenceEqual(expected).Should().BeTrue();
         }
         
-        private static LazinatorTree<WString> GetTree(bool clone)
+        private static LazinatorGeneralTree<WString> GetTree(bool clone)
         {
-            LazinatorTree<WString> root = new LazinatorTree<WString>("Root");
+            LazinatorGeneralTree<WString> root = new LazinatorGeneralTree<WString>("Root");
             var root_0 = root.AddChild("Root-0");
             var root_1 = root.AddChild("Root-1");
             var root_2 = root.AddChild("Root-2");
@@ -62,7 +62,7 @@ namespace LazinatorTests.Tests
             var root_1_1 = root_1.AddChild("Root-1-1");
             var root_1_1_0 = root_1_1.AddChild("Root-1-1-0");
             if (clone)
-                root = (LazinatorTree<WString>) root.CloneLazinator();
+                root = (LazinatorGeneralTree<WString>) root.CloneLazinator();
             return root;
         }
 
@@ -71,7 +71,7 @@ namespace LazinatorTests.Tests
         [InlineData(false)]
         public void CanFindLocationInLazinatorTree(bool clone)
         {
-            LazinatorTree<WString> root = GetTree(clone);
+            LazinatorGeneralTree<WString> root = GetTree(clone);
             var root_1 = root.GetTreeAtLocation(new List<int> {1});
             root_1.GetLocationInTree().SequenceEqual(new List<int> { 1 }).Should().BeTrue();
         }
@@ -81,7 +81,7 @@ namespace LazinatorTests.Tests
         [InlineData(false)]
         public void LazinatorTreeNonserializedProperties(bool clone)
         {
-            LazinatorTree<WString> root = GetTree(clone);
+            LazinatorGeneralTree<WString> root = GetTree(clone);
             root.Index.Should().Be(0);
             root.Level.Should().Be(0);
             root.ParentTree.Should().Be(null);
@@ -108,7 +108,7 @@ namespace LazinatorTests.Tests
         [InlineData(false)]
         public void LazinatorTree_CanInsert(bool clone)
         {
-            LazinatorTree<WString> root = GetTree(clone);
+            LazinatorGeneralTree<WString> root = GetTree(clone);
             var root_2 = root.GetTreeAtLocation(new List<int> { 2 }); // original root 2
             var root_1A = root.InsertChild("Root-1A", 2);
             root_1A.Index.Should().Be(2);
@@ -142,7 +142,7 @@ namespace LazinatorTests.Tests
         [InlineData(false)]
         public void LazinatorTree_CanRemove(bool clone)
         {
-            LazinatorTree<WString> root = GetTree(clone);
+            LazinatorGeneralTree<WString> root = GetTree(clone);
             int childrenCount = root.GetChildren().Count();
             var root_0 = root.GetTreeAtLocation(new List<int> { 0 });
             var root_1 = root.GetTreeAtLocation(new List<int> { 1 });

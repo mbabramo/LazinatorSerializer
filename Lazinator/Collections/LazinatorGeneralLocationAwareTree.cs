@@ -9,10 +9,10 @@ using System.Text;
 namespace Lazinator.Collections
 {
     /// <summary>
-    /// A LazinatorTree with the ability to look up an element of the tree by location.
+    /// A LazinatorGeneralTree with the ability to look up an element of the tree by location.
     /// </summary>
     /// <typeparam name="T">The type of each tree node</typeparam>
-    public partial class LazinatorLocationAwareTree<T> : LazinatorTree<T>, ILazinatorLocationAwareTree<T> where T : ILazinator
+    public partial class LazinatorGeneralLocationAwareTree<T> : LazinatorGeneralTree<T>, ILazinatorLocationAwareTree<T> where T : ILazinator
     {
         private void InitializeLocationsIfNecessary()
         {
@@ -20,19 +20,19 @@ namespace Lazinator.Collections
                 Locations = new LazinatorDictionary<T, LazinatorList<WInt>>();
         }
 
-        public override void OnAddChild(LazinatorTree<T> child)
+        public override void OnAddChild(LazinatorGeneralTree<T> child)
         {
             InitializeLocationsIfNecessary();
             var location = ConvertToLazinatorList(child.GetLocationInTree());
             Locations[child.Item] = location;
         }
 
-        public override void OnRemoveChild(LazinatorTree<T> child)
+        public override void OnRemoveChild(LazinatorGeneralTree<T> child)
         {
             Locations.Remove(child.Item);
         }
 
-        public LazinatorTree<T> GetTreeForItem(T item)
+        public LazinatorGeneralTree<T> GetTreeForItem(T item)
         {
             if (Locations.ContainsKey(item))
             {

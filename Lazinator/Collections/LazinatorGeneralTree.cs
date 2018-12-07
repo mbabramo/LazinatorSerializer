@@ -7,28 +7,28 @@ using System.Text;
 namespace Lazinator.Collections
 {
     /// <summary>
-    /// A basic tree class, for relating each parent to any number of children. This class does not index items by key.
+    /// A general tree, where each parent can have any number of children.
     /// </summary>
     /// <typeparam name="T">The type of each tree node</typeparam>
-    public partial class LazinatorTree<T> : ILazinatorTree<T> where T : ILazinator
+    public partial class LazinatorGeneralTree<T> : ILazinatorGeneralTree<T> where T : ILazinator
     {
         // The following are not serialized. They are set after the child is loaded.
-        public LazinatorTree<T> ParentTree { get; set; }
+        public LazinatorGeneralTree<T> ParentTree { get; set; }
         public int Level { get; set; }
         public int Index { get; set; }
         public bool Initialized { get; set; }
         public bool ChildrenLoaded { get; set; }
 
-        public virtual void OnAddChild(LazinatorTree<T> child)
+        public virtual void OnAddChild(LazinatorGeneralTree<T> child)
         {
 
         }
-        public virtual void OnRemoveChild(LazinatorTree<T> child)
+        public virtual void OnRemoveChild(LazinatorGeneralTree<T> child)
         {
 
         }
 
-        public IEnumerable<LazinatorTree<T>> GetChildren()
+        public IEnumerable<LazinatorGeneralTree<T>> GetChildren()
         {
             if (Children == null)
                 yield break;
@@ -42,7 +42,7 @@ namespace Lazinator.Collections
             ChildrenLoaded = true;
         }
 
-        private void SetChildInformation(LazinatorTree<T> child, int index, bool addingChild)
+        private void SetChildInformation(LazinatorGeneralTree<T> child, int index, bool addingChild)
         {
             child.ParentTree = this;
             child.Level = Level + 1;
@@ -61,7 +61,7 @@ namespace Lazinator.Collections
             return location;
         }
 
-        public LazinatorTree<T> GetTreeAtLocation(List<int> location, int index = 0)
+        public LazinatorGeneralTree<T> GetTreeAtLocation(List<int> location, int index = 0)
         {
             if (index == location.Count)
                 return this;
@@ -71,7 +71,7 @@ namespace Lazinator.Collections
             return children.Skip(location[index]).First().GetTreeAtLocation(location, index + 1);
         }
 
-        public LazinatorTree<T> GetTreeAtIndex(int index)
+        public LazinatorGeneralTree<T> GetTreeAtIndex(int index)
         {
             var children = GetChildren();
             if (index > children.Count() - 1)
@@ -107,48 +107,48 @@ namespace Lazinator.Collections
                 yield return descendantWithLevel;
         }
 
-        public LazinatorTree(T item)
+        public LazinatorGeneralTree(T item)
         {
             Item = item;
         }
 
-        public LazinatorTree<T> AddChild(T child)
+        public LazinatorGeneralTree<T> AddChild(T child)
         {
             if (Children == null)
-                Children = new LazinatorList<LazinatorTree<T>>();
-            LazinatorTree<T> childTree = new LazinatorTree<T>(child);
+                Children = new LazinatorList<LazinatorGeneralTree<T>>();
+            LazinatorGeneralTree<T> childTree = new LazinatorGeneralTree<T>(child);
             return AddChildTree(childTree);
         }
 
-        public LazinatorTree<T> AddChildTree(LazinatorTree<T> childTree)
+        public LazinatorGeneralTree<T> AddChildTree(LazinatorGeneralTree<T> childTree)
         {
             if (Children == null)
-                Children = new LazinatorList<LazinatorTree<T>>();
+                Children = new LazinatorList<LazinatorGeneralTree<T>>();
             Children.Add(childTree);
             SetChildInformation(childTree, Children.Count - 1, true);
             return childTree;
         }
 
-        public LazinatorTree<T> InsertChild(T child, int index)
+        public LazinatorGeneralTree<T> InsertChild(T child, int index)
         {
             int childrenCount = Children.Count();
-            LazinatorTree<T> childTree = null;
+            LazinatorGeneralTree<T> childTree = null;
             if (Children == null || index == childrenCount)
                 childTree = AddChild(child);
             else
             {
                 if (index < 0 || index > childrenCount)
                     throw new ArgumentException("Invalid index");
-                childTree = new LazinatorTree<T>(child);
+                childTree = new LazinatorGeneralTree<T>(child);
                 InsertChildTree(childTree, index);
             }
             return childTree;
         }
 
-        private void InsertChildTree(LazinatorTree<T> childTree, int index)
+        private void InsertChildTree(LazinatorGeneralTree<T> childTree, int index)
         {
             if (Children == null)
-                Children = new LazinatorList<LazinatorTree<T>>();
+                Children = new LazinatorList<LazinatorGeneralTree<T>>();
             Children.Insert(index, childTree);
             ResetDescendantIndices();
         }
@@ -168,7 +168,7 @@ namespace Lazinator.Collections
                 return false;
         }
 
-        public bool RemoveChildTree(LazinatorTree<T> childTree)
+        public bool RemoveChildTree(LazinatorGeneralTree<T> childTree)
         {
             bool removeSuccessful = Children.Remove(childTree);
             if (removeSuccessful)
