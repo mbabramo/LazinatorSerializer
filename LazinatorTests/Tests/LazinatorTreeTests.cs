@@ -51,9 +51,9 @@ namespace LazinatorTests.Tests
             traversed.SequenceEqual(expected).Should().BeTrue();
         }
         
-        private static LazinatorGeneralTree<WString> GetTree(bool clone)
+        private static LazinatorGeneralTree<WString> GetTree(bool clone, bool locationAware = false)
         {
-            LazinatorGeneralTree<WString> root = new LazinatorGeneralTree<WString>("Root");
+            LazinatorGeneralTree<WString> root = locationAware ? new LazinatorLocationAwareTree<WString>("Root") : new LazinatorGeneralTree<WString>("Root");
             var root_0 = root.AddChild("Root-0");
             var root_1 = root.AddChild("Root-1");
             var root_2 = root.AddChild("Root-2");
@@ -151,6 +151,21 @@ namespace LazinatorTests.Tests
             bool successful = root.RemoveChild(root_0.Item);
             successful.Should().BeTrue();
             root_1.Index.Should().Be(0);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LazinatorTree_LocationAware(bool clone)
+        {
+            LazinatorLocationAwareTree<WString> root = (LazinatorLocationAwareTree<WString>) GetTree(clone, true);
+            var root_1_1 = root.GetTreeForItem("Root-1-1");
+            root_1_1.Item.Should().Be("Root-1-1");
+            var root_1 = root_1_1.ParentTree;
+            root_1.Item.Should().Be("Root-1");
+            root_1.RemoveChild("Root-1-1");
+            root_1_1 = root.GetTreeForItem("Root-1-1");
+            root_1_1.Should().BeNull();
         }
     }
 }

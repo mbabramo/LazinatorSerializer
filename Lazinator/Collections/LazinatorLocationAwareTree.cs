@@ -12,22 +12,47 @@ namespace Lazinator.Collections
     /// A LazinatorGeneralTree with the ability to look up an element of the tree by location.
     /// </summary>
     /// <typeparam name="T">The type of each tree node</typeparam>
-    public partial class LazinatorGeneralLocationAwareTree<T> : LazinatorGeneralTree<T>, ILazinatorLocationAwareTree<T> where T : ILazinator
+    public partial class LazinatorLocationAwareTree<T> : LazinatorGeneralTree<T>, ILazinatorLocationAwareTree<T> where T : ILazinator
     {
+        public LazinatorLocationAwareTree(T item) : base(item)
+        {
+            OnAddChild(this);
+        }
+
+        public override LazinatorGeneralTree<T> CreateTree(T item)
+        {
+            return new LazinatorLocationAwareTree<T>(item);
+        }
+
         private void InitializeLocationsIfNecessary()
         {
             if (Locations == null)
                 Locations = new LazinatorDictionary<T, LazinatorList<WInt>>();
         }
 
-        public override void OnAddChild(LazinatorGeneralTree<T> child)
+        public LazinatorLocationAwareTree<T> GetLocationAwareRoot()
+        {
+            return (LazinatorLocationAwareTree<T>) GetRoot();
+        }
+
+        protected override void OnAddChild(LazinatorGeneralTree<T> child)
+        {
+            GetLocationAwareRoot().OnAddChildComplete(child);
+        }
+
+        private void OnAddChildComplete(LazinatorGeneralTree<T> child)
         {
             InitializeLocationsIfNecessary();
             var location = ConvertToLazinatorList(child.GetLocationInTree());
             Locations[child.Item] = location;
         }
 
-        public override void OnRemoveChild(LazinatorGeneralTree<T> child)
+        protected override void OnRemoveChild(LazinatorGeneralTree<T> child)
+        {
+            GetLocationAwareRoot().OnRemoveChildComplete(child);
+        }
+
+        private void OnRemoveChildComplete(LazinatorGeneralTree<T> child)
         {
             Locations.Remove(child.Item);
         }

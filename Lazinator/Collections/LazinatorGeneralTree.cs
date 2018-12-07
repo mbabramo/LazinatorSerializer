@@ -19,13 +19,27 @@ namespace Lazinator.Collections
         public bool Initialized { get; set; }
         public bool ChildrenLoaded { get; set; }
 
-        public virtual void OnAddChild(LazinatorGeneralTree<T> child)
+        public LazinatorGeneralTree(T item)
         {
-
+            Item = item;
         }
-        public virtual void OnRemoveChild(LazinatorGeneralTree<T> child)
-        {
 
+        public LazinatorGeneralTree<T> GetRoot()
+        {
+            var x = this;
+            while (x.ParentTree != null)
+                x = x.ParentTree;
+            return x;
+        }
+
+        public IEnumerable<(T, int)> Traverse(int level = 0, int maxLevel = Int32.MaxValue)
+        {
+            yield return (Item, level);
+            if (level == maxLevel)
+                yield break;
+            foreach (var child in GetChildren())
+            foreach (var descendantWithLevel in child.Traverse(level + 1, maxLevel))
+                yield return descendantWithLevel;
         }
 
         public IEnumerable<LazinatorGeneralTree<T>> GetChildren()
@@ -42,7 +56,7 @@ namespace Lazinator.Collections
             ChildrenLoaded = true;
         }
 
-        private void SetChildInformation(LazinatorGeneralTree<T> child, int index, bool addingChild)
+        protected void SetChildInformation(LazinatorGeneralTree<T> child, int index, bool addingChild)
         {
             child.ParentTree = this;
             child.Level = Level + 1;
@@ -79,7 +93,7 @@ namespace Lazinator.Collections
             return children.Skip(index).First();
         }
 
-        public void ResetDescendantIndices()
+        protected void ResetDescendantIndices()
         {
             if (Children == null)
                 return;
@@ -97,26 +111,11 @@ namespace Lazinator.Collections
             }
         }
 
-        public IEnumerable<(T, int)> Traverse(int level = 0, int maxLevel = Int32.MaxValue)
-        {
-            yield return (Item, level);
-            if (level == maxLevel)
-                yield break;
-            foreach (var child in GetChildren())
-            foreach (var descendantWithLevel in child.Traverse(level + 1, maxLevel))
-                yield return descendantWithLevel;
-        }
-
-        public LazinatorGeneralTree(T item)
-        {
-            Item = item;
-        }
-
         public LazinatorGeneralTree<T> AddChild(T child)
         {
             if (Children == null)
                 Children = new LazinatorList<LazinatorGeneralTree<T>>();
-            LazinatorGeneralTree<T> childTree = new LazinatorGeneralTree<T>(child);
+            LazinatorGeneralTree<T> childTree = CreateTree(child);
             return AddChildTree(childTree);
         }
 
@@ -139,7 +138,7 @@ namespace Lazinator.Collections
             {
                 if (index < 0 || index > childrenCount)
                     throw new ArgumentException("Invalid index");
-                childTree = new LazinatorGeneralTree<T>(child);
+                childTree = CreateTree(child);
                 InsertChildTree(childTree, index);
             }
             return childTree;
@@ -150,6 +149,7 @@ namespace Lazinator.Collections
             if (Children == null)
                 Children = new LazinatorList<LazinatorGeneralTree<T>>();
             Children.Insert(index, childTree);
+            OnAddChild(childTree);
             ResetDescendantIndices();
         }
 
@@ -178,6 +178,20 @@ namespace Lazinator.Collections
                 return true;
             }
             return false;
+        }
+
+        public virtual LazinatorGeneralTree<T> CreateTree(T item)
+        {
+            return new LazinatorGeneralTree<T>(item);
+        }
+
+        protected virtual void OnAddChild(LazinatorGeneralTree<T> child)
+        {
+
+        }
+        protected virtual void OnRemoveChild(LazinatorGeneralTree<T> child)
+        {
+
         }
     }
 }
