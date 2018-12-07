@@ -167,5 +167,56 @@ namespace LazinatorTests.Tests
             root_1_1 = root.GetTreeForItem("Root-1-1");
             root_1_1.Should().BeNull();
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LazinatorTree_MergeIn(bool clone)
+        {
+            LazinatorLocationAwareTree<WString> root = (LazinatorLocationAwareTree<WString>)GetTree(clone, true);
+            LazinatorLocationAwareTree<WString> toMergeIn = (LazinatorLocationAwareTree<WString>)GetTreeToMergeIn(clone, true);
+            root.MergeIn(toMergeIn);
+
+            var traversed = root.Traverse().ToList();
+            var expected = new List<(WString, int)>()
+            {
+                ("Root", 0),
+                ("Root-0", 1),
+                ("Root-1", 1),
+                ("Root-1-0", 2),
+                ("Root-1-1", 2),
+                ("Root-1-1-0", 3),
+                ("Root-2", 1),
+                ("Root-2-0", 2),
+                ("Root-2-0-0", 3),
+                ("Root-3", 1),
+                ("Root-3-0", 2)
+            };
+            traversed.SequenceEqual(expected).Should().BeTrue();
+            var root_3 = root.GetTreeForItem("Root-3");
+            root_3.Index.Should().Be(3);
+            root_3.Level.Should().Be(1);
+            root_3.ParentTree.Should().Be(root);
+            var root_2_0 = root.GetTreeForItem("Root-2-0");
+            var root_2_0_0 = root.GetTreeForItem("Root-2-0-0");
+            root_2_0_0.Index.Should().Be(0);
+            root_2_0_0.Level.Should().Be(3);
+            root_2_0_0.ParentTree.Should().Be(root_2_0);
+
+        }
+
+
+        private static LazinatorGeneralTree<WString> GetTreeToMergeIn(bool clone, bool locationAware = false)
+        {
+            LazinatorGeneralTree<WString> root = locationAware ? new LazinatorLocationAwareTree<WString>("Root") : new LazinatorGeneralTree<WString>("Root");
+            var root_3 = root.AddChild("Root-3");
+            var root_3_0 = root_3.AddChild("Root-3-0");
+            var root_2 = root.AddChild("Root-2"); // in original
+            var root_2_0 = root_2.AddChild("Root-2-0"); // in original
+            var root_2_0_0 = root_2_0.AddChild("Root-2-0-0");
+            if (clone)
+                root = (LazinatorGeneralTree<WString>)root.CloneLazinator();
+            return root;
+        }
     }
 }

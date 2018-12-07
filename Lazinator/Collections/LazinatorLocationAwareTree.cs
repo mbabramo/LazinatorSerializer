@@ -79,5 +79,25 @@ namespace Lazinator.Collections
         {
             return list.Select(x => x.WrappedValue).ToList();
         }
+
+        public void MergeIn(LazinatorGeneralTree<T> treeToMergeIn)
+        {
+            foreach (var child in treeToMergeIn.GetChildren())
+            {
+                var existing = GetTreeForItem(child.Item);
+                if (existing == null)
+                {
+                    var parent = child.ParentTree;
+                    LazinatorLocationAwareTree<T> existingParent = parent == null ? null : (LazinatorLocationAwareTree<T>)GetTreeForItem(parent.Item);
+                    (existingParent ?? this)?.AddChildTree(child);
+                }
+                else
+                {
+                    // this already exists, but check its descendants
+                    foreach (var grandchild in child.GetChildren())
+                        MergeIn(grandchild);
+                }
+            }
+        }
     }
 }

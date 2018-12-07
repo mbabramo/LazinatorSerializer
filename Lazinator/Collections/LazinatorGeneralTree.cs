@@ -62,7 +62,11 @@ namespace Lazinator.Collections
             child.Level = Level + 1;
             child.Index = index;
             if (addingChild)
+            {
                 OnAddChild(child);
+                child.ResetDescendantIndices();
+            }
+
             Initialized = true;
         }
 
@@ -80,7 +84,7 @@ namespace Lazinator.Collections
             if (index == location.Count)
                 return this;
             var children = GetChildren();
-            if (index > children.Count() - 1)
+            if (location[index] > children.Count() - 1)
                 return null;
             return children.Skip(location[index]).First().GetTreeAtLocation(location, index + 1);
         }
@@ -178,6 +182,31 @@ namespace Lazinator.Collections
                 return true;
             }
             return false;
+        }
+
+        public override string ToString()
+        {
+            return ToTreeString(true);
+        }
+
+        public string ToTreeString(bool includeRoot)
+        {
+            StringBuilder s = new StringBuilder();
+            foreach (var treeInfo in Traverse())
+            {
+                if (!includeRoot && treeInfo.Item2 == 0)
+                    continue;
+                TabToDepth(treeInfo.Item2, s);
+                s.Append(treeInfo.Item1.ToString());
+                s.Append("\n");
+            }
+            return s.ToString();
+        }
+
+        private static void TabToDepth(int depth, StringBuilder s)
+        {
+            for (int i = 0; i < depth * 2; i++)
+                s.Append(' ');
         }
 
         public virtual LazinatorGeneralTree<T> CreateTree(T item)
