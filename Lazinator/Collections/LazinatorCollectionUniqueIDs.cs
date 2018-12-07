@@ -66,5 +66,8 @@
         LazinatorFastReadListInt32,
         LazinatorFastReadListInt16,
         LazinatorListUnofficial,
+        LazinatorTree,
+        LazinatorTreeUnofficial,
+        LazinatorLocationAwareTree,
     }
 }

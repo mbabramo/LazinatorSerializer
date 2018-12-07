@@ -16,6 +16,11 @@ namespace Lazinator.Collections
             Item2 = item2;
         }
 
+        public override string ToString()
+        {
+            return $"({Item1?.ToString()}, {Item2?.ToString()})";
+        }
+
         public int CompareTo(LazinatorTuple<T, U> other)
         {
             return ((Item1, Item2)).CompareTo((other.Item1, other.Item2));

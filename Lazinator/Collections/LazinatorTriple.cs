@@ -16,6 +16,11 @@ namespace Lazinator.Collections
             Item3 = item3;
         }
 
+        public override string ToString()
+        {
+            return $"({Item1?.ToString()}, {Item2?.ToString()},, {Item3?.ToString()})";
+        }
+
         public int CompareTo(LazinatorTriple<T, U, V> other)
         {
             return ((Item1, Item2, Item3)).CompareTo((other.Item1, other.Item2, other.Item3));
