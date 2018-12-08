@@ -93,9 +93,7 @@ namespace Lazinator.Collections
                 }
                 else
                 {
-                    // this already exists, but check its descendants
-                    foreach (var grandchild in child.GetChildren())
-                        MergeIn(grandchild);
+                    MergeIn(child);
                 }
             }
         }
