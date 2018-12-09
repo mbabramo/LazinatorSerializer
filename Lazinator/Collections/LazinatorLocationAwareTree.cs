@@ -19,6 +19,12 @@ namespace Lazinator.Collections
             OnAddChild(this);
         }
 
+        public IEnumerable<LazinatorLocationAwareTree<T>> TraverseLocationAwareTree()
+        {
+            foreach (var tree in TraverseTree())
+                yield return (LazinatorLocationAwareTree<T>) tree;
+        }
+
         public override LazinatorGeneralTree<T> CreateTree(T item)
         {
             return new LazinatorLocationAwareTree<T>(item);
@@ -60,14 +66,14 @@ namespace Lazinator.Collections
             Locations.Remove(child.Item);
         }
 
-        public LazinatorGeneralTree<T> GetTreeForItem(T item)
+        public LazinatorLocationAwareTree<T> GetTreeForItem(T item)
         {
             InitializeLocationsIfNecessary();
             if (Locations.ContainsKey(item))
             {
                 var locationAsLazinatorList = Locations[item];
                 var locationAsList = ConvertToRegularList(locationAsLazinatorList);
-                return GetTreeAtLocation(locationAsList);
+                return (LazinatorLocationAwareTree<T>) GetTreeAtLocation(locationAsList);
             }
             return null;
         }
@@ -82,20 +88,27 @@ namespace Lazinator.Collections
             return list.Select(x => x.WrappedValue).ToList();
         }
 
-        public void MergeIn(LazinatorGeneralTree<T> treeToMergeIn)
+        public void MergeIn(LazinatorLocationAwareTree<T> treeToMergeIn)
         {
-            foreach (var child in treeToMergeIn.GetChildren())
+            foreach (var descendant in treeToMergeIn.TraverseLocationAwareTree())
             {
-                var existing = GetTreeForItem(child.Item);
+                var existing = GetTreeForItem(descendant.Item);
                 if (existing == null)
                 {
-                    var parent = child.ParentTree;
-                    LazinatorLocationAwareTree<T> existingParent = parent == null ? null : (LazinatorLocationAwareTree<T>)GetTreeForItem(parent.Item);
-                    (existingParent ?? this)?.AddChildTree(child);
-                }
-                else
-                {
-                    MergeIn(child);
+                    var parent = descendant.ParentTree;
+                    if (parent == null)
+                        throw new Exception("Cannot merge in tree because trees have different roots.");
+                    if (parent != null)
+                    {
+                        LazinatorLocationAwareTree<T> existingParent = (LazinatorLocationAwareTree<T>) GetTreeForItem(parent.Item);
+                        if (existingParent == null)
+                            throw new Exception("Internal exception in MergeIn algorithm."); // DEBUG -- eliminate this check
+                        var originalChildren = descendant.Children;
+                        descendant.Children = null;
+                        var descendantClone = descendant.CloneNoBuffer();
+                        existingParent.AddChildTree(descendantClone);
+                        descendant.Children = originalChildren;
+                    }
                 }
             }
         }

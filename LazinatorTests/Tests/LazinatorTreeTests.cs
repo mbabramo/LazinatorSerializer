@@ -190,7 +190,9 @@ namespace LazinatorTests.Tests
                 ("Root-2-0", 2),
                 ("Root-2-0-0", 3),
                 ("Root-3", 1),
-                ("Root-3-0", 2)
+                ("Root-3-0", 2),
+                ("Root-3-0-0", 3),
+                ("Root-3-0-0-0", 4),
             };
             traversed.SequenceEqual(expected).Should().BeTrue();
             var root_3 = root.GetTreeForItem("Root-3");
@@ -202,6 +204,12 @@ namespace LazinatorTests.Tests
             root_2_0_0.Index.Should().Be(0);
             root_2_0_0.Level.Should().Be(3);
             root_2_0_0.ParentTree.Should().Be(root_2_0);
+            var root_3_0 = root.GetTreeForItem("Root-3-0");
+            root_3_0.Should().NotBeNull();
+            var root_3_0_0 = root.GetTreeForItem("Root-3-0-0");
+            root_3_0_0.Should().NotBeNull();
+            var root_3_0_0_0 = root.GetTreeForItem("Root-3-0-0-0");
+            root_3_0_0_0.Should().NotBeNull();
 
         }
 
@@ -211,6 +219,8 @@ namespace LazinatorTests.Tests
             LazinatorGeneralTree<WString> root = locationAware ? new LazinatorLocationAwareTree<WString>("Root") : new LazinatorGeneralTree<WString>("Root");
             var root_3 = root.AddChild("Root-3");
             var root_3_0 = root_3.AddChild("Root-3-0");
+            var root_3_0_0 = root_3_0.AddChild("Root-3-0-0");
+            var root_3_0_0_0 = root_3_0_0.AddChild("Root-3-0-0-0");
             var root_2 = root.AddChild("Root-2"); // in original
             var root_2_0 = root_2.AddChild("Root-2-0"); // in original
             var root_2_0_0 = root_2_0.AddChild("Root-2-0-0");

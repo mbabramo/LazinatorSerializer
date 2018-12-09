@@ -42,6 +42,14 @@ namespace Lazinator.Collections
                 yield return descendantWithLevel;
         }
 
+        public IEnumerable<LazinatorGeneralTree<T>> TraverseTree()
+        {
+            yield return this;
+            foreach (var child in GetChildren())
+            foreach (var descendant in child.TraverseTree())
+                yield return descendant;
+        }
+
         public IEnumerable<LazinatorGeneralTree<T>> GetChildren()
         {
             if (Children == null)
