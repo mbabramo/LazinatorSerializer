@@ -50,7 +50,7 @@ namespace LazinatorTests.Tests
             };
             traversed.SequenceEqual(expected).Should().BeTrue();
         }
-        
+
         private static LazinatorGeneralTree<WString> GetTree(bool clone, bool locationAware = false)
         {
             LazinatorGeneralTree<WString> root = locationAware ? new LazinatorLocationAwareTree<WString>("Root") : new LazinatorGeneralTree<WString>("Root");
@@ -166,6 +166,17 @@ namespace LazinatorTests.Tests
             root_1.RemoveChild("Root-1-1");
             root_1_1 = root.GetTreeForItem("Root-1-1");
             root_1_1.Should().BeNull();
+            VerifyLocationKnown(root);
+        }
+
+        private static void VerifyLocationKnown(LazinatorLocationAwareTree<WString> root)
+        {
+            var traversed = root.Traverse().ToList();
+            foreach (var item in traversed.Select(x => x.Item1))
+            {
+                var tree = root.GetTreeForItem(item);
+                tree.Item.Equals(item).Should().BeTrue();
+            }
         }
 
         [Theory]
@@ -182,13 +193,14 @@ namespace LazinatorTests.Tests
             {
                 ("Root", 0),
                 ("Root-0", 1),
-                ("Root-1", 1),
-                ("Root-1-0", 2),
-                ("Root-1-1", 2),
-                ("Root-1-1-0", 3),
                 ("Root-2", 1),
                 ("Root-2-0", 2),
                 ("Root-2-0-0", 3),
+                ("Root-1Above", 1),
+                ("Root-1", 2),
+                ("Root-1-0", 3),
+                ("Root-1-1", 3),
+                ("Root-1-1-0", 4),
                 ("Root-3", 1),
                 ("Root-3-0", 2),
                 ("Root-3-0-0", 3),
@@ -214,9 +226,44 @@ namespace LazinatorTests.Tests
         }
 
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CanReorderLazinatorTree(bool clone)
+        {
+            LazinatorGeneralTree<WString> root = GetTreeMisordered(clone);
+            root.Order();
+            var traversed = root.Traverse().ToList();
+            var expected = new List<(WString, int)>()
+            {
+                ("Root", 0),
+                ("Root-0", 1),
+                ("Root-1", 1),
+                ("Root-1-0", 2),
+                ("Root-1-1", 2),
+                ("Root-1-1-0", 3),
+                ("Root-2", 1),
+                ("Root-2-0", 2)
+            };
+            traversed.SequenceEqual(expected).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CanReorderLazinatorTree_LocationAware(bool clone)
+        {
+            LazinatorLocationAwareTree<WString> root = (LazinatorLocationAwareTree<WString>)GetTreeMisordered(clone, true);
+            root.Order();
+            // we've already checked correct ordering in test above. here we're just checking that the location aware tree knows where each item is. 
+            VerifyLocationKnown(root);
+        }
+
         private static LazinatorGeneralTree<WString> GetTreeToMergeIn(bool clone, bool locationAware = false)
         {
             LazinatorGeneralTree<WString> root = locationAware ? new LazinatorLocationAwareTree<WString>("Root") : new LazinatorGeneralTree<WString>("Root");
+            var root_1Above = root.AddChild("Root-1Above");
+            var root_1 = root_1Above.AddChild("Root-1");
             var root_3 = root.AddChild("Root-3");
             var root_3_0 = root_3.AddChild("Root-3-0");
             var root_3_0_0 = root_3_0.AddChild("Root-3-0-0");
@@ -224,6 +271,21 @@ namespace LazinatorTests.Tests
             var root_2 = root.AddChild("Root-2"); // in original
             var root_2_0 = root_2.AddChild("Root-2-0"); // in original
             var root_2_0_0 = root_2_0.AddChild("Root-2-0-0");
+            if (clone)
+                root = (LazinatorGeneralTree<WString>)root.CloneLazinator();
+            return root;
+        }
+
+        private static LazinatorGeneralTree<WString> GetTreeMisordered(bool clone, bool locationAware = false)
+        {
+            LazinatorGeneralTree<WString> root = locationAware ? new LazinatorLocationAwareTree<WString>("Root") : new LazinatorGeneralTree<WString>("Root");
+            var root_0 = root.AddChild("Root-0");
+            var root_2 = root.AddChild("Root-2");
+            var root_1 = root.AddChild("Root-1");
+            var root_1_1 = root_1.AddChild("Root-1-1");
+            var root_1_0 = root_1.AddChild("Root-1-0");
+            var root_2_0 = root_2.AddChild("Root-2-0");
+            var root_1_1_0 = root_1_1.AddChild("Root-1-1-0");
             if (clone)
                 root = (LazinatorGeneralTree<WString>)root.CloneLazinator();
             return root;

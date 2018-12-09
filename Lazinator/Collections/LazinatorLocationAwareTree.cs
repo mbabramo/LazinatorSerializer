@@ -64,6 +64,8 @@ namespace Lazinator.Collections
         {
             InitializeLocationsIfNecessary();
             Locations.Remove(child.Item);
+            foreach (var grandchild in child.GetChildren())
+                OnRemoveChildComplete(grandchild);
         }
 
         public LazinatorLocationAwareTree<T> GetTreeForItem(T item)
@@ -88,29 +90,54 @@ namespace Lazinator.Collections
             return list.Select(x => x.WrappedValue).ToList();
         }
 
+        /// <summary>
+        /// Merge another tree sharing the same root into this one.
+        /// </summary>
+        /// <param name="treeToMergeIn"></param>
         public void MergeIn(LazinatorLocationAwareTree<T> treeToMergeIn)
         {
-            foreach (var descendant in treeToMergeIn.TraverseLocationAwareTree())
+            if (!treeToMergeIn.Item.Equals(Item))
+                throw new Exception("Cannot merge in tree because trees have different roots.");
+            foreach (var descendant in treeToMergeIn.TraverseLocationAwareTree().Skip(1)) // skip the root
             {
                 var existing = GetTreeForItem(descendant.Item);
                 if (existing == null)
                 {
-                    var parent = descendant.ParentTree;
-                    if (parent == null)
-                        throw new Exception("Cannot merge in tree because trees have different roots.");
-                    if (parent != null)
+                    // Descendant in treeToMergeIn doesn't exist in this tree. Find its parent in this tree, and then merge descendant into that spot.
+                    var parentInTreeToMergeIn = descendant.ParentTree;
+                    MergeInSingleNode(descendant, parentInTreeToMergeIn);
+                }
+                else
+                {
+                    // Descendant in treeToMergeIn already exists in this tree. We may or may not need to do something.
+                    if (existing.ParentTree == this)
                     {
-                        LazinatorLocationAwareTree<T> existingParent = (LazinatorLocationAwareTree<T>) GetTreeForItem(parent.Item);
-                        if (existingParent == null)
-                            throw new Exception("Internal exception in MergeIn algorithm."); // DEBUG -- eliminate this check
-                        var originalChildren = descendant.Children;
-                        descendant.Children = null;
-                        var descendantClone = descendant.CloneNoBuffer();
-                        existingParent.AddChildTree(descendantClone);
-                        descendant.Children = originalChildren;
+                        if (descendant.ParentTree != treeToMergeIn)
+                        {
+                            // Suppose that this tree has A-B and the other tree has C-A. We start by adding C, so now the tree is A-B, C. Then, when we get to A in the other tree, we see that it's already in this tree (thus existing != null). Then, we confirm that A in this tree has the root as a parent, and that the A in the other tree does not have its root as a parent. So, the correct thing for us to do is to move the A in this tree under the C in this tree. 
+                            var replacementParent = GetTreeForItem(descendant.ParentTree.Item); // i.e., find the C in this tree
+                            RemoveChildTree(existing);
+                            replacementParent.AddChildTree(existing);
+                        }
+                    }
+                    else
+                    {
+                        if (!EqualityComparer<T>.Default.Equals(existing.ParentTree.Item, descendant.ParentTree.Item))
+                            throw new Exception(
+                                $"An item {existing.Item} exists in both trees, but their parents are not the same.");
                     }
                 }
             }
+        }
+
+        private void MergeInSingleNode(LazinatorLocationAwareTree<T> nodeToMergeIn, LazinatorGeneralTree<T> placeInTreeToMergeIn)
+        {
+            LazinatorLocationAwareTree<T> parentInThisTree = (LazinatorLocationAwareTree<T>)GetTreeForItem(placeInTreeToMergeIn.Item);
+            var originalChildren = nodeToMergeIn.Children;
+            nodeToMergeIn.Children = null;
+            var descendantClone = nodeToMergeIn.CloneNoBuffer();
+            parentInThisTree.AddChildTree(descendantClone);
+            nodeToMergeIn.Children = originalChildren;
         }
     }
 }
