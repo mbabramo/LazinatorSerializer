@@ -110,21 +110,24 @@ namespace Lazinator.Collections
                 else
                 {
                     // Descendant in treeToMergeIn already exists in this tree. We may or may not need to do something.
-                    if (existing.ParentTree == this)
+                    // If the descendant is just on the root of the tree to merge in, then there is nothing to do.
+                    if (descendant.ParentTree != treeToMergeIn)
                     {
-                        if (descendant.ParentTree != treeToMergeIn)
+                        if (existing.ParentTree == this)
                         {
                             // Suppose that this tree has A-B and the other tree has C-A. We start by adding C, so now the tree is A-B, C. Then, when we get to A in the other tree, we see that it's already in this tree (thus existing != null). Then, we confirm that A in this tree has the root as a parent, and that the A in the other tree does not have its root as a parent. So, the correct thing for us to do is to move the A in this tree under the C in this tree. 
-                            var replacementParent = GetTreeForItem(descendant.ParentTree.Item); // i.e., find the C in this tree
+                            var replacementParent =
+                                GetTreeForItem(descendant.ParentTree.Item); // i.e., find the C in this tree
                             RemoveChildTree(existing);
                             replacementParent.AddChildTree(existing);
                         }
-                    }
-                    else
-                    {
-                        if (!EqualityComparer<T>.Default.Equals(existing.ParentTree.Item, descendant.ParentTree.Item))
-                            throw new Exception(
-                                $"An item {existing.Item} exists in both trees, but their parents are not the same.");
+                        else
+                        {
+                            if (!EqualityComparer<T>.Default.Equals(existing.ParentTree.Item,
+                                descendant.ParentTree.Item))
+                                throw new Exception(
+                                    $"An item {existing.Item} exists in both trees, but their parents are not the same.");
+                        }
                     }
                 }
             }
