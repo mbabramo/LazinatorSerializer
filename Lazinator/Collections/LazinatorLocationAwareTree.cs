@@ -45,6 +45,8 @@ namespace Lazinator.Collections
             InitializeLocationsIfNecessary();
             var location = ConvertToLazinatorList(child.GetLocationInTree());
             Locations[child.Item] = location;
+            foreach (var grandchild in child.GetChildren())
+                OnAddChildComplete(grandchild);
         }
 
         protected override void OnRemoveChild(LazinatorGeneralTree<T> child)
