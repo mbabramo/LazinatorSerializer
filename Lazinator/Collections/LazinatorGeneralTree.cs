@@ -223,12 +223,25 @@ namespace Lazinator.Collections
         }
 
         /// <summary>
-        /// Orders the item at each level of the tree.
+        /// Orders the item at each level of the tree, by the item at each level.
         /// </summary>
         public void Order()
         {
             var children = GetChildren();
             Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => x.Item));
+            foreach (var child in Children)
+                child.Order();
+            if (ParentTree == null)
+                ResetDescendantIndices();
+        }
+
+        /// <summary>
+        /// Orders the item at each level of the tree, by something other than the item at each level.
+        /// </summary>
+        public void Order<T2>(Func<LazinatorGeneralTree<T>, T2> orderByItem) where T2 : IComparable<T2>
+        {
+            var children = GetChildren();
+            Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => orderByItem(x)));
             foreach (var child in Children)
                 child.Order();
             if (ParentTree == null)
