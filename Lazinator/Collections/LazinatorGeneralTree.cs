@@ -243,7 +243,7 @@ namespace Lazinator.Collections
             var children = GetChildren();
             Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => orderByItem(x)));
             foreach (var child in Children)
-                child.Order();
+                child.Order(orderByItem);
             if (ParentTree == null)
                 ResetDescendantIndices();
         }
