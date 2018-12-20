@@ -117,6 +117,13 @@ namespace Lazinator.Collections.Dictionary
             return bucket != null && bucket.ContainsKey(key, hash);
         }
 
+        public TValue GetValueOrDefault(TKey key)
+        {
+            if (ContainsKey(key))
+                return this[key];
+            return default;
+        }
+
         public bool TryGetValue(TKey key, out TValue value)
         {
             GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
