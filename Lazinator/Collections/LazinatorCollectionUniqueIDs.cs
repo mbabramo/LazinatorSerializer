@@ -69,5 +69,10 @@
         LazinatorGeneralTree,
         LazinatorGeneralTreeUnofficial,
         LazinatorLocationAwareTree,
+        LazinatorBigListNode,
+        BigListNode,
+        BigListLeafNode,
+        BigListInteriorNode,
+        BigList,
     }
 }
