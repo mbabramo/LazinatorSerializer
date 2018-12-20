@@ -19,6 +19,12 @@ namespace Lazinator.Collections.Dictionary
                 Clear();
         }
 
+        private DictionaryBucket<TKey, TValue> GetBucketAtIndexIfExists(int index)
+        {
+            var bucket = Buckets[index];
+            return bucket;
+        }
+
         private DictionaryBucket<TKey, TValue> GetBucketAtIndex(int index, LazinatorList<DictionaryBucket<TKey, TValue>> buckets = null)
         {
             if (buckets == null)
@@ -32,12 +38,12 @@ namespace Lazinator.Collections.Dictionary
             return bucket;
         }
 
-        private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
+        private void GetHashAndBucket(TKey key, out uint hash, out DictionaryBucket<TKey, TValue> bucket, bool returnNullForEmptyBucket = false)
         {
             EnsureBucketsExist();
             hash = key.GetBinaryHashCode32();
             int bucketIndex = (int)(hash % NumBuckets);
-            bucket = GetBucketAtIndex(bucketIndex);
+            bucket = returnNullForEmptyBucket ? GetBucketAtIndexIfExists(bucketIndex) : GetBucketAtIndex(bucketIndex);
         }
 
         private void GetHashAndBucket(TKey key, LazinatorList<DictionaryBucket<TKey, TValue>> buckets, out uint hash, out DictionaryBucket<TKey, TValue> bucket)
@@ -94,8 +100,8 @@ namespace Lazinator.Collections.Dictionary
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            if (bucket.ContainsKey(item.Key, hash))
+            GetHashAndBucket(item.Key, out uint hash, out DictionaryBucket<TKey, TValue> bucket, true);
+            if (bucket != null && bucket.ContainsKey(item.Key, hash))
             {
                 TValue value = bucket.GetValueAtKey(item.Key, hash);
                 return value.Equals(item.Value);
@@ -107,8 +113,8 @@ namespace Lazinator.Collections.Dictionary
         {
             if (Count == 1)
                 return GetSingleKey().Equals(key);
-            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket);
-            return bucket.ContainsKey(key, hash);
+            GetHashAndBucket(key, out uint hash, out DictionaryBucket<TKey, TValue> bucket, true);
+            return bucket != null && bucket.ContainsKey(key, hash);
         }
 
         public bool TryGetValue(TKey key, out TValue value)
@@ -185,7 +191,7 @@ namespace Lazinator.Collections.Dictionary
         {
             Buckets = new LazinatorList<DictionaryBucket<TKey, TValue>>();
             for (int i = 0; i < InitialNumBuckets; i++)
-                Buckets.Add(new DictionaryBucket<TKey, TValue>());
+                Buckets.Add(null);
             Count = 0;
         }
 
