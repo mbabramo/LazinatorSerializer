@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableDouble(double? x)
         {
             return new WNullableDouble(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator double? (WNullableDouble x)
         {
             return x.WrappedValue;

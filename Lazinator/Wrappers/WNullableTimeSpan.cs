@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableTimeSpan(TimeSpan? x)
         {
             return new WNullableTimeSpan(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator TimeSpan? (WNullableTimeSpan x)
         {
             return x.WrappedValue;

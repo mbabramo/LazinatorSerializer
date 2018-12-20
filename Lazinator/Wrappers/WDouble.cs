@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WDouble(double x)
         {
             return new WDouble(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator double(WDouble x)
         {
             return x.WrappedValue;

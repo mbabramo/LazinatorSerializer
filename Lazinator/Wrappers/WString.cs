@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WString(string x)
         {
             return new WString(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator string(WString x)
         {
             return x.WrappedValue;

@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WFloatArray(float[] x)
         {
             return new WFloatArray(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator float[] (WFloatArray x)
         {
             return x.WrappedValue;

@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableInt(int? x)
         {
             return new WNullableInt(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator int? (WNullableInt x)
         {
             return x.WrappedValue;

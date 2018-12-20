@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableDateTime(DateTime? x)
         {
             return new WNullableDateTime(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator DateTime? (WNullableDateTime x)
         {
             return x.WrappedValue;

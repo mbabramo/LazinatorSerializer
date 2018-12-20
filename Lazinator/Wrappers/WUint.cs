@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WUint(uint x)
         {
             return new WUint(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator uint(WUint x)
         {
             return x.WrappedValue;

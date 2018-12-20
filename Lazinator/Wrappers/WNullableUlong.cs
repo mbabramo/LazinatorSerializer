@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableUlong(ulong? x)
         {
             return new WNullableUlong(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator ulong? (WNullableUlong x)
         {
             return x.WrappedValue;

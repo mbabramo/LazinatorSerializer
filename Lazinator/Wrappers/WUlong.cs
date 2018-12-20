@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WUlong(ulong x)
         {
             return new WUlong(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator ulong(WUlong x)
         {
             return x.WrappedValue;

@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableLong(long? x)
         {
             return new WNullableLong(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator long? (WNullableLong x)
         {
             return x.WrappedValue;

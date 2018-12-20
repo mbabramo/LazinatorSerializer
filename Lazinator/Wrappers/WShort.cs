@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WShort(short x)
         {
             return new WShort(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator short(WShort x)
         {
             return x.WrappedValue;

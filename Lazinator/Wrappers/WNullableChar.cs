@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableChar(char? x)
         {
             return new WNullableChar(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator char? (WNullableChar x)
         {
             return x.WrappedValue;

@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WLong(long x)
         {
             return new WLong(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator long(WLong x)
         {
             return x.WrappedValue;

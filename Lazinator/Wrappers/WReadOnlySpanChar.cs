@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             Value = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WReadOnlySpanChar(ReadOnlySpan<char> x)
         {
             return new WReadOnlySpanChar(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator ReadOnlySpan<char>(WReadOnlySpanChar x)
         {
             return x.Value;

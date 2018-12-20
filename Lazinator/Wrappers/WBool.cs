@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WBool(bool x)
         {
             return new WBool(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator bool(WBool x)
         {
             return x.WrappedValue;

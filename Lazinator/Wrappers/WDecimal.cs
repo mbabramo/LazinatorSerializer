@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WDecimal(decimal x)
         {
             return new WDecimal(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator decimal(WDecimal x)
         {
             return x.WrappedValue;

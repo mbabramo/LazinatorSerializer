@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WFloat(float x)
         {
             return new WFloat(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator float(WFloat x)
         {
             return x.WrappedValue;

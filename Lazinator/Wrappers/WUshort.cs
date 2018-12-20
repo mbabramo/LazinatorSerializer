@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WUshort(ushort x)
         {
             return new WUshort(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator ushort(WUshort x)
         {
             return x.WrappedValue;

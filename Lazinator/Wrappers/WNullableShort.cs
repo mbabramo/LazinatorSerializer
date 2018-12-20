@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableShort(short? x)
         {
             return new WNullableShort(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator short? (WNullableShort x)
         {
             return x.WrappedValue;

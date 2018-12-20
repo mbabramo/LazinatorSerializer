@@ -14,11 +14,13 @@
             return WrappedValue?.ToString() ?? "";
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableBool(bool? x)
         {
             return new WNullableBool(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator bool?(WNullableBool x)
         {
             return x.WrappedValue;

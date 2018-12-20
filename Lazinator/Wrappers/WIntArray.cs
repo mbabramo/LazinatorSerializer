@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WIntArray(int[] x)
         {
             return new WIntArray(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator int[](WIntArray x)
         {
             return x.WrappedValue;

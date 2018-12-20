@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableByte(byte? x)
         {
             return new WNullableByte(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator byte? (WNullableByte x)
         {
             return x.WrappedValue;

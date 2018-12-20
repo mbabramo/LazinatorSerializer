@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableFloat(float? x)
         {
             return new WNullableFloat(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator float? (WNullableFloat x)
         {
             return x.WrappedValue;

@@ -9,11 +9,13 @@
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WNullableDecimal(decimal? x)
         {
             return new WNullableDecimal(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator decimal? (WNullableDecimal x)
         {
             return x.WrappedValue;

@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WByte(byte x)
         {
             return new WByte(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator byte(WByte x)
         {
             return x.WrappedValue;

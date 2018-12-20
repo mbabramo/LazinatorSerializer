@@ -11,11 +11,13 @@ namespace Lazinator.Wrappers
             WrappedValue = x;
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator WGuid(Guid x)
         {
             return new WGuid(x);
         }
 
+        [System.Diagnostics.DebuggerStepThrough]
         public static implicit operator Guid(WGuid x)
         {
             return x.WrappedValue;
