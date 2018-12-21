@@ -4,8 +4,8 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.BigList
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.BigListLeafNode)]
-    public interface IBigListLeafNode<T> where T : ILazinator
+    [Lazinator((int)LazinatorCollectionUniqueIDs.BigListLeafContainer)]
+    public interface IBigListLeafContainer<T> where T : ILazinator
     {
         LazinatorList<T> Items { get; set; }
     }

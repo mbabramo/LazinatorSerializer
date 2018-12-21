@@ -4,9 +4,9 @@ using Lazinator.Core;
 namespace Lazinator.Collections.BigList
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.BigListNode)]
-    public interface IBigListNode<T> where T : ILazinator
+    public interface IBigListContainer<T> where T : ILazinator
     {
-        int MaxLeafCount { get; set; }
+        int BranchingFactor { get; set; }
         long Count { get; set; }
     }
 }

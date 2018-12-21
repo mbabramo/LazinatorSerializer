@@ -71,8 +71,8 @@
         LazinatorLocationAwareTree,
         LazinatorBigListNode,
         BigListNode,
-        BigListLeafNode,
-        BigListInteriorNode,
+        BigListLeafContainer,
+        BigListInteriorContainer,
         BigList,
     }
 }
