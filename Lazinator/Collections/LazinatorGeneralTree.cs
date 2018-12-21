@@ -64,6 +64,11 @@ namespace Lazinator.Collections
             ChildrenLoaded = true;
         }
 
+        public LazinatorGeneralTree<T> GetChild(int index)
+        {
+            return GetChildren().Skip(index).First();
+        }
+
         protected void SetChildInformation(LazinatorGeneralTree<T> child, int index, bool addingChild)
         {
             child.ParentTree = this;
