@@ -7,6 +7,6 @@ namespace Lazinator.Collections.BigList
     [Lazinator((int)LazinatorCollectionUniqueIDs.BigListInteriorContainer)]
     internal interface IBigListInteriorContainer<T> where T : ILazinator
     {
-        LazinatorList<WLong> Counts { get; set; }
+        LazinatorList<WLong> ChildContainerCounts { get; set; }
     }
 }

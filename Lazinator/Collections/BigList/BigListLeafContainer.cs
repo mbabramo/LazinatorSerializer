@@ -40,12 +40,11 @@ namespace Lazinator.Collections.BigList
             }
             else
             {
+                // We will embed the existing tree items and the new item within leaves that are children of an interior node that we will create. If we're adding at the beginning or the end, we'll keep all of the existing items together; thus, if we continue to add at an end, we can easily fill up the entire level before we'll need to create yet another level. If we're adding in the middle, then we want to leave enough space for more random additions, so we'll separate these items out
                 bool insertAtBeginning = index == 0;
                 bool insertAtEnd = index == BranchingFactor;
                 bool separateItemsIntoSeparateLeaves = insertAtBeginning || insertAtEnd;
-                // We will embed this portion of the tree within an interior node. If we're adding at the beginning or the end, we'll keep all of these items together; thus, if we continue to add at an end, we can easily fill up the entire level before we'll need to create yet another level. If we're adding in the middle, then we want to leave enough space for more random additions, so we'll separate these items out.
-                var interiorContainer = CorrespondingTree.DemoteChildTree(CorrespondingTree, separateItemsIntoSeparateLeaves);
-                // We'll insert the new interior node, resulting in creation of a new leaf node.
+                var interiorContainer = CorrespondingTree.DemoteLeafContainer(separateItemsIntoSeparateLeaves);
                 interiorContainer.Insert(index, value);
             }
         }

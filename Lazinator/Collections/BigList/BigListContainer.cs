@@ -23,6 +23,8 @@ namespace Lazinator.Collections.BigList
 
         public BigListContainer(int branchingFactor, BigListTree<T> correspondingTree)
         {
+            if (branchingFactor < 2)
+                throw new ArgumentException();
             BranchingFactor = branchingFactor;
             CorrespondingTree = correspondingTree;
         }

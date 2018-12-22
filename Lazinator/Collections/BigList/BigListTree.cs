@@ -13,16 +13,12 @@ namespace Lazinator.Collections.BigList
 
         public BigListTree() : base()
         {
-            Item = null; // no item at the root
-            InitializeWithChildLeaf();
         }
 
         public BigListTree(BigListContainer<T> container)
         {
             Item = container;
             Item.CorrespondingTree = this;
-            if (container.IsLeaf == false)
-                InitializeWithChildLeaf();
         }
 
         public override LazinatorGeneralTree<BigListContainer<T>> CreateTree(BigListContainer<T> item)
@@ -57,7 +53,11 @@ namespace Lazinator.Collections.BigList
 
         public IEnumerable<BigListTree<T>> BigListChildTrees => Children.Select(x => (BigListTree<T>)x);
 
-        public IEnumerable<BigListContainer<T>> BigListChildNodes => BigListChildTrees.Select(x => x.BigListContainer);
+        public IEnumerable<BigListContainer<T>> BigListChildContainers => BigListChildTrees.Select(x => x.BigListContainer);
+
+        public BigListTree<T> BigListChildTree(int childIndex) => BigListChildTrees.Skip(childIndex).FirstOrDefault();
+
+        public BigListContainer<T> BigListChildContainer(int childIndex) => BigListChildContainers.Skip(childIndex).FirstOrDefault();
 
         public BigListTree<T> BigListParentTree => (BigListTree<T>)ParentTree;
 
@@ -67,28 +67,32 @@ namespace Lazinator.Collections.BigList
 
         #region Tree modification
 
-        protected internal BigListInteriorContainer<T> DemoteChildTree(BigListTree<T> childTree, bool separateItemsIntoSeparateLeaves)
+        protected internal void InsertChildContainer(BigListContainer<T> childContainer, int childIndex)
         {
-            int childIndex = childTree.Index;
-            BigListInteriorContainer<T> interiorContainer = new BigListInteriorContainer<T>(childTree.BigListContainer.BranchingFactor, null);
-            BigListTree<T> treeForInteriorContainer = new BigListTree<T>(interiorContainer);
-            Children[childIndex] = treeForInteriorContainer; // add interior container as a child of this
-            SetChildInformation(treeForInteriorContainer, childIndex, false); // make sure level is set correctly
-            if (separateItemsIntoSeparateLeaves)
+            BigListInteriorContainer<T> containerToInsertUnder = (BigListInteriorContainer<T>)BigListContainer;
+            containerToInsertUnder.ChildContainerCounts.Insert(childIndex, 0); // nothing in the child container yet
+            InsertChild(childContainer, childIndex);
+            BigListChildContainer(childIndex).CorrespondingTree = BigListChildTree(childIndex);
+        }
+
+        protected internal BigListInteriorContainer<T> DemoteLeafContainer(bool separateItemsIntoSeparateLeaves)
+        {
+            BigListLeafContainer<T> originalContainer = (BigListLeafContainer<T>) BigListContainer;
+            BigListInteriorContainer<T> interiorContainer = new BigListInteriorContainer<T>(originalContainer.BranchingFactor, this);
+            Item = interiorContainer;
+            if (!separateItemsIntoSeparateLeaves)
             {
-                BigListLeafContainer<T> leafNode = (BigListLeafContainer<T>)childTree.BigListContainer;
-                foreach (T t in leafNode.Items)
-                {
-                    BigListLeafContainer<T> newLeafNode = new BigListLeafContainer<T>(childTree.BigListContainer.BranchingFactor, null);
-                    newLeafNode.Items.Add(t); // only item for this container for now
-                    treeForInteriorContainer.AddChild(newLeafNode);
-                }
+                InsertChildContainer(originalContainer, 0);
             }
             else
             {
-                treeForInteriorContainer.AddChild(childTree.BigListContainer); // add container being demoted as child of interior container
-                childTree.BigListContainer.CorrespondingTree = treeForInteriorContainer.BigListChildTrees.First();
-                // now, childTree is no longer attached to the tree, but its container is within a new tree.
+                int childIndex = 0;
+                foreach (T t in originalContainer.Items)
+                {
+                    BigListLeafContainer<T> newLeafNode = new BigListLeafContainer<T>(originalContainer.BranchingFactor, null);
+                    newLeafNode.Items.Add(t); // only item for this container for now
+                    InsertChildContainer(newLeafNode, childIndex++);
+                }
             }
             return interiorContainer;
         }

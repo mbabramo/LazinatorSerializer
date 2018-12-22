@@ -117,11 +117,13 @@ namespace Lazinator.Collections
             int index = 0;
             foreach (var child in Children)
             {
-                if (child.Index != index || child.ParentTree != this || child.Level != Level + 1)
+                bool descendantLevelsWrong = child.Level != Level + 1;
+                if (child.Index != index || child.ParentTree != this || descendantLevelsWrong)
                 {
                     OnRemoveChild(child);
                     SetChildInformation(child, index, true);
-                    child.ResetDescendantIndices();
+                    if (descendantLevelsWrong)
+                        child.ResetDescendantIndices();
                 }
 
                 index++;
@@ -145,7 +147,7 @@ namespace Lazinator.Collections
             return childTree;
         }
 
-        public LazinatorGeneralTree<T> InsertChild(T child, int index)
+        public virtual LazinatorGeneralTree<T> InsertChild(T child, int index)
         {
             int childrenCount = Children.Count();
             LazinatorGeneralTree<T> childTree = null;

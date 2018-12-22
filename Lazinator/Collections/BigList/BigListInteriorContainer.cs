@@ -8,48 +8,47 @@ namespace Lazinator.Collections.BigList
 {
     public partial class BigListInteriorContainer<T> : BigListContainer<T>, IBigListInteriorContainer<T> where T : ILazinator
     {
-        public BigListInteriorContainer(int maxLeafCount, BigListTree<T> correspondingTree) : base(maxLeafCount, correspondingTree)
+        public BigListInteriorContainer(int branchingFactor, BigListTree<T> correspondingTree) : base(branchingFactor, correspondingTree)
         {
-            Counts = new LazinatorList<WLong>();
+            ChildContainerCounts = new LazinatorList<WLong>();
         }
 
-        public override bool IsLeaf => true;
+        public int NumChildContainers => ChildContainerCounts.Count;
 
-        enum Border
-        {
-            Within,
-            BorderLeftEdge,
-            BorderLeftNode,
-            BorderRightNode,
-            BorderRightEdge
-        }
+        public override bool IsLeaf => false;
 
-        private (int childIndex, long numInEarlierChildren) FindChildForItemIndex(long index)
+        private (int childIndex, long numInEarlierChildren) ChildContainerForItemIndex(long index)
         {
             if (index == 0)
                 return (0, 0);
             else if (index == Count)
-                return (Counts.Count - 1, Count - Counts[Counts.Count - 1]); // this is just past the last item, so we'll return the last child)
+                return (NumChildContainers - 1, Count - ChildContainerCounts[NumChildContainers - 1]); // this is just past the last item, so we'll return the last child)
             else if (index > Count || index < 0)
                 throw new ArgumentException();
-            // 5 5 5 ==> index 0-4 are in childIndex 0, 5-9 are in childIndex 1, 10-14 are in childIndex 2
+            // Suppose children counts are 5 5 5 ==> index 0-4 are in childIndex 0, 5-9 are in childIndex 1, 10-14 are in childIndex 2
             long count = 0, previousCount = 0;
             int childIndex = -1;
             do
             {
                 previousCount = 0;
-                count += Counts[childIndex].WrappedValue;
                 childIndex++;
+                count += ChildContainerCounts[childIndex].WrappedValue;
             }
             while (count <= index);
             return (childIndex, previousCount);
         }
 
+        private BigListTree<T> GetChildTree(int childIndex)
+        {
+            if (childIndex < 0 || childIndex >= NumChildContainers)
+                throw new ArgumentException();
+            var childTree = (BigListTree<T>)CorrespondingTree.GetChild(childIndex);
+            return childTree;
+        }
+
         private BigListContainer<T> GetChildContainer(int childIndex)
         {
-            if (childIndex < 0 || childIndex >= Counts.Count)
-                throw new ArgumentException();
-            var childTree = (BigListTree<T>) CorrespondingTree.GetChild(childIndex);
+            BigListTree<T> childTree = GetChildTree(childIndex);
             return childTree.BigListContainer;
         }
 
@@ -57,7 +56,7 @@ namespace Lazinator.Collections.BigList
         {
             if (index >= Count)
                 throw new ArgumentException();
-            (int childIndex, long numInEarlierChildren) = FindChildForItemIndex(index);
+            (int childIndex, long numInEarlierChildren) = ChildContainerForItemIndex(index);
             var childContainer = GetChildContainer(childIndex);
             return childContainer.Get(index - numInEarlierChildren);
         }
@@ -66,7 +65,7 @@ namespace Lazinator.Collections.BigList
         {
             if (index >= Count)
                 throw new ArgumentException();
-            (int childIndex, long numInEarlierChildren) = FindChildForItemIndex(index);
+            (int childIndex, long numInEarlierChildren) = ChildContainerForItemIndex(index);
             var childContainer = GetChildContainer(childIndex);
             childContainer.Set(index - numInEarlierChildren, value);
         }
@@ -75,36 +74,52 @@ namespace Lazinator.Collections.BigList
         {
             if (index > Count)
                 throw new ArgumentException();
-            (int childIndex, long numInEarlierChildren) = FindChildForItemIndex(index);
-            if (Counts[childIndex] == BranchingFactor)
+            if (NumChildContainers == 0)
             {
+                CorrespondingTree.InsertChildContainer(new BigListLeafContainer<T>(BranchingFactor, null), 0);
+            }
+            (int childIndex, long numInEarlierChildren) = ChildContainerForItemIndex(index);
+
+            if (ChildContainerCounts[childIndex] == BranchingFactor)
+            { // the child is full, so decide where to put this new item -- maybe in an adjacent child, if one is empty
                 bool isAtLeftOfChild = index == numInEarlierChildren;
-                bool isAtRightOfChild = index - numInEarlierChildren + 1 == Counts[childIndex].WrappedValue;
+                bool isAtRightOfChild = index == ChildContainerCounts[childIndex].WrappedValue + numInEarlierChildren;
                 if (isAtLeftOfChild)
                 {
-                    if (childIndex > 0 && Counts[childIndex - 1].WrappedValue < BranchingFactor)
+                    if (childIndex > 0 && ChildContainerCounts[childIndex - 1].WrappedValue < BranchingFactor)
                     { // there is room in child to left -- add it as the last item there
                         var adjacentChildContainer = GetChildContainer(childIndex - 1);
-                        adjacentChildContainer.Insert(Counts[childIndex - 1].WrappedValue, value);
+                        adjacentChildContainer.Insert(ChildContainerCounts[childIndex - 1].WrappedValue, value);
+                        return;
                     }
                     else
                     {
                         // can we add a new child at childIndex?
-                        asdf;
+                        if (NumChildContainers < BranchingFactor)
+                        {
+                            CorrespondingTree.InsertChildContainer(new BigListLeafContainer<T>(BranchingFactor, null), childIndex);
+                            // insertion will occur below
+                        }
                     }
                 }
                 else if (isAtRightOfChild)
                 { // isAtRightOfChild is true
-                    if (childIndex < BranchingFactor - 1 && Counts[childIndex + 1].WrappedValue < BranchingFactor)
+                    if (childIndex < BranchingFactor - 1 && ChildContainerCounts[childIndex + 1].WrappedValue < BranchingFactor)
                     { // there is room in child to right -- add it there
                         var adjacentChildContainer = GetChildContainer(childIndex + 1);
                         adjacentChildContainer.Insert(0, value);
+                        return;
                     }
                     else
                     {
                         // can we add a new child at childIndex + 1?
-                        asdf;
-                        throw new NotImplementedException();
+                        if (NumChildContainers < BranchingFactor)
+                        {
+                            CorrespondingTree.InsertChildContainer(new BigListLeafContainer<T>(BranchingFactor, null), childIndex + 1);
+                            var newContainer = GetChildContainer(childIndex + 1);
+                            newContainer.Insert(0, value);
+                            return;
+                        }
                     }
                 }
             }
@@ -115,13 +130,20 @@ namespace Lazinator.Collections.BigList
 
         protected internal override void RemoveAt(long index)
         {
-            throw new NotImplementedException();
+            (int childIndex, long numInEarlierChildren) = ChildContainerForItemIndex(index);
+            var childContainer = GetChildContainer(childIndex);
+            childContainer.RemoveAt(index - numInEarlierChildren);
+            if (ChildContainerCounts[childIndex] == 0)
+            {
+                ChildContainerCounts.RemoveAt(childIndex);
+                CorrespondingTree.RemoveChild(childContainer);
+            }
         }
 
         protected internal override void ChangeCount(long increment, int? childIndex = null) 
         {
             base.ChangeCount(increment, childIndex);
-            Counts[(int)childIndex] += increment;
+            ChildContainerCounts[(int)childIndex] += increment;
         }
     }
 }

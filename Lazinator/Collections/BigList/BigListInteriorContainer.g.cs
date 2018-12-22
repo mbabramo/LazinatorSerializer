@@ -72,7 +72,7 @@ namespace Lazinator.Collections.BigList
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected LazinatorList<WLong> _Counts;
-        public LazinatorList<WLong> Counts
+        public LazinatorList<WLong> ChildContainerCounts
         {
             [DebuggerStepThrough]
             get
@@ -168,13 +168,13 @@ namespace Lazinator.Collections.BigList
             typedClone.Count = Count;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (Counts == null)
+                if (ChildContainerCounts == null)
                 {
-                    typedClone.Counts = default(LazinatorList<WLong>);
+                    typedClone.ChildContainerCounts = default(LazinatorList<WLong>);
                 }
                 else
                 {
-                    typedClone.Counts = (LazinatorList<WLong>) Counts.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ChildContainerCounts = (LazinatorList<WLong>) ChildContainerCounts.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
@@ -304,23 +304,23 @@ namespace Lazinator.Collections.BigList
         
         public override IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Counts_Accessed) && Counts == null)
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Counts_Accessed) && ChildContainerCounts == null)
             {
                 yield return ("Counts", default);
             }
             else
             {
-                if ((!exploreOnlyDeserializedChildren && Counts != null) || (_Counts_Accessed && _Counts != null))
+                if ((!exploreOnlyDeserializedChildren && ChildContainerCounts != null) || (_Counts_Accessed && _Counts != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Counts);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Counts);
+                    bool isMatch = matchCriterion == null || matchCriterion(ChildContainerCounts);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ChildContainerCounts);
                     if (isMatch)
                     {
-                        yield return ("Counts", Counts);
+                        yield return ("Counts", ChildContainerCounts);
                     }
                     if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
                     {
-                        foreach (var toYield in Counts.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        foreach (var toYield in ChildContainerCounts.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
                             yield return ("Counts" + "." + toYield.propertyName, toYield.descendant);
                         }
@@ -340,7 +340,7 @@ namespace Lazinator.Collections.BigList
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Counts != null) || (_Counts_Accessed && _Counts != null))
+            if ((!exploreOnlyDeserializedChildren && ChildContainerCounts != null) || (_Counts_Accessed && _Counts != null))
             {
                 _Counts = (LazinatorList<WLong>) _Counts.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -475,7 +475,7 @@ namespace Lazinator.Collections.BigList
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Counts_Accessed)
                 {
-                    var deserialized = Counts;
+                    var deserialized = ChildContainerCounts;
                 }
                 WriteChild(ref writer, ref _Counts, includeChildrenMode, _Counts_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Counts_ByteIndex, _Counts_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
