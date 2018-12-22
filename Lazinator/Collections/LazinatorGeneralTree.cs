@@ -149,6 +149,8 @@ namespace Lazinator.Collections
 
         public virtual LazinatorGeneralTree<T> InsertChild(T child, int index)
         {
+            if (Children == null)
+                Children = new LazinatorList<LazinatorGeneralTree<T>>();
             int childrenCount = Children.Count();
             LazinatorGeneralTree<T> childTree = null;
             if (Children == null || index == childrenCount)

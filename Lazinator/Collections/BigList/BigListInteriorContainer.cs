@@ -30,7 +30,7 @@ namespace Lazinator.Collections.BigList
             int childIndex = -1;
             do
             {
-                previousCount = 0;
+                previousCount = count;
                 childIndex++;
                 count += ChildContainerCounts[childIndex].WrappedValue;
             }
@@ -104,7 +104,7 @@ namespace Lazinator.Collections.BigList
                 }
                 else if (isAtRightOfChild)
                 { // isAtRightOfChild is true
-                    if (childIndex < BranchingFactor - 1 && ChildContainerCounts[childIndex + 1].WrappedValue < BranchingFactor)
+                    if (childIndex < BranchingFactor - 1 && NumChildContainers > childIndex + 1 && ChildContainerCounts[childIndex + 1].WrappedValue < BranchingFactor)
                     { // there is room in child to right -- add it there
                         var adjacentChildContainer = GetChildContainer(childIndex + 1);
                         adjacentChildContainer.Insert(0, value);

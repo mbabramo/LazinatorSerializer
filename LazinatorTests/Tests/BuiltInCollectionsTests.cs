@@ -10,6 +10,7 @@ using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
+using Lazinator.Collections.BigList;
 
 namespace LazinatorTests.Tests
 {
@@ -763,9 +764,13 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void BigListWorks()
+        public void BigList_AddingAtEnd()
         {
-
+            BigList<WInt> l = new BigList<WInt>(3);
+            for (int i = 0; i < 100; i++)
+                l.Add(i);
+            var result = l.Select(x => x.WrappedValue).ToList();
+            result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();
         }
     }
 }

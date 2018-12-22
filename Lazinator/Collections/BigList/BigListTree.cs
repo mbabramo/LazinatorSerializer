@@ -70,7 +70,8 @@ namespace Lazinator.Collections.BigList
         protected internal void InsertChildContainer(BigListContainer<T> childContainer, int childIndex)
         {
             BigListInteriorContainer<T> containerToInsertUnder = (BigListInteriorContainer<T>)BigListContainer;
-            containerToInsertUnder.ChildContainerCounts.Insert(childIndex, 0); // nothing in the child container yet
+            containerToInsertUnder.ChildContainerCounts.Insert(childIndex, childContainer.Count);
+            containerToInsertUnder.Count += childContainer.Count;
             InsertChild(childContainer, childIndex);
             BigListChildContainer(childIndex).CorrespondingTree = BigListChildTree(childIndex);
         }
