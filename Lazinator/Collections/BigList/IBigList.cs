@@ -6,6 +6,6 @@ namespace Lazinator.Collections.BigList
     [Lazinator((int)LazinatorCollectionUniqueIDs.BigList)]
     public interface IBigList<T> where T : ILazinator
     {
-        LazinatorGeneralTree<BigListContainer<T>> UnderlyingTree { get; set; }
+        BigListTree<T> UnderlyingTree { get; set; }
     }
 }

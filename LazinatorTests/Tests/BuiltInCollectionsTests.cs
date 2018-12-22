@@ -761,5 +761,11 @@ namespace LazinatorTests.Tests
             r.WrappedValue.Should().Be(5);
             s.Any().Should().BeFalse();
         }
+
+        [Fact]
+        public void BigListWorks()
+        {
+
+        }
     }
 }
