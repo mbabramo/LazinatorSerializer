@@ -3,7 +3,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.BigList
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.BigListNode)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.BigListContainer)]
     public interface IBigListContainer<T> where T : ILazinator
     {
         int BranchingFactor { get; set; }

@@ -61,7 +61,7 @@ namespace Lazinator.Collections.BigList
 
         public BigListTree<T> BigListParentTree => (BigListTree<T>)ParentTree;
 
-        public BigListContainer<T> BigListParentContainer => BigListParentTree.BigListContainer;
+        public BigListContainer<T> BigListParentContainer => BigListParentTree?.BigListContainer;
 
         #endregion
 

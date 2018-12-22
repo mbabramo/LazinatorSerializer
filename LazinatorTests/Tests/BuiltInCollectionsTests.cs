@@ -786,23 +786,48 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void BigList_RandomInsertions()
+        public void BigList_RandomInsertionsAndDeletions()
         {
+            bool trace = false;
             Random r = new Random(0);
             List<int> o = new List<int>();
             BigList<WInt> l = new BigList<WInt>(3);
-            for (int i = 0; i < 100; i++)
+            const int totalChanges = 1000;
+            const int switchToMoreDeletionsAfter = 400; // we'll start mostly with insertions, and then switch to mostly deletions, so that we can delete the entire tree.
+            for (int i = 0; i < totalChanges; i++)
             {
-                int j = r.Next(0, i + 1); // insert at a valid location
-                int k = r.Next(0, 999999);
-                o.Insert(j, k);
-                l.Insert(j, k);
-                Debug.WriteLine($"Inserting {k} at index {j}");
-                Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
-                Debug.WriteLine("");
+                if (o.Count == 0 || r.Next(0, 100) < (i > switchToMoreDeletionsAfter ? 30 : 70))
+                {
+                    int j;
+                    if (r.Next(0, 10) == 0)
+                        j = 0;
+                    else if (r.Next(0, 10) == 0 && o.Count() != 0)
+                        j = o.Count() - 1;
+                    else
+                        j = r.Next(0, o.Count()); // insert at a valid location
+                    int k = r.Next(0, 999999);
+                    if (trace)
+                        Debug.WriteLine($"Inserting {k} at index {j}");
+                    o.Insert(j, k);
+                    l.Insert(j, k);
+                }
+                else
+                {
+                    int j = r.Next(0, o.Count() - 1); // delete at valid location
+                    if (trace)
+                        Debug.WriteLine($"Deleting at index {j}");
+                    o.RemoveAt(j);
+                    l.RemoveAt(j);
+                }
+                if (trace)
+                {
+                    Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
+                    Debug.WriteLine("");
+                }
+                // DEBUG: Remove CloneLazinatorTyped after getting it to work
+                var result = l.CloneLazinatorTyped().Select(x => x.WrappedValue).ToList();
+                result.SequenceEqual(o).Should().BeTrue();
             }
-            var result = l.Select(x => x.WrappedValue).ToList();
-            result.SequenceEqual(o).Should().BeTrue();
         }
     }
 }

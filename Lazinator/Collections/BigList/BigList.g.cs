@@ -54,7 +54,7 @@ namespace Lazinator.Collections.BigList
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(114, () => new BigListTree<T>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(122, () => new BigListTree<T>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
