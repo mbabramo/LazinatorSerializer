@@ -146,6 +146,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(BigListContainer<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "BigList/", ws);
             await CompleteGenerateCode(typeof(BigListInteriorContainer<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "BigList/", ws);
             await CompleteGenerateCode(typeof(BigListLeafContainer<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "BigList/", ws);
+            await CompleteGenerateCode(typeof(BigListTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "BigList/", ws);
             await CompleteGenerateCode(typeof(BigList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "BigList/", ws);
             await CompleteGenerateCode(typeof(WAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);

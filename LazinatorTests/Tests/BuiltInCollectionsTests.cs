@@ -824,8 +824,7 @@ namespace LazinatorTests.Tests
                     Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
                     Debug.WriteLine("");
                 }
-                // DEBUG: Remove CloneLazinatorTyped after getting it to work
-                var result = l.CloneLazinatorTyped().Select(x => x.WrappedValue).ToList();
+                var result = l.Select(x => x.WrappedValue).ToList();
                 result.SequenceEqual(o).Should().BeTrue();
             }
         }
