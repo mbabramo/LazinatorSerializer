@@ -11,6 +11,7 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Collections.BigList;
+using System.Diagnostics;
 
 namespace LazinatorTests.Tests
 {
@@ -771,6 +772,37 @@ namespace LazinatorTests.Tests
                 l.Add(i);
             var result = l.Select(x => x.WrappedValue).ToList();
             result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BigList_AddingAtBeginning()
+        {
+            BigList<WInt> l = new BigList<WInt>(3);
+            for (int i = 0; i < 100; i++)
+                l.Insert(0, i);
+            var result = l.Select(x => x.WrappedValue).ToList();
+            result.Reverse();
+            result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BigList_RandomInsertions()
+        {
+            Random r = new Random(0);
+            List<int> o = new List<int>();
+            BigList<WInt> l = new BigList<WInt>(3);
+            for (int i = 0; i < 100; i++)
+            {
+                int j = r.Next(0, i + 1); // insert at a valid location
+                int k = r.Next(0, 999999);
+                o.Insert(j, k);
+                l.Insert(j, k);
+                Debug.WriteLine($"Inserting {k} at index {j}");
+                Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
+                Debug.WriteLine("");
+            }
+            var result = l.Select(x => x.WrappedValue).ToList();
+            result.SequenceEqual(o).Should().BeTrue();
         }
     }
 }

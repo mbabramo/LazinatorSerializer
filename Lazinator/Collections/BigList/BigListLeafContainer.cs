@@ -56,5 +56,10 @@ namespace Lazinator.Collections.BigList
             Items.RemoveAt((int)index);
             ChangeCount(-1);
         }
+
+        public override string ToString()
+        {
+            return $"{Count} items: {String.Join(", ", Items)}";
+        }
     }
 }

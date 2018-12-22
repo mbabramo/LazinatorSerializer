@@ -61,7 +61,7 @@ namespace Lazinator.Collections.BigList
 
         public BigListTree<T> BigListParentTree => (BigListTree<T>)ParentTree;
 
-        public BigListContainer<T> BigListParentNode => BigListParentTree.BigListContainer;
+        public BigListContainer<T> BigListParentContainer => BigListParentTree.BigListContainer;
 
         #endregion
 
@@ -91,9 +91,10 @@ namespace Lazinator.Collections.BigList
                 foreach (T t in originalContainer.Items)
                 {
                     BigListLeafContainer<T> newLeafNode = new BigListLeafContainer<T>(originalContainer.BranchingFactor, null);
-                    newLeafNode.Items.Add(t); // only item for this container for now
                     InsertChildContainer(newLeafNode, childIndex++);
+                    newLeafNode.Insert(0, t); // only item for this container for now
                 }
+                BigListParentContainer?.ChangeCount(-originalContainer.Items.Count, Index);
             }
             return interiorContainer;
         }

@@ -145,5 +145,10 @@ namespace Lazinator.Collections.BigList
             base.ChangeCount(increment, childIndex);
             ChildContainerCounts[(int)childIndex] += increment;
         }
+
+        public override string ToString()
+        {
+            return $"{Count} items in {NumChildContainers} Containers";
+        }
     }
 }
