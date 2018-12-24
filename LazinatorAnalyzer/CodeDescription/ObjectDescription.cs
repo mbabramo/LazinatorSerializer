@@ -429,7 +429,13 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
 
-                        {IIF(!IsClass, $@"{ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => LazinatorUtilities.EncodeToNewBinaryBufferWriter(this, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        {IIF(!IsClass, $@"{ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {{
+                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
+                            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+                            SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            return writer.LazinatorMemory;
+                        }}
 
                         ")}{cloneMethod}
 
