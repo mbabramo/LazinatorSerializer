@@ -88,7 +88,21 @@ namespace Lazinator.Wrappers
             return bytesSoFar;
         }
         
-        public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, (EncodeManuallyDelegate) EncodeToNewBuffer);
+        public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+        {
+            if (LazinatorMemoryStorage.IsEmpty ||
+            includeChildrenMode != OriginalIncludeChildrenMode ||
+            (
+            verifyCleanness ||
+            IsDirty ||
+            (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)
+            )
+            )
+            return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+            writer.Write(LazinatorMemoryStorage.Span);
+            return writer.LazinatorMemory;
+        }
         
         LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
         {
