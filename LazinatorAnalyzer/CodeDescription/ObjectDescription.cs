@@ -427,9 +427,25 @@ namespace Lazinator.CodeDescription
                             return bytesSoFar;
                         }}
 
-                        public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, {(IsClass ? $@"this" : $@"(EncodeManuallyDelegate) EncodeToNewBuffer")});
+                        {IIF(IsClass, $@"                        public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, verifyCleanness, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, updateStoredBuffer, this);
 
-                        {IIF(!IsClass, $@"{ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        ")}{IIF(!IsClass, $@"                        public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {{
+                            if (LazinatorMemoryStorage.IsEmpty ||
+                                includeChildrenMode != OriginalIncludeChildrenMode ||
+                                (
+                                    verifyCleanness ||
+                                    IsDirty ||
+                                    (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)
+                                )
+                            )
+                            return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                            writer.Write(LazinatorMemoryStorage.Span);
+                            return writer.LazinatorMemory;
+                        }}
+
+                        {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
                             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
                             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
