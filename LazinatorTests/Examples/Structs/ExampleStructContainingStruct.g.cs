@@ -129,15 +129,10 @@ namespace LazinatorTests.Examples
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
         {
-            if (LazinatorMemoryStorage.IsEmpty ||
-            includeChildrenMode != OriginalIncludeChildrenMode ||
-            (
-            verifyCleanness ||
-            IsDirty ||
-            (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)
-            )
-            )
-            return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
+            {
+                return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            }
             BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
             writer.Write(LazinatorMemoryStorage.Span);
             return writer.LazinatorMemory;
