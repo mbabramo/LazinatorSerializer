@@ -18,8 +18,6 @@ namespace Lazinator.Core
 
         // Delegate types. Methods matching these types must be passed into some of the methods below.
 
-        public delegate LazinatorMemory EncodeManuallyDelegate(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-
         public delegate LazinatorMemory ReturnLazinatorMemoryDelegate();
 
         public delegate void WriteDelegate(ref BinaryBufferWriter writer);
@@ -29,41 +27,6 @@ namespace Lazinator.Core
         #endregion
         
         #region Encoding
-
-        /// <summary>
-        /// Serializes from the top of the hierarchy, using the original storage if the item is not dirty and does not need its cleanness verified or, if dirty, creating a stream to manually serialize. 
-        /// </summary>
-        /// <param name="includeChildrenMode">Includes children (and thus descendants) when converting to bytes.</param>
-        /// <param name="originalIncludeChildrenMode">The original mode used to serialize this object.</param>
-        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development. Set this to false if you may wish to dispose of the memory backing the original while still using the new deserialized bytes.</param>
-        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, i.e. has had its dirty flag set.</param>
-        /// <param name="isDefinitelyClean">An indication whether any storage, if it exists, is definitely clean. If the storage has never been converted into bytes, then it is definitely clean. If the storage does not exist (it hasn't been serialized yet), then this is irrelevant, because there is no need to verify cleanliness.</param>
-        /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
-        /// <param name="updateStoredBuffer">If true, the internal storage is updated</param>
-        /// <param name="encodeManuallyFn">The function that completes the conversion to bytes, without using the original storage for the item as a whole.</param>
-        /// <returns></returns>
-        public static LazinatorMemory EncodeOrRecycleToNewBuffer(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, bool updateStoredBuffer, EncodeManuallyDelegate encodeManuallyFn)
-        {
-            // if item has never been serialized before, there will be no storage, so we must convert to bytes.
-            // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
-            // unless the original storage is definitely clean.
-            if (originalStorage.IsEmpty ||
-                includeChildrenMode != originalIncludeChildrenMode ||
-                    (!isDefinitelyClean
-                        &&
-                        (verifyCleanness ||
-                        isBelievedDirty ||
-                        (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && descendantIsBelievedDirty)
-                        )
-                     )
-                )
-                return encodeManuallyFn(includeChildrenMode, verifyCleanness, updateStoredBuffer);
-
-            // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length); 
-            writer.Write(originalStorage.Span);
-            return writer.LazinatorMemory;
-        }
 
         /// <summary>
         /// Serializes from the top of the hierarchy, using the original storage if the item is not dirty and does not need its cleanness verified or, if dirty, creating a stream to manually serialize. 
