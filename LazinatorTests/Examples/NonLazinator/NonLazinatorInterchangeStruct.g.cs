@@ -213,7 +213,16 @@ namespace LazinatorTests.Examples
                 return;
             }
             var previousBuffer = LazinatorMemoryStorage;
-            LazinatorMemoryStorage = EncodeOrRecycleToNewBuffer(IncludeChildrenMode.IncludeAllChildren, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, previousBuffer, true, (EncodeManuallyDelegate) EncodeToNewBuffer);
+            if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
+            {
+                LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
+            }
+            else
+            {
+                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                writer.Write(LazinatorMemoryStorage.Span);
+                LazinatorMemoryStorage = writer.LazinatorMemory;
+            }
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
             if (!LazinatorParents.Any())
             {
