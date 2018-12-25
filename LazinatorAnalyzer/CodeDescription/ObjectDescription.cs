@@ -530,9 +530,9 @@ namespace Lazinator.CodeDescription
                                 return;
                             }}
                             var previousBuffer = LazinatorMemoryStorage;
-                            if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
+                            if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
                             {{
-                                LazinatorMemoryStorage = EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                                LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
                             }}
                             else
                             {{
