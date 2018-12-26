@@ -117,6 +117,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneExcludableChildAttribute();
                 case "FullyQualifyAttribute":
                     return new CloneFullyQualifyAttribute();
+                case "GenerateRefStructAttribute":
+                    return new CloneGenerateRefStructAttribute();
                 case "IncludableChildAttribute":
                     return new CloneIncludableChildAttribute();
                 case "IncludeRefPropertyAttribute":

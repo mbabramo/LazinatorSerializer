@@ -18,8 +18,8 @@ namespace Lazinator.CodeDescription
 
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
-        private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class;
-        private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct;
+        private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct;
+        private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct;
         private PropertyDescription ContainingPropertyDescription { get; set; }
         public PropertyDescription OutmostPropertyDescription => ContainingPropertyDescription?.OutmostPropertyDescription ?? this;
         private int UniqueIDForLazinatorType { get; set; }
@@ -805,7 +805,7 @@ namespace Lazinator.CodeDescription
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"
-                    {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct, " = false")};
+                    {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct && !ContainingObjectDescription.GeneratingRefStruct, " = false")};
                 {IIF(IncludeRefProperty, $@"{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{abstractDerivationKeyword}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get;
@@ -821,7 +821,7 @@ namespace Lazinator.CodeDescription
 
         private string GetModifiedDerivationKeyword()
         {
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.IsSealed)
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.IsSealed || ContainingObjectDescription.GeneratingRefStruct)
                 return "";
             string modifiedDerivationKeyword = DerivationKeyword;
             if (modifiedDerivationKeyword == null)
@@ -880,7 +880,7 @@ namespace Lazinator.CodeDescription
             }
 
             string assignment;
-            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class, ", this");
+            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct, ", this");
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
             {
                 if (IsInterface)
@@ -904,7 +904,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
+                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
 
@@ -967,7 +967,7 @@ namespace Lazinator.CodeDescription
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct)
                         {{{IIF(ContainerIsClass, $@"
@@ -1070,7 +1070,7 @@ namespace Lazinator.CodeDescription
                             _{PropertyName} = default;
                         }}
                         else ";
-            string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ? "" : $@"
+            string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct ? "" : $@"
                             {{
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             }}";
@@ -1329,7 +1329,7 @@ namespace Lazinator.CodeDescription
             if (PlaceholderMemoryWriteMethod == null)
             {
                 sb.Append($"{EnsureDeserialized()}");
-                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
                 {
                     sb.AppendLine(
                         $@"WriteNonLazinatorObject{omitLengthSuffix}(
@@ -1380,7 +1380,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class)
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 sb.AppendLine(
                     CreateConditional(WriteInclusionConditional, $"{EnsureDeserialized()}WriteChild(ref writer, ref _{PropertyName}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);"));
@@ -1477,7 +1477,7 @@ namespace Lazinator.CodeDescription
         private void AppendReadOnlySpanOrMemory_ConvertToBytes(CodeStringBuilder sb, bool isSpan)
         {
             // this method is used within classes, but not within structs
-            if (ContainingObjectDescription.ObjectType != LazinatorObjectType.Class)
+            if (ContainingObjectDescription.ObjectType != LazinatorObjectType.Class || ContainingObjectDescription.GeneratingRefStruct)
                 return;
 
             string innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
