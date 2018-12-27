@@ -107,7 +107,7 @@ namespace Lazinator.CodeDescription
                     " : "";
 
 
-        // DEBUG: ref struct: Eliminate interfad3 declaRATIONS, add ToRefStruct, FromRefStruct. Most importantly, base properties without separate method on classes. ALSO, static conversion methods use superclass name.
+        // DEBUG: ref struct: base properties without separate method on classes. ALSO, static conversion methods use superclass name.
         public ObjectDescription()
         {
 
