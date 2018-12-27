@@ -438,7 +438,7 @@ namespace Lazinator.Collections.Avl
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID.IsEmpty)
+                if (!ContainsOpenGenericParameters)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }

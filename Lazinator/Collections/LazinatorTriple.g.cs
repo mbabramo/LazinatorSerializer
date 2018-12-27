@@ -671,7 +671,7 @@ namespace Lazinator.Collections
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID.IsEmpty)
+                if (!ContainsOpenGenericParameters)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }

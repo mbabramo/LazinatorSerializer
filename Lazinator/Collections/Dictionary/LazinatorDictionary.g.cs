@@ -459,7 +459,7 @@ namespace Lazinator.Collections.Dictionary
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID.IsEmpty)
+                if (!ContainsOpenGenericParameters)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }

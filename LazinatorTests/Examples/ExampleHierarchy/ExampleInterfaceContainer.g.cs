@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples.Hierarchy
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID.IsEmpty)
+                if (!ContainsOpenGenericParameters)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }

@@ -1229,7 +1229,7 @@ namespace Lazinator.CodeDescription
                 if (ContainsOpenGenericParameters || !IsSealedOrStruct)
                     sb.AppendLine($@"if (includeUniqueID)
                             {{
-                                if (LazinatorGenericID.IsEmpty)
+                                if (!ContainsOpenGenericParameters)
                                 {{
                                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                                 }}

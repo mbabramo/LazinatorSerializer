@@ -35,7 +35,8 @@ namespace LazinatorTests.Examples.Collections
         protected int _MyHashSetSerialized_ByteIndex;
         private int _DotNetHashSet_Lazinator_EndByteIndex;
         protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
-
+        
+        
         protected HashSet<ExampleChild> _MyHashSetSerialized;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public HashSet<ExampleChild> MyHashSetSerialized
@@ -364,7 +365,7 @@ namespace LazinatorTests.Examples.Collections
             // header information
             if (includeUniqueID)
             {
-                if (LazinatorGenericID.IsEmpty)
+                if (!ContainsOpenGenericParameters)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }
