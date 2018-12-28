@@ -255,12 +255,12 @@ namespace Lazinator.Core
         {
             if (containsOpenGenericParameters)
             {
-                List<int> lazinatorGenericID = ReadLazinatorGenericID(span, ref index).TypeAndInnerTypeIDs;
-                if (lazinatorGenericID[0] != uniqueID)
+                var lazinatorGenericID = ReadLazinatorGenericID(span, ref index);
+                if (lazinatorGenericID.OuterType != uniqueID)
                 {
                     throw new FormatException("Wrong Lazinator type initialized.");
                 }
-                return new LazinatorGenericIDType(lazinatorGenericID);
+                return lazinatorGenericID;
             }
             else
             {
@@ -275,26 +275,35 @@ namespace Lazinator.Core
 
         public static void WriteLazinatorGenericID(ref BinaryBufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
         {
-            // We write the first component before the total count to be consistent with non-generic items.
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, lazinatorGenericID.TypeAndInnerTypeIDs[0]);
-            int numItems = lazinatorGenericID.TypeAndInnerTypeIDs.Count;
-            writer.Write((byte)numItems);
-            for (int i = 1; i < numItems; i++)
-            {
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, lazinatorGenericID.TypeAndInnerTypeIDs[i]);
-            }
+            lazinatorGenericID.Write(ref writer); // DEBUG -- change to call Write directly
         }
 
         public static LazinatorGenericIDType ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
         {
             int mainID = span.ToDecompressedInt(ref index);
-            List<int> l = new List<int>() { mainID };
             byte numEntries = span.ToByte(ref index);
-            for (byte b = 1; b < numEntries; b++)
+            if (numEntries == 0)
+                throw new Exception("Internal error on ReadLazinatorGenericID");
+            else if (numEntries == 1)
+                return new LazinatorGenericIDType(mainID);
+            else if (numEntries == 2)
+                return new LazinatorGenericIDType(mainID, span.ToDecompressedInt(ref index));
+            else if (numEntries == 3)
+                return new LazinatorGenericIDType(mainID, span.ToDecompressedInt(ref index), span.ToDecompressedInt(ref index));
+            else if (numEntries == 4)
+                return new LazinatorGenericIDType(mainID, span.ToDecompressedInt(ref index), span.ToDecompressedInt(ref index), span.ToDecompressedInt(ref index));
+            else if (numEntries == 5)
+                return new LazinatorGenericIDType(mainID, span.ToDecompressedInt(ref index), span.ToDecompressedInt(ref index), span.ToDecompressedInt(ref index), span.ToDecompressedInt(ref index));
+            var t1 = span.ToDecompressedInt(ref index);
+            var t2 = span.ToDecompressedInt(ref index);
+            var t3 = span.ToDecompressedInt(ref index);
+            var t4 = span.ToDecompressedInt(ref index);
+            List<int> l = new List<int>();
+            for (byte b = 5; b < numEntries; b++)
             {
                 l.Add(span.ToDecompressedInt(ref index));
             }
-            return new LazinatorGenericIDType(l);
+            return new LazinatorGenericIDType(mainID, t1, t2, t3, t4, l);
         }
 
         #endregion
