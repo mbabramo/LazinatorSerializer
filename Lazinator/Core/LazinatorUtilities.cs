@@ -251,7 +251,7 @@ namespace Lazinator.Core
 
         #region Generic IDs
 
-        public static LazinatorGenericIDType ReadGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
+        public static LazinatorGenericIDType GetGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
         {
             if (containsOpenGenericParameters)
             {
