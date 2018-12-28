@@ -381,11 +381,7 @@ namespace Lazinator.Collections.Avl
         {
             get
             {
-                if (_LazinatorGenericID.IsEmpty)
-                {
-                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(96, new Type[] { typeof(T) });
-                }
-                return _LazinatorGenericID;
+                return DeserializationFactory.Instance.GetUniqueIDListForGenericType(96, new Type[] { typeof(T) });
             }
             set
             {

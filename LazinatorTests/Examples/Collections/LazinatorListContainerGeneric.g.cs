@@ -342,11 +342,7 @@ namespace LazinatorTests.Examples.Collections
         {
             get
             {
-                if (_LazinatorGenericID.IsEmpty)
-                {
-                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
-                }
-                return _LazinatorGenericID;
+                return DeserializationFactory.Instance.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
             }
             set
             {

@@ -359,11 +359,7 @@ namespace Lazinator.Wrappers
         {
             get
             {
-                if (_LazinatorGenericID.IsEmpty)
-                {
-                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType(88, new Type[] { typeof(T) });
-                }
-                return _LazinatorGenericID;
+                return DeserializationFactory.Instance.GetUniqueIDListForGenericType(88, new Type[] { typeof(T) });
             }
             set
             {
