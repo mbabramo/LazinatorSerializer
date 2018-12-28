@@ -436,7 +436,7 @@ namespace Lazinator.CodeDescription
 
                             ")}";
                     else
-                        readUniqueID = $@"LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
+                        readUniqueID = $@"GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
 
@@ -717,9 +717,8 @@ namespace Lazinator.CodeDescription
         private void AppendAbstractConversions(CodeStringBuilder sb)
         {
             sb.Append($@"{HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
-                        {HideBackingField}{ProtectedIfApplicable}abstract LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
-                        {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; set; }}
+                        {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; }}
                         {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);")}
                         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
@@ -950,32 +949,15 @@ namespace Lazinator.CodeDescription
         {
             string containsOpenGenericParametersString = $@"{HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};";
 
-            string lazinatorGenericBackingID = "";
-            if (!IsDerivedFromNonAbstractLazinator && (ContainsOpenGenericParameters || !IsSealedOrStruct))
-                lazinatorGenericBackingID = $@"{HideBackingField}{ProtectedIfApplicable}{DerivationKeyword}LazinatorGenericIDType _LazinatorGenericID {{ get; set; }}
-                        ";
-
             string lazinatorGenericID;
             if (ContainsOpenGenericParameters)
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {lazinatorGenericBackingID}{HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
-                        {{
-                            get
-                            {{
-                                return DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
-                            }}
-                            set
-                            {{
-                                _LazinatorGenericID = value;
-                            }}
-                        }}";
+                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
+                    ";
             else
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {lazinatorGenericBackingID}{HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID
-                        {{
-                            get => default;
-                            set {{ }}
-                        }}";
+                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID => default;
+                    ";
 
             string selfSerializationVersionString;
             if (Version == -1)
