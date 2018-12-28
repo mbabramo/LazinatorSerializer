@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples.Abstract
                 return 0;
             }
             
-            LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
+            GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -336,12 +336,8 @@ namespace LazinatorTests.Examples.Abstract
         public override int LazinatorUniqueID => 245;
         
         protected override bool ContainsOpenGenericParameters => false;
-        protected override LazinatorGenericIDType _LazinatorGenericID { get; set; }
-        public override LazinatorGenericIDType LazinatorGenericID
-        {
-            get => default;
-            set { }
-        }
+        public override LazinatorGenericIDType LazinatorGenericID => default;
+        
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         

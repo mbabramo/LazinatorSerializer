@@ -142,7 +142,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 return 0;
             }
             
-            LazinatorGenericID = GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
+            GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -392,18 +392,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public virtual int LazinatorUniqueID => 233;
         
         protected virtual bool ContainsOpenGenericParameters => true;
-        protected virtual LazinatorGenericIDType _LazinatorGenericID { get; set; }
-        public virtual LazinatorGenericIDType LazinatorGenericID
-        {
-            get
-            {
-                return DeserializationFactory.Instance.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
-            }
-            set
-            {
-                _LazinatorGenericID = value;
-            }
-        }
+        public virtual LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) });
+        
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         

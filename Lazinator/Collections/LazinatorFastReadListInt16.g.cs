@@ -103,11 +103,8 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID
-        {
-            get => default;
-            set { }
-        }
+        public override LazinatorGenericIDType LazinatorGenericID => default;
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion

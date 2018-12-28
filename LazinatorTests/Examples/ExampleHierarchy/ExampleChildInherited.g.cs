@@ -200,11 +200,8 @@ namespace LazinatorTests.Examples
         public override int LazinatorUniqueID => 214;
         
         protected override bool ContainsOpenGenericParameters => false;
-        public override LazinatorGenericIDType LazinatorGenericID
-        {
-            get => default;
-            set { }
-        }
+        public override LazinatorGenericIDType LazinatorGenericID => default;
+        
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         

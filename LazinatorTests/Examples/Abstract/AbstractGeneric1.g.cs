@@ -135,9 +135,8 @@ namespace LazinatorTests.Examples.Abstract
         public abstract int GetByteLength();
         
         public abstract int LazinatorUniqueID { get; }
-        protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
         protected virtual bool ContainsOpenGenericParameters => true;
-        public abstract LazinatorGenericIDType LazinatorGenericID { get; set; }
+        public abstract LazinatorGenericIDType LazinatorGenericID { get; }
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);

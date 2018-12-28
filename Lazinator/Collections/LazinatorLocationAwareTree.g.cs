@@ -191,17 +191,8 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID
-        {
-            get
-            {
-                return DeserializationFactory.Instance.GetUniqueIDListForGenericType(116, new Type[] { typeof(T) });
-            }
-            set
-            {
-                _LazinatorGenericID = value;
-            }
-        }
+        public override LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType(116, new Type[] { typeof(T) });
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;

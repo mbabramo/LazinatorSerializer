@@ -211,17 +211,8 @@ namespace LazinatorTests.Examples.Abstract
         public override int LazinatorUniqueID => 267;
         
         protected override bool ContainsOpenGenericParameters => true;
-        public override LazinatorGenericIDType LazinatorGenericID
-        {
-            get
-            {
-                return DeserializationFactory.Instance.GetUniqueIDListForGenericType(267, new Type[] { typeof(T) });
-            }
-            set
-            {
-                _LazinatorGenericID = value;
-            }
-        }
+        public override LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType(267, new Type[] { typeof(T) });
+        
         
         public override int LazinatorObjectVersion { get; set; } = 0;
         

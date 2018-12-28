@@ -127,11 +127,9 @@ namespace Lazinator.Collections.BigList
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorUniqueID { get; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected abstract LazinatorGenericIDType _LazinatorGenericID { get; set; }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract LazinatorGenericIDType LazinatorGenericID { get; set; }
+        public abstract LazinatorGenericIDType LazinatorGenericID { get; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);

@@ -286,11 +286,8 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => false;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public LazinatorGenericIDType LazinatorGenericID
-        {
-            get => default;
-            set { }
-        }
+        public LazinatorGenericIDType LazinatorGenericID => default;
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int LazinatorObjectVersion
@@ -592,11 +589,8 @@ namespace Lazinator.Wrappers
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             bool ContainsOpenGenericParameters => false;
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            public LazinatorGenericIDType LazinatorGenericID
-            {
-                get => default;
-                set { }
-            }
+            public LazinatorGenericIDType LazinatorGenericID => default;
+            
             
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public int LazinatorObjectVersion
