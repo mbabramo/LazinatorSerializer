@@ -962,11 +962,7 @@ namespace Lazinator.CodeDescription
                         {{
                             get
                             {{
-                                if (_LazinatorGenericID.IsEmpty)
-                                {{
-                                    _LazinatorGenericID = DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
-                                }}
-                                return _LazinatorGenericID;
+                                return DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
                             }}
                             set
                             {{
