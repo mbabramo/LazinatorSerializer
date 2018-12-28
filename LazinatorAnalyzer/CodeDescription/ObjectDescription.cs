@@ -436,7 +436,7 @@ namespace Lazinator.CodeDescription
 
                             ")}";
                     else
-                        readUniqueID = $@"GetGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
+                        readUniqueID = $@"ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
 
                                     ";
 
