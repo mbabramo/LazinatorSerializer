@@ -337,7 +337,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual int LazinatorUniqueID => 223;
         
         protected virtual bool ContainsOpenGenericParameters => true;
-        public virtual LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) });
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorListContainerGeneric<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(223, new Type[] { typeof(T) }));
         
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;

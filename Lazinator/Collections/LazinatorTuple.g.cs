@@ -461,7 +461,7 @@ namespace Lazinator.Collections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType(95, new Type[] { typeof(T), typeof(U) });
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorTuple<T, U>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(95, new Type[] { typeof(T), typeof(U) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

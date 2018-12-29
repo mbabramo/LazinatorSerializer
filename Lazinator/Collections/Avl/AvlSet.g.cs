@@ -374,7 +374,7 @@ namespace Lazinator.Collections.Avl
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType(97, new Type[] { typeof(TKey) });
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlSet<TKey>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(97, new Type[] { typeof(TKey) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
