@@ -28,7 +28,7 @@ namespace Lazinator.Collections.BigList
 
         public void Add(T item)
         {
-            ((IList<T>)UnderlyingTree).Add(item);
+            Insert(Count, item);
         }
 
         public void Clear()
