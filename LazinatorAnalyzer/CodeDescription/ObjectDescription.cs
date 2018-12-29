@@ -952,7 +952,7 @@ namespace Lazinator.CodeDescription
             string lazinatorGenericID;
             if (ContainsOpenGenericParameters)
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
-                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID => DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }});
+                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<{NameIncludingGenerics}>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType({ UniqueID }, new Type[] {{ {GenericArgumentNameTypes} }}));
                     ";
             else
                 lazinatorGenericID = $@"{containsOpenGenericParametersString}
