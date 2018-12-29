@@ -37,5 +37,25 @@ namespace Lazinator.Core
             }
             return false;
         }
+
+        /// <summary>
+        /// A container with a cached LazinatorGenericIDType for each class. This allows us to avoid allocating a new LazinatorGenericIDType each time we access the LazinatorGenericID property.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        static class CachedPerType<T>
+        {
+            public static LazinatorGenericIDType? GenericIDType;
+        }
+
+        public static LazinatorGenericIDType GetCachedForType<T>(Func<LazinatorGenericIDType> func)
+        {
+            LazinatorGenericIDType? t = CachedPerType<T>.GenericIDType;
+            if (t == null)
+            {
+                t = func();
+                CachedPerType<T>.GenericIDType = t;
+            }
+            return t.Value;
+        }
     }
 }
