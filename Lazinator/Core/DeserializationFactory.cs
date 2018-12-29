@@ -393,6 +393,8 @@ namespace Lazinator.Core
             return func();
         }
 
+
+
         public LazinatorGenericIDType GetUniqueIDListForGenericType(int outerTypeUniqueID, IEnumerable<Type> innerTypes)
         {
             List<int> l = new List<int>() { outerTypeUniqueID };
@@ -441,9 +443,9 @@ namespace Lazinator.Core
 
         public (Type type, int numberTypeArgumentsConsumed) GetTypeBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, int index = 0)
         {
-            if (index >= typeAndGenericTypeArgumentIDs.Count())
-                throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.OuterType}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count()} integer IDs, but more than that was needed.");
-            int uniqueIDOfMainType = typeAndGenericTypeArgumentIDs[index];
+            if (index >= typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count)
+                throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count} integer IDs, but more than that was needed.");
+            int uniqueIDOfMainType = typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[index];
             if (UniqueIDToTypeMap.ContainsKey(uniqueIDOfMainType))
             {
                 (Type t, byte numberGenericParameters) = UniqueIDToTypeMap[uniqueIDOfMainType];
@@ -458,8 +460,8 @@ namespace Lazinator.Core
                     typeParameters[gp] = genericParameterType;
                 }
                 Type result = t.MakeGenericType(typeParameters);
-                if (index == 0 && numberTypeArgumentsConsumed != typeAndGenericTypeArgumentIDs.Count())
-                    throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.OuterType}. The type ID consisted of {typeAndGenericTypeArgumentIDs.Count()} integer IDs, but only {numberTypeArgumentsConsumed} were needed.");
+                if (index == 0 && numberTypeArgumentsConsumed != typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count())
+                    throw new LazinatorDeserializationException($"Unexpected exception deserializing type with unique ID {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs[0]}. The type ID consisted of {typeAndGenericTypeArgumentIDs.TypeAndInnerTypeIDs.Count} integer IDs, but only {numberTypeArgumentsConsumed} were needed.");
                 return (result, numberTypeArgumentsConsumed);
             }
             else
