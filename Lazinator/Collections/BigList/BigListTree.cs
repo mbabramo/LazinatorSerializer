@@ -51,6 +51,8 @@ namespace Lazinator.Collections.BigList
             }
         }
 
+        public int BranchingFactor => BigListContainer.BranchingFactor;
+
         public IEnumerable<BigListTree<T>> BigListChildTrees => Children.Select(x => (BigListTree<T>)x);
 
         public IEnumerable<BigListContainer<T>> BigListChildContainers => BigListChildTrees.Select(x => x.BigListContainer);
@@ -74,6 +76,15 @@ namespace Lazinator.Collections.BigList
             containerToInsertUnder.Count += childContainer.Count;
             InsertChild(childContainer, childIndex);
             BigListChildContainer(childIndex).CorrespondingTree = BigListChildTree(childIndex);
+        }
+
+        protected internal BigListInteriorContainer<T> DemoteInteriorContainer()
+        {
+            BigListInteriorContainer<T> originalContainer = (BigListInteriorContainer<T>)BigListContainer;
+            BigListInteriorContainer<T> interiorContainer = new BigListInteriorContainer<T>(originalContainer.BranchingFactor, this);
+            Item = interiorContainer;
+            InsertChildContainer(originalContainer, 0);
+            return interiorContainer;
         }
 
         protected internal BigListInteriorContainer<T> DemoteLeafContainer(bool separateItemsIntoSeparateLeaves)
