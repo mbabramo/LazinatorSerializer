@@ -401,7 +401,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private static bool RequiresParameterlessConstructor(INamedTypeSymbol implementingType, IEnumerable<TypeDeclarationSyntax> typeDeclarations)
         {
-            return implementingType.IsNonAbstractTypeWithConstructor() && !typeDeclarations.Any(x => x.TypeDeclarationIncludesParameterlessConstructor());
+            return implementingType.IsNonAbstractTypeWithConstructor() && !typeDeclarations.Any(x => x.TypeDeclarationIncludesParameterlessConstructor()); // TODO: If typeDeclarations includes a non-Lazinator subclass, this can return false when the correct answer is true. Current workaround is to include parameterless constructor in hand-coded portion of partial class.
         }
 
         public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)

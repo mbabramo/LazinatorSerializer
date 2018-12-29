@@ -100,6 +100,10 @@ namespace Lazinator.Collections.BigList
         
         /* Serialization, deserialization, and object relationships */
         
+        public BigList() : base()
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

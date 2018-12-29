@@ -7,8 +7,12 @@ using System.Text;
 namespace Lazinator.Collections.BigList
 {
     public partial class BigList<T> : IBigList<T>, IList<T> where T : ILazinator
-    { 
-        public BigList(int branchingFactor, bool isAppendOnly = false)
+    {
+        public BigList(int branchingFactor) : this(branchingFactor, false)
+        {
+        }
+
+        public BigList(int branchingFactor, bool isAppendOnly)
         {
             UnderlyingTree = new BigListTree<T>(new BigListLeafContainer<T>(branchingFactor, null));
             IsAppendOnly = isAppendOnly;
@@ -25,13 +29,6 @@ namespace Lazinator.Collections.BigList
         public void Add(T item)
         {
             ((IList<T>)UnderlyingTree).Add(item);
-        }
-
-        public class BigListUnsupportedOperationWithAppendOnlyException : Exception
-        {
-            public BigListUnsupportedOperationWithAppendOnlyException() : base("In an append-only big list, one can only insert at the end of the list, and one cannot remove items.")
-            {
-            }
         }
 
         public void Clear()
