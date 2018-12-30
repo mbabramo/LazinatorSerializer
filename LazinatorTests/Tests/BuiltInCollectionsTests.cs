@@ -772,10 +772,16 @@ namespace LazinatorTests.Tests
         private void BigList_AddingAtEnd(bool useAppendOnlyList)
         {
             BigList<WInt> l = new BigList<WInt>(3, useAppendOnlyList);
-            for (int i = 0; i < 1000; i++)
+            const int numItems = 30;
+            for (int i = 0; i < numItems; i++)
+            {
                 l.Add(i);
+                // DEBUG
+                Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
+                Debug.WriteLine("");
+            }
             var result = l.Select(x => x.WrappedValue).ToList();
-            result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();
+            result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
         }
 
         [Fact]
