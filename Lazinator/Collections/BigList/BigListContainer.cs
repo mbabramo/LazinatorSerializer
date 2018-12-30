@@ -38,7 +38,7 @@ namespace Lazinator.Collections.BigList
 
         protected internal abstract void Set(long index, T value);
 
-        protected internal abstract void Insert(long index, T value);
+        protected internal abstract bool Insert(long index, T value);
 
         protected internal abstract void RemoveAt(long index);
 

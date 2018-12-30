@@ -29,7 +29,7 @@ namespace Lazinator.Collections.BigList
             Items[(int)index] = value;
         }
 
-        protected internal override void Insert(long index, T value)
+        protected internal override bool Insert(long index, T value)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();
@@ -37,18 +37,29 @@ namespace Lazinator.Collections.BigList
             {
                 Items.Insert((int)index, value);
                 ChangeCount(1);
+                return true;
             }
             else
             {
                 // We will embed the existing tree items and the new item within leaves that are children of an interior node that we will create. If we're adding at the beginning or the end, we'll keep all of the existing items together; thus, if we continue to add at an end, we can easily fill up the entire level before we'll need to create yet another level. If we're adding in the middle, then we want to leave enough space for more random additions, so we'll separate these items out
-                // DEBUG: This isn't doing what we want. What we want is, if we get to n, to make sure that all inserts happen at least two levels down. That is, if branching factor is 3, then when we get to 4, we want the third interior container to have three interior containers as children. That way, when we insert 4, it will be two levels down. When we get to 27, then we want to be three levels down. Etc. This requires awareness of the current level, which we can get from the tree. In other words, we're effectively increasing the branching factor. When we insert in the middle of a tree, this isn't really an issue, if we assume that we are inserting at random locations. Really, it should only be an issue when we are adding the very first or last element of the entire tree. Maybe in this case we should always add at the top.
-                // DEBUG2: Suppose that we keep track, at an interior node, whether we are full at the furthest level down to the left and the right, keeping track of how full we are. At the top of the tree, if inserting at an end that is full, we demote the entire interior node If inserting on the borderline, we compare the left node's fullness to the right and the right node's fullness to the left. Then, we add to the left if both are not full. If one is full and the other is not, then we add to the node that is not full. If both are full but one is full to a higher degree, then we demote the node that is full to the lower degree, and we add to that node. If both are full to the same degree, then we  
-                // DEBUG3: Suppose that a subtree is filled up. The question is where to add if the current node is full. If the item would be inserted in the middle of a leaf node, then we add by demoting the leaf node and spreading the items out. If not, we look to the parent, seeing if (1) there are empty slots, in which case one is added before/after, as needed; or (2) the child has a maximum level less than the highest max level, in which case the child and adjacent children of the same or lower max level are consolidated. If we get to the root level, and we can't take either of these approaches, then we consolidate all the children.   
+ 
+                // DEBUG3: Suppose that a subtree is filled up. The question is where to add if the current node is full. If the item would be inserted in the middle of a leaf node, then we add by demoting the leaf node and spreading the items out. If not, we look to the parent, seeing if (1) there are empty slots, in which case a leaf node is added before/after, as needed; or (2) the child has a maximum level less than the highest max level, in which case the child and adjacent children of the same or lower max level are consolidated. If we get to the root level, and we can't take either of these approaches, then we consolidate all the children.
+                // STEP1: Keep track of max levels for each child.
+                // STEP2: Add a ChooseContainersToConsolidate function, accepting a parameter including the child that must be demoted. This returns the range of containers that should be consolidated and demoted, or null if demotion is not possible. Add a DemoteContainer function, which calls the parent's ChooseContainersToConsolidate, and if that fails, the parent's DemoteContainer function. 
+                
                 bool insertAtBeginning = index == 0;
                 bool insertAtEnd = index == BranchingFactor;
                 bool separateItemsIntoSeparateLeaves = !(insertAtBeginning || insertAtEnd);
-                var interiorContainer = CorrespondingTree.DemoteLeafContainer(separateItemsIntoSeparateLeaves);
-                interiorContainer.Insert(index, value);
+                if (separateItemsIntoSeparateLeaves || CorrespondingTree.Level == 0)
+                {
+                    var interiorContainer = CorrespondingTree.DemoteLeafContainer(separateItemsIntoSeparateLeaves);
+                    interiorContainer.Insert(index, value);
+                    return true;
+                }
+                else
+                {
+                    return false; // can't handle this at the leaf level, must be handled further up
+                }
             }
         }
 

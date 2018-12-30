@@ -11,6 +11,7 @@ namespace Lazinator.Collections.BigList
         public BigListInteriorContainer(int branchingFactor, BigListTree<T> correspondingTree) : base(branchingFactor, correspondingTree)
         {
             ChildContainerCounts = new LazinatorList<WLong>();
+            ChildContainerMaxPathToLeaf = new LazinatorList<WInt>();
         }
 
         public int NumChildContainers => ChildContainerCounts.Count;
@@ -70,7 +71,7 @@ namespace Lazinator.Collections.BigList
             childContainer.Set(index - numInEarlierChildren, value);
         }
 
-        protected internal override void Insert(long index, T value)
+        protected internal override bool Insert(long index, T value)
         {
             if (index > Count)
                 throw new ArgumentException();
@@ -80,52 +81,17 @@ namespace Lazinator.Collections.BigList
             }
             (int childIndex, long numInEarlierChildren) = ChildContainerForItemIndex(index);
 
+            // DEBUG -- delete
             if (ChildContainerCounts[childIndex] == BranchingFactor)
             { // the child is full, so decide where to put this new item -- maybe in an adjacent child, if one is empty
                 bool isAtLeftOfChild = index == numInEarlierChildren;
                 bool isAtRightOfChild = index == ChildContainerCounts[childIndex].WrappedValue + numInEarlierChildren;
-                if (isAtLeftOfChild)
-                {
-                    if (childIndex > 0 && ChildContainerCounts[childIndex - 1].WrappedValue < BranchingFactor)
-                    { // there is room in child to left -- add it as the last item there
-                        var adjacentChildContainer = GetChildContainer(childIndex - 1);
-                        adjacentChildContainer.Insert(ChildContainerCounts[childIndex - 1].WrappedValue, value);
-                        return;
-                    }
-                    else
-                    {
-                        // can we add a new child at childIndex?
-                        if (NumChildContainers < BranchingFactor)
-                        {
-                            CorrespondingTree.InsertChildContainer(new BigListLeafContainer<T>(BranchingFactor, null), childIndex);
-                            // insertion will occur below
-                        }
-                    }
-                }
-                else if (isAtRightOfChild)
-                { // isAtRightOfChild is true
-                    if (childIndex < BranchingFactor - 1 && NumChildContainers > childIndex + 1 && ChildContainerCounts[childIndex + 1].WrappedValue < BranchingFactor)
-                    { // there is room in child to right -- add it there
-                        var adjacentChildContainer = GetChildContainer(childIndex + 1);
-                        adjacentChildContainer.Insert(0, value);
-                        return;
-                    }
-                    else
-                    {
-                        // can we add a new child at childIndex + 1?
-                        if (NumChildContainers < BranchingFactor)
-                        {
-                            CorrespondingTree.InsertChildContainer(new BigListLeafContainer<T>(BranchingFactor, null), childIndex + 1);
-                            var newContainer = GetChildContainer(childIndex + 1);
-                            newContainer.Insert(0, value);
-                            return;
-                        }
-                    }
-                }
+
             }
+
             // either the child has enough space, or it doesn't but we couldn't find a way to add in an adjacent child, so we add in this child, adding another level if necessary
             var childContainer = GetChildContainer(childIndex);
-            childContainer.Insert(index - numInEarlierChildren, value);
+            return childContainer.Insert(index - numInEarlierChildren, value);
         }
 
         protected internal override void RemoveAt(long index)
