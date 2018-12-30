@@ -764,13 +764,15 @@ namespace LazinatorTests.Tests
             s.Any().Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void BigList_AddingAtEnd(bool useAppendOnlyList)
+        [Fact]
+        public void BigList_AddingAtEnd_AppendOnly() => BigList_AddingAtEnd(true);
+        [Fact]
+        public void BigList_AddingAtEnd_NotAppendOnly() => BigList_AddingAtEnd(false);
+
+        private void BigList_AddingAtEnd(bool useAppendOnlyList)
         {
             BigList<WInt> l = new BigList<WInt>(3, useAppendOnlyList);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
                 l.Add(i);
             var result = l.Select(x => x.WrappedValue).ToList();
             result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();

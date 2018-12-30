@@ -69,6 +69,14 @@ namespace Lazinator.Collections.BigList
 
         #region Tree modification
 
+        protected internal void InsertBigListTree(BigListTree<T> childTree, int childIndex)
+        {
+            BigListInteriorContainer<T> containerToInsertUnder = (BigListInteriorContainer<T>)BigListContainer;
+            containerToInsertUnder.ChildContainerCounts.Insert(childIndex, childTree.Count);
+            containerToInsertUnder.Count += childTree.Count;
+            InsertChildTree(childTree, childIndex);
+        }
+
         protected internal void InsertChildContainer(BigListContainer<T> childContainer, int childIndex)
         {
             BigListInteriorContainer<T> containerToInsertUnder = (BigListInteriorContainer<T>)BigListContainer;
@@ -76,15 +84,6 @@ namespace Lazinator.Collections.BigList
             containerToInsertUnder.Count += childContainer.Count;
             InsertChild(childContainer, childIndex);
             BigListChildContainer(childIndex).CorrespondingTree = BigListChildTree(childIndex);
-        }
-
-        protected internal BigListInteriorContainer<T> DemoteInteriorContainer()
-        {
-            BigListInteriorContainer<T> originalContainer = (BigListInteriorContainer<T>)BigListContainer;
-            BigListInteriorContainer<T> interiorContainer = new BigListInteriorContainer<T>(originalContainer.BranchingFactor, this);
-            Item = interiorContainer;
-            InsertChildContainer(originalContainer, 0);
-            return interiorContainer;
         }
 
         protected internal BigListInteriorContainer<T> DemoteLeafContainer(bool separateItemsIntoSeparateLeaves)

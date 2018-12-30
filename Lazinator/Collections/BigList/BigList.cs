@@ -64,9 +64,16 @@ namespace Lazinator.Collections.BigList
                 throw new BigListUnsupportedOperationWithAppendOnlyException();
             if (IsAppendOnly && IsPowerOfBranchingFactorGreaterThan1())
             {
-                UnderlyingTree.DemoteInteriorContainer();
+                var originalTree = UnderlyingTree;
+                BigListInteriorContainer<T> interiorContainer = new BigListInteriorContainer<T>(originalTree.BranchingFactor, null);
+                BigListLeafContainer<T> leafContainer = new BigListLeafContainer<T>(BranchingFactor, null);
+                UnderlyingTree = new BigListTree<T>(interiorContainer);
+                UnderlyingTree.InsertBigListTree(originalTree, 0);
+                UnderlyingTree.InsertChildContainer(leafContainer, 1);
+                leafContainer.Insert(0, item);
             }
-            ((IList<T>)UnderlyingTree).Insert(index, item);
+            else
+                ((IList<T>)UnderlyingTree).Insert(index, item);
         }
 
         private bool IsPowerOfBranchingFactorGreaterThan1()

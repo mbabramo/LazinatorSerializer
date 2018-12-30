@@ -165,7 +165,7 @@ namespace Lazinator.Collections
             return childTree;
         }
 
-        private void InsertChildTree(LazinatorGeneralTree<T> childTree, int index)
+        protected internal void InsertChildTree(LazinatorGeneralTree<T> childTree, int index)
         {
             if (Children == null)
                 Children = new LazinatorList<LazinatorGeneralTree<T>>();
