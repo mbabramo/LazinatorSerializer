@@ -4,7 +4,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorTriple)]
-    interface ILazinatorTriple<T, U, V> : ILazinator where T : ILazinator, new() where U : ILazinator, new() where V : ILazinator, new()
+    interface ILazinatorTriple<T, U, V> : ILazinator where T : ILazinator where U : ILazinator where V : ILazinator
     {
         T Item1 { get; set; }
         U Item2 { get; set; }

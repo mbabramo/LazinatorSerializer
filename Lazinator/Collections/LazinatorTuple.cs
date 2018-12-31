@@ -4,7 +4,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorTuple<T, U> : ILazinatorTuple<T, U>, IComparable<LazinatorTuple<T,U>> where T : ILazinator, new() where U : ILazinator, new()
+    public partial class LazinatorTuple<T, U> : ILazinatorTuple<T, U>, IComparable<LazinatorTuple<T,U>> where T : ILazinator where U : ILazinator
     {
         public LazinatorTuple()
         {
