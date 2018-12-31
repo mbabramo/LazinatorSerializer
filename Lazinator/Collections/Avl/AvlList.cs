@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl
     { 
         public AvlList()
         {
-            UnderlyingTree = new AvlTree<WByte, T>();
+            UnderlyingTree = new AvlTree<Placeholder, T>();
         }
 
         public T this[int index]
@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            UnderlyingTree = new AvlTree<WByte, T>();
+            UnderlyingTree = new AvlTree<Placeholder, T>();
         }
 
         public bool Contains(T item)
@@ -84,7 +84,7 @@ namespace Lazinator.Collections.Avl
 
         public void Insert(int index, T item)
         {
-            UnderlyingTree.Insert(new WByte(0), item, index);
+            UnderlyingTree.Insert(new Placeholder(), item, index);
         }
 
         public bool Remove(T item)
@@ -92,13 +92,13 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree.Delete(new WByte(0), index);
+            UnderlyingTree.Delete(new Placeholder(), index);
             return true;
         }
 
         public void RemoveAt(int index)
         {
-            UnderlyingTree.Delete(new WByte(0), index);
+            UnderlyingTree.Delete(new Placeholder(), index);
         }
     }
 }

@@ -39,8 +39,8 @@ namespace Lazinator.Collections.Avl
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected AvlTree<WByte, T> _UnderlyingTree;
-        public virtual AvlTree<WByte, T> UnderlyingTree
+        protected AvlTree<Placeholder, T> _UnderlyingTree;
+        public virtual AvlTree<Placeholder, T> UnderlyingTree
         {
             [DebuggerStepThrough]
             get
@@ -49,13 +49,13 @@ namespace Lazinator.Collections.Avl
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _UnderlyingTree = default(AvlTree<WByte, T>);
+                        _UnderlyingTree = default(AvlTree<Placeholder, T>);
                     }
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(95, () => new AvlTree<WByte, T>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(95, () => new AvlTree<Placeholder, T>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
@@ -149,11 +149,11 @@ namespace Lazinator.Collections.Avl
             {
                 if (UnderlyingTree == null)
                 {
-                    typedClone.UnderlyingTree = default(AvlTree<WByte, T>);
+                    typedClone.UnderlyingTree = default(AvlTree<Placeholder, T>);
                 }
                 else
                 {
-                    typedClone.UnderlyingTree = (AvlTree<WByte, T>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.UnderlyingTree = (AvlTree<Placeholder, T>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
@@ -328,7 +328,7 @@ namespace Lazinator.Collections.Avl
         {
             if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
-                _UnderlyingTree = (AvlTree<WByte, T>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _UnderlyingTree = (AvlTree<Placeholder, T>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (changeThisLevel)
             {

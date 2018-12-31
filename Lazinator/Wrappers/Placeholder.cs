@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A struct containing no information. This is useful when a collection class requires a Lazinator type as a key, but you plan to use the same key for each item in the collection.
+    /// </summary>
     public partial struct Placeholder : IPlaceholder, IComparable
     {
         public override int GetHashCode()
