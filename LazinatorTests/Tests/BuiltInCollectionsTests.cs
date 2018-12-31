@@ -764,14 +764,17 @@ namespace LazinatorTests.Tests
             s.Any().Should().BeFalse();
         }
 
-        [Fact]
-        public void SortedLazinatorListWorks()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void SortedLazinatorListWorks(bool allowDuplicates)
         {
             const int numOperations = 100;
+            const int maxValue = 60;
             Random r = new Random();
             SortedLazinatorList<WInt> s = new SortedLazinatorList<WInt>()
             {
-                AllowDuplicates = true
+                AllowDuplicates = allowDuplicates
             };
             List<int> basic = new List<int>();
             for (int i = 0; i < numOperations; i++)
@@ -785,12 +788,14 @@ namespace LazinatorTests.Tests
                 }
                 else
                 { // add item
-                    int n = r.Next(100);
-                    basic.Add(n);
+                    int n = r.Next(maxValue);
+                    if (!basic.Contains(n))
+                        basic.Add(n);
                     s.Insert(n);
                 }
             }
-            basic.OrderBy(x => x).SequenceEqual(s.Select(x => x.WrappedValue)).Should().BeTrue();
+            List<int> sortedResult = s.Select(x => x.WrappedValue).ToList();
+            basic.OrderBy(x => x).SequenceEqual(sortedResult).Should().BeTrue();
         }
 
         [Fact]
