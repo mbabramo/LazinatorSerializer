@@ -12,6 +12,7 @@ namespace Lazinator.Collections.Avl
         public AvlBigNodeTree(IComparer<TKey> comparer)
         {
             _comparer = comparer;
+            UnderlyingTree = new AvlTree<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
         }
 
         public AvlBigNodeTree()

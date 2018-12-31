@@ -75,8 +75,8 @@ namespace Lazinator.Collections.Avl
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected long _SelfCount;
-        public long SelfCount
+        protected int _SelfCount;
+        public int SelfCount
         {
             [DebuggerStepThrough]
             get
@@ -513,7 +513,7 @@ namespace Lazinator.Collections.Avl
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _LeftCount = span.ToDecompressedLong(ref bytesSoFar);
             _RightCount = span.ToDecompressedLong(ref bytesSoFar);
-            _SelfCount = span.ToDecompressedLong(ref bytesSoFar);
+            _SelfCount = span.ToDecompressedInt(ref bytesSoFar);
             _Keys_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

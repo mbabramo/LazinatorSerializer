@@ -13,6 +13,7 @@ namespace Lazinator.Collections.Avl
 		public AvlTree(IComparer<TKey> comparer)
 		{
 			_comparer = comparer;
+            
 		}
 
 		public AvlTree()
@@ -108,6 +109,19 @@ namespace Lazinator.Collections.Avl
                     return node;
                 }
             }
+        }
+
+        public AvlNode<TKey, TValue> SearchMatchOrNextOrLast(TKey key)
+        {
+            return SearchMatchOrNext(key) ?? LastNode();
+        }
+
+        public AvlNode<TKey, TValue> LastNode()
+        {
+            var x = Root;
+            while (x.Right != null)
+                x = x.Right;
+            return x;
         }
 
         public bool Insert(TKey key, TValue value, int? nodeIndex = null)

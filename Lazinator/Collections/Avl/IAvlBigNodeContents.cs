@@ -10,8 +10,8 @@ namespace Lazinator.Collections.Avl
     {
         LazinatorList<TKey> Keys { get; set; }
         LazinatorList<TValue> Values { get; set; }
+        int SelfCount { get; set; }
         long LeftCount { get; set; }
-        long SelfCount { get; set; }
         long RightCount { get; set; }
     }
 }
