@@ -7,7 +7,7 @@ namespace Lazinator.Collections
 {
     public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T> where T : ILazinator
     {
-        public (int location, bool alreadyExisted) Insert(T item, IComparer<T> comparer = null)
+        public (int location, bool rejectedAsDuplicate) Insert(T item, IComparer<T> comparer = null)
         {
             (int location, bool exists) = Find(item, comparer);
             if (exists && !AllowDuplicates)

@@ -8,10 +8,9 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
-        LazinatorList<TKey> Keys { get; set; }
-        LazinatorList<TValue> Values { get; set; }
-        int SelfCount { get; set; }
-        long LeftCount { get; set; }
-        long RightCount { get; set; }
+        SortedLazinatorList<LazinatorTuple<TKey, TValue>> Items { get; set; }
+        int SelfItemsCount { get; set; }
+        long LeftItemsCount { get; set; }
+        long RightItemsCount { get; set; }
     }
 }

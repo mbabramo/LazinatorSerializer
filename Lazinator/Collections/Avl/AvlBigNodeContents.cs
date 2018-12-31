@@ -1,4 +1,6 @@
 ﻿using Lazinator.Core;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
@@ -6,28 +8,77 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
-        public AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> CorrespondingNode;
+        private AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
+        private IComparer<LazinatorTuple<TKey, TValue>> _Comparer;
 
-        public AvlBigNodeContents(TKey firstKey, TValue firstValue)
+        public int NodeIndex => _CorrespondingNode.Left.Count;
+        public long ItemsIndex => LeftItemsCount;
+
+        public void SetCorrespondingNode(AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
         {
-            Keys = new LazinatorList<TKey>();
-            Values = new LazinatorList<TValue>();
-            Keys.Add(firstKey);
-            Values.Add(firstValue);
-            SelfCount = 1;
+            _CorrespondingNode = correspondingNode;
         }
 
-        public void Add(TKey key, TValue value)
+        public void SetComparer(IComparer<LazinatorTuple<TKey, TValue>> comparer)
         {
+            // this method can be used to reset the comparer after deserialization
+            _Comparer = comparer;
+        }
 
+        public AvlBigNodeContents(LazinatorTuple<TKey, TValue> firstItem)
+        {
+            Items = new SortedLazinatorList<LazinatorTuple<TKey, TValue>>() { AllowDuplicates = false };
+            Insert(firstItem);
+        }
+
+        public AvlBigNodeContents(IEnumerable<LazinatorTuple<TKey, TValue>> items, IComparer<LazinatorTuple<TKey, TValue>> comparer = null)
+        {
+            Items = new SortedLazinatorList<LazinatorTuple<TKey, TValue>>() { AllowDuplicates = false };
+            foreach (var item in items)
+                Items.Insert(item, comparer);
+            SelfItemsCount = Items.Count;
+        }
+
+        public (int location, bool rejectedAsDuplicate) Insert(LazinatorTuple<TKey, TValue> keyAndValue)
+        {
+            var result = Items.Insert(keyAndValue);
+            SelfItemsCount = Items.Count;
+            return result;
+        }
+
+        public bool Contains(LazinatorTuple<TKey, TValue> keyAndValue)
+        {
+            var result = Items.Find(keyAndValue, _Comparer);
+            return result.exists;
+        }
+
+        public (int priorLocation, bool existed) Remove(LazinatorTuple<TKey, TValue> keyAndValue)
+        {
+            (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue, _Comparer);
+            SelfItemsCount = Items.Count;
+            return result;
         }
 
         public LazinatorTuple<TKey, TValue> GetLastItem()
         {
-            int itemsCount = (int) SelfCount;
+            int itemsCount = (int) SelfItemsCount;
             if (itemsCount == 0)
                 return null;
-            return new LazinatorTuple<TKey, TValue>(Keys[itemsCount - 1].CloneNoBuffer(), Values[itemsCount - 1].CloneNoBuffer());
+            return Items[itemsCount - 1].CloneNoBuffer();
+        }
+
+        public (AvlBigNodeContents<TKey, TValue> node, int nodeIndex) SplitOffFirstHalf()
+        {
+            int itemsCount = SelfItemsCount;
+            if (itemsCount < 2)
+                throw new System.Exception("Insufficient number of items to split.");
+            int numToRemove = itemsCount / 2;
+            var itemsToRemove = Items.Take(numToRemove).Select(x => x.CloneNoBuffer()).ToList();
+            for (int i = 0; i < numToRemove; i++)
+                Items.RemoveAt(i);
+            SelfItemsCount = Items.Count;
+            AvlBigNodeContents<TKey, TValue> node = new AvlBigNodeContents<TKey, TValue>(itemsToRemove);
+            return (node, NodeIndex); // new node will be at current node's index. This will result in this node's NodeIndex increasing
         }
 
         /// <summary>
@@ -35,7 +86,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         private void UpdateNodeKey()
         {
-            CorrespondingNode.Key = GetLastItem();
+            _CorrespondingNode.Key = GetLastItem();
         }
     }
 }
