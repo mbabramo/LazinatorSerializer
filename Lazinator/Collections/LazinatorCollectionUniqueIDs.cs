@@ -78,5 +78,6 @@
         BigListTree,
         AvlBigNodeTree,
         AvlBigNodeContents,
+        SortedLazinatorList,
     }
 }
