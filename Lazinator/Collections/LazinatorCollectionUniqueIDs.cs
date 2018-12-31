@@ -79,5 +79,6 @@
         AvlBigNodeTree,
         AvlBigNodeContents,
         SortedLazinatorList,
+        LazinatorKeyValue,
     }
 }

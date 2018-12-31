@@ -6,12 +6,12 @@ using System.Linq;
 namespace Lazinator.Collections.Avl
 {
     public partial class AvlBigNodeContents<TKey, TValue> : IAvlBigNodeContents<TKey, TValue>
-        where TKey : ILazinator
+        where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
-        private AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
+        private AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
         
-        public AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
+        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
         public AvlBigNodeContents<TKey, TValue> ParentContents
         {
             get
@@ -39,39 +39,39 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public void SetCorrespondingNode(AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
+        public void SetCorrespondingNode(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
         {
             _CorrespondingNode = correspondingNode;
         }
 
-        public AvlBigNodeContents(LazinatorTuple<TKey, TValue> firstItem)
+        public AvlBigNodeContents(LazinatorKeyValue<TKey, TValue> firstItem)
         {
-            Items = new SortedLazinatorList<LazinatorTuple<TKey, TValue>>() { AllowDuplicates = false };
+            Items = new SortedLazinatorList<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = false };
             Insert(firstItem);
         }
 
-        public AvlBigNodeContents(IEnumerable<LazinatorTuple<TKey, TValue>> items, IComparer<LazinatorTuple<TKey, TValue>> comparer = null)
+        public AvlBigNodeContents(IEnumerable<LazinatorKeyValue<TKey, TValue>> items, IComparer<LazinatorKeyValue<TKey, TValue>> comparer = null)
         {
-            Items = new SortedLazinatorList<LazinatorTuple<TKey, TValue>>() { AllowDuplicates = false };
+            Items = new SortedLazinatorList<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = false };
             foreach (var item in items)
                 Items.Insert(item, comparer);
             SelfItemsCount = Items.Count;
         }
 
-        public (int location, bool rejectedAsDuplicate) Insert(LazinatorTuple<TKey, TValue> keyAndValue)
+        public (int location, bool rejectedAsDuplicate) Insert(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.Insert(keyAndValue);
             SelfItemsCount = Items.Count;
             return result;
         }
 
-        public bool Contains(LazinatorTuple<TKey, TValue> keyAndValue)
+        public bool Contains(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.Find(keyAndValue);
             return result.exists;
         }
 
-        public (int location, bool exists) Find(LazinatorTuple<TKey, TValue> keyAndValue)
+        public (int location, bool exists) Find(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.Find(keyAndValue);
             return result;
@@ -82,14 +82,14 @@ namespace Lazinator.Collections.Avl
 
         //}
 
-        public (int priorLocation, bool existed) Remove(LazinatorTuple<TKey, TValue> keyAndValue)
+        public (int priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
             SelfItemsCount = Items.Count;
             return result;
         }
 
-        public LazinatorTuple<TKey, TValue> GetLastItem()
+        public LazinatorKeyValue<TKey, TValue> GetLastItem()
         {
             int itemsCount = (int) SelfItemsCount;
             if (itemsCount == 0)

@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlBigNodeTree<TKey, TValue> : /* IEnumerable<AvlNode<TKey, TValue>>, */ IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlBigNodeTree<TKey, TValue> : /* IEnumerable<AvlNode<TKey, TValue>>, */ IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlBigNodeTree()
         {
-            UnderlyingTree = new AvlTree<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
+            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
         }
 
-        private AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
+        private AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
         {
             var v = node.Value;
             v.SetCorrespondingNode(node);
             return v;
         }
 
-        public AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> GetNodeByNodeIndex(int nodeIndex)
+        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> GetNodeByNodeIndex(int nodeIndex)
         {
             if (UnderlyingTree.Root == null)
                 return null;
@@ -46,7 +46,7 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public (AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) GetNodeByItemIndex(long itemIndex)
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) GetNodeByItemIndex(long itemIndex)
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1);
@@ -77,7 +77,7 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        //public (AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) Find(long itemIndex)
+        //public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) Find(long itemIndex)
         //{
 
         //}

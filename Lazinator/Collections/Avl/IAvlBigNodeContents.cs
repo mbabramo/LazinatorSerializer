@@ -1,14 +1,15 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
+using System;
 
 namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlBigNodeContents)]
     public interface IAvlBigNodeContents<TKey, TValue>
-        where TKey : ILazinator
+        where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
-        SortedLazinatorList<LazinatorTuple<TKey, TValue>> Items { get; set; }
+        SortedLazinatorList<LazinatorKeyValue<TKey, TValue>> Items { get; set; }
         int SelfItemsCount { get; set; }
         long LeftItemsCount { get; set; }
         long RightItemsCount { get; set; }
