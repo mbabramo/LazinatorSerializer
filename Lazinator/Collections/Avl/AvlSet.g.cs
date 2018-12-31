@@ -72,7 +72,7 @@ namespace Lazinator.Collections.Avl
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(94, () => new AvlTree<TKey, WByte>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(95, () => new AvlTree<TKey, WByte>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
@@ -369,12 +369,12 @@ namespace Lazinator.Collections.Avl
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 97;
+        public virtual int LazinatorUniqueID => 102;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlSet<TKey>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(97, new Type[] { typeof(TKey) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlSet<TKey>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(102, new Type[] { typeof(TKey) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

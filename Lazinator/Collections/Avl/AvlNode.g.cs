@@ -149,7 +149,7 @@ namespace Lazinator.Collections.Avl
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Left_ByteIndex, _Left_ByteLength, false, false, null);
                         
-                        _Left = DeserializationFactory.Instance.CreateBaseOrDerivedType(93, () => new AvlNode<TKey, TValue>(), childData, this); 
+                        _Left = DeserializationFactory.Instance.CreateBaseOrDerivedType(94, () => new AvlNode<TKey, TValue>(), childData, this); 
                     }
                     _Left_Accessed = true;
                 } 
@@ -193,7 +193,7 @@ namespace Lazinator.Collections.Avl
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Right_ByteIndex, _Right_ByteLength, false, false, null);
                         
-                        _Right = DeserializationFactory.Instance.CreateBaseOrDerivedType(93, () => new AvlNode<TKey, TValue>(), childData, this); 
+                        _Right = DeserializationFactory.Instance.CreateBaseOrDerivedType(94, () => new AvlNode<TKey, TValue>(), childData, this); 
                     }
                     _Right_Accessed = true;
                 } 
@@ -668,12 +668,12 @@ namespace Lazinator.Collections.Avl
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 93;
+        public virtual int LazinatorUniqueID => 94;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlNode<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(93, new Type[] { typeof(TKey), typeof(TValue) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlNode<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(94, new Type[] { typeof(TKey), typeof(TValue) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

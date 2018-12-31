@@ -71,7 +71,7 @@ namespace Lazinator.Collections.BigList
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(122, () => new BigListTree<T>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(123, () => new BigListTree<T>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
@@ -372,12 +372,12 @@ namespace Lazinator.Collections.BigList
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 121;
+        public virtual int LazinatorUniqueID => 122;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BigList<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(121, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BigList<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(122, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

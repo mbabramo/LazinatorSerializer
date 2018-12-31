@@ -389,12 +389,12 @@ namespace Lazinator.Collections.BigList
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 119;
+        public override int LazinatorUniqueID => 120;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BigListLeafContainer<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(119, new Type[] { typeof(T) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BigListLeafContainer<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(120, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

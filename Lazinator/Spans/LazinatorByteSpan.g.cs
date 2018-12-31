@@ -345,7 +345,7 @@ namespace Lazinator.Spans
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 89;
+        public virtual int LazinatorUniqueID => 90;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => false;

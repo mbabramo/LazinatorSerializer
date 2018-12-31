@@ -95,12 +95,12 @@ namespace Lazinator.Collections.BigList
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 122;
+        public override int LazinatorUniqueID => 123;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BigListTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(122, new Type[] { typeof(T) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BigListTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(123, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
