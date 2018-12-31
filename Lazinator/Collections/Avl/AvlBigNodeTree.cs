@@ -93,10 +93,10 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public (AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) Find(long itemIndex)
-        {
+        //public (AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) Find(long itemIndex)
+        //{
 
-        }
+        //}
 
         //public AvlNode<TKey, TValue> this[int i]
         //{

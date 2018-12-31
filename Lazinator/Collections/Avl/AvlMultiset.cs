@@ -18,7 +18,6 @@ namespace Lazinator.Collections.Avl
 
         public void SetComparer(IComparer<T> comparer)
         {
-            UnderlyingSet.UnderlyingTree.SetComparer(GetComparerForWrapper(comparer));
         }
 
         private static CustomComparer<LazinatorTuple<T, WInt>> GetComparerForWrapper(IComparer<T> comparer)

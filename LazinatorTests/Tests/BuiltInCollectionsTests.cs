@@ -789,7 +789,7 @@ namespace LazinatorTests.Tests
                 else
                 { // add item
                     int n = r.Next(maxValue);
-                    if (!basic.Contains(n))
+                    if (!basic.Contains(n) || allowDuplicates)
                         basic.Add(n);
                     s.Insert(n);
                 }

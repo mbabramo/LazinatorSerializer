@@ -85,10 +85,10 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public (int location, bool exists) Find(TKey key)
-        {
+        //public (int location, bool exists) Find(TKey key)
+        //{
 
-        }
+        //}
 
         public (int priorLocation, bool existed) Remove(LazinatorTuple<TKey, TValue> keyAndValue)
         {
