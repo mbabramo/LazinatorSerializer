@@ -6,7 +6,7 @@ namespace LazinatorTests.AVL
 {
     public static class AvlNodeExtensionsForTesting
 	{
-		public static int CountByEnumerating<TKey>(this AvlNode<TKey, WByte> source) where TKey : ILazinator, new()
+		public static int CountByEnumerating<TKey>(this AvlNode<TKey, WByte> source) where TKey : ILazinator
 		{
 			int count = 1;
 

@@ -6,7 +6,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlMultiset<T> : IAvlMultiset<T>, IEnumerable<T> where T : ILazinator, new()
+    public partial class AvlMultiset<T> : IAvlMultiset<T>, IEnumerable<T> where T : ILazinator
     {
         public AvlMultiset(IComparer<T> comparer)
         {

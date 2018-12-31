@@ -5,7 +5,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlMultisetEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, new()
+    public class AvlMultisetEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator
     {
         private AvlNodeKeyEnumerator<LazinatorTuple<TKey, WInt>> UnderlyingEnumerator;
 

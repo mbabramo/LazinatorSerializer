@@ -5,7 +5,7 @@ using Lazinator.Wrappers;
 namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlSet)]
-    interface IAvlSet<TKey> where TKey : ILazinator, new()
+    interface IAvlSet<TKey> where TKey : ILazinator
     {
         int Count { get; set; }
         AvlTree<TKey, WByte> UnderlyingTree { get; set; }
