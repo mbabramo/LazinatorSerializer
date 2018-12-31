@@ -7,14 +7,24 @@ namespace Lazinator.Collections
 {
     public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T> where T : ILazinator
     {
-        public int Insert(T item, IComparer<T> comparer = null)
+        public (int location, bool alreadyExisted) Insert(T item, IComparer<T> comparer = null)
         {
-            (int location, bool exists) = FindLocation(item, comparer);
+            (int location, bool exists) = Find(item, comparer);
+            if (exists && !AllowDuplicates)
+                return (location, true);
             Insert(location, item);
-            return location;
+            return (location, false);
         }
 
-        public (int location, bool exists) FindLocation(T target, IComparer<T> comparer = null)
+        public (int priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer = null)
+        {
+            (int location, bool exists) = Find(item, comparer);
+            if (exists)
+                RemoveAt(location);
+            return (location, exists);
+        }
+
+        public (int location, bool exists) Find(T target, IComparer<T> comparer = null)
         {
             if (comparer == null)
                 comparer = Comparer<T>.Default;

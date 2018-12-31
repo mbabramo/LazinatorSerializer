@@ -765,6 +765,35 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void SortedLazinatorListWorks()
+        {
+            const int numOperations = 100;
+            Random r = new Random();
+            SortedLazinatorList<WInt> s = new SortedLazinatorList<WInt>()
+            {
+                AllowDuplicates = true
+            };
+            List<int> basic = new List<int>();
+            for (int i = 0; i < numOperations; i++)
+            {
+                if (r.Next(3) == 0 && basic.Any())
+                { // remove item
+                    int j = r.Next(basic.Count());
+                    int n = basic[j];
+                    basic.Remove(n);
+                    s.RemoveSorted(n);
+                }
+                else
+                { // add item
+                    int n = r.Next(100);
+                    basic.Add(n);
+                    s.Insert(n);
+                }
+            }
+            basic.OrderBy(x => x).SequenceEqual(s.Select(x => x.WrappedValue)).Should().BeTrue();
+        }
+
+        [Fact]
         public void BigList_AddingAtEnd_AppendOnly() => BigList_AddingAtEnd(true);
         [Fact]
         public void BigList_AddingAtEnd_NotAppendOnly() => BigList_AddingAtEnd(false);
