@@ -7,30 +7,14 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlBigNodeTree<TKey, TValue> : /* IEnumerable<AvlNode<TKey, TValue>>, */ IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        private IComparer<LazinatorTuple<TKey, TValue>> _comparer;
-
-        public AvlBigNodeTree(IComparer<LazinatorTuple<TKey, TValue>> comparer)
-        {
-            _comparer = comparer;
-            UnderlyingTree = new AvlTree<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
-        }
-
         public AvlBigNodeTree()
-           : this(Comparer<LazinatorTuple<TKey, TValue>>.Default)
         {
-
-        }
-
-        public void SetComparer(IComparer<LazinatorTuple<TKey, TValue>> comparer)
-        {
-            // this method can be used to reset the comparer after deserialization
-            _comparer = comparer;
+            UnderlyingTree = new AvlTree<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
         }
 
         private AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
         {
             var v = node.Value;
-            v.SetComparer(_comparer);
             v.SetCorrespondingNode(node);
             return v;
         }

@@ -79,20 +79,6 @@ namespace LazinatorTests.AVL
         }
 
         [Fact]
-        public void AvlMultisetComparerWorks()
-        {
-            // The AvlMultiset comparer sets the comparer of the underlying set, which sets the comparer of the underlying tree, so this serves to check all their functionality. 
-            CustomComparer<WInt> reverseComparer =
-                new CustomComparer<WInt>((x, y) => 0 - x.CompareTo(y));
-            AvlMultiset<WInt> s = new AvlMultiset<WInt>(reverseComparer);
-            s.Insert(3);
-            s.Insert(5);
-            s.Insert(5);
-            List<WInt> list = s.ToList();
-            list.Select(x => x.WrappedValue).SequenceEqual(new int[] {5, 5, 3}).Should().BeTrue();
-        }
-
-        [Fact]
         public void AvlSetGetMatchOrNextWorks()
         {
             GetAvlSet(out var set, out var ints);

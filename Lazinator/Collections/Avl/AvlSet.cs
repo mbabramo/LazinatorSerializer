@@ -1,25 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSet<TKey> : IAvlSet<TKey>, IEnumerable<TKey> where TKey : ILazinator
+    public partial class AvlSet<TKey> : IAvlSet<TKey>, IEnumerable<TKey> where TKey : ILazinator, IComparable<TKey>
     {
-        public AvlSet(IComparer<TKey> comparer)
-        {
-            UnderlyingTree = new AvlTree<TKey, WByte>(comparer);
-        }
-
         public AvlSet() : base()
         {
             UnderlyingTree = new AvlTree<TKey, WByte>();
-        }
-
-        public void SetComparer(IComparer<TKey> comparer)
-        {
-            UnderlyingTree.SetComparer(comparer);
         }
 
         public bool Contains(TKey key)

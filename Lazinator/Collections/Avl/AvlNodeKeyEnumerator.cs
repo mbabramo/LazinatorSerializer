@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlNodeKeyEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator
+    public class AvlNodeKeyEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, IComparable<TKey>
     {
         private AvlNodeEnumerator<TKey, WByte> UnderlyingEnumerator;
 

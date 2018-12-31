@@ -1,10 +1,11 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Core;
+using System;
 
 namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.AvlTree)]
-    interface IAvlTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    interface IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         AvlNode<TKey, TValue> Root { get; set; }
     }

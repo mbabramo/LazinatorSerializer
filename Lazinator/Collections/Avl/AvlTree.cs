@@ -6,27 +6,11 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-		private IComparer<TKey> _comparer;
-
-		public AvlTree(IComparer<TKey> comparer)
-		{
-			_comparer = comparer;
-            
-		}
-
 		public AvlTree()
-		   : this(Comparer<TKey>.Default)
 		{
-
 		}
-
-        public void SetComparer(IComparer<TKey> comparer)
-        {
-            // this method can be used to reset the comparer after deserialization
-            _comparer = comparer;
-        }
 
         public AvlNode<TKey, TValue> this[int i]
         {
@@ -65,11 +49,12 @@ namespace Lazinator.Collections.Avl
 
 			while (node != null)
 			{
-				if (_comparer.Compare(key, node.Key) < 0)
+                int comparison = key.CompareTo(node.Key);
+                if (comparison < 0)
 				{
 					node = node.Left;
 				}
-				else if (_comparer.Compare(key, node.Key) > 0)
+				else if (comparison > 0)
 				{
 					node = node.Right;
 				}
@@ -92,13 +77,14 @@ namespace Lazinator.Collections.Avl
 
             while (true)
             {
-                if (_comparer.Compare(key, node.Key) < 0)
+                int comparison = key.CompareTo(node.Key);
+                if (comparison < 0)
                 {
                     if (node.Left == null)
                         return node;
                     node = node.Left;
                 }
-                else if (_comparer.Compare(key, node.Key) > 0)
+                else if (comparison > 0)
                 {
                     if (node.Right == null)
                         return node.GetNextNode();
@@ -219,7 +205,7 @@ namespace Lazinator.Collections.Avl
                     compare = 1;
             }
             else
-                compare = _comparer.Compare(key, node.Key);
+                compare = key.CompareTo(node.Key);
             return compare;
         }
 

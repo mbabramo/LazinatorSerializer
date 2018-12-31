@@ -1,13 +1,14 @@
 ﻿using Lazinator.Collections.Avl;
 using Lazinator.Core;
 using Lazinator.Wrappers;
+using System;
 
 namespace LazinatorTests.AVL
 {
     public static class AvlNodeExtensionsForTesting
 	{
-		public static int CountByEnumerating<TKey>(this AvlNode<TKey, WByte> source) where TKey : ILazinator
-		{
+		public static int CountByEnumerating<TKey>(this AvlNode<TKey, WByte> source) where TKey : ILazinator, IComparable<TKey>
+        {
 			int count = 1;
 
 			AvlNode<TKey, WByte> left = source.Left;

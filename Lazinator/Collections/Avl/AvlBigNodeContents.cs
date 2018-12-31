@@ -10,7 +10,6 @@ namespace Lazinator.Collections.Avl
         where TValue : ILazinator
     {
         private AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
-        private IComparer<LazinatorTuple<TKey, TValue>> _Comparer;
         
         public AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
         public AvlBigNodeContents<TKey, TValue> ParentContents
@@ -22,7 +21,6 @@ namespace Lazinator.Collections.Avl
                     return null;
                 var contents = parent.Value;
                 contents.SetCorrespondingNode(parent);
-                contents.SetComparer(_Comparer);
                 return contents;
             }
         }
@@ -44,12 +42,6 @@ namespace Lazinator.Collections.Avl
         public void SetCorrespondingNode(AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
         {
             _CorrespondingNode = correspondingNode;
-        }
-
-        public void SetComparer(IComparer<LazinatorTuple<TKey, TValue>> comparer)
-        {
-            // this method can be used to reset the comparer after deserialization
-            _Comparer = comparer;
         }
 
         public AvlBigNodeContents(LazinatorTuple<TKey, TValue> firstItem)
@@ -75,13 +67,13 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(LazinatorTuple<TKey, TValue> keyAndValue)
         {
-            var result = Items.Find(keyAndValue, _Comparer);
+            var result = Items.Find(keyAndValue);
             return result.exists;
         }
 
         public (int location, bool exists) Find(LazinatorTuple<TKey, TValue> keyAndValue)
         {
-            var result = Items.Find(keyAndValue, _Comparer);
+            var result = Items.Find(keyAndValue);
             return result;
         }
 
@@ -92,7 +84,7 @@ namespace Lazinator.Collections.Avl
 
         public (int priorLocation, bool existed) Remove(LazinatorTuple<TKey, TValue> keyAndValue)
         {
-            (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue, _Comparer);
+            (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
             SelfItemsCount = Items.Count;
             return result;
         }

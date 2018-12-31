@@ -5,7 +5,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Avl
 {
     public partial class AvlNode<TKey, TValue> : IAvlNode<TKey, TValue>
-        where TKey : ILazinator where TValue : ILazinator
+        where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.
         private AvlNode<TKey, TValue> _Parent;
