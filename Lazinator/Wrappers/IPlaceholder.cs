@@ -4,7 +4,7 @@ using Lazinator.Collections;
 namespace Lazinator.Wrappers
 {
     [SmallLazinator]
-    [FixedLengthLazinator(1)]
+    [FixedLengthLazinator(0)]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
     [Lazinator((int)LazinatorCollectionUniqueIDs.Placeholder, -1)]
