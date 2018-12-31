@@ -15,8 +15,8 @@ namespace Lazinator.Collections.Avl
 
         public T this[int index]
         {
-            get => UnderlyingTree[index].Value;
-            set => UnderlyingTree[index].Value = value;
+            get => UnderlyingTree.NodeAtIndex(index).Value;
+            set => UnderlyingTree.NodeAtIndex(index).Value = value;
         }
 
         public int Count => UnderlyingTree.Count;

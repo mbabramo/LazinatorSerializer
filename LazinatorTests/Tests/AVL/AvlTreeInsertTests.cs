@@ -58,7 +58,7 @@ namespace LazinatorTests.AVL
                 else
                 {
                     result.Key.Should().Be(i + 1);
-                    tree[i].Should().Be(result); // confirm indexing works
+                    tree.NodeAtIndex(i).Should().Be(result); // confirm indexing works
                 }
             }
 	    }
@@ -79,7 +79,7 @@ namespace LazinatorTests.AVL
                 else
                 {
                     result.Key.Should().Be(i + 1);
-                    tree[i].Should().Be(result); // confirm indexing works
+                    tree.NodeAtIndex(i).Should().Be(result); // confirm indexing works
                 }
             }
 	    }

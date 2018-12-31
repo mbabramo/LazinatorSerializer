@@ -12,13 +12,10 @@ namespace Lazinator.Collections.Avl
 		{
 		}
 
-        public AvlNode<TKey, TValue> this[int i]
+        public AvlNode<TKey, TValue> NodeAtIndex(int i)
         {
-            get
-            {
-                ConfirmInRange(i);
-                return Skip(i).First();
-            }
+            ConfirmInRange(i);
+            return Skip(i).First();
         }
 
         private void ConfirmInRange(int i)
