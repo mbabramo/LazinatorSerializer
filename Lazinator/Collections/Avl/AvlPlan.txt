@@ -1,0 +1,28 @@
+﻿
+The AvlList solves the problem of balancing, but has too much overhead per node. The AvlBigNodeTree is responsive to this issue. Meanwhile, we could still use lazy loading of blobs with this, by allowing for lazy loading only at the AvlBigNode level. There is a danger that we may end up splitting at a relatively high level, but the cost of that is mitigated by using high splits. 
+
+AvlBigNodeTree<K, V> is a class that functions like an AvlTree, but stores many items on each node. It has underlying AvlTree<LazinatorKeyValue<K, V>, AvlBigNodeContents<K, V>>. LazinatorKeyValue would implement IComparer, prioritizing the key then the value. AvlBigNodeContents<K, V> contains LazinatorList<LazinatorKeyValue<K, V>>, plus LeftCount, SelfCount, and RightCount long counts. Whenever we insert or delete, we will recalculate these counts, following essentially the same approach as in AvlTree. 
+
+Inserting by key and value: The key for a node in AvlBigNodeTree should be the key and value of the last item contained within the LazinatorList. This allows us to quickly find the applicable node containing the location where a key/value pair should be. On AvlTree, we define a SearchMatchOrNextOrLast, which goes all the way to the right if SearchMatchOrNext returns null. 
+
+Inserting by index: Meanwhile, we need to support also inserting by index, so that the AvlList wrapper will work. This should be straightforward, given that we maintain counts.
+
+Splits: When we insert, if we exceed the maximum permissible number, then we remove the AvlTree node and we split the node in two, first removing it.
+
+Deletions: We also delete by key, by key/value, or by index. If we delete all items from a node, then we delete the node.
+
+Additional changes: We should change AvlTree so that it uses long counts. This will be useful anyway, if we allow trees to stretch over multiple files. We will need to modify AvlList so that it can work with AvlBigNodeTree instead of regular AvlTree (or perhaps either). Node that when AvlList is used, the Key is always 0.
+
+One question is whether we also need an uncounted AvlTree / AvlBigNodeTree class. This may be useful if we anticipate only wanting to enumerate the first items in the list or alternatively the entire list, without a need to skip items. But it would be some work. The counts are, moreover, necessary for the AvlList functionality to work. 
+
+We might adjust BigList so that is always uses AppendOnlyMode, with improvements to AppendOnlyMode so that it will always be balanced. An advantage of BigList is that we don't need to store the key value, since the key is always implicit. We could call it AppendOnlyList. But maybe this isn't really necessary. After all, insertions and searches should be fairly efficient. Higher branching factor means less overhead, but greater need to deal with the complications of LazinatorList. 
+
+
+
+ 
+Rejected approach of modifying AvlNodeEnumerator: When searching for an item with a particular index, we need to take into account the total weight of items below. We could continue to use AvlNodeEnumerator. However, the SkipPending logic will have to adjust for the cumulative Count size. If we have a node, and the SkipPending < Count && Count > 0, then we don't want to move past it. Instead, we enumerate the node. The SkipPending then gives us the index into the relevant node. When MoveNext() is called, then we want to move onto the next item in the node, so we increment SkipPending. Only if SkipPending == Count can we actually move onto the next node, in which case we subtract Count from SkipPending. Note: This is going to be difficult, because Count is expressed throughout, and we'll need to subclass Node, Tree, etc.
+
+
+
+When inserting, we look for the range containing the item. If that range is full, we remove the item from the tree, and we split it in half. We then add the two new lists to the tree.  
+ 
