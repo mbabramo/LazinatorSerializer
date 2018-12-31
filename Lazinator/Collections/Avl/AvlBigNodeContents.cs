@@ -1,4 +1,5 @@
 ﻿using Lazinator.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,9 +11,35 @@ namespace Lazinator.Collections.Avl
     {
         private AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
         private IComparer<LazinatorTuple<TKey, TValue>> _Comparer;
-
-        public int NodeIndex => _CorrespondingNode.Left.Count;
-        public long ItemsIndex => LeftItemsCount;
+        
+        public AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
+        public AvlBigNodeContents<TKey, TValue> ParentContents
+        {
+            get
+            {
+                var parent = ParentNode;
+                if (parent == null)
+                    return null;
+                var contents = parent.Value;
+                contents.SetCorrespondingNode(parent);
+                contents.SetComparer(_Comparer);
+                return contents;
+            }
+        }
+        public int NodeIndex => _CorrespondingNode.Index;
+        public long ItemsIndex
+        {
+            get
+            {
+                if (ParentContents == null)
+                    return LeftItemsCount;
+                if (_CorrespondingNode.IsLeftNode)
+                    return ParentContents.ItemsIndex - RightItemsCount - 1;
+                else if (_CorrespondingNode.IsRightNode)
+                    return ParentContents.ItemsIndex + LeftItemsCount + 1;
+                throw new Exception("Malformed AvlTree.");
+            }
+        }
 
         public void SetCorrespondingNode(AvlNode<LazinatorTuple<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
         {
@@ -50,6 +77,12 @@ namespace Lazinator.Collections.Avl
         {
             var result = Items.Find(keyAndValue, _Comparer);
             return result.exists;
+        }
+
+        public (int location, bool exists) Find(LazinatorTuple<TKey, TValue> keyAndValue)
+        {
+            var result = Items.Find(keyAndValue, _Comparer);
+            return result;
         }
 
         public (int priorLocation, bool existed) Remove(LazinatorTuple<TKey, TValue> keyAndValue)

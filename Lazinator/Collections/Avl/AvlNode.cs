@@ -54,8 +54,26 @@ namespace Lazinator.Collections.Avl
             {
                 Left?.RecalculateCount();
                 Right?.RecalculateCount();
-                Count = (Left?.Count ?? 0) + (Right?.Count ?? 0) + 1;
+                Count = LeftCount + RightCount + 1;
                 NodeVisitedDuringChange = false;
+            }
+        }
+
+        public int LeftCount => Left?.Count ?? 0;
+        public int RightCount => Right?.Count ?? 0;
+        public bool IsLeftNode => Parent != null && this == Parent._Left;
+        public bool IsRightNode => Parent != null && this == Parent._Right;
+        public int Index
+        {
+            get
+            {
+                if (Parent == null)
+                    return LeftCount;
+                if (IsLeftNode)
+                    return Parent.Index - RightCount - 1;
+                else if (IsRightNode)
+                    return Parent.Index + LeftCount + 1;
+                throw new Exception("Malformed AvlTree.");
             }
         }
 
