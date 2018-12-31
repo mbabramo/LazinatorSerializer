@@ -27,13 +27,26 @@ namespace Lazinator.Collections
             return ((Key, Value)).CompareTo((other.Key, other.Value));
         }
 
-        static CustomComparer<LazinatorTuple<T, U>> KeyOnlyComparer = null;
-        public static CustomComparer<LazinatorTuple<T, U>> GetKeyOnlyComparer()
+
+        static CustomComparer<LazinatorKeyValue<T, U>> KeyOnlyComparer = null;
+        public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyOnlyComparer()
         {
             if (KeyOnlyComparer == null)
-                return new CustomComparer<LazinatorTuple<T, U>>((t, u) => t.Item1.CompareTo(u.Item1));
+                return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key));
             return KeyOnlyComparer;
         }
+        // For the value-only comparer, we need to constraint the value type to icomparable.
+        static class ValueOnlyComparerContainer<T2, U2> where T2 : ILazinator, IComparable<T2> where U2 : ILazinator, IComparable<U2>
+        {
+            public static CustomComparer<LazinatorKeyValue<T, U2>> ValueOnlyComparer = null;
+        }
+        public static CustomComparer<LazinatorKeyValue<T, U2>> GetValueOnlyComparer<U2>() where U2 : ILazinator, IComparable<U2>
+        {
+            if (ValueOnlyComparerContainer<T, U2>.ValueOnlyComparer == null)
+                ValueOnlyComparerContainer<T, U2>.ValueOnlyComparer = new CustomComparer<LazinatorKeyValue<T, U2>>((t, u) => t.Value.CompareTo(u.Value));
+            return ValueOnlyComparerContainer<T, U2>.ValueOnlyComparer;
+        }
+
 
         public override bool Equals(object obj)
         {

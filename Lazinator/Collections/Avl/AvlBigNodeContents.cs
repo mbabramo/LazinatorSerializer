@@ -77,10 +77,29 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        //public (int location, bool exists) Find(TKey key)
-        //{
-
-        //}
+        /// <summary>
+        /// Find the first item containing the specified key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public (int location, bool exists) Find(TKey key)
+        {
+            var comparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
+            var result = Items.Find(new LazinatorKeyValue<TKey, TValue>(key, default), comparer);
+            if (result.exists)
+            {
+                bool matches = true;
+                do
+                { // make sure we have the first key match
+                    result.location--;
+                    matches = Items[result.location].Key.Equals(key);
+                    if (!matches)
+                        result.location++;
+                }
+                while (matches && result.location > 0);
+            }
+            return result;
+        }
 
         public (int priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
