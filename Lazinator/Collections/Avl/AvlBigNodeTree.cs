@@ -77,6 +77,19 @@ namespace Lazinator.Collections.Avl
             }
         }
 
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) GetNodeByKey(TKey key)
+        {
+            if (UnderlyingTree.Root == null)
+                return (null, -1);
+            LazinatorKeyValue<TKey, TValue> keyWithDefaultValue = new LazinatorKeyValue<TKey, TValue>(key, default);
+            var node = UnderlyingTree.SearchMatchOrNextOrLast(keyWithDefaultValue);
+            var contents = GetNodeContents(node);
+            var result = contents.Find(key);
+            if (result.exists == false)
+                return (node, contents.SelfItemsCount); // item must be after all values
+            return (node, result.location);
+        }
+
         //public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) Find(long itemIndex)
         //{
 
