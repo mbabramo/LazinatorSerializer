@@ -108,7 +108,7 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public LazinatorKeyValue<TKey, TValue> GetLastItem()
+        public LazinatorKeyValue<TKey, TValue>? GetLastItem()
         {
             int itemsCount = (int) SelfItemsCount;
             if (itemsCount == 0)
@@ -135,7 +135,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         private void UpdateNodeKey()
         {
-            _CorrespondingNode.Key = GetLastItem();
+            _CorrespondingNode.Key = GetLastItem().Value;
         }
     }
 }

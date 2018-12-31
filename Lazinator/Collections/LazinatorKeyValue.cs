@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lazinator.Buffers;
 using Lazinator.Core;
 using Lazinator.Support;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorKeyValue<T, U> : ILazinatorKeyValue<T, U>, IComparable<LazinatorKeyValue<T, U>> where T : ILazinator, IComparable<T> where U : ILazinator
+    public partial struct LazinatorKeyValue<T, U> : ILazinatorKeyValue<T, U>, IComparable<LazinatorKeyValue<T, U>> where T : ILazinator, IComparable<T> where U : ILazinator
     {
-        public LazinatorKeyValue()
-        {
-        }
 
-        public LazinatorKeyValue(T key, U value)
+        public LazinatorKeyValue(T key, U value) : this()
         {
             Key = key;
             Value = value;
@@ -27,8 +25,8 @@ namespace Lazinator.Collections
             return ((Key, Value)).CompareTo((other.Key, other.Value));
         }
 
-
         static CustomComparer<LazinatorKeyValue<T, U>> KeyOnlyComparer = null;
+
         public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyOnlyComparer()
         {
             if (KeyOnlyComparer == null)
@@ -38,10 +36,11 @@ namespace Lazinator.Collections
 
         public override bool Equals(object obj)
         {
-            LazinatorKeyValue<T, U> other = obj as LazinatorKeyValue<T, U>;
-            if (other == null)
-                return false;
-            return EqualityComparer<T>.Default.Equals(Key, other.Key) && EqualityComparer<U>.Default.Equals(Value, other.Value);
+            if (obj is LazinatorKeyValue<T, U> otherKeyValue)
+            {
+                return EqualityComparer<T>.Default.Equals(Key, otherKeyValue.Key) && EqualityComparer<U>.Default.Equals(Value, otherKeyValue.Value);
+            }
+            return false;
         }
 
         public override int GetHashCode()
@@ -56,5 +55,6 @@ namespace Lazinator.Collections
                 return hash;
             }
         }
+        
     }
 }
