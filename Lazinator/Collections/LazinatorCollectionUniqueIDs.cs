@@ -76,5 +76,7 @@
         BigListInteriorContainer,
         BigList,
         BigListTree,
+        AvlBigNodeTree,
+        AvlBigNodeContents,
     }
 }
