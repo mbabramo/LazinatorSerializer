@@ -54,12 +54,12 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new AvlNodeValueEnumerator<T>(UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<WByte, T>);
+            return new AvlNodeValueEnumerator<T>(UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<Placeholder, T>);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new AvlNodeValueEnumerator<T>(UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<WByte, T>);
+            return new AvlNodeValueEnumerator<T>(UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<Placeholder, T>);
         }
 
         public int IndexOf(T item)

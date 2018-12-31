@@ -7,9 +7,9 @@ namespace Lazinator.Collections.Avl
 {
     public class AvlNodeValueEnumerator<TValue> : IEnumerator<TValue> where TValue : ILazinator
     {
-        private AvlNodeEnumerator<WByte, TValue> UnderlyingEnumerator;
+        private AvlNodeEnumerator<Placeholder, TValue> UnderlyingEnumerator;
 
-        public AvlNodeValueEnumerator(AvlNodeEnumerator<WByte, TValue> underlyingEnumerator)
+        public AvlNodeValueEnumerator(AvlNodeEnumerator<Placeholder, TValue> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }
