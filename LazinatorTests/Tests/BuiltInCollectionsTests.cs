@@ -10,7 +10,6 @@ using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using Lazinator.Collections.BigList;
 using System.Diagnostics;
 
 namespace LazinatorTests.Tests
@@ -797,80 +796,6 @@ namespace LazinatorTests.Tests
             List<int> sortedResult = s.Select(x => x.WrappedValue).ToList();
             basic.OrderBy(x => x).SequenceEqual(sortedResult).Should().BeTrue();
         }
-
-        [Fact]
-        public void BigList_AddingAtEnd_AppendOnly() => BigList_AddingAtEnd(true);
-        [Fact]
-        public void BigList_AddingAtEnd_NotAppendOnly() => BigList_AddingAtEnd(false);
-
-        private void BigList_AddingAtEnd(bool useAppendOnlyList)
-        {
-            BigList<WInt> l = new BigList<WInt>(3, useAppendOnlyList);
-            const int numItems = 30;
-            for (int i = 0; i < numItems; i++)
-            {
-                l.Add(i);
-                // DEBUG
-                Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
-                Debug.WriteLine("");
-            }
-            var result = l.Select(x => x.WrappedValue).ToList();
-            result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
-        }
-
-        [Fact]
-        public void BigList_AddingAtBeginning()
-        {
-            BigList<WInt> l = new BigList<WInt>(3);
-            for (int i = 0; i < 100; i++)
-                l.Insert(0, i);
-            var result = l.Select(x => x.WrappedValue).ToList();
-            result.Reverse();
-            result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();
-        }
-
-        [Fact]
-        public void BigList_RandomInsertionsAndDeletions()
-        {
-            bool trace = false;
-            Random r = new Random(0);
-            List<int> o = new List<int>();
-            BigList<WInt> l = new BigList<WInt>(3);
-            const int totalChanges = 1000;
-            const int switchToMoreDeletionsAfter = 400; // we'll start mostly with insertions, and then switch to mostly deletions, so that we can delete the entire tree.
-            for (int i = 0; i < totalChanges; i++)
-            {
-                if (o.Count == 0 || r.Next(0, 100) < (i > switchToMoreDeletionsAfter ? 30 : 70))
-                {
-                    int j;
-                    if (r.Next(0, 10) == 0)
-                        j = 0;
-                    else if (r.Next(0, 10) == 0 && o.Count() != 0)
-                        j = o.Count() - 1;
-                    else
-                        j = r.Next(0, o.Count()); // insert at a valid location
-                    int k = r.Next(0, 999999);
-                    if (trace)
-                        Debug.WriteLine($"Inserting {k} at index {j}");
-                    o.Insert(j, k);
-                    l.Insert(j, k);
-                }
-                else
-                {
-                    int j = r.Next(0, o.Count() - 1); // delete at valid location
-                    if (trace)
-                        Debug.WriteLine($"Deleting at index {j}");
-                    o.RemoveAt(j);
-                    l.RemoveAt(j);
-                }
-                if (trace)
-                {
-                    Debug.WriteLine(l.UnderlyingTree.ToTreeString(true));
-                    Debug.WriteLine("");
-                }
-                var result = l.Select(x => x.WrappedValue).ToList();
-                result.SequenceEqual(o).Should().BeTrue();
-            }
-        }
+        
     }
 }
