@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlList<T> : IAvlList<T>, IList<T> where T : ILazinator
+    public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorCountableListable<T> where T : ILazinator
     { 
         public AvlList()
         {
@@ -107,5 +107,49 @@ namespace Lazinator.Collections.Avl
         {
             Insert(index, item);
         }
+        #region ILazinatorCountableListableFactory 
+
+        public long LongCount => Count;
+
+        public void InsertAt(long index, T item)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            Insert((int)index, item);
+        }
+
+        public void RemoveAt(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            RemoveAt((int)index);
+        }
+
+        public IEnumerable<T> EnumerateFrom(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            if (Count == 0)
+                yield break;
+            foreach (var node in UnderlyingTree.Skip((int)index))
+                yield return node.Value;
+        }
+
+        public T GetAt(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            return this[(int)index];
+        }
+
+        public void SetAt(long index, T value)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            this[(int)index] = value;
+        }
+
+        #endregion
+
     }
 }

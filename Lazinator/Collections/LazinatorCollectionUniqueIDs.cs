@@ -88,5 +88,6 @@
         ILazinatorKeyable,
         ILazinatorOrderedKeyable,
         ILazinatorCountableListable,
+        ILazinatorTreeable,
     }
 }
