@@ -80,5 +80,10 @@
         AvlBigNodeContents,
         SortedLazinatorList,
         LazinatorKeyValue,
+        LazinatorCountable,
+        LazinatorIndexable,
+        LazinatorListable,
+        ILazinatorSortable,
+        LazinatorBranchable,
     }
 }
