@@ -85,6 +85,8 @@ namespace Lazinator.Collections.Avl
             var keyValue = Items[index];
             keyValue.Value = value;
             Items[index] = keyValue;
+            if (index == SelfItemsCount - 1)
+                UpdateNodeKey();
         }
 
         public bool Contains(LazinatorKeyValue<TKey, TValue> keyAndValue)
@@ -127,6 +129,8 @@ namespace Lazinator.Collections.Avl
         {
             (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
             SelfItemsCount = Items.Count;
+            if (result.priorLocation == SelfItemsCount && SelfItemsCount > 0)
+                UpdateNodeKey();
             return result;
         }
 
@@ -134,6 +138,8 @@ namespace Lazinator.Collections.Avl
         {
             Items.RemoveAt(index);
             SelfItemsCount = Items.Count;
+            if (index == SelfItemsCount && SelfItemsCount > 0)
+                UpdateNodeKey();
         }
 
         public LazinatorKeyValue<TKey, TValue>? GetLastItem()

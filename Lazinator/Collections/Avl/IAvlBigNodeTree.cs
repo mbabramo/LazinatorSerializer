@@ -10,5 +10,6 @@ namespace Lazinator.Collections.Avl
     {
         AvlTree<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> UnderlyingTree { get; set; }
         bool AllowMultipleValuesPerKey { get; set; }
+        int MaxItemsPerNode { get; set; }
     }
 }

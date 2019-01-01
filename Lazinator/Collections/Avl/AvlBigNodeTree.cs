@@ -8,9 +8,11 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlBigNodeTree<TKey, TValue> : IEnumerable<LazinatorTuple<TKey, TValue>>, IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public AvlBigNodeTree()
+        public AvlBigNodeTree(int maxItemsPerNode, bool allowMultipleValuesPerKey)
         {
             UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
+            MaxItemsPerNode = maxItemsPerNode;
+            AllowMultipleValuesPerKey = allowMultipleValuesPerKey;
         }
 
         public bool Contains(TKey key)
@@ -43,20 +45,32 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public void Insert(TKey key, TValue value, int? itemIndex = null)
+        public void Insert(TKey key, TValue value, long? itemIndex = null)
         {
-            if (itemIndex == null)
+            LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
+            AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node;
+            int indexInNode;
+            if (itemIndex is long itemIndexNonNull)
             {
-                LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-                var result = GetNodeByKeyAndValue(keyValue);
-                var contents = GetNodeContents(result.node);
-                contents.InsertAt(result.indexInNode, keyValue);
+                var result = GetNodeByItemIndex(itemIndexNonNull);
+                if (result.node == null)
+                    throw new ArgumentOutOfRangeException();
+                node = result.node;
+                indexInNode = result.indexInNode;
             }
             else
             {
-                throw new NotImplementedException();
+                var result = GetNodeByKeyAndValue(keyValue);
+                node = result.node;
+                indexInNode = result.indexInNode;
             }
-            // DEBUG -- must implement splitting
+            var contents = GetNodeContents(node);
+            contents.InsertAt(indexInNode, keyValue);
+            if (contents.SelfItemsCount > MaxItemsPerNode)
+            {
+                var toInsert = contents.SplitOffFirstHalf();
+                UnderlyingTree.Insert(toInsert.node.GetLastItem().Value, toInsert.node, toInsert.nodeIndex);
+            }
         }
 
         /// <summary>
@@ -72,6 +86,8 @@ namespace Lazinator.Collections.Avl
             {
                 var contents = GetNodeContents(result.node);
                 contents.RemoveAt(result.indexInNode);
+                if (contents.SelfItemsCount == 0)
+                    UnderlyingTree.Delete(result.node.Key);
                 return true;
             }
             return false;
@@ -85,6 +101,8 @@ namespace Lazinator.Collections.Avl
             {
                 var contents = GetNodeContents(result.node);
                 contents.RemoveAt(result.indexInNode);
+                if (contents.SelfItemsCount == 0)
+                    UnderlyingTree.Delete(result.node.Key);
                 return true;
             }
             return false;
@@ -207,7 +225,5 @@ namespace Lazinator.Collections.Avl
         }
 
         public int Count => 0;
-
-        public bool AllowMultipleValuesPerKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
     }
