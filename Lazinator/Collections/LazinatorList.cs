@@ -487,5 +487,46 @@ namespace Lazinator.Collections
             }
         }
 
+        #region ILazinatorCountableListableFactory 
+
+        public long LongCount => Count;
+
+        public void InsertAt(long index, T item)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            Insert((int) index, item);
+        }
+
+        public void RemoveAt(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            RemoveAt((int)index);
+        }
+
+        public IEnumerable<T> EnumerateFrom(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            foreach (T t in this.Skip((int)index))
+                yield return t;
+        }
+
+        public T GetAt(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            return this[(int) index];
+        }
+
+        public void SetAt(long index, T value)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            this[(int)index] = value;
+        }
+
+        #endregion
     }
 }
