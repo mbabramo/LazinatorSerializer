@@ -9,6 +9,7 @@ namespace Lazinator.Collections
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IILazinatorSortable)]
     public interface ILazinatorSortable<T> : ILazinatorListable<T>, ILazinatorIndexable<T>, ILazinatorCountable where T : ILazinator, IComparable<T>
     {
+        bool AllowDuplicates { get; set; }
         void Insert(T item);
         bool Remove(T item);
     }

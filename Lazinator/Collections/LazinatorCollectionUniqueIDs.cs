@@ -85,5 +85,8 @@
         ILazinatorListable,
         IILazinatorSortable,
         ILazinatorBranchable,
+        ILazinatorKeyable,
+        ILazinatorOrderedKeyable,
+        ILazinatorCountableListable,
     }
 }
