@@ -39,6 +39,8 @@ namespace Lazinator.Collections.Avl
             }
         }
 
+        public long TotalItemsCount => LeftItemsCount + SelfItemsCount + RightItemsCount;
+
         public void SetCorrespondingNode(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
         {
             _CorrespondingNode = correspondingNode;

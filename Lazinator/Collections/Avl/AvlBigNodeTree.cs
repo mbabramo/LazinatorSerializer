@@ -6,13 +6,18 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlBigNodeTree<TKey, TValue> : IEnumerable<LazinatorTuple<TKey, TValue>>, IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlBigNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlBigNodeTree(int maxItemsPerNode, bool allowMultipleValuesPerKey)
         {
             UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
             MaxItemsPerNode = maxItemsPerNode;
             AllowMultipleValuesPerKey = allowMultipleValuesPerKey;
+        }
+
+        public AvlBigNodeTree()
+        {
+
         }
 
         public bool Contains(TKey key)
@@ -108,7 +113,7 @@ namespace Lazinator.Collections.Avl
             return false;
         }
 
-        private AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
+        public AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
         {
             var v = node.Value;
             v.SetCorrespondingNode(node);
@@ -194,36 +199,26 @@ namespace Lazinator.Collections.Avl
             return (node, result.exists ? result.location : contents.SelfItemsCount, result.exists);
         }
 
-        //public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) Find(long itemIndex)
-        //{
-
-        //}
-
-        //public AvlNode<TKey, TValue> this[int i]
-        //{
-        //    get
-        //    {
-        //        ConfirmInRange(i);
-        //        return default; // Skip(i).First();
-        //    }
-        //}
-
-        private void ConfirmInRange(int i)
+        public IEnumerator<LazinatorKeyValue<TKey, TValue>> GetEnumerator()
         {
-            if (i < 0 || i >= Count)
-                throw new ArgumentOutOfRangeException();
-        }
-
-        public IEnumerator<LazinatorTuple<TKey, TValue>> GetEnumerator()
-        {
-            throw new NotImplementedException();
+            return new AvlBigNodeTreeEnumerator<TKey, TValue>(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new AvlBigNodeTreeEnumerator<TKey, TValue>(this);
         }
 
-        public int Count => 0;
+        public long ItemsCount
+        {
+            get
+            {
+                var root = UnderlyingTree.Root;
+                if (root == null)
+                    return 0;
+                var contents = GetNodeContents(root);
+                return contents.TotalItemsCount;
+            }
+        }
     }
-    }
+}
