@@ -7,7 +7,7 @@ using System.Text;
 namespace Lazinator.Collections
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorCountableListable)]
-    public interface ILazinatorCountableListable<T> : ILazinatorCountable, ILazinatorListable<T> where T : ILazinator
+    public interface ILazinatorCountableListable<T> : ILazinatorCountable, ILazinatorListable<T>, IList<T> where T : ILazinator
     {
     }
 }

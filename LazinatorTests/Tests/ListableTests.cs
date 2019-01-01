@@ -56,9 +56,75 @@ namespace LazinatorTests.Tests
             result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
         }
 
+
         [Theory]
         [ClassData(typeof(ListFactoryTestData))]
-        public void Listable_RandomInsertionsAndDeletions(ILazinatorCountableListableFactory<WInt> factory)
+        public void Listable_InsertAndRemoveWork(ILazinatorCountableListableFactory<WInt> factory)
+        {
+            (int numModifications, double removalProbability)[] phases = new (int numModifications, double removalProbability)[] { (2, 0.25), (4, 0.6), (8, 0.25), (16, 0.6), (32, 0.25), (64, 0.6), };
+            Random r = new Random(0);
+            const int numRepetitions = 10;
+            for (int repetition = 0; repetition < numRepetitions; repetition++)
+            {
+                int i = 0;
+                List<int> list = new List<int>();
+                ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
+                foreach (var phase in phases)
+                {
+                    for (int m = 0; m < phase.numModifications; m++)
+                    {
+                        ListModificationInstruction instruction = new ListModificationInstruction(r, list, i++, phase.removalProbability);
+                        instruction.Execute(list);
+                        instruction.Execute(l);
+                        if (!list.SequenceEqual(l.Select(x => x.WrappedValue)))
+                            throw new Exception("Match failure.");
+                    }
+                }
+            }
+        }
+
+        class ListModificationInstruction
+        {
+            public bool Remove;
+            public int Index;
+            public int ValueToAdd;
+
+            public ListModificationInstruction(Random r, IList<int> list, int valueToAdd, double removalProbability)
+            {
+                if (!list.Any())
+                {
+                    Remove = false;
+                    Index = 0;
+                }
+                else
+                {
+                    Remove = r.NextDouble() < removalProbability;
+                    Index = r.Next(list.Count());
+                    if (!Remove)
+                        ValueToAdd = valueToAdd;
+                }
+            }
+
+            public void Execute(IList<int> list)
+            {
+                if (Remove)
+                    list.RemoveAt(Index);
+                else
+                    list.Insert(Index, ValueToAdd);
+            }
+
+            public void Execute(IList<WInt> list)
+            {
+                if (Remove)
+                    list.RemoveAt(Index);
+                else
+                    list.Insert(Index, ValueToAdd);
+            }
+        }
+
+        [Theory]
+        [ClassData(typeof(ListFactoryTestData))]
+        public void Listable_LargeNumberInsertionsAndDeletions(ILazinatorCountableListableFactory<WInt> factory)
         {
             bool trace = false;
             Random r = new Random(0);

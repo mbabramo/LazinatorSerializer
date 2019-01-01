@@ -56,13 +56,13 @@ namespace Lazinator.Collections.Avl
         {
             Items = new SortedLazinatorList<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = false };
             foreach (var item in items)
-                Items.Insert(item, comparer);
+                Items.InsertSorted(item, comparer);
             SelfItemsCount = Items.Count;
         }
 
         public (int location, bool rejectedAsDuplicate) Insert(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
-            var result = Items.Insert(keyAndValue);
+            var result = Items.InsertSorted(keyAndValue);
             SelfItemsCount = Items.Count;
             return result;
         }
@@ -93,13 +93,13 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
-            var result = Items.Find(keyAndValue);
+            var result = Items.FindSorted(keyAndValue);
             return result.exists;
         }
 
         public (int location, bool exists) Find(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
-            var result = Items.Find(keyAndValue);
+            var result = Items.FindSorted(keyAndValue);
             return result;
         }
 
@@ -111,7 +111,7 @@ namespace Lazinator.Collections.Avl
         public (int location, bool exists) Find(TKey key)
         {
             var comparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
-            var result = Items.Find(new LazinatorKeyValue<TKey, TValue>(key, default), comparer);
+            var result = Items.FindSorted(new LazinatorKeyValue<TKey, TValue>(key, default), comparer);
             if (result.exists)
             {
                 bool matches = true;
