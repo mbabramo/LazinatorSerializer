@@ -92,7 +92,7 @@ namespace Lazinator.Collections.Avl
                 var contents = GetNodeContents(result.node);
                 contents.RemoveAt(result.indexInNode);
                 if (contents.SelfItemsCount == 0)
-                    UnderlyingTree.Delete(result.node.Key);
+                    UnderlyingTree.Remove(result.node.Key);
                 return true;
             }
             return false;
@@ -107,7 +107,7 @@ namespace Lazinator.Collections.Avl
                 var contents = GetNodeContents(result.node);
                 contents.RemoveAt(result.indexInNode);
                 if (contents.SelfItemsCount == 0)
-                    UnderlyingTree.Delete(result.node.Key);
+                    UnderlyingTree.Remove(result.node.Key);
                 return true;
             }
             return false;

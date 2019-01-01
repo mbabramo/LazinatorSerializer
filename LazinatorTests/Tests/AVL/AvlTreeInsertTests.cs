@@ -38,7 +38,7 @@ namespace LazinatorTests.AVL
                 var deleteItems = Enumerable.Range(itemsToInsert + 1, itemsToInsertThenDelete).ToList();
                 Shuffle(deleteItems);
                 foreach (int i in deleteItems)
-                    tree.Delete(i).Should().BeTrue();
+                    tree.Remove(i).Should().BeTrue();
                 tree.Root.Count.Should().Be(itemsToInsert);
             }
         }

@@ -15,8 +15,8 @@ namespace Lazinator.Collections.Avl
 
         public T this[int index]
         {
-            get => UnderlyingTree.NodeAtIndex(index).Value;
-            set => UnderlyingTree.NodeAtIndex(index).Value = value;
+            get => GetAt(index);
+            set => SetAt(index, value);
         }
 
         public long Count => UnderlyingTree.Count;
@@ -27,7 +27,7 @@ namespace Lazinator.Collections.Avl
 
         public void Add(T item)
         {
-            Insert(Count, item);
+            InsertAt(Count, item);
         }
 
         public void Clear()
@@ -84,45 +84,37 @@ namespace Lazinator.Collections.Avl
             return -1;
         }
 
-        public void Insert(long index, T item)
-        {
-            UnderlyingTree.Insert(new Placeholder(), item, index);
-        }
-
         public bool Remove(T item)
         {
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree.Delete(new Placeholder(), index);
+            UnderlyingTree.Remove(new Placeholder(), index);
             return true;
         }
 
         public void RemoveAt(int index)
         {
-            UnderlyingTree.Delete(new Placeholder(), index);
+            RemoveAt((long)index);
         }
 
         public void Insert(int index, T item)
         {
-            Insert(index, item);
+            InsertAt((long) index, item);
         }
+
         #region ILazinatorCountableListableFactory 
 
         public long LongCount => Count;
 
         public void InsertAt(long index, T item)
         {
-            if (index > Count || index < 0)
-                throw new ArgumentException();
-            Insert((int)index, item);
+            UnderlyingTree.Insert(new Placeholder(), item, index);
         }
 
         public void RemoveAt(long index)
         {
-            if (index > Count || index < 0)
-                throw new ArgumentException();
-            RemoveAt((int)index);
+            UnderlyingTree.Remove(new Placeholder(), index);
         }
 
         public IEnumerable<T> EnumerateFrom(long index)
@@ -131,22 +123,18 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentException();
             if (Count == 0)
                 yield break;
-            foreach (var node in UnderlyingTree.Skip((int)index))
+            foreach (var node in UnderlyingTree.Skip(index))
                 yield return node.Value;
         }
 
         public T GetAt(long index)
         {
-            if (index > Count || index < 0)
-                throw new ArgumentException();
-            return this[(int)index];
+            return UnderlyingTree.NodeAtIndex(index).Value;
         }
 
         public void SetAt(long index, T value)
         {
-            if (index > Count || index < 0)
-                throw new ArgumentException();
-            this[(int)index] = value;
+            UnderlyingTree.NodeAtIndex(index).Value = value;
         }
 
         #endregion

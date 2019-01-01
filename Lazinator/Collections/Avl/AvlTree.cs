@@ -12,13 +12,13 @@ namespace Lazinator.Collections.Avl
 		{
 		}
 
-        public AvlNode<TKey, TValue> NodeAtIndex(int i)
+        public AvlNode<TKey, TValue> NodeAtIndex(long i)
         {
             ConfirmInRange(i);
             return Skip(i).First();
         }
 
-        private void ConfirmInRange(int i)
+        private void ConfirmInRange(long i)
         {
             if (i < 0 || i >= Count)
                 throw new ArgumentOutOfRangeException();
@@ -462,7 +462,7 @@ namespace Lazinator.Collections.Avl
 			return rightLeft;
 		}
 
-        public bool Delete(TKey key, int? nodeIndex = null)
+        public bool Remove(TKey key, long? nodeIndex = null)
         {
             bool returnVal = DeleteHelper(key, nodeIndex);
             if (Root != null)

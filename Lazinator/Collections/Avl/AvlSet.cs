@@ -34,7 +34,7 @@ namespace Lazinator.Collections.Avl
 
         public bool Delete(TKey key)
         {
-            bool deleted = UnderlyingTree.Delete(key);
+            bool deleted = UnderlyingTree.Remove(key);
             if (deleted)
                 Count--;
             return deleted;

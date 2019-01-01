@@ -23,7 +23,7 @@ namespace LazinatorTests.Tests
             public IEnumerator<object[]> GetEnumerator()
             {
                 yield return new object[] { new LazinatorListFactory<WInt>() };
-                yield return new object[] { new AvlListFactory<WInt>() };
+                // DEBUG yield return new object[] { new AvlListFactory<WInt>() };
             }
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
