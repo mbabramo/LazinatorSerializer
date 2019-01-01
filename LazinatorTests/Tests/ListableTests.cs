@@ -23,7 +23,7 @@ namespace LazinatorTests.Tests
             public IEnumerator<object[]> GetEnumerator()
             {
                 yield return new object[] { new LazinatorListFactory<WInt>() };
-                // DEBUG yield return new object[] { new AvlListFactory<WInt>() };
+                yield return new object[] { new AvlListFactory<WInt>() };
             }
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -53,7 +53,7 @@ namespace LazinatorTests.Tests
                 l.InsertAt(0, i);
             var result = l.Select(x => x.WrappedValue).ToList();
             result.Reverse();
-            result.SequenceEqual(Enumerable.Range(0, 100)).Should().BeTrue();
+            result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
         }
 
         [Theory]
