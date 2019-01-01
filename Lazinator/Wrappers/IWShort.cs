@@ -6,7 +6,7 @@ namespace Lazinator.Wrappers
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WShort, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IWShort, -1)]
     interface IWShort : IW<short>
     {
     }

@@ -4,7 +4,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.BigList
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.BigListLeafContainer)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IBigListLeafContainer)]
     public interface IBigListLeafContainer<T> where T : ILazinator
     {
         LazinatorList<T> Items { get; set; }

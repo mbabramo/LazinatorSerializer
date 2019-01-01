@@ -4,7 +4,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.AvlMultiset)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlMultiset)]
     interface IAvlMultiset<T> where T : ILazinator
     {
         AvlSet<LazinatorTuple<T, WInt>> UnderlyingSet { get; set; }

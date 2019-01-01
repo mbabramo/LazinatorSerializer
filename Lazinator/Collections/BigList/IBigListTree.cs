@@ -3,7 +3,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections.BigList
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.BigListTree)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IBigListTree)]
     public interface IBigListTree<T> where T : ILazinator
     {
     }

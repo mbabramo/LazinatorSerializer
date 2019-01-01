@@ -30,7 +30,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanGetTypeFromGenericTypeIDs_MaxOneTypeParameter()
         {
-            List<int> IDs = new List<int>() { (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WInt };
+            List<int> IDs = new List<int>() { (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWInt };
             DeserializationFactory deserializationFactory = DeserializationFactory.Instance;
             (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnGenericIDType(new LazinatorGenericIDType(IDs));
             Type expectedType = typeof(GenericFromBase<GenericFromBase<WInt>>);
@@ -42,7 +42,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanGetTypeFromGenericTypeIDs_MultipleTypeParameters()
         {
-            List<int> IDs = new List<int>() { (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.LazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WInt, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WLong, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.WByte };
+            List<int> IDs = new List<int>() { (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.ILazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWInt, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWLong, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWByte };
             DeserializationFactory deserializationFactory = DeserializationFactory.Instance;
             (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnGenericIDType(new LazinatorGenericIDType(IDs));
             Type expectedType = typeof(LazinatorTriple<GenericFromBase<WInt>, WLong, GenericFromBase<GenericFromBase<WByte>>>);

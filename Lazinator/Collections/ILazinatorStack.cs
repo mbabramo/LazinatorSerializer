@@ -3,7 +3,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorStack)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorStack)]
     internal interface ILazinatorStack<T> where T : ILazinator
     {
     }

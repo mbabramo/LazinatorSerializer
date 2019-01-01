@@ -3,7 +3,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.DictionaryBucket)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IDictionaryBucket)]
     interface IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         bool Initialized { get; set; }

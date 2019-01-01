@@ -3,7 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WDecimalArray, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IWDecimalArray, -1)]
     interface IWDecimalArray : IW<decimal[]>
     {
     }

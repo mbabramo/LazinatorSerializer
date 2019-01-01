@@ -7,7 +7,7 @@ namespace Lazinator.Wrappers
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WGuid, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IWGuid, -1)]
     interface IWGuid : IW<Guid>
     {
     }

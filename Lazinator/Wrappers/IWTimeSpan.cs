@@ -7,7 +7,7 @@ namespace Lazinator.Wrappers
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WTimeSpan, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IWTimeSpan, -1)]
     interface IWTimeSpan : IW<TimeSpan>
     {
     }

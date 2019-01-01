@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.LazinatorBranchable)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorBranchable)]
     public interface ILazinatorBranchable<T> where T : ILazinator, ILazinatorBranchable<T>
     {
         short MaxBranches { get; }

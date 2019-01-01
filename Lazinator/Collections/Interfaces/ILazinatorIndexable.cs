@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.LazinatorIndexable)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorIndexable)]
     public interface ILazinatorIndexable<T> where T : ILazinator
     {
         T GetAt(long index);

@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WFloat, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IWFloat, -1)]
     interface IWFloat : IW<float>
     {
     }

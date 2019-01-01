@@ -5,7 +5,7 @@ using System;
 
 namespace Lazinator.Collections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.AvlSet)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlSet)]
     interface IAvlSet<TKey> where TKey : ILazinator, IComparable<TKey>
     {
         int Count { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorFastReadListInt32, -1, false)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorFastReadListInt32, -1, false)]
     internal interface ILazinatorFastReadListInt32
     {
     }

@@ -4,7 +4,7 @@ using System;
 
 namespace Lazinator.Collections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.AvlBigNodeContents)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlBigNodeContents)]
     public interface IAvlBigNodeContents<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator

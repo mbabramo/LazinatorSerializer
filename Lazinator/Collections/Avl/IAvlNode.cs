@@ -4,7 +4,7 @@ using System;
 
 namespace Lazinator.Collections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.AvlNode)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlNode)]
     interface IAvlNode<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         AvlNode<TKey, TValue> Left { get; set; }

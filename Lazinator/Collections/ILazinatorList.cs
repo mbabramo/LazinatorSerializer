@@ -12,13 +12,13 @@ namespace Lazinator.Collections
         void RemoveAt(int index);
     }
 
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorList)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorList)]
     [UnofficiallyIncorporateInterface("Lazinator.Collections.ILazinatorListUnofficial", "protected")]
     public interface ILazinatorList<T> where T : ILazinator
     {
     }
 
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorListUnofficial)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorListUnofficial)]
     public interface ILazinatorListUnofficial
     {
         [PlaceholderMemory("WriteMainList")]

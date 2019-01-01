@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    [NonexclusiveLazinator((int) LazinatorCollectionUniqueIDs.LazinatorCountable)]
+    [NonexclusiveLazinator((int) LazinatorCollectionUniqueIDs.ILazinatorCountable)]
     public interface ILazinatorCountable: ILazinator
     {
         long LongCount { get; }

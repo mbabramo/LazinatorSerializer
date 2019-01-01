@@ -4,7 +4,7 @@ using System;
 
 namespace Lazinator.Spans
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorBitArrayUnofficial)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorBitArrayUnofficial)]
     internal interface ILazinatorBitArrayUnofficial
     {
         Memory<int> IntStorage { get; set; }

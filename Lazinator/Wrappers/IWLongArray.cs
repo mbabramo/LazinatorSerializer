@@ -3,7 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.WLongArray, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IWLongArray, -1)]
     interface IWLongArray : IW<long[]>
     {
     }

@@ -3,7 +3,7 @@ using Lazinator.Attributes;
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorArray)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorArray)]
     public interface ILazinatorArray<T> where T : ILazinator
     {
     }

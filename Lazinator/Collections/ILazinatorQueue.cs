@@ -4,7 +4,7 @@ using Lazinator.Collections.Avl;
 
 namespace Lazinator.Collections
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.LazinatorQueue)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorQueue)]
     interface ILazinatorQueue<T> where T : ILazinator
     {
         LazinatorList<T> UnderlyingList { get; set; }
