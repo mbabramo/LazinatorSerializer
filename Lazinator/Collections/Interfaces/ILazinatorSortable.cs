@@ -7,7 +7,7 @@ using System.Text;
 namespace Lazinator.Collections
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IILazinatorSortable)]
-    public interface ILazinatorSortable<T> : ILazinatorListable<T>, ILazinatorIndexable<T>, ILazinatorCountable where T : ILazinator, IComparable<T>
+    public interface ILazinatorSortable<T> : ILazinatorCountableListable<T> where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
         (int location, bool rejectedAsDuplicate) InsertSorted(T item);

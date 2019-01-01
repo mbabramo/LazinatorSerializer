@@ -140,6 +140,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorKeyValue<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(AvlList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlSortedList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlSet<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlMultiset<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);

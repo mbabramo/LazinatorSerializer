@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T>, ILazinatorSortable<T> where T : ILazinator
+    public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
         public (int location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer = null)
         {

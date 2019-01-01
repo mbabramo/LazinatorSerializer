@@ -89,5 +89,6 @@
         ILazinatorOrderedKeyable,
         ILazinatorCountableListable,
         ILazinatorTreeable,
+        IAvlSortedList,
     }
 }
