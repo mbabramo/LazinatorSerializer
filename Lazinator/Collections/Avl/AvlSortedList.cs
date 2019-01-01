@@ -9,150 +9,141 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlSortedList<T> : IAvlSortedList<T>, IList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
-        public T this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public AvlSortedList()
+        {
+            // DEBUG -- preferable not to create data in constructors. Change this throughout
+            UnderlyingTree = new AvlTree<T, Placeholder>();
+        }
 
-        public AvlTree<Placeholder, T> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public T this[int index]
+        {
+            get => GetAt(index);
+            set => SetAt(index, value);
+        }
 
-        public long LongCount => throw new NotImplementedException();
+        public long Count => UnderlyingTree.Count;
 
-        public bool HasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool DescendantHasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool DescendantIsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public LazinatorMemory LazinatorMemoryStorage { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsReadOnly => false;
 
-        public IncludeChildrenMode OriginalIncludeChildrenMode => throw new NotImplementedException();
-
-        public bool IsStruct => throw new NotImplementedException();
-
-        public bool NonBinaryHash32 => throw new NotImplementedException();
-
-        public LazinatorParentsCollection LazinatorParents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int LazinatorObjectVersion { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public int Count => throw new NotImplementedException();
-
-        public bool IsReadOnly => throw new NotImplementedException();
-
-        AvlTree<T, Placeholder> IAvlSortedList<T>.UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        int ICollection<T>.Count => (int)Count;
 
         public void Add(T item)
         {
-            throw new NotImplementedException();
-        }
-
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
-        {
-            throw new NotImplementedException();
+            InsertAt(Count, item);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
-        }
-
-        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
-        {
-            throw new NotImplementedException();
+            UnderlyingTree = new AvlTree<T, Placeholder>();
         }
 
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            return IndexOf(item) != -1;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
-        }
-
-        public void DeserializeLazinator(LazinatorMemory serialized)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> EnumerateFrom(long index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
-        {
-            throw new NotImplementedException();
-        }
-
-        public (int location, bool exists) FindSorted(T target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FreeInMemoryObjects()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T GetAt(long index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetByteLength()
-        {
-            throw new NotImplementedException();
+            if (array == null)
+                throw new ArgumentNullException();
+            if (arrayIndex < 0)
+                throw new ArgumentOutOfRangeException();
+            if (UnderlyingTree.Count > array.Length - arrayIndex + 1)
+                throw new ArgumentException();
+            foreach (var item in this)
+            {
+                array[arrayIndex++] = item;
+            }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<T, Placeholder>;
+            return new AvlNodeKeyEnumerator<T>(underlyingEnumerator);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<T, Placeholder>;
+            return new AvlNodeKeyEnumerator<T>(underlyingEnumerator);
         }
 
         public int IndexOf(T item)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(int index, T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertAt(long index, T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public (int location, bool rejectedAsDuplicate) InsertSorted(T item)
-        {
-            throw new NotImplementedException();
+            int i = 0;
+            foreach (T existingItem in this)
+            {
+                if (item == null)
+                {
+                    if (existingItem == null)
+                        return i;
+                }
+                else
+                {
+                    if (item.Equals(existingItem))
+                        return i;
+                }
+                i++;
+            }
+            return -1;
         }
 
         public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            int index = IndexOf(item);
+            if (index == -1)
+                return false;
+            UnderlyingTree.Remove(item, index);
+            return true;
+        }
+
+        public void RemoveAt(int index)
+        {
+            RemoveAt((long)index);
+        }
+
+        public void Insert(int index, T item)
+        {
+            InsertAt((long)index, item);
+        }
+
+        #region ILazinatorCountableListableFactory 
+
+        public long LongCount => Count;
+
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public void InsertAt(long index, T item)
+        {
+            UnderlyingTree.Insert(item, new Placeholder(), index);
         }
 
         public void RemoveAt(long index)
         {
-            throw new NotImplementedException();
+            UnderlyingTree.Remove(default, index);
         }
 
-        public void RemoveAt(int index)
+        public IEnumerable<T> EnumerateFrom(long index)
+        {
+            if (index > Count || index < 0)
+                throw new ArgumentException();
+            if (Count == 0)
+                yield break;
+            foreach (var node in UnderlyingTree.Skip(index))
+                yield return node.Key;
+        }
+
+        public T GetAt(long index)
+        {
+            return UnderlyingTree.NodeAtIndex(index).Key;
+        }
+
+        public void SetAt(long index, T value)
+        {
+            UnderlyingTree.NodeAtIndex(index).Key = value;
+        }
+
+        public (int location, bool rejectedAsDuplicate) InsertSorted(T item)
         {
             throw new NotImplementedException();
         }
@@ -162,34 +153,12 @@ namespace Lazinator.Collections.Avl
             throw new NotImplementedException();
         }
 
-        public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public (int location, bool exists) FindSorted(T target)
         {
             throw new NotImplementedException();
         }
 
-        public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public void SetAt(long index, T value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateStoredBuffer()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -84,10 +84,6 @@ namespace Lazinator.Collections.Avl
         
         /* Serialization, deserialization, and object relationships */
         
-        public AvlSortedList() : base()
-        {
-        }
-        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

@@ -24,6 +24,7 @@ namespace LazinatorTests.Tests
             {
                 yield return new object[] { new LazinatorListFactory<WInt>() };
                 yield return new object[] { new AvlListFactory<WInt>() };
+                yield return new object[] { new AvlSortedListFactory<WInt>() };
             }
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
