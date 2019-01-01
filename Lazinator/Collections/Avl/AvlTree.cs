@@ -24,9 +24,9 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentOutOfRangeException();
         }
 
-        public int Count => Root?.Count ?? 0;
+        public long Count => Root?.Count ?? 0;
 
-        public IEnumerable<AvlNode<TKey, TValue>> Skip(int i)
+        public IEnumerable<AvlNode<TKey, TValue>> Skip(long i)
         {
             var enumerator = new AvlNodeEnumerator<TKey, TValue>(Root);
             enumerator.Skip(i);
@@ -107,7 +107,7 @@ namespace Lazinator.Collections.Avl
             return x;
         }
 
-        public bool Insert(TKey key, TValue value, int? nodeIndex = null)
+        public bool Insert(TKey key, TValue value, long? nodeIndex = null)
         {
             bool returnVal = InsertHelper(key, value, nodeIndex);
             if (Root != null)
@@ -125,7 +125,7 @@ namespace Lazinator.Collections.Avl
         /// <param name="value">The value to insert</param>
         /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
         /// <returns></returns>
-        private bool InsertHelper(TKey key, TValue value, int? nodeIndex = null)
+        private bool InsertHelper(TKey key, TValue value, long? nodeIndex = null)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
@@ -188,12 +188,12 @@ namespace Lazinator.Collections.Avl
 			return true;
 		}
 
-        private int CompareKeyOrIndexToNode(TKey key, int? nodeIndex, AvlNode<TKey, TValue> node)
+        private int CompareKeyOrIndexToNode(TKey key, long? nodeIndex, AvlNode<TKey, TValue> node)
         {
             int compare;
-            if (nodeIndex is int index)
+            if (nodeIndex is long index)
             {
-                int actualNodeIndex = (node.Left?.Count ?? 0);
+                long actualNodeIndex = (node.Left?.Count ?? 0);
                 if (index == actualNodeIndex)
                     compare = 0;
                 else if (index < actualNodeIndex)
@@ -473,7 +473,7 @@ namespace Lazinator.Collections.Avl
             return returnVal;
         }
 
-		private bool DeleteHelper(TKey key, int? nodeIndex)
+		private bool DeleteHelper(TKey key, long? nodeIndex)
 		{
 			AvlNode<TKey, TValue> node = Root;
 

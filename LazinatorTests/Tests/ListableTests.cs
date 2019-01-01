@@ -48,7 +48,8 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtBeginning(ILazinatorCountableListableFactory<WInt> factory)
         {
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
-            for (int i = 0; i < 100; i++)
+            const int numItems = 500;
+            for (int i = 0; i < numItems; i++)
                 l.InsertAt(0, i);
             var result = l.Select(x => x.WrappedValue).ToList();
             result.Reverse();

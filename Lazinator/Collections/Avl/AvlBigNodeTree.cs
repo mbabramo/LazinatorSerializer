@@ -125,7 +125,7 @@ namespace Lazinator.Collections.Avl
             if (UnderlyingTree.Root == null)
                 return null;
             var node = UnderlyingTree.Root;
-            int actualIndex = node.LeftCount;
+            long actualIndex = node.LeftCount;
             while (true)
             {
                 if (actualIndex == nodeIndex)

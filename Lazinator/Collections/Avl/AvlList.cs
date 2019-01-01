@@ -19,9 +19,11 @@ namespace Lazinator.Collections.Avl
             set => UnderlyingTree.NodeAtIndex(index).Value = value;
         }
 
-        public int Count => UnderlyingTree.Count;
+        public long Count => UnderlyingTree.Count;
 
         public bool IsReadOnly => false;
+
+        int ICollection<T>.Count => (int) Count;
 
         public void Add(T item)
         {
@@ -82,7 +84,7 @@ namespace Lazinator.Collections.Avl
             return -1;
         }
 
-        public void Insert(int index, T item)
+        public void Insert(long index, T item)
         {
             UnderlyingTree.Insert(new Placeholder(), item, index);
         }
@@ -99,6 +101,11 @@ namespace Lazinator.Collections.Avl
         public void RemoveAt(int index)
         {
             UnderlyingTree.Delete(new Placeholder(), index);
+        }
+
+        public void Insert(int index, T item)
+        {
+            Insert(index, item);
         }
     }
 }

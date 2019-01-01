@@ -24,7 +24,7 @@ namespace Lazinator.Collections.Avl
                 return contents;
             }
         }
-        public int NodeIndex => _CorrespondingNode.Index;
+        public long NodeIndex => _CorrespondingNode.Index;
         public long ItemsIndex
         {
             get
@@ -152,7 +152,7 @@ namespace Lazinator.Collections.Avl
             return Items[itemsCount - 1].CloneNoBuffer();
         }
 
-        public (AvlBigNodeContents<TKey, TValue> node, int nodeIndex) SplitOffFirstHalf()
+        public (AvlBigNodeContents<TKey, TValue> node, long nodeIndex) SplitOffFirstHalf()
         {
             int itemsCount = SelfItemsCount;
             if (itemsCount < 2)

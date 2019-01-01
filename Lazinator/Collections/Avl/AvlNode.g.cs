@@ -61,8 +61,8 @@ namespace Lazinator.Collections.Avl
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected int _Count;
-        public int Count
+        protected long _Count;
+        public long Count
         {
             [DebuggerStepThrough]
             get
@@ -793,7 +793,7 @@ namespace Lazinator.Collections.Avl
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _Balance);
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, _Count);
+            CompressedIntegralTypes.WriteCompressedLong(ref writer, _Count);
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {

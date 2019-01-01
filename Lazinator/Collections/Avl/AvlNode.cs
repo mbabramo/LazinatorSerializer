@@ -59,11 +59,11 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public int LeftCount => Left?.Count ?? 0;
-        public int RightCount => Right?.Count ?? 0;
+        public long LeftCount => Left?.Count ?? 0;
+        public long RightCount => Right?.Count ?? 0;
         public bool IsLeftNode => Parent != null && this == Parent._Left;
         public bool IsRightNode => Parent != null && this == Parent._Right;
-        public int Index
+        public long Index
         {
             get
             {

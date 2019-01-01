@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Avl
         AvlNode<TKey, TValue> Right { get; set; }
         TKey Key { get; set; }
         TValue Value { get; set; }
-        int Count { get; set; }
+        long Count { get; set; }
         int Balance { get; set; }
     }
 }

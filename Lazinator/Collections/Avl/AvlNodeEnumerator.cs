@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Avl
 		private NextAction _nextAction;
 		private AvlNode<TKey, TValue> _current;
 		private AvlNode<TKey, TValue> _right;
-        private int SkipPending = 0;
+        private long SkipPending = 0;
 
 		public AvlNodeEnumerator(AvlNode<TKey, TValue> root)
 		{
@@ -19,7 +19,7 @@ namespace Lazinator.Collections.Avl
 			_nextAction = _root == null ? NextAction.End : NextAction.Right;
 		}
 
-        public void Skip(int i)
+        public void Skip(long i)
         {
             SkipPending += i;
         }
