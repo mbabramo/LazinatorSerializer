@@ -13,6 +13,83 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
         }
 
+        public bool Contains(TKey key)
+        {
+            var result = GetNodeByKey(key);
+            return result.exists;
+        }
+
+        public bool Contains(TKey key, TValue value)
+        {
+            LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
+            var result = GetNodeByKeyAndValue(keyValue);
+            return result.exists;
+        }
+
+        public void Set(TKey key, TValue value)
+        {
+            if (AllowMultipleValuesPerKey)
+                throw new NotImplementedException("Because this tree supports multiple values per key, you cannot set a key to a unique value.");
+            var result = GetNodeByKey(key);
+            var contents = GetNodeContents(result.node);
+            if (result.exists)
+            {
+                contents.Set(result.indexInNode, value.CloneNoBuffer());
+            }
+            else
+            {
+                LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key.CloneNoBuffer(), value.CloneNoBuffer());
+                contents.InsertAt(result.indexInNode, keyValue);
+            }
+        }
+
+        public void Insert(TKey key, TValue value, int? itemIndex = null)
+        {
+            if (itemIndex == null)
+            {
+                LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
+                var result = GetNodeByKeyAndValue(keyValue);
+                var contents = GetNodeContents(result.node);
+                contents.InsertAt(result.indexInNode, keyValue);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            // DEBUG -- must implement splitting
+        }
+
+        /// <summary>
+        /// Deletes the first item with the matching key. Returns true if such an item is found.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="itemIndex"></param>
+        /// <returns></returns>
+        public bool Delete(TKey key, int? itemIndex = null)
+        {
+            var result = GetNodeByKey(key);
+            if (result.exists)
+            {
+                var contents = GetNodeContents(result.node);
+                contents.RemoveAt(result.indexInNode);
+                return true;
+            }
+            return false;
+        }
+
+        public bool Delete(TKey key, TValue value)
+        {
+            LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
+            var result = GetNodeByKeyAndValue(keyValue);
+            if (result.exists)
+            {
+                var contents = GetNodeContents(result.node);
+                contents.RemoveAt(result.indexInNode);
+                return true;
+            }
+            return false;
+        }
+
         private AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
         {
             var v = node.Value;
@@ -130,5 +207,7 @@ namespace Lazinator.Collections.Avl
         }
 
         public int Count => 0;
+
+        public bool AllowMultipleValuesPerKey { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
     }

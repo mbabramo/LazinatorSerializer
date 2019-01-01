@@ -65,6 +65,28 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
+        /// <summary>
+        /// Inserts at a particular index. The caller is responsible for ensuring that this retains sort order.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="keyAndValue"></param>
+        public void InsertAt(int index, LazinatorKeyValue<TKey, TValue> keyAndValue)
+        {
+            Items.Insert(index, keyAndValue);
+        }
+
+        /// <summary>
+        /// Sets the value at a particular index. The caller is responsible for ensuring that this retains sort order.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="keyAndValue"></param>
+        public void Set(int index, TValue value)
+        {
+            var keyValue = Items[index];
+            keyValue.Value = value;
+            Items[index] = keyValue;
+        }
+
         public bool Contains(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.Find(keyAndValue);
@@ -106,6 +128,12 @@ namespace Lazinator.Collections.Avl
             (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
             SelfItemsCount = Items.Count;
             return result;
+        }
+
+        public void RemoveAt(int index)
+        {
+            Items.RemoveAt(index);
+            SelfItemsCount = Items.Count;
         }
 
         public LazinatorKeyValue<TKey, TValue>? GetLastItem()
