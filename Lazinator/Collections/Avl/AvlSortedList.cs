@@ -143,19 +143,27 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.NodeAtIndex(index).Key = value;
         }
 
-        public (int location, bool rejectedAsDuplicate) InsertSorted(T item)
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item)
+        {
+            if (AllowDuplicates)
+                UnderlyingTree.Insert(item, default);
+            else
+            {
+                (long location, bool exists) = FindSorted(item);
+                if (!exists)
+                    UnderlyingTree.Insert(item, default, location);
+            }
+        }
+
+        public (long priorLocation, bool existed) RemoveSorted(T item)
         {
             throw new NotImplementedException();
         }
 
-        public (int priorLocation, bool existed) RemoveSorted(T item)
+        public (long location, bool exists) FindSorted(T target)
         {
-            throw new NotImplementedException();
-        }
-
-        public (int location, bool exists) FindSorted(T target)
-        {
-            throw new NotImplementedException();
+            var result = UnderlyingTree.SearchMatchOrNext(target);
+            return (result.index, result.found);
         }
 
         #endregion

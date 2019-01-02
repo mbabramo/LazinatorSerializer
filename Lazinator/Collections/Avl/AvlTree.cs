@@ -68,35 +68,40 @@ namespace Lazinator.Collections.Avl
 			return false;
 		}
 
-        public AvlNode<TKey, TValue> SearchMatchOrNext(TKey key)
+        public (AvlNode<TKey, TValue> node, long index, bool found) SearchMatchOrNext(TKey key)
         {
             AvlNode<TKey, TValue> node = Root;
-
+            long index = node.LeftCount;
             while (true)
             {
                 int comparison = key.CompareTo(node.Key);
                 if (comparison < 0)
                 {
                     if (node.Left == null)
-                        return node;
+                        return (node, index, false);
                     node = node.Left;
+                    index -= 1 + node.RightCount;
                 }
                 else if (comparison > 0)
                 {
                     if (node.Right == null)
-                        return node.GetNextNode();
+                    {
+                        var next = node.GetNextNode();
+                        return (next, next?.Index ?? Count, false);
+                    }
                     node = node.Right;
+                    index += 1 + node.LeftCount;
                 }
                 else
                 {
-                    return node;
+                    return (node, index, true);
                 }
             }
         }
 
         public AvlNode<TKey, TValue> SearchMatchOrNextOrLast(TKey key)
         {
-            return SearchMatchOrNext(key) ?? LastNode();
+            return SearchMatchOrNext(key).node ?? LastNode();
         }
 
         public AvlNode<TKey, TValue> LastNode()
@@ -125,10 +130,10 @@ namespace Lazinator.Collections.Avl
         /// <param name="value">The value to insert</param>
         /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
         /// <returns></returns>
-        private bool InsertHelper(TKey key, TValue value, long? nodeIndex = null)
+        private (bool inserted, long location) InsertHelper(TKey key, TValue value, long? nodeIndex = null)
 		{
 			AvlNode<TKey, TValue> node = Root;
-
+            long index = node?.LeftCount ?? 0;
 			while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
@@ -142,14 +147,15 @@ namespace Lazinator.Collections.Avl
                     if (left == null)
                     {
                         node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
-
+                        // index is same as node
                         InsertBalance(node, 1);
 
-                        return true;
+                        return (true, index);
                     }
                     else
                     {
                         node = left;
+                        index -= node.RightCount;
                     }
                 }
                 else if (compare > 0)
@@ -168,24 +174,26 @@ namespace Lazinator.Collections.Avl
 
                         InsertBalance(node, -1);
 
-                        return true;
+                        index += 1;
+                        return (true, index);
                     }
                     else
                     {
                         node = right;
+                        nodeIndex += 1 + node.LeftCount;
                     }
                 }
                 else
                 {
                     node.Value = value;
 
-                    return false;
+                    return (false, index);
                 }
             }
 
             Root = new AvlNode<TKey, TValue> { Key = key, Value = value, NodeVisitedDuringChange = true };
 
-			return true;
+			return (true, 0);
 		}
 
         private int CompareKeyOrIndexToNode(TKey key, long? nodeIndex, AvlNode<TKey, TValue> node)

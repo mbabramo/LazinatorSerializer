@@ -7,24 +7,24 @@ namespace Lazinator.Collections
 {
     public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
-        public (int location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer = null)
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer = null)
         {
-            (int location, bool exists) = FindSorted(item, comparer);
+            (long location, bool exists) = FindSorted(item, comparer);
             if (exists && !AllowDuplicates)
                 return (location, true);
-            Insert(location, item);
+            Insert((int) location, item);
             return (location, false);
         }
 
-        public (int priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer = null)
+        public (long priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer = null)
         {
-            (int location, bool exists) = FindSorted(item, comparer);
+            (long location, bool exists) = FindSorted(item, comparer);
             if (exists)
                 RemoveAt(location);
             return (location, exists);
         }
 
-        public (int location, bool exists) FindSorted(T target, IComparer<T> comparer = null)
+        public (long location, bool exists) FindSorted(T target, IComparer<T> comparer = null)
         {
             if (comparer == null)
                 comparer = Comparer<T>.Default;
@@ -60,17 +60,17 @@ namespace Lazinator.Collections
             return (mid, false);
         }
 
-        public (int location, bool rejectedAsDuplicate) InsertSorted(T item)
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item)
         {
             return InsertSorted(item, null);
         }
 
-        public (int priorLocation, bool existed) RemoveSorted(T item)
+        public (long priorLocation, bool existed) RemoveSorted(T item)
         {
             return RemoveSorted(item, null);
         }
 
-        public (int location, bool exists) FindSorted(T target)
+        public (long location, bool exists) FindSorted(T target)
         {
             return FindSorted(target, null);
         }

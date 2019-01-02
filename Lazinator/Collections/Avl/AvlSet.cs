@@ -21,7 +21,7 @@ namespace Lazinator.Collections.Avl
         public (bool valueFound, TKey valueIfFound) GetMatchOrNext(TKey key)
         {
             var matchOrNext = UnderlyingTree.SearchMatchOrNext(key);
-            return (matchOrNext != null, (matchOrNext == null) ? default(TKey) : matchOrNext.Key);
+            return (matchOrNext.found, matchOrNext.found ? key : default);
         }
 
         public bool Insert(TKey key)

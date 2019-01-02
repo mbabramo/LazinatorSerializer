@@ -10,8 +10,8 @@ namespace Lazinator.Collections
     public interface ILazinatorSortable<T> : ILazinatorCountableListable<T> where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
-        (int location, bool rejectedAsDuplicate) InsertSorted(T item);
-        (int priorLocation, bool existed) RemoveSorted(T item);
-        (int location, bool exists) FindSorted(T target);
+        (long location, bool rejectedAsDuplicate) InsertSorted(T item);
+        (long priorLocation, bool existed) RemoveSorted(T item);
+        (long location, bool exists) FindSorted(T target);
     }
 }
