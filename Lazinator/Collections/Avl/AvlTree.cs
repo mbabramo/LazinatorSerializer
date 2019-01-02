@@ -71,7 +71,9 @@ namespace Lazinator.Collections.Avl
         public (AvlNode<TKey, TValue> node, long index, bool found) SearchMatchOrNext(TKey key)
         {
             AvlNode<TKey, TValue> node = Root;
-            long index = node.LeftCount;
+            if (node == null)
+                return (null, 0, false);
+            long index = node?.LeftCount ?? 0;
             while (true)
             {
                 int comparison = key.CompareTo(node.Key);

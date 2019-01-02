@@ -73,8 +73,11 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
         public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -90,8 +93,11 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
         public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -107,8 +113,11 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
         public void Listable_InsertAndRemoveWork(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -175,10 +184,14 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
         public void Listable_LargeNumberInsertionsAndDeletions(ListFactoryToUse listFactoryToUse)
         {
+            (bool isSorted, bool allowsDuplicates) = GetSortedInfo(listFactoryToUse);
             var factory = GetListFactory(listFactoryToUse);
             bool trace = false;
             Random r = new Random(0);
@@ -186,6 +199,8 @@ namespace LazinatorTests.Tests
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
             const int totalChanges = 1000;
             const int switchToMoreDeletionsAfter = 400; // we'll start mostly with insertions, and then switch to mostly deletions, so that we can delete the entire tree.
+
+            int maxValue = isSorted ? totalChanges / 2 : 999999; // fewer possibilities if sorted so we can get some duplicates
             for (int i = 0; i < totalChanges; i++)
             {
                 //if (i > 0 && l is Lazinator.Collections.Avl.AvlList<WInt> DEBUG)
@@ -202,19 +217,43 @@ namespace LazinatorTests.Tests
                         j = o.Count() - 1;
                     else
                         j = r.Next(0, o.Count()); // insert at a valid location
-                    int k = r.Next(0, 999999);
+                    int k = r.Next(0, maxValue);
                     if (trace)
                         Debug.WriteLine($"Inserting {k} at index {j}");
-                    o.Insert(j, k);
-                    l.InsertAt(j, k);
+                    if (isSorted)
+                    {
+                        if (allowsDuplicates || !o.Contains(k))
+                        {
+                            int index = o.BinarySearch(k);
+                            if (index < 0)
+                                o.Insert(~index, k); // bitwise complement
+                            else
+                                o.Insert(index, k);
+                        }
+                        (l as ILazinatorSortable<WInt>).InsertSorted(k);
+                    }
+                    else
+                    {
+                        o.Insert(j, k);
+                        l.InsertAt(j, k);
+                    }
                 }
                 else
                 {
                     int j = r.Next(0, o.Count() - 1); // delete at valid location
                     if (trace)
                         Debug.WriteLine($"Deleting at index {j}");
-                    o.RemoveAt(j);
-                    l.RemoveAt(j);
+                    if (isSorted)
+                    {
+                        int value = o[j];
+                        o.RemoveAt(j);
+                        (l as ILazinatorSortable<WInt>).RemoveSorted(value);
+                    }
+                    else
+                    {
+                        o.RemoveAt(j);
+                        l.RemoveAt(j);
+                    }
                 }
                 var result = l.Select(x => x.WrappedValue).ToList();
                 result.SequenceEqual(o).Should().BeTrue();
