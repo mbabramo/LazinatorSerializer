@@ -39,6 +39,16 @@ namespace Lazinator.Collections.Avl
             throw new InvalidOperationException(); // should not be reached
         }
 
+        public virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
+        {
+            return new AvlNode<TKey, TValue>()
+            {
+                Key = key,
+                Value = value,
+                Parent = parent
+            };
+        }
+
         private void ConfirmInRange(long i)
         {
             if (i < 0 || i >= Count)
@@ -188,7 +198,9 @@ namespace Lazinator.Collections.Avl
 
                     if (left == null)
                     {
-                        node.Left = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
+                        var childNode = CreateNode(key, value, node);
+                        childNode.NodeVisitedDuringChange = true;
+                        node.Left = childNode;
                         // index is same as node
                         InsertBalance(node, 1);
 
@@ -206,7 +218,9 @@ namespace Lazinator.Collections.Avl
 
                     if (right == null)
                     {
-                        node.Right = new AvlNode<TKey, TValue> { Key = key, Value = value, Parent = node, NodeVisitedDuringChange = true };
+                        var childNode = CreateNode(key, value, node);
+                        childNode.NodeVisitedDuringChange = true;
+                        node.Right = childNode;
 
                         InsertBalance(node, -1);
 
@@ -227,7 +241,8 @@ namespace Lazinator.Collections.Avl
                 }
             }
 
-            Root = new AvlNode<TKey, TValue> { Key = key, Value = value, NodeVisitedDuringChange = true };
+            Root = CreateNode(key, value);
+            Root.NodeVisitedDuringChange = true;
 
 			return (true, 0);
 		}
