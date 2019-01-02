@@ -6,7 +6,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlNodeKeyEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, IComparable<TKey>
+    public struct AvlNodeKeyEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, IComparable<TKey>
     {
         private AvlNodeEnumerator<TKey, Placeholder> UnderlyingEnumerator;
 

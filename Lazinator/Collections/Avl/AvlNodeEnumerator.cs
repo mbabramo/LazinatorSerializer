@@ -5,14 +5,15 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public struct AvlNodeEnumerator<TKey, TValue> : IEnumerator<AvlNode<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
 		private AvlNode<TKey, TValue> _current;
         private long _index;
-        bool isFirst = true;
+        bool _isFirst;
 
         public AvlNodeEnumerator(AvlTree<TKey, TValue> tree, long skip = 0)
 		{
+            _isFirst = true;
             if (tree?.Root == null || skip >= tree.Count)
             {
                 _current = null;
@@ -27,8 +28,8 @@ namespace Lazinator.Collections.Avl
 
         public bool MoveNext()
         {
-            if (isFirst)
-                isFirst = false;
+            if (_isFirst)
+                _isFirst = false;
             else
                 _current = _current?.GetNextNode();
             if (_current == null)

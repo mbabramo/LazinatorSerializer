@@ -78,13 +78,13 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<T> GetEnumerator()
         {
-            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<T, Placeholder>;
+            var underlyingEnumerator = (AvlNodeEnumerator<T, Placeholder>) UnderlyingTree.GetEnumerator();
             return new AvlNodeKeyEnumerator<T>(underlyingEnumerator);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<T, Placeholder>;
+            var underlyingEnumerator = (AvlNodeEnumerator<T, Placeholder>) UnderlyingTree.GetEnumerator();
             return new AvlNodeKeyEnumerator<T>(underlyingEnumerator);
         }
 
