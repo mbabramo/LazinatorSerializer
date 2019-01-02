@@ -8,9 +8,9 @@ namespace Lazinator.Collections.Avl
 {
     public class AvlNodeKeyEnumerator<TKey> : IEnumerator<TKey> where TKey : ILazinator, IComparable<TKey>
     {
-        private AvlNodeEnumerator<TKey, WByte> UnderlyingEnumerator;
+        private AvlNodeEnumerator<TKey, Placeholder> UnderlyingEnumerator;
 
-        public AvlNodeKeyEnumerator(AvlNodeEnumerator<TKey, WByte> underlyingEnumerator)
+        public AvlNodeKeyEnumerator(AvlNodeEnumerator<TKey, Placeholder> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }

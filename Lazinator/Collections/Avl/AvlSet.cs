@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl
     {
         public AvlSet() : base()
         {
-            UnderlyingTree = new AvlTree<TKey, WByte>();
+            UnderlyingTree = new AvlTree<TKey, Placeholder>();
         }
 
         public bool Contains(TKey key)
@@ -26,7 +26,7 @@ namespace Lazinator.Collections.Avl
 
         public bool Insert(TKey key)
         {
-            bool notAlreadyPresent = UnderlyingTree.Insert(key, 0);
+            bool notAlreadyPresent = UnderlyingTree.Insert(key, default);
             if (notAlreadyPresent)
                 Count++;
             return notAlreadyPresent;
@@ -52,7 +52,7 @@ namespace Lazinator.Collections.Avl
 
         public AvlNodeKeyEnumerator<TKey> AsKeyEnumerator()
         {
-            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<TKey, WByte>;
+            var underlyingEnumerator = UnderlyingTree.GetEnumerator() as AvlNodeEnumerator<TKey, Placeholder>;
             return new AvlNodeKeyEnumerator<TKey>(underlyingEnumerator);
         }
 

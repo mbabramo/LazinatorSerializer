@@ -14,7 +14,7 @@ namespace LazinatorTests.AVL
 		[Fact]
 		public void Empty()
 		{
-			var tree = new AvlTree<WInt, WByte>();
+			var tree = new AvlTree<WInt, Placeholder>();
 
 			Assert.Equal(0, tree.CountByEnumerating());
 			AssertTreeValid("", tree);
@@ -29,7 +29,7 @@ namespace LazinatorTests.AVL
                 int itemsToInsert = 100;
                 int itemsToInsertThenDelete = 20;
                 int insertions = itemsToInsert + itemsToInsertThenDelete;
-                AvlTree<WInt, WByte> tree = BuildTreeInRandomOrder(insertions);
+                AvlTree<WInt, Placeholder> tree = BuildTreeInRandomOrder(insertions);
                 tree.Root.Count.Should().Be(insertions);
 
                 if (r % 2 == 0)
@@ -84,7 +84,7 @@ namespace LazinatorTests.AVL
             }
 	    }
 
-        private AvlTree<WInt, WByte> BuildTreeInRandomOrder(int insertions)
+        private AvlTree<WInt, Placeholder> BuildTreeInRandomOrder(int insertions)
         {
             var insertItems = Enumerable.Range(1, insertions).ToList();
             Shuffle(insertItems);
@@ -118,7 +118,7 @@ namespace LazinatorTests.AVL
 		[Fact]
 		public void DuplicateFails()
 		{
-			var tree = new AvlTree<WInt, WByte>();
+			var tree = new AvlTree<WInt, Placeholder>();
 
 			bool success0a = tree.Insert(0);
 			bool success0b = tree.Insert(0);
@@ -321,7 +321,7 @@ namespace LazinatorTests.AVL
 			AssertTreeValid("2-:{1,8:{4,20}}", tree);
 		}
 
-		private void AssertTreeValid(string description, AvlTree<WInt, WByte> tree)
+		private void AssertTreeValid(string description, AvlTree<WInt, Placeholder> tree)
 		{
 			Assert.Equal(description, tree.Description());
 			
@@ -335,9 +335,9 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private AvlTree<WInt, WByte> SetupTree(params int[] values)
+		private AvlTree<WInt, Placeholder> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<WInt, WByte>();
+			var tree = new AvlTree<WInt, Placeholder>();
 
 			foreach (int value in values)
 			{

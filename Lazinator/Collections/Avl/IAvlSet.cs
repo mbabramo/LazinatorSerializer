@@ -9,6 +9,6 @@ namespace Lazinator.Collections.Avl
     interface IAvlSet<TKey> where TKey : ILazinator, IComparable<TKey>
     {
         int Count { get; set; }
-        AvlTree<TKey, WByte> UnderlyingTree { get; set; }
+        AvlTree<TKey, Placeholder> UnderlyingTree { get; set; }
     }
 }
