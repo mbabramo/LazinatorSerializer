@@ -19,11 +19,6 @@ namespace Lazinator.Collections.Avl
 
         object IEnumerator.Current => Current;
 
-        public void Skip(int i)
-        {
-            UnderlyingEnumerator.Skip(i);
-        }
-
         public void Dispose()
         {
             UnderlyingEnumerator.Dispose();

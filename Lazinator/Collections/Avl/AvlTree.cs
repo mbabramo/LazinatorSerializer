@@ -15,7 +15,28 @@ namespace Lazinator.Collections.Avl
         public AvlNode<TKey, TValue> NodeAtIndex(long i)
         {
             ConfirmInRange(i);
-            return Skip(i).First();
+            
+			AvlNode<TKey, TValue> node = Root;
+
+            long index = node?.LeftCount ?? 0;
+            while (node != null)
+			{
+			    node.NodeVisitedDuringChange = true;
+
+                if (i == index)
+                    return node;
+                else if (i < index)
+                {
+                    node = node.Left;
+                    index -= 1 + (node?.RightCount ?? 0);
+                }
+                else
+                {
+                    node = node.Right;
+                    index += 1 + (node?.LeftCount ?? 0);
+                }
+			}
+            throw new InvalidOperationException(); // should not be reached
         }
 
         private void ConfirmInRange(long i)
@@ -28,15 +49,14 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<AvlNode<TKey, TValue>> Skip(long i)
         {
-            var enumerator = new AvlNodeEnumerator<TKey, TValue>(Root);
-            enumerator.Skip(i);
+            var enumerator = new AvlNodeEnumerator<TKey, TValue>(this, i);
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
         }
 
 		public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
 		{
-			var enumerator = new AvlNodeEnumerator<TKey, TValue>(Root);
+			var enumerator = new AvlNodeEnumerator<TKey, TValue>(this);
 		    return enumerator;
 		}
 
@@ -154,11 +174,6 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
         private (bool inserted, long location) InsertHelper(bool skipDuplicateKeys, TKey key, TValue value, long? nodeIndex = null)
 		{
-            bool DEBUG = false;
-            if (DEBUG)
-            {
-                Root.Print("", false);
-            }
 			AvlNode<TKey, TValue> node = Root;
             long index = node?.LeftCount ?? 0;
 			while (node != null)

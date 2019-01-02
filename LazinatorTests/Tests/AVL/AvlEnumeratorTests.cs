@@ -12,7 +12,7 @@ namespace LazinatorTests.AVL
 		{
 			var tree = SetupTree(5, 4, 3, 2, 1);
 
-			var enumerator = new AvlNodeEnumerator<WInt, WByte>(tree.Root);
+			var enumerator = new AvlNodeEnumerator<WInt, WByte>(tree);
 
 			for (int i = 1; i <= 5; i++)
 			{
@@ -23,33 +23,6 @@ namespace LazinatorTests.AVL
 
 			Assert.False(enumerator.MoveNext());
 			Assert.False(enumerator.MoveNext());
-		}
-
-		[Fact]
-		public void Reset()
-		{
-			var tree = SetupTree(5, 4, 3, 2, 1);
-
-			var enumerator = tree.GetEnumerator();
-
-			int count1 = 0;
-
-			while (enumerator.MoveNext())
-			{
-				count1++;
-			}
-
-			enumerator.Reset();
-
-			int count2 = 0;
-
-			while (enumerator.MoveNext())
-			{
-				count2++;
-			}
-
-			Assert.Equal(5, count1);
-			Assert.Equal(5, count2);
 		}
 
 		[Fact]

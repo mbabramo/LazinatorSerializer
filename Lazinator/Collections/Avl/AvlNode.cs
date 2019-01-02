@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
@@ -117,24 +118,31 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public void Print(string indent, bool right)
+        public string ToTreeString()
         {
-            Debug.Write(indent);
+            StringBuilder sb = new StringBuilder();
+            ToTreeStringHelper(sb, "", false);
+            return sb.ToString();
+        }
+
+        private void ToTreeStringHelper(StringBuilder sb, string indent, bool right)
+        {
+            sb.Append(indent);
             if (right)
             {
-                Debug.Write("\\-");
+                sb.Append("\\-");
                 indent += "  ";
             }
             else
             {
-                Debug.Write("|-");
+                sb.Append("|-");
                 indent += "| ";
             }
 
-            Debug.WriteLine($"Index {Index}: ({Key}, {Value}) (Count {Count}, Visited {NodeVisitedDuringChange})");
+            sb.AppendLine($"Index {Index}: ({Key}, {Value}) (Count {Count}, Visited {NodeVisitedDuringChange})");
 
-            Left?.Print(indent, false);
-            Right?.Print(indent, true);
+            Left?.ToTreeStringHelper(sb, indent, false);
+            Right?.ToTreeStringHelper(sb, indent, true);
         }
     }
 }
