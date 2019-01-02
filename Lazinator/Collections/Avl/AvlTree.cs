@@ -96,6 +96,18 @@ namespace Lazinator.Collections.Avl
                 }
                 else
                 {
+                    if (AllowDuplicateKeys)
+                    {
+                        bool keyMatches = true;
+                        while (keyMatches)
+                        {
+                            AvlNode<TKey, TValue> previous = node.GetPreviousNode();
+                            keyMatches = previous.Key.Equals(key);
+                            if (keyMatches)
+                                node = previous;
+                        }
+                        return (node, node?.Index ?? Count, false);
+                    }
                     return (node, index, true);
                 }
             }
@@ -116,7 +128,7 @@ namespace Lazinator.Collections.Avl
 
         public (bool inserted, long location) Insert(TKey key, TValue value, long? nodeIndex = null)
         {
-            var result = InsertHelper(key, value, nodeIndex);
+            var result = InsertHelper(AllowDuplicateKeys, key, value, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
@@ -132,7 +144,7 @@ namespace Lazinator.Collections.Avl
         /// <param name="value">The value to insert</param>
         /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
         /// <returns></returns>
-        private (bool inserted, long location) InsertHelper(TKey key, TValue value, long? nodeIndex = null)
+        private (bool inserted, long location) InsertHelper(bool skipDuplicateKeys, TKey key, TValue value, long? nodeIndex = null)
 		{
             bool DEBUG = false;
             if (DEBUG)
@@ -144,9 +156,8 @@ namespace Lazinator.Collections.Avl
 			while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
-
-                DEBUG; // add parameter for whether duplicate key is allowed. if so, and compare would be 0, then set compare to 1, so this is inserted afterward.
-                int compare = CompareKeyOrIndexToNode(key, index, nodeIndex, node);
+                
+                int compare = CompareKeyOrIndexToNode(skipDuplicateKeys, key, node, nodeIndex, index);
 
                 if (compare < 0 || (compare == 0 && nodeIndex != null))
                 {
@@ -197,14 +208,16 @@ namespace Lazinator.Collections.Avl
 
 			return (true, 0);
 		}
-        
-        private int CompareKeyOrIndexToNode(TKey key, long actualNodeIndex, long? nodeIndex, AvlNode<TKey, TValue> node)
+
+        private int CompareKeyOrIndexToNode(bool skipDuplicateKeys, TKey key, AvlNode<TKey, TValue> node, long? desiredNodeIndex, long actualNodeIndex)
         {
             int compare;
-            if (nodeIndex is long index)
+            if (desiredNodeIndex is long index)
             {
                 if (index == actualNodeIndex)
+                {
                     compare = 0;
+                }
                 else if (index < actualNodeIndex)
                     compare = -1;
                 else
@@ -212,8 +225,22 @@ namespace Lazinator.Collections.Avl
             }
             else
                 compare = key.CompareTo(node.Key);
+            if (compare == 0 && skipDuplicateKeys)
+            {
+                if (desiredNodeIndex == null)
+                {
+                    if (key.Equals(node.Key))
+                        compare = 1;
+                }
+                else
+                {
+                    compare = 1; // move to next location
+                }
+            }
             return compare;
         }
+
+        #region Balancing
 
         private void InsertBalance(AvlNode<TKey, TValue> node, int balance)
 		{
@@ -491,7 +518,7 @@ namespace Lazinator.Collections.Avl
 			{
 			    node.NodeVisitedDuringChange = true;
 
-                int compare = CompareKeyOrIndexToNode(key, index, nodeIndex, node);
+                int compare = CompareKeyOrIndexToNode(false, key, node, nodeIndex, index);
                 if (compare < 0)
 				{
 					node = node.Left;
@@ -722,5 +749,7 @@ namespace Lazinator.Collections.Avl
 		{
 			return GetEnumerator();
 		}
-	}
+
+        #endregion
+    }
 }

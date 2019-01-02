@@ -11,8 +11,12 @@ namespace Lazinator.Collections.Avl
     {
         public AvlSortedList()
         {
-            // DEBUG -- preferable not to create data in constructors. Change this throughout
+        }
+
+        public AvlSortedList(bool allowDuplicateKeys)
+        {
             UnderlyingTree = new AvlTree<T, Placeholder>();
+            UnderlyingTree.AllowDuplicateKeys = allowDuplicateKeys;
         }
 
         // DEBUG -- once this works, AvlSet and AvlMultiset should be replaceable.
@@ -145,19 +149,8 @@ namespace Lazinator.Collections.Avl
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item)
         {
-            if (AllowDuplicates)
-            {
-                (bool inserted, long location) = UnderlyingTree.Insert(item, default);
-                return (location, !inserted);
-            }
-            else
-            {
-                (long location, bool exists) = FindSorted(item);
-                if (exists)
-                    return (location, true);
-                UnderlyingTree.Insert(item, default, location);
-                return (location, exists);
-            }
+            (bool inserted, long location) = UnderlyingTree.Insert(item, default);
+            return (location, !inserted);
         }
 
         public (long priorLocation, bool existed) RemoveSorted(T item)

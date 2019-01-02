@@ -30,7 +30,38 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public AvlNode<TKey, TValue> GetNextNode()
+        public AvlNode<TKey, TValue> GetNextNode(ref long index)
+        {
+            // All the nodes to the left are complete. Therefore, if there is a node to the right, we move to the right and then as far to the left as possible. Otherwise, we move to the first parent where this is on the left; if there is no such parent, we return null, because there is no last node.
+            long originalIndex = index;
+            AvlNode<TKey, TValue> current = this;
+            if (current.Right != null)
+            {
+                current = current.Right;
+                index += 1 + current.LeftCount;
+                while (current.Left != null)
+                {
+                    current = current.Left;
+                    index -= 1 + current.RightCount;
+                }
+                return current;
+            }
+            while (true)
+            {
+                var p = current.Parent;
+                if (p == null)
+                {
+                    index = originalIndex + 1;
+                    return null;
+                }
+                if (p.Left == current)
+                    return p;
+                current = p;
+            }
+            Debug; // DEBUG -- don't need indexes here
+        }
+
+        public AvlNode<TKey, TValue> GetPreviousNode(ref long index)
         {
             AvlNode<TKey, TValue> current = this;
             while (true)
@@ -38,7 +69,7 @@ namespace Lazinator.Collections.Avl
                 var p = current.Parent;
                 if (p == null)
                     return null;
-                if (p.Left == current)
+                if (p.Right == current)
                     return p;
                 current = p;
             }

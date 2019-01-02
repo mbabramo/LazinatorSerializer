@@ -7,6 +7,7 @@ namespace Lazinator.Collections.Avl
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlTree)]
     interface IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
+        bool AllowDuplicateKeys { get; set; }
         AvlNode<TKey, TValue> Root { get; set; }
     }
 }
