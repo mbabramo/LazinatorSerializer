@@ -18,22 +18,66 @@ namespace LazinatorTests.Tests
 {
     public class ListableTests : SerializationDeserializationTestBase
     {
-        public class ListFactoryTestData : IEnumerable<object[]>
+        public enum ListFactoryToUse
         {
-            public IEnumerator<object[]> GetEnumerator()
-            {
-                yield return new object[] { new LazinatorListFactory<WInt>() };
-                yield return new object[] { new AvlListFactory<WInt>() };
-                // yield return new object[] { new AvlSortedListFactory<WInt>() };
-            }
+            LazinatorList,
+            SortedLazinatorList,
+            SortedLazinatorListWithDuplicates,
+            AvlList,
+            AvlSortedList,
+            AvlSortedListWithDuplicates,
+            
+        }
 
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        static ILazinatorCountableListableFactory<WInt> GetListFactory(ListFactoryToUse l)
+        {
+            switch (l)
+            {
+                case ListFactoryToUse.LazinatorList:
+                    return new LazinatorListFactory<WInt>();
+                case ListFactoryToUse.SortedLazinatorList:
+                    return new SortedLazinatorListFactory<WInt>();
+                case ListFactoryToUse.SortedLazinatorListWithDuplicates:
+                    return new SortedLazinatorListWithDuplicatesFactory<WInt>();
+                case ListFactoryToUse.AvlList:
+                    return new AvlListFactory<WInt>();
+                case ListFactoryToUse.AvlSortedList:
+                    return new AvlSortedListFactory<WInt>();
+                case ListFactoryToUse.AvlSortedListWithDuplicates:
+                    return new AvlSortedListWithDuplicatesFactory<WInt>();
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        static (bool isSorted, bool allowsDuplicates) GetSortedInfo(ListFactoryToUse l)
+        {
+            switch (l)
+            {
+                case ListFactoryToUse.LazinatorList:
+                    return (false, true);
+                case ListFactoryToUse.SortedLazinatorList:
+                    return (true, false);
+                case ListFactoryToUse.SortedLazinatorListWithDuplicates:
+                    return (true, true);
+                case ListFactoryToUse.AvlList:
+                    return (false, true);
+                case ListFactoryToUse.AvlSortedList:
+                    return (true, false);
+                case ListFactoryToUse.AvlSortedListWithDuplicates:
+                    return (true, true);
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         [Theory]
-        [ClassData(typeof(ListFactoryTestData))]
-        public void Listable_AddingAtEnd(ILazinatorCountableListableFactory<WInt> factory)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
+            var factory = GetListFactory(listFactoryToUse);
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
             const int numItems = 500;
             for (int i = 0; i < numItems; i++)
@@ -45,9 +89,12 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [ClassData(typeof(ListFactoryTestData))]
-        public void Listable_AddingAtBeginning(ILazinatorCountableListableFactory<WInt> factory)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
+            var factory = GetListFactory(listFactoryToUse);
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
             const int numItems = 500;
             for (int i = 0; i < numItems; i++)
@@ -59,9 +106,12 @@ namespace LazinatorTests.Tests
 
 
         [Theory]
-        [ClassData(typeof(ListFactoryTestData))]
-        public void Listable_InsertAndRemoveWork(ILazinatorCountableListableFactory<WInt> factory)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        public void Listable_InsertAndRemoveWork(ListFactoryToUse listFactoryToUse)
         {
+            var factory = GetListFactory(listFactoryToUse);
             (int numModifications, double removalProbability)[] phases = new (int numModifications, double removalProbability)[] { (2, 0.25), (4, 0.6), (8, 0.25), (16, 0.6), (32, 0.25), (64, 0.6), };
             Random r = new Random(0);
             const int numRepetitions = 10;
@@ -124,9 +174,12 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [ClassData(typeof(ListFactoryTestData))]
-        public void Listable_LargeNumberInsertionsAndDeletions(ILazinatorCountableListableFactory<WInt> factory)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        public void Listable_LargeNumberInsertionsAndDeletions(ListFactoryToUse listFactoryToUse)
         {
+            var factory = GetListFactory(listFactoryToUse);
             bool trace = false;
             Random r = new Random(0);
             List<int> o = new List<int>();

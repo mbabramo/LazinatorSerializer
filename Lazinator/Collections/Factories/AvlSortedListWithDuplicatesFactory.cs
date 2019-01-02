@@ -6,13 +6,13 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public class AvlSortedListFactory<T> : ILazinatorCountableListableFactory<T> where T : ILazinator, IComparable<T>
+    public class AvlSortedListWithDuplicatesFactory<T> : ILazinatorCountableListableFactory<T> where T : ILazinator, IComparable<T>
     {
         public ILazinatorCountableListable<T> CreateCountableListable()
         {
             return new AvlSortedList<T>()
             {
-                AllowDuplicates = false
+                AllowDuplicates = true
             };
         }
     }
