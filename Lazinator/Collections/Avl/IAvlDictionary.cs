@@ -1,0 +1,16 @@
+﻿using Lazinator.Attributes;
+using Lazinator.Core;
+using Lazinator.Wrappers;
+using System;
+
+namespace Lazinator.Collections.Avl
+{
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlDictionary)]
+    public interface IAvlDictionary<TKey, TValue>
+        where TKey : ILazinator
+        where TValue : ILazinator
+    {
+        AvlTree<WInt, LazinatorTuple<TKey, TValue>> UnderlyingTree { get; set; }
+        bool AllowDuplicateKeys { get; set; }
+    }
+}

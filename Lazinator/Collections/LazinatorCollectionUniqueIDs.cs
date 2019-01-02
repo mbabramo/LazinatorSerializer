@@ -90,5 +90,6 @@
         IAvlSortedList,
         IAvlSortedDictionary,
         ILazinatorKeyableMultivalue,
+        IAvlDictionary,
     }
 }
