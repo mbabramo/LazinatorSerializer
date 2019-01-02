@@ -15,6 +15,8 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree = new AvlTree<T, Placeholder>();
         }
 
+        // DEBUG -- once this works, AvlSet and AvlMultiset should be replaceable.
+
         public T this[int index]
         {
             get => GetAt(index);
@@ -160,7 +162,13 @@ namespace Lazinator.Collections.Avl
 
         public (long priorLocation, bool existed) RemoveSorted(T item)
         {
-            throw new NotImplementedException();
+            (long location, bool exists) = FindSorted(item);
+            if (exists)
+            {
+                RemoveAt(location);
+                return (location, true);
+            }
+            return (-1, false);
         }
 
         public (long location, bool exists) FindSorted(T target)

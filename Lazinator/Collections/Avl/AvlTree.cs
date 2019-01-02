@@ -145,6 +145,7 @@ namespace Lazinator.Collections.Avl
             {
                 node.NodeVisitedDuringChange = true;
 
+                DEBUG; // add parameter for whether duplicate key is allowed. if so, and compare would be 0, then set compare to 1, so this is inserted afterward.
                 int compare = CompareKeyOrIndexToNode(key, index, nodeIndex, node);
 
                 if (compare < 0 || (compare == 0 && nodeIndex != null))
