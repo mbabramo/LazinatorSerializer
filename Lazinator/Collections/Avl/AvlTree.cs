@@ -89,7 +89,8 @@ namespace Lazinator.Collections.Avl
                     if (node.Right == null)
                     {
                         var next = node.GetNextNode();
-                        return (next, next?.Index ?? Count, false);
+                        index++;
+                        return (next, index, false);
                     }
                     node = node.Right;
                     index += 1 + node.LeftCount;
@@ -102,11 +103,17 @@ namespace Lazinator.Collections.Avl
                         while (keyMatches)
                         {
                             AvlNode<TKey, TValue> previous = node.GetPreviousNode();
-                            keyMatches = previous.Key.Equals(key);
-                            if (keyMatches)
-                                node = previous;
+                            if (previous != null)
+                            {
+                                keyMatches = previous.Key.Equals(key);
+                                if (keyMatches)
+                                {
+                                    node = previous;
+                                    index--;
+                                }
+                            }
                         }
-                        return (node, node?.Index ?? Count, false);
+                        return (node, index, false);
                     }
                     return (node, index, true);
                 }
