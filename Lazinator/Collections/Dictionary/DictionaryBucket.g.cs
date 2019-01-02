@@ -458,12 +458,12 @@ namespace Lazinator.Collections.Dictionary
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 103;
+        public virtual int LazinatorUniqueID => 101;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DictionaryBucket<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(103, new Type[] { typeof(TKey), typeof(TValue) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DictionaryBucket<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(101, new Type[] { typeof(TKey), typeof(TValue) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

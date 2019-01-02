@@ -307,7 +307,7 @@ namespace Lazinator.Wrappers
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int LazinatorUniqueID => 107;
+        public int LazinatorUniqueID => 105;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => false;

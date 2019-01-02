@@ -388,12 +388,12 @@ namespace Lazinator.Collections.Avl
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 124;
+        public virtual int LazinatorUniqueID => 122;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlBigNodeTree<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(124, new Type[] { typeof(TKey), typeof(TValue) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlBigNodeTree<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(122, new Type[] { typeof(TKey), typeof(TValue) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
