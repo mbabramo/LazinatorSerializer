@@ -26,7 +26,6 @@ namespace LazinatorTests.Tests
             AvlList,
             AvlSortedList,
             AvlSortedListWithDuplicates,
-            
         }
 
         static ILazinatorCountableListableFactory<WInt> GetListFactory(ListFactoryToUse l)

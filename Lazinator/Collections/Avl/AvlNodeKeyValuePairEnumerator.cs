@@ -6,16 +6,16 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public struct AvlNodeKeyEnumerator<TKey, TValue> : IEnumerator<TKey> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public struct AvlNodeKeyValuePairEnumerator<TKey, TValue> : IEnumerator<KeyValuePair<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         private AvlNodeEnumerator<TKey, TValue> UnderlyingEnumerator;
 
-        public AvlNodeKeyEnumerator(AvlNodeEnumerator<TKey, TValue> underlyingEnumerator)
+        public AvlNodeKeyValuePairEnumerator(AvlNodeEnumerator<TKey, TValue> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }
 
-        public TKey Current => UnderlyingEnumerator.Current.Key;
+        public KeyValuePair<TKey, TValue> Current => UnderlyingEnumerator.Current.KeyValuePair;
 
         object IEnumerator.Current => Current;
 
@@ -35,3 +35,4 @@ namespace Lazinator.Collections.Avl
         }
     }
 }
+

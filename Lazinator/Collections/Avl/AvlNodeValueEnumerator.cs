@@ -1,15 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
 namespace Lazinator.Collections.Avl
 {
-    public struct AvlNodeValueEnumerator<TValue> : IEnumerator<TValue> where TValue : ILazinator
+    public struct AvlNodeValueEnumerator<TKey, TValue> : IEnumerator<TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        private AvlNodeEnumerator<Placeholder, TValue> UnderlyingEnumerator;
+        private AvlNodeEnumerator<TKey, TValue> UnderlyingEnumerator;
 
-        public AvlNodeValueEnumerator(AvlNodeEnumerator<Placeholder, TValue> underlyingEnumerator)
+        public AvlNodeValueEnumerator(AvlNodeEnumerator<TKey, TValue> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }

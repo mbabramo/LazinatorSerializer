@@ -88,5 +88,6 @@
         ILazinatorCountableListable,
         ILazinatorTreeable,
         IAvlSortedList,
+        IAvlSortedDictionary,
     }
 }

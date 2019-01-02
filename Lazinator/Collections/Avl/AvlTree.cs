@@ -57,19 +57,6 @@ namespace Lazinator.Collections.Avl
 
         public long Count => Root?.Count ?? 0;
 
-        public IEnumerable<AvlNode<TKey, TValue>> Skip(long i)
-        {
-            var enumerator = new AvlNodeEnumerator<TKey, TValue>(this, i);
-            while (enumerator.MoveNext())
-                yield return enumerator.Current;
-        }
-
-		public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
-		{
-			var enumerator = new AvlNodeEnumerator<TKey, TValue>(this);
-		    return enumerator;
-		}
-
 		public bool Search(TKey key, out TValue value)
 		{
 			AvlNode<TKey, TValue> node = Root;
@@ -775,10 +762,29 @@ namespace Lazinator.Collections.Avl
 			}
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+
+        public IEnumerable<AvlNode<TKey, TValue>> Skip(long i)
+        {
+            var enumerator = new AvlNodeEnumerator<TKey, TValue>(this, i);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
+        public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
+        {
+            var enumerator = new AvlNodeEnumerator<TKey, TValue>(this);
+            return enumerator;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}
+
+        public AvlNodeValueEnumerator<TKey, TValue> GetValueEnumerator() => new AvlNodeValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
+        public AvlNodeKeyEnumerator<TKey, TValue> GetKeyEnumerator() => new AvlNodeKeyEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
+        public AvlNodeLazinatorKeyValueEnumerator<TKey, TValue> GetLazinatorKeyValueEnumerator() => new AvlNodeLazinatorKeyValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
+        public AvlNodeKeyValuePairEnumerator<TKey, TValue> GetKeyValuePairEnumerator() => new AvlNodeKeyValuePairEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
 
         #endregion
     }
