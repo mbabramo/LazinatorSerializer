@@ -89,5 +89,6 @@
         ILazinatorTreeable,
         IAvlSortedList,
         IAvlSortedDictionary,
+        ILazinatorKeyableMultivalue,
     }
 }

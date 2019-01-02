@@ -151,12 +151,12 @@ namespace Lazinator.Collections.Avl
 
         public T GetAt(long index)
         {
-            return UnderlyingTree.NodeAtIndex(index).Key;
+            return UnderlyingTree.KeyAtIndex(index);
         }
 
         public void SetAt(long index, T value)
         {
-            UnderlyingTree.NodeAtIndex(index).Key = value;
+            UnderlyingTree.SetKeyAtIndex(index, value);
         }
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item)

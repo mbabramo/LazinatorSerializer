@@ -129,7 +129,7 @@ namespace Lazinator.Collections.Avl
 
         public T GetAt(long index)
         {
-            return UnderlyingTree.NodeAtIndex(index).Value;
+            return UnderlyingTree.ValueAtIndex(index);
         }
 
         public void SetAt(long index, T value)

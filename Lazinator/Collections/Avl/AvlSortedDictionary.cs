@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyable<TKey, TValue>, ILazinatorOrderedKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyable<TKey, TValue>, ILazinatorKeyableMultivalue<TKey, TValue>, ILazinatorOrderedKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedDictionary()
         {
@@ -18,11 +18,9 @@ namespace Lazinator.Collections.Avl
         {
             UnderlyingTree = new AvlTree<TKey, TValue>();
             UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
-            if (allowDuplicates)
-                throw new NotImplementedException();
         }
 
-        public bool AllowDuplicates
+        public bool AllowDuplicateKeys
         {
             get
             {
@@ -57,6 +55,8 @@ namespace Lazinator.Collections.Avl
             }
             set
             {
+                if (AllowDuplicateKeys)
+                    throw new Exception("With multiple keys, use AddValue method to add item.");
                 UnderlyingTree.Insert(key, value);
             }
         }
@@ -67,15 +67,26 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            bool allowDuplicates = AllowDuplicates;
+            bool allowDuplicates = AllowDuplicateKeys;
             UnderlyingTree = new AvlTree<TKey, TValue>();
             UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
         }
-
-
+        
         public bool Remove(TKey item)
         {
             return UnderlyingTree.Remove(item);
+        }
+
+        public bool RemoveAll(TKey item)
+        {
+            bool any = Remove(item);
+            if (any)
+            {
+                do
+                {
+                } while (Remove(item));
+            }
+            return any;
         }
 
         public ICollection<TKey> Keys => GetKeysAndValues().Select(x => x.Key).ToList();
@@ -93,18 +104,33 @@ namespace Lazinator.Collections.Avl
 
         int ICollection<KeyValuePair<TKey, TValue>>.Count => (int) Count;
 
-        public IEnumerable<TKey> EnumerateFrom(long index)
+        public IEnumerable<TValue> GetAllValues(TKey key)
         {
-            if (index > Count || index < 0)
-                throw new ArgumentException();
-            if (Count == 0)
-                yield break;
-            foreach (var node in UnderlyingTree.Skip(index))
-                yield return node.Key;
+            foreach (var p in EnumerateFrom(key))
+            {
+                if (p.Key.Equals(key))
+                    yield return p.Value;
+                else
+                    yield break;
+            }
+        }
+
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateFrom(TKey key)
+        {
+            var result = UnderlyingTree.SearchMatchOrNext(key);
+            foreach (var node in UnderlyingTree.Skip(result.index))
+                yield return node.KeyValuePair;
+        }
+
+        public void AddValue(TKey key, TValue value)
+        {
+            UnderlyingTree.Insert(key, value);
         }
 
         public void Add(TKey key, TValue value)
         {
+            if (AllowDuplicateKeys)
+                throw new Exception("With multiple keys, use AddValue method to add item.");
             if (this.ContainsKey(key))
                 throw new ArgumentException();
             this[key] = value;
@@ -117,8 +143,18 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            bool found = TryGetValue(item.Key, out TValue value);
-            return found && System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, item.Value);
+            if (AllowDuplicateKeys)
+            {
+                foreach (var v in GetAllValues(item.Key))
+                    if (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(v, item.Value))
+                        return true;
+                return false;
+            }
+            else
+            {
+                bool found = TryGetValue(item.Key, out TValue value);
+                return found && System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, item.Value);
+            }
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
@@ -133,7 +169,33 @@ namespace Lazinator.Collections.Avl
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             if (Contains(item))
+            {
+                if (AllowDuplicateKeys)
+                { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
+                    var result = UnderlyingTree.SearchMatchOrNext(item.Key);
+                    if (result.found == false)
+                        return false;
+                    bool valueFound = false;
+                    int distanceFromFirst = 0;
+                    foreach (var value in GetAllValues(item.Key))
+                    { 
+                        if (item.Value.Equals(value))
+                        {
+                            valueFound = true;
+                            break;
+                        }
+                        else
+                            distanceFromFirst++;
+                    }
+                    if (valueFound)
+                    {
+                        UnderlyingTree.Remove(item.Key, result.index + distanceFromFirst);
+                        return true;
+                    }
+                    return false;
+                }
                 return Remove(item.Key);
+            }
             return false;
         }
 

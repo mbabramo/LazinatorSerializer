@@ -17,7 +17,8 @@ namespace LazinatorTests.Tests
         public enum DictionaryToUse
         {
             LazinatorDictionary,
-            AvlSortedDictionary
+            AvlSortedDictionary,
+            AvlSortedDictionaryMultiValue
         }
 
         public ILazinatorKeyable<TKey, TValue> GetDictionary<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
@@ -28,6 +29,8 @@ namespace LazinatorTests.Tests
                     return new LazinatorDictionary<TKey, TValue>();
                 case DictionaryToUse.AvlSortedDictionary:
                     return new AvlSortedDictionary<TKey, TValue>(false);
+                case DictionaryToUse.AvlSortedDictionaryMultiValue:
+                    return new AvlSortedDictionary<TKey, TValue>(true);
             }
             throw new InvalidOperationException();
         }
@@ -242,6 +245,35 @@ namespace LazinatorTests.Tests
             s = d[a3];
             s.Should().Be("something");
 
+        }
+
+        [Theory]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryMultiValue)]
+        public void SortedMultivalueDictionaryWorks(DictionaryToUse dictionaryToUse)
+        {
+            ILazinatorKeyableMultivalue<WLong, WInt> d = (ILazinatorKeyableMultivalue<WLong, WInt>)GetDictionary<WLong, WInt>(dictionaryToUse);
+            const int numKeys = 100;
+            const int numEntries = 150;
+            List<int>[] itemsForNode = new List<int>[numKeys];
+            for (int i = 0; i < numKeys; i++)
+                itemsForNode[i] = new List<int>();
+            Random r = new Random(0);
+            for (int i = 0; i < numEntries; i++)
+            {
+                int j = r.Next(numKeys);
+                int k = r.Next();
+                itemsForNode[j].Add(k);
+                d.AddValue(j, k);
+            }
+            for (int i = 0; i < numKeys; i++)
+            {
+                var key = new WLong(i);
+                var items = d.GetAllValues(key).Select(x => x.WrappedValue).ToList();
+                d.ContainsKey(key).Should().Be(items.Any());
+                items.SequenceEqual(itemsForNode[i]).Should().BeTrue();
+                d.RemoveAll(key);
+                d.GetAllValues(key).Any().Should().BeFalse();
+            }
         }
 
 

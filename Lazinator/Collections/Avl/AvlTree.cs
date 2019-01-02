@@ -39,6 +39,18 @@ namespace Lazinator.Collections.Avl
             throw new InvalidOperationException(); // should not be reached
         }
 
+        public KeyValuePair<TKey, TValue> KeyValuePairAtIndex(long i) => NodeAtIndex(i).KeyValuePair;
+        public TKey KeyAtIndex(long i) => NodeAtIndex(i).Key;
+        public void SetKeyAtIndex(long i, TKey key)
+        {
+            NodeAtIndex(i).Key = key;
+        }
+        public TValue ValueAtIndex(long i) => NodeAtIndex(i).Value;
+        public void SetValueAtIndex(long i, TValue value)
+        {
+            NodeAtIndex(i).Value = value;
+        }
+
         public virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
         {
             return new AvlNode<TKey, TValue>()
@@ -87,6 +99,24 @@ namespace Lazinator.Collections.Avl
 
         public (AvlNode<TKey, TValue> node, long index, bool found) SearchMatchOrNext(TKey key)
         {
+            var result = SearchMatchOrNextHelper(key);
+            if (result.found && AllowDuplicateKeys)
+            {
+                bool matches = true;
+                do
+                { // make sure we have the first key match
+                    result.index--;
+                    matches = result.index >= 0 && KeyAtIndex(result.index).Equals(key);
+                    if (!matches)
+                        result.index++;
+                }
+                while (matches);
+            }
+            return result;
+        }
+
+        public (AvlNode<TKey, TValue> node, long index, bool found) SearchMatchOrNextHelper(TKey key)
+        {
             AvlNode<TKey, TValue> node = Root;
             if (node == null)
                 return (null, 0, false);
@@ -114,25 +144,6 @@ namespace Lazinator.Collections.Avl
                 }
                 else
                 {
-                    if (AllowDuplicateKeys)
-                    {
-                        bool keyMatches = true;
-                        while (keyMatches)
-                        {
-                            AvlNode<TKey, TValue> previous = node.GetPreviousNode();
-                            if (previous == null)
-                                keyMatches = false;
-                            if (previous != null)
-                            {
-                                keyMatches = previous.Key.Equals(key);
-                                if (keyMatches)
-                                {
-                                    node = previous;
-                                    index--;
-                                }
-                            }
-                        }
-                    }
                     return (node, index, true);
                 }
             }
