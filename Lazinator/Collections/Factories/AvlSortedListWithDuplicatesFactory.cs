@@ -10,10 +10,7 @@ namespace Lazinator.Collections.Factories
     {
         public ILazinatorCountableListable<T> CreateCountableListable()
         {
-            return new AvlSortedList<T>()
-            {
-                AllowDuplicates = true
-            };
+            return new AvlSortedList<T>(true);
         }
     }
 }

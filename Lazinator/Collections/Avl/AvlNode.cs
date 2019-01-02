@@ -65,15 +65,18 @@ namespace Lazinator.Collections.Avl
                 current = current.Left;
                 return current;
             }
-            // If the parent is to the left, then that was previous.
             var p = current.Parent;
-            if (p.Left == current)
+            // If there is no parent, then this is a root node with no children, and thus the first node.
+            if (p == null)
+                return null;
+            // If the parent is to the left (i.e., this is the right child), then that was previous.
+            if (p.Right == current)
             {
                 current = p;
                 return current;
             }
             // Otherwise, go up to the right as far as possible and then one up to the left.
-            while (p.Right == current)
+            while (p != null && p.Left == current)
             {
                 current = p;
                 p = current.Parent;

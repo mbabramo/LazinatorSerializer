@@ -13,10 +13,22 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlSortedList(bool allowDuplicateKeys)
+        public AvlSortedList(bool allowDuplicates)
         {
             UnderlyingTree = new AvlTree<T, Placeholder>();
-            UnderlyingTree.AllowDuplicateKeys = allowDuplicateKeys;
+            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
+        }
+
+        public bool AllowDuplicates
+        {
+            get
+            {
+                return UnderlyingTree.AllowDuplicateKeys;
+            }
+            set
+            {
+                UnderlyingTree.AllowDuplicateKeys = value;
+            }
         }
 
         // DEBUG -- once this works, AvlSet and AvlMultiset should be replaceable.
@@ -40,7 +52,9 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
+            bool allowDuplicates = AllowDuplicates;
             UnderlyingTree = new AvlTree<T, Placeholder>();
+            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
         }
 
         public bool Contains(T item)

@@ -41,7 +41,22 @@ namespace Lazinator.Collections
 
                 int comparison = comparer.Compare(target, this[mid]);
                 if (comparison == 0)
+                {
+                    if (AllowDuplicates)
+                    { // return first match
+                        bool matches = true;
+                        while (matches && mid > 0)
+                        {
+                            var previous = this[mid - 1];
+                            matches = previous.Equals(target);
+                            if (matches)
+                            {
+                                mid--;
+                            }
+                        }
+                    }
                     return (mid, true);
+                }
                 if (first == last)
                 {
                     if (comparison > 0)

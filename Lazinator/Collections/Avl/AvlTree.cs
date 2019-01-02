@@ -103,6 +103,8 @@ namespace Lazinator.Collections.Avl
                         while (keyMatches)
                         {
                             AvlNode<TKey, TValue> previous = node.GetPreviousNode();
+                            if (previous == null)
+                                keyMatches = false;
                             if (previous != null)
                             {
                                 keyMatches = previous.Key.Equals(key);
@@ -113,7 +115,6 @@ namespace Lazinator.Collections.Avl
                                 }
                             }
                         }
-                        return (node, index, false);
                     }
                     return (node, index, true);
                 }
@@ -232,17 +233,9 @@ namespace Lazinator.Collections.Avl
             }
             else
                 compare = key.CompareTo(node.Key);
-            if (compare == 0 && skipDuplicateKeys)
+            if (compare == 0 && skipDuplicateKeys && desiredNodeIndex == null)
             {
-                if (desiredNodeIndex == null)
-                {
-                    if (key.Equals(node.Key))
-                        compare = 1;
-                }
-                else
-                {
-                    compare = 1; // move to next location
-                }
+                compare = 1;
             }
             return compare;
         }
