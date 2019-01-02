@@ -53,8 +53,6 @@
         ILazinatorQueue,
         ILazinatorStack,
         ILazinatorArray,
-        IAvlMultiset,
-        IAvlSet,
         IDictionaryBucket,
         IDictionary,
         IDictionaryUnofficial,
