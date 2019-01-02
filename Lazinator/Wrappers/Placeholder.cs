@@ -35,5 +35,10 @@ namespace Lazinator.Wrappers
         {
             return true;
         }
+
+        public override string ToString()
+        {
+            return "X";
+        }
     }
 }

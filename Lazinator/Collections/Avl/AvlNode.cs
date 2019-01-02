@@ -91,7 +91,7 @@ namespace Lazinator.Collections.Avl
                 indent += "| ";
             }
 
-            Debug.WriteLine($"{Key} ({Count}, {NodeVisitedDuringChange})");
+            Debug.WriteLine($"Index {Index}: ({Key}, {Value}) (Count {Count}, Visited {NodeVisitedDuringChange})");
 
             Left?.Print(indent, false);
             Right?.Print(indent, true);

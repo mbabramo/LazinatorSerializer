@@ -67,6 +67,7 @@ namespace LazinatorTests.AVL
             s.RemoveFirstMatchIfExists(4);
             s.Count.Should().Be(1);
         }
+        
 
         [Fact]
         public void AvlMultisetSkipWorks()
@@ -84,19 +85,19 @@ namespace LazinatorTests.AVL
             GetAvlSet(out var set, out var ints);
             foreach (int x in ints)
             {
-                (bool valueFound, WInt valueIfFound) = set.GetMatchOrNext(x);
+                (bool valueFound, bool valueOrNextExists, WInt valueOrNext) = set.GetMatchOrNext(x);
                 valueFound.Should().BeTrue();
-                valueIfFound.WrappedValue.Should().Be(x);
+                valueOrNext.WrappedValue.Should().Be(x);
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
                 {
-                    (bool valueFound, WInt valueIfFound) = set.GetMatchOrNext(x);
+                    (bool valueFound, bool valueOrNextExists, WInt valueOrNext) = set.GetMatchOrNext(x);
                     if (x > ints.Max())
                         valueFound.Should().BeFalse();
                     else
                     {
-                        valueIfFound.WrappedValue.Should().Be(ints.First(y => y > x));
+                        valueOrNext.WrappedValue.Should().Be(ints.First(y => y > x));
                     }
                 }
         }
@@ -139,18 +140,18 @@ namespace LazinatorTests.AVL
                 tree.Insert(x, x.ToString());
             foreach (int x in ints)
             {
-                var node = tree.SearchMatchOrNext(x);
+                (AvlNode<WInt, WString> node, long index, bool found) = tree.SearchMatchOrNext(x);
                 node.Value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
                 {
-                    var node = tree.SearchMatchOrNext(x);
+                    var result = tree.SearchMatchOrNext(x);
                     if (x > ints.Max())
-                        node.Should().BeNull();
+                        result.found.Should().BeFalse();
                     else
                     {
-                        node.Key.Should().Be(ints.First(y => y > x));
+                        result.node.Key.Should().Be(ints.First(y => y > x));
                     }
                 }
         }

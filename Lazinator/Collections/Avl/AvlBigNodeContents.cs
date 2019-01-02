@@ -60,7 +60,7 @@ namespace Lazinator.Collections.Avl
             SelfItemsCount = Items.Count;
         }
 
-        public (int location, bool rejectedAsDuplicate) Insert(LazinatorKeyValue<TKey, TValue> keyAndValue)
+        public (long location, bool rejectedAsDuplicate) Insert(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.InsertSorted(keyAndValue);
             SelfItemsCount = Items.Count;
@@ -97,7 +97,7 @@ namespace Lazinator.Collections.Avl
             return result.exists;
         }
 
-        public (int location, bool exists) Find(LazinatorKeyValue<TKey, TValue> keyAndValue)
+        public (long location, bool exists) Find(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.FindSorted(keyAndValue);
             return result;
@@ -108,7 +108,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public (int location, bool exists) Find(TKey key)
+        public (long location, bool exists) Find(TKey key)
         {
             var comparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
             var result = Items.FindSorted(new LazinatorKeyValue<TKey, TValue>(key, default), comparer);
@@ -118,7 +118,7 @@ namespace Lazinator.Collections.Avl
                 do
                 { // make sure we have the first key match
                     result.location--;
-                    matches = Items[result.location].Key.Equals(key);
+                    matches = Items[(int) result.location].Key.Equals(key);
                     if (!matches)
                         result.location++;
                 }
@@ -127,9 +127,9 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public (int priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue)
+        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
-            (int priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
+            (long priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
             SelfItemsCount = Items.Count;
             if (result.priorLocation == SelfItemsCount && SelfItemsCount > 0)
                 UpdateNodeKey();

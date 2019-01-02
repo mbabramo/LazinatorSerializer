@@ -23,15 +23,11 @@ namespace Lazinator.Collections.Avl
         public bool Contains(T key)
         {
             var result = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
-            if (!result.valueFound)
-                return false;
-            return result.valueIfFound.Item1.Equals(key);
-        }
-
-        public (bool valueFound, T valueIfFound) GetMatchOrNext(T key)
-        {
-            var matchOrNext = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
-            return (matchOrNext.valueFound, matchOrNext.valueFound ? matchOrNext.valueIfFound.Item1 : default(T));
+            if (result.valueFound)
+                return true;
+            if (result.valueOrNextExists)
+                return result.valueOrNext.Item1.Equals(key); // the result
+            return false;
         }
 
         public bool Insert(T key)
@@ -41,9 +37,9 @@ namespace Lazinator.Collections.Avl
 
         public void RemoveFirstMatchIfExists(T key)
         {
-            var matchOrNext = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
-            if (matchOrNext.valueFound)
-                UnderlyingSet.Delete(matchOrNext.valueIfFound);
+            var result = UnderlyingSet.GetMatchOrNext(new LazinatorTuple<T, WInt>(key, 0));
+            if (result.valueFound || (result.valueOrNextExists && result.valueOrNext.Item1.Equals(key)))
+                UnderlyingSet.Remove(result.valueOrNext);
         }
 
         public IEnumerator GetEnumerator()

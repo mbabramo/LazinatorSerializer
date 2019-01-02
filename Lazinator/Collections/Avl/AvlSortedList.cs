@@ -111,8 +111,6 @@ namespace Lazinator.Collections.Avl
 
         public long LongCount => Count;
 
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public void InsertAt(long index, T item)
         {
             UnderlyingTree.Insert(item, new Placeholder(), index);
@@ -146,12 +144,17 @@ namespace Lazinator.Collections.Avl
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item)
         {
             if (AllowDuplicates)
-                UnderlyingTree.Insert(item, default);
+            {
+                (bool inserted, long location) = UnderlyingTree.Insert(item, default);
+                return (location, !inserted);
+            }
             else
             {
                 (long location, bool exists) = FindSorted(item);
-                if (!exists)
-                    UnderlyingTree.Insert(item, default, location);
+                if (exists)
+                    return (location, true);
+                UnderlyingTree.Insert(item, default, location);
+                return (location, exists);
             }
         }
 

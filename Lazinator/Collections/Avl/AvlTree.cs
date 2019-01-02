@@ -112,15 +112,15 @@ namespace Lazinator.Collections.Avl
             return x;
         }
 
-        public bool Insert(TKey key, TValue value, long? nodeIndex = null)
+        public (bool inserted, long location) Insert(TKey key, TValue value, long? nodeIndex = null)
         {
-            bool returnVal = InsertHelper(key, value, nodeIndex);
+            var result = InsertHelper(key, value, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
                 //Root.Print("", false);
             }
-            return returnVal;
+            return result;
         }
 
         /// <summary>
@@ -132,13 +132,18 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
         private (bool inserted, long location) InsertHelper(TKey key, TValue value, long? nodeIndex = null)
 		{
+            bool DEBUG = false;
+            if (DEBUG)
+            {
+                Root.Print("", false);
+            }
 			AvlNode<TKey, TValue> node = Root;
             long index = node?.LeftCount ?? 0;
 			while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
 
-                int compare = CompareKeyOrIndexToNode(key, nodeIndex, node);
+                int compare = CompareKeyOrIndexToNode(key, index, nodeIndex, node);
 
                 if (compare < 0 || (compare == 0 && nodeIndex != null))
                 {
@@ -155,17 +160,11 @@ namespace Lazinator.Collections.Avl
                     else
                     {
                         node = left;
-                        index -= node.RightCount;
+                        index -= 1 + (node?.RightCount ?? 0);
                     }
                 }
                 else if (compare > 0)
                 {
-                    // adjust the node index that we are looking for, since we have now skipped the left nodes.
-                    // for example, suppose we are at node 100 and looking for node 200. When we go to the right, 
-                    // we'll be at node 101, so we want to look for node 100 within that subtree. 
-                    if (nodeIndex != null)
-                        nodeIndex -= (node.Left?.Count ?? 0) + 1;
-
                     AvlNode <TKey, TValue> right = node.Right;
 
                     if (right == null)
@@ -180,7 +179,7 @@ namespace Lazinator.Collections.Avl
                     else
                     {
                         node = right;
-                        nodeIndex += 1 + node.LeftCount;
+                        index += 1 + (node?.LeftCount ?? 0);
                     }
                 }
                 else
@@ -195,13 +194,12 @@ namespace Lazinator.Collections.Avl
 
 			return (true, 0);
 		}
-
-        private int CompareKeyOrIndexToNode(TKey key, long? nodeIndex, AvlNode<TKey, TValue> node)
+        
+        private int CompareKeyOrIndexToNode(TKey key, long actualNodeIndex, long? nodeIndex, AvlNode<TKey, TValue> node)
         {
             int compare;
             if (nodeIndex is long index)
             {
-                long actualNodeIndex = (node.Left?.Count ?? 0);
                 if (index == actualNodeIndex)
                     compare = 0;
                 else if (index < actualNodeIndex)
@@ -485,21 +483,22 @@ namespace Lazinator.Collections.Avl
 		{
 			AvlNode<TKey, TValue> node = Root;
 
-			while (node != null)
+            long index = node?.LeftCount ?? 0;
+            while (node != null)
 			{
 			    node.NodeVisitedDuringChange = true;
 
-                int compare = CompareKeyOrIndexToNode(key, nodeIndex, node);
+                int compare = CompareKeyOrIndexToNode(key, index, nodeIndex, node);
                 if (compare < 0)
 				{
 					node = node.Left;
-				}
+                    index -= 1 + (node?.RightCount ?? 0);
+                }
 				else if (compare > 0)
                 {
-                    if (nodeIndex != null)
-                        nodeIndex -= (node.Left?.Count ?? 0) + 1;
                     node = node.Right;
-				}
+                    index += 1 + (node?.LeftCount ?? 0);
+                }
 				else
 				{
 					AvlNode<TKey, TValue> left = node.Left;

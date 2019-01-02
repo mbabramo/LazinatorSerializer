@@ -186,7 +186,7 @@ namespace Lazinator.Collections.Avl
             var node = UnderlyingTree.SearchMatchOrNextOrLast(keyWithDefaultValue);
             var contents = GetNodeContents(node);
             var result = contents.Find(key);
-            return (node, result.exists ? result.location : contents.SelfItemsCount, result.exists);
+            return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);
         }
 
         public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKeyAndValue(LazinatorKeyValue<TKey, TValue> keyAndValue)
@@ -196,7 +196,7 @@ namespace Lazinator.Collections.Avl
             var node = UnderlyingTree.SearchMatchOrNextOrLast(keyAndValue);
             var contents = GetNodeContents(node);
             var result = contents.Find(keyAndValue);
-            return (node, result.exists ? result.location : contents.SelfItemsCount, result.exists);
+            return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);
         }
 
         public IEnumerator<LazinatorKeyValue<TKey, TValue>> GetEnumerator()

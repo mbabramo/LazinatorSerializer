@@ -24,7 +24,7 @@ namespace LazinatorTests.Tests
             {
                 yield return new object[] { new LazinatorListFactory<WInt>() };
                 yield return new object[] { new AvlListFactory<WInt>() };
-                yield return new object[] { new AvlSortedListFactory<WInt>() };
+                // yield return new object[] { new AvlSortedListFactory<WInt>() };
             }
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -135,6 +135,11 @@ namespace LazinatorTests.Tests
             const int switchToMoreDeletionsAfter = 400; // we'll start mostly with insertions, and then switch to mostly deletions, so that we can delete the entire tree.
             for (int i = 0; i < totalChanges; i++)
             {
+                //if (i > 0 && l is Lazinator.Collections.Avl.AvlList<WInt> DEBUG)
+                //{
+                //    DEBUG.UnderlyingTree.Root.Print("", false);
+                //    Debug.WriteLine($"");
+                //}
                 if (o.Count == 0 || r.Next(0, 100) < (i > switchToMoreDeletionsAfter ? 30 : 70))
                 {
                     int j;

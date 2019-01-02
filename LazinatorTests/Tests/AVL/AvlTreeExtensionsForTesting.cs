@@ -19,7 +19,7 @@ namespace LazinatorTests.AVL
 
         public static bool Insert<TKey>(this AvlTree<TKey, Placeholder> source, TKey key) where TKey : ILazinator, IComparable<TKey>
         {
-            return source.Insert(key, default);
+            return source.Insert(key, default).inserted;
         }
 
         public static int CountByEnumerating<TKey>(this AvlTree<TKey, Placeholder> source) where TKey : ILazinator, IComparable<TKey>
