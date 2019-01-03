@@ -91,5 +91,6 @@
         IAvlSortedDictionary,
         ILazinatorKeyableMultivalue,
         IAvlDictionary,
+        IStructWithBadHashFunction,
     }
 }

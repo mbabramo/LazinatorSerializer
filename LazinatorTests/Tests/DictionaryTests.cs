@@ -8,6 +8,7 @@ using Lazinator.Wrappers;
 using Lazinator.Core;
 using Lazinator.Collections;
 using Lazinator.Collections.Avl;
+using LazinatorTests.Examples;
 
 namespace LazinatorTests.Tests
 {
@@ -232,6 +233,33 @@ namespace LazinatorTests.Tests
             var key = d.Keys.First();
             d.ContainsKey(key).Should().BeTrue();
             d[key].WrappedValue.Should().Be(key.ToString());
+        }
+
+        [Theory]
+        [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        public void DictionaryWithBadHashFunction(DictionaryToUse dictionaryToUse)
+        {
+            // With some dictionary implementations, all items with same hash are put in hash bucket. So, this ensures that dictionary will work in this case.
+            ILazinatorKeyable<StructWithBadHashFunction, WString> d = GetDictionary<StructWithBadHashFunction, WString>(dictionaryToUse);
+            for (int i = 0; i < 100; i++)
+                d[i] = i.ToString();
+
+            for (int i = 0; i < 100; i++)
+            {
+                d.ContainsKey(i).Should().BeTrue();
+                d[i].WrappedValue.Should().Be(i.ToString());
+            }
+
+            for (int i = 0; i < 100; i++)
+                if (i % 3 == 0)
+                    d.Remove(i);
+                else
+                    d.Remove(new KeyValuePair<StructWithBadHashFunction, WString>(i, i.ToString()));
+
+            for (int i = 0; i < 100; i++)
+                d.ContainsKey(i).Should().BeFalse();
         }
 
         [Theory]

@@ -2,7 +2,7 @@
 
 namespace Lazinator.Wrappers
 {
-    interface IW<T> : ILazinatorHasValue
+    public interface IW<T> : ILazinatorHasValue
     {
         [SetterAccessibility("private")]
         T WrappedValue { get; }
