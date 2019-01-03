@@ -17,6 +17,8 @@ namespace LazinatorTests.Tests
         public enum DictionaryToUse
         {
             LazinatorDictionary,
+            AvlDictionary,
+            AvlDictionaryMultiValue,
             AvlSortedDictionary,
             AvlSortedDictionaryMultiValue
         }
@@ -27,6 +29,10 @@ namespace LazinatorTests.Tests
             {
                 case DictionaryToUse.LazinatorDictionary:
                     return new LazinatorDictionary<TKey, TValue>();
+                case DictionaryToUse.AvlDictionary:
+                    return new AvlDictionary<TKey, TValue>(false);
+                case DictionaryToUse.AvlDictionaryMultiValue:
+                    return new AvlDictionary<TKey, TValue>(true);
                 case DictionaryToUse.AvlSortedDictionary:
                     return new AvlSortedDictionary<TKey, TValue>(false);
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
@@ -37,6 +43,7 @@ namespace LazinatorTests.Tests
         
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryEnumerableWorks(DictionaryToUse dictionaryToUse)
         {
@@ -79,6 +86,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryLongStringWorks(DictionaryToUse dictionaryToUse)
         {
@@ -141,6 +149,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryCanGrowAndShrink(DictionaryToUse dictionaryToUse)
         {
@@ -157,6 +166,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryRecognizesKeyEquivalent(DictionaryToUse dictionaryToUse)
         {
@@ -168,6 +178,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void EmptyDictionary(DictionaryToUse dictionaryToUse)
         {
@@ -192,6 +203,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void SingleItemDictionary(DictionaryToUse dictionaryToUse)
         {
@@ -224,6 +236,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionarySearchWorksEvenIfLastKeyDisposed(DictionaryToUse dictionaryToUse)
         {
@@ -248,6 +261,7 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
+        [InlineData(DictionaryToUse.AvlDictionaryMultiValue)]
         [InlineData(DictionaryToUse.AvlSortedDictionaryMultiValue)]
         public void SortedMultivalueDictionaryWorks(DictionaryToUse dictionaryToUse)
         {

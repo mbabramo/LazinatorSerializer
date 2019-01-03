@@ -35,14 +35,14 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<(LazinatorTuple<TKey, TValue> keyValue, long index)> GetHashMatches(TKey key, uint hash)
         {
-            return GetAllInHashBucket(hash).Where(x => x.Item1.Equals(key));
+            return GetAllInHashBucket(hash).Where(x => x.keyValue.Item1.Equals(key));
         }
 
         private IEnumerable<(LazinatorTuple<TKey, TValue> keyValue, long index)> GetAllInHashBucket(uint hash)
         {
             foreach ((KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index) p in EnumerateFrom(hash))
             {
-                if (p.keyValue.Key.GetHashCode().Equals(hash))
+                if (p.keyValue.Key.GetBinaryHashCode32().Equals(hash))
                     yield return (p.keyValue.Value, p.index);
                 else
                     yield break;
@@ -89,7 +89,14 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                     throw new Exception("With multiple keys, use AddValue method to add item.");
-                UnderlyingTree.Insert(key.GetBinaryHashCode32(), new LazinatorTuple<TKey, TValue>(key, value));
+                uint hash = key.GetBinaryHashCode32();
+                var item = GetHashMatches(key, hash).FirstOrDefault();
+                if (item.keyValue == null)
+                {
+                    UnderlyingTree.Insert(key.GetBinaryHashCode32(), new LazinatorTuple<TKey, TValue>(key, value));
+                }
+                else
+                    item.keyValue.Item2 = value;
             }
         }
 
