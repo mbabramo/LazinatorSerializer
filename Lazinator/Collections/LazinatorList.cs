@@ -8,6 +8,7 @@ using static Lazinator.Core.LazinatorUtilities;
 using Lazinator.Attributes;
 using System.Buffers;
 using System.Linq;
+using Lazinator.Collections.OffsetList;
 
 namespace Lazinator.Collections
 {

@@ -2,7 +2,7 @@
 using System.Linq;
 using Lazinator.Core;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.OffsetList
 {
     /// <summary>
     /// A list of progressively increasing integral values, used to store offsets into a stream. 

@@ -4,7 +4,7 @@ using Lazinator.Core;
 using System.Runtime.InteropServices;
 using Lazinator.Attributes;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.OffsetList
 {
     /// <summary>
     /// A list of primitive values that can be indexed without deserialization if the list is not changed. The AsList property provides an underlying List, which can be mutated. 

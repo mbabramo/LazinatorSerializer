@@ -26,6 +26,7 @@ using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.Subclasses;
+using Lazinator.Collections.OffsetList;
 
 namespace LazinatorTests.Tests
 {
@@ -123,10 +124,10 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "Lazinator", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "Lazinator", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
+            await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "Lazinator", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
             await CompleteGenerateCode(typeof(LazinatorList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(SortedLazinatorList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorArray<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "", ws);

@@ -1,6 +1,6 @@
 ﻿using Lazinator.Attributes;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.OffsetList
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorOffsetList)]
     interface ILazinatorOffsetList

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.OffsetList
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;

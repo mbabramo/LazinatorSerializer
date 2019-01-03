@@ -11,6 +11,7 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Diagnostics;
+using Lazinator.Collections.OffsetList;
 
 namespace LazinatorTests.Tests
 {

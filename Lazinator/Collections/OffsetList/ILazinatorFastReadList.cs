@@ -1,7 +1,7 @@
 ﻿using System;
 using Lazinator.Attributes;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.OffsetList
 {
     [AllowNonlazinatorOpenGenerics]
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorFastReadList, -1, false)]

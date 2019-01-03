@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.OffsetList
 {
     public partial class LazinatorFastReadListInt32 : LazinatorFastReadList<Int32>, ILazinatorFastReadListInt32
     {

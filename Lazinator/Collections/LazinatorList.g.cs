@@ -12,6 +12,7 @@ namespace Lazinator.Collections
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
+    using Lazinator.Collections.OffsetList;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
