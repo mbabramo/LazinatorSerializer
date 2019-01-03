@@ -319,6 +319,10 @@ namespace LazinatorTests.Tests
             }
             void CheckList()
             {
+                var DEBUG0 = GetList();
+                var DEBUG0a = GetList().ToList();
+                var DEBUG = GetList().Select(x => x?.MyShort).ToList();
+                var DEBUG2 = list.Select(x => x?.MyShort).ToList();
                 for (int i = 0; i < list.Count; i++)
                 {
                     var currentListItem = GetList()[i];
