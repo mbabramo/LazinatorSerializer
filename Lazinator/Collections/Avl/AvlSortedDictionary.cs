@@ -72,19 +72,19 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
         }
         
-        public bool Remove(TKey item)
+        public bool Remove(TKey key)
         {
-            return UnderlyingTree.Remove(item);
+            return UnderlyingTree.Remove(key);
         }
 
-        public bool RemoveAll(TKey item)
+        public bool RemoveAll(TKey key)
         {
-            bool any = Remove(item);
+            bool any = Remove(key);
             if (any)
             {
                 do
                 {
-                } while (Remove(item));
+                } while (Remove(key));
             }
             return any;
         }

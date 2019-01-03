@@ -8,7 +8,8 @@ using System.Threading;
 namespace Lazinator.Buffers
 {
     /// <summary>
-    /// This memory owner rents memory and then returns it and rents more, copying what it has written, when more space is needed.
+    /// This memory owner rents memory and later returns it and rents more. If, when writing, it realizes that it needs more, then it 
+    /// rents a bigger buffer and copies the existing buffer into it and returns the original. 
     /// </summary>
     public class ExpandableBytes : IMemoryOwner<byte>
     {
