@@ -13,6 +13,8 @@ namespace Lazinator.Collections
         IEnumerator<TKey> GetKeyEnumerator(long skip = 0);
         IEnumerator<TValue> GetValueEnumerator(long skip = 0);
         IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0);
+        bool ValueAtKey(TKey key, IComparer<TKey> comparer, out TValue value);
+
         TValue ValueAtIndex(long i);
         void SetValueAtIndex(long i, TValue value);
         TKey KeyAtIndex(long i);
@@ -20,6 +22,7 @@ namespace Lazinator.Collections
         (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value);
         void InsertAtIndex(TKey key, TValue value, long index);
         (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer);
+        bool Remove(TKey key, IComparer<TKey> comparer);
         bool RemoveAt(long i);
         long Count { get; }
     }

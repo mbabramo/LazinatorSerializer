@@ -16,31 +16,39 @@ namespace Lazinator.Collections.Avl
 
         public AvlSortedDictionary(bool allowDuplicates)
         {
-            UnderlyingTree = new AvlTree<TKey, TValue>();
-            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree2 = new AvlTree<TKey, TValue>();
+            UnderlyingTree2.AllowDuplicateKeys = allowDuplicates;
         }
 
         public bool AllowDuplicateKeys
         {
             get
             {
-                return UnderlyingTree.AllowDuplicateKeys;
+                return UnderlyingTree2.AllowDuplicateKeys;
             }
             set
             {
-                UnderlyingTree.AllowDuplicateKeys = value;
+                UnderlyingTree2.AllowDuplicateKeys = value;
             }
         }
 
         public bool ContainsKey(TKey key)
         {
-            bool result = UnderlyingTree.ValueAtKey(key, Comparer<TKey>.Default, out TValue value);
+            bool result = UnderlyingTree2.ValueAtKey(key, Comparer<TKey>.Default, out TValue value);
             return result;
         }
 
-        public bool TryGetValue(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, out TValue value) => ValueAtKey(key, out value); // for IDictionary
+
+        public bool ValueAtKey(TKey key, out TValue value)
         {
-            bool result = UnderlyingTree.ValueAtKey(key, Comparer<TKey>.Default, out value);
+            bool result = UnderlyingTree2.ValueAtKey(key, Comparer<TKey>.Default, out value);
+            return result;
+        }
+
+        public bool ValueAtKey(TKey key, IComparer<TKey> comparer, out TValue value)
+        {
+            bool result = UnderlyingTree2.ValueAtKey(key, comparer, out value);
             return result;
         }
 
@@ -48,7 +56,7 @@ namespace Lazinator.Collections.Avl
         {
             get
             {
-                bool result = TryGetValue(key, out TValue value);
+                bool result = ValueAtKey(key, out TValue value);
                 if (result == false)
                     throw new KeyNotFoundException();
                 return value;
@@ -57,24 +65,28 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                     throw new Exception("With multiple keys, use AddValue method to add item.");
-                UnderlyingTree.Insert(key, Comparer<TKey>.Default, value);
+                UnderlyingTree2.Insert(key, Comparer<TKey>.Default, value);
             }
         }
 
-        public long Count => UnderlyingTree.Count;
+        public long Count => UnderlyingTree2.Count;
 
         public bool IsReadOnly => false;
 
         public void Clear()
         {
             bool allowDuplicates = AllowDuplicateKeys;
-            UnderlyingTree = new AvlTree<TKey, TValue>();
-            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree2 = new AvlTree<TKey, TValue>();
+            UnderlyingTree2.AllowDuplicateKeys = allowDuplicates;
         }
         
+        public bool Remove(TKey key, IComparer<TKey> comparer)
+        {
+            return UnderlyingTree2.Remove(key, comparer);
+        }
         public bool Remove(TKey key)
         {
-            return UnderlyingTree.Remove(key);
+            return UnderlyingTree2.Remove(key, Comparer<TKey>.Default);
         }
 
         public bool RemoveAll(TKey key)
@@ -96,7 +108,7 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<KeyValuePair<TKey, TValue>> GetKeysAndValues()
         {
-            var enumerator = UnderlyingTree.GetKeyValuePairEnumerator();
+            var enumerator = UnderlyingTree2.GetKeyValuePairEnumerator();
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
             enumerator.Dispose();
@@ -117,14 +129,15 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateFrom(TKey key)
         {
-            var result = UnderlyingTree.GetMatchingOrNextNode(key, Comparer<TKey>.Default);
-            foreach (var keyValuePair in UnderlyingTree.KeyValuePairs(result.index))
-                yield return keyValuePair;
+            var result = UnderlyingTree2.GetMatchingOrNext(key, Comparer<TKey>.Default);
+            var enumerator = UnderlyingTree2.GetKeyValuePairEnumerator();
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
         }
 
         public void AddValue(TKey key, TValue value)
         {
-            UnderlyingTree.Insert(key, Comparer<TKey>.Default, value);
+            UnderlyingTree2.Insert(key, Comparer<TKey>.Default, value);
         }
 
         public void Add(TKey key, TValue value)
@@ -152,7 +165,7 @@ namespace Lazinator.Collections.Avl
             }
             else
             {
-                bool found = TryGetValue(item.Key, out TValue value);
+                bool found = ValueAtKey(item.Key, out TValue value);
                 return found && System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, item.Value);
             }
         }
@@ -172,7 +185,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                 { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
-                    var result = UnderlyingTree.GetMatchingOrNextNode(item.Key, Comparer<TKey>.Default);
+                    var result = UnderlyingTree2.GetMatchingOrNext(item.Key, Comparer<TKey>.Default);
                     if (result.found == false)
                         return false;
                     bool valueFound = false;
@@ -189,7 +202,7 @@ namespace Lazinator.Collections.Avl
                     }
                     if (valueFound)
                     {
-                        UnderlyingTree.RemoveAt(result.index + distanceFromFirst);
+                        UnderlyingTree2.RemoveAt(result.index + distanceFromFirst);
                         return true;
                     }
                     return false;
@@ -201,67 +214,67 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator GetEnumerator()
         {
-            return UnderlyingTree.GetKeyValuePairEnumerator();
+            return UnderlyingTree2.GetKeyValuePairEnumerator();
         }
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
-            return UnderlyingTree.GetKeyValuePairEnumerator();
+            return UnderlyingTree2.GetKeyValuePairEnumerator();
         }
 
         public IEnumerator<TKey> GetKeyEnumerator(long skip = 0)
         {
-            return UnderlyingTree.GetKeyEnumerator(skip);
+            return UnderlyingTree2.GetKeyEnumerator(skip);
         }
 
         public IEnumerator<TValue> GetValueEnumerator(long skip = 0)
         {
-            return UnderlyingTree.GetValueEnumerator(skip);
+            return UnderlyingTree2.GetValueEnumerator(skip);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0)
         {
-            return UnderlyingTree.GetKeyValuePairEnumerator(skip);
+            return UnderlyingTree2.GetKeyValuePairEnumerator(skip);
         }
 
         public TValue ValueAtIndex(long i)
         {
-            return UnderlyingTree.ValueAtIndex(i);
+            return UnderlyingTree2.ValueAtIndex(i);
         }
 
         public void SetValueAtIndex(long i, TValue value)
         {
-            UnderlyingTree.SetValueAtIndex(i, value);
+            UnderlyingTree2.SetValueAtIndex(i, value);
         }
 
         public void InsertAtIndex(TKey key, TValue value, long index)
         {
-            UnderlyingTree.InsertAtIndex(key, value, index);
+            UnderlyingTree2.InsertAtIndex(key, value, index);
         }
 
         public bool RemoveAt(long index)
         {
-            return UnderlyingTree.RemoveAt(index);
+            return UnderlyingTree2.RemoveAt(index);
         }
 
         public TKey KeyAtIndex(long i)
         {
-            return UnderlyingTree.KeyAtIndex(i);
+            return UnderlyingTree2.KeyAtIndex(i);
         }
 
         public void SetKeyAtIndex(long i, TKey key)
         {
-            UnderlyingTree.SetKeyAtIndex(i, key);
+            UnderlyingTree2.SetKeyAtIndex(i, key);
         }
 
         public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value)
         {
-            return UnderlyingTree.Insert(key, comparer, value);
+            return UnderlyingTree2.Insert(key, comparer, value);
         }
 
         public (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer)
         {
-            return UnderlyingTree.GetMatchingOrNext(key, comparer);
+            return UnderlyingTree2.GetMatchingOrNext(key, comparer);
         }
     }
 }

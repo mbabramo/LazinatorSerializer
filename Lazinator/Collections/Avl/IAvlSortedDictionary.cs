@@ -11,5 +11,6 @@ namespace Lazinator.Collections.Avl
         where TValue : ILazinator
     {
         AvlTree<TKey, TValue> UnderlyingTree { get; set; }
+        ILazinatorOrderedKeyable<TKey, TValue> UnderlyingTree2 { get; set; }
     }
 }
