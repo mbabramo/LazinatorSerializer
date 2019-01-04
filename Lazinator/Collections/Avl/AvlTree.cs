@@ -856,7 +856,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="skip">The number of nodes to skip</param>
         /// <returns></returns>
-        public IEnumerable<TKey> Keys(long skip = 0)
+        public IEnumerable<TKey> KeysEnumerable(long skip = 0)
         {
             var enumerator = GetKeyEnumerator(skip);
             while (enumerator.MoveNext())
@@ -868,7 +868,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="skip">The number of nodes to skip</param>
         /// <returns></returns>
-        public IEnumerable<TValue> Values(long skip = 0)
+        public IEnumerable<TValue> ValuesEnumerable(long skip = 0)
         {
             var enumerator = GetValueEnumerator(skip);
             while (enumerator.MoveNext())

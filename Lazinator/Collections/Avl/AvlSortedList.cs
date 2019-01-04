@@ -143,7 +143,7 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentException();
             if (Count == 0)
                 yield break;
-            foreach (var key in UnderlyingTree.Keys(skip))
+            foreach (var key in UnderlyingTree.KeysEnumerable(skip))
                 yield return key;
         }
 

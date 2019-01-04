@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
@@ -278,9 +279,33 @@ namespace Lazinator.Collections.Dictionary
             return new DictionaryEnumerator(Buckets);
         }
 
-        public ICollection<TKey> Keys => GetKeysAndValues().Select(x => x.Key).ToList();
+        public IEnumerator<TKey> GetKeyEnumerator()
+        {
+            return new KeyEnumerator<TKey, TValue>(GetEnumerator());
+        }
 
-        public ICollection<TValue> Values => GetKeysAndValues().Select(x => x.Value).ToList();
+        public IEnumerator<TValue> GetValueEnumerator()
+        {
+            return new ValueEnumerator<TKey, TValue>(GetEnumerator());
+        }
+
+        public ICollection<TKey> Keys => KeysEnumerable().ToList();
+
+        public ICollection<TValue> Values => ValuesEnumerable().ToList();
+
+        public IEnumerable<TKey> KeysEnumerable()
+        {
+            var enumerator = GetKeyEnumerator();
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
+        public IEnumerable<TValue> ValuesEnumerable()
+        {
+            var enumerator = GetValueEnumerator();
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
 
         private IEnumerable<KeyValuePair<TKey, TValue>> GetKeysAndValues()
         {

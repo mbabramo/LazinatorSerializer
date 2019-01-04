@@ -10,13 +10,14 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlListNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-
+        // DEBUG -- we need to store the factory with the tree.
         private ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableListFactory;
 
         public AvlListNodeTree(int maxItemsPerNode, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableListFactory)
         {
             UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>();
             MaxItemsPerNode = maxItemsPerNode;
+            SortableListFactory = sortableListFactory;
         }
 
         public AvlListNodeTree()
@@ -39,7 +40,7 @@ namespace Lazinator.Collections.Avl
 
         public void Set(TKey key, TValue value)
         {
-            if (AllowMultipleValuesPerKey)
+            if (SortableListFactory.AllowDuplicates)
                 throw new NotImplementedException("Because this tree supports multiple values per key, you cannot set a key to a unique value.");
             var result = GetNodeByKey(key);
             var contents = GetNodeContents(result.node);

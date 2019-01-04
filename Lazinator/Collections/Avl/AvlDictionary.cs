@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyableDictionary<TKey, TValue>, ILazinatorKeyableMultivalueDictionary<TKey, TValue>, ILazinatorOrderedKeyableDictionary<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyableDictionary<TKey, TValue>, ILazinatorKeyableMultivalueDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         public AvlDictionary()
         {
@@ -269,8 +269,32 @@ namespace Lazinator.Collections.Avl
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
+            return GetUnderlyingTreeValueEnumerator();
+        }
+
+        private IEnumerator<KeyValuePair<TKey, TValue>> GetUnderlyingTreeValueEnumerator()
+        {
             return new Enumerator(UnderlyingTree.GetValueEnumerator());
         }
-        
+
+        public IEnumerator<TKey> GetKeyEnumerator()
+        {
+            return new KeyEnumerator<TKey, TValue>(GetUnderlyingTreeValueEnumerator());
+        }
+
+        public IEnumerator<TValue> GetValueEnumerator()
+        {
+            return new ValueEnumerator<TKey, TValue>(GetUnderlyingTreeValueEnumerator());
+        }
+
+        public TValue ValueAtIndex(long i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetValueAtIndex(long i, TValue value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -209,14 +209,34 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.GetKeyValuePairEnumerator();
         }
 
-        public IEnumerator<TKey> GetKeyEnumerator()
+        public IEnumerator<TKey> GetKeyEnumerator(long skip = 0)
         {
-            return UnderlyingTree.GetKeyEnumerator();
+            return UnderlyingTree.GetKeyEnumerator(skip);
         }
 
-        public IEnumerator<TValue> GetValueEnumerator()
+        public IEnumerator<TValue> GetValueEnumerator(long skip = 0)
         {
-            return UnderlyingTree.GetValueEnumerator();
+            return UnderlyingTree.GetValueEnumerator(skip);
+        }
+
+        public TValue ValueAtIndex(long i)
+        {
+            return UnderlyingTree.ValueAtIndex(i);
+        }
+
+        public void SetValueAtIndex(long i, TValue value)
+        {
+            UnderlyingTree.SetValueAtIndex(i, value);
+        }
+
+        public void InsertAtIndex(TKey key, TValue value, long index)
+        {
+            UnderlyingTree.InsertAtIndex(key, value, index);
+        }
+
+        public bool RemoveAt(long index)
+        {
+            return UnderlyingTree.RemoveAt(index);
         }
     }
 }

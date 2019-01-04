@@ -7,6 +7,7 @@ namespace Lazinator.Collections.Avl
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlList)]
     interface IAvlList<T> where T : ILazinator
     {
-        AvlTree<Placeholder, T> UnderlyingTree { get; set; }
+        ILazinatorKeyable<Placeholder, T> UnderlyingTree { get; set; }
+        ILazinatorOrderedKeyable<Placeholder, T> UnderlyingTree2 { get; set; }
     }
 }
