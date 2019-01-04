@@ -31,8 +31,6 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        // DEBUG -- once this works, AvlSet and AvlMultiset should be replaceable.
-
         public T this[int index]
         {
             get => GetAt(index);

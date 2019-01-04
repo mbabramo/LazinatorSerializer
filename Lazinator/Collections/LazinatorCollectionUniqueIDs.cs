@@ -94,5 +94,6 @@
         IStructWithBadHashFunction,
         ILazinatorLinkedListNode,
         ILazinatorLinkedList,
+        ISortedLazinatorLinkedList,
     }
 }

@@ -15,18 +15,18 @@ namespace Lazinator.Collections
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorCountableListable<T> where T : ILazinator
     {
-        // The status of an item currently in the list.
+        // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
         struct ItemStatus
         {
             public int OriginalIndex;
-            public int IndexInDeserializedItems;
+            public int DeserializedIndex;
             public bool IsInOriginalItems => OriginalIndex != -1;
-            public bool IsDeserialized => IndexInDeserializedItems != -1;
+            public bool IsDeserialized => DeserializedIndex != -1;
 
             public ItemStatus(int? originalIndex, int? indexInDeserializedItems)
             {
                 OriginalIndex = originalIndex ?? -1;
-                IndexInDeserializedItems = indexInDeserializedItems ?? -1;
+                DeserializedIndex = indexInDeserializedItems ?? -1;
             }
         }
 
@@ -89,7 +89,7 @@ namespace Lazinator.Collections
                 return (uint) this[currentIndex].GetHashCode();
             ItemStatus status = _ItemsTracker[currentIndex];
             if (status.IsDeserialized)
-                return ((IList<T>)_DeserializedItems)[status.IndexInDeserializedItems].GetBinaryHashCode32();
+                return ((IList<T>)_DeserializedItems)[status.DeserializedIndex].GetBinaryHashCode32();
             var byteSpan = GetListMemberSlice(status.OriginalIndex);
             return FarmhashByteSpans.Hash32(byteSpan.Span);
         }
@@ -133,7 +133,7 @@ namespace Lazinator.Collections
                 SetupItemsTracker();
                 ItemStatus status = _ItemsTracker[currentIndex];
                 if (status.IsDeserialized)
-                    return ((IList<T>) _DeserializedItems)[status.IndexInDeserializedItems];
+                    return ((IList<T>) _DeserializedItems)[status.DeserializedIndex];
                 var deserialized = GetSerializedContents(status.OriginalIndex);
                 _DeserializedItems.Add(deserialized);
                 _ItemsTracker[currentIndex] = new ItemStatus(null, _DeserializedItems.Count - 1);
@@ -145,7 +145,7 @@ namespace Lazinator.Collections
                 if (currentOccupant != null)
                     currentOccupant.LazinatorParents = currentOccupant.LazinatorParents.WithRemoved(this);
                 ItemStatus status = _ItemsTracker[currentIndex];
-                ((IList<T>) _DeserializedItems)[status.IndexInDeserializedItems] = value;
+                ((IList<T>) _DeserializedItems)[status.DeserializedIndex] = value;
                 if (value != null)
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 MarkDirty();
@@ -329,7 +329,7 @@ namespace Lazinator.Collections
                 // Note: We don't remove from DeserializedItems if it's there, because then we 
                 // would need to update every other index in the items tracker. However, we set it
                 // to null to reduce memory burden.
-                _DeserializedItems[status.IndexInDeserializedItems] = default;
+                _DeserializedItems[status.DeserializedIndex] = default;
             }
             MarkDirty();
         }
@@ -369,13 +369,13 @@ namespace Lazinator.Collections
                 var status = _ItemsTracker[index];
                 if (status.IsDeserialized)
                 {
-                    var current = ((IList<T>)_DeserializedItems)[status.IndexInDeserializedItems];
+                    var current = ((IList<T>)_DeserializedItems)[status.DeserializedIndex];
                     if (current != null)
                     {
                         current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), GetOffset(index + 1) - GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
                         if (current.IsStruct)
                         {
-                            _DeserializedItems[status.IndexInDeserializedItems] = current;
+                            _DeserializedItems[status.DeserializedIndex] = current;
                         }
                     }
                 }
@@ -406,12 +406,12 @@ namespace Lazinator.Collections
                         var status = _ItemsTracker[itemIndex];
                         if (status.IsDeserialized)
                         {
-                            var underlyingItem = _DeserializedItems[status.IndexInDeserializedItems];
+                            var underlyingItem = _DeserializedItems[status.DeserializedIndex];
                             WriteChild(ref w, ref underlyingItem, includeChildrenMode, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, verifyCleanness, updateStoredBuffer, false, true /* skip length altogether */, this);
                             if (underlyingItem != null && underlyingItem.IsStruct)
                             { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                                 underlyingItem = underlyingItem.CloneNoBuffer();
-                                _DeserializedItems[status.IndexInDeserializedItems] = underlyingItem;
+                                _DeserializedItems[status.DeserializedIndex] = underlyingItem;
                             }
                         }
                         else

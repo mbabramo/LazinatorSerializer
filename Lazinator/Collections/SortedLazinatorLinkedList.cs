@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
+    public partial class SortedLazinatorLinkedList<T> : LazinatorLinkedList<T>, ISortedLazinatorLinkedList<T>, ILazinatorSortable<T> where T : IComparable<T>, ILazinator
     {
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
         public (long priorLocation, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
@@ -16,7 +16,7 @@ namespace Lazinator.Collections
             (long location, bool exists) = FindSorted(item, comparer);
             if (exists && !AllowDuplicates)
                 return (location, true);
-            Insert((int) location, item);
+            Insert((int)location, item);
             return (location, false);
         }
 
@@ -76,6 +76,6 @@ namespace Lazinator.Collections
             }
             return (mid, false);
         }
-        
+
     }
 }
