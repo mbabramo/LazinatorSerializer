@@ -34,13 +34,13 @@ namespace Lazinator.Collections.Avl
 
         public bool ContainsKey(TKey key)
         {
-            bool result = UnderlyingTree.Search(key, out TValue value);
+            bool result = UnderlyingTree.ValueAtKey(key, out TValue value);
             return result;
         }
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            bool result = UnderlyingTree.Search(key, out value);
+            bool result = UnderlyingTree.ValueAtKey(key, out value);
             return result;
         }
 
@@ -117,9 +117,9 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateFrom(TKey key)
         {
-            var result = UnderlyingTree.SearchMatchOrNext(key);
-            foreach (var node in UnderlyingTree.Skip(result.index))
-                yield return node.KeyValuePair;
+            var result = UnderlyingTree.GetMatchingOrNextNode(key);
+            foreach (var keyValuePair in UnderlyingTree.KeyValuePairs(result.index))
+                yield return keyValuePair;
         }
 
         public void AddValue(TKey key, TValue value)
@@ -172,7 +172,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                 { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
-                    var result = UnderlyingTree.SearchMatchOrNext(item.Key);
+                    var result = UnderlyingTree.GetMatchingOrNextNode(item.Key);
                     if (result.found == false)
                         return false;
                     bool valueFound = false;
@@ -189,7 +189,7 @@ namespace Lazinator.Collections.Avl
                     }
                     if (valueFound)
                     {
-                        UnderlyingTree.Remove(item.Key, result.index + distanceFromFirst);
+                        UnderlyingTree.RemoveAt(result.index + distanceFromFirst);
                         return true;
                     }
                     return false;

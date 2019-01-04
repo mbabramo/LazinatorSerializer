@@ -516,7 +516,7 @@ namespace Lazinator.Collections
             RemoveAt((int)index);
         }
 
-        public IEnumerable<T> EnumerateFrom(long index)
+        public IEnumerable<T> AsEnumerable(long index)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();

@@ -52,7 +52,7 @@ namespace LazinatorTests.AVL
             for (int i = 0; i < treeSize + 1; i++)
             {
                 //Debug.WriteLine($"Skipping {i}");
-                var result = tree.Skip(i).FirstOrDefault();
+                var result = tree.AsEnumerable(i).FirstOrDefault();
                 if (i >= treeSize)
                     result.Should().Be(null);
                 else
@@ -73,7 +73,7 @@ namespace LazinatorTests.AVL
 	        for (int j = 0; j < 10000; j++)
 	        {
 	            int i = r.Next(11000);
-	            var result = tree.Skip(i).FirstOrDefault();
+	            var result = tree.AsEnumerable(i).FirstOrDefault();
 	            if (i >= treeSize)
 	                result.Should().Be(null);
                 else

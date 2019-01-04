@@ -111,7 +111,7 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree.Remove(item, index);
+            UnderlyingTree.RemoveAt(index);
             return true;
         }
 
@@ -131,22 +131,22 @@ namespace Lazinator.Collections.Avl
 
         public void InsertAt(long index, T item)
         {
-            UnderlyingTree.Insert(item, new Placeholder(), index);
+            UnderlyingTree.InsertAtIndex(item, new Placeholder(), index);
         }
 
         public void RemoveAt(long index)
         {
-            UnderlyingTree.Remove(default, index);
+            UnderlyingTree.RemoveAt(index);
         }
 
-        public IEnumerable<T> EnumerateFrom(long index)
+        public IEnumerable<T> AsEnumerable(long skip = 0)
         {
-            if (index > Count || index < 0)
+            if (skip > Count || skip < 0)
                 throw new ArgumentException();
             if (Count == 0)
                 yield break;
-            foreach (var node in UnderlyingTree.Skip(index))
-                yield return node.Key;
+            foreach (var key in UnderlyingTree.Keys(skip))
+                yield return key;
         }
 
         public T GetAt(long index)
@@ -178,7 +178,7 @@ namespace Lazinator.Collections.Avl
 
         public (long location, bool exists) FindSorted(T target)
         {
-            var result = UnderlyingTree.SearchMatchOrNext(target);
+            var result = UnderlyingTree.GetMatchingOrNextNode(target);
             return (result.index, result.found);
         }
 

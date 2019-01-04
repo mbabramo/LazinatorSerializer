@@ -74,7 +74,7 @@ namespace Lazinator.Collections.Avl
             if (contents.SelfItemsCount > MaxItemsPerNode)
             {
                 var toInsert = contents.SplitOffFirstHalf();
-                UnderlyingTree.Insert(toInsert.node.GetLastItem().Value, toInsert.node, toInsert.nodeIndex);
+                UnderlyingTree.InsertAtIndex(toInsert.node.GetLastItem().Value, toInsert.node, toInsert.nodeIndex);
             }
         }
 
@@ -183,7 +183,7 @@ namespace Lazinator.Collections.Avl
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
             LazinatorKeyValue<TKey, TValue> keyWithDefaultValue = new LazinatorKeyValue<TKey, TValue>(key, default);
-            var node = UnderlyingTree.SearchMatchOrNextOrLast(keyWithDefaultValue);
+            var node = UnderlyingTree.NodeForKey(keyWithDefaultValue);
             var contents = GetNodeContents(node);
             var result = contents.Find(key);
             return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);
@@ -193,7 +193,7 @@ namespace Lazinator.Collections.Avl
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
-            var node = UnderlyingTree.SearchMatchOrNextOrLast(keyAndValue);
+            var node = UnderlyingTree.NodeForKey(keyAndValue);
             var contents = GetNodeContents(node);
             var result = contents.Find(keyAndValue);
             return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);

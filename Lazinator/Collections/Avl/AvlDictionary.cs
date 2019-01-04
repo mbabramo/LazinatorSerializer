@@ -51,8 +51,8 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<(KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index)> EnumerateFrom(uint hash)
         {
-            var result = UnderlyingTree.SearchMatchOrNext(hash);
-            foreach (var node in UnderlyingTree.Skip(result.index))
+            var result = UnderlyingTree.GetMatchingOrNextNode(hash);
+            foreach (var node in UnderlyingTree.AsEnumerable(result.index))
                 yield return (node.KeyValuePair, node.Index);
         }
 
@@ -119,7 +119,7 @@ namespace Lazinator.Collections.Avl
             {
                 return false;
             }
-            UnderlyingTree.Remove(hash, match.index);
+            UnderlyingTree.RemoveAt(match.index);
             return true;
         }
 
@@ -219,7 +219,7 @@ namespace Lazinator.Collections.Avl
                     }
                     if (valueFound)
                     {
-                        UnderlyingTree.Remove(hash, firstMatch.index + distanceFromFirst);
+                        UnderlyingTree.RemoveAt(firstMatch.index + distanceFromFirst);
                         return true;
                     }
                     return false;

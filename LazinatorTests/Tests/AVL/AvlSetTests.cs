@@ -21,14 +21,14 @@ namespace LazinatorTests.AVL
                 tree.Insert(x, x.ToString());
             foreach (int x in ints)
             {
-                bool found = tree.Search(x, out WString value);
+                bool found = tree.ValueAtKey(x, out WString value);
                 found.Should().BeTrue();
                 value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
                 {
-                    bool found = tree.Search(x, out WString value);
+                    bool found = tree.ValueAtKey(x, out WString value);
                     found.Should().BeFalse();
                 }
         }
@@ -42,13 +42,13 @@ namespace LazinatorTests.AVL
                 tree.Insert(x, x.ToString());
             foreach (int x in ints)
             {
-                (AvlNode<WInt, WString> node, long index, bool found) = tree.SearchMatchOrNext(x);
+                (AvlNode<WInt, WString> node, long index, bool found) = tree.GetMatchingOrNextNode(x);
                 node.Value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)
                 if (!ints.Contains(x))
                 {
-                    var result = tree.SearchMatchOrNext(x);
+                    var result = tree.GetMatchingOrNextNode(x);
                     if (x > ints.Max())
                         result.found.Should().BeFalse();
                     else

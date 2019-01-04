@@ -51,7 +51,14 @@ namespace Lazinator.Collections.Avl
             NodeAtIndex(i).Value = value;
         }
 
-        public virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
+        /// <summary>
+        /// Creates a node for the tree. This should be subclasses by trees with custom node types.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        protected internal virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
         {
             return new AvlNode<TKey, TValue>()
             {
@@ -69,7 +76,13 @@ namespace Lazinator.Collections.Avl
 
         public long Count => Root?.Count ?? 0;
 
-		public bool Search(TKey key, out TValue value)
+        /// <summary>
+        /// Returns the value at the first node matching the key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+		public bool ValueAtKey(TKey key, out TValue value)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
@@ -97,9 +110,14 @@ namespace Lazinator.Collections.Avl
 			return false;
 		}
 
-        public (AvlNode<TKey, TValue> node, long index, bool found) SearchMatchOrNext(TKey key)
+        /// <summary>
+        /// Gets the node that either contains the key or the next node (which would contain the key if inserted).
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>A node or null, if the key is after all keys in the tree</returns>
+        public (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key)
         {
-            var result = SearchMatchOrNextHelper(key);
+            var result = GetMatchingOrNextNodeHelper(key);
             if (result.found && AllowDuplicateKeys)
             {
                 bool matches = true;
@@ -115,7 +133,7 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public (AvlNode<TKey, TValue> node, long index, bool found) SearchMatchOrNextHelper(TKey key)
+        private (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNodeHelper(TKey key)
         {
             AvlNode<TKey, TValue> node = Root;
             if (node == null)
@@ -149,11 +167,21 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public AvlNode<TKey, TValue> SearchMatchOrNextOrLast(TKey key)
+        /// <summary>
+        /// Gets the node containing the key, or which would contain the key if the key were inserted, or the last
+        /// node if there is no such node.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public AvlNode<TKey, TValue> NodeForKey(TKey key)
         {
-            return SearchMatchOrNext(key).node ?? LastNode();
+            return GetMatchingOrNextNode(key).node ?? LastNode();
         }
 
+        /// <summary>
+        /// Gets the last node.
+        /// </summary>
+        /// <returns></returns>
         public AvlNode<TKey, TValue> LastNode()
         {
             var x = Root;
@@ -162,7 +190,11 @@ namespace Lazinator.Collections.Avl
             return x;
         }
 
-        public (bool inserted, long location) Insert(TKey key, TValue value, long? nodeIndex = null)
+        public (bool inserted, long location) InsertAtIndex(TKey key, TValue value, long? nodeIndex) => InsertByKeyOrIndex(key, value, nodeIndex);
+
+        public (bool inserted, long location) Insert(TKey key, TValue value) => InsertByKeyOrIndex(key, value, null);
+
+        private (bool inserted, long location) InsertByKeyOrIndex(TKey key, TValue value, long? nodeIndex = null)
         {
             var result = InsertHelper(AllowDuplicateKeys, key, value, nodeIndex);
             if (Root != null)
@@ -174,7 +206,7 @@ namespace Lazinator.Collections.Avl
         }
 
         /// <summary>
-        /// 
+        /// Helps complete the insert by key or by node.
         /// </summary>
         /// <param name="key">The key to insert.</param>
         /// <param name="value">The value to insert</param>
@@ -526,9 +558,23 @@ namespace Lazinator.Collections.Avl
 			return rightLeft;
 		}
 
-        public bool Remove(TKey key, long? nodeIndex = null)
+        /// <summary>
+        /// Tries to remove the first node matching the specified key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>True if the item was contained in the tree, in which case it is removed</returns>
+        public bool Remove(TKey key) => Remove(key, null);
+
+        /// <summary>
+        /// Removes the node at the specified index.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>True if the item was contained in the tree, in which case it is removed</returns>
+        public bool RemoveAt(long nodeIndex) => Remove(default, nodeIndex);
+
+        private bool Remove(TKey key, long? nodeIndex = null)
         {
-            bool returnVal = DeleteHelper(key, nodeIndex);
+            bool returnVal = RemoveHelper(key, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
@@ -537,7 +583,7 @@ namespace Lazinator.Collections.Avl
             return returnVal;
         }
 
-		private bool DeleteHelper(TKey key, long? nodeIndex)
+		private bool RemoveHelper(TKey key, long? nodeIndex)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
@@ -773,29 +819,124 @@ namespace Lazinator.Collections.Avl
 			}
 		}
 
-
-        public IEnumerable<AvlNode<TKey, TValue>> Skip(long i)
+        /// <summary>
+        /// Enumerates the nodes of the tree, skipping a specified number of nodes.
+        /// </summary>
+        /// <param name="skip">The number of nodes to skip</param>
+        /// <returns></returns>
+        public IEnumerable<AvlNode<TKey, TValue>> AsEnumerable(long skip = 0)
         {
-            var enumerator = new AvlNodeEnumerator<TKey, TValue>(this, i);
+            var enumerator = GetEnumerator(skip);
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
         }
 
+        /// <summary>
+        /// Enumerates the keys of the tree, skipping a specified number.
+        /// </summary>
+        /// <param name="skip">The number of nodes to skip</param>
+        /// <returns></returns>
+        public IEnumerable<TKey> Keys(long skip = 0)
+        {
+            var enumerator = GetKeyEnumerator(skip);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
+        /// <summary>
+        /// Enumerates the values of the tree, skipping a specified number.
+        /// </summary>
+        /// <param name="skip">The number of nodes to skip</param>
+        /// <returns></returns>
+        public IEnumerable<TValue> Values(long skip = 0)
+        {
+            var enumerator = GetValueEnumerator(skip);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
+
+        /// <summary>
+        /// Enumerates the keys and values of the tree, skipping a specified number.
+        /// </summary>
+        /// <param name="skip">The number of nodes to skip</param>
+        /// <returns></returns>
+        public IEnumerable<KeyValuePair<TKey, TValue>> KeyValuePairs(long skip = 0)
+        {
+            var enumerator = GetKeyValuePairEnumerator(skip);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
+        /// <summary>
+        /// Enumerates the keys and values of the tree, skipping a specified number.
+        /// </summary>
+        /// <param name="skip">The number of nodes to skip</param>
+        /// <returns></returns>
+        public IEnumerable<LazinatorKeyValue<TKey, TValue>> LazinatorKeyValues(long skip = 0)
+        {
+            var enumerator = GetLazinatorKeyValueEnumerator(skip);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+        }
+
+        /// <summary>
+        /// Enumerates the nodes of the tree, starting with the lowest key
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
         {
             var enumerator = new AvlNodeEnumerator<TKey, TValue>(this);
             return enumerator;
         }
 
+        /// <summary>
+        /// Enumerates the nodes of the tree, starting at the node with the lowest key
+        /// </summary>
+        /// <param name="skip">Number of nodes to skip before enumeration</param>
+        /// <returns></returns>
+        public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator(long skip)
+        {
+            var enumerator = new AvlNodeEnumerator<TKey, TValue>(this, skip);
+            return enumerator;
+        }
+
+        /// <summary>
+        /// Gets the node enumerator. The generic method should usually be used instead.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}
 
-        public AvlNodeValueEnumerator<TKey, TValue> GetValueEnumerator() => new AvlNodeValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
-        public AvlNodeKeyEnumerator<TKey, TValue> GetKeyEnumerator() => new AvlNodeKeyEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
-        public AvlNodeLazinatorKeyValueEnumerator<TKey, TValue> GetLazinatorKeyValueEnumerator() => new AvlNodeLazinatorKeyValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
-        public AvlNodeKeyValuePairEnumerator<TKey, TValue> GetKeyValuePairEnumerator() => new AvlNodeKeyValuePairEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this));
+        /// <summary>
+        /// Enumerates the values in the tree
+        /// </summary>
+        /// <param name="skip">Number of nodes to skip before enumeration</param>
+        /// <returns></returns>
+        public AvlNodeValueEnumerator<TKey, TValue> GetValueEnumerator(long skip = 0) => new AvlNodeValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+
+        /// <summary>
+        /// Enumerates the keys in the tree
+        /// </summary>
+        /// <param name="skip">Number of nodes to skip before enumeration</param>
+        /// <returns></returns>
+        public AvlNodeKeyEnumerator<TKey, TValue> GetKeyEnumerator(long skip = 0) => new AvlNodeKeyEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+
+        /// <summary>
+        /// Enumerates the key/value pairs in the tree as LazinatorKeyValue.
+        /// </summary>
+        /// <param name="skip">Number of nodes to skip before enumeration</param>
+        /// <returns></returns>
+        public AvlNodeLazinatorKeyValueEnumerator<TKey, TValue> GetLazinatorKeyValueEnumerator(long skip = 0) => new AvlNodeLazinatorKeyValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+
+        /// <summary>
+        /// Enumerates the key/value pairs in the tree as KeyValuePair.
+        /// </summary>
+        /// <param name="skip">Number of nodes to skip before enumeration</param>
+        /// <returns></returns>
+        public AvlNodeKeyValuePairEnumerator<TKey, TValue> GetKeyValuePairEnumerator(long skip = 0) => new AvlNodeKeyValuePairEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
 
         #endregion
     }

@@ -40,7 +40,7 @@ namespace LazinatorTests.AVL
                 {
                 };
                 tree2.DeserializeLazinator(b);
-                bool found = tree2.Search(firstKey, out WInt value);
+                bool found = tree2.ValueAtKey(firstKey, out WInt value);
                 found.Should().BeTrue();
             //}
         }

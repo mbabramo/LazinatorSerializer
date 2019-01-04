@@ -89,7 +89,7 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree.Remove(new Placeholder(), index);
+            UnderlyingTree.RemoveAt(index);
             return true;
         }
 
@@ -109,22 +109,22 @@ namespace Lazinator.Collections.Avl
 
         public void InsertAt(long index, T item)
         {
-            UnderlyingTree.Insert(new Placeholder(), item, index);
+            UnderlyingTree.InsertAtIndex(new Placeholder(), item, index);
         }
 
         public void RemoveAt(long index)
         {
-            UnderlyingTree.Remove(new Placeholder(), index);
+            UnderlyingTree.RemoveAt(index);
         }
 
-        public IEnumerable<T> EnumerateFrom(long index)
+        public IEnumerable<T> AsEnumerable(long index)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();
             if (Count == 0)
                 yield break;
-            foreach (var node in UnderlyingTree.Skip(index))
-                yield return node.Value;
+            foreach (var value in UnderlyingTree.Values(index))
+                yield return value;
         }
 
         public T GetAt(long index)

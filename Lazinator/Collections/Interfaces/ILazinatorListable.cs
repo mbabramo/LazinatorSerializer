@@ -11,6 +11,6 @@ namespace Lazinator.Collections
     {
         void InsertAt(long index, T item);
         void RemoveAt(long index);
-        IEnumerable<T> EnumerateFrom(long index);
+        IEnumerable<T> AsEnumerable(long index);
     }
 }
