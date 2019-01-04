@@ -9,6 +9,7 @@ namespace Lazinator.Collections.Avl
     interface IAvlSortedList<T> where T : ILazinator, IComparable<T>
     {
         AvlTree<T, Placeholder> UnderlyingTree { get; set; }
+        ILazinatorOrderedKeyable<T, Placeholder> UnderlyingTree2 { get; set; }
     }
 }
 

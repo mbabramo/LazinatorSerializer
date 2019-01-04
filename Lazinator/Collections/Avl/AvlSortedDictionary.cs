@@ -238,5 +238,25 @@ namespace Lazinator.Collections.Avl
         {
             return UnderlyingTree.RemoveAt(index);
         }
+
+        public TKey KeyAtIndex(long i)
+        {
+            return UnderlyingTree.KeyAtIndex(i);
+        }
+
+        public void SetKeyAtIndex(long i, TKey key)
+        {
+            UnderlyingTree.SetKeyAtIndex(i, key);
+        }
+
+        public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value)
+        {
+            return UnderlyingTree.Insert(key, comparer, value);
+        }
+
+        public (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer)
+        {
+            return UnderlyingTree.GetMatchingOrNext(key, comparer);
+        }
     }
 }

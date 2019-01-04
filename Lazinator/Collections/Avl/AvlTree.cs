@@ -114,6 +114,17 @@ namespace Lazinator.Collections.Avl
 			return false;
 		}
 
+        public (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key) => GetMatchingOrNext(key, Comparer<TKey>.Default);
+
+        public (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer)
+        {
+            var result = GetMatchingOrNextNode(key);
+            if (result.found)
+                return (result.node.Value, result.index, true);
+            else
+                return (default, result.index, false);
+        }
+
         public (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key) => GetMatchingOrNextNode(key, Comparer<TKey>.Default);
 
         /// <summary>
