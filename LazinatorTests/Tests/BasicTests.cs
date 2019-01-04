@@ -10,6 +10,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {

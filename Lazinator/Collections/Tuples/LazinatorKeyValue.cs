@@ -4,7 +4,7 @@ using Lazinator.Buffers;
 using Lazinator.Core;
 using Lazinator.Support;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.Tuples
 {
     public partial struct LazinatorKeyValue<T, U> : ILazinatorKeyValue<T, U>, IComparable<LazinatorKeyValue<T, U>> where T : ILazinator, IComparable<T> where U : ILazinator
     {

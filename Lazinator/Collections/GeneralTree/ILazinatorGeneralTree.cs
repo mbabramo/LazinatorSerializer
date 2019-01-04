@@ -1,7 +1,7 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.GeneralTree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorGeneralTree)]
     [UnofficiallyIncorporateInterface("Lazinator.Collections.ILazinatorGeneralTreeUnofficial`1", "protected")]

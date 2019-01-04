@@ -9,6 +9,7 @@ using Lazinator.Core;
 using Lazinator.Collections;
 using Lazinator.Collections.Avl;
 using LazinatorTests.Examples;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {

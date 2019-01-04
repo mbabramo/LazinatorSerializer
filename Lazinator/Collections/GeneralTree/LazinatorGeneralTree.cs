@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.GeneralTree
 {
     /// <summary>
     /// A general tree, where each parent can have any number of children.

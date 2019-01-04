@@ -12,6 +12,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Diagnostics;
 using Lazinator.Collections.OffsetList;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {

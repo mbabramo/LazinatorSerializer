@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl

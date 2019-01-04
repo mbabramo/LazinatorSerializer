@@ -1,6 +1,7 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 using System;
+using Lazinator.Collections.Tuples;
 
 namespace Lazinator.Collections.Avl
 {

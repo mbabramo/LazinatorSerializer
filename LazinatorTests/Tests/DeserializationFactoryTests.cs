@@ -9,6 +9,7 @@ using LazinatorTests.Examples.Abstract;
 using Lazinator.Collections;
 using System.Linq;
 using Lazinator.Buffers;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {

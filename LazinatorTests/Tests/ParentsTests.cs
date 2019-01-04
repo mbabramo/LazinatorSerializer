@@ -13,6 +13,7 @@ using Lazinator.Buffers;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Collections;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {

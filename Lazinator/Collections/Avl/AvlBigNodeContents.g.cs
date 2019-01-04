@@ -13,6 +13,7 @@ namespace Lazinator.Collections.Avl
     using Lazinator.Attributes;
     using Lazinator.Buffers;
     using Lazinator.Collections;
+    using Lazinator.Collections.Tuples;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;

@@ -1,7 +1,7 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Core;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.Tuples
 {
     [Lazinator((int) LazinatorCollectionUniqueIDs.ILazinatorTuple)]
     interface ILazinatorTuple<T, U> : ILazinator where T : ILazinator where U : ILazinator

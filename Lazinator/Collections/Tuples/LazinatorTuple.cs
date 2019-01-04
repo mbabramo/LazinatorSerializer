@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Lazinator.Core;
 using Lazinator.Support;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.Tuples
 {
     public partial class LazinatorTuple<T, U> : ILazinatorTuple<T, U>, IComparable<LazinatorTuple<T,U>> where T : ILazinator where U : ILazinator
     {

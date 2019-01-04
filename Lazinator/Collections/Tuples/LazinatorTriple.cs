@@ -1,7 +1,7 @@
 ﻿using System;
 using Lazinator.Core;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.Tuples
 {
     public partial class LazinatorTriple<T, U, V> : ILazinatorTriple<T, U, V>, IComparable<LazinatorTriple<T, U, V>> where T : ILazinator where U : ILazinator where V : ILazinator
     {

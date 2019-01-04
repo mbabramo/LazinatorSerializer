@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
