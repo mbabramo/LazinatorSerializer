@@ -21,6 +21,7 @@ namespace LazinatorTests.Tests
         public enum ListFactoryToUse
         {
             LazinatorList,
+            LazinatorLinkedList,
             SortedLazinatorList,
             SortedLazinatorListWithDuplicates,
             AvlList,
@@ -34,6 +35,8 @@ namespace LazinatorTests.Tests
             {
                 case ListFactoryToUse.LazinatorList:
                     return new LazinatorListFactory<WInt>();
+                case ListFactoryToUse.LazinatorLinkedList:
+                    return new LazinatorLinkedListFactory<WInt>();
                 case ListFactoryToUse.SortedLazinatorList:
                     return new SortedLazinatorListFactory<WInt>();
                 case ListFactoryToUse.SortedLazinatorListWithDuplicates:
@@ -55,6 +58,8 @@ namespace LazinatorTests.Tests
             {
                 case ListFactoryToUse.LazinatorList:
                     return (false, true);
+                case ListFactoryToUse.LazinatorLinkedList:
+                    return (false, true);
                 case ListFactoryToUse.SortedLazinatorList:
                     return (true, false);
                 case ListFactoryToUse.SortedLazinatorListWithDuplicates:
@@ -72,6 +77,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
         [InlineData(ListFactoryToUse.SortedLazinatorList)]
         [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
@@ -92,6 +98,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
         [InlineData(ListFactoryToUse.SortedLazinatorList)]
         [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
@@ -101,7 +108,7 @@ namespace LazinatorTests.Tests
         {
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
-            const int numItems = 2; // DEBUG 500 ;
+            const int numItems = 500;
             for (int i = 0; i < numItems; i++)
                 l.InsertAt(0, i);
             var result = l.Select(x => x.WrappedValue).ToList();
@@ -112,6 +119,7 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
         [InlineData(ListFactoryToUse.SortedLazinatorList)]
         [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
@@ -187,12 +195,14 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList, 200, 1)]
         [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates, 200, 1)]
         [InlineData(ListFactoryToUse.LazinatorList, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList, 200, 1)]
         [InlineData(ListFactoryToUse.AvlList, 200, 1)]
         [InlineData(ListFactoryToUse.SortedLazinatorList, 15, 20)]
         [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates, 15, 20)]
         [InlineData(ListFactoryToUse.AvlSortedList, 15, 20)]
         [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates, 15, 20)]
         [InlineData(ListFactoryToUse.LazinatorList, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList, 15, 20)]
         [InlineData(ListFactoryToUse.AvlList, 15, 20)]
         public void Listable_Sortable(ListFactoryToUse listFactoryToUse, int totalChanges, int repetitions)
         {

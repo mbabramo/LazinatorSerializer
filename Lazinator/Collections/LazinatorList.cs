@@ -520,8 +520,10 @@ namespace Lazinator.Collections
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();
-            foreach (T t in this.Skip((int)index))
-                yield return t;
+            for (int i = (int) index; i < Count; i++)
+            {
+                yield return this[i];
+            }
         }
 
         public T GetAt(long index)

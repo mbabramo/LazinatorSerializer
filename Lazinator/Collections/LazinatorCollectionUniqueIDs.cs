@@ -92,5 +92,7 @@
         ILazinatorKeyableMultivalue,
         IAvlDictionary,
         IStructWithBadHashFunction,
+        ILazinatorLinkedListNode,
+        ILazinatorLinkedList,
     }
 }
