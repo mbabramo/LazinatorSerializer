@@ -25,14 +25,9 @@ namespace Lazinator.Collections.Tuples
             return ((Key, Value)).CompareTo((other.Key, other.Value));
         }
 
-        // DEBUG static CustomComparer<LazinatorKeyValue<T, U>> KeyOnlyComparer = default;
-
         public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyOnlyComparer()
         {
-            return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key)); // DEBUG
-            //if (KeyOnlyComparer.Initialized == false)
-            //    KeyOnlyComparer = new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key));
-            //return KeyOnlyComparer;
+            return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key));
         }
 
         public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyValueComparer(IComparer<T> keyComparer, IComparer<U> valueComparer)

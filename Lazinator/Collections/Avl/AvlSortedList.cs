@@ -159,7 +159,7 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.SetKeyAtIndex(index, value);
         }
 
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, null);
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
         {

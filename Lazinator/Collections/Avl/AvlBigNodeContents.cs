@@ -111,6 +111,8 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
+        protected internal static IComparer<LazinatorKeyValue<TKey, TValue>> KeyOnlyComparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
+
         /// <summary>
         /// Find the first item containing the specified key.
         /// </summary>
@@ -118,8 +120,7 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
         public (long location, bool exists) Find(TKey key)
         {
-            var comparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
-            var result = Items.FindSorted(new LazinatorKeyValue<TKey, TValue>(key, default), comparer);
+            var result = Items.FindSorted(new LazinatorKeyValue<TKey, TValue>(key, default), KeyOnlyComparer);
             if (result.exists)
             {
                 bool matches = true;
