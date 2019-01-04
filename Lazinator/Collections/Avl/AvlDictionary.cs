@@ -1,6 +1,7 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
+using Lazinator.Support;
 using Lazinator.Wrappers;
 using System;
 using System.Collections;
@@ -142,7 +143,7 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<LazinatorTuple<TKey, TValue>> GetKeysAndValues()
         {
-            var enumerator = UnderlyingTree.GetValueEnumerator();
+            var enumerator = UnderlyingTree.GetValueEnumerator(0);
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
             enumerator.Dispose();
@@ -235,56 +236,29 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.GetKeyValuePairEnumerator();
         }
 
-        // the dictionary interface requires us to define a key-value pair enumerator
-        private struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
-        {
-            private AvlNodeValueEnumerator<WUint, LazinatorTuple<TKey, TValue>> UnderlyingEnumerator;
-
-            public Enumerator(AvlNodeValueEnumerator<WUint, LazinatorTuple<TKey, TValue>> underlyingEnumerator)
-            {
-                UnderlyingEnumerator = underlyingEnumerator;
-            }
-
-            KeyValuePair<TKey, TValue> Current => new KeyValuePair<TKey, TValue>(UnderlyingEnumerator.Current.Item1, UnderlyingEnumerator.Current.Item2);
-
-            object IEnumerator.Current => Current;
-
-            KeyValuePair<TKey, TValue> IEnumerator<KeyValuePair<TKey, TValue>>.Current => Current;
-
-            public void Dispose()
-            {
-                UnderlyingEnumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                return UnderlyingEnumerator.MoveNext();
-            }
-
-            public void Reset()
-            {
-                UnderlyingEnumerator.Reset();
-            }
-        }
-
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
-            return GetUnderlyingTreeValueEnumerator();
+            return GetKeyValuePairEnumerator();
         }
 
-        private IEnumerator<KeyValuePair<TKey, TValue>> GetUnderlyingTreeValueEnumerator()
+        private IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator()
         {
-            return new Enumerator(UnderlyingTree.GetValueEnumerator());
+            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, KeyValuePair<TKey, TValue>>(GetUnderlyingTreeValueEnumerator(), x => new KeyValuePair<TKey, TValue>(x.Item1, x.Item2));
         }
 
         public IEnumerator<TKey> GetKeyEnumerator()
         {
-            return new KeyEnumerator<TKey, TValue>(GetUnderlyingTreeValueEnumerator());
+            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TKey>(GetUnderlyingTreeValueEnumerator(), x => x.Item1);
         }
 
         public IEnumerator<TValue> GetValueEnumerator()
         {
-            return new ValueEnumerator<TKey, TValue>(GetUnderlyingTreeValueEnumerator());
+            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TValue>(GetUnderlyingTreeValueEnumerator(), x => x.Item2);
+        }
+
+        private IEnumerator<LazinatorTuple<TKey, TValue>> GetUnderlyingTreeValueEnumerator()
+        {
+            return UnderlyingTree.GetValueEnumerator();
         }
 
         public TValue ValueAtIndex(long i)

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
+using Lazinator.Support;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue>, ILazinatorOrderedKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
 		public AvlTree()
 		{
@@ -199,7 +200,7 @@ namespace Lazinator.Collections.Avl
             return x;
         }
 
-        public (bool inserted, long location) InsertAtIndex(TKey key, TValue value, long? nodeIndex) => InsertByKeyOrIndex(key, Comparer<TKey>.Default, value, nodeIndex);
+        public void InsertAtIndex(TKey key, TValue value, long nodeIndex) => InsertByKeyOrIndex(key, Comparer<TKey>.Default, value, nodeIndex);
 
         public (bool inserted, long location) Insert(TKey key, TValue value) => Insert(key, Comparer<TKey>.Default, value);
 
@@ -935,28 +936,51 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="skip">Number of nodes to skip before enumeration</param>
         /// <returns></returns>
-        public AvlNodeValueEnumerator<TKey, TValue> GetValueEnumerator(long skip = 0) => new AvlNodeValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+        public IEnumerator<TValue> GetValueEnumerator(long skip = 0)
+        {
+            return new TransformEnumerator<AvlNode<TKey, TValue>, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip), x => x.Value);
+        }
 
         /// <summary>
         /// Enumerates the keys in the tree
         /// </summary>
         /// <param name="skip">Number of nodes to skip before enumeration</param>
         /// <returns></returns>
-        public AvlNodeKeyEnumerator<TKey, TValue> GetKeyEnumerator(long skip = 0) => new AvlNodeKeyEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+        public IEnumerator<TKey> GetKeyEnumerator(long skip = 0)
+        {
+            return new TransformEnumerator<AvlNode<TKey, TValue>, TKey>(new AvlNodeEnumerator<TKey, TValue>(this, skip), x => x.Key);
+        }
 
         /// <summary>
         /// Enumerates the key/value pairs in the tree as LazinatorKeyValue.
         /// </summary>
         /// <param name="skip">Number of nodes to skip before enumeration</param>
         /// <returns></returns>
-        public AvlNodeLazinatorKeyValueEnumerator<TKey, TValue> GetLazinatorKeyValueEnumerator(long skip = 0) => new AvlNodeLazinatorKeyValueEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+        public IEnumerator<LazinatorKeyValue<TKey, TValue>> GetLazinatorKeyValueEnumerator(long skip = 0)
+        {
+            return new TransformEnumerator<AvlNode<TKey, TValue>, LazinatorKeyValue<TKey, TValue>>(new AvlNodeEnumerator<TKey, TValue>(this, skip), x => new LazinatorKeyValue<TKey, TValue>(x.Key, x.Value));
+        }
 
         /// <summary>
         /// Enumerates the key/value pairs in the tree as KeyValuePair.
         /// </summary>
         /// <param name="skip">Number of nodes to skip before enumeration</param>
         /// <returns></returns>
-        public AvlNodeKeyValuePairEnumerator<TKey, TValue> GetKeyValuePairEnumerator(long skip = 0) => new AvlNodeKeyValuePairEnumerator<TKey, TValue>(new AvlNodeEnumerator<TKey, TValue>(this, skip));
+        /// 
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0)
+        {
+            return new TransformEnumerator<AvlNode<TKey, TValue>, KeyValuePair<TKey, TValue>>(new AvlNodeEnumerator<TKey, TValue>(this, skip), x => new KeyValuePair<TKey, TValue>(x.Key, x.Value));
+        }
+
+        IEnumerator<TKey> ILazinatorOrderedKeyable<TKey, TValue>.GetKeyEnumerator(long skip)
+        {
+            return GetKeyEnumerator(skip);
+        }
+
+        IEnumerator<TValue> ILazinatorOrderedKeyable<TKey, TValue>.GetValueEnumerator(long skip)
+        {
+            return GetValueEnumerator(skip);
+        }
 
         #endregion
     }
